@@ -36,9 +36,15 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   XHR. Same entry shape: `{ method, url, headers, body }`. Header names are
   lowercased; method is uppercased to match XHR semantics.
 - When `strict_compat=False`, type conversion produces richer Python values:
-  `BigInt -> int`, `Date -> datetime.datetime`, `Map -> dict`, `Set -> set`.
-  Previously these all degraded to strings or `None`.
+  `BigInt -> int`, `Date -> datetime.datetime`, `Map -> dict`, `Set -> set`,
+  `TypedArray -> list[int|float]` (11 typed array subtypes preserved).
+  Previously these all degraded to strings, `None`, or raw bytes.
   `strict_compat=True` (default) is unchanged for v0.1 compatibility.
+- `set_network_handler` is now documented as always-on regardless of
+  `strict_compat`. The Python handler runs as the second tier of a three-layer
+  fallback chain (ResourceBundle -> handler -> NetworkError) for both `fetch`
+  and synchronous XHR. (No code change in v0.2 — this was already the case
+  in v0.1; v0.2 just documents and tests the existing behavior explicitly.)
 - Resolves L-01, L-03, L-04, L-09, L-10 known limitations from v0.1.
 
 ### Build
