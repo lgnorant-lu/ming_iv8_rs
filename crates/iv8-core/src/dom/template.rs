@@ -1414,6 +1414,12 @@ unsafe extern "C" fn replace_child_cb(info: *const v8::FunctionCallbackInfo) {
         let new_id = extract_node_id_from_internal(scope, new_obj);
         let old_id = extract_node_id_from_internal(scope, old_obj);
         if let (Some(nid), Some(oid)) = (new_id, old_id) {
+            // Edge case: replaceChild(node, node) — replacing a node with itself.
+            // Real browsers treat this as a no-op. Return the old child reference.
+            if nid == oid {
+                rv.set(old_arg);
+                return;
+            }
             let mut doc = state.document.borrow_mut();
             if let Some(ref mut doc) = *doc {
                 // Detach new node from wherever it currently is
@@ -1447,6 +1453,11 @@ unsafe extern "C" fn insert_before_cb(info: *const v8::FunctionCallbackInfo) {
                                 extract_node_id_from_internal(scope, ref_obj)
                             } else { None }
                         });
+                        // Edge case: insertBefore(node, node) — no-op in real browsers.
+                        if ref_id == Some(new_id) {
+                            rv.set(new_node_arg);
+                            return;
+                        }
                         let mut doc = state.document.borrow_mut();
                         if let Some(ref mut doc) = *doc {
                             doc.detach(new_id);
