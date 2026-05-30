@@ -4,7 +4,7 @@ All notable changes to iv8-rs are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/) and
 [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [0.2.0] - 2026-05-30
 
 ### Added
 
