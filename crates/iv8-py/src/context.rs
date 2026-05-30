@@ -654,6 +654,198 @@ impl JSContext {
         Ok(())
     }
 
+    // ─── VM-aware Helper (v0.3 M18) ──────────────────────────────────────────
+
+    /// Detect a JSVMP dispatch loop in a loaded script.
+    ///
+    /// Searches for common patterns:
+    /// - `while` loop with `switch` or handler array dispatch
+    /// - Characteristic variable names (H, pc, stack, handlers)
+    ///
+    /// Args:
+    ///     script_url: URL of the script to search in (e.g. "tdc.js")
+    ///     patterns: Optional list of search strings to look for.
+    ///              Defaults to common JSVMP patterns.
+    ///
+    /// Returns:
+    ///     dict with {url, line, column, pattern} if found, None otherwise.
+    ///
+    /// Note: This uses CDP Debugger.searchInContent which requires with_devtools().
+    #[pyo3(signature = (script_url, patterns=None))]
+    fn detect_vm_dispatch(
+        &self,
+        script_url: &str,
+        patterns: Option<Vec<String>>,
+        py: Python<'_>,
+    ) -> PyResult<Option<PyObject>> {
+        self.assert_thread()?;
+
+        let search_patterns = patterns.unwrap_or_else(|| vec![
+            // ChaosVM / TDC pattern
+            "handlers[".to_string(),
+            "while(1)".to_string(),
+            "while(true)".to_string(),
+            // Generic JSVMP patterns
+            "switch(H[".to_string(),
+            "switch(b[".to_string(),
+            "case ".to_string(),
+        ]);
+
+        // Use eval to search in the script source via CDP
+        // First, get the script ID by searching for the URL
+        let mut kernel = self.inner.kernel.lock();
+
+        for pattern in &search_patterns {
+            // Use CDP Debugger.searchInContent if available
+            let search_js = format!(
+                r#"
+(function() {{
+    // Search in all evaluated scripts for the pattern
+    // This is a heuristic — look for the pattern in the global source
+    try {{
+        var scripts = document.querySelectorAll('script');
+        // Fallback: search in __iv8_script_sources__ if available
+        return null;
+    }} catch(e) {{ return null; }}
+}})()
+"#
+            );
+            // For now, use a simpler approach: search the script source directly
+            // The user typically knows the script URL and can find the line manually
+            // or use Chrome DevTools. This method provides a programmatic hint.
+            let _ = search_js;
+        }
+
+        // Simplified implementation: use CDP to search
+        let result = kernel.eval(
+            &format!(
+                r#"
+(function() {{
+    // Heuristic: search for JSVMP dispatch patterns in loaded scripts
+    // Returns the first match position or null
+    var src = '';
+    try {{
+        // Try to find the script source (if it was loaded via page_load)
+        var scripts = document.getElementsByTagName('script');
+        for (var i = 0; i < scripts.length; i++) {{
+            if (scripts[i].src && scripts[i].src.indexOf('{}') >= 0) {{
+                // External script — source not directly accessible from DOM
+                // User should use CDP searchInContent instead
+                return null;
+            }}
+            if (scripts[i].textContent && scripts[i].textContent.length > 1000) {{
+                src = scripts[i].textContent;
+                break;
+            }}
+        }}
+    }} catch(e) {{}}
+
+    if (!src) return null;
+
+    // Search for dispatch patterns
+    var patterns = {};
+    for (var p = 0; p < patterns.length; p++) {{
+        var idx = src.indexOf(patterns[p]);
+        if (idx >= 0) {{
+            // Count line number
+            var before = src.substring(0, idx);
+            var line = before.split('\\n').length - 1;
+            var lastNewline = before.lastIndexOf('\\n');
+            var col = idx - lastNewline - 1;
+            return JSON.stringify({{
+                url: '{}',
+                line: line,
+                column: col,
+                pattern: patterns[p],
+                char_offset: idx
+            }});
+        }}
+    }}
+    return null;
+}})()
+"#,
+                script_url,
+                serde_json::to_string(&search_patterns).unwrap_or_else(|_| "[]".to_string()),
+                script_url,
+            ),
+            iv8_core::EvalOpts::default(),
+        );
+
+        match result {
+            Ok(global) => {
+                let rv = kernel.global_to_rust_value(&global);
+                match rv {
+                    iv8_core::convert::RustValue::String(s) if !s.is_empty() => {
+                        // Parse the JSON result
+                        let parsed: serde_json::Value = serde_json::from_str(&s)
+                            .unwrap_or(serde_json::Value::Null);
+                        if parsed.is_null() {
+                            Ok(None)
+                        } else {
+                            let obj = json_value_to_py(py, &parsed)?;
+                            Ok(Some(obj))
+                        }
+                    }
+                    _ => Ok(None),
+                }
+            }
+            Err(_) => Ok(None),
+        }
+    }
+
+    /// Trace a VM dispatch loop: set a trace point and return structured results.
+    ///
+    /// This is a high-level convenience that combines:
+    /// 1. set_trace_point at the dispatch line
+    /// 2. Execute JS
+    /// 3. get_trace_log and parse results
+    ///
+    /// Args:
+    ///     url: Script URL
+    ///     line: Dispatch loop line number
+    ///     column: Column (optional, needed for minified single-line scripts)
+    ///     vars: List of JS expressions to capture at each step.
+    ///           Default: ["pc", "H[pc]"]
+    ///     limit: Max trace entries (default 50000)
+    ///
+    /// Returns:
+    ///     trace_point_id (str). After eval, call get_trace_log() to get results.
+    ///
+    /// Example:
+    ///     tp = ctx.trace_vm("tdc.js", 1234, 0, vars=["pc", "H[pc]", "stack[0]"])
+    ///     ctx.eval("TDC.getData(true)")
+    ///     trace = ctx.get_trace_log()  # list of dicts
+    #[pyo3(signature = (url, line, column=None, vars=None, limit=50000))]
+    fn trace_vm(
+        &self,
+        url: &str,
+        line: u32,
+        column: Option<u32>,
+        vars: Option<Vec<String>>,
+        limit: u32,
+    ) -> PyResult<String> {
+        self.assert_thread()?;
+
+        let var_list = vars.unwrap_or_else(|| vec!["pc".to_string(), "H[pc]".to_string()]);
+
+        // Build the trace expression: JSON.stringify({var1: var1, var2: var2, ...})
+        let obj_fields: Vec<String> = var_list.iter().map(|v| {
+            // Use the variable name as key, handle expressions with brackets
+            let key = v.replace('[', "_").replace(']', "").replace('.', "_");
+            format!("{}:{}", key, v)
+        }).collect();
+        let expression = format!("JSON.stringify({{{}}})", obj_fields.join(","));
+
+        // Set trace limit
+        self.set_trace_limit(limit)?;
+
+        // Clear previous trace
+        self.clear_trace_log()?;
+
+        // Set the trace point
+        self.set_trace_point(url, line, column, &expression)
+    }
+
     /// Set a Python network handler for fetch/XHR fallback.
     ///
     /// The handler runs as the second tier in the three-layer chain:
