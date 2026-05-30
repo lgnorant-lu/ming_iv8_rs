@@ -1,0 +1,50 @@
+[package]
+name = "iv8-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "iv8-rs core: V8 embedded browser host engine"
+
+[dependencies]
+v8 = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+bytes = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+ego-tree = { workspace = true }
+html5ever = { workspace = true }
+selectors = { workspace = true }
+cssparser = { workspace = true }
+precomputed-hash = "0.1"
+parking_lot = { workspace = true }
+url = { workspace = true }
+sha2 = { workspace = true }
+sha1 = { workspace = true }
+hmac = { workspace = true }
+aes-gcm = { workspace = true }
+aes = { workspace = true }
+cbc = { workspace = true }
+rsa = { workspace = true }
+p256 = { workspace = true }
+p384 = { workspace = true }
+elliptic-curve = { workspace = true }
+ecdsa = { workspace = true }
+hkdf = { workspace = true }
+pkcs8 = { workspace = true }
+spki = { workspace = true }
+rand = { workspace = true }
+tiny-skia = { workspace = true }
+png = { workspace = true }
+
+[dev-dependencies]
+tracing-subscriber = { workspace = true }
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "iv8_bench"
+harness = false
+
+[lints]
+workspace = true
