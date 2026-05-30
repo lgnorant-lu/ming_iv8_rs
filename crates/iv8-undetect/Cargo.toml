@@ -1,0 +1,15 @@
+[package]
+name = "iv8-undetect"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "iv8-rs anti-detection: MarkAsUndetectable, wrapNative, window.chrome"
+
+[dependencies]
+v8 = { workspace = true }
+iv8-core = { path = "../iv8-core" }
+tracing = { workspace = true }
+
+[lints]
+workspace = true
