@@ -1,0 +1,249 @@
+//! expose: Python callable → V8 global function bridge.
+//!
+//! When `ctx.expose(name, callable)` is called from Python:
+//! 1. Store `Py<PyAny>` (the callable) in a V8 External
+//! 2. Create a FunctionTemplate with our trampoline as callback
+//! 3. Install the function on the V8 global object
+//!
+//! When JS calls the exposed function:
+//! 1. Trampoline extracts `Py<PyAny>` from External
+//! 2. Converts V8 args → RustValue (no GIL needed)
+//! 3. `Python::with_gil` → convert RustValue to PyObject → call callable
+//! 4. Convert Python return → V8 value
+//! 5. If Python raises → throw JS exception
+
+use pyo3::prelude::*;
+use pyo3::types::{PyBytes, PyDict, PyList, PyTuple};
+use std::ffi::c_void;
+
+use iv8_core::RustValue;
+
+/// Data stored in V8 External for each exposed Python function.
+struct ExposedPyFnData {
+    callable: Py<PyAny>,
+}
+
+/// Register a Python callable as a named function on the V8 global object.
+/// Must be called with the isolate entered and within a proper scope.
+///
+/// NOTE: The ExposedPyFnData is intentionally leaked (Box::into_raw) and stored
+/// in a V8 External. It lives for the lifetime of the V8 context. When the
+/// Isolate is disposed, V8 drops the External but does NOT call back to free
+/// our data. This is a bounded leak (~40 bytes per expose call) that only
+/// accumulates within a single JSContext lifetime. For v0.2+, we should register
+/// a weak callback to properly free the data when GC collects the function.
+pub fn expose_py_function(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+    name: &str,
+    callable: Py<PyAny>,
+) {
+    let data = Box::new(ExposedPyFnData { callable });
+    let data_ptr = Box::into_raw(data) as *mut c_void;
+    let external = v8::External::new(scope, data_ptr);
+
+    let tmpl = v8::FunctionTemplate::builder_raw(py_fn_trampoline)
+        .data(external.into())
+        .build(scope);
+
+    let func = tmpl.get_function(scope).expect("get_function");
+    let name_str = v8::String::new(scope, name).expect("name");
+    func.set_name(name_str);
+    global.set(scope, name_str.into(), func.into());
+}
+
+/// The raw extern "C" trampoline that V8 calls for exposed Python functions.
+unsafe extern "C" fn py_fn_trampoline(info: *const v8::FunctionCallbackInfo) {
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+
+        v8::callback_scope!(unsafe scope, info_ref);
+
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+
+        // Extract the ExposedPyFnData from External
+        let data = args.data();
+        if !data.is_external() {
+            return;
+        }
+        let external: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(data) };
+        let fn_data = unsafe { &*(external.value() as *const ExposedPyFnData) };
+
+        // Collect V8 arguments → RustValue (no GIL needed)
+        let argc = args.length();
+        let mut rust_args: Vec<RustValue> = Vec::with_capacity(argc as usize);
+        for i in 0..argc {
+            let arg = args.get(i);
+            rust_args.push(iv8_core::v8_to_rust_impl(scope, arg, 0));
+        }
+
+        // Acquire GIL, call Python, convert result
+        let py_result = Python::with_gil(|py| -> Result<RustValue, String> {
+            // Convert RustValue args to Python objects
+            let py_args = rust_args
+                .iter()
+                .map(|rv| rust_value_to_py(py, rv))
+                .collect::<PyResult<Vec<PyObject>>>()
+                .map_err(|e| format!("arg conversion error: {}", e))?;
+
+            let tuple = PyTuple::new(py, &py_args)
+                .map_err(|e| format!("tuple creation error: {}", e))?;
+
+            // Call the Python callable
+            let result = fn_data
+                .callable
+                .call(py, tuple, None)
+                .map_err(|e| e.to_string())?;
+
+            // Convert Python return value to RustValue
+            py_to_rust_value(py, result.bind(py))
+                .map_err(|e| format!("return conversion error: {}", e))
+        });
+
+        match py_result {
+            Ok(rust_val) => {
+                // RustValue::Null → don't set rv → JS gets undefined
+                // (Python None = JS undefined, matching iv8 behavior)
+                if !matches!(rust_val, RustValue::Null) {
+                    if let Some(v8_val) = rust_value_to_v8(scope, &rust_val) {
+                        rv.set(v8_val);
+                    }
+                }
+            }
+            Err(err_msg) => {
+                if let Some(msg) = v8::String::new(scope, &err_msg) {
+                    let exc = v8::Exception::error(scope, msg);
+                    scope.throw_exception(exc);
+                }
+            }
+        }
+    }));
+
+    if result.is_err() {
+        tracing::error!("panic in exposed Python function callback");
+    }
+}
+
+/// Convert RustValue to a V8 Local<Value>.
+fn rust_value_to_v8<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    value: &RustValue,
+) -> Option<v8::Local<'s, v8::Value>> {
+    match value {
+        RustValue::Null => Some(v8::null(scope).into()),
+        RustValue::Bool(b) => Some(v8::Boolean::new(scope, *b).into()),
+        RustValue::Int(i) => {
+            if *i >= i32::MIN as i64 && *i <= i32::MAX as i64 {
+                Some(v8::Integer::new(scope, *i as i32).into())
+            } else {
+                Some(v8::Number::new(scope, *i as f64).into())
+            }
+        }
+        RustValue::Float(f) => Some(v8::Number::new(scope, *f).into()),
+        RustValue::String(s) => v8::String::new(scope, s).map(|s| s.into()),
+        RustValue::Bytes(b) => {
+            let store = v8::ArrayBuffer::new_backing_store_from_vec(b.clone());
+            let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
+            Some(v8::Uint8Array::new(scope, ab, 0, b.len()).expect("Uint8Array").into())
+        }
+        RustValue::Array(arr) => {
+            let v8_arr = v8::Array::new(scope, arr.len() as i32);
+            for (i, item) in arr.iter().enumerate() {
+                if let Some(v) = rust_value_to_v8(scope, item) {
+                    v8_arr.set_index(scope, i as u32, v);
+                }
+            }
+            Some(v8_arr.into())
+        }
+        RustValue::Object(map) => {
+            let obj = v8::Object::new(scope);
+            for (k, v) in map {
+                if let (Some(key), Some(val)) = (v8::String::new(scope, k), rust_value_to_v8(scope, v)) {
+                    obj.set(scope, key.into(), val);
+                }
+            }
+            Some(obj.into())
+        }
+        RustValue::JsObject(s) => v8::String::new(scope, s).map(|s| s.into()),
+    }
+}
+
+/// Convert a Python object to RustValue (for return value conversion).
+fn py_to_rust_value(_py: Python<'_>, obj: &Bound<'_, PyAny>) -> PyResult<RustValue> {
+    if obj.is_none() {
+        return Ok(RustValue::Null);
+    }
+
+    // bool before int (bool is subclass of int in Python)
+    if let Ok(b) = obj.extract::<bool>() {
+        return Ok(RustValue::Bool(b));
+    }
+
+    if let Ok(i) = obj.extract::<i64>() {
+        return Ok(RustValue::Int(i));
+    }
+
+    if let Ok(f) = obj.extract::<f64>() {
+        return Ok(RustValue::Float(f));
+    }
+
+    if let Ok(s) = obj.extract::<String>() {
+        return Ok(RustValue::String(s));
+    }
+
+    // Check if it's bytes type
+    if obj.is_instance_of::<PyBytes>() {
+        if let Ok(b) = obj.extract::<Vec<u8>>() {
+            return Ok(RustValue::Bytes(b));
+        }
+    }
+
+    if let Ok(list) = obj.downcast::<PyList>() {
+        let mut arr = Vec::with_capacity(list.len());
+        for item in list.iter() {
+            arr.push(py_to_rust_value(_py, &item)?);
+        }
+        return Ok(RustValue::Array(arr));
+    }
+
+    if let Ok(dict) = obj.downcast::<PyDict>() {
+        let mut map = std::collections::HashMap::new();
+        for (k, v) in dict.iter() {
+            let key: String = k.extract()?;
+            map.insert(key, py_to_rust_value(_py, &v)?);
+        }
+        return Ok(RustValue::Object(map));
+    }
+
+    // Fallback: convert to string
+    let s = obj.str()?.to_string();
+    Ok(RustValue::String(s))
+}
+
+/// Convert RustValue to PyObject (for argument conversion to Python).
+fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
+    match value {
+        RustValue::Null => Ok(py.None()),
+        RustValue::Bool(b) => Ok((*b).into_pyobject(py).expect("bool").to_owned().into_any().into()),
+        RustValue::Int(i) => Ok((*i).into_pyobject(py).expect("int").into_any().into()),
+        RustValue::Float(f) => Ok((*f).into_pyobject(py).expect("float").into_any().into()),
+        RustValue::String(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
+        RustValue::Bytes(b) => Ok(b.as_slice().into_pyobject(py).expect("bytes").into_any().into()),
+        RustValue::Array(arr) => {
+            let list = PyList::empty(py);
+            for item in arr {
+                list.append(rust_value_to_py(py, item)?)?;
+            }
+            Ok(list.into_any().into())
+        }
+        RustValue::Object(map) => {
+            let dict = PyDict::new(py);
+            for (k, v) in map {
+                dict.set_item(k, rust_value_to_py(py, v)?)?;
+            }
+            Ok(dict.into_any().into())
+        }
+        RustValue::JsObject(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
+    }
+}
