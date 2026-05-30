@@ -63,6 +63,16 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     install_method(scope, doc_obj, "getElementsByClassName", get_elements_by_class_name);
     install_method(scope, doc_obj, "createElement", create_element);
 
+    // EventTarget methods on document (v0.2: L-03 fix).
+    //
+    // Real DOM exposes addEventListener/removeEventListener/dispatchEvent on
+    // document because Document inherits from EventTarget. v0.1 had stub
+    // versions installed via document_props.js that did nothing. v0.2 wires
+    // them to the EventListenerRegistry using the DOM tree's root NodeId.
+    install_method(scope, doc_obj, "addEventListener", add_event_listener_callback);
+    install_method(scope, doc_obj, "removeEventListener", remove_event_listener_callback);
+    install_method(scope, doc_obj, "dispatchEvent", dispatch_event_callback);
+
     // Install document.documentElement / document.body / document.head as accessors
     install_doc_accessor(scope, doc_obj, "documentElement", doc_document_element);
     install_doc_accessor(scope, doc_obj, "body", doc_body);
@@ -74,6 +84,30 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     // Install document.URL / document.documentURI as accessors (= location.href)
     install_doc_accessor(scope, doc_obj, "URL", doc_url);
     install_doc_accessor(scope, doc_obj, "documentURI", doc_url);
+
+    // Bind document to the DOM tree's root NodeId so that
+    // addEventListener/dispatchEvent can locate it via extract_node_id.
+    // If no Document is loaded yet (e.g. JSContext init before page.load),
+    // skip silently — the binding will be redone when set_document/page_load runs.
+    let isolate: &v8::Isolate = &*scope;
+    let state = RuntimeState::get(isolate);
+    let root_id_opt = state
+        .document
+        .borrow()
+        .as_ref()
+        .map(|doc| doc.root_id());
+    if let Some(root_id) = root_id_opt {
+        let id_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let nz: std::num::NonZeroUsize = unsafe { std::mem::transmute(root_id) };
+        let id_val = v8::Number::new(scope, nz.get() as f64);
+        // Use DontEnum so Object.keys(document) doesn't show __nodeId__.
+        doc_obj.define_own_property(
+            scope,
+            id_key.into(),
+            id_val.into(),
+            v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::DONT_DELETE,
+        );
+    }
 
     // Set document on global
     let key = v8::String::new(scope, "document").expect("document key");
