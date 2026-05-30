@@ -533,6 +533,118 @@ impl JSContext {
         Ok(kernel.cdp_process_events())
     }
 
+    // ─── Trace Mode (v0.3 M16) ───────────────────────────────────────────────
+
+    /// Set a trace point: a conditional breakpoint that doesn't pause execution
+    /// but records data via a side-effect expression.
+    ///
+    /// Internally sets a CDP breakpoint with condition:
+    ///   `(__iv8_trace__.push(<expression>), false)`
+    ///
+    /// The expression should evaluate to a JSON-serializable value (e.g.
+    /// `JSON.stringify({pc:pc, op:H[pc], s:stack.slice(0,3)})`).
+    ///
+    /// Call `get_trace_log()` after execution to retrieve all recorded entries.
+    ///
+    /// Args:
+    ///     url: Script URL to set trace point in
+    ///     line: Line number (0-based)
+    ///     column: Column number (0-based, optional)
+    ///     expression: JS expression to evaluate and record each time the line is hit
+    ///
+    /// Returns:
+    ///     trace_point_id (str) for later removal via remove_trace_point()
+    ///
+    /// Example:
+    ///     tp = ctx.set_trace_point("tdc.js", 1234, None,
+    ///         "JSON.stringify({pc:pc, op:H[pc]})")
+    ///     ctx.eval("TDC.getData(true)")
+    ///     trace = ctx.get_trace_log()
+    #[pyo3(signature = (url, line, column=None, expression="'hit'"))]
+    fn set_trace_point(
+        &self,
+        url: &str,
+        line: u32,
+        column: Option<u32>,
+        expression: &str,
+    ) -> PyResult<String> {
+        self.assert_thread()?;
+
+        // Ensure __iv8_trace__ array exists
+        {
+            let mut kernel = self.inner.kernel.lock();
+            kernel.eval(
+                "if (typeof __iv8_trace__ === 'undefined') { var __iv8_trace__ = []; }",
+                iv8_core::EvalOpts::default(),
+            ).ok();
+        }
+
+        // Build condition: push expression result to trace array, return false (don't pause)
+        // Respects __iv8_trace_limit__ if set.
+        let condition = format!(
+            "(typeof __iv8_trace_limit__ === 'undefined' || __iv8_trace__.length < __iv8_trace_limit__) \
+             ? (__iv8_trace__.push({}), false) : false",
+            expression
+        );
+
+        // Set the breakpoint via CDP
+        let mut kernel = self.inner.kernel.lock();
+        kernel.cdp_set_breakpoint(url, line, column, Some(&condition))
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+    }
+
+    /// Remove a trace point by id (returned by set_trace_point).
+    fn remove_trace_point(&self, trace_point_id: &str) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.cdp_remove_breakpoint(trace_point_id)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+    }
+
+    /// Get the trace log: all entries recorded by trace points since last clear.
+    ///
+    /// Returns:
+    ///     list of values (whatever the trace point expressions produced)
+    fn get_trace_log(&self, py: Python<'_>) -> PyResult<PyObject> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let global = kernel.eval(
+            "typeof __iv8_trace__ !== 'undefined' ? __iv8_trace__ : []",
+            iv8_core::EvalOpts::default(),
+        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        let rust_value = kernel.global_to_rust_value(&global);
+        rust_value_to_py(py, &rust_value)
+    }
+
+    /// Clear the trace log.
+    fn clear_trace_log(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.eval("__iv8_trace__ = [];", iv8_core::EvalOpts::default())
+            .map_err(crate::error::iv8_error_to_pyerr)?;
+        Ok(())
+    }
+
+    /// Set a maximum trace log size. When reached, trace points stop recording.
+    ///
+    /// Args:
+    ///     max_entries: Maximum number of entries before auto-stop.
+    ///                  Set to 0 to disable limit.
+    fn set_trace_limit(&self, max_entries: u32) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        if max_entries == 0 {
+            kernel.eval("__iv8_trace_limit__ = Infinity;", iv8_core::EvalOpts::default())
+                .map_err(crate::error::iv8_error_to_pyerr)?;
+        } else {
+            kernel.eval(
+                &format!("__iv8_trace_limit__ = {};", max_entries),
+                iv8_core::EvalOpts::default(),
+            ).map_err(crate::error::iv8_error_to_pyerr)?;
+        }
+        Ok(())
+    }
+
     /// Set a Python network handler for fetch/XHR fallback.
     ///
     /// The handler runs as the second tier in the three-layer chain:
