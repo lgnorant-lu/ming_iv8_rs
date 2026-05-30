@@ -6,6 +6,30 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+### Added
+
+- `iv8_core::v8_extra` module providing `MarkAsUndetectable` and
+  `SetCallAsFunctionHandler` bindings via cc crate, enabling real V8
+  `[[IsHTMLDDA]]` semantics without requiring a forked v8 crate.
+- 3 new integration tests for v8_extra (typeof/==/Boolean/if, callable,
+  document.all combined pattern).
+
+### Changed
+
+- `__iv8__` tool object now has full `[[IsHTMLDDA]]` semantics:
+  `typeof __iv8__ === 'undefined'`, `__iv8__ == null`, `Boolean(__iv8__) === false`.
+  Property access (`__iv8__.page.load` etc.) remains unchanged.
+- `document.all` now uses real `MarkAsUndetectable` (was JS-level workaround).
+- Resolves L-01 known limitation from v0.1.
+
+### Build
+
+- iv8-core gains a `build.rs` that compiles `cxx/iv8_v8_extra.cc` via cc crate.
+  Auto-locates V8 headers from cargo registry cache; override with
+  `IV8_V8_CRATE_DIR` env var if needed.
+- Requires C++20 compiler. On MSVC `/Zc:__cplusplus` is added so V8 headers
+  detect the standard version correctly.
+
 ## [0.1.0] - 2026-05-30
 
 ### Added
