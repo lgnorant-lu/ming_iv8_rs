@@ -13,6 +13,14 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   `[[IsHTMLDDA]]` semantics without requiring a forked v8 crate.
 - 3 new integration tests for v8_extra (typeof/==/Boolean/if, callable,
   document.all combined pattern).
+- `RustValue` enum gains four variants (`BigInt`, `DateTime`, `Map`, `Set`)
+  produced when `strict_compat=False`. They map to Python `int` (any size),
+  `datetime.datetime` (UTC), `dict` (insertion order), `set` respectively.
+- `iv8_py::value_convert` helper module centralizes the new conversions and
+  also handles round-trip back to V8 (`int -> BigInt`, `datetime -> Date`,
+  `dict -> Map`, `set -> Set`).
+- `RuntimeState::has` helper that returns `false` when no state is installed
+  (used by conversion code that may run before/without a RuntimeState).
 
 ### Changed
 
@@ -27,7 +35,11 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - `fetch()` requests are now recorded to `__iv8__.netLog.entries` alongside
   XHR. Same entry shape: `{ method, url, headers, body }`. Header names are
   lowercased; method is uppercased to match XHR semantics.
-- Resolves L-01, L-03, L-04 known limitations from v0.1.
+- When `strict_compat=False`, type conversion produces richer Python values:
+  `BigInt -> int`, `Date -> datetime.datetime`, `Map -> dict`, `Set -> set`.
+  Previously these all degraded to strings or `None`.
+  `strict_compat=True` (default) is unchanged for v0.1 compatibility.
+- Resolves L-01, L-03, L-04, L-09, L-10 known limitations from v0.1.
 
 ### Build
 
