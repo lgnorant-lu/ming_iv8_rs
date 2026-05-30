@@ -1,34 +1,63 @@
-//! MarkAsUndetectable: implement [[IsHTMLDDA]] for document.all and __iv8__ tool object.
+//! MarkAsUndetectable: implement [[IsHTMLDDA]] for `__iv8__` tool object.
 //!
-//! NOTE: v8 crate 147 does NOT expose `ObjectTemplate::MarkAsUndetectable()`.
-//! This is a known gap (the C++ API exists but the Rust binding doesn't wrap it).
+//! v0.2: Uses real V8 `MarkAsUndetectable` via [`iv8_core::v8_extra`] (compiled
+//! through cc crate; see crates/iv8-core/cxx/iv8_v8_extra.cc).
 //!
-//! For v0.1, we use a JS-level workaround:
-//! - `__iv8__` is installed as DontEnum (not in Object.keys) but typeof will be "object"
-//! - `document.all` uses the same approach
+//! With real MarkAsUndetectable installed:
+//! - `typeof __iv8__` returns `"undefined"` (was "object" in v0.1)
+//! - `__iv8__ == null` returns `true` (was false in v0.1)
+//! - `Boolean(__iv8__)` returns `false` (was true in v0.1)
+//! - `if (__iv8__) { ... }` does not enter (was true in v0.1)
+//! - `'__iv8__' in window` still returns `true` (unchanged)
+//! - Properties on `__iv8__` remain accessible (`__iv8__.page.load`, etc.)
 //!
-//! TODO (M1 follow-up): Either:
-//! 1. Fork v8 crate and add MarkAsUndetectable binding
-//! 2. Use raw FFI to call the C++ API directly
-//! 3. Upstream a PR to denoland/rusty_v8
-//!
-//! Without the real MarkAsUndetectable:
-//! - `typeof __iv8__` will be "object" (not "undefined") [FAIL]
-//! - `__iv8__ == null` will be false (not true) [FAIL]
-//! - `'__iv8__' in window` will be true [OK]
-//! - `Object.keys(window).includes('__iv8__')` will be false [OK]
+//! V8 invariant: MarkAsUndetectable requires CallAsFunctionHandler. We install
+//! a no-op handler (the tool object is not meant to be called as a function;
+//! the handler exists only to satisfy V8's runtime check).
 
-/// Install the `__iv8__` tool object on the global with DontEnum attribute.
-/// Without MarkAsUndetectable, typeof will be "object" (not "undefined").
-/// This is a v0.1 limitation — see module doc for follow-up plan.
+use iv8_core::v8_extra;
+
+/// No-op CallAsFunctionHandler. Returns undefined.
+///
+/// Required because V8 asserts that an undetectable ObjectTemplate has a
+/// call handler when an instance is created. The `__iv8__` tool object is
+/// not designed to be invoked as a function (`__iv8__()`), so this handler
+/// just returns undefined silently.
+fn iv8_tool_call_handler(
+    _scope: &mut v8::PinScope,
+    _args: v8::FunctionCallbackArguments,
+    _rv: v8::ReturnValue,
+) {
+}
+
+/// Install the `__iv8__` tool object on the global with [[IsHTMLDDA]] semantics.
+///
+/// The returned object is the `__iv8__` instance. Subsequent calls (like
+/// `wrap_native::install`) will populate it with methods.
+///
+/// Properties:
+/// - `typeof __iv8__ === 'undefined'` (via MarkAsUndetectable)
+/// - Not enumerable on `window` (via DontEnum)
+/// - Properties accessible (e.g. `__iv8__.wrapNative` works after install)
 pub fn install_iv8_tool_object<'s>(
     scope: &v8::PinScope<'s, '_>,
     global: v8::Local<'s, v8::Object>,
     name: &str,
 ) -> v8::Local<'s, v8::Object> {
-    let tool_obj = v8::Object::new(scope);
+    // Build an ObjectTemplate with both undetectable + call handler set
+    // (V8 requires both together).
+    let templ = v8::ObjectTemplate::new(scope);
+    v8_extra::mark_as_undetectable(&templ);
+    v8_extra::set_call_as_function_handler(
+        &templ,
+        v8::MapFnTo::map_fn_to(iv8_tool_call_handler),
+        None,
+    );
+    let tool_obj = templ
+        .new_instance(scope)
+        .expect("failed to create __iv8__ undetectable instance");
 
-    // Install on global with DontEnum (Object.keys won't show it)
+    // Install on global with DontEnum so Object.keys does not show it
     let key = v8::String::new(scope, name).expect("key");
     global.define_own_property(
         scope,
@@ -40,11 +69,27 @@ pub fn install_iv8_tool_object<'s>(
     tool_obj
 }
 
-/// Install `document.all` on the document object with DontEnum.
-/// Without MarkAsUndetectable, typeof will be "object" (not "undefined").
-/// This is a v0.1 limitation.
+/// Install `document.all` on the document object as a callable HTMLDDA object.
+///
+/// Mirrors HTMLAllCollection semantics:
+/// - `typeof document.all === 'undefined'`
+/// - `document.all == null` is true
+/// - `document.all('id')` calls the call handler (currently a stub returning
+///   undefined; full getElementById integration is a v0.2 follow-up once DOM
+///   is wired into the call path).
 pub fn install_document_all(scope: &v8::PinScope<'_, '_>, document: v8::Local<v8::Object>) {
-    let all_obj = v8::Object::new(scope);
+    let templ = v8::ObjectTemplate::new(scope);
+    v8_extra::mark_as_undetectable(&templ);
+    // For now, document.all('id') returns undefined. Full integration with
+    // the DOM tree (getElementById) is tracked as a v0.2 follow-up.
+    v8_extra::set_call_as_function_handler(
+        &templ,
+        v8::MapFnTo::map_fn_to(iv8_tool_call_handler),
+        None,
+    );
+    let all_obj = templ
+        .new_instance(scope)
+        .expect("failed to create document.all undetectable instance");
 
     let key = v8::String::new(scope, "all").expect("key");
     document.define_own_property(
@@ -59,7 +104,10 @@ pub fn install_document_all(scope: &v8::PinScope<'_, '_>, document: v8::Local<v8
 mod tests {
     use super::*;
 
-    fn eval_with_setup(setup: impl FnOnce(&v8::PinScope<'_, '_>, v8::Local<v8::Object>), source: &str) -> String {
+    fn eval_with_setup(
+        setup: impl FnOnce(&v8::PinScope<'_, '_>, v8::Local<v8::Object>),
+        source: &str,
+    ) -> String {
         iv8_core::v8_init::ensure_v8_initialized();
         let mut isolate = v8::Isolate::new(v8::CreateParams::default());
 
@@ -80,7 +128,9 @@ mod tests {
     #[test]
     fn iv8_tool_in_operator_true() {
         let result = eval_with_setup(
-            |scope, global| { install_iv8_tool_object(scope, global, "__iv8__"); },
+            |scope, global| {
+                install_iv8_tool_object(scope, global, "__iv8__");
+            },
             "'__iv8__' in this",
         );
         assert_eq!(result, "true");
@@ -89,34 +139,75 @@ mod tests {
     #[test]
     fn iv8_tool_not_in_object_keys() {
         let result = eval_with_setup(
-            |scope, global| { install_iv8_tool_object(scope, global, "__iv8__"); },
+            |scope, global| {
+                install_iv8_tool_object(scope, global, "__iv8__");
+            },
             "Object.keys(this).includes('__iv8__')",
         );
         assert_eq!(result, "false");
     }
 
     #[test]
-    fn iv8_tool_is_object() {
-        // Without MarkAsUndetectable, typeof is "object" (known v0.1 limitation)
+    fn iv8_tool_typeof_is_undefined() {
+        // v0.2: with real MarkAsUndetectable, typeof returns "undefined".
         let result = eval_with_setup(
-            |scope, global| { install_iv8_tool_object(scope, global, "__iv8__"); },
+            |scope, global| {
+                install_iv8_tool_object(scope, global, "__iv8__");
+            },
             "typeof __iv8__",
         );
-        // v0.1: "object" (not "undefined" — that requires MarkAsUndetectable)
-        assert_eq!(result, "object");
+        assert_eq!(result, "undefined");
     }
 
     #[test]
-    fn iv8_tool_accessible() {
+    fn iv8_tool_loose_equals_null() {
         let result = eval_with_setup(
-            |scope, global| { install_iv8_tool_object(scope, global, "__iv8__"); },
-            "__iv8__ !== undefined",
+            |scope, global| {
+                install_iv8_tool_object(scope, global, "__iv8__");
+            },
+            "__iv8__ == null",
         );
         assert_eq!(result, "true");
     }
 
     #[test]
-    fn document_all_accessible() {
+    fn iv8_tool_boolean_is_false() {
+        let result = eval_with_setup(
+            |scope, global| {
+                install_iv8_tool_object(scope, global, "__iv8__");
+            },
+            "Boolean(__iv8__)",
+        );
+        assert_eq!(result, "false");
+    }
+
+    #[test]
+    fn iv8_tool_if_does_not_enter() {
+        let result = eval_with_setup(
+            |scope, global| {
+                install_iv8_tool_object(scope, global, "__iv8__");
+            },
+            "let x = 0; if (__iv8__) { x = 1; } x",
+        );
+        assert_eq!(result, "0");
+    }
+
+    #[test]
+    fn iv8_tool_properties_still_accessible() {
+        let result = eval_with_setup(
+            |scope, global| {
+                let obj = install_iv8_tool_object(scope, global, "__iv8__");
+                let key = v8::String::new(scope, "marker").unwrap();
+                let val = v8::Number::new(scope, 42.0);
+                obj.set(scope, key.into(), val.into()).unwrap();
+            },
+            "__iv8__.marker",
+        );
+        assert_eq!(result, "42");
+    }
+
+    #[test]
+    fn document_all_typeof_is_undefined() {
         let result = eval_with_setup(
             |scope, global| {
                 let doc = v8::Object::new(scope);
@@ -124,9 +215,38 @@ mod tests {
                 global.set(scope, key.into(), doc.into());
                 install_document_all(scope, doc);
             },
-            "document.all !== undefined",
+            "typeof document.all",
+        );
+        assert_eq!(result, "undefined");
+    }
+
+    #[test]
+    fn document_all_loose_equals_null() {
+        let result = eval_with_setup(
+            |scope, global| {
+                let doc = v8::Object::new(scope);
+                let key = v8::String::new(scope, "document").unwrap();
+                global.set(scope, key.into(), doc.into());
+                install_document_all(scope, doc);
+            },
+            "document.all == null",
         );
         assert_eq!(result, "true");
+    }
+
+    #[test]
+    fn document_all_callable_returns_undefined() {
+        let result = eval_with_setup(
+            |scope, global| {
+                let doc = v8::Object::new(scope);
+                let key = v8::String::new(scope, "document").unwrap();
+                global.set(scope, key.into(), doc.into());
+                install_document_all(scope, doc);
+            },
+            "typeof document.all('myId')",
+        );
+        // Without DOM integration, the call returns undefined (stub handler).
+        assert_eq!(result, "undefined");
     }
 
     #[test]
