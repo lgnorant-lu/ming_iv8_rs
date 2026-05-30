@@ -1,0 +1,133 @@
+# ============================================================================
+# iv8-rs .gitignore
+# ============================================================================
+
+# ── Rust ────────────────────────────────────────────────────────────────────
+target/
+Cargo.lock.bak
+**/*.rs.bk
+*.pdb
+
+# ── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.dylib
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+develop-eggs/
+.installed.cfg
+
+# ── Python virtual environments ─────────────────────────────────────────────
+.venv/
+.venv-probe/
+venv/
+env/
+ENV/
+.python-version
+
+# ── uv lock files ───────────────────────────────────────────────────────────
+# uv.lock kept (lockfile should be committed for reproducibility)
+
+# ── maturin / wheels ────────────────────────────────────────────────────────
+wheels/
+*.whl
+
+# ── IDE / Editor ────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.iml
+
+# ── Kiro IDE / Spec workflow（项目独属，不提交）────────────────────────────
+.kiro/
+.ace-tool/
+
+# ── Test / Coverage / Cache ─────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.hypothesis/
+*.cover
+.cache/
+coverage.xml
+nosetests.xml
+
+# ── Benchmark / Profiling ───────────────────────────────────────────────────
+flamegraph.svg
+perf.data*
+*.prof
+
+# ── Reverse engineering / Ghidra (调研产物，不提交大文件)──────────────────
+ghidra_proj/
+
+# ── Logs ────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Temporary / Scratch ─────────────────────────────────────────────────────
+*.tmp
+*.bak
+*.orig
+scratch/
+tmp/
+
+# ── iv8 reference (参考代码，不提交)─────────────────────────────────────────
+tests/iv8-ref/
+
+# ── Documentation build outputs ─────────────────────────────────────────────
+docs/_build/
+docs/.doctrees/
+site/
+
+# ── OS-specific ─────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ── Ghidra / 反编译相关脚本（章程禁止）────────────────────────────────────
+scripts/ghidra_*.py
+scripts/disasm_*.py
+scripts/find_func_rvas.py
+scripts/debug_rel.py
+docs/research/iv8-asm-analysis.md
+docs/research/iv8-binary-analysis.md
+docs/research/iv8-ghidra-analysis.md
+docs/research/disasm/
+docs/research/ghidra_c/
+*.asm
+*.gpr
+*.gbf
+*.rep/
+
+# ── Probe scripts（黑盒探测脚本，非核心代码）───────────────────────────────
+scripts/probe-iv8*.py
+scripts/probe_iv8*.py
+tests/probe_*.py
+
+# ── Activate scripts (本地环境)──────────────────────────────────────────────
+scripts/activate-env.ps1
+
+# ── 本地测试探测产物 ─────────────────────────────────────────────────────
+tests/probe_results.json
+tests/_*.py
+scripts/_*.py
+scripts/diag*.py

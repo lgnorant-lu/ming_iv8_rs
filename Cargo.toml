@@ -1,0 +1,87 @@
+[workspace]
+members = [
+    "crates/iv8-core",
+    "crates/iv8-undetect",
+    "crates/iv8-py",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.80"
+license = "MIT"
+
+[workspace.dependencies]
+# V8 engine
+v8 = "147"
+
+# Python binding
+pyo3 = { version = "0.23", features = ["extension-module"] }
+
+# Logging
+tracing = { version = "0.1", features = ["release_max_level_debug"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+# Error handling
+thiserror = "2"
+
+# Data
+bytes = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# DOM
+ego-tree = "=0.10.0"
+html5ever = "0.31"
+selectors = "0.26"
+cssparser = "0.34"
+
+# Async / concurrency
+parking_lot = "0.12"
+
+# URL
+url = "2"
+
+# Crypto (RustCrypto)
+sha2 = "0.10"
+sha1 = "0.10"
+hmac = "0.12"
+aes-gcm = "0.10"
+cbc = { version = "0.1", features = ["alloc"] }
+aes = "0.8"
+# RSA + ECDSA/ECDH
+rsa = { version = "0.9", features = ["sha2"] }
+p256 = { version = "0.13", features = ["ecdsa", "ecdh"] }
+p384 = { version = "0.13", features = ["ecdsa", "ecdh"] }
+elliptic-curve = "0.13"
+ecdsa = "0.16"
+hkdf = "0.12"
+pkcs8 = { version = "0.10", features = ["alloc"] }
+spki = "0.7"
+rand = "0.8"
+
+# Canvas 2D rendering
+tiny-skia = { version = "0.11", default-features = false, features = ["std"] }
+png = "0.17"
+
+[workspace.lints.clippy]
+# REQ-ENG-007: unwrap/expect/panic should be avoided in production code.
+# Currently set to "warn" (not "deny") to allow gradual cleanup.
+# TODO: upgrade to "deny" before v0.1 release after fixing all occurrences.
+unwrap_used = "warn"
+expect_used = "warn"
+panic = "warn"
+
+[workspace.lints.rust]
+unsafe_code = "allow"
+
+[profile.dev]
+debug = "line-tables-only"
+incremental = true
+
+[profile.release]
+panic = "unwind"
+lto = "thin"
+codegen-units = 16
+strip = "debuginfo"

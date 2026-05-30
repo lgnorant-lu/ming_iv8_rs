@@ -1,0 +1,58 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "iv8-rs"
+version = "0.1.0"
+requires-python = ">=3.13"
+description = "High-fidelity browser runtime for Python, powered by V8"
+license = { text = "MIT" }
+readme = "README.md"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "maturin>=1.7"]
+
+[tool.maturin]
+manifest-path = "crates/iv8-py/Cargo.toml"
+python-source = "python"
+module-name = "iv8_rs._iv8"
+features = ["pyo3/extension-module"]
+profile = "release"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "e2e: end-to-end tests (slow)",
+    "bench: benchmark tests",
+]
+
+# ─── cibuildwheel ─────────────────────────────────────────────────────────────
+[tool.cibuildwheel]
+# Build cp313 (standard) and cp313t (free-threaded / nogil)
+build = ["cp313-*", "cp313t-*"]
+# Skip musl Linux (Alpine) — v8 build is complex there
+skip = ["*-musllinux_*"]
+# Test command after building each wheel
+test-requires = ["pytest"]
+test-command = "pytest {project}/tests/smoke_test.py -q"
+
+[tool.cibuildwheel.linux]
+before-all = [
+    "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
+    "source $HOME/.cargo/env",
+]
+environment = { PATH = "$HOME/.cargo/bin:$PATH", CARGO_NET_GIT_FETCH_WITH_CLI = "true" }
+repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
+
+[tool.cibuildwheel.macos]
+before-all = [
+    "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
+    "source $HOME/.cargo/env",
+]
+environment = { PATH = "$HOME/.cargo/bin:$PATH" }
+repair-wheel-command = "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}"
+
+[tool.cibuildwheel.windows]
+# Rust is pre-installed on GitHub Actions Windows runners
+before-all = []
