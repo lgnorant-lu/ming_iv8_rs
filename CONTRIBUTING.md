@@ -248,7 +248,44 @@ Refs: REQ-CORE-013, REQ-ENG-004
 
 ---
 
-## 六、参考
+## 六、Release Commits（发布相关特殊 commit）
+
+发布流程中有两种特殊 commit，不属于日常开发但必须遵守规范：
+
+### 6.1 Release 准备 commit
+
+```
+chore: prepare vX.Y.Z release
+
+更新 CHANGELOG.md 归档 [Unreleased] -> [X.Y.Z]。
+更新 docs/PROGRESS.md 时间戳与最终状态。
+```
+
+- type: `chore`，不带 scope（项目根级操作）
+- 此 commit 之后立即打 tag
+
+### 6.2 Version bump commit
+
+```
+chore: bump version to X.Y.Z-dev
+
+Cargo.toml workspace.package.version: "X.Y.Z" -> "X.(Y+1).0-dev"
+开始下一个开发周期。
+```
+
+- type: `chore`，不带 scope
+- 此 commit 在 tag 之后
+
+### 6.3 Release tag message
+
+Tag message 不是 commit message，但遵循相同审美：
+- subject: `release: vX.Y.Z -- <英文短描述>`
+- body: 中文摘要 + 英文 highlights + known limitations + stats
+- 详见 RELEASING.md §4
+
+---
+
+## 七、参考
 
 - [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
 - [Semantic Versioning 2.0.0](https://semver.org/)
