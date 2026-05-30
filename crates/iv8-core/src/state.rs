@@ -63,6 +63,9 @@ pub struct RuntimeState {
     /// Optional CDP programmatic client (Python-driven Inspector control).
     pub cdp_client: RefCell<Option<crate::inspector::CdpClient>>,
 
+    /// Optional crypto seed for deterministic crypto.getRandomValues.
+    pub crypto_seed: RefCell<Option<u64>>,
+
     /// Canvas 2D instances keyed by canvas ID (for toDataURL/getImageData).
     pub canvases: RefCell<std::collections::HashMap<String, crate::canvas::canvas2d::Canvas2D>>,
 }
@@ -108,6 +111,7 @@ impl RuntimeState {
             network_handler: RefCell::new(None),
             inspector_session: RefCell::new(None),
             cdp_client: RefCell::new(None),
+            crypto_seed: RefCell::new(None),
             canvases: RefCell::new(std::collections::HashMap::new()),
         }
     }

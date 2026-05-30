@@ -55,6 +55,9 @@ impl JSContext {
         time_mode = "logical",
         js_api = "__iv8__",
         strict_compat = true,
+        random_seed = None,
+        crypto_seed = None,
+        time_freeze = None,
     ))]
     fn new(
         environment: Option<&Bound<'_, PyDict>>,
@@ -62,6 +65,9 @@ impl JSContext {
         time_mode: &str,
         js_api: &str,
         strict_compat: bool,
+        random_seed: Option<u64>,
+        crypto_seed: Option<u64>,
+        time_freeze: Option<f64>,
     ) -> PyResult<Self> {
         // Parse config dict
         let mut timezone: Option<String> = None;
@@ -110,6 +116,9 @@ impl JSContext {
             time_mode: tm,
             js_api_name: js_api.to_string(),
             environment_overrides: env_overrides,
+            random_seed,
+            crypto_seed,
+            time_freeze,
         };
 
         let kernel = EmbeddedV8Kernel::new(kernel_config).map_err(error::iv8_error_to_pyerr)?;

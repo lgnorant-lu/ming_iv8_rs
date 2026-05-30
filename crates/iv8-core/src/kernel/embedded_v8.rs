@@ -86,6 +86,11 @@ impl EmbeddedV8Kernel {
     pub fn new(config: KernelConfig) -> Result<Self, IV8Error> {
         ensure_v8_initialized();
 
+        // Extract deterministic config before moving config fields
+        let random_seed = config.random_seed;
+        let crypto_seed = config.crypto_seed;
+        let time_freeze = config.time_freeze;
+
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
 
         let mut isolate = v8::Isolate::new(v8::CreateParams::default());
@@ -123,6 +128,9 @@ impl EmbeddedV8Kernel {
 
         // Install anti-detection shims (__iv8__ + wrapNative + window.chrome)
         kernel.install_undetect_shims();
+
+        // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
+        kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
         // Install DOM templates (FunctionTemplate hierarchy)
         kernel.install_dom_templates();
@@ -333,6 +341,74 @@ impl EmbeddedV8Kernel {
         };
         unsafe { self.isolate.exit(); }
         result
+    }
+
+    /// Install deterministic overrides for Math.random, crypto, and time.
+    ///
+    /// Called during init if random_seed / crypto_seed / time_freeze are set.
+    /// Uses JS-layer override (not V8 native) — simple and effective for our use case.
+    /// ChaosVM caching `var R = Math.random` before our override is handled by
+    /// installing this BEFORE any user code runs (including tdc.js).
+    fn install_deterministic_overrides_from(
+        &mut self,
+        random_seed: Option<u64>,
+        crypto_seed: Option<u64>,
+        time_freeze: Option<f64>,
+    ) {
+        // Math.random seed: xorshift128+ PRNG in JS
+        if let Some(seed) = random_seed {
+            let js = format!(r#"
+(function() {{
+    // xorshift128+ seeded PRNG (same algorithm as V8's Math.random)
+    var s0 = BigInt({seed}) | 1n;  // ensure non-zero
+    var s1 = (BigInt({seed}) * 6364136223846793005n + 1442695040888963407n) & 0xFFFFFFFFFFFFFFFFn;
+    var MASK = 0xFFFFFFFFFFFFFFFFn;
+    Math.random = function random() {{
+        var x = s0;
+        var y = s1;
+        s0 = y;
+        x = x ^ ((x << 23n) & MASK);
+        x = x ^ (x >> 17n);
+        x = x ^ y;
+        x = x ^ (y >> 26n);
+        s1 = x & MASK;
+        // Convert to [0, 1) float: take upper 52 bits
+        var combined = ((s0 + s1) & MASK);
+        return Number(combined & 0x1FFFFFFFFFFFFFn) / 9007199254740992;
+    }};
+}})();
+"#, seed = seed);
+            self.eval(&js, EvalOpts::default()).ok();
+        }
+
+        // time_freeze: override Date.now, performance.now, new Date()
+        if let Some(freeze_ms) = time_freeze {
+            let js = format!(r#"
+(function() {{
+    var FROZEN = {freeze_ms};
+    Date.now = function now() {{ return FROZEN; }};
+    var _OrigDate = Date;
+    Date = function Date() {{
+        if (arguments.length === 0) return new _OrigDate(FROZEN);
+        return new (Function.prototype.bind.apply(_OrigDate, [null].concat(Array.from(arguments))))();
+    }};
+    Date.now = function now() {{ return FROZEN; }};
+    Date.parse = _OrigDate.parse;
+    Date.UTC = _OrigDate.UTC;
+    Date.prototype = _OrigDate.prototype;
+    if (typeof performance !== 'undefined') {{
+        performance.now = function now() {{ return 0; }};
+    }}
+}})();
+"#, freeze_ms = freeze_ms as u64);
+            self.eval(&js, EvalOpts::default()).ok();
+        }
+
+        // crypto_seed: store in RuntimeState for Rust-side random.rs to use
+        if let Some(seed) = crypto_seed {
+            let state = crate::state::RuntimeState::get(&self.isolate);
+            *state.crypto_seed.borrow_mut() = Some(seed);
+        }
     }
 
     /// Install anti-detection shims (__iv8__ tool object + wrapNative + hookNative + window.chrome).

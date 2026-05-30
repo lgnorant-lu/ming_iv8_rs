@@ -76,7 +76,34 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
 
         // Generate random bytes
         let mut random_bytes = vec![0u8; byte_length];
-        fill_random(&mut random_bytes);
+
+        // Check for deterministic crypto_seed
+        let isolate: &v8::Isolate = &*scope;
+        let use_seed = if crate::state::RuntimeState::has(isolate) {
+            let state = crate::state::RuntimeState::get(isolate);
+            state.crypto_seed.borrow().is_some()
+        } else {
+            false
+        };
+
+        if use_seed {
+            let state = crate::state::RuntimeState::get(isolate);
+            let seed = state.crypto_seed.borrow().unwrap_or(0);
+            // Simple xorshift64 PRNG seeded from crypto_seed + call counter
+            // Not cryptographically secure, but deterministic (which is the point).
+            let counter = state.increment_eval_count(); // use eval count as nonce
+            let mut s = seed.wrapping_add(counter).wrapping_mul(6364136223846793005) | 1;
+            for chunk in random_bytes.chunks_mut(8) {
+                s ^= s << 13;
+                s ^= s >> 7;
+                s ^= s << 17;
+                let bytes = s.to_le_bytes();
+                let len = chunk.len().min(8);
+                chunk[..len].copy_from_slice(&bytes[..len]);
+            }
+        } else {
+            fill_random(&mut random_bytes);
+        }
 
         // Write into the TypedArray's backing store
         let ab = ta.buffer(scope).expect("buffer");

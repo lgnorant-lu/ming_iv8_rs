@@ -21,6 +21,12 @@ pub struct KernelConfig {
     pub time_mode: crate::state::TimeMode,
     pub js_api_name: String,
     pub environment_overrides: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// If set, Math.random() returns a deterministic sequence seeded by this value.
+    pub random_seed: Option<u64>,
+    /// If set, crypto.getRandomValues() uses this seed for deterministic output.
+    pub crypto_seed: Option<u64>,
+    /// If set, Date.now() / performance.now() / new Date() return this fixed timestamp (ms).
+    pub time_freeze: Option<f64>,
 }
 
 impl Default for KernelConfig {
@@ -30,6 +36,9 @@ impl Default for KernelConfig {
             time_mode: crate::state::TimeMode::Logical,
             js_api_name: "__iv8__".to_string(),
             environment_overrides: None,
+            random_seed: None,
+            crypto_seed: None,
+            time_freeze: None,
         }
     }
 }
