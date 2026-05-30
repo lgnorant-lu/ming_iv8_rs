@@ -222,10 +222,20 @@ class JSContext:
         """
         Set a Python network handler for fetch/XHR fallback.
 
-        Called when a URL is not in the ResourceBundle. The handler receives
-        ``(url: str, method: str)`` and should return:
+        Runs as the second tier of the three-layer chain:
+
+        1. ResourceBundle (pre-registered offline responses)
+        2. Python handler (this) — always called when a URL is not in the
+           bundle, regardless of ``strict_compat`` mode
+        3. NetworkError (offline default when handler returns ``None``)
+
+        The handler receives ``(url: str, method: str)`` and should return:
         - ``(status: int, body: str | bytes)`` to provide a response
-        - ``None`` to reject with NetworkError
+        - ``None`` to fall through to NetworkError
+
+        Both ``fetch()`` and synchronous XMLHttpRequest call the handler.
+        For asynchronous XHR, the handler is invoked when the event loop
+        drains the timer queue.
 
         Example::
 
