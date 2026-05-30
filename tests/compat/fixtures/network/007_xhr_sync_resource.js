@@ -1,0 +1,1 @@
+(function(){var x=new XMLHttpRequest();x.open('GET','https://test.example/r',false);x.send();return x.status;})()

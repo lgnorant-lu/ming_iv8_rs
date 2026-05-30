@@ -1,0 +1,1 @@
+(function(){var f=__iv8__.wrapNative(function(){return 42;},'f');return f();})()

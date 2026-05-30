@@ -1,0 +1,1 @@
+performance.memory.totalJSHeapSize > 0

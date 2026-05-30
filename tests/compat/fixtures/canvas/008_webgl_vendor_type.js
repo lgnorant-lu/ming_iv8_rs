@@ -1,0 +1,1 @@
+(function(){var c=document.createElement('canvas');var gl=c.getContext('webgl');return typeof gl.getParameter(gl.VENDOR);})()

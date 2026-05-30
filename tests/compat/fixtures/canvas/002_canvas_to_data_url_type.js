@@ -1,0 +1,1 @@
+(function(){var c=document.createElement('canvas');return typeof c.toDataURL();})()

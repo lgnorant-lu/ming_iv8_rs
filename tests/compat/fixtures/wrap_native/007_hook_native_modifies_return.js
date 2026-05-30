@@ -1,0 +1,1 @@
+(function(){__iv8__.hookNative('Math.ceil',function(orig,args){return 99;});return Math.ceil(1.1);})()

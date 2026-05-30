@@ -1,0 +1,1 @@
+(function(){var o={a:1,b:[2,3]};var c=structuredClone(o);return c.a===1&&c.b[0]===2&&c!==o;})()

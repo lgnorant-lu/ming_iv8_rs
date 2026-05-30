@@ -1,0 +1,1 @@
+(function(){var f=__iv8__.wrapNative(function(){},'myName');return f.name;})()

@@ -1,0 +1,1 @@
+(function(){localStorage.setItem('k2','v2');localStorage.removeItem('k2');return localStorage.getItem('k2');})()

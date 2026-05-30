@@ -1,0 +1,1 @@
+(function(){var p=new Proxy({},{get:function(t,k){return k;}});return p.test;})()

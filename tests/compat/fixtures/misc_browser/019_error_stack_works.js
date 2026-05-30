@@ -1,0 +1,1 @@
+(function(){try{throw new Error('t');}catch(e){return typeof e.stack==='string'&&e.stack.length>0;}})()

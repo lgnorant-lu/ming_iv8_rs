@@ -1,0 +1,1 @@
+(function(){var f=__iv8__.wrapNative(function(){return 1;},'myFn');return f.toString().indexOf('[native code]')!==-1;})()

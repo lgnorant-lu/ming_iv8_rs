@@ -1,0 +1,1 @@
+(function(){var e=new TextEncoder();var d=new TextDecoder();return d.decode(e.encode('hello'));})()

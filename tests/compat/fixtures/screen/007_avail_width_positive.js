@@ -1,0 +1,1 @@
+screen.availWidth > 0

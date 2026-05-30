@@ -1,0 +1,1 @@
+(function(){var c=document.createElement('canvas');var ctx=c.getContext('2d');ctx.font='14px Arial';return ctx.measureText('hello').width>0;})()

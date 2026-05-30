@@ -1,0 +1,1 @@
+setTimeout.toString().indexOf('[native code]') !== -1

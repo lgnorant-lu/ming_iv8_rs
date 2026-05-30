@@ -1,0 +1,1 @@
+new AudioContext().createOscillator().type

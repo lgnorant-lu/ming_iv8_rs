@@ -1,0 +1,1 @@
+Array.isArray(__iv8__.netLog.entries)

@@ -1,0 +1,1 @@
+(function(){var c=document.createElement('canvas');c.width=4;c.height=4;var ctx=c.getContext('2d');var d=ctx.getImageData(0,0,4,4);return d.data.length;})()

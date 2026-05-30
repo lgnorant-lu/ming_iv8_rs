@@ -1,0 +1,1 @@
+typeof Object.getOwnPropertyDescriptor(navigator,'userAgent').get

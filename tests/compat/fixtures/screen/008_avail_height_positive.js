@@ -1,0 +1,1 @@
+screen.availHeight > 0

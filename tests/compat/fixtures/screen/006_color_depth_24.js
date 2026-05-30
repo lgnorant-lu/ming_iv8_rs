@@ -1,0 +1,1 @@
+screen.colorDepth === 24 || screen.colorDepth === 32

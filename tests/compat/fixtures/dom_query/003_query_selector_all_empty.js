@@ -1,0 +1,1 @@
+document.querySelectorAll('.nonexistent').length

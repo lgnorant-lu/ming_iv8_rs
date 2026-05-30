@@ -1,0 +1,1 @@
+Object.keys(window).indexOf('__iv8__') === -1

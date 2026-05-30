@@ -1,0 +1,1 @@
+performance.now() >= 0

@@ -1,0 +1,1 @@
+new URL('https://example.com/path?q=1').hostname

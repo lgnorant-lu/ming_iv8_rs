@@ -1,0 +1,1 @@
+typeof setTimeout(function(){}, 0)

@@ -1,0 +1,1 @@
+typeof document.fonts.ready

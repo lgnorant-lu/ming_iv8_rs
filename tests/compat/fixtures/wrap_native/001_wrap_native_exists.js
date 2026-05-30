@@ -1,0 +1,1 @@
+typeof __iv8__.wrapNative

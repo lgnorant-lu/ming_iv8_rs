@@ -1,0 +1,1 @@
+crypto.getRandomValues(new Uint8Array(16)).some(function(b){return b!==0;})

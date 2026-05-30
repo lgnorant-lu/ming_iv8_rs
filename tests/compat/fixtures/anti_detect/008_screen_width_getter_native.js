@@ -1,0 +1,1 @@
+typeof Object.getOwnPropertyDescriptor(screen,'width').get

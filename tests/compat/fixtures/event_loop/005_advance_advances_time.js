@@ -1,0 +1,1 @@
+(function(){var t0=Date.now();__iv8__.eventLoop.advance(1000);return Date.now()>=t0+1000;})()

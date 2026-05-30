@@ -1,0 +1,1 @@
+(function(){var called=false;__iv8__.hookNative('Math.abs',function(orig,args){called=true;return orig.apply(this,args);});Math.abs(-5);return called;})()

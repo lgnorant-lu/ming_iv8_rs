@@ -1,0 +1,1 @@
+(function(){var c=document.createElement('canvas');return c.getContext('2d')!==null;})()

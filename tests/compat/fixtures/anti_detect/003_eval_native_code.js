@@ -1,0 +1,1 @@
+eval.toString().indexOf('[native code]') !== -1

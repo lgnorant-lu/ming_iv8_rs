@@ -1,0 +1,1 @@
+crypto.getRandomValues(new Uint8Array(4)) instanceof Uint8Array

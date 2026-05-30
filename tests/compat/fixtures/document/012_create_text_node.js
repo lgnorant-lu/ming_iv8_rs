@@ -1,0 +1,1 @@
+document.createTextNode('hello').nodeType

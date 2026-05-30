@@ -1,0 +1,1 @@
+(function(){var c=document.createElement('canvas');var gl=c.getContext('webgl');return gl.getParameter(gl.MAX_TEXTURE_SIZE)>0;})()
