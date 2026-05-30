@@ -123,6 +123,13 @@ impl RuntimeState {
             .expect("RuntimeState not installed on this isolate")
     }
 
+    /// Returns true if a RuntimeState is installed on the given Isolate.
+    /// Useful when conversion code may run before/without a RuntimeState
+    /// (e.g. low-level test contexts).
+    pub fn has(isolate: &v8::Isolate) -> bool {
+        isolate.get_slot::<Self>().is_some()
+    }
+
     /// Increment eval counter and return new count.
     pub fn increment_eval_count(&self) -> u64 {
         let mut count = self.eval_count.borrow_mut();

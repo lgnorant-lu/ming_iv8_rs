@@ -9,6 +9,21 @@
 //! - Object → HashMap<String, RustValue>
 //! - TypedArray / ArrayBuffer → Vec<u8> (raw bytes)
 //! - Other (Date/Map/Set/Promise/Function/RegExp) → RustValue::JsObject(toString)
+//!
+//! ## strict_compat = false (v0.2 enhancement)
+//!
+//! When `RuntimeState.strict_compat` is false, certain types convert to
+//! richer Rust representations that map cleanly to Python:
+//!
+//! | JS type | strict_compat=true       | strict_compat=false   |
+//! |---------|--------------------------|-----------------------|
+//! | BigInt  | RustValue::Null + log    | RustValue::BigInt      |
+//! | Date    | RustValue::JsObject("[object Date]") | RustValue::DateTime(ms) |
+//! | Map     | RustValue::JsObject("[object Map]")  | RustValue::Map         |
+//! | Set     | RustValue::JsObject("[object Set]")  | RustValue::Set         |
+//!
+//! Function/Promise/RegExp/Error are NOT enhanced in v0.2 (Promise needs
+//! asyncio integration; Function needs callback marshalling — both deferred).
 
 use std::collections::HashMap;
 
@@ -35,6 +50,24 @@ pub enum RustValue {
     /// opaque JS object (toString representation) — Date/Map/Set/Promise/Function/etc.
     /// In strict_compat mode, complex objects degrade to their toString.
     JsObject(String),
+    /// JS BigInt represented as sign + magnitude (little-endian u64 words).
+    /// Only produced when strict_compat=false. Maps to Python int (any precision).
+    BigInt {
+        /// True if the value is negative.
+        negative: bool,
+        /// Little-endian u64 words: words[0] is least significant.
+        words: Vec<u64>,
+    },
+    /// JS Date as milliseconds since Unix epoch (matches Date.prototype.valueOf()).
+    /// Only produced when strict_compat=false. Maps to Python datetime.datetime.
+    DateTime(f64),
+    /// JS Map preserved as ordered key-value pairs.
+    /// Only produced when strict_compat=false. Maps to Python dict (insertion order).
+    Map(Vec<(RustValue, RustValue)>),
+    /// JS Set preserved as ordered values.
+    /// Only produced when strict_compat=false. Maps to Python set (or list when
+    /// the elements are not all hashable).
+    Set(Vec<RustValue>),
 }
 
 /// Convert a V8 Local<Value> to RustValue.
@@ -60,6 +93,17 @@ pub fn v8_to_rust_impl(
     depth: u32,
 ) -> RustValue {
     v8_to_rust_with_seen(scope, value, depth, &mut std::collections::HashSet::new())
+}
+
+/// Returns the strict_compat flag from the current isolate's RuntimeState.
+/// Defaults to true if RuntimeState is not yet installed (e.g. very early
+/// init or test contexts).
+fn current_strict_compat(scope: &v8::PinScope<'_, '_>) -> bool {
+    let isolate: &v8::Isolate = &*scope;
+    if !crate::state::RuntimeState::has(isolate) {
+        return true;
+    }
+    crate::state::RuntimeState::get(isolate).strict_compat
 }
 
 /// Internal implementation with circular reference tracking.
@@ -141,10 +185,28 @@ fn v8_to_rust_with_seen(
         return RustValue::Bytes(buf);
     }
 
-    // BigInt → Null in strict_compat mode (iv8 bug: "cannot convert value, type not handled: V8 bigint")
+    // BigInt
     if value.is_big_int() {
-        tracing::error!("[ERROR] cannot convert value, type not handled: V8 bigint");
-        return RustValue::Null;
+        if current_strict_compat(scope) {
+            // iv8 0.1.2 bug-compat: BigInt → Null + error log
+            tracing::error!("[ERROR] cannot convert value, type not handled: V8 bigint");
+            return RustValue::Null;
+        }
+        // strict_compat=false: extract sign + words
+        let bi: v8::Local<v8::BigInt> = unsafe { v8::Local::cast_unchecked(value) };
+        let word_count = bi.word_count();
+        let mut words = vec![0u64; word_count];
+        let (sign_bit, written) = bi.to_words_array(&mut words);
+        let written_len = written.len();
+        words.truncate(written_len);
+        // Strip trailing zeros to canonicalize (zero stays as words=[]).
+        while words.last() == Some(&0u64) {
+            words.pop();
+        }
+        return RustValue::BigInt {
+            negative: sign_bit,
+            words,
+        };
     }
 
     // Array → recursive
@@ -164,38 +226,78 @@ fn v8_to_rust_with_seen(
 
     // Plain Object → recursive (only if not a special type)
     if value.is_object() {
-        // Check for special object types that degrade to toString in strict_compat
-        if value.is_date()
-            || value.is_map()
-            || value.is_set()
-            || value.is_promise()
+        let strict = current_strict_compat(scope);
+
+        // Date
+        if value.is_date() {
+            if strict {
+                let s = call_object_to_string(scope, value);
+                return RustValue::JsObject(s);
+            }
+            let date: v8::Local<v8::Date> = unsafe { v8::Local::cast_unchecked(value) };
+            return RustValue::DateTime(date.value_of());
+        }
+
+        // Map
+        if value.is_map() {
+            if strict {
+                let s = call_object_to_string(scope, value);
+                return RustValue::JsObject(s);
+            }
+            let map: v8::Local<v8::Map> = unsafe { v8::Local::cast_unchecked(value) };
+            let arr = map.as_array(scope);
+            let arr_len = arr.length();
+            let mut entries = Vec::with_capacity((arr_len / 2) as usize);
+            let mut i = 0;
+            while i + 1 < arr_len {
+                let k = arr
+                    .get_index(scope, i)
+                    .map(|v| v8_to_rust_with_seen(scope, v, depth + 1, seen))
+                    .unwrap_or(RustValue::Null);
+                let v = arr
+                    .get_index(scope, i + 1)
+                    .map(|v| v8_to_rust_with_seen(scope, v, depth + 1, seen))
+                    .unwrap_or(RustValue::Null);
+                entries.push((k, v));
+                i += 2;
+            }
+            return RustValue::Map(entries);
+        }
+
+        // Set
+        if value.is_set() {
+            if strict {
+                let s = call_object_to_string(scope, value);
+                return RustValue::JsObject(s);
+            }
+            let set: v8::Local<v8::Set> = unsafe { v8::Local::cast_unchecked(value) };
+            let arr = set.as_array(scope);
+            let arr_len = arr.length();
+            let mut values = Vec::with_capacity(arr_len as usize);
+            for i in 0..arr_len {
+                let v = arr
+                    .get_index(scope, i)
+                    .map(|v| v8_to_rust_with_seen(scope, v, depth + 1, seen))
+                    .unwrap_or(RustValue::Null);
+                values.push(v);
+            }
+            return RustValue::Set(values);
+        }
+
+        // Other special object types still degrade to toString in BOTH modes
+        // (Promise/Function/RegExp/Error — full handling deferred).
+        if value.is_promise()
             || value.is_function()
             || value.is_reg_exp()
             || value.is_native_error()
         {
-            // iv8 0.1.2 strict_compat behavior:
-            // - Function → "function name() { ... }" (truncated source)
-            // - Error → "[object Error]" (Object.prototype.toString)
-            // - Promise → "[object Promise]"
-            // - Map/Set → "[object Map]" / "[object Set]"
-            // - Date → "[object Date]"
-            // - RegExp → "/pattern/flags"
             let s = if value.is_function() {
-                // iv8 returns truncated function source: "function name() { ... }"
-                // We use toString() which gives the full source, then truncate body
                 let full = value.to_detail_string(scope)
                     .map(|s| s.to_rust_string_lossy(scope))
                     .unwrap_or_else(|| "function() {}".to_string());
-                // Truncate body to match iv8 format: "function name() { ... }"
                 truncate_function_body(&full)
-            } else if value.is_native_error() || value.is_map() || value.is_set() || value.is_promise() || value.is_date() {
-                // Use Object.prototype.toString for these types
-                // This gives "[object Error]", "[object Map]", "[object Set]", "[object Promise]", "[object Date]"
-                call_object_to_string(scope, value)
             } else {
-                value.to_detail_string(scope)
-                    .map(|s| s.to_rust_string_lossy(scope))
-                    .unwrap_or_else(|| "[object Object]".to_string())
+                call_object_to_string(scope, value)
             };
             return RustValue::JsObject(s);
         }

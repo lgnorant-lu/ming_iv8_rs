@@ -636,6 +636,16 @@ fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
             Ok(dict.into_any().into())
         }
         RustValue::JsObject(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
+        RustValue::BigInt { negative, words } => {
+            crate::value_convert::bigint_to_python(py, *negative, words)
+        }
+        RustValue::DateTime(ms) => crate::value_convert::ms_to_datetime(py, *ms),
+        RustValue::Map(entries) => {
+            crate::value_convert::map_to_python_dict(py, entries, &rust_value_to_py)
+        }
+        RustValue::Set(values) => {
+            crate::value_convert::set_to_python_set(py, values, &rust_value_to_py)
+        }
     }
 }
 

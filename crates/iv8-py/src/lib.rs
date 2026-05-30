@@ -13,6 +13,7 @@ mod debugger;
 mod error;
 mod expose;
 mod logging;
+mod value_convert;
 
 /// The iv8_rs Python module.
 #[pymodule]

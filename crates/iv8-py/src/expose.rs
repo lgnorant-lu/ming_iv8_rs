@@ -166,6 +166,38 @@ fn rust_value_to_v8<'s>(
             Some(obj.into())
         }
         RustValue::JsObject(s) => v8::String::new(scope, s).map(|s| s.into()),
+        RustValue::BigInt { negative, words } => {
+            // Reconstruct V8 BigInt from sign + words.
+            // BigInt::new_from_words requires a non-empty word slice; for zero
+            // we synthesize a single-word zero.
+            let words_slice: &[u64] = if words.is_empty() { &[0u64] } else { words };
+            v8::BigInt::new_from_words(scope, *negative, words_slice).map(|b| b.into())
+        }
+        RustValue::DateTime(ms) => {
+            // Build a JS Date from milliseconds since epoch.
+            v8::Date::new(scope, *ms).map(|d| d.into())
+        }
+        RustValue::Map(entries) => {
+            let m = v8::Map::new(scope);
+            for (k, v) in entries {
+                if let (Some(key), Some(val)) = (
+                    rust_value_to_v8(scope, k),
+                    rust_value_to_v8(scope, v),
+                ) {
+                    m.set(scope, key, val);
+                }
+            }
+            Some(m.into())
+        }
+        RustValue::Set(values) => {
+            let s = v8::Set::new(scope);
+            for v in values {
+                if let Some(val) = rust_value_to_v8(scope, v) {
+                    s.add(scope, val);
+                }
+            }
+            Some(s.into())
+        }
     }
 }
 
@@ -245,5 +277,15 @@ fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
             Ok(dict.into_any().into())
         }
         RustValue::JsObject(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
+        RustValue::BigInt { negative, words } => {
+            crate::value_convert::bigint_to_python(py, *negative, words)
+        }
+        RustValue::DateTime(ms) => crate::value_convert::ms_to_datetime(py, *ms),
+        RustValue::Map(entries) => {
+            crate::value_convert::map_to_python_dict(py, entries, &rust_value_to_py)
+        }
+        RustValue::Set(values) => {
+            crate::value_convert::set_to_python_set(py, values, &rust_value_to_py)
+        }
     }
 }
