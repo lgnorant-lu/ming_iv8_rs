@@ -1,0 +1,68 @@
+//! Extra V8 ObjectTemplate bindings not exposed by upstream rusty_v8.
+//!
+//! Compiled from [`cxx/iv8_v8_extra.cc`] via [`build.rs`].
+//!
+//! These provide:
+//! - [`mark_as_undetectable`] — implements [[IsHTMLDDA]] semantics (typeof
+//!   === 'undefined', falsy, == null) for objects created from this template.
+//! - [`set_call_as_function_handler`] — enables calling instances created
+//!   from this template as a function (needed e.g. for `document.all('id')`).
+//!
+//! See `docs/research/v0.2/mark-as-undetectable-fork.md` for the full design
+//! and rationale.
+
+use v8::ObjectTemplate;
+
+unsafe extern "C" {
+    fn v8__ObjectTemplate__MarkAsUndetectable(this: *const ObjectTemplate);
+    fn v8__ObjectTemplate__SetCallAsFunctionHandler(
+        this: *const ObjectTemplate,
+        callback: v8::FunctionCallback,
+        data_or_null: *const v8::Value,
+    );
+}
+
+/// Marks instances created from this `ObjectTemplate` as undetectable.
+///
+/// In many ways, undetectable objects behave as though they are not there:
+/// `typeof obj === 'undefined'`, `Boolean(obj) === false`, `obj == null`.
+/// However, properties can still be accessed and called on them as on
+/// normal objects.
+///
+/// This implements V8's `ObjectTemplate::MarkAsUndetectable` API, which
+/// upstream rusty_v8 does not expose.
+///
+/// # V8 invariant
+///
+/// V8 requires that an undetectable ObjectTemplate also has a
+/// CallAsFunctionHandler installed (V8 asserts this when instantiating).
+/// You **must** call [`set_call_as_function_handler`] before instantiating
+/// an undetectable template; the handler may be a no-op.
+#[inline]
+pub fn mark_as_undetectable(template: &ObjectTemplate) {
+    // SAFETY: We pass a reference to a valid ObjectTemplate. The C++ side
+    // reinterprets it as a v8::Local<ObjectTemplate>, which is safe because
+    // v8::Local<T> is layout-compatible with T*.
+    unsafe { v8__ObjectTemplate__MarkAsUndetectable(template) };
+}
+
+/// Sets the callback used when calling instances created from this template
+/// as a function (e.g. `instance(args)`).
+///
+/// If `data` is `None`, no callback data is passed to the callback.
+#[inline]
+pub fn set_call_as_function_handler(
+    template: &ObjectTemplate,
+    callback: v8::FunctionCallback,
+    data: Option<v8::Local<v8::Value>>,
+) {
+    let data_ptr: *const v8::Value = match data {
+        Some(local) => &*local,
+        None => std::ptr::null(),
+    };
+    // SAFETY: Same as above. `callback` is a function pointer with the V8
+    // FunctionCallback ABI. `data_ptr` is either null or a valid Local handle.
+    unsafe {
+        v8__ObjectTemplate__SetCallAsFunctionHandler(template, callback, data_ptr);
+    }
+}

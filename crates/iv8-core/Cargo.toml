@@ -5,6 +5,10 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 description = "iv8-rs core: V8 embedded browser host engine"
+build = "build.rs"
+
+[build-dependencies]
+cc = "1.2"
 
 [dependencies]
 v8 = { workspace = true }
