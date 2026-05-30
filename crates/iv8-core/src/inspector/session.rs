@@ -54,6 +54,11 @@ impl InspectorSession {
         tracing::info!("V8 Inspector initialized on port {}", self.config.port);
     }
 
+    /// Get a reference to the underlying V8InspectorSession (for CDP client).
+    pub fn session_ref(&self) -> Option<&v8::inspector::V8InspectorSession> {
+        self.session.as_ref()
+    }
+
     /// Process pending CDP messages from DevTools client.
     pub fn process_messages(&mut self) {
         let incoming: Vec<String> = {

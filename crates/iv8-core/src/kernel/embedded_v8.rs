@@ -772,7 +772,15 @@ impl EmbeddedV8Kernel {
 
         // Store session in RuntimeState
         let state = RuntimeState::get(&self.isolate);
-        *state.inspector_session.borrow_mut() = Some(session);
+        let channel_state = {
+            // Clone channel_state before moving session
+            let cs = session.channel_state.clone();
+            *state.inspector_session.borrow_mut() = Some(session);
+            cs
+        };
+
+        // Initialize CDP programmatic client
+        *state.cdp_client.borrow_mut() = Some(crate::inspector::CdpClient::new(channel_state));
 
         devtools_url
     }
@@ -792,6 +800,149 @@ impl EmbeddedV8Kernel {
         let session = state.inspector_session.borrow();
         if let Some(ref s) = *session {
             s.wait_for_connection(timeout_ms);
+        }
+    }
+
+    // ─── CDP Programmatic API (v0.3 M15) ─────────────────────────────────────
+
+    /// Set a breakpoint by URL. Returns breakpoint_id or error.
+    pub fn cdp_set_breakpoint(
+        &mut self,
+        url: &str,
+        line: u32,
+        column: Option<u32>,
+        condition: Option<&str>,
+    ) -> Result<String, String> {
+        // V8 Inspector requires the isolate to be entered.
+        unsafe { self.isolate.enter(); }
+        let result = self.cdp_set_breakpoint_inner(url, line, column, condition);
+        unsafe { self.isolate.exit(); }
+        result
+    }
+
+    fn cdp_set_breakpoint_inner(
+        &mut self,
+        url: &str,
+        line: u32,
+        column: Option<u32>,
+        condition: Option<&str>,
+    ) -> Result<String, String> {
+        let state = RuntimeState::get(&self.isolate);
+        let session_guard = state.inspector_session.borrow();
+        let session = session_guard.as_ref()
+            .and_then(|s| s.session_ref())
+            .ok_or_else(|| "Inspector not started. Call with_devtools() first.".to_string())?;
+        let mut cdp = state.cdp_client.borrow_mut();
+        let cdp = cdp.as_mut()
+            .ok_or_else(|| "CDP client not initialized.".to_string())?;
+        cdp.ensure_debugger_enabled(session);
+        cdp.set_breakpoint_by_url(session, url, line, column, condition)
+    }
+
+    /// Remove a breakpoint by id.
+    pub fn cdp_remove_breakpoint(&mut self, breakpoint_id: &str) -> Result<(), String> {
+        unsafe { self.isolate.enter(); }
+        let result = {
+            let state = RuntimeState::get(&self.isolate);
+            let session_guard = state.inspector_session.borrow();
+            let session = session_guard.as_ref()
+                .and_then(|s| s.session_ref())
+                .ok_or_else(|| "Inspector not started.".to_string())?;
+            let cdp = state.cdp_client.borrow();
+            let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
+            cdp.remove_breakpoint(session, breakpoint_id)
+        };
+        unsafe { self.isolate.exit(); }
+        result
+    }
+
+    /// Evaluate expression on a call frame while paused.
+    pub fn cdp_evaluate_on_frame(
+        &mut self,
+        call_frame_id: &str,
+        expression: &str,
+    ) -> Result<serde_json::Value, String> {
+        unsafe { self.isolate.enter(); }
+        let result = {
+            let state = RuntimeState::get(&self.isolate);
+            let session_guard = state.inspector_session.borrow();
+            let session = session_guard.as_ref()
+                .and_then(|s| s.session_ref())
+                .ok_or_else(|| "Inspector not started.".to_string())?;
+            let cdp = state.cdp_client.borrow();
+            let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
+            cdp.evaluate_on_call_frame(session, call_frame_id, expression)
+        };
+        unsafe { self.isolate.exit(); }
+        result
+    }
+
+    /// Resume execution (after pause).
+    pub fn cdp_resume(&mut self) -> Result<(), String> {
+        unsafe { self.isolate.enter(); }
+        let result = {
+            let state = RuntimeState::get(&self.isolate);
+            let session_guard = state.inspector_session.borrow();
+            let session = session_guard.as_ref()
+                .and_then(|s| s.session_ref())
+                .ok_or_else(|| "Inspector not started.".to_string())?;
+            let cdp = state.cdp_client.borrow();
+            let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
+            cdp.resume(session)
+        };
+        unsafe { self.isolate.exit(); }
+        result
+    }
+
+    /// Step over (after pause).
+    pub fn cdp_step_over(&mut self) -> Result<(), String> {
+        unsafe { self.isolate.enter(); }
+        let result = {
+            let state = RuntimeState::get(&self.isolate);
+            let session_guard = state.inspector_session.borrow();
+            let session = session_guard.as_ref()
+                .and_then(|s| s.session_ref())
+                .ok_or_else(|| "Inspector not started.".to_string())?;
+            let cdp = state.cdp_client.borrow();
+            let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
+            cdp.step_over(session)
+        };
+        unsafe { self.isolate.exit(); }
+        result
+    }
+
+    /// Step into (after pause).
+    pub fn cdp_step_into(&mut self) -> Result<(), String> {
+        unsafe { self.isolate.enter(); }
+        let result = {
+            let state = RuntimeState::get(&self.isolate);
+            let session_guard = state.inspector_session.borrow();
+            let session = session_guard.as_ref()
+                .and_then(|s| s.session_ref())
+                .ok_or_else(|| "Inspector not started.".to_string())?;
+            let cdp = state.cdp_client.borrow();
+            let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
+            cdp.step_into(session)
+        };
+        unsafe { self.isolate.exit(); }
+        result
+    }
+
+    /// Get call frames from last Debugger.paused event.
+    pub fn cdp_get_call_frames(&self) -> Option<serde_json::Value> {
+        let state = RuntimeState::get(&self.isolate);
+        let cdp = state.cdp_client.borrow();
+        cdp.as_ref().and_then(|c| c.get_call_frames().cloned())
+    }
+
+    /// Process CDP events (check for paused/resumed).
+    pub fn cdp_process_events(&mut self) -> bool {
+        let state = RuntimeState::get(&self.isolate);
+        let mut cdp = state.cdp_client.borrow_mut();
+        if let Some(ref mut c) = *cdp {
+            c.process_events()
+        } else {
+            false
         }
     }
 

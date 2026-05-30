@@ -60,6 +60,9 @@ pub struct RuntimeState {
     /// Optional V8 Inspector session (CDP debugging).
     pub inspector_session: RefCell<Option<crate::inspector::session::InspectorSession>>,
 
+    /// Optional CDP programmatic client (Python-driven Inspector control).
+    pub cdp_client: RefCell<Option<crate::inspector::CdpClient>>,
+
     /// Canvas 2D instances keyed by canvas ID (for toDataURL/getImageData).
     pub canvases: RefCell<std::collections::HashMap<String, crate::canvas::canvas2d::Canvas2D>>,
 }
@@ -104,6 +107,7 @@ impl RuntimeState {
             console_messages: RefCell::new(Vec::new()),
             network_handler: RefCell::new(None),
             inspector_session: RefCell::new(None),
+            cdp_client: RefCell::new(None),
             canvases: RefCell::new(std::collections::HashMap::new()),
         }
     }

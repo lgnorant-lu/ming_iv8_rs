@@ -14,5 +14,7 @@
 pub mod session;
 pub mod channel;
 pub mod server;
+pub mod cdp_client;
 
 pub use session::InspectorSession;
+pub use cdp_client::CdpClient;

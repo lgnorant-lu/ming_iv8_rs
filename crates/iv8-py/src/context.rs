@@ -381,12 +381,15 @@ impl JSContext {
     ///     port: WebSocket port (default 9229)
     ///     watch_apis: List of API paths to auto-breakpoint on access
     ///     enable_console: Whether to enable DevTools console (default True)
-    #[pyo3(signature = (port=9229, watch_apis=None, enable_console=true))]
+    ///     wait: Whether to wait for a DevTools client to connect (default True).
+    ///           Set to False for programmatic CDP use (cdp_set_breakpoint etc.)
+    #[pyo3(signature = (port=9229, watch_apis=None, enable_console=true, wait=true))]
     fn with_devtools(
         slf: pyo3::Py<Self>,
         port: u16,
         watch_apis: Option<Vec<String>>,
         enable_console: bool,
+        wait: bool,
         py: Python<'_>,
     ) -> PyResult<pyo3::Py<Self>> {
         {
@@ -400,8 +403,10 @@ impl JSContext {
                 enable_console,
             );
             println!("DevTools URL: {}", devtools_url);
-            // Wait for connection (up to 30s)
-            kernel.wait_for_devtools(30000);
+            if wait {
+                // Wait for external DevTools client to connect (up to 30s)
+                kernel.wait_for_devtools(30000);
+            }
         }
         Ok(slf)
     }
@@ -421,6 +426,111 @@ impl JSContext {
         let mut kernel = self.inner.kernel.lock();
         kernel.process_inspector_messages();
         Ok(())
+    }
+
+    // ─── CDP Programmatic API (v0.3 M15) ─────────────────────────────────────
+
+    /// Set a breakpoint by script URL.
+    ///
+    /// Args:
+    ///     url: Script URL (e.g. "tdc.js" or full URL)
+    ///     line: Line number (0-based)
+    ///     column: Column number (0-based, optional)
+    ///     condition: JS expression; breakpoint only fires when true (optional)
+    ///
+    /// Returns:
+    ///     breakpoint_id (str) for later removal
+    ///
+    /// Requires with_devtools() to have been called first.
+    #[pyo3(signature = (url, line, column=None, condition=None))]
+    fn cdp_set_breakpoint(
+        &self,
+        url: &str,
+        line: u32,
+        column: Option<u32>,
+        condition: Option<&str>,
+    ) -> PyResult<String> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.cdp_set_breakpoint(url, line, column, condition)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+    }
+
+    /// Remove a breakpoint by id.
+    fn cdp_remove_breakpoint(&self, breakpoint_id: &str) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.cdp_remove_breakpoint(breakpoint_id)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+    }
+
+    /// Evaluate an expression on a call frame while paused at a breakpoint.
+    ///
+    /// Args:
+    ///     call_frame_id: Frame ID from cdp_get_call_frames()
+    ///     expression: JS expression to evaluate in that frame's scope
+    ///
+    /// Returns:
+    ///     The evaluation result (Python value)
+    fn cdp_evaluate_on_frame(&self, call_frame_id: &str, expression: &str) -> PyResult<PyObject> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let result = kernel.cdp_evaluate_on_frame(call_frame_id, expression)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))?;
+        Python::with_gil(|py| {
+            json_value_to_py(py, &result)
+        })
+    }
+
+    /// Resume execution after a breakpoint pause.
+    fn cdp_resume(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.cdp_resume()
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+    }
+
+    /// Step over (next statement, skip function calls).
+    fn cdp_step_over(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.cdp_step_over()
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+    }
+
+    /// Step into (enter function calls).
+    fn cdp_step_into(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.cdp_step_into()
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+    }
+
+    /// Get call frames from the last breakpoint pause.
+    ///
+    /// Returns:
+    ///     list of frame dicts, or None if not paused.
+    ///     Each frame: {functionName, url, lineNumber, columnNumber, callFrameId, ...}
+    fn cdp_get_call_frames(&self) -> PyResult<Option<PyObject>> {
+        self.assert_thread()?;
+        let kernel = self.inner.kernel.lock();
+        match kernel.cdp_get_call_frames() {
+            Some(frames) => {
+                Python::with_gil(|py| {
+                    let obj = json_value_to_py(py, &frames)?;
+                    Ok(Some(obj))
+                })
+            }
+            None => Ok(None),
+        }
+    }
+
+    /// Process CDP events (check if execution paused at breakpoint).
+    /// Returns True if a Debugger.paused event was received.
+    fn cdp_process_events(&self) -> PyResult<bool> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        Ok(kernel.cdp_process_events())
     }
 
     /// Set a Python network handler for fetch/XHR fallback.
