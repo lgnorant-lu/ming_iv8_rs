@@ -198,7 +198,117 @@ fn rust_value_to_v8<'s>(
             }
             Some(s.into())
         }
+        RustValue::TypedArray { kind, elements } => {
+            // Round-trip Python list -> JS TypedArray. Encode element list back
+            // to bytes, then construct the matching TypedArray subtype.
+            let bytes = encode_typed_array(*kind, elements);
+            let store = v8::ArrayBuffer::new_backing_store_from_vec(bytes.clone());
+            let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
+            let count = bytes.len() / kind.element_size().max(1);
+            match kind {
+                iv8_core::convert::TypedArrayKind::Uint8 => {
+                    v8::Uint8Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::Uint8Clamped => {
+                    v8::Uint8ClampedArray::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::Int8 => {
+                    v8::Int8Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::Uint16 => {
+                    v8::Uint16Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::Int16 => {
+                    v8::Int16Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::Uint32 => {
+                    v8::Uint32Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::Int32 => {
+                    v8::Int32Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::Float32 => {
+                    v8::Float32Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::Float64 => {
+                    v8::Float64Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::BigInt64 => {
+                    v8::BigInt64Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+                iv8_core::convert::TypedArrayKind::BigUint64 => {
+                    v8::BigUint64Array::new(scope, ab, 0, count).map(|a| a.into())
+                }
+            }
+        }
     }
+}
+
+/// Encode a list of typed scalar `RustValue`s back into bytes per element kind.
+fn encode_typed_array(
+    kind: iv8_core::convert::TypedArrayKind,
+    elements: &[RustValue],
+) -> Vec<u8> {
+    use iv8_core::convert::TypedArrayKind as K;
+    let mut buf = Vec::with_capacity(elements.len() * kind.element_size());
+    for el in elements {
+        match (kind, el) {
+            (K::Uint8 | K::Uint8Clamped, RustValue::Int(i)) => {
+                buf.push(*i as u8);
+            }
+            (K::Int8, RustValue::Int(i)) => {
+                buf.push(*i as i8 as u8);
+            }
+            (K::Uint16, RustValue::Int(i)) => {
+                buf.extend_from_slice(&(*i as u16).to_le_bytes());
+            }
+            (K::Int16, RustValue::Int(i)) => {
+                buf.extend_from_slice(&(*i as i16).to_le_bytes());
+            }
+            (K::Uint32, RustValue::Int(i)) => {
+                buf.extend_from_slice(&(*i as u32).to_le_bytes());
+            }
+            (K::Int32, RustValue::Int(i)) => {
+                buf.extend_from_slice(&(*i as i32).to_le_bytes());
+            }
+            (K::Float32, RustValue::Float(f)) => {
+                buf.extend_from_slice(&(*f as f32).to_le_bytes());
+            }
+            (K::Float32, RustValue::Int(i)) => {
+                buf.extend_from_slice(&(*i as f32).to_le_bytes());
+            }
+            (K::Float64, RustValue::Float(f)) => {
+                buf.extend_from_slice(&f.to_le_bytes());
+            }
+            (K::Float64, RustValue::Int(i)) => {
+                buf.extend_from_slice(&(*i as f64).to_le_bytes());
+            }
+            (K::BigInt64, RustValue::Int(i)) => {
+                buf.extend_from_slice(&i.to_le_bytes());
+            }
+            (K::BigInt64, RustValue::BigInt { negative, words }) => {
+                let mag = words.first().copied().unwrap_or(0);
+                let v: i64 = if *negative {
+                    -(mag as i64)
+                } else {
+                    mag as i64
+                };
+                buf.extend_from_slice(&v.to_le_bytes());
+            }
+            (K::BigUint64, RustValue::Int(i)) => {
+                buf.extend_from_slice(&(*i as u64).to_le_bytes());
+            }
+            (K::BigUint64, RustValue::BigInt { words, .. }) => {
+                let v = words.first().copied().unwrap_or(0);
+                buf.extend_from_slice(&v.to_le_bytes());
+            }
+            _ => {
+                // Type mismatch: fill with zero of element_size.
+                buf.resize(buf.len() + kind.element_size(), 0);
+            }
+        }
+    }
+    buf
 }
 
 /// Convert a Python object to RustValue (for return value conversion).
@@ -286,6 +396,13 @@ fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
         }
         RustValue::Set(values) => {
             crate::value_convert::set_to_python_set(py, values, &rust_value_to_py)
+        }
+        RustValue::TypedArray { elements, .. } => {
+            let list = PyList::empty(py);
+            for el in elements {
+                list.append(rust_value_to_py(py, el)?)?;
+            }
+            Ok(list.into_any().unbind())
         }
     }
 }

@@ -68,6 +68,76 @@ pub enum RustValue {
     /// Only produced when strict_compat=false. Maps to Python set (or list when
     /// the elements are not all hashable).
     Set(Vec<RustValue>),
+    /// JS TypedArray with element-type information preserved.
+    /// Only produced when strict_compat=false. Maps to a Python list of the
+    /// appropriate scalar type (int / float / int for big ints).
+    /// In strict_compat=true mode, TypedArray converts to RustValue::Bytes
+    /// (raw byte memcpy, matches v0.1).
+    TypedArray {
+        kind: TypedArrayKind,
+        /// Flat element list. Each inner RustValue is Int (small) / BigInt
+        /// (BigInt64 / BigUint64) / Float (float types).
+        elements: Vec<RustValue>,
+    },
+}
+
+/// JS TypedArray element kind.
+///
+/// Mirrors the V8 typed array type hierarchy. Used by RustValue::TypedArray.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum TypedArrayKind {
+    Uint8,
+    Uint8Clamped,
+    Int8,
+    Uint16,
+    Int16,
+    Uint32,
+    Int32,
+    Float32,
+    Float64,
+    BigInt64,
+    BigUint64,
+}
+
+impl TypedArrayKind {
+    /// Detect from a V8 value.
+    pub fn detect(value: v8::Local<v8::Value>) -> Option<Self> {
+        if value.is_uint8_clamped_array() {
+            Some(Self::Uint8Clamped)
+        } else if value.is_uint8_array() {
+            Some(Self::Uint8)
+        } else if value.is_int8_array() {
+            Some(Self::Int8)
+        } else if value.is_uint16_array() {
+            Some(Self::Uint16)
+        } else if value.is_int16_array() {
+            Some(Self::Int16)
+        } else if value.is_uint32_array() {
+            Some(Self::Uint32)
+        } else if value.is_int32_array() {
+            Some(Self::Int32)
+        } else if value.is_float32_array() {
+            Some(Self::Float32)
+        } else if value.is_float64_array() {
+            Some(Self::Float64)
+        } else if value.is_big_int64_array() {
+            Some(Self::BigInt64)
+        } else if value.is_big_uint64_array() {
+            Some(Self::BigUint64)
+        } else {
+            None
+        }
+    }
+
+    /// Bytes per element.
+    pub fn element_size(self) -> usize {
+        match self {
+            Self::Uint8 | Self::Uint8Clamped | Self::Int8 => 1,
+            Self::Uint16 | Self::Int16 => 2,
+            Self::Uint32 | Self::Int32 | Self::Float32 => 4,
+            Self::Float64 | Self::BigInt64 | Self::BigUint64 => 8,
+        }
+    }
 }
 
 /// Convert a V8 Local<Value> to RustValue.
@@ -156,16 +226,33 @@ fn v8_to_rust_with_seen(
         return RustValue::String(desc);
     }
 
-    // TypedArray → bytes (raw memcpy, not typed interpretation — matches iv8 behavior)
+    // TypedArray
     if value.is_typed_array() {
+        let strict = current_strict_compat(scope);
+
+        if strict {
+            // v0.1 behavior: raw bytes (matches iv8 0.1.2)
+            let ta: v8::Local<v8::TypedArray> = unsafe { v8::Local::cast_unchecked(value) };
+            let len = ta.byte_length();
+            let mut buf = vec![0u8; len];
+            if len > 0 {
+                let copied = ta.copy_contents(&mut buf);
+                buf.truncate(copied);
+            }
+            return RustValue::Bytes(buf);
+        }
+
+        // strict_compat=false: detect kind, decode elements as typed scalars
         let ta: v8::Local<v8::TypedArray> = unsafe { v8::Local::cast_unchecked(value) };
-        let len = ta.byte_length();
-        let mut buf = vec![0u8; len];
-        if len > 0 {
+        let kind = TypedArrayKind::detect(value).unwrap_or(TypedArrayKind::Uint8);
+        let byte_len = ta.byte_length();
+        let mut buf = vec![0u8; byte_len];
+        if byte_len > 0 {
             let copied = ta.copy_contents(&mut buf);
             buf.truncate(copied);
         }
-        return RustValue::Bytes(buf);
+        let elements = decode_typed_array(kind, &buf);
+        return RustValue::TypedArray { kind, elements };
     }
 
     // ArrayBuffer → bytes
@@ -334,6 +421,84 @@ fn v8_to_rust_with_seen(
             .map(|s| s.to_rust_string_lossy(scope))
             .unwrap_or_else(|| "[unknown]".to_string()),
     )
+}
+
+/// Decode a TypedArray byte buffer into a flat list of typed scalar `RustValue`s.
+///
+/// Per ECMA-262, multi-byte typed arrays are little-endian on all platforms
+/// V8 supports. This helper assumes that and uses `from_le_bytes` accordingly.
+fn decode_typed_array(kind: TypedArrayKind, buf: &[u8]) -> Vec<RustValue> {
+    let elem_size = kind.element_size();
+    if elem_size == 0 || buf.len() % elem_size != 0 {
+        return Vec::new();
+    }
+    let count = buf.len() / elem_size;
+    let mut out = Vec::with_capacity(count);
+    for i in 0..count {
+        let chunk = &buf[i * elem_size..(i + 1) * elem_size];
+        let val = match kind {
+            TypedArrayKind::Uint8 | TypedArrayKind::Uint8Clamped => {
+                RustValue::Int(chunk[0] as i64)
+            }
+            TypedArrayKind::Int8 => RustValue::Int(chunk[0] as i8 as i64),
+            TypedArrayKind::Uint16 => {
+                let arr: [u8; 2] = [chunk[0], chunk[1]];
+                RustValue::Int(u16::from_le_bytes(arr) as i64)
+            }
+            TypedArrayKind::Int16 => {
+                let arr: [u8; 2] = [chunk[0], chunk[1]];
+                RustValue::Int(i16::from_le_bytes(arr) as i64)
+            }
+            TypedArrayKind::Uint32 => {
+                let mut arr = [0u8; 4];
+                arr.copy_from_slice(chunk);
+                RustValue::Int(u32::from_le_bytes(arr) as i64)
+            }
+            TypedArrayKind::Int32 => {
+                let mut arr = [0u8; 4];
+                arr.copy_from_slice(chunk);
+                RustValue::Int(i32::from_le_bytes(arr) as i64)
+            }
+            TypedArrayKind::Float32 => {
+                let mut arr = [0u8; 4];
+                arr.copy_from_slice(chunk);
+                RustValue::Float(f32::from_le_bytes(arr) as f64)
+            }
+            TypedArrayKind::Float64 => {
+                let mut arr = [0u8; 8];
+                arr.copy_from_slice(chunk);
+                RustValue::Float(f64::from_le_bytes(arr))
+            }
+            TypedArrayKind::BigInt64 => {
+                let mut arr = [0u8; 8];
+                arr.copy_from_slice(chunk);
+                let v = i64::from_le_bytes(arr);
+                // BigInt as RustValue::BigInt for any value (cleaner than mixing
+                // RustValue::Int and RustValue::BigInt within the same array).
+                let (negative, magnitude) = if v < 0 {
+                    // Two's complement -> magnitude
+                    let m = (v as i128).unsigned_abs();
+                    (true, m as u64)
+                } else {
+                    (false, v as u64)
+                };
+                let words = if magnitude == 0 { vec![] } else { vec![magnitude] };
+                RustValue::BigInt { negative, words }
+            }
+            TypedArrayKind::BigUint64 => {
+                let mut arr = [0u8; 8];
+                arr.copy_from_slice(chunk);
+                let v = u64::from_le_bytes(arr);
+                let words = if v == 0 { vec![] } else { vec![v] };
+                RustValue::BigInt {
+                    negative: false,
+                    words,
+                }
+            }
+        };
+        out.push(val);
+    }
+    out
 }
 
 /// Truncate function body to match iv8 0.1.2 format: "function name() { ... }"

@@ -657,6 +657,17 @@ fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
         RustValue::Set(values) => {
             crate::value_convert::set_to_python_set(py, values, &rust_value_to_py)
         }
+        RustValue::TypedArray { elements, .. } => {
+            // Convert to Python list of typed scalars (int/float/big int).
+            // The kind is currently not preserved on the Python side; users
+            // who need numpy-typed arrays can construct from the list.
+            use pyo3::types::PyList;
+            let list = PyList::empty(py);
+            for el in elements {
+                list.append(rust_value_to_py(py, el)?)?;
+            }
+            Ok(list.into_any().unbind())
+        }
     }
 }
 
