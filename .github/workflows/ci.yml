@@ -1,0 +1,342 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  release:
+    types: [published]
+
+# Cancel in-progress runs for the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  # ─── Lint & Format ──────────────────────────────────────────────────────────
+  lint:
+    name: Lint (Linux x64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/.rusty_v8
+            target
+          key: ${{ runner.os }}-cargo-lint-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-lint-
+            ${{ runner.os }}-cargo-
+
+      - name: Cargo fmt check
+        run: cargo fmt --all -- --check
+
+      - name: Cargo clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+  # ─── Rust Tests ─────────────────────────────────────────────────────────────
+  rust-test:
+    name: Rust Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/.rusty_v8
+            target
+          key: ${{ runner.os }}-cargo-test-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-test-
+            ${{ runner.os }}-cargo-
+
+      - name: Cargo test (iv8-core)
+        run: cargo test --package iv8-core
+
+      - name: Cargo test (iv8-undetect)
+        run: cargo test --package iv8-undetect
+
+  # ─── Python Tests (Linux x64) ───────────────────────────────────────────────
+  python-test-linux:
+    name: Python Tests (Linux x64)
+    runs-on: ubuntu-latest
+    needs: [lint, rust-test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/.rusty_v8
+            target
+          key: ${{ runner.os }}-cargo-py-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-py-
+            ${{ runner.os }}-cargo-
+
+      - name: Install Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Build wheel (dev)
+        run: |
+          uv venv
+          uv run maturin develop -m crates/iv8-py/Cargo.toml
+
+      - name: Run all Python tests
+        run: uv run --with pytest pytest tests -q --tb=short
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-linux-x64
+          path: |
+            .pytest_cache/
+          retention-days: 7
+
+  # ─── Python Tests (macOS arm64) ─────────────────────────────────────────────
+  python-test-macos:
+    name: Python Tests (macOS arm64)
+    runs-on: macos-latest
+    needs: [lint, rust-test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/.rusty_v8
+            target
+          key: ${{ runner.os }}-cargo-py-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-py-
+            ${{ runner.os }}-cargo-
+
+      - name: Install Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Build wheel (dev)
+        run: |
+          uv venv
+          uv run maturin develop -m crates/iv8-py/Cargo.toml
+
+      - name: Run all Python tests
+        run: uv run --with pytest pytest tests -q --tb=short
+
+  # ─── Python Tests (Windows x64) ─────────────────────────────────────────────
+  python-test-windows:
+    name: Python Tests (Windows x64)
+    runs-on: windows-latest
+    needs: [lint, rust-test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/.rusty_v8
+            target
+          key: ${{ runner.os }}-cargo-py-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-py-
+            ${{ runner.os }}-cargo-
+
+      - name: Install Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Build wheel (dev)
+        run: |
+          uv venv
+          uv run maturin develop -m crates/iv8-py/Cargo.toml
+
+      - name: Run all Python tests
+        run: uv run --with pytest pytest tests -q --tb=short
+
+  # ─── Build Wheels (cibuildwheel) ────────────────────────────────────────────
+  # Only runs on release or manual trigger
+  build-wheels:
+    name: Build Wheels (${{ matrix.platform.os }} / ${{ matrix.platform.arch }})
+    runs-on: ${{ matrix.platform.runner }}
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+    needs: [python-test-linux, python-test-macos, python-test-windows]
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          # Linux x86_64 (cp313 + cp313t)
+          - runner: ubuntu-latest
+            os: linux
+            arch: x86_64
+            cibw_archs: x86_64
+          # Linux aarch64 (cp313 + cp313t)
+          - runner: ubuntu-latest
+            os: linux
+            arch: aarch64
+            cibw_archs: aarch64
+          # macOS x86_64
+          - runner: macos-13
+            os: macos
+            arch: x86_64
+            cibw_archs: x86_64
+          # macOS arm64
+          - runner: macos-latest
+            os: macos
+            arch: arm64
+            cibw_archs: arm64
+          # Windows x86_64
+          - runner: windows-latest
+            os: windows
+            arch: x86_64
+            cibw_archs: AMD64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU (Linux aarch64)
+        if: matrix.platform.os == 'linux' && matrix.platform.arch == 'aarch64'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/.rusty_v8
+          key: ${{ runner.os }}-${{ matrix.platform.arch }}-cargo-wheel-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.platform.arch }}-cargo-wheel-
+            ${{ runner.os }}-${{ matrix.platform.arch }}-cargo-
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install cibuildwheel
+        run: pip install cibuildwheel==2.21.3
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.21.3
+        env:
+          CIBW_ARCHS: ${{ matrix.platform.cibw_archs }}
+          # Build cp313 and cp313t (free-threaded)
+          CIBW_BUILD: "cp313-* cp313t-*"
+          CIBW_SKIP: "*-musllinux_*"
+          # Install Rust in Linux containers
+          CIBW_BEFORE_ALL_LINUX: >
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
+            source $HOME/.cargo/env
+          CIBW_ENVIRONMENT_LINUX: >
+            PATH="$HOME/.cargo/bin:$PATH"
+            CARGO_NET_GIT_FETCH_WITH_CLI=true
+          # macOS: ensure Rust is available
+          CIBW_BEFORE_ALL_MACOS: >
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
+            source $HOME/.cargo/env
+          CIBW_ENVIRONMENT_MACOS: >
+            PATH="$HOME/.cargo/bin:$PATH"
+          # Build command: use maturin
+          CIBW_BUILD_FRONTEND: "build[uv]"
+          # Test the wheel
+          CIBW_TEST_REQUIRES: "pytest"
+          CIBW_TEST_COMMAND: "pytest {project}/tests/smoke_test.py -q"
+          # Repair wheels
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
+            auditwheel repair -w {dest_dir} {wheel}
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
+            delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.platform.os }}-${{ matrix.platform.arch }}
+          path: wheelhouse/*.whl
+          retention-days: 30
+
+  # ─── Publish to PyPI ────────────────────────────────────────────────────────
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    needs: [build-wheels]
+    environment:
+      name: pypi
+      url: https://pypi.org/p/iv8-rs
+    permissions:
+      id-token: write  # OIDC trusted publishing
+    steps:
+      - name: Download all wheels
+        uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          path: dist/
+          merge-multiple: true
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/

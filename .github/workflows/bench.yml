@@ -1,0 +1,79 @@
+name: Benchmarks
+
+on:
+  workflow_dispatch:
+  # Run on main branch pushes to track performance over time
+  push:
+    branches: [main]
+    paths:
+      - 'crates/**'
+      - 'Cargo.lock'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bench:
+    name: Benchmarks (Linux x64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/.rusty_v8
+            target
+          key: ${{ runner.os }}-cargo-bench-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-bench-
+            ${{ runner.os }}-cargo-
+
+      - name: Run benchmarks
+        run: |
+          cargo bench --bench iv8_bench -- \
+            context_lifecycle \
+            eval_simple_1plus1 \
+            browser_api/navigator_userAgent \
+            browser_api/date_now \
+            browser_api/math_random \
+            throughput/eval_1plus1_throughput \
+            throughput/navigator_ua_throughput \
+            --warm-up-time 2 \
+            --measurement-time 5 \
+            2>&1 | tee bench_results.txt
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results-${{ github.sha }}
+          path: |
+            bench_results.txt
+            target/criterion/
+          retention-days: 90
+
+      - name: Comment benchmark results on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = fs.readFileSync('bench_results.txt', 'utf8');
+            // Extract key metrics
+            const lines = results.split('\n').filter(l =>
+              l.includes('time:') || l.includes('Benchmarking')
+            );
+            const summary = lines.slice(0, 20).join('\n');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Benchmark Results\n\`\`\`\n${summary}\n\`\`\``
+            });
