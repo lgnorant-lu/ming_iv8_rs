@@ -216,6 +216,57 @@ impl Debugger {
     if (!_obj) return;
     var _desc = Object.getOwnPropertyDescriptor(_obj, '{prop}');
     if (!_desc) return;
+
+    // If property is non-configurable (e.g. environment-injected ReadOnly+DontDelete),
+    // we cannot use Object.defineProperty. Fall back to wrapping the parent object
+    // with a Proxy on the global path, intercepting get/set for this specific property.
+    if (!_desc.configurable) {{
+        // Strategy: replace the parent object on its parent with a Proxy.
+        // For top-level objects (navigator, screen, document), replace on globalThis.
+        var _parentParts = '{obj_path}'.split('.');
+        var _parentParent = globalThis;
+        for (var i = 0; i < _parentParts.length - 1; i++) {{
+            _parentParent = _parentParent[_parentParts[i]];
+        }}
+        var _lastKey = _parentParts[_parentParts.length - 1];
+        var _target = _parentParent[_lastKey];
+        if (!_target || typeof _target !== 'object') return;
+
+        var _proxy = new Proxy(_target, {{
+            get: function(target, key, receiver) {{
+                var val = Reflect.get(target, key, receiver);
+                if (key === '{prop}' && {watch_read}) {{
+                    _log.push({{ api: '{api_path}', args: '[]', result: JSON.stringify(val), timestamp: performance.now(), mode: 'read' }});
+                }}
+                return val;
+            }},
+            set: function(target, key, value, receiver) {{
+                if (key === '{prop}' && {watch_write}) {{
+                    _log.push({{ api: '{api_path}', args: JSON.stringify([value]), result: 'undefined', timestamp: performance.now(), mode: 'write' }});
+                }}
+                return Reflect.set(target, key, value, receiver);
+            }}
+        }});
+        // Replace on parent (or globalThis for top-level)
+        if (_parentParts.length === 1) {{
+            try {{
+                Object.defineProperty(globalThis, _lastKey, {{
+                    value: _proxy, writable: true, configurable: true, enumerable: true
+                }});
+            }} catch(e) {{
+                // globalThis property is also non-configurable (e.g. navigator).
+                // Last resort: install a getter on the prototype chain or just
+                // accept we can't intercept. Log a one-time snapshot instead.
+                var _val = _target['{prop}'];
+                _log.push({{ api: '{api_path}', args: '[]', result: JSON.stringify(_val), timestamp: performance.now(), mode: 'read', note: 'snapshot (non-configurable parent)' }});
+            }}
+        }} else {{
+            _parentParent[_lastKey] = _proxy;
+        }}
+        return;
+    }}
+
+    // Normal path: property is configurable, use Object.defineProperty
     var _origGet = _desc.get;
     var _origSet = _desc.set;
     var _origVal = _desc.value;
