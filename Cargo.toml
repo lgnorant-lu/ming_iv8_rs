@@ -14,6 +14,8 @@ license = "MIT"
 
 [workspace.dependencies]
 # V8 engine
+# v0.2: switch to fork after prebuilt archives are ready
+# v8 = { git = "https://github.com/lgnorant-lu/rusty_v8.git", tag = "v147.4.0-iv8.1" }
 v8 = "147"
 
 # Python binding
