@@ -5,8 +5,149 @@
 //! - If URL is NOT in ResourceBundle → reject with TypeError("NetworkError")
 //!
 //! The Response object has: status, ok, headers, text(), json(), arrayBuffer()
+//!
+//! v0.2 (L-04 fix): fetch() requests are also recorded to `__iv8__.netLog.entries`
+//! (was previously XHR-only). Same entry format: { method, url, headers, body }.
 
 use crate::state::RuntimeState;
+
+/// Record a fetch request into __iv8__.netLog.entries.
+///
+/// Mirrors the JS shim used by XHR (network/xhr.rs) but called from the Rust
+/// fetch callback. Silent no-op if __iv8__ or netLog is not yet installed
+/// (e.g. very early in context lifetime).
+fn record_fetch_in_netlog(
+    scope: &v8::PinScope<'_, '_>,
+    method: &str,
+    url: &str,
+    header_pairs: &[(String, String)],
+    body: &str,
+) {
+    let global = scope.get_current_context().global(scope);
+
+    let iv8_key = match v8::String::new(scope, "__iv8__") {
+        Some(k) => k,
+        None => return,
+    };
+    let iv8_val = match global.get(scope, iv8_key.into()) {
+        Some(v) if v.is_object() => v,
+        _ => return,
+    };
+    let iv8_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(iv8_val) };
+
+    let netlog_key = match v8::String::new(scope, "netLog") {
+        Some(k) => k,
+        None => return,
+    };
+    let netlog_val = match iv8_obj.get(scope, netlog_key.into()) {
+        Some(v) if v.is_object() => v,
+        _ => return,
+    };
+    let netlog_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(netlog_val) };
+
+    let entries_key = match v8::String::new(scope, "entries") {
+        Some(k) => k,
+        None => return,
+    };
+    let entries_val = match netlog_obj.get(scope, entries_key.into()) {
+        Some(v) if v.is_array() => v,
+        _ => return,
+    };
+    let entries_arr: v8::Local<v8::Array> = unsafe { v8::Local::cast_unchecked(entries_val) };
+
+    // Build entry object: { method, url, headers, body }
+    let entry = v8::Object::new(scope);
+    if let Some(k) = v8::String::new(scope, "method") {
+        if let Some(v) = v8::String::new(scope, method) {
+            entry.set(scope, k.into(), v.into());
+        }
+    }
+    if let Some(k) = v8::String::new(scope, "url") {
+        if let Some(v) = v8::String::new(scope, url) {
+            entry.set(scope, k.into(), v.into());
+        }
+    }
+    // headers: Array of [name, value] pairs (matches XHR shim format).
+    let headers_arr = v8::Array::new(scope, header_pairs.len() as i32);
+    for (i, (hk, hv)) in header_pairs.iter().enumerate() {
+        let pair = v8::Array::new(scope, 2);
+        if let Some(name) = v8::String::new(scope, hk) {
+            pair.set_index(scope, 0, name.into());
+        }
+        if let Some(val) = v8::String::new(scope, hv) {
+            pair.set_index(scope, 1, val.into());
+        }
+        headers_arr.set_index(scope, i as u32, pair.into());
+    }
+    if let Some(k) = v8::String::new(scope, "headers") {
+        entry.set(scope, k.into(), headers_arr.into());
+    }
+    if let Some(k) = v8::String::new(scope, "body") {
+        if let Some(v) = v8::String::new(scope, body) {
+            entry.set(scope, k.into(), v.into());
+        }
+    }
+
+    let len = entries_arr.length();
+    entries_arr.set_index(scope, len, entry.into());
+}
+
+/// Extract method/headers/body from the optional `init` object passed to fetch().
+fn parse_fetch_init<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    init_arg: v8::Local<'s, v8::Value>,
+) -> (String, Vec<(String, String)>, String) {
+    let mut method = String::from("GET");
+    let mut headers = Vec::new();
+    let mut body = String::new();
+
+    if !init_arg.is_object() {
+        return (method, headers, body);
+    }
+    let init_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(init_arg) };
+
+    if let Some(method_key) = v8::String::new(scope, "method") {
+        if let Some(method_val) = init_obj.get(scope, method_key.into()) {
+            if !method_val.is_undefined() && !method_val.is_null() {
+                method = method_val.to_rust_string_lossy(scope).to_uppercase();
+            }
+        }
+    }
+
+    if let Some(headers_key) = v8::String::new(scope, "headers") {
+        if let Some(headers_val) = init_obj.get(scope, headers_key.into()) {
+            if headers_val.is_object() {
+                let headers_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(headers_val) };
+                let context = scope.get_current_context();
+                if let Some(names) = headers_obj.get_own_property_names(scope, Default::default()) {
+                    for i in 0..names.length() {
+                        if let Some(name_val) = names.get_index(scope, i) {
+                            let name = name_val.to_rust_string_lossy(scope);
+                            if let Some(val) = headers_obj.get(scope, name_val) {
+                                if !val.is_undefined() && !val.is_null() {
+                                    headers
+                                        .push((name.to_lowercase(), val.to_rust_string_lossy(scope)));
+                                }
+                            }
+                        }
+                    }
+                    let _ = context; // suppress unused warning if no use of context elsewhere
+                }
+            }
+        }
+    }
+
+    if let Some(body_key) = v8::String::new(scope, "body") {
+        if let Some(body_val) = init_obj.get(scope, body_key.into()) {
+            if !body_val.is_undefined() && !body_val.is_null() {
+                body = body_val.to_rust_string_lossy(scope);
+            }
+        }
+    }
+
+    (method, headers, body)
+}
 
 /// Install the global fetch() function.
 pub fn install_fetch(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
@@ -40,6 +181,17 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
         let url_arg = args.get(0);
         let url_str = url_arg.to_rust_string_lossy(scope);
 
+        // Parse optional init parameter (method/headers/body)
+        let (method, headers, body) = if args.length() >= 2 {
+            parse_fetch_init(scope, args.get(1))
+        } else {
+            (String::from("GET"), Vec::new(), String::new())
+        };
+
+        // Record into netLog BEFORE attempting the fetch (matches XHR semantics:
+        // the request is logged regardless of whether it succeeds).
+        record_fetch_in_netlog(scope, &method, &url_str, &headers, &body);
+
         // Look up in ResourceBundle
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
@@ -59,7 +211,7 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
                 let handler_result = {
                     let handler = state.network_handler.borrow();
                     if let Some(ref h) = *handler {
-                        h(&url_str, "GET")
+                        h(&url_str, &method)
                     } else {
                         None
                     }
