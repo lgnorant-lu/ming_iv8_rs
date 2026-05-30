@@ -20,7 +20,14 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   `typeof __iv8__ === 'undefined'`, `__iv8__ == null`, `Boolean(__iv8__) === false`.
   Property access (`__iv8__.page.load` etc.) remains unchanged.
 - `document.all` now uses real `MarkAsUndetectable` (was JS-level workaround).
-- Resolves L-01 known limitation from v0.1.
+- `document` is now a real `EventTarget`: `addEventListener`, `removeEventListener`,
+  and `dispatchEvent` are wired to the central `EventListenerRegistry` via the
+  DOM tree's root `NodeId`. Listeners on `DOMContentLoaded`, `click`, etc. now
+  fire correctly. Events from child nodes with `bubbles: true` reach `document`.
+- `fetch()` requests are now recorded to `__iv8__.netLog.entries` alongside
+  XHR. Same entry shape: `{ method, url, headers, body }`. Header names are
+  lowercased; method is uppercased to match XHR semantics.
+- Resolves L-01, L-03, L-04 known limitations from v0.1.
 
 ### Build
 
