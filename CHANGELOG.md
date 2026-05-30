@@ -6,6 +6,14 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+### Fixed
+
+- `replaceChild(node, node)` and `insertBefore(node, node)` no longer panic.
+  Real browsers treat same-node replacement/insertion as a no-op; iv8-rs now
+  matches. Previously ego-tree's internal assert fired (caught by catch_unwind
+  but caused the DOM operation to silently fail). Discovered via TDC ChaosVM
+  which uses this pattern as an environment probe.
+
 ## [0.2.0] - 2026-05-30
 
 ### Added
