@@ -2,16 +2,17 @@
 iv8-rs Python type stubs.
 
 Type annotations for the iv8_rs._iv8 extension module.
+Covers v0.1 (core), v0.2 (type conversion), v0.3 (observability).
 """
 
 from __future__ import annotations
 from typing import Any, Callable, Optional, Union, List, Dict, Tuple
 
-# ─── Version ──────────────────────────────────────────────────────────────────
+# --- Version ---
 
 __version__: str
 
-# ─── Exceptions ───────────────────────────────────────────────────────────────
+# --- Exceptions ---
 
 class JSError(Exception):
     """Base class for JavaScript runtime errors."""
@@ -33,18 +34,99 @@ class JSPanic(JSError):
     """Internal Rust panic (should not occur in normal usage)."""
     ...
 
-# ─── JSContext ────────────────────────────────────────────────────────────────
+# --- Module-level functions ---
+
+def enable_logging(level: str = "info") -> None:
+    """
+    Enable tracing/logging output.
+
+    Can also be enabled via the ``IV8_LOG`` environment variable.
+
+    Args:
+        level: Log level. One of "trace", "debug", "info", "warn", "error".
+    """
+    ...
+
+
+def instrument_source(
+    source: str,
+    mode: str = "auto",
+    capture_stack_depth: int = 3,
+    capture_env: bool = True,
+    env_targets: Optional[List[str]] = None,
+    limit: int = 100000,
+    handler_array: Optional[str] = None,
+    pc_var: Optional[str] = None,
+    stack_var: Optional[str] = None,
+    index_array: Optional[str] = None,
+    dispatch_pattern: Optional[str] = None,
+) -> Tuple[str, Dict[str, Any]]:
+    """
+    Detect JSVMP pattern and inject unified tracing code.
+
+    Strategy:
+    - Replaces the dispatch expression (e.g. ``A[Q[U++]]()``) with a logging wrapper
+    - Prepends global object Proxies at source start (captures env reads with PC)
+
+    Output format: "TYPE,PC,target,value" where TYPE is D/R/C/W.
+
+    Args:
+        source: The JS source code to instrument.
+        mode: Detection mode. "auto" (default), "chaosvm", or "switch_vm".
+        capture_stack_depth: Stack elements to capture per dispatch (default 3).
+        capture_env: Whether to inject environment Proxy wrappers (default True).
+        env_targets: Global objects to proxy (default: navigator, screen, document,
+            location, Math, crypto, performance).
+        limit: Maximum trace entries (default 100000).
+        handler_array: Manual override for handler array variable name.
+        pc_var: Manual override for program counter variable name.
+        stack_var: Manual override for stack variable name.
+        index_array: Manual override for index/bytecode array variable name.
+        dispatch_pattern: Manual override for the dispatch expression string.
+
+    Returns:
+        Tuple of (patched_source, vm_info_dict).
+        vm_info_dict keys: handler_array, index_array, pc_var, stack_var,
+        mode, dispatch_pattern, dispatch_offset, head_code_length.
+
+    Raises:
+        RuntimeError: If no JSVMP dispatch pattern detected and no manual params given.
+    """
+    ...
+
+
+def trace_diff(trace_a: List[str], trace_b: List[str]) -> Dict[str, Any]:
+    """
+    Compare two trace logs and find the first divergence point.
+
+    Args:
+        trace_a: First trace log (list of strings).
+        trace_b: Second trace log (list of strings).
+
+    Returns:
+        Dict with divergence info:
+        - index: position of first difference (-1 if identical)
+        - a: entry from trace_a at divergence point (or None)
+        - b: entry from trace_b at divergence point (or None)
+        - total_a: length of trace_a
+        - total_b: length of trace_b
+        - match_count: number of matching entries before divergence
+    """
+    ...
+
+# --- JSContext ---
 
 class JSContext:
     """
     A JavaScript execution context backed by V8.
 
-    Each instance owns a V8 Isolate and must be used from the thread that created it.
+    Each instance owns a V8 Isolate and must be used from the thread that
+    created it. Provides the full browser environment surface for JS execution.
 
     Example::
 
         ctx = JSContext()
-        result = ctx.eval("1 + 1")  # → 2
+        result = ctx.eval("1 + 1")  # -> 2
         ctx.close()
 
         # Or use as context manager:
@@ -59,25 +141,31 @@ class JSContext:
         time_mode: str = "logical",
         js_api: str = "__iv8__",
         strict_compat: bool = True,
+        random_seed: Optional[int] = None,
+        crypto_seed: Optional[int] = None,
+        time_freeze: Optional[float] = None,
     ) -> None:
         """
         Create a new JSContext.
 
         Args:
-            environment: Browser environment overrides. Supports both flat format
-                (``{"navigator.userAgent": "..."}```) and nested format
+            environment: Browser environment overrides. Supports flat format
+                (``{"navigator.userAgent": "..."}``) and nested format
                 (``{"navigator": {"userAgent": "..."}}``, auto-flattened).
-            config: Additional configuration dict. Supported keys:
-                - ``timezone``: IANA timezone string (e.g. ``"America/New_York"``)
-                - ``locale``: BCP 47 locale string (e.g. ``"zh-CN"``)
-            time_mode: Time mode. ``"logical"`` (default) uses a controlled clock
-                that advances only when explicitly advanced. ``"system"`` uses
-                the real system clock.
-            js_api: Name of the internal tool object (default ``"__iv8__"``).
-            strict_compat: If True (default), replicate iv8 0.1.2 behavior including
-                known bugs. If False, enable enhanced behavior.
+            config: Additional configuration. Supported keys:
+                - timezone: IANA timezone string (e.g. "America/New_York")
+                - locale: BCP 47 locale string (e.g. "zh-CN")
+            time_mode: "logical" (default, controlled clock) or "system" (real clock).
+            js_api: Name of the internal tool object (default "__iv8__").
+            strict_compat: If True (default), replicate iv8 0.1.2 behavior.
+                If False, enable enhanced type conversions.
+            random_seed: Seed for deterministic Math.random() (v0.3).
+            crypto_seed: Seed for deterministic crypto.getRandomValues() (v0.3).
+            time_freeze: Frozen timestamp in ms for Date.now() (v0.3).
         """
         ...
+
+    # --- Core eval ---
 
     def eval(
         self,
@@ -90,33 +178,28 @@ class JSContext:
         devtools: bool = True,
     ) -> Any:
         """
-        Evaluate JavaScript source code and return the result as a Python object.
+        Evaluate JavaScript source code and return the result.
 
-        Type conversion (JS → Python):
-            - ``null`` / ``undefined`` → ``None``
-            - ``boolean`` → ``bool``
-            - integer number → ``int``
-            - float number → ``float``
-            - ``string`` → ``str``
-            - ``Array`` → ``list``
-            - ``Object`` → ``dict``
-            - ``ArrayBuffer`` / ``TypedArray`` → ``bytes``
+        Type conversion (strict_compat=True):
+            null/undefined -> None, boolean -> bool, int -> int, float -> float,
+            string -> str, Array -> list, Object -> dict, ArrayBuffer -> bytes,
+            BigInt -> None, Date -> "[object Date]"
+
+        Type conversion (strict_compat=False):
+            BigInt -> int, Date -> datetime.datetime, Map -> dict, Set -> set,
+            TypedArray -> list[int|float]
 
         Args:
             source: JavaScript source code to evaluate.
             name: Optional source URL for stack traces.
             line: Line offset for error reporting.
             col: Column offset for error reporting.
-            to_py: Ignored (always deep-converts, matching iv8 ``to_py=True``).
-            devtools: Ignored (DevTools integration is automatic).
-
-        Returns:
-            The JavaScript result converted to a Python object.
+            to_py: Ignored (always deep-converts).
+            devtools: Ignored (automatic).
 
         Raises:
-            JSCompileError: If the source has a syntax error.
-            JSError: If the JavaScript throws an exception.
-            JSTimeoutError: If execution times out.
+            JSCompileError: Syntax error in source.
+            JSError: JavaScript exception thrown.
         """
         ...
 
@@ -124,75 +207,15 @@ class JSContext:
         """
         Evaluate JavaScript and await the result if it's a Promise.
 
-        Runs the event loop until the Promise settles (up to ``max_ticks``
-        iterations). Returns the resolved value.
+        Runs the event loop until the Promise settles.
 
         Args:
             source: JavaScript source code that returns a Promise.
             max_ticks: Maximum event loop ticks to wait (default 1000).
-
-        Returns:
-            The resolved Promise value converted to a Python object.
-
-        Raises:
-            JSError: If the Promise rejects or the source throws.
         """
         ...
 
-    def page_load(self, html: str, base_url: Optional[str] = None) -> None:
-        """
-        Load an HTML page: parse DOM, execute inline scripts, fire DOMContentLoaded.
-
-        This is the primary way to set up a browser environment for JS execution.
-        After calling this, ``document.getElementById``, ``querySelector``, etc.
-        are available.
-
-        Args:
-            html: The HTML source to parse.
-            base_url: Optional base URL for resolving relative URLs and setting
-                ``location.href``.
-        """
-        ...
-
-    def expose(
-        self,
-        name_or_data: Union[str, Any],
-        callable_or_name: Optional[Any] = None,
-    ) -> None:
-        """
-        Expose a Python callable as a global JS function, or store data.
-
-        Two modes:
-
-        **Mode 1: expose(name, callable)** — registers a JS function::
-
-            def my_func(x, y):
-                return x + y
-            ctx.expose("myFunc", my_func)
-            ctx.eval("myFunc(1, 2)")  # → 3
-
-        **Mode 2: expose(data, name)** — stores data at ``__iv8__.data.name``::
-
-            ctx.expose({"html": "...", "resources": {}}, "s1")
-            ctx.eval("__iv8__.page.load(__iv8__.data.s1)")
-
-        Args:
-            name_or_data: Either the function name (str) or data dict.
-            callable_or_name: Either the callable or the data name.
-        """
-        ...
-
-    def expose_module(self, module: Any) -> None:
-        """
-        Expose all callable members of a Python module to JS global scope.
-
-        If the module has ``__all__``, only those names are exposed.
-        Otherwise, all public callables (not starting with ``_``) are exposed.
-
-        Args:
-            module: A Python module object.
-        """
-        ...
+    # --- Resource & Network ---
 
     def add_resource(
         self,
@@ -204,14 +227,7 @@ class JSContext:
         """
         Add a resource to the offline bundle.
 
-        When JS later calls ``fetch(url)`` or ``XMLHttpRequest``, the registered
-        response is returned.
-
-        Args:
-            url: The URL to register.
-            body: Response body (str or bytes).
-            status: HTTP status code (default 200).
-            headers: Optional response headers dict.
+        When JS calls fetch(url) or XHR, the registered response is returned.
         """
         ...
 
@@ -222,31 +238,8 @@ class JSContext:
         """
         Set a Python network handler for fetch/XHR fallback.
 
-        Runs as the second tier of the three-layer chain:
-
-        1. ResourceBundle (pre-registered offline responses)
-        2. Python handler (this) — always called when a URL is not in the
-           bundle, regardless of ``strict_compat`` mode
-        3. NetworkError (offline default when handler returns ``None``)
-
-        The handler receives ``(url: str, method: str)`` and should return:
-        - ``(status: int, body: str | bytes)`` to provide a response
-        - ``None`` to fall through to NetworkError
-
-        Both ``fetch()`` and synchronous XMLHttpRequest call the handler.
-        For asynchronous XHR, the handler is invoked when the event loop
-        drains the timer queue.
-
-        Example::
-
-            def handler(url, method):
-                if 'api.example.com' in url:
-                    return (200, '{"ok": true}')
-                return None
-            ctx.set_network_handler(handler)
-
-        Args:
-            handler: Callable that takes (url, method) and returns response or None.
+        Three-layer chain: ResourceBundle -> Python handler -> NetworkError.
+        Handler receives (url, method), returns (status, body) or None.
         """
         ...
 
@@ -254,23 +247,53 @@ class JSContext:
         """Clear the network handler (revert to offline-only mode)."""
         ...
 
+    # --- DOM & Page ---
+
+    def page_load(self, html: str, base_url: Optional[str] = None) -> None:
+        """
+        Load an HTML page: parse DOM, execute scripts, fire DOMContentLoaded.
+
+        After calling this, document.getElementById, querySelector, etc. work.
+        """
+        ...
+
+    # --- Expose ---
+
+    def expose(
+        self,
+        name_or_data: Union[str, Any],
+        callable_or_name: Optional[Any] = None,
+    ) -> None:
+        """
+        Expose a Python callable as a global JS function, or store data.
+
+        Mode 1: expose(name, callable) -- registers a JS function.
+        Mode 2: expose(data, name) -- stores data at __iv8__.data.name.
+        """
+        ...
+
+    def expose_module(self, module: Any) -> None:
+        """Expose all callable members of a Python module to JS global scope."""
+        ...
+
+    # --- Inspector / DevTools (v0.3 M15) ---
+
     def with_devtools(
         self,
         port: int = 9229,
         watch_apis: Optional[List[str]] = None,
         enable_console: bool = True,
+        wait: bool = True,
     ) -> "JSContext":
         """
         Start the V8 Inspector (CDP WebSocket server).
-
-        Opens a DevTools debugging session. Returns self for chaining::
-
-            ctx = JSContext().with_devtools(port=9229, watch_apis=["Math.random"])
 
         Args:
             port: WebSocket port (default 9229).
             watch_apis: List of API paths to auto-breakpoint on access.
             enable_console: Whether to enable DevTools console (default True).
+            wait: Whether to wait for a DevTools client to connect (default True).
+                Set to False for programmatic CDP use.
 
         Returns:
             self (for chaining).
@@ -285,20 +308,333 @@ class JSContext:
         """Process pending CDP messages (call periodically when debugging)."""
         ...
 
+    # --- CDP Programmatic API (v0.3 M15) ---
+
+    def cdp_set_breakpoint(
+        self,
+        url: str,
+        line: int,
+        column: Optional[int] = None,
+        condition: Optional[str] = None,
+    ) -> str:
+        """
+        Set a breakpoint by script URL.
+
+        Args:
+            url: Script URL (e.g. "tdc.js" or full URL).
+            line: Line number (0-based).
+            column: Column number (0-based, optional).
+            condition: JS expression; breakpoint only fires when true.
+
+        Returns:
+            breakpoint_id (str) for later removal.
+
+        Requires with_devtools() to have been called first.
+        """
+        ...
+
+    def cdp_remove_breakpoint(self, breakpoint_id: str) -> None:
+        """Remove a breakpoint by id."""
+        ...
+
+    def cdp_evaluate_on_frame(self, call_frame_id: str, expression: str) -> Any:
+        """
+        Evaluate an expression on a call frame while paused at a breakpoint.
+
+        Args:
+            call_frame_id: Frame ID from cdp_get_call_frames().
+            expression: JS expression to evaluate in that frame's scope.
+        """
+        ...
+
+    def cdp_resume(self) -> None:
+        """Resume execution after a breakpoint pause."""
+        ...
+
+    def cdp_step_over(self) -> None:
+        """Step over (next statement, skip function calls)."""
+        ...
+
+    def cdp_step_into(self) -> None:
+        """Step into (enter function calls)."""
+        ...
+
+    def cdp_get_call_frames(self) -> Optional[List[Dict[str, Any]]]:
+        """
+        Get call frames from the last breakpoint pause.
+
+        Returns:
+            List of frame dicts, or None if not paused.
+            Each frame: {functionName, url, lineNumber, columnNumber, callFrameId}
+        """
+        ...
+
+    def cdp_process_events(self) -> bool:
+        """
+        Process CDP events (check if execution paused at breakpoint).
+
+        Returns:
+            True if a Debugger.paused event was received.
+        """
+        ...
+
+    # --- Trace Mode (v0.3 M16) ---
+
+    def set_trace_point(
+        self,
+        url: str,
+        line: int,
+        column: Optional[int] = None,
+        expression: str = "'hit'",
+    ) -> str:
+        """
+        Set a trace point: conditional breakpoint that records without pausing.
+
+        The expression is evaluated each time the line is hit and pushed to
+        an internal trace array. Call get_trace_log() after execution.
+
+        Args:
+            url: Script URL to set trace point in.
+            line: Line number (0-based).
+            column: Column number (0-based, optional).
+            expression: JS expression to evaluate and record each hit.
+
+        Returns:
+            trace_point_id (str) for later removal.
+        """
+        ...
+
+    def remove_trace_point(self, trace_point_id: str) -> None:
+        """Remove a trace point by id."""
+        ...
+
+    def get_trace_log(self) -> List[Any]:
+        """Get all entries recorded by trace points since last clear."""
+        ...
+
+    def clear_trace_log(self) -> None:
+        """Clear the trace log."""
+        ...
+
+    def set_trace_limit(self, max_entries: int) -> None:
+        """
+        Set maximum trace log size. When reached, trace points stop recording.
+
+        Args:
+            max_entries: Maximum entries. Set to 0 to disable limit.
+        """
+        ...
+
+    # --- Deterministic Mode (v0.3 M17) ---
+    # (Configured via __init__ params: random_seed, crypto_seed, time_freeze)
+
+    # --- VM-aware Helper (v0.3 M18) ---
+
+    def detect_chaosvm_vars(self, source: str) -> Optional[Dict[str, str]]:
+        """
+        Detect ChaosVM/JSVMP variable names from JS source code.
+
+        Searches for patterns like A[Q[U++]]() (handler_array[index_array[pc++]]()).
+
+        Args:
+            source: The JS source code to analyze.
+
+        Returns:
+            Dict with detected names: {handler_array, index_array, pc, stack},
+            or None if no VM pattern found.
+        """
+        ...
+
+    def instrument_chaosvm(
+        self,
+        handler_array: str,
+        pc_var: str,
+        stack_var: str,
+        capture_stack_depth: int = 3,
+        limit: int = 100000,
+    ) -> None:
+        """
+        Instrument a ChaosVM handler array for high-performance tracing.
+
+        Wraps the handler array with a Proxy that records every dispatch.
+        Much faster than CDP breakpoints (~0.5s for 50000 instructions).
+
+        After calling this, execute JS normally, then call get_vm_trace().
+
+        Args:
+            handler_array: Variable name of the handler array (e.g. "A").
+            pc_var: Variable name of the program counter (e.g. "U").
+            stack_var: Variable name of the stack (e.g. "S").
+            capture_stack_depth: Stack top elements to capture (default 3).
+            limit: Maximum trace entries (default 100000).
+        """
+        ...
+
+    def get_vm_trace(self) -> List[str]:
+        """
+        Get the VM trace log (after instrument_chaosvm + execution).
+
+        Returns:
+            List of trace entry strings: "pc,opcode,stack0,stack1,..."
+        """
+        ...
+
+    def clear_vm_trace(self) -> None:
+        """Clear the VM trace log."""
+        ...
+
+    def uninstrument_chaosvm(self, handler_array: str) -> None:
+        """Restore original handler array (undo instrument_chaosvm)."""
+        ...
+
+    def detect_vm_dispatch(
+        self,
+        script_url: str,
+        patterns: Optional[List[str]] = None,
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Detect a JSVMP dispatch loop in a loaded script.
+
+        Args:
+            script_url: URL of the script to search in.
+            patterns: Optional list of search strings.
+
+        Returns:
+            Dict with {url, line, column, pattern} if found, None otherwise.
+            Requires with_devtools() for CDP search.
+        """
+        ...
+
+    def trace_vm(
+        self,
+        url: str,
+        line: int,
+        column: Optional[int] = None,
+        vars: Optional[List[str]] = None,
+        limit: int = 50000,
+    ) -> str:
+        """
+        High-level VM trace: set trace point with structured capture.
+
+        Combines set_trace_point + expression building. After eval, call
+        get_trace_log() to get results.
+
+        Args:
+            url: Script URL.
+            line: Dispatch loop line number.
+            column: Column (optional).
+            vars: JS expressions to capture (default: ["pc", "H[pc]"]).
+            limit: Max trace entries (default 50000).
+
+        Returns:
+            trace_point_id (str).
+        """
+        ...
+
+    # --- M19: Deep Trace (unified instrument_source integration) ---
+
+    def get_unified_trace(self) -> List[str]:
+        """
+        Get the unified trace log (from instrument_source injection).
+
+        Entry format: "TYPE,PC,target,value"
+        - D,pc,opcode,stack_depth -- VM dispatch
+        - R,pc,obj.prop,value -- Environment read
+        - C,pc,obj.method,result -- Function call
+        - W,pc,obj.prop,value -- Property write
+        """
+        ...
+
+    def clear_unified_trace(self) -> None:
+        """Clear the unified trace log."""
+        ...
+
+    # --- Recording (v0.3 M19) ---
+
+    def start_recording(
+        self,
+        targets: Optional[List[str]] = None,
+        record_reads: bool = True,
+        record_writes: bool = True,
+        record_calls: bool = True,
+        limit: int = 50000,
+    ) -> None:
+        """
+        Start recording all property reads/writes/calls on global objects.
+
+        Args:
+            targets: Global object names to monitor (default: navigator, screen,
+                document, location, Math, crypto, performance).
+            record_reads: Record property reads (default True).
+            record_writes: Record property writes (default True).
+            record_calls: Record function calls (default True).
+            limit: Maximum entries (default 50000).
+        """
+        ...
+
+    def stop_recording(self) -> List[str]:
+        """
+        Stop recording and return all captured entries.
+
+        Returns:
+            List of entry strings: "TYPE,target.prop,value"
+            TYPE: R=read, W=write, C=call.
+        """
+        ...
+
+    # --- Profiler & Coverage (v0.3 M19) ---
+
+    def start_profiler(self) -> None:
+        """
+        Start V8 CPU Profiler (function-level call graph).
+
+        Requires with_devtools(wait=False) to have been called.
+        """
+        ...
+
+    def stop_profiler(self) -> Optional[Dict[str, Any]]:
+        """
+        Stop V8 CPU Profiler and return the profile data.
+
+        Returns:
+            Dict with V8 CPU Profile format (nodes, startTime, endTime, samples),
+            or None if profiler was not started.
+        """
+        ...
+
+    def start_coverage(self) -> None:
+        """
+        Start precise code coverage collection.
+
+        Requires with_devtools(wait=False).
+        """
+        ...
+
+    def stop_coverage(self) -> Optional[List[Dict[str, Any]]]:
+        """
+        Stop coverage collection and return results.
+
+        Returns:
+            List of script coverage dicts (scriptId, url, functions with ranges).
+        """
+        ...
+
+    # --- Console ---
+
     def get_console_messages(self) -> List[Dict[str, str]]:
         """
         Get all console messages captured since context creation.
 
         Returns:
-            List of dicts with ``'level'`` and ``'text'`` keys.
-            Levels: ``'log'``, ``'info'``, ``'warn'``, ``'error'``, ``'debug'``,
-            ``'trace'``, ``'assert'``.
+            List of dicts with 'level' and 'text' keys.
         """
         ...
 
     def clear_console_messages(self) -> None:
         """Clear all captured console messages."""
         ...
+
+    # --- Lifecycle ---
 
     def is_disposed(self) -> bool:
         """Check if the context has been disposed."""
@@ -308,36 +644,27 @@ class JSContext:
         """Close the context and release V8 resources."""
         ...
 
-    def __enter__(self) -> "JSContext":
-        """Context manager entry — returns self."""
-        ...
-
+    def __enter__(self) -> "JSContext": ...
     def __exit__(
         self,
         exc_type: Optional[type],
         exc_val: Optional[BaseException],
         exc_tb: Optional[Any],
-    ) -> bool:
-        """Context manager exit — closes the context."""
-        ...
+    ) -> bool: ...
 
     @classmethod
     def get_defaults(cls) -> Dict[str, Any]:
-        """
-        Return the 393 default environment entries as a dict.
-
-        Useful for inspecting or customizing the default browser fingerprint.
-        """
+        """Return the 393 default environment entries as a dict."""
         ...
 
-# ─── Debugger ─────────────────────────────────────────────────────────────────
+# --- Debugger ---
 
 class Debugger:
     """
     Runtime analysis assistant for a JSContext.
 
-    Provides lightweight instrumentation for JS reverse engineering:
-    - API call tracing via hookNative
+    Provides lightweight instrumentation via hookNative:
+    - API call tracing
     - Property watching (read/write interception)
     - Environment snapshot
     - Call log capture and summary
@@ -348,57 +675,30 @@ class Debugger:
         dbg.trace_api('Math.random')
         ctx.eval('Math.random(); Math.random();')
         log = dbg.get_call_log()
-        # [{'api': 'Math.random', 'args': '[]', 'result': '0.42', 'timestamp': 0.0}]
     """
 
     def __init__(self, ctx: JSContext) -> None:
-        """
-        Create a Debugger attached to a JSContext.
-
-        Args:
-            ctx: The JSContext to attach to.
-        """
+        """Create a Debugger attached to a JSContext."""
         ...
 
     def trace_api(self, api_path: str) -> None:
         """
         Trace all calls to a JS API path.
 
-        Installs a hookNative interceptor that records every call.
-
         Args:
-            api_path: Dot-path like ``'Math.random'``, ``'document.getElementById'``,
-                ``'fetch'``.
-
-        Example::
-
-            dbg.trace_api('Math.random')
-            ctx.eval('Math.random()')
-            log = dbg.get_call_log()
+            api_path: Dot-path like 'Math.random', 'document.getElementById'.
         """
         ...
 
     def trace_apis(self, api_paths: List[str]) -> None:
-        """
-        Trace multiple APIs at once.
-
-        Args:
-            api_paths: List of dot-paths to trace.
-        """
+        """Trace multiple APIs at once."""
         ...
 
     def get_call_log(self) -> List[Dict[str, Any]]:
         """
-        Get the call log as a list of dicts.
+        Get the call log.
 
-        Each entry has:
-        - ``api``: The API path that was called.
-        - ``args``: JSON-serialized arguments.
-        - ``result``: JSON-serialized return value.
-        - ``timestamp``: ``performance.now()`` at call time.
-
-        Returns:
-            List of call log entries.
+        Each entry: {api, args, result, timestamp}.
         """
         ...
 
@@ -416,9 +716,6 @@ class Debugger:
 
         Clears the log before evaluation, then captures all traced calls.
 
-        Args:
-            source: JavaScript source code.
-
         Returns:
             Tuple of (result, call_log_entries).
         """
@@ -428,13 +725,9 @@ class Debugger:
         """
         Get a snapshot of the current environment.
 
-        Returns a dict with key environment properties including:
-        ``userAgent``, ``platform``, ``language``, ``hardwareConcurrency``,
-        ``screenWidth``, ``screenHeight``, ``hasChrome``, ``hasCrypto``,
-        ``performanceNow``, ``dateNow``, ``documentURL``, etc.
-
-        Returns:
-            Dict of environment properties.
+        Returns dict with key environment properties: userAgent, platform,
+        language, hardwareConcurrency, screenWidth, screenHeight, hasChrome,
+        hasCrypto, performanceNow, dateNow, documentURL, etc.
         """
         ...
 
@@ -445,44 +738,21 @@ class Debugger:
         mode: str = "both",
     ) -> None:
         """
-        Install a watch on a property — logs every read/write.
+        Install a watch on a property -- logs every read/write.
 
         Args:
-            obj_path: Path to the object (e.g. ``'navigator'``, ``'document'``).
-            prop: Property name to watch (e.g. ``'userAgent'``, ``'cookie'``).
-            mode: ``'read'``, ``'write'``, or ``'both'`` (default ``'both'``).
+            obj_path: Path to the object (e.g. 'navigator', 'document').
+            prop: Property name to watch (e.g. 'userAgent', 'cookie').
+            mode: 'read', 'write', or 'both' (default 'both').
         """
         ...
 
     def get_call_summary(self) -> Dict[str, int]:
-        """
-        Get a summary of call counts per API.
-
-        Returns:
-            Dict mapping API path to call count.
-        """
+        """Get a summary of call counts per API."""
         ...
 
     def schedule_pause(self) -> None:
-        """
-        Schedule a pause on the next JS statement.
-
-        Requires DevTools to be connected (``ctx.with_devtools()``).
-        """
+        """Schedule a pause on the next JS statement (requires DevTools)."""
         ...
 
     def __repr__(self) -> str: ...
-
-# ─── Logging ──────────────────────────────────────────────────────────────────
-
-def enable_logging(level: str = "info") -> None:
-    """
-    Enable tracing/logging output.
-
-    Can also be enabled via the ``IV8_LOG`` environment variable.
-
-    Args:
-        level: Log level. One of ``"trace"``, ``"debug"``, ``"info"``,
-            ``"warn"``, ``"error"``. Default ``"info"``.
-    """
-    ...

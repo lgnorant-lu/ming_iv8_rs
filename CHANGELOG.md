@@ -8,29 +8,52 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ### Added
 
-- `instrument_chaosvm()`: High-performance VM instruction-level trace via Proxy
-  wrapper on handler array. 50000 instructions in ~0.5s (vs CDP breakpoint 30s+).
-- `detect_chaosvm_vars(source)`: Auto-detect JSVMP handler/pc/stack variable names.
-- `get_vm_trace()` / `clear_vm_trace()` / `uninstrument_chaosvm()`: VM trace lifecycle.
-- `start_recording()` / `stop_recording()`: Global object Proxy recording (all
-  property reads/writes/calls on navigator/screen/document/Math/crypto/etc).
-- `start_profiler()` / `stop_profiler()`: V8 CPU Profile (function-level call graph).
-- `start_coverage()` / `stop_coverage()`: Precise code coverage (function-level).
-- `iv8_rs.trace_diff(trace_a, trace_b)`: Find first divergence between two traces.
+- `docs/GUIDE.md`: Comprehensive usage guide covering all 19 sections
+- Updated Python type stubs (`.pyi`) to cover all v0.3 methods
 
-### Changed
-
-- M19 deep trace validated on TDC ChaosVM: 19,259 + 30,741 bytecode instructions
-  traced, 58 unique opcodes, TYPE_B source located at PC=26588 in 5 seconds
-  (previously took an entire analysis phase without resolution).
+## [0.3.1] - 2026-05-31
 
 ### Fixed
 
-- `replaceChild(node, node)` and `insertBefore(node, node)` no longer panic.
-  Real browsers treat same-node replacement/insertion as a no-op; iv8-rs now
-  matches. Previously ego-tree's internal assert fired (caught by catch_unwind
-  but caused the DOM operation to silently fail). Discovered via TDC ChaosVM
-  which uses this pattern as an environment probe.
+- `instrument_source`: Rewrite injection strategy to dispatch expression replacement.
+  Previous approach (source-head only) missed recursive ChaosVM calls. New approach
+  replaces `A[Q[U++]]()` with `(log_push, A[Q[U++]]())` — captures EVERY iteration.
+- DOM `clientWidth`/`clientHeight` now reads environment fallback chain
+  (`document.body.clientWidth` -> `window.innerWidth` -> default).
+- WebGL `getParameter(37446)` now reads `webgl.UNMASKED_RENDERER_WEBGL` from
+  environment (was reading wrong path `webgl.vendor`).
+
+## [0.3.0] - 2026-05-30
+
+### Added
+
+- **M15 Python CDP API**: `cdp_set_breakpoint`, `cdp_remove_breakpoint`,
+  `cdp_evaluate_on_frame`, `cdp_resume`, `cdp_step_over`, `cdp_step_into`,
+  `cdp_get_call_frames`, `cdp_process_events`. Full programmatic V8 Inspector
+  control without Chrome DevTools.
+- **M16 Trace mode**: `set_trace_point`, `remove_trace_point`, `get_trace_log`,
+  `clear_trace_log`, `set_trace_limit`. Non-pausing execution tracing via CDP
+  conditional breakpoints with side-effect expressions.
+- **M17 Deterministic mode**: `random_seed` (Math.random), `crypto_seed`
+  (crypto.getRandomValues), `time_freeze` (Date.now/performance.now). Same seed
+  produces identical sequences across runs.
+- **M18 VM-aware helper**: `detect_chaosvm_vars`, `instrument_chaosvm`,
+  `get_vm_trace`, `clear_vm_trace`, `uninstrument_chaosvm`, `detect_vm_dispatch`,
+  `trace_vm`. High-performance JSVMP tracing via Proxy (~0.5s for 50000 instructions).
+- **M19 Deep trace**:
+  - `instrument_source()`: Unified source injection (dispatch replacement + env Proxy).
+  - `start_recording()` / `stop_recording()`: Global object Proxy recording.
+  - `start_profiler()` / `stop_profiler()`: V8 CPU Profile.
+  - `start_coverage()` / `stop_coverage()`: Precise code coverage.
+  - `get_unified_trace()` / `clear_unified_trace()`: Unified D/R/C/W trace log.
+  - `iv8_rs.trace_diff(trace_a, trace_b)`: Find first divergence between traces.
+
+### Changed
+
+- `with_devtools()` gains `wait` parameter (default True). Set `wait=False` for
+  programmatic CDP use without waiting for external DevTools client.
+- M19 deep trace validated on TDC ChaosVM: 50000+ bytecode instructions traced,
+  58 unique opcodes, TYPE_B source located at PC=26588 in 5 seconds.
 
 ## [0.2.0] - 2026-05-30
 

@@ -1,6 +1,7 @@
 """iv8-rs: High-fidelity browser runtime for Python, powered by V8."""
 
 from iv8_rs._iv8 import __version__, JSContext, Debugger, enable_logging
+from iv8_rs._iv8 import instrument_source, trace_diff
 from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, JSPanic
 
 __all__ = [
@@ -8,6 +9,8 @@ __all__ = [
     "JSContext",
     "Debugger",
     "enable_logging",
+    "instrument_source",
+    "trace_diff",
     "JSError",
     "JSCompileError",
     "JSTimeoutError",
