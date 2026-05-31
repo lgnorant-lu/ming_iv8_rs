@@ -85,6 +85,9 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     install_doc_accessor(scope, doc_obj, "URL", doc_url);
     install_doc_accessor(scope, doc_obj, "documentURI", doc_url);
 
+    // Install document.location as accessor (= window.location)
+    install_doc_accessor(scope, doc_obj, "location", doc_location);
+
     // Bind document to the DOM tree's root NodeId so that
     // addEventListener/dispatchEvent can locate it via extract_node_id.
     // If no Document is loaded yet (e.g. JSContext init before page.load),
@@ -262,6 +265,21 @@ unsafe extern "C" fn doc_url(info: *const v8::FunctionCallbackInfo) {
             }
         }
         rv.set(v8::String::new(scope, "about:blank").expect("str").into());
+    }));
+}
+
+/// document.location getter — returns the window.location object itself
+/// In real browsers: document.location === window.location
+unsafe extern "C" fn doc_location(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let global = scope.get_current_context().global(scope);
+        let loc_key = match v8::String::new(scope, "location") { Some(k) => k, None => return };
+        if let Some(loc_val) = global.get(scope, loc_key.into()) {
+            rv.set(loc_val);
+        }
     }));
 }
 
