@@ -354,7 +354,7 @@ unsafe extern "C" fn subtle_digest(info: *const v8::FunctionCallbackInfo) {
         };
 
         let result = match algo.to_uppercase().replace("-", "").as_str() {
-            "SHA1" | "SHA1" => {
+            "SHA1" => {
                 let mut hasher = Sha1::new();
                 hasher.update(&data);
                 hasher.finalize().to_vec()

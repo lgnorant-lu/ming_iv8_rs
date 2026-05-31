@@ -6,6 +6,7 @@
 
 use p256::ecdsa::{SigningKey as P256SigningKey, VerifyingKey as P256VerifyingKey, Signature as P256Signature};
 use p384::ecdsa::{SigningKey as P384SigningKey, VerifyingKey as P384VerifyingKey, Signature as P384Signature};
+#[allow(unused_imports)]
 use elliptic_curve::sec1::{ToEncodedPoint, FromEncodedPoint};
 use rand::rngs::OsRng;
 
@@ -109,7 +110,6 @@ pub fn ecdsa_generate_key(curve: EcCurve) -> Result<(EcKeyMaterial, EcKeyMateria
 /// ECDSA sign.
 pub fn ecdsa_sign(key: &EcKeyMaterial, data: &[u8], _hash: &str) -> Result<Vec<u8>, String> {
     use p256::ecdsa::signature::Signer;
-    use p384::ecdsa::signature::Signer as Signer384;
 
     match key {
         EcKeyMaterial::P256Private(k) => {
@@ -127,7 +127,6 @@ pub fn ecdsa_sign(key: &EcKeyMaterial, data: &[u8], _hash: &str) -> Result<Vec<u
 /// ECDSA verify.
 pub fn ecdsa_verify(key: &EcKeyMaterial, data: &[u8], signature: &[u8]) -> bool {
     use p256::ecdsa::signature::Verifier;
-    use p384::ecdsa::signature::Verifier as Verifier384;
 
     match key {
         EcKeyMaterial::P256Public(k) => {

@@ -556,6 +556,7 @@ fn call_object_to_string(scope: &v8::PinScope<'_, '_>, value: v8::Local<v8::Valu
 
 /// Handle circular reference: convert object but truncate at depth limit.
 /// For the circular fixture, iv8 returns {'self': '[object Object]'} at depth 1.
+#[allow(dead_code)]
 fn convert_circular_object(
     scope: &v8::PinScope<'_, '_>,
     obj: v8::Local<v8::Object>,

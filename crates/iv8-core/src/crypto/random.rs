@@ -147,7 +147,6 @@ pub fn fill_random_bytes(buf: &mut [u8]) {
 fn fill_random(buf: &mut [u8]) {
     // Use getrandom crate for cross-platform cryptographic randomness
     // This works on Windows, Linux, macOS, and other platforms
-    use std::io::Read;
     
     #[cfg(target_os = "windows")]
     {
