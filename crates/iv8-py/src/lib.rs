@@ -12,6 +12,7 @@ mod context;
 mod debugger;
 mod error;
 mod expose;
+mod instrumentation;
 mod logging;
 mod value_convert;
 
@@ -23,6 +24,7 @@ fn _iv8(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<debugger::Debugger>()?;
     m.add_function(wrap_pyfunction!(logging::enable_logging, m)?)?;
     m.add_function(wrap_pyfunction!(trace_diff, m)?)?;
+    m.add_function(wrap_pyfunction!(instrumentation::instrument_source, m)?)?;
     error::register(m)?;
     Ok(())
 }

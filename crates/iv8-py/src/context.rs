@@ -822,6 +822,35 @@ impl JSContext {
         Ok(())
     }
 
+    /// Get the unified trace log (from instrument_source injection).
+    ///
+    /// Returns entries in format: "TYPE,PC,target,value"
+    /// - D,pc,opcode,stack_depth — VM dispatch
+    /// - R,pc,obj.prop,value — Environment read
+    /// - C,pc,obj.method,result — Function call
+    /// - W,pc,obj.prop,value — Property write
+    fn get_unified_trace(&self, py: Python<'_>) -> PyResult<PyObject> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let global = kernel.eval(
+            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
+            iv8_core::EvalOpts::default(),
+        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        let rv = kernel.global_to_rust_value(&global);
+        rust_value_to_py(py, &rv)
+    }
+
+    /// Clear the unified trace log.
+    fn clear_unified_trace(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.eval(
+            "if (typeof __iv8i_log__ !== 'undefined') __iv8i_log__.length = 0;",
+            iv8_core::EvalOpts::default(),
+        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        Ok(())
+    }
+
     /// Start recording all property reads/writes/calls on specified global objects.
     ///
     /// This is "Layer 5 approximate" — records all observable interactions between
