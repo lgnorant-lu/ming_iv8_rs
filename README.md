@@ -13,6 +13,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Anti-detection**: wrapNative / hookNative / window.chrome / MarkAsUndetectable
 - **CDP Inspector**: V8Inspector + WebSocket server + programmatic Python API
 - **Observability (v0.3)**: trace mode / deterministic mode / VM instrumentation / recording / profiler / coverage / instrument_source / trace_diff
+- **Environment Precision (v0.4)**: NavigatorUAData / Profile System / Diff Analysis / browser API stubs
 - **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
 - **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
 
@@ -91,7 +92,7 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 
 ## Documentation
 
-- **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive, 19 sections)
+- **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive, 22 sections)
 - **Roadmap**: [docs/roadmap-v0.4-and-beyond.md](docs/roadmap-v0.4-and-beyond.md)
 - **Progress**: [docs/PROGRESS.md](docs/PROGRESS.md)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
