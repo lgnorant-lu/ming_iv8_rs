@@ -1061,13 +1061,16 @@ unsafe extern "C" fn insert_adjacent_html_callback(info: *const v8::FunctionCall
 
                 match position.as_str() {
                     "beforebegin" => {
-                        // Insert before this element
-                        for (frag_id, _) in &frag_children {
-                            append_node_recursive(doc, nid, &fragment, *frag_id);
+                        // Insert before this element (as previous sibling)
+                        if let Some(parent_id) = doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id()) {
+                            for (frag_id, _) in &frag_children {
+                                let frag_data = fragment.tree.get(*frag_id).map(|n| n.value().clone());
+                                if let Some(data) = frag_data {
+                                    doc.insert_before(nid, data);
+                                }
+                            }
+                            let _ = parent_id; // used for context validation
                         }
-                        // Actually insert before: need parent
-                        // Simplified: just append to parent before nid
-                        // TODO: proper beforebegin
                     }
                     "afterbegin" => {
                         // Insert as first children of this element
