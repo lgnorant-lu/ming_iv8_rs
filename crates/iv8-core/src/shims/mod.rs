@@ -16,3 +16,4 @@ pub mod element_prototypes;
 pub mod tier1_stubs;
 pub mod console;
 pub mod native_env;
+pub mod user_agent_data;

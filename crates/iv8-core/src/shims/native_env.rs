@@ -74,6 +74,9 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("pdfViewerEnabled",    nav_pdf_viewer_enabled);
     // Instantiate and install on global
     if let Some(nav_obj) = nav_tmpl.new_instance(scope) {
+        // Install userAgentData sub-object on navigator
+        crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
+
         let key = v8::String::new(scope, "navigator").expect("key");
         global.define_own_property(
             scope,
