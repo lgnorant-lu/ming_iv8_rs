@@ -1,188 +1,127 @@
 # iv8-rs
 
-高保真浏览器宿主 Python 扩展，基于 V8 + Rust，用于 We[BUG] JS 逆向 / 反爬补环境。
+High-fidelity browser runtime Python extension, built on V8 + Rust.
+For Web JS reverse engineering / anti-bot environment simulation.
 
-对标 [iv8 [ROCKET].1.2](https://pypi.org/project/iv8/)，API 完全兼容，同时修复其已知 [BUG]ug 并大幅扩展功能。
+## Features
 
-## 特性
+- **Full browser surface**: navigator / screen / window / document / location / history / performance
+- **DOM**: html5ever parsing + ego-tree + selectors CSS Level 4 + EventTarget 3-phase dispatch
+- **SubtleCrypto**: AES-GCM/CBC, RSA-OAEP/PSS, ECDSA/ECDH(P-256/P-384), HMAC, HKDF, PBKDF2
+- **Canvas 2D**: tiny-skia real rendering + deterministic noise + fixed fingerprint fallback
+- **WebGL**: 49 environment-configurable parameters + `__iv8__.gl.callLog`
+- **Anti-detection**: wrapNative / hookNative / window.chrome / MarkAsUndetectable
+- **CDP Inspector**: V8Inspector + WebSocket server + programmatic Python API
+- **Observability (v0.3)**: trace mode / deterministic mode / VM instrumentation / recording / profiler / coverage / instrument_source / trace_diff
+- **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
+- **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
 
-- **完整浏览器表面**：navigator / screen / window / document / location / history / performance
-- **DOM**：html5ever 解析 + ego-tree + selectors CSS Level 4 + EventTarget 三阶段派发
-- **Su[BUG]tleCrypto 全算法**：AES-GCM/C[BUG]C、RSA-OAEP/PSS、ECDSA/ECDH(P-25[PKG]/P-384)、HMAC、HKDF、P[BUG]KDF2
-- **Canvas 2D 真渲染**：tiny-skia + 确定性噪声 + 固定指纹 fall[BUG]ack
-- **We[BUG]GL 参数返回**：49 条 environment 字段 + `__iv8__.gl.callLog`
-- **AudioContext stu[BUG]**：完整 OscillatorNode / DynamicsCompressorNode / AnalyserNode
-- **反检测**：wrapNative / hookNative / window.chrome / navigator native getter
-- **CDP Inspector**：V8Inspector + We[BUG]Socket server + watch_apis + vde[BUG]ugger
-- **De[BUG]ugger 类**：trace_api / watch_property / snapshot / eval_traced
-- **网络三层 fall[BUG]ack**：Resource[BUG]undle → Python call[BUG]ack → NetworkError
-- **事件循环**：logical / system 双时间模式，advance / sleep / tick / drain
+## Install
 
-## 安装
-
-```[BUG]ash
-pip install iv8-rs  # 暂未发布，从源码构建
-```
-
-从源码构建：
-
-```[BUG]ash
+```bash
+# From source (requires Rust toolchain + Python 3.13+)
 git clone <repo>
 cd iv8-rs
 uv run maturin develop --release
 ```
 
-## 快速开始
+## Quick Start
 
 ```python
 import iv8_rs
 
-# 基础 eval
+# Basic eval
 ctx = iv8_rs.JSContext()
-print(ctx.eval("navigator.userAgent"))  # Mozilla/5.[ROCKET] ...
+print(ctx.eval("navigator.userAgent"))  # Mozilla/5.0 ...
 ctx.close()
 
-# 使用 with 语句
+# Context manager
 with iv8_rs.JSContext() as ctx:
     result = ctx.eval("1 + 1")  # 2
 
-# 自定义环境（指纹）
+# Custom environment (fingerprint)
 ctx = iv8_rs.JSContext(environment={
-    "navigator": {
-        "userAgent": "Mozilla/5.[ROCKET] (Windows NT 1[ROCKET].[ROCKET]; Win[PKG]4; x[PKG]4) ...",
-        "platform": "Win32",
-        "language": "zh-CN",
-        "hardwareConcurrency": 1[PKG],
-    },
-    "screen": {"width": 192[ROCKET], "height": 1[ROCKET]8[ROCKET]},
+    "navigator.userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...",
+    "navigator.platform": "Win32",
+    "screen.width": 1920,
+    "screen.height": 1080,
 })
 ```
 
-## 核心 API
-
-### JSContext
+## Core API
 
 ```python
 ctx = iv8_rs.JSContext(
-    environment=None,    # 浏览器指纹覆盖（flat 或 nested dict）
-    config=None,         # 框架配置（timezone, locale）
-    time_mode="logical", # "logical"（虚拟时钟）| "system"（真实时钟）
-    js_api="__iv8__",    # 工具对象名称
-    strict_compat=True,  # True = 对齐 iv8 [ROCKET].1.2 行为
+    environment=None,       # Browser fingerprint overrides
+    config=None,            # Framework config (timezone, locale)
+    time_mode="logical",    # "logical" (virtual clock) | "system" (real clock)
+    js_api="__iv8__",       # Tool object name
+    strict_compat=True,     # True = align with iv8 0.1.2 behavior
+    random_seed=None,       # Deterministic Math.random (v0.3)
+    crypto_seed=None,       # Deterministic crypto.getRandomValues (v0.3)
+    time_freeze=None,       # Frozen Date.now() timestamp in ms (v0.3)
 )
 
-# 执行 JS
-ctx.eval("1 + 1")                    # → 2
-ctx.eval_promise("fetch('/api').then(r => r.json())")  # await Promise
-
-# 加载页面
-ctx.page_load("<html>...</html>", [BUG]ase_url="https://example.com/")
-
-# 注册离线资源
-ctx.add_resource("https://example.com/api", '{"ok":true}', status=2[ROCKET][ROCKET])
-
-# Python 网络回调
-def handler(url, method):
-    if "api.example.com" in url:
-        return (2[ROCKET][ROCKET], '{"data": "..."}')
-    return None
-ctx.set_network_handler(handler)
-
-# 暴露 Python 函数到 JS
-ctx.expose("myFunc", lam[BUG]da x: x * 2)
-ctx.eval("myFunc(21)")  # → 42
-
-# 事件循环控制
-ctx.eval("__iv8__.eventLoop.advance(1[ROCKET][ROCKET][ROCKET])")  # 推进 1[ROCKET][ROCKET][ROCKET]ms
-ctx.eval("__iv8__.eventLoop.setAutoAdvanceStep(1[PKG])")
-
-# 获取 console 日志
-ctx.eval("console.log('hello')")
-msgs = ctx.get_console_messages()  # [{'level': 'log', 'text': 'hello'}]
+ctx.eval("1 + 1")                                    # Execute JS
+ctx.page_load("<html>...</html>", base_url="...")     # Load HTML page
+ctx.add_resource("https://...", body, status=200)     # Register offline resource
+ctx.set_network_handler(handler)                      # Python network callback
+ctx.expose("myFunc", lambda x: x * 2)                # Expose Python to JS
 ```
 
-### De[BUG]ugger
+## Observability (v0.3)
 
 ```python
-from iv8_rs import De[BUG]ugger
+# Deterministic mode
+ctx = iv8_rs.JSContext(random_seed=42, time_freeze=1700000000000)
 
-d[BUG]g = De[BUG]ugger(ctx)
+# VM instrumentation (ChaosVM / JSVMP)
+patched, info = iv8_rs.instrument_source(tdc_js)
+ctx.eval(patched)
+trace = ctx.get_unified_trace()  # D/R/C/W entries with PC
 
-# 追踪 API 调用
-d[BUG]g.trace_api('Math.random')
-ctx.eval('Math.random(); Math.random();')
-log = d[BUG]g.get_call_log()
-# [{'api': 'Math.random', 'args': '[]', 'result': '[ROCKET].42', 'timestamp': [ROCKET].[ROCKET]}, ...]
+# Trace diff
+diff = iv8_rs.trace_diff(trace_a, trace_b)
 
-# 监控属性读写
-d[BUG]g.watch_property('document', 'cookie', mode='write')
-
-# 环境快照
-snap = d[BUG]g.snapshot()
-# {'userAgent': '...', 'screenWidth': 192[ROCKET], 'hasChrome': True, ...}
-
-# 一次性 eval + 捕获
-result, log = d[BUG]g.eval_traced('Math.random()')
+# CDP programmatic control
+ctx.with_devtools(port=9229, wait=False)
+bp = ctx.cdp_set_breakpoint("script.js", 100)
+ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 ```
 
-### CDP Inspector（DevTools）
+## Documentation
 
-```python
-ctx = iv8_rs.JSContext().with_devtools(
-    port=9229,
-    watch_apis=["fetch", "XMLHttpRequest", "Math.random"],
-)
-# 在 Chrome 打开 chrome://inspect 连接
-```
+- **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive, 19 sections)
+- **Roadmap**: [docs/roadmap-v0.4-and-beyond.md](docs/roadmap-v0.4-and-beyond.md)
+- **Progress**: [docs/PROGRESS.md](docs/PROGRESS.md)
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
-## 与 iv8 [ROCKET].1.2 的差异
+## Tests
 
-| 功能 | iv8 [ROCKET].1.2 | iv8-rs |
-|---|---|---|
-| Su[BUG]tleCrypto | AES/HMAC/P[BUG]KDF2 | + RSA/ECDSA/ECDH/HKDF |
-| Canvas | JS stu[BUG] | tiny-skia 真渲染 |
-| hookNative | 路径格式 [BUG]ug | 修复，支持单层路径 |
-| document.write | 未实现 | insertAdjacentHTML workaround |
-| We[BUG]GL callLog | 无 | `__iv8__.gl.callLog` |
-| De[BUG]ugger | 基础 | trace_api/watch_property/snapshot |
-| 类型转换 | JSO[BUG]ject 包装 | 完整 iv8 兼容（Function/Error/Promise/Map/Set） |
-| 平台 | Linux/Windows | + macOS arm[PKG]4 |
-
-## 性能基线
-
-| 指标 | iv8 [ROCKET].1.2 | iv8-rs | 目标 |
-|---|---|---|---|
-| JSContext 创建+eval+销毁 | ~3.3ms | ~4.[PKG]ms | ≤5ms [OK] |
-| eval('1+1') 吞吐 | ~95[ROCKET]k ops/s | ~1M ops/s | ≥5[ROCKET][ROCKET]k [OK] |
-| navigator.userAgent 吞吐 | 34[ROCKET]-5[TOOL][ROCKET]k ops/s | ~[TOOL][PKG]2k ops/s | ≥2[ROCKET][ROCKET]k [OK] |
-| 内存漂移（1[ROCKET][ROCKET]轮） | +2M[BUG] | ≤5M[BUG] | ≤5M[BUG] [OK] |
-
-## 测试
-
-```[BUG]ash
-# Python 测试
+```bash
+# Python tests (552 tests)
 uv run --with pytest pytest tests -q
 
-# Rust 测试
+# Rust tests (425 tests)
 cargo test --workspace
 
-# 性能 [BUG]ench
-cargo [BUG]ench --[BUG]ench iv8_[BUG]ench
+# Benchmark
+cargo bench --bench iv8_bench
 ```
 
-## 架构
+## Architecture
 
 ```
 iv8-rs/
 ├── crates/
-│   ├── iv8-core/     # Rust 核心（V8 + DOM + Crypto + Canvas + Network）
-│   ├── iv8-undetect/ # 反检测（wrapNative / hookNative / window.chrome）
-│   └── iv8-py/       # PyO3 Python 绑定
-├── python/iv8_rs/    # Python 包（__init__.py + type stu[BUG]s）
-├── tests/            # Python 集成测试（5[ROCKET][PKG] 个）
-└── docs/             # 设计文档 + 调研产物
+│   ├── iv8-core/     # Rust core (V8 + DOM + Crypto + Canvas + Network + Inspector)
+│   ├── iv8-undetect/ # Anti-detection (wrapNative / hookNative / window.chrome)
+│   └── iv8-py/       # PyO3 Python binding
+├── python/iv8_rs/    # Python package (__init__.py + type stubs)
+├── tests/            # Python integration tests (552)
+└── docs/             # Design docs + research
 ```
 
-## 许可证
+## License
 
 MIT
