@@ -72,6 +72,7 @@ perf.data*
 # ── Third-party reference data (local only) ──────────────────────────────────
 _ref/
 docs/research/iv8-*.json
+!docs/research/iv8-defaults.json
 docs/research/iv8-*.txt
 docs/research/d-[1234]-iv8-*.md
 
