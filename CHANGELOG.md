@@ -6,6 +6,24 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+### Added
+
+- `instrument_chaosvm()`: High-performance VM instruction-level trace via Proxy
+  wrapper on handler array. 50000 instructions in ~0.5s (vs CDP breakpoint 30s+).
+- `detect_chaosvm_vars(source)`: Auto-detect JSVMP handler/pc/stack variable names.
+- `get_vm_trace()` / `clear_vm_trace()` / `uninstrument_chaosvm()`: VM trace lifecycle.
+- `start_recording()` / `stop_recording()`: Global object Proxy recording (all
+  property reads/writes/calls on navigator/screen/document/Math/crypto/etc).
+- `start_profiler()` / `stop_profiler()`: V8 CPU Profile (function-level call graph).
+- `start_coverage()` / `stop_coverage()`: Precise code coverage (function-level).
+- `iv8_rs.trace_diff(trace_a, trace_b)`: Find first divergence between two traces.
+
+### Changed
+
+- M19 deep trace validated on TDC ChaosVM: 19,259 + 30,741 bytecode instructions
+  traced, 58 unique opcodes, TYPE_B source located at PC=26588 in 5 seconds
+  (previously took an entire analysis phase without resolution).
+
 ### Fixed
 
 - `replaceChild(node, node)` and `insertBefore(node, node)` no longer panic.
