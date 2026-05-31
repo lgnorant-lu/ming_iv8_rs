@@ -1516,7 +1516,7 @@ unsafe extern "C" fn insert_adjacent_html_cb(info: *const v8::FunctionCallbackIn
                         }
                     }
                     "beforebegin" => {
-                        if let Some(parent_id) = doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id()) {
+                        if let Some(_parent_id) = doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id()) {
                             for (frag_id, _) in &frag_children {
                                 let data = fragment.tree.get(*frag_id).map(|n| n.value().clone());
                                 if let Some(d) = data { doc.insert_before(nid, d); }

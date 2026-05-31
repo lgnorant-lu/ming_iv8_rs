@@ -94,7 +94,7 @@ impl CdpClient {
                         remaining.push(msg);
                     }
                 }
-                InspectorMessage::Notification { message } => {
+                InspectorMessage::Notification { message: _ } => {
                     // Check for Debugger.paused event
                     // We'll handle it outside the lock
                     remaining.push(msg);

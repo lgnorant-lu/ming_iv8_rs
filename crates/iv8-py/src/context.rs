@@ -1013,7 +1013,7 @@ impl JSContext {
     ///     dict with V8 CPU Profile format (nodes, startTime, endTime, samples)
     fn stop_profiler(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
-        let mut kernel = self.inner.kernel.lock();
+        let kernel = self.inner.kernel.lock();
         let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
         let session_guard = state.inspector_session.borrow();
         if let Some(ref session) = *session_guard {
@@ -1036,7 +1036,7 @@ impl JSContext {
     /// Requires with_devtools(wait=False).
     fn start_coverage(&self) -> PyResult<()> {
         self.assert_thread()?;
-        let mut kernel = self.inner.kernel.lock();
+        let kernel = self.inner.kernel.lock();
         let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
         let session_guard = state.inspector_session.borrow();
         if let Some(ref session) = *session_guard {
@@ -1058,7 +1058,7 @@ impl JSContext {
     ///     list of script coverage dicts (scriptId, url, functions with ranges and counts)
     fn stop_coverage(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
-        let mut kernel = self.inner.kernel.lock();
+        let kernel = self.inner.kernel.lock();
         let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
         let session_guard = state.inspector_session.borrow();
         if let Some(ref session) = *session_guard {
@@ -1117,7 +1117,7 @@ impl JSContext {
         // First, get the script ID by searching for the URL
         let mut kernel = self.inner.kernel.lock();
 
-        for pattern in &search_patterns {
+        for _pattern in &search_patterns {
             // Use CDP Debugger.searchInContent if available
             let search_js = format!(
                 r#"
