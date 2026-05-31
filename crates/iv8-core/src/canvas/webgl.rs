@@ -347,15 +347,24 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
         let env = &state.environment;
 
         // Read from environment if available, otherwise use defaults
-        let vendor = env.get_str("webgl.vendor").unwrap_or("Google Inc. (NVIDIA)");
-        let renderer = env.get_str("webgl.renderer").unwrap_or("ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Direct3D11 vs_5_0 ps_5_0, D3D11)");
+        let vendor = env.get_str("webgl.VENDOR").unwrap_or("WebKit");
+        let renderer = env.get_str("webgl.RENDERER").unwrap_or("WebKit WebGL");
+        let unmasked_vendor = env.get_str("webgl.UNMASKED_VENDOR_WEBGL").unwrap_or("Google Inc. (NVIDIA)");
+        let unmasked_renderer = env.get_str("webgl.UNMASKED_RENDERER_WEBGL")
+            .unwrap_or("ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) Direct3D11 vs_5_0 ps_5_0, D3D11)");
 
         match pname {
-            GL_VENDOR | UNMASKED_VENDOR_WEBGL => {
+            GL_VENDOR => {
                 if let Some(s) = v8::String::new(scope, vendor) { rv.set(s.into()); }
             }
-            GL_RENDERER | UNMASKED_RENDERER_WEBGL => {
+            UNMASKED_VENDOR_WEBGL => {
+                if let Some(s) = v8::String::new(scope, unmasked_vendor) { rv.set(s.into()); }
+            }
+            GL_RENDERER => {
                 if let Some(s) = v8::String::new(scope, renderer) { rv.set(s.into()); }
+            }
+            UNMASKED_RENDERER_WEBGL => {
+                if let Some(s) = v8::String::new(scope, unmasked_renderer) { rv.set(s.into()); }
             }
             GL_VERSION => {
                 if let Some(s) = v8::String::new(scope, "WebGL 1.0 (OpenGL ES 2.0 Chromium)") { rv.set(s.into()); }

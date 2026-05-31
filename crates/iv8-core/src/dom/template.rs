@@ -1809,13 +1809,42 @@ unsafe extern "C" fn get_client_rects_cb(info: *const v8::FunctionCallbackInfo) 
 
 unsafe extern "C" fn scroll_into_view_cb(_info: *const v8::FunctionCallbackInfo) {}
 
-unsafe extern "C" fn offset_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn offset_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
+/// Read a layout value from environment config with fallback chain.
+/// Checks: primary_path → fallback_path → default_value.
+#[inline]
+fn get_layout_value(state: &RuntimeState, primary: &str, fallback: &str, default: f64) -> f64 {
+    let env = &state.environment;
+    if let Some(val) = env.get_f64(primary) {
+        return val;
+    }
+    if let Some(val) = env.get_f64(fallback) {
+        return val;
+    }
+    default
+}
+
+unsafe extern "C" fn offset_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
+    let val = get_layout_value(state, "element.offsetWidth", "window.innerWidth", 1920.0);
+    rv.set(v8::Number::new(scope, val).into());
+}); }
+unsafe extern "C" fn offset_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
+    let val = get_layout_value(state, "element.offsetHeight", "window.innerHeight", 969.0);
+    rv.set(v8::Number::new(scope, val).into());
+}); }
 unsafe extern "C" fn offset_top_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
 unsafe extern "C" fn offset_left_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn client_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn client_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn scroll_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
+unsafe extern "C" fn client_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
+    let val = get_layout_value(state, "document.body.clientWidth", "window.innerWidth", 1920.0);
+    rv.set(v8::Number::new(scope, val).into());
+}); }
+unsafe extern "C" fn client_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
+    let val = get_layout_value(state, "document.body.clientHeight", "window.innerHeight", 969.0);
+    rv.set(v8::Number::new(scope, val).into());
+}); }
+unsafe extern "C" fn scroll_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
+    let val = get_layout_value(state, "element.scrollWidth", "window.innerWidth", 1920.0);
+    rv.set(v8::Number::new(scope, val).into());
+}); }
 unsafe extern "C" fn scroll_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
 unsafe extern "C" fn scroll_top_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
 unsafe extern "C" fn scroll_top_setter(_info: *const v8::FunctionCallbackInfo) {}
