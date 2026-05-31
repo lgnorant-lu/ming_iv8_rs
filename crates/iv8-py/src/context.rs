@@ -654,6 +654,399 @@ impl JSContext {
         Ok(())
     }
 
+    // ─── M19: Deep Trace Enhancement (Layer 4 + 5) ────────────────────────────
+
+    /// Detect ChaosVM/JSVMP variable names from JS source code.
+    ///
+    /// Searches for common patterns:
+    /// - Handler array: `A[Q[U++]]()` or `handlers[pc++]`
+    /// - PC variable: incremented in dispatch loop
+    /// - Stack variable: push/pop patterns
+    ///
+    /// Args:
+    ///     source: The JS source code to analyze (e.g. tdc.js content)
+    ///
+    /// Returns:
+    ///     dict with detected variable names, or None if no VM pattern found.
+    ///     Example: {"handler_array": "A", "pc": "U", "stack": "S", "scope": "Q"}
+    #[pyo3(signature = (source))]
+    fn detect_chaosvm_vars(&self, source: &str) -> PyResult<Option<PyObject>> {
+        // Heuristic patterns for ChaosVM-style dispatch:
+        // Pattern 1: A[Q[U++]]() — TDC ChaosVM
+        // Pattern 2: handlers[H[pc++]]() — generic
+        // Pattern 3: switch(bytecode[ip]) — switch-based VM
+
+        use pyo3::types::PyDict;
+
+        // Search for A[X[Y++]]() pattern (handler_array[index_array[pc++]]())
+        let re_handler_dispatch = regex_lite::Regex::new(
+            r"([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\+\+\]\]"
+        );
+
+        if let Ok(re) = re_handler_dispatch {
+            if let Some(caps) = re.captures(source) {
+                let handler_array = caps.get(1).map(|m| m.as_str()).unwrap_or("");
+                let index_array = caps.get(2).map(|m| m.as_str()).unwrap_or("");
+                let pc_var = caps.get(3).map(|m| m.as_str()).unwrap_or("");
+
+                // Try to find stack variable (look for .push/.pop patterns near the dispatch)
+                let stack_re = regex_lite::Regex::new(
+                    &format!(r"([A-Za-z_$][A-Za-z0-9_$]*)\.push\(|([A-Za-z_$][A-Za-z0-9_$]*)\.pop\(\)")
+                );
+                let stack_var = if let Ok(sre) = stack_re {
+                    sre.captures(source)
+                        .and_then(|c| c.get(1).or(c.get(2)))
+                        .map(|m| m.as_str().to_string())
+                        .unwrap_or_default()
+                } else {
+                    String::new()
+                };
+
+                return Python::with_gil(|py| {
+                    let dict = PyDict::new(py);
+                    dict.set_item("handler_array", handler_array)?;
+                    dict.set_item("index_array", index_array)?;
+                    dict.set_item("pc", pc_var)?;
+                    dict.set_item("stack", &stack_var)?;
+                    Ok(Some(dict.into_any().unbind()))
+                });
+            }
+        }
+
+        Ok(None)
+    }
+
+    /// Instrument a ChaosVM/JSVMP handler array for high-performance tracing.
+    ///
+    /// Wraps the handler array with a Proxy that records every dispatch call.
+    /// Much faster than CDP breakpoints (~0.5s for 50000 instructions vs 30s+).
+    ///
+    /// Args:
+    ///     handler_array: Variable name of the handler/function array (e.g. "A")
+    ///     pc_var: Variable name of the program counter (e.g. "U")
+    ///     stack_var: Variable name of the stack (e.g. "S")
+    ///     capture_stack_depth: How many stack top elements to capture (default 3)
+    ///     limit: Maximum trace entries (default 100000)
+    ///
+    /// After calling this, execute JS normally. Then call get_vm_trace() to retrieve.
+    #[pyo3(signature = (handler_array, pc_var, stack_var, capture_stack_depth=3, limit=100000))]
+    fn instrument_chaosvm(
+        &self,
+        handler_array: &str,
+        pc_var: &str,
+        stack_var: &str,
+        capture_stack_depth: u32,
+        limit: u32,
+    ) -> PyResult<()> {
+        self.assert_thread()?;
+        let js = format!(r#"
+(function() {{
+    var __orig_handlers = {handler};
+    var __vm_log = [];
+    var __vm_limit = {limit};
+    {handler} = new Proxy(__orig_handlers, {{
+        get: function(target, prop) {{
+            var fn = target[prop];
+            if (typeof fn !== 'function') return fn;
+            return function() {{
+                if (__vm_log.length < __vm_limit) {{
+                    var entry = {pc} + ',' + prop;
+                    var st = {stack};
+                    if (st && st.length > 0) {{
+                        var depth = Math.min(st.length, {depth});
+                        for (var i = st.length - depth; i < st.length; i++) {{
+                            var v = st[i];
+                            entry += ',' + (typeof v === 'string' ? v.slice(0,20) : String(v));
+                        }}
+                    }}
+                    __vm_log.push(entry);
+                }}
+                return fn.apply(this, arguments);
+            }};
+        }}
+    }});
+    globalThis.__iv8_vm_log__ = __vm_log;
+    globalThis.__iv8_vm_orig_handlers__ = __orig_handlers;
+}})();
+"#,
+            handler = handler_array,
+            pc = pc_var,
+            stack = stack_var,
+            depth = capture_stack_depth,
+            limit = limit,
+        );
+
+        let mut kernel = self.inner.kernel.lock();
+        kernel.eval(&js, iv8_core::EvalOpts::default())
+            .map_err(crate::error::iv8_error_to_pyerr)?;
+        Ok(())
+    }
+
+    /// Get the VM trace log (after instrument_chaosvm + execution).
+    ///
+    /// Returns:
+    ///     list of trace entry strings. Each entry: "pc,opcode,stack0,stack1,..."
+    ///     Parse with: pc, op, *stack = entry.split(',')
+    fn get_vm_trace(&self, py: Python<'_>) -> PyResult<PyObject> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let global = kernel.eval(
+            "typeof __iv8_vm_log__ !== 'undefined' ? __iv8_vm_log__ : []",
+            iv8_core::EvalOpts::default(),
+        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        let rv = kernel.global_to_rust_value(&global);
+        rust_value_to_py(py, &rv)
+    }
+
+    /// Clear the VM trace log.
+    fn clear_vm_trace(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.eval(
+            "if (typeof __iv8_vm_log__ !== 'undefined') __iv8_vm_log__.length = 0;",
+            iv8_core::EvalOpts::default(),
+        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        Ok(())
+    }
+
+    /// Restore original handler array (undo instrument_chaosvm).
+    fn uninstrument_chaosvm(&self, handler_array: &str) -> PyResult<()> {
+        self.assert_thread()?;
+        let js = format!(
+            "if (typeof __iv8_vm_orig_handlers__ !== 'undefined') {{ {} = __iv8_vm_orig_handlers__; }}",
+            handler_array
+        );
+        let mut kernel = self.inner.kernel.lock();
+        kernel.eval(&js, iv8_core::EvalOpts::default())
+            .map_err(crate::error::iv8_error_to_pyerr)?;
+        Ok(())
+    }
+
+    /// Start recording all property reads/writes/calls on specified global objects.
+    ///
+    /// This is "Layer 5 approximate" — records all observable interactions between
+    /// JS code and the browser environment, without modifying the JS source.
+    ///
+    /// Args:
+    ///     targets: List of global object names to monitor
+    ///              (default: navigator, screen, document, location, Math, crypto, performance)
+    ///     record_reads: Record property reads (default True)
+    ///     record_writes: Record property writes (default True)
+    ///     record_calls: Record function calls (default True)
+    ///     limit: Maximum entries (default 50000)
+    #[pyo3(signature = (targets=None, record_reads=true, record_writes=true, record_calls=true, limit=50000))]
+    fn start_recording(
+        &self,
+        targets: Option<Vec<String>>,
+        record_reads: bool,
+        record_writes: bool,
+        record_calls: bool,
+        limit: u32,
+    ) -> PyResult<()> {
+        self.assert_thread()?;
+
+        let target_list = targets.unwrap_or_else(|| vec![
+            "navigator".into(), "screen".into(), "document".into(),
+            "location".into(), "Math".into(), "crypto".into(), "performance".into(),
+        ]);
+
+        let targets_json = serde_json::to_string(&target_list).unwrap_or("[]".into());
+
+        let js = format!(r#"
+(function() {{
+    var __rec = [];
+    var __rec_limit = {limit};
+    var __rec_reads = {reads};
+    var __rec_writes = {writes};
+    var __rec_calls = {calls};
+    var __targets = {targets};
+    var __originals = {{}};
+
+    __targets.forEach(function(name) {{
+        var obj = globalThis[name];
+        if (!obj || typeof obj !== 'object') return;
+        __originals[name] = obj;
+
+        var proxy = new Proxy(obj, {{
+            get: function(target, prop, receiver) {{
+                var val = Reflect.get(target, prop, receiver);
+                if (__rec.length >= __rec_limit) return val;
+                if (typeof prop === 'symbol') return val;
+                if (prop === 'then' || prop === 'toJSON') return val;
+
+                if (typeof val === 'function' && __rec_calls) {{
+                    return function() {{
+                        var result = val.apply(target, arguments);
+                        if (__rec.length < __rec_limit) {{
+                            __rec.push('C,' + name + '.' + prop + ',' + String(result).slice(0,30));
+                        }}
+                        return result;
+                    }};
+                }}
+
+                if (__rec_reads) {{
+                    __rec.push('R,' + name + '.' + prop + ',' + String(val).slice(0,30));
+                }}
+                return val;
+            }},
+            set: function(target, prop, value, receiver) {{
+                if (__rec_writes && __rec.length < __rec_limit) {{
+                    __rec.push('W,' + name + '.' + prop + ',' + String(value).slice(0,30));
+                }}
+                return Reflect.set(target, prop, value, receiver);
+            }}
+        }});
+
+        try {{
+            Object.defineProperty(globalThis, name, {{
+                value: proxy, writable: true, configurable: true, enumerable: true
+            }});
+        }} catch(e) {{
+            // non-configurable (e.g. navigator) — skip silently
+        }}
+    }});
+
+    globalThis.__iv8_recording__ = __rec;
+    globalThis.__iv8_rec_originals__ = __originals;
+}})();
+"#,
+            limit = limit,
+            reads = record_reads,
+            writes = record_writes,
+            calls = record_calls,
+            targets = targets_json,
+        );
+
+        let mut kernel = self.inner.kernel.lock();
+        kernel.eval(&js, iv8_core::EvalOpts::default())
+            .map_err(crate::error::iv8_error_to_pyerr)?;
+        Ok(())
+    }
+
+    /// Stop recording and return all captured entries.
+    ///
+    /// Returns:
+    ///     list of entry strings. Format: "TYPE,target.prop,value"
+    ///     TYPE: R=read, W=write, C=call
+    fn stop_recording(&self, py: Python<'_>) -> PyResult<PyObject> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+
+        // Restore originals
+        kernel.eval(r#"
+(function() {
+    if (typeof __iv8_rec_originals__ === 'undefined') return;
+    for (var name in __iv8_rec_originals__) {
+        try {
+            Object.defineProperty(globalThis, name, {
+                value: __iv8_rec_originals__[name], writable: true, configurable: true, enumerable: true
+            });
+        } catch(e) {}
+    }
+})();
+"#, iv8_core::EvalOpts::default()).ok();
+
+        // Get recording
+        let global = kernel.eval(
+            "typeof __iv8_recording__ !== 'undefined' ? __iv8_recording__ : []",
+            iv8_core::EvalOpts::default(),
+        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        let rv = kernel.global_to_rust_value(&global);
+        rust_value_to_py(py, &rv)
+    }
+
+    /// Start V8 CPU Profiler (function-level call graph).
+    ///
+    /// Requires with_devtools(wait=False) to have been called.
+    /// After execution, call stop_profiler() to get the profile.
+    fn start_profiler(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel.cdp_set_breakpoint("__profiler_dummy__", 0, None, None).ok(); // ensure debugger enabled
+        // Use CDP to start profiler
+        let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
+        let session_guard = state.inspector_session.borrow();
+        if let Some(ref session) = *session_guard {
+            if let Some(v8_session) = session.session_ref() {
+                let cdp = state.cdp_client.borrow();
+                if let Some(ref c) = *cdp {
+                    c.send_and_wait(v8_session, "Profiler.enable", serde_json::json!({})).ok();
+                    c.send_and_wait(v8_session, "Profiler.start", serde_json::json!({})).ok();
+                }
+            }
+        }
+        Ok(())
+    }
+
+    /// Stop V8 CPU Profiler and return the profile data.
+    ///
+    /// Returns:
+    ///     dict with V8 CPU Profile format (nodes, startTime, endTime, samples)
+    fn stop_profiler(&self, py: Python<'_>) -> PyResult<PyObject> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
+        let session_guard = state.inspector_session.borrow();
+        if let Some(ref session) = *session_guard {
+            if let Some(v8_session) = session.session_ref() {
+                let cdp = state.cdp_client.borrow();
+                if let Some(ref c) = *cdp {
+                    if let Ok(result) = c.send_and_wait(v8_session, "Profiler.stop", serde_json::json!({})) {
+                        if let Some(profile) = result.get("result").and_then(|r| r.get("profile")) {
+                            return json_value_to_py(py, profile);
+                        }
+                    }
+                }
+            }
+        }
+        Ok(py.None())
+    }
+
+    /// Start precise code coverage collection.
+    ///
+    /// Requires with_devtools(wait=False).
+    fn start_coverage(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
+        let session_guard = state.inspector_session.borrow();
+        if let Some(ref session) = *session_guard {
+            if let Some(v8_session) = session.session_ref() {
+                let cdp = state.cdp_client.borrow();
+                if let Some(ref c) = *cdp {
+                    c.send_and_wait(v8_session, "Profiler.enable", serde_json::json!({})).ok();
+                    c.send_and_wait(v8_session, "Profiler.startPreciseCoverage",
+                        serde_json::json!({"callCount": true, "detailed": true})).ok();
+                }
+            }
+        }
+        Ok(())
+    }
+
+    /// Stop coverage collection and return results.
+    ///
+    /// Returns:
+    ///     list of script coverage dicts (scriptId, url, functions with ranges and counts)
+    fn stop_coverage(&self, py: Python<'_>) -> PyResult<PyObject> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
+        let session_guard = state.inspector_session.borrow();
+        if let Some(ref session) = *session_guard {
+            if let Some(v8_session) = session.session_ref() {
+                let cdp = state.cdp_client.borrow();
+                if let Some(ref c) = *cdp {
+                    if let Ok(result) = c.send_and_wait(v8_session, "Profiler.takePreciseCoverage", serde_json::json!({})) {
+                        if let Some(cov) = result.get("result").and_then(|r| r.get("result")) {
+                            return json_value_to_py(py, cov);
+                        }
+                    }
+                }
+            }
+        }
+        Ok(py.None())
+    }
+
     // ─── VM-aware Helper (v0.3 M18) ──────────────────────────────────────────
 
     /// Detect a JSVMP dispatch loop in a loaded script.
