@@ -2,7 +2,7 @@
 iv8-rs Python type stubs.
 
 Type annotations for the iv8_rs._iv8 extension module.
-Covers v0.1 (core), v0.2 (type conversion), v0.3 (observability).
+Covers v0.1 (core), v0.2 (type conversion), v0.3 (observability), v0.4 (environment precision).
 """
 
 from __future__ import annotations
