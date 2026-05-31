@@ -6,7 +6,42 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
-## [0.3.2] - 2026-05-31
+## [0.4.0] - 2026-06-01
+
+### Added
+
+- **M20 NavigatorUAData API**: `navigator.userAgentData` with brands/mobile/platform
+  (synchronous), `getHighEntropyValues(hints)` (async Promise), `toJSON()`.
+  Values from environment config. Default brands include Chrome 147 GREASE.
+- **M21 Profile System**: `iv8_rs.load_profile(path)` + `JSContext(profile=...)`.
+  Three-layer override: environment > profile > defaults. Built-in default
+  profile (Chrome 147 Win10). Browser export script (`scripts/export_browser_fingerprint.js`).
+- **M22 Diff Analysis Framework**: `iv8_rs.diff_analysis(js_source, eval_expr,
+  base_env, test_variables, ...)`. Multi-threaded, deterministic, structured report.
+- **Browser API stubs** (`browser_apis.js`): navigator properties (requestMIDIAccess,
+  bluetooth, usb, credentials, clipboard, storage, wakeLock, locks, share,
+  getBattery, getGamepads, vibrate, sendBeacon, connection), window.customElements,
+  window.matchMedia, CSS.supports, window.getComputedStyle (Proxy stub).
+- **DOM captureStream**: HTMLVideoElement/HTMLCanvasElement templates gain
+  captureStream/mozCaptureStream/webkitCaptureStream methods.
+- **navigator.plugins/mimeTypes**: 5 PDF Viewer plugins + 2 MIME types (Chrome standard).
+- `document.location` getter (= window.location, was undefined).
+
+### Changed
+
+- `__init__.py` refactored: JSContext is now a factory function (fixes infinite
+  recursion OOM from monkey-patching `__new__`). Profile parameter handled in Python layer.
+
+### Fixed
+
+- `document.location` was undefined (ChaosVM uses it for URL → modules failed).
+
+### Verified (TDC real-world)
+
+- cd[] field correctness: 37/38 (97.4%)
+- Bitmask cd[7]: 256 → 295 (5/10 bits, API stub ceiling reached)
+- Remaining 5 bits: DOM rendering checks (structural limitation, not fixable via stubs)
+- 80% of tdc.js versions produce 20+ fields (up from 65% in v0.3.2)
 
 ### Fixed
 
