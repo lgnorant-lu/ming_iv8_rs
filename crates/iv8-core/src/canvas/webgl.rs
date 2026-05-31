@@ -265,8 +265,8 @@ pub const WEBGL_SHIM_JS: &str = r#"
     // Records all WebGL API calls for fingerprint analysis
     (function() {
         var callLog = [];
+        if (!('__iv8__' in globalThis)) return;
         var iv8 = globalThis.__iv8__;
-        if (!iv8) return;
         if (!iv8.gl) iv8.gl = {};
         iv8.gl.callLog = callLog;
         iv8.gl.clearCallLog = function() { callLog.length = 0; };
