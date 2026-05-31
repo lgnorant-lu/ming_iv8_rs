@@ -328,6 +328,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "getContext", get_context_cb);
         install_proto_method(scope, proto, "toDataURL", to_data_url_cb);
         install_proto_method(scope, proto, "toBlob", to_blob_cb);
+        install_proto_method(scope, proto, "captureStream", capture_stream_cb);
     }
 
     let html_script_element = make_template(scope, "HTMLScriptElement");
@@ -367,6 +368,8 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "pause", media_pause_cb);
         install_proto_method(scope, proto, "load", media_load_cb);
         install_proto_method(scope, proto, "canPlayType", can_play_type_cb);
+        install_proto_method(scope, proto, "captureStream", capture_stream_cb);
+        install_proto_method(scope, proto, "mozCaptureStream", capture_stream_cb);
     }
 
     let html_audio_element = make_template(scope, "HTMLAudioElement");
@@ -2233,6 +2236,15 @@ unsafe extern "C" fn muted_getter(info: *const v8::FunctionCallbackInfo) { run_a
 unsafe extern "C" fn muted_setter(_info: *const v8::FunctionCallbackInfo) {}
 unsafe extern "C" fn volume_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 1.0).into()); }); }
 unsafe extern "C" fn volume_setter(_info: *const v8::FunctionCallbackInfo) {}
+
+/// captureStream() stub — returns an empty MediaStream-like object.
+/// Used by fingerprint bitmask detection (bit 1).
+unsafe extern "C" fn capture_stream_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback(info, |scope, _args, rv, _state, _node_id| {
+        let obj = v8::Object::new(scope);
+        rv.set(obj.into());
+    });
+}
 
 unsafe extern "C" fn media_play_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, _state, _node_id| {
