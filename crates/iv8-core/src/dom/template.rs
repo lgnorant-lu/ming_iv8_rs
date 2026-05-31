@@ -329,6 +329,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "toDataURL", to_data_url_cb);
         install_proto_method(scope, proto, "toBlob", to_blob_cb);
         install_proto_method(scope, proto, "captureStream", capture_stream_cb);
+        install_proto_method(scope, proto, "webkitCaptureStream", capture_stream_cb);
     }
 
     let html_script_element = make_template(scope, "HTMLScriptElement");
@@ -370,6 +371,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "canPlayType", can_play_type_cb);
         install_proto_method(scope, proto, "captureStream", capture_stream_cb);
         install_proto_method(scope, proto, "mozCaptureStream", capture_stream_cb);
+        install_proto_method(scope, proto, "webkitCaptureStream", capture_stream_cb);
     }
 
     let html_audio_element = make_template(scope, "HTMLAudioElement");
