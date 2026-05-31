@@ -8,6 +8,7 @@ from typing import Dict, Any, Optional
 from iv8_rs._iv8 import __version__, JSContext as _JSContextRust, Debugger, enable_logging
 from iv8_rs._iv8 import instrument_source, trace_diff
 from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, JSPanic
+from iv8_rs.analysis import diff_analysis
 
 # --- Profile System ---
 
@@ -101,6 +102,7 @@ __all__ = [
     "enable_logging",
     "instrument_source",
     "trace_diff",
+    "diff_analysis",
     "load_profile",
     "JSError",
     "JSCompileError",
