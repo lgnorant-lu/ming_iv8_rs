@@ -532,6 +532,9 @@ impl EmbeddedV8Kernel {
         // HTMLDivElement, HTMLElement, etc. are installed by install_dom_templates().
         self.eval(crate::shims::tier1_stubs::TIER1_STUBS_JS, crate::kernel::EvalOpts::default()).ok();
 
+        // 16b. Browser API stubs (P0/P1: navigator properties, matchMedia, performance.now fix)
+        self.eval(crate::shims::browser_apis::BROWSER_APIS_JS, crate::kernel::EvalOpts::default()).ok();
+
         // 17. Install timezone shim (override Intl.DateTimeFormat default timezone)
         {
             let tz = {
