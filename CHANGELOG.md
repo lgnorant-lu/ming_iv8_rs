@@ -6,10 +6,48 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-05-31
+
+### Fixed
+
+- **[Critical] MarkAsUndetectable integration**: `typeof __iv8__` was returning
+  `"object"` instead of `"undefined"`. v0.2 implemented the C++ binding and unit
+  tests but never called `mark_as_undetectable` in the kernel initialization path.
+  Now `__iv8__` has full `[[IsHTMLDDA]]` semantics: `typeof === "undefined"`,
+  `== null`, `Boolean() === false`, while properties remain accessible.
+  Real-world impact: TDC ChaosVM collect dropped from 2400 chars to 1088 chars
+  (matching browser output) because anti-automation detection modules no longer trigger.
+- **WebGL callLog not installed**: The `__iv8__.gl.callLog` array was never created
+  because the installation code used `if (!iv8) return` — which always short-circuits
+  on an undetectable (falsy) object. Fixed to use `'__iv8__' in globalThis` check.
+- **XHR netLog not recording**: Same falsy-check pattern as WebGL. XHR requests
+  were silently skipped from `__iv8__.netLog.entries`. Fixed with `'in'` operator.
+- **insertAdjacentHTML("beforebegin")**: Was incorrectly appending to the target
+  node itself. Now correctly inserts as previous sibling via `insert_before` on parent.
+- **WebGL test environment key**: Test used `webgl.renderer` but implementation
+  reads `webgl.UNMASKED_RENDERER_WEBGL`. Aligned test with actual API.
+
+### Changed
+
+- **Default fingerprint migrated from Chrome 124 to Chrome 147**: `navigator.userAgent`,
+  `navigator.appVersion`, `config.features.profile` updated. Aligns with V8 crate
+  version (`v8 = "147"`), eliminating engine/UA version inconsistency.
+- `iv8-defaults.json` restored to git tracking (was accidentally untracked in
+  a previous cleanup commit). Added `.gitignore` negation rule.
+- `Cargo.lock` now tracked for reproducible builds.
+
 ### Added
 
-- `docs/GUIDE.md`: Comprehensive usage guide covering all 19 sections
-- Updated Python type stubs (`.pyi`) to cover all v0.3 methods
+- `docs/GUIDE.md`: 19-section comprehensive usage guide (runtime + analysis).
+- Python type stubs (`.pyi`) fully cover v0.3 API surface (CDP, trace, deterministic,
+  VM instrumentation, recording, profiler, coverage, instrument_source, trace_diff).
+- `__init__.py` exports `instrument_source` and `trace_diff` at module level.
+- `README.md` rewritten with v0.3 observability section and documentation links.
+
+### Chore
+
+- Resolved clippy warnings: unused imports, dead code, unreachable pattern, unused variables.
+- Version numbers unified to 0.3.2 across Cargo.toml and pyproject.toml.
 
 ## [0.3.1] - 2026-05-31
 
