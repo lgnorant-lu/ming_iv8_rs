@@ -69,8 +69,11 @@ flamegraph.svg
 perf.data*
 *.prof
 
-# ── Reverse engineering / Ghidra (调研产物，不提交大文件)──────────────────
-ghidra_proj/
+# ── Third-party reference data (local only) ──────────────────────────────────
+_ref/
+docs/research/iv8-*.json
+docs/research/iv8-*.txt
+docs/research/d-[1234]-iv8-*.md
 
 # ── Logs ────────────────────────────────────────────────────────────────────
 *.log
@@ -103,22 +106,18 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 
-# ── Ghidra / 反编译相关脚本（章程禁止）────────────────────────────────────
+# ── Analysis scripts (local tooling, not core) ────────────────────────────────
 scripts/ghidra_*.py
 scripts/disasm_*.py
 scripts/find_func_rvas.py
 scripts/debug_rel.py
-docs/research/iv8-asm-analysis.md
-docs/research/iv8-binary-analysis.md
-docs/research/iv8-ghidra-analysis.md
 docs/research/disasm/
-docs/research/ghidra_c/
 *.asm
 *.gpr
 *.gbf
 *.rep/
 
-# ── Probe scripts（黑盒探测脚本，非核心代码）───────────────────────────────
+# ── Local scripts (non-core) ─────────────────────────────────────────────────
 scripts/probe-iv8*.py
 scripts/probe_iv8*.py
 tests/probe_*.py
