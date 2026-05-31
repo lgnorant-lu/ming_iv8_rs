@@ -410,7 +410,15 @@ impl EmbeddedV8Kernel {
             *state.crypto_seed.borrow_mut() = Some(seed);
         }
     }
+}
 
+/// No-op call-as-function handler for the undetectable __iv8__ tool object.
+/// V8 requires this when MarkAsUndetectable is set on an ObjectTemplate.
+unsafe extern "C" fn undetectable_noop_handler(_info: *const v8::FunctionCallbackInfo) {
+    // Returns undefined implicitly (no rv.set call).
+}
+
+impl EmbeddedV8Kernel {
     /// Install anti-detection shims (__iv8__ tool object + wrapNative + hookNative + window.chrome).
     pub fn install_undetect_shims(&mut self) {
         let js_api_name = {
@@ -418,9 +426,35 @@ impl EmbeddedV8Kernel {
             state.js_api_name.clone()
         };
 
-        // 1. Create __iv8__ tool object (DontEnum)
-        let create_tool = format!("Object.defineProperty(this, '{}', {{ value: {{}}, writable: true, enumerable: false, configurable: true }})", js_api_name);
-        self.eval(&create_tool, crate::kernel::EvalOpts::default()).ok();
+        // 1. Create __iv8__ tool object with MarkAsUndetectable (DontEnum)
+        //    This gives [[IsHTMLDDA]] semantics: typeof === 'undefined', == null, falsy
+        unsafe { self.isolate.enter(); }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+            let global = context.global(scope);
+
+            let templ = v8::ObjectTemplate::new(scope);
+            crate::v8_extra::mark_as_undetectable(&templ);
+            crate::v8_extra::set_call_as_function_handler(
+                &templ,
+                undetectable_noop_handler,
+                None,
+            );
+            let tool_obj = templ
+                .new_instance(scope)
+                .expect("failed to create undetectable __iv8__ instance");
+
+            let key = v8::String::new(scope, &js_api_name).expect("api name");
+            global.define_own_property(
+                scope,
+                key.into(),
+                tool_obj.into(),
+                v8::PropertyAttribute::DONT_ENUM,
+            );
+        }
+        unsafe { self.isolate.exit(); }
 
         // 2. Install wrapNative shim
         let wrap_script = format!("{}({})", include_str!("../../../iv8-undetect/src/shims/wrap_native.js"), js_api_name);

@@ -69,8 +69,8 @@ pub const XHR_SHIM_JS: &str = r#"
     XMLHttpRequest.prototype.send = function(body) {
         var self = this;
 
-        // Record in netLog
-        if (globalThis.__iv8__ && globalThis.__iv8__.netLog) {
+        // Record in netLog (use 'in' check — __iv8__ is undetectable/falsy)
+        if ('__iv8__' in globalThis && globalThis.__iv8__.netLog) {
             var headerPairs = [];
             for (var h in this._headers) {
                 headerPairs.push([h.toLowerCase(), this._headers[h]]);
