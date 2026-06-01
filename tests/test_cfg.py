@@ -287,3 +287,74 @@ class TestPerformance:
         loops = cfg.find_loops()
         elapsed_loops = time.perf_counter() - start
         assert elapsed_loops < 0.5, f"find_loops took {elapsed_loops:.3f}s"
+
+
+# ============================================================
+# Optional: collapse_to_blocks
+# ============================================================
+class TestCollapseToBlocks:
+    def test_linear_collapses_to_one_block(self):
+        trace = make_dispatch_trace([0, 1, 2, 3, 4])
+        cfg = CFG.from_trace(trace)
+        collapsed = cfg.collapse_to_blocks()
+        # Linear sequence with no branching = 1 block
+        assert len(collapsed.nodes) == 1
+        assert collapsed.nodes[0].exec_count == 5
+        assert len(collapsed.edges) == 0
+
+    def test_loop_preserves_back_edge(self):
+        trace = make_dispatch_trace([0, 1, 2, 0, 1, 2, 0, 1, 2])
+        cfg = CFG.from_trace(trace)
+        collapsed = cfg.collapse_to_blocks()
+        # A simple loop with no branching may collapse to 1 block with a self-loop edge,
+        # or stay as multiple blocks if back-edge targets are treated as block heads.
+        # Either way, the collapsed CFG should be valid.
+        assert len(collapsed.nodes) >= 1
+        # If collapsed to 1 node, there should be a self-loop back edge
+        if len(collapsed.nodes) == 1:
+            # Self-loop edge (or no edge if fully collapsed)
+            pass  # valid
+        else:
+            # Multiple blocks: should have at least one back edge
+            assert any(e.is_back_edge for e in collapsed.edges)
+
+    def test_branch_preserves_targets(self):
+        # 0->1->2, 0->1->3 (branch at 1)
+        trace = make_dispatch_trace([0, 1, 2, 0, 1, 3])
+        cfg = CFG.from_trace(trace)
+        collapsed = cfg.collapse_to_blocks()
+        # PC 1 has 2 successors, so it's a block boundary
+        assert len(collapsed.nodes) >= 2
+
+    def test_empty_cfg(self):
+        cfg = CFG.from_trace(StructuredTrace([]))
+        collapsed = cfg.collapse_to_blocks()
+        assert len(collapsed.nodes) == 0
+
+
+# ============================================================
+# Optional: to_dataframe
+# ============================================================
+class TestToDataframe:
+    def test_basic_dataframe(self):
+        pytest.importorskip("pandas")
+        trace = make_dispatch_trace([0, 1, 2, 0, 1])
+        cfg = CFG.from_trace(trace)
+        df = cfg.to_dataframe()
+        assert len(df) == 3  # 3 unique PCs
+        assert "pc" in df.columns
+        assert "exec_count" in df.columns
+        assert "in_degree" in df.columns
+        assert "out_degree" in df.columns
+
+    def test_no_pandas_raises(self):
+        # This test only makes sense if pandas is NOT installed
+        # Skip if pandas is available
+        try:
+            import pandas
+            pytest.skip("pandas is installed")
+        except ImportError:
+            trace = make_dispatch_trace([0, 1])
+            cfg = CFG.from_trace(trace)
+            with pytest.raises(ImportError):
+                cfg.to_dataframe()

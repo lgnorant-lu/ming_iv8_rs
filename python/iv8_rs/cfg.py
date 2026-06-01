@@ -363,3 +363,101 @@ class CFG:
         back = sum(1 for e in self.edges if e.is_back_edge)
         return (f"CFG(nodes={len(self.nodes)}, edges={len(self.edges)}, "
                 f"back_edges={back})")
+
+    def to_dataframe(self):
+        """Convert nodes to pandas DataFrame (optional, requires pandas).
+
+        Returns:
+            pd.DataFrame with columns: pc, opcode, exec_count, in_degree, out_degree.
+
+        Raises:
+            ImportError: If pandas is not installed.
+        """
+        try:
+            import pandas as pd
+        except ImportError:
+            raise ImportError("pandas required for to_dataframe(). Install: pip install pandas")
+
+        rows = []
+        for pc, node in sorted(self.nodes.items()):
+            rows.append({
+                "pc": node.pc,
+                "opcode": node.opcode,
+                "exec_count": node.exec_count,
+                "in_degree": len(self._predecessors.get(pc, [])),
+                "out_degree": len(self._successors.get(pc, [])),
+            })
+        return pd.DataFrame(rows)
+
+    def collapse_to_blocks(self) -> "CFG":
+        """Collapse sequential PCs into basic blocks.
+
+        A basic block is a maximal sequence of PCs where each has exactly
+        one predecessor and one successor (no branching). The collapsed CFG
+        uses the first PC of each block as the representative node.
+
+        Returns:
+            New CFG with fewer nodes (blocks instead of individual PCs).
+        """
+        if not self.nodes:
+            return CFG({}, [])
+
+        # Find block boundaries: PCs with in_degree != 1 or out_degree != 1
+        # or that are targets of back edges
+        block_heads: Set[int] = set()
+        sorted_pcs = sorted(self.nodes.keys())
+
+        # First PC is always a block head
+        if sorted_pcs:
+            block_heads.add(sorted_pcs[0])
+
+        for pc in sorted_pcs:
+            preds = self._predecessors.get(pc, [])
+            succs = self._successors.get(pc, [])
+            # Multiple predecessors or multiple successors = block boundary
+            if len(preds) != 1 or len(succs) > 1:
+                block_heads.add(pc)
+            # Target of a non-sequential edge = block head
+            for pred in preds:
+                if pred + 1 != pc:  # non-sequential predecessor
+                    block_heads.add(pc)
+                    break
+
+        # Build blocks: each block starts at a head and extends until next head
+        blocks: Dict[int, List[int]] = {}  # head_pc -> [pcs in block]
+        current_head = sorted_pcs[0]
+        current_block = [current_head]
+
+        for pc in sorted_pcs[1:]:
+            if pc in block_heads:
+                blocks[current_head] = current_block
+                current_head = pc
+                current_block = [pc]
+            else:
+                current_block.append(pc)
+        blocks[current_head] = current_block
+
+        # Build collapsed nodes
+        new_nodes: Dict[int, CFGNode] = {}
+        pc_to_block: Dict[int, int] = {}  # map each PC to its block head
+        for head, pcs in blocks.items():
+            total_exec = sum(self.nodes[p].exec_count for p in pcs if p in self.nodes)
+            opc = self.nodes[head].opcode if head in self.nodes else -1
+            new_nodes[head] = CFGNode(pc=head, opcode=opc, exec_count=total_exec)
+            for p in pcs:
+                pc_to_block[p] = head
+
+        # Build collapsed edges
+        edge_counts: Dict[Tuple[int, int], int] = defaultdict(int)
+        for e in self.edges:
+            from_block = pc_to_block.get(e.from_pc, e.from_pc)
+            to_block = pc_to_block.get(e.to_pc, e.to_pc)
+            if from_block != to_block:  # skip intra-block edges
+                edge_counts[(from_block, to_block)] += e.count
+
+        new_edges = [
+            CFGEdge(from_pc=f, to_pc=t, count=c, is_back_edge=(t <= f))
+            for (f, t), c in edge_counts.items()
+        ]
+
+        return CFG(new_nodes, new_edges)
