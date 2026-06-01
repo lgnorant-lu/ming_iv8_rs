@@ -1,26 +1,223 @@
 {
+  "_meta": {
+    "description": "Crypto algorithm detection patterns for JS VM opcode analysis",
+    "version": "0.5.0",
+    "note": "Patterns match computational structure, not specific opcode numbers. Use opcode_behavior (shift/xor/add/and/or/not/rot/load/store/cmp/jmp) for matching. User can extend by adding new entries.",
+    "references": [
+      "FoC: Figure out Cryptographic Functions (2024)",
+      "FindCrypt2 / Signsrch signature databases",
+      "NIST SP 800-131A approved algorithms"
+    ]
+  },
+
   "XTEA": {
-    "description": "XTEA block cipher (shift-xor-add pattern)",
-    "opcode_sequence": [4, 7, 1, 5, 7, 1],
-    "opcode_names": ["SHL", "XOR", "ADD", "SHR", "XOR", "ADD"],
-    "notes": "XTEA round: (v0 << 4 ^ v0 >> 5) + v0 ^ sum + key[sum & 3]",
-    "min_window": 6,
+    "description": "XTEA block cipher (Extended Tiny Encryption Algorithm)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["shl", "xor", "add", "shr", "xor", "add"],
+    "constants": ["0x9E3779B9"],
+    "rounds": 32,
+    "block_size": 64,
+    "notes": "Common in Chinese anti-bot (TDC, Tencent ecosystem). Round: (v0<<4 ^ v0>>5) + v0 ^ sum + key[sum&3]",
     "min_confidence": 0.7
   },
-  "MD5_ROUND": {
-    "description": "MD5 hash round (rotate-add pattern)",
-    "opcode_sequence": [4, 1, 7, 2, 1],
-    "opcode_names": ["SHL", "ADD", "XOR", "OR", "ADD"],
-    "notes": "MD5 F/G/H/I round: rotate_left + add + bitwise",
-    "min_window": 5,
+
+  "TEA": {
+    "description": "TEA (Tiny Encryption Algorithm)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["shl", "add", "xor", "shr", "add", "xor"],
+    "constants": ["0x9E3779B9"],
+    "rounds": 32,
+    "block_size": 64,
+    "notes": "Predecessor of XTEA. Used in QQ protocol and some game anti-cheat.",
+    "min_confidence": 0.7
+  },
+
+  "MD5": {
+    "description": "MD5 message digest (128-bit hash)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["and", "not", "or", "add", "rot", "add"],
+    "constants": ["0xD76AA478", "0xE8C7B756", "0x242070DB"],
+    "rounds": 64,
+    "block_size": 512,
+    "notes": "4 rounds x 16 operations. F/G/H/I functions use AND/OR/XOR/NOT. Common in fingerprint hashing.",
     "min_confidence": 0.6
   },
-  "RC4_SWAP": {
-    "description": "RC4 key scheduling (swap pattern)",
-    "opcode_sequence": [11, 11, 12, 12],
-    "opcode_names": ["LOAD", "LOAD", "STORE", "STORE"],
-    "notes": "RC4 KSA: swap(S[i], S[j])",
-    "min_window": 4,
+
+  "SHA1": {
+    "description": "SHA-1 secure hash (160-bit, deprecated)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["rot", "and", "xor", "or", "add"],
+    "constants": ["0x5A827999", "0x6ED9EBA1", "0x8F1BBCDC", "0xCA62C1D6"],
+    "rounds": 80,
+    "block_size": 512,
+    "notes": "80 rounds with 4 different functions. Still used in HMAC and some legacy systems.",
+    "min_confidence": 0.6
+  },
+
+  "SHA256": {
+    "description": "SHA-256 secure hash (256-bit)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["shr", "xor", "rot", "and", "xor", "add"],
+    "constants": ["0x428A2F98", "0x71374491", "0xB5C0FBCF", "0xE9B5DBA5"],
+    "rounds": 64,
+    "block_size": 512,
+    "notes": "64 rounds. Sigma/sigma functions use rotate+shift+xor. Common in token generation.",
+    "min_confidence": 0.6
+  },
+
+  "SHA512": {
+    "description": "SHA-512 secure hash (512-bit)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["shr", "xor", "rot", "and", "xor", "add"],
+    "constants": ["0x428A2F98D728AE22", "0x7137449123EF65CD"],
+    "rounds": 80,
+    "block_size": 1024,
+    "notes": "Same structure as SHA-256 but 64-bit words and 80 rounds.",
+    "min_confidence": 0.6
+  },
+
+  "HMAC": {
+    "description": "HMAC (Hash-based Message Authentication Code)",
+    "category": "mac",
+    "behavior_pattern": ["xor", "hash_call", "xor", "hash_call"],
+    "constants": ["0x36363636", "0x5C5C5C5C"],
+    "rounds": 2,
+    "notes": "ipad=0x36, opad=0x5C. Wraps any hash function. Detect by XOR with these constants.",
+    "min_confidence": 0.7
+  },
+
+  "AES": {
+    "description": "AES (Advanced Encryption Standard)",
+    "category": "symmetric_spn",
+    "behavior_pattern": ["load", "xor", "sub_bytes", "shift_rows", "mix_cols", "xor"],
+    "constants": ["0x63", "0x7C", "0x77", "0x7B"],
+    "rounds_options": [10, 12, 14],
+    "block_size": 128,
+    "notes": "SBox lookup (256-byte table starting with 0x63,0x7C,0x77,0x7B). 10/12/14 rounds for 128/192/256-bit keys.",
+    "min_confidence": 0.7
+  },
+
+  "RC4": {
+    "description": "RC4 stream cipher (Rivest Cipher 4)",
+    "category": "stream_cipher",
+    "behavior_pattern": ["load", "add", "mod", "load", "store", "store"],
+    "constants": [],
+    "rounds": 256,
+    "notes": "KSA: 256 iterations of swap(S[i], S[j]). PRGA: continuous swap+XOR. Detect by 256-iteration init loop + swap pattern.",
+    "min_confidence": 0.5
+  },
+
+  "ChaCha20": {
+    "description": "ChaCha20 stream cipher",
+    "category": "stream_arx",
+    "behavior_pattern": ["add", "xor", "rot", "add", "xor", "rot"],
+    "constants": ["0x61707865", "0x3320646E", "0x79622D32", "0x6B206574"],
+    "rounds": 20,
+    "notes": "Quarter-round: a+=b; d^=a; d<<<16; c+=d; b^=c; b<<<12; a+=b; d^=a; d<<<8; c+=d; b^=c; b<<<7. Constants = 'expand 32-byte k'.",
+    "min_confidence": 0.7
+  },
+
+  "Salsa20": {
+    "description": "Salsa20 stream cipher",
+    "category": "stream_arx",
+    "behavior_pattern": ["add", "xor", "rot", "add", "xor", "rot"],
+    "constants": ["0x61707865", "0x3320646E", "0x79622D32", "0x6B206574"],
+    "rounds": 20,
+    "notes": "Similar to ChaCha20 but different quarter-round structure. Same constants.",
+    "min_confidence": 0.6
+  },
+
+  "DES": {
+    "description": "DES (Data Encryption Standard, legacy)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["xor", "sub_bytes", "permute", "xor"],
+    "constants": [],
+    "rounds": 16,
+    "block_size": 64,
+    "notes": "16 rounds Feistel. 8 S-boxes (6-bit to 4-bit). Detect by permutation tables or S-box constants.",
+    "min_confidence": 0.5
+  },
+
+  "Blowfish": {
+    "description": "Blowfish block cipher",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["xor", "add", "xor", "add"],
+    "constants": ["0x243F6A88", "0x85A308D3", "0x13198A2E"],
+    "rounds": 16,
+    "block_size": 64,
+    "notes": "16 rounds Feistel with key-dependent S-boxes. P-array initialized from pi digits.",
+    "min_confidence": 0.6
+  },
+
+  "CRC32": {
+    "description": "CRC-32 checksum (not crypto, but common)",
+    "category": "checksum",
+    "behavior_pattern": ["xor", "shr", "and", "xor"],
+    "constants": ["0xEDB88320"],
+    "rounds": 8,
+    "notes": "Per-byte: 8 iterations of shift-right + conditional XOR with polynomial 0xEDB88320. Very common in data integrity checks.",
+    "min_confidence": 0.7
+  },
+
+  "PBKDF2": {
+    "description": "PBKDF2 key derivation function",
+    "category": "kdf",
+    "behavior_pattern": ["hmac_call", "xor", "hmac_call", "xor"],
+    "constants": [],
+    "rounds_options": [1000, 10000, 100000],
+    "notes": "Iterative HMAC. Detect by high iteration count of HMAC calls + XOR accumulation.",
+    "min_confidence": 0.5
+  },
+
+  "Base64": {
+    "description": "Base64 encoding (not crypto, but ubiquitous)",
+    "category": "encoding",
+    "behavior_pattern": ["shr", "and", "load_table", "shl", "or", "and", "load_table"],
+    "constants": [],
+    "notes": "6-bit extraction + table lookup. Detect by AND 0x3F + 64-char lookup table. btoa/atob in JS.",
+    "min_confidence": 0.6
+  },
+
+  "XOR_Cipher": {
+    "description": "Simple XOR cipher / obfuscation",
+    "category": "stream_cipher",
+    "behavior_pattern": ["load", "xor", "store"],
+    "constants": [],
+    "rounds": 1,
+    "notes": "Single-byte or multi-byte XOR. Very common in JS obfuscation for string decryption. Detect by repeated XOR in a loop.",
+    "min_confidence": 0.4
+  },
+
+  "SM3": {
+    "description": "SM3 Chinese national hash standard (256-bit)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["rot", "xor", "and", "or", "add"],
+    "constants": ["0x79CC4519", "0x7A879D8A"],
+    "rounds": 64,
+    "block_size": 512,
+    "notes": "Chinese national standard. Similar structure to SHA-256. Used in Chinese government/finance systems.",
+    "min_confidence": 0.6
+  },
+
+  "SM4": {
+    "description": "SM4 Chinese national block cipher (128-bit)",
+    "category": "symmetric_spn",
+    "behavior_pattern": ["xor", "sub_bytes", "rot", "xor"],
+    "constants": ["0xD6", "0x90", "0xE9", "0xFE"],
+    "rounds": 32,
+    "block_size": 128,
+    "notes": "Chinese national standard. 32 rounds with non-linear transformation (S-box) + linear transformation (circular shift + XOR).",
+    "min_confidence": 0.6
+  },
+
+  "RIPEMD160": {
+    "description": "RIPEMD-160 hash (160-bit)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["xor", "or", "and", "not", "add", "rot"],
+    "constants": ["0x50A28BE6", "0x5A827999", "0x6ED9EBA1"],
+    "rounds": 80,
+    "block_size": 512,
+    "notes": "Dual-path Merkle-Damgard. 80 rounds (5 groups of 16). Used in Bitcoin address generation.",
     "min_confidence": 0.5
   }
 }

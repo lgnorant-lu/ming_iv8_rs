@@ -111,7 +111,9 @@ def detect_patterns(
     matches: List[PatternMatch] = []
 
     for pattern_name, pattern_def in patterns.items():
-        pat_seq = pattern_def.get("opcode_sequence", [])
+        if pattern_name.startswith("_"):
+            continue  # Skip metadata entries
+        pat_seq = pattern_def.get("opcode_sequence") or pattern_def.get("behavior_pattern", [])
         pat_min_conf = pattern_def.get("min_confidence", min_confidence)
         pat_window = pattern_def.get("min_window", len(pat_seq))
         description = pattern_def.get("description", "")
