@@ -11,7 +11,7 @@
       "RFC 7539 (ChaCha20-Poly1305), RFC 8439",
       "GM/T 0002-2012 (SM4), GM/T 0004-2012 (SM3)"
     ],
-    "total_patterns": 38
+    "total_patterns": 47
   },
 
   "XTEA": {
@@ -471,5 +471,90 @@
     "rounds": 4,
     "notes": "2 compression rounds + 4 finalization rounds. ARX structure. Constants = 'somepseudorandomlygeneratedbytes'. Used in hash table DoS protection.",
     "min_confidence": 0.6
+  },
+
+  "IDEA": {
+    "description": "IDEA (International Data Encryption Algorithm)",
+    "category": "symmetric_lai_massey",
+    "behavior_pattern": ["mul", "add", "xor", "mul", "add", "xor"],
+    "constants": [],
+    "rounds": 8,
+    "block_size": 64,
+    "notes": "8.5 rounds. Operations: XOR, addition mod 2^16, multiplication mod 2^16+1. NO fixed constants (tables computed from key at runtime). Detect by structure only: interleaved mul/add/xor on 16-bit words.",
+    "min_confidence": 0.45
+  },
+
+  "Poly1305": {
+    "description": "Poly1305 one-time authenticator (128-bit MAC)",
+    "category": "mac",
+    "behavior_pattern": ["add", "mul", "mod", "add", "mul", "mod"],
+    "constants": ["0x0FFFFFFC0FFFFFFC"],
+    "rounds": 1,
+    "notes": "Polynomial evaluation mod 2^130-5. Clamping mask on r: clear bits 4,8,12..124 and top 4 bits of each 32-bit word. Often paired with ChaCha20 (RFC 8439).",
+    "min_confidence": 0.5
+  },
+
+  "HKDF": {
+    "description": "HKDF (HMAC-based Key Derivation Function, RFC 5869)",
+    "category": "kdf",
+    "behavior_pattern": ["hmac_call", "concat", "hmac_call"],
+    "constants": [],
+    "rounds": 2,
+    "notes": "Two phases: Extract (HMAC(salt, IKM)) and Expand (iterative HMAC). Detect by two sequential HMAC calls with output of first as key of second.",
+    "min_confidence": 0.45
+  },
+
+  "HAVAL": {
+    "description": "HAVAL hash (variable 128/160/192/224/256-bit)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["and", "xor", "or", "not", "rot", "add"],
+    "constants": ["0x243F6A88", "0x85A308D3", "0x13198A2E", "0x03707344"],
+    "rounds_options": [96, 128, 160],
+    "block_size": 1024,
+    "notes": "3/4/5 passes of 32 rounds each. Uses Blowfish P-array constants for message expansion. 32 boolean functions. Variable output length.",
+    "min_confidence": 0.5
+  },
+
+  "SAFER": {
+    "description": "SAFER (Secure And Fast Encryption Routine) K-64/SK-128",
+    "category": "symmetric_spn",
+    "behavior_pattern": ["xor", "add", "exp", "log", "xor", "add"],
+    "constants": ["0x2D", "0x01"],
+    "rounds_options": [6, 8, 10, 12],
+    "block_size": 64,
+    "notes": "SPN with byte-level operations. Uses exp(x, 45) and log(x, 45) mod 257 as S-boxes. Key-dependent rotation. Massey design.",
+    "min_confidence": 0.45
+  },
+
+  "Skipjack": {
+    "description": "Skipjack block cipher (NSA, declassified 1998)",
+    "category": "symmetric_unbalanced_feistel",
+    "behavior_pattern": ["xor", "load", "xor", "load", "xor"],
+    "constants": [],
+    "rounds": 32,
+    "block_size": 64,
+    "notes": "32 rounds unbalanced Feistel. Two rule types (A and B) alternating. Single 256-byte F-table (permutation). 80-bit key. No public constants (F-table is the signature).",
+    "min_confidence": 0.45
+  },
+
+  "WAKE": {
+    "description": "WAKE (Word Auto Key Encryption)",
+    "category": "stream_cipher",
+    "behavior_pattern": ["xor", "shr", "xor", "and", "xor"],
+    "constants": [],
+    "rounds": 1,
+    "notes": "Stream cipher using 256-entry T-table. Key-dependent table generation. Detect by 256-entry table access pattern + XOR/shift combination.",
+    "min_confidence": 0.4
+  },
+
+  "MARS": {
+    "description": "MARS block cipher (AES finalist, IBM)",
+    "category": "symmetric_heterogeneous",
+    "behavior_pattern": ["add", "xor", "rot", "mul", "rot", "xor"],
+    "constants": ["0x09D0C479", "0x28C8FFE0"],
+    "rounds": 32,
+    "block_size": 128,
+    "notes": "Heterogeneous structure: 8 forward mixing + 8 keyed transformation + 8 backward mixing. Uses multiplication for diffusion. Two 512-entry S-boxes.",
+    "min_confidence": 0.5
   }
 }

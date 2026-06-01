@@ -258,5 +258,11 @@
 
   "POLY1305_CLAMP": {"value": "0x0FFFFFFC0FFFFFFC", "int": 1152921500311879676, "algorithm": "Poly1305", "description": "Poly1305 r clamping mask"},
 
-  "TIGER_INIT_A": {"value": "0x0123456789ABCDEF", "int": 81985529216486895, "algorithm": "Tiger", "description": "Tiger initial value A"}
+  "TIGER_INIT_A": {"value": "0x0123456789ABCDEF", "int": 81985529216486895, "algorithm": "Tiger", "description": "Tiger initial value A"},
+
+  "MARS_S0": {"value": "0x09D0C479", "int": 164906105, "algorithm": "MARS", "description": "MARS S-box first entry"},
+  "MARS_S1": {"value": "0x28C8FFE0", "int": 684720096, "algorithm": "MARS", "description": "MARS S-box second entry"},
+
+  "HAVAL_MC1": {"value": "0x452821E6", "int": 1160258022, "algorithm": "HAVAL", "description": "HAVAL pass 3 constant (same as Blowfish P8, from pi)"},
+  "HAVAL_MC2": {"value": "0x38D01377", "int": 953160567, "algorithm": "HAVAL", "description": "HAVAL pass 3 constant (same as Blowfish P9)"}
 }
