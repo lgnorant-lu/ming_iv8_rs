@@ -22,7 +22,7 @@ use pyo3::types::PyDict;
 #[pyo3(signature = (
     source,
     mode = "auto",
-    capture_stack_depth = 3,
+    capture_stack_depth = 0,
     capture_env = true,
     env_targets = None,
     limit = 100000,
