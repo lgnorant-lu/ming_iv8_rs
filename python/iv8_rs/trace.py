@@ -48,7 +48,13 @@ class TraceEntry:
 
 
 def _parse_entry(raw: str) -> Optional[TraceEntry]:
-    """Parse a single raw trace string into a TraceEntry."""
+    """Parse a single raw trace string into a TraceEntry.
+
+    Handles two formats:
+      4-field (instrument_source / get_unified_trace): "TYPE,pc,target,value"
+      3-field (start_recording / stop_recording):       "TYPE,target,value"
+    The 3-field form has no PC; it is detected when the 2nd field is not an int.
+    """
     if not raw or len(raw) < 3:
         return None
     parts = raw.split(",", 3)
@@ -57,12 +63,26 @@ def _parse_entry(raw: str) -> Optional[TraceEntry]:
     entry_type = parts[0]
     if entry_type not in ("D", "R", "C", "W"):
         return None
+
+    # Distinguish 4-field (has integer PC) from 3-field (no PC) format.
+    second = parts[1]
+    is_int_pc = False
     try:
-        pc = int(parts[1])
-    except (ValueError, IndexError):
+        pc = int(second)
+        is_int_pc = True
+    except ValueError:
         pc = -1
-    target = parts[2] if len(parts) > 2 else ""
-    value = parts[3] if len(parts) > 3 else ""
+
+    if is_int_pc:
+        # 4-field: TYPE,pc,target,value
+        target = parts[2] if len(parts) > 2 else ""
+        value = parts[3] if len(parts) > 3 else ""
+    else:
+        # 3-field: TYPE,target,value  -> re-split with maxsplit=2
+        p3 = raw.split(",", 2)
+        target = p3[1] if len(p3) > 1 else ""
+        value = p3[2] if len(p3) > 2 else ""
+
     return TraceEntry(type=entry_type, pc=pc, target=target, value=value, raw=raw)
 
 
