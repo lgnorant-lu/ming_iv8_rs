@@ -264,19 +264,24 @@ fn generate_dispatch_replacement(detection: &VmDetection, capture_stack_depth: u
     if detection.mode == "chaosvm" {
         let ha = &detection.handler_array;
         let ia = &detection.index_array;
-        // Build the stack-value capture expression.
+
+        // Guard: only access stack if it's defined (typeof check prevents ReferenceError
+        // when auto-detection guessed wrong stack_var or it's not yet defined during init)
+        let stack_guard = format!("typeof {stack}!=='undefined'", stack = stack);
+
+        // Build the stack-value capture expression with typeof guard.
         // D entry format: D,pc,opcode_idx,stack_depth[,stack_top[,stack_top-1[,...]]]
-        // capture_stack_depth controls how many stack values to include (0 = depth only).
         let stack_capture = if capture_stack_depth == 0 {
-            format!("'+{stack}.length", stack = stack)
+            format!("'+(({sg})?{stack}.length:0)", sg = stack_guard, stack = stack)
         } else {
-            // Capture top N stack values after the depth field.
-            // e.g. for depth=2: ','+g.length+','+g[g.length-1]+','+g[g.length-2]
-            let mut parts = format!("'+{stack}.length", stack = stack);
+            let mut parts = format!(
+                "'+(({sg})?{stack}.length:0)",
+                sg = stack_guard, stack = stack,
+            );
             for i in 1..=capture_stack_depth {
                 parts.push_str(&format!(
-                    "+','+({stack}.length>={i}?{stack}[{stack}.length-{i}]:'')",
-                    stack = stack, i = i,
+                    "+','+(({sg}&&{stack}.length>={i})?{stack}[{stack}.length-{i}]:'')",
+                    sg = stack_guard, stack = stack, i = i,
                 ));
             }
             parts
