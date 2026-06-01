@@ -87,12 +87,7 @@ def _make_trace(entries_data):
 # ============================================================
 def evaluate_A():
     verify_scripts = [
-        "verify_crypto_data.py",
-        "verify_sequences_full.py",
-        "verify_final_comprehensive.py",
-        "verify_round4.py",
-        "verify_round5.py",
-        "verify_round6.py",
+        "verify_crypto_data_integrity.py",
     ]
     total_errors = 0
     total_checks = 0

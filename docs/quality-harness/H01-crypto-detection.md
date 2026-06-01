@@ -35,16 +35,19 @@ SHA-3 常量——因为只测了证实（喂 crypto 能检测），从没测证
 |---|---|---|
 | total_errors | 所有数据验证脚本报告的错误总数 | **= 0** |
 
-验证脚本（各自独立计算，orchestrator 汇总）：
-- `verify_crypto_data.py` — hex/int 一致性 + 独立数学计算（SHA-256 K/MD5 T/AES S-box）
-- `verify_sequences_full.py` — 全表逐条对照权威参考
-- `verify_final_comprehensive.py` — 跨库交叉验证 + metadata
-- `verify_round4.py` — 对抗性数据性质（置换性、互逆性、bit 约束）
-- `verify_round5.py` — 外部交叉验证（hashlib/zlib/test vector）
-- `verify_round6.py` — 新增数据（SHA-512/MD2/Base64）
+验证脚本（单一整合脚本，按验证方法分 7 节）：
+`scripts/verify_crypto_data_integrity.py`
+- 第 1 节：hex/int 一致性（所有常量）
+- 第 2 节：独立数学计算（SHA-256 K / MD5 T / CRC32 table / SM4 CK / Keccak RC）
+- 第 3 节：权威参考表逐条对照（AES/SM4 S-box、Blowfish、DES、SHA-256 IV、sigma、FK）
+- 第 4 节：结构/对抗性质（置换性、互逆性、Keccak bit 约束、XTEA/HMAC 算术）
+- 第 5 节：外部交叉验证（hashlib/zlib/XTEA test vector）
+- 第 6 节：跨库一致性（sequence vs constant、metadata）
+- 第 7 节：完整性守护（hex/int 冲突、值非负）
 
-> 注：这 6 个脚本将在"脚本合并"阶段整合为 1 个
-> `verify_crypto_data_integrity.py`（分节）。合并后本节同步更新。
+> 历史：原为 6 个独立脚本（verify_crypto_data / verify_sequences_full /
+> verify_final_comprehensive / verify_round4/5/6），存在重复检查，
+> 已合并为单一脚本，去重后约 4149 项检查（原 4529 含重复）。
 
 金标准来源（宪法 P10）：FIPS 180-4 / FIPS 197 / FIPS 46-3 / RFC 1319 /
 RFC 8439 / GM/T 0002-2012 / GM/T 0004-2012 / Schneier Applied Cryptography。
@@ -120,7 +123,7 @@ python scripts/check_coverage.py          # B/D 类明细
 
 | 类别 | 指标 | 实测 | 阈值 | 状态 |
 |---|---|---|---|---|
-| A | total_errors | 0 (4529 checks) | 0 | PASS |
+| A | total_errors | 0 (4149 checks) | 0 | PASS |
 | B | recall_pct | 100% (43 算法) | 100% | PASS |
 | B | l3_missing_pattern | 0 (8 L3-only) | 0 | PASS |
 | C | fp_samples | 0 (6 场景) | 0 | PASS |
