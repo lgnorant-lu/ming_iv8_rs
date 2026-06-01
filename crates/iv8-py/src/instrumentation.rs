@@ -22,7 +22,7 @@ use pyo3::types::PyDict;
 #[pyo3(signature = (
     source,
     mode = "auto",
-    capture_stack_depth = 0,
+    capture_stack_depth = 3,
     capture_env = true,
     env_targets = None,
     limit = 100000,
@@ -211,11 +211,14 @@ fn generate_head_code(capture_env: bool, env_targets_json: &str, limit: u32) -> 
     let mut code = String::new();
 
     // Always create the unified log array (non-enumerable to avoid detection by Object.keys)
+    // __iv8i_cap__: stack capture switch. Default false (safe for init).
+    // User sets `globalThis.__iv8i_cap__ = true` after init to enable stack value capture.
     code.push_str(&format!(
         ";(function(){{var g=globalThis;\
          Object.defineProperty(g,'__iv8i_log__',{{value:[],writable:true,enumerable:false,configurable:true}});\
          Object.defineProperty(g,'__iv8i_lim__',{{value:{limit},writable:true,enumerable:false,configurable:true}});\
-         Object.defineProperty(g,'__iv8i_pc__',{{value:-1,writable:true,enumerable:false,configurable:true}});}})();\n",
+         Object.defineProperty(g,'__iv8i_pc__',{{value:-1,writable:true,enumerable:false,configurable:true}});\
+         Object.defineProperty(g,'__iv8i_cap__',{{value:false,writable:true,enumerable:false,configurable:true}});}})();\n",
         limit = limit
     ));
 
@@ -272,18 +275,32 @@ fn generate_dispatch_replacement(detection: &VmDetection, capture_stack_depth: u
         // when auto-detection guessed wrong stack_var or it's not yet defined during init)
         let stack_guard = format!("typeof {stack}!=='undefined'", stack = stack);
 
-        // Build the stack-value capture expression with typeof guard.
+        // Build the stack-value capture expression.
         // D entry format: D,pc,opcode_idx,stack_depth[,stack_top[,stack_top-1[,...]]]
+        //
+        // Stack values are gated by __iv8i_cap__ (deferred capture switch):
+        // - __iv8i_cap__ = false (default): only record depth, no stack values
+        //   → safe during VM init (reading stack elements can have side effects)
+        // - __iv8i_cap__ = true (user sets after init): record depth + top N values
+        //   → enables crypto constant detection in business-logic dispatches
+        //
+        // User workflow:
+        //   ctx.eval(patched)                     # init (cap=false, safe)
+        //   ctx.eval("__iv8i_cap__ = true")       # enable stack capture
+        //   ctx.eval("TDC.getData(true)")         # business logic (stack values recorded)
         let stack_capture = if capture_stack_depth == 0 {
+            // No stack capture requested at all: just depth
             format!("'+(({sg})?{stack}.length:0)", sg = stack_guard, stack = stack)
         } else {
+            // Deferred capture: depth always, values only when __iv8i_cap__ is true
             let mut parts = format!(
                 "'+(({sg})?{stack}.length:0)",
                 sg = stack_guard, stack = stack,
             );
             for i in 1..=capture_stack_depth {
+                // Gate each stack value read with __iv8i_cap__
                 parts.push_str(&format!(
-                    "+','+(({sg}&&{stack}.length>={i})?{stack}[{stack}.length-{i}]:'')",
+                    "+','+(globalThis.__iv8i_cap__&&{sg}&&{stack}.length>={i}?{stack}[{stack}.length-{i}]:'')",
                     sg = stack_guard, stack = stack, i = i,
                 ));
             }
