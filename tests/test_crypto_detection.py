@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 from iv8_rs.trace import StructuredTrace, TraceEntry, parse_trace
 from iv8_rs.patterns import (
-    detect_constants, detect_sequences, detect_all,
+    detect_constants, detect_sequences, detect_all, detect_patterns,
     detect_loops, detect_hotspots,
     _load_builtin_patterns, _load_constants_db, _load_sequences_db,
 )
@@ -548,6 +548,86 @@ class TestDetectAll:
         trace = make_trace(entries)
         detections = detect_all(trace, min_confidence=0.3)
         assert_algorithm_detected(detections, "MurmurHash3")
+
+
+# ============================================================
+# Layer 3 (detect_patterns) contract tests
+# ============================================================
+
+def _opcode_trace(opcodes):
+    """Build a dispatch-only trace from a list of numeric opcodes."""
+    entries = [("D", 100 + i, str(o), "3") for i, o in enumerate(opcodes)]
+    return make_trace(entries)
+
+
+class TestLayer3Contract:
+    """Layer 3 requires an opcode_map; honest contract when absent.
+
+    Regression guard for the audit finding that detect_patterns silently
+    compared numeric opcodes against string tokens and never fired.
+    """
+
+    def test_no_opcode_map_returns_empty(self):
+        """Without opcode_map, detect_patterns MUST return [] (no fabrication)."""
+        patterns = _load_builtin_patterns()
+        bp = patterns["XTEA"]["behavior_pattern"]
+        tokens = sorted(set(bp))
+        opmap = {10 + i: t for i, t in enumerate(tokens)}
+        rev = {v: k for k, v in opmap.items()}
+        trace = _opcode_trace([rev[t] for t in bp])
+        assert detect_patterns(trace) == []
+        assert detect_patterns(trace, opcode_map=None) == []
+        assert detect_patterns(trace, opcode_map={}) == []
+
+    def test_with_opcode_map_fires_xtea(self):
+        """With a correct opcode_map, the XTEA behavior pattern must fire."""
+        patterns = _load_builtin_patterns()
+        bp = patterns["XTEA"]["behavior_pattern"]  # shl,xor,add,shr,xor,add
+        tokens = sorted(set(bp))
+        opmap = {10 + i: t for i, t in enumerate(tokens)}
+        rev = {v: k for k, v in opmap.items()}
+        trace = _opcode_trace([rev[t] for t in bp])
+        ms = detect_patterns(trace, opcode_map=opmap, min_confidence=0.6)
+        assert any(m.name == "XTEA" for m in ms)
+        assert max(m.confidence for m in ms if m.name == "XTEA") >= 0.6
+
+    def test_l3_only_algorithm_detectable_with_map(self):
+        """An L3-only algorithm (RC4) becomes detectable when opcode_map given."""
+        patterns = _load_builtin_patterns()
+        bp = patterns["RC4"]["behavior_pattern"]
+        tokens = sorted(set(bp))
+        opmap = {20 + i: t for i, t in enumerate(tokens)}
+        rev = {v: k for k, v in opmap.items()}
+        trace = _opcode_trace([rev[t] for t in bp])
+        ms = detect_patterns(trace, opcode_map=opmap, min_confidence=0.5)
+        assert any(m.name == "RC4" for m in ms), \
+            "RC4 (L3-only) must be detectable when opcode_map is provided"
+
+    def test_unmapped_opcodes_do_not_match(self):
+        """Opcodes not in the map translate to None and match nothing."""
+        patterns = _load_builtin_patterns()
+        bp = patterns["XTEA"]["behavior_pattern"]
+        # Provide a map that covers NONE of the needed tokens
+        wrong_map = {999: "nonsense"}
+        tokens = sorted(set(bp))
+        rev = {t: 10 + i for i, t in enumerate(tokens)}
+        trace = _opcode_trace([rev[t] for t in bp])
+        ms = detect_patterns(trace, opcode_map=wrong_map, min_confidence=0.6)
+        assert not any(m.name == "XTEA" for m in ms)
+
+    def test_detect_all_l3_only_with_opcode_map(self):
+        """detect_all includes L3 only when opcode_map is supplied."""
+        patterns = _load_builtin_patterns()
+        bp = patterns["IDEA"]["behavior_pattern"]
+        tokens = sorted(set(bp))
+        opmap = {30 + i: t for i, t in enumerate(tokens)}
+        rev = {v: k for k, v in opmap.items()}
+        trace = _opcode_trace([rev[t] for t in bp])
+        # Without map: IDEA (L3-only, no constants) not detected
+        assert not any("IDEA" in d.algorithm for d in detect_all(trace, min_confidence=0.4))
+        # With map: IDEA detected via Layer 3
+        dets = detect_all(trace, min_confidence=0.4, opcode_map=opmap)
+        assert any("IDEA" in d.algorithm for d in dets)
 
 
 # ============================================================

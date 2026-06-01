@@ -29,7 +29,7 @@ sys.path.insert(0, str(ROOT / "python"))
 
 from iv8_rs.trace import StructuredTrace, TraceEntry
 from iv8_rs.patterns import (
-    detect_constants, detect_sequences, detect_all,
+    detect_constants, detect_sequences, detect_all, detect_patterns,
     _load_builtin_patterns, _load_constants_db, _load_sequences_db,
 )
 
@@ -40,7 +40,7 @@ from iv8_rs.patterns import (
 THRESHOLDS = {
     "A_data_integrity_errors": 0,        # zero data errors allowed
     "B_recall_l1l2_pct": 100.0,          # every L1/L2 algorithm must be detectable
-    "B_l3_must_have_pattern": True,      # every L3-only algo must have behavior_pattern
+    "B_l3_fires_with_map": True,         # L3-only algos must FIRE given an opcode_map
     "C_false_positive_count": 0,         # zero FP at confidence >= C_fp_conf
     "C_fp_conf": 0.5,
     "C_fp_samples": 6,                   # number of negative scenarios
@@ -140,6 +140,7 @@ def evaluate_B():
     detectable = []   # L1/L2 algorithms expected to be detected
     failures = []
     l3_missing_pattern = []
+    l3_not_firing = []
 
     def algo_in_field(algo, field):
         """Exact match: algo must be one of the /-separated tokens in field."""
@@ -185,17 +186,31 @@ def evaluate_B():
             if not ok:
                 failures.append(pk)
         else:
-            # Must be L3-only AND have a behavior_pattern
+            # Must be L3-only. Upgraded check: not merely "behavior_pattern
+            # exists" but "L3 actually FIRES given a synthetic opcode_map".
             if pk not in LAYER3_ONLY:
                 failures.append(f"{pk} (no signature, not in LAYER3_ONLY)")
             else:
                 bp = patterns[pk].get("behavior_pattern", [])
                 if not bp or len(bp) < 2:
                     l3_missing_pattern.append(pk)
+                else:
+                    # Build synthetic opcode_map: assign each token a VM opcode,
+                    # construct a dispatch trace spelling out the behavior_pattern,
+                    # and verify detect_patterns fires this algorithm.
+                    tokens = sorted(set(bp))
+                    opmap = {100 + i: t for i, t in enumerate(tokens)}
+                    rev = {v: k for k, v in opmap.items()}
+                    entries = [("D", 500 + j, str(rev[t]), "3") for j, t in enumerate(bp)]
+                    t3 = _make_trace(entries)
+                    ms = detect_patterns(t3, opcode_map=opmap, min_confidence=0.5)
+                    if not any(m.name == pk for m in ms):
+                        l3_not_firing.append(pk)
 
     recall_pct = (len(detectable) - len(failures)) / len(detectable) * 100 if detectable else 0
     passed = (recall_pct >= THRESHOLDS["B_recall_l1l2_pct"]
               and not l3_missing_pattern
+              and not l3_not_firing
               and not [f for f in failures])
     results["B"] = {
         "name": "Recall (detectability)",
@@ -203,9 +218,12 @@ def evaluate_B():
         "metrics": {"detectable_algos": len(detectable),
                     "recall_pct": round(recall_pct, 1),
                     "threshold_pct": THRESHOLDS["B_recall_l1l2_pct"],
-                    "l3_only_count": len(LAYER3_ONLY)},
+                    "l3_only_count": len(LAYER3_ONLY),
+                    "l3_fires_with_map": len(LAYER3_ONLY) - len(l3_not_firing)},
         "details": ([f"FAIL detect: {failures}"] if failures else ["all L1/L2 detected"]) +
-                   ([f"L3 missing pattern: {l3_missing_pattern}"] if l3_missing_pattern else []),
+                   ([f"L3 missing pattern: {l3_missing_pattern}"] if l3_missing_pattern else []) +
+                   ([f"L3 NOT firing with map: {l3_not_firing}"] if l3_not_firing
+                    else ["all L3-only fire with opcode_map"]),
     }
 
 

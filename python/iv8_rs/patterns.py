@@ -94,102 +94,125 @@ def _load_builtin_patterns() -> Dict[str, Any]:
     return {}
 
 
-def _sequence_similarity(seq_a: List[int], seq_b: List[int]) -> float:
-    """Compute similarity between two opcode sequences (0.0 - 1.0)."""
-    if not seq_a or not seq_b:
-        return 0.0
-    min_len = min(len(seq_a), len(seq_b))
-    matches = sum(1 for i in range(min_len) if seq_a[i] == seq_b[i])
-    return matches / max(len(seq_a), len(seq_b))
-
-
 def detect_patterns(
     trace: StructuredTrace,
     patterns: Optional[Dict[str, Any]] = None,
+    opcode_map: Optional[Dict[int, str]] = None,
     window_size: int = 20,
     min_confidence: float = 0.6,
 ) -> List[PatternMatch]:
-    """Detect known algorithmic patterns in a trace.
+    """Layer 3: Detect algorithmic structure patterns via opcode semantics.
 
-    Scans the dispatch entries with a sliding window, comparing opcode
-    sequences against known patterns (crypto, hash, cipher).
+    IMPORTANT — Layer 3 requires an ``opcode_map``:
+
+    A VM's dispatch opcodes are arbitrary per-VM numbers (e.g. opcode 5).
+    The pattern library's ``behavior_pattern`` is a list of *semantic* tokens
+    (e.g. "shl", "xor", "add"). To match them, the caller must supply a map
+    from this VM's numeric opcodes to semantic tokens. This map comes from
+    manual reverse-engineering of the VM's handler table (the standard
+    workflow, e.g. "77 opcodes mapped" in published JS-VM reversing) or from
+    differential opcode-semantic inference (Phase 2).
+
+    Without ``opcode_map`` this function returns an EMPTY list — it does NOT
+    guess, because comparing numeric opcodes against string tokens is
+    meaningless. This is a deliberate, honest contract (see H01 spec).
 
     Args:
         trace: StructuredTrace to analyze.
         patterns: Custom pattern dict (same format as crypto_patterns.json).
                   If None, uses built-in library.
+        opcode_map: REQUIRED for any matching. Maps this VM's numeric opcodes
+                    to semantic tokens, e.g. {5: "xor", 7: "add", 12: "shl"}.
+                    Tokens should match those used in behavior_pattern
+                    (shl/shr/rot/xor/and/or/not/add/sub/mul/load/store/...).
+                    If None, returns [].
         window_size: Sliding window size for scanning (default 20).
         min_confidence: Minimum confidence threshold (default 0.6).
 
     Returns:
         List of PatternMatch objects, sorted by confidence (descending).
+        Empty list if opcode_map is None.
 
     Example::
 
-        from iv8_rs.trace import parse_trace
-        from iv8_rs.patterns import detect_patterns
-
-        trace = parse_trace(ctx.get_unified_trace())
-        matches = detect_patterns(trace)
+        # After reversing the VM's handler table:
+        opmap = {5: "xor", 7: "add", 12: "shl", 13: "shr"}
+        matches = detect_patterns(trace, opcode_map=opmap)
         for m in matches:
             print(f"{m.name} at PC {m.pc_start}-{m.pc_end} (conf={m.confidence:.2f})")
     """
     if patterns is None:
         patterns = _load_builtin_patterns()
 
+    # Layer 3 cannot operate without a VM opcode -> semantic token map.
+    # Returning [] here is the honest contract: we do not fabricate matches
+    # by comparing numeric opcodes against semantic string tokens.
+    if not opcode_map:
+        return []
+
     dispatches = trace.dispatches
     if not dispatches:
         return []
 
-    # Extract opcode sequence
-    opcodes = []
-    pcs = []
+    # Translate this VM's numeric opcodes into semantic tokens via the map.
+    # Unmapped opcodes become None (a token that matches nothing).
+    sem_tokens: List[Optional[str]] = []
+    pcs: List[int] = []
     for d in dispatches:
         try:
-            opcodes.append(int(d.target))
-            pcs.append(d.pc)
+            opc = int(d.target)
         except (ValueError, TypeError):
-            opcodes.append(-1)
+            sem_tokens.append(None)
             pcs.append(d.pc)
+            continue
+        sem_tokens.append(opcode_map.get(opc))
+        pcs.append(d.pc)
+
+    def token_similarity(window: List[Optional[str]], pat: List[str]) -> float:
+        """Fraction of positions where the translated token equals the pattern token."""
+        n = min(len(window), len(pat))
+        if n == 0:
+            return 0.0
+        hits = sum(1 for i in range(n) if window[i] is not None and window[i] == pat[i])
+        return hits / max(len(window), len(pat))
 
     matches: List[PatternMatch] = []
 
     for pattern_name, pattern_def in patterns.items():
         if pattern_name.startswith("_"):
-            continue  # Skip metadata entries
-        pat_seq = pattern_def.get("opcode_sequence") or pattern_def.get("behavior_pattern", [])
-        pat_min_conf = pattern_def.get("min_confidence", min_confidence)
-        pat_window = pattern_def.get("min_window", len(pat_seq))
-        description = pattern_def.get("description", "")
-
-        if not pat_seq:
             continue
+        pat_seq = pattern_def.get("behavior_pattern") or pattern_def.get("opcode_sequence", [])
+        # Only string-token behavior patterns are matchable via opcode_map.
+        if not pat_seq or not all(isinstance(t, str) for t in pat_seq):
+            continue
+        pat_min_conf = pattern_def.get("min_confidence", min_confidence)
+        description = pattern_def.get("description", "")
+        plen = len(pat_seq)
 
-        # Sliding window scan
-        for i in range(len(opcodes) - pat_window + 1):
-            window = opcodes[i:i + len(pat_seq)]
-            conf = _sequence_similarity(window, pat_seq)
-
+        for i in range(len(sem_tokens) - plen + 1):
+            window = sem_tokens[i:i + plen]
+            conf = token_similarity(window, pat_seq)
             if conf >= max(pat_min_conf, min_confidence):
                 matches.append(PatternMatch(
                     name=pattern_name,
                     description=description,
                     pc_start=pcs[i],
-                    pc_end=pcs[min(i + len(pat_seq) - 1, len(pcs) - 1)],
-                    confidence=conf,
-                    matched_opcodes=window,
+                    pc_end=pcs[min(i + plen - 1, len(pcs) - 1)],
+                    confidence=round(conf, 3),
+                    matched_opcodes=[t for t in window if t is not None][:plen],
                     window_index=i,
                 ))
 
-    # Deduplicate overlapping matches (keep highest confidence)
+    # Deduplicate overlapping matches (keep highest confidence per name+region)
     matches.sort(key=lambda m: m.confidence, reverse=True)
     deduplicated = []
-    used_ranges = set()
+    seen = set()
     for m in matches:
-        key = (m.name, m.window_index // (len(patterns.get(m.name, {}).get("opcode_sequence", [1])) or 1))
-        if key not in used_ranges:
+        plen = len(patterns.get(m.name, {}).get("behavior_pattern", [1])) or 1
+        key = (m.name, m.window_index // plen)
+        if key not in seen:
             deduplicated.append(m)
-            used_ranges.add(key)
+            seen.add(key)
 
     return deduplicated
 
@@ -698,6 +721,7 @@ def detect_all(
     min_confidence: float = 0.5,
     enable_fuzzy: bool = False,
     context_window: int = 50,
+    opcode_map: Optional[Dict[int, str]] = None,
 ) -> List[CryptoDetection]:
     """Layer 4: Cross-validated comprehensive crypto detection.
 
@@ -711,6 +735,9 @@ def detect_all(
         min_confidence: Minimum confidence to include in results.
         enable_fuzzy: Enable fuzzy matching for sequences.
         context_window: PC range window for cross-validation proximity.
+        opcode_map: Optional VM opcode -> semantic token map. Only when
+                    provided does Layer 3 (structure/behavior) participate;
+                    without it L1/L2/L4 still work on constants/sequences.
 
     Returns:
         List of CryptoDetection objects, sorted by confidence.
@@ -727,10 +754,10 @@ def detect_all(
             if d.ambiguity:
                 print(f"  [WARN] Shared constants with: {d.ambiguity}")
     """
-    # Run all layers
+    # Run all layers. Layer 3 only fires when an opcode_map is supplied.
     constants = detect_constants(trace)
     sequences = detect_sequences(trace, fuzzy=enable_fuzzy)
-    patterns = detect_patterns(trace, min_confidence=min_confidence)
+    patterns = detect_patterns(trace, opcode_map=opcode_map, min_confidence=min_confidence)
 
     # Group by algorithm
     algo_constants: Dict[str, List[ConstantMatch]] = {}

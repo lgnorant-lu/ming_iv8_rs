@@ -57,23 +57,28 @@ RFC 8439 / GM/T 0002-2012 / GM/T 0004-2012 / Schneier Applied Cryptography。
 | 指标 | 定义 | 阈值 |
 |---|---|---|
 | recall_pct | L1/L2 可检测算法中实际检测到的比例 | **= 100%** |
-| l3_missing_pattern | L3-only 算法缺 behavior_pattern 的数量 | **= 0** |
+| l3_fires_with_map | L3-only 算法在合成 opcode_map 下实际 fire 的数量 | **= 8 (全部)** |
 
 - **L1-capable**（有常量）：喂理想常量，必须 `detect_constants` 检测到
 - **L2-capable**（有序列）：喂理想序列，必须 `detect_sequences` 检测到
-- **L3-only**（无固定常量）：必须有 behavior_pattern 且在 `LAYER3_ONLY` 白名单
+- **L3-only**（无固定常量）：构造合成 opcode_map + trace，必须 `detect_patterns` 真正 fire
 
-L3-only 白名单（合法无固定常量，记录在案）：
+L3-only 白名单（无固定常量，仅能经 Layer 3 结构检测）：
 `RC4, IDEA, XOR_Cipher, WAKE, PBKDF2, HKDF, GOST_28147, SAFER`
 - key-dependent table: RC4 / IDEA / XOR / WAKE
 - HMAC 构造: PBKDF2 / HKDF
 - impl-defined S-box: GOST
 - exp/log table: SAFER
 
+> **Layer 3 契约（关键）**：VM opcode 是 per-VM 任意数字，behavior_pattern 是
+> 语义 token。`detect_patterns` 必须接收 `opcode_map`（VM 数字 opcode → 语义
+> token，来自人工逆向标定或 Phase 2 差分推断）才能匹配。**无 map 时返回 []**，
+> 不做数字 vs 字符串的无效比较，不伪造匹配。B 类不再仅检查"pattern 存在"
+> （旧标准给假绿），而是构造合成 map 验证 L3 真能 fire。
+
 > harness bug 警示（宪法 P6）：召回匹配必须用**精确 token 匹配**
 > （algo 是 `/` 分隔字段中的完整一项），不能用 substring——
-> 否则 "SHA-3" 会误配 "SHA-384"、"SHA-1" 误配 "RIPEMD-160"，
-> 导致 harness 自身误报 FAIL。
+> 否则 "SHA-3" 会误配 "SHA-384"、"SHA-1" 误配 "RIPEMD-160"。
 
 ### C. 假阳性率 (False Positive Rate) — 强制，会否误报
 
@@ -125,7 +130,7 @@ python scripts/check_coverage.py          # B/D 类明细
 |---|---|---|---|---|
 | A | total_errors | 0 (4149 checks) | 0 | PASS |
 | B | recall_pct | 100% (43 算法) | 100% | PASS |
-| B | l3_missing_pattern | 0 (8 L3-only) | 0 | PASS |
+| B | l3_fires_with_map | 8/8 | 8 | PASS |
 | C | fp_samples | 0 (6 场景) | 0 | PASS |
 | D | positive_coverage_pct | 100% (51 算法) | 100% | PASS |
 | D | fp_guard_tests | 6 | >=5 | PASS |
@@ -135,15 +140,20 @@ python scripts/check_coverage.py          # B/D 类明细
 **OVERALL: PASS**
 
 数据库规模：51 patterns / 216 constants / 24 sequences。
-关联 pytest：`tests/test_crypto_detection.py`（99 tests）。
+关联 pytest：`tests/test_crypto_detection.py`（104 tests）。
 
 ---
 
 ## 5. 已知局限（诚实记录，宪法 P8）
 
-- L3-only 的 8 个算法目前**只验证了 behavior_pattern 存在**，
-  未验证 `detect_patterns` 在真实 trace 上能 fire（opcode 语义是 per-VM 的，
-  需要实际 VM trace 才能测）。设计局限，非 bug —— 记录在案待 Phase 2 解决。
+- **L3 需要 opcode_map**：8 个 L3-only 算法（RC4/IDEA/XOR/WAKE/PBKDF2/HKDF/
+  GOST/SAFER）只能经 Layer 3 结构检测，而 Layer 3 必须由调用方提供 VM 的
+  opcode→语义映射才能 fire。harness 已用合成 map 验证 8/8 全部 fire；但**真实
+  使用时 map 来自人工逆向标定或 Phase 2 差分推断**——无 map 时这 8 个不可检测。
+  这是设计契约（宪法 P8），非 bug。
+- **真实 trace 召回 vs 理想输入召回**：B 类用理想合成输入测召回。真实 trace 的
+  常量编码变体（已验证：decimal/hex/负数补码均命中）、序列交错（需显式 max_gap）、
+  乱序访问（序列匹配固有失效，靠 L1 兜底）见 `audit_m27_realworld.py`。
 - 序列匹配是动态 trace 值匹配，非 ghidra-findcrypt 的静态完整表扫描；
   trace 中表值不连续/不完整时召回会下降（已通过 E 类噪声测试部分覆盖）。
 - 共享常量算法（TEA/XTEA/RC5/Serpent/SEED 共享 0x9E3779B9）只能标注歧义，
