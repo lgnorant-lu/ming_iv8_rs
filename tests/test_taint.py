@@ -1,0 +1,145 @@
+"""Taint Tracking tests (M26)."""
+import pytest
+from iv8_rs.trace import StructuredTrace, TraceEntry
+from iv8_rs.taint import TaintEngine, TaintReport
+
+
+def make_trace(entries_data):
+    entries = []
+    for t, pc, target, value in entries_data:
+        raw = f"{t},{pc},{target},{value}"
+        entries.append(TraceEntry(type=t, pc=pc, target=target, value=str(value), raw=raw))
+    return StructuredTrace(entries)
+
+
+class TestBasicTaint:
+    def test_value_flows_from_read_to_write(self):
+        """Source value appears in R entry, propagates through D stack, reaches W entry."""
+        trace = make_trace([
+            ("R", 10, "screen.width", "1920"),
+            ("D", 20, "5", "3,1920,,"),       # stack contains 1920
+            ("D", 21, "7", "4,1920,100,"),    # still in stack
+            ("W", 30, "cd[10]", "1920"),       # written to output
+        ])
+        engine = TaintEngine(trace, sources={"screen.width": "1920"})
+        report = engine.analyze()
+
+        assert len(report.sources) == 1
+        assert report.sources[0].value == "1920"
+        assert report.sources[0].pc == 10  # found in R entry
+        assert len(report.sinks) == 1
+        assert report.sinks[0].target == "cd[10]"
+        assert len(report.flows) == 1
+        assert report.flows[0].source.target == "screen.width"
+        assert report.flows[0].sink.target == "cd[10]"
+        assert len(report.flows[0].intermediate_pcs) == 2  # PCs 20, 21
+        assert report.unreached_sources == []
+        assert report.stack_hits["WIDTH"] == 2
+
+    def test_value_not_reaching_sink(self):
+        """Source value appears in stack but never in W entry."""
+        trace = make_trace([
+            ("R", 10, "screen.width", "1920"),
+            ("D", 20, "5", "3,1920,,"),
+            ("D", 21, "7", "2,42,,"),
+        ])
+        engine = TaintEngine(trace, sources={"screen.width": "1920"})
+        report = engine.analyze()
+
+        assert len(report.sinks) == 0
+        assert len(report.flows) == 0
+        assert "WIDTH" in report.unreached_sources
+
+    def test_multiple_sources(self):
+        """Multiple sources tracked independently."""
+        trace = make_trace([
+            ("R", 10, "screen.width", "1920"),
+            ("R", 11, "screen.height", "1080"),
+            ("D", 20, "5", "3,1920,,"),
+            ("D", 21, "7", "3,1080,,"),
+            ("W", 30, "cd[10]", "1920"),
+            ("W", 31, "cd[11]", "1080"),
+        ])
+        engine = TaintEngine(trace, sources={
+            "screen.width": "1920",
+            "screen.height": "1080",
+        })
+        report = engine.analyze()
+
+        assert len(report.sources) == 2
+        assert len(report.sinks) == 2
+        assert len(report.flows) == 2
+        assert report.unreached_sources == []
+
+    def test_no_stack_values_still_finds_direct_rw(self):
+        """Even without D stack values, direct R→W value match works."""
+        trace = make_trace([
+            ("R", 10, "screen.width", "1920"),
+            ("D", 20, "5", "3"),  # no stack values
+            ("W", 30, "cd[10]", "1920"),
+        ])
+        engine = TaintEngine(trace, sources={"screen.width": "1920"})
+        report = engine.analyze()
+
+        assert len(report.sinks) == 1  # W entry value matches
+        assert report.stack_hits["WIDTH"] == 0  # no stack hits (no values in D)
+
+    def test_empty_trace(self):
+        trace = make_trace([])
+        engine = TaintEngine(trace, sources={"screen.width": "1920"})
+        report = engine.analyze()
+
+        assert len(report.sources) == 1
+        assert len(report.sinks) == 0
+        assert len(report.flows) == 0
+        assert "WIDTH" in report.unreached_sources
+
+    def test_user_specified_source_no_r_entry(self):
+        """Source specified by user but not found in R entries → pc=-1."""
+        trace = make_trace([
+            ("D", 20, "5", "3,1920,,"),
+            ("W", 30, "output", "1920"),
+        ])
+        engine = TaintEngine(trace, sources={"screen.width": "1920"})
+        report = engine.analyze()
+
+        assert report.sources[0].pc == -1  # not found in R entries
+        assert len(report.sinks) == 1  # still finds the W match
+
+    def test_call_entry_as_sink(self):
+        """C entries (function calls) can also be sinks."""
+        trace = make_trace([
+            ("R", 10, "screen.width", "1920"),
+            ("C", 30, "String.concat", "prefix1920suffix"),
+        ])
+        engine = TaintEngine(trace, sources={"screen.width": "1920"})
+        report = engine.analyze()
+
+        assert len(report.sinks) == 1
+        assert report.sinks[0].target == "String.concat"
+
+    def test_substring_matching(self):
+        """Value matching is substring-based (handles concatenated values)."""
+        trace = make_trace([
+            ("D", 20, "5", "3,abc1920def,,"),
+            ("W", 30, "result", "hash_1920_end"),
+        ])
+        engine = TaintEngine(trace, sources={"screen.width": "1920"})
+        report = engine.analyze()
+
+        assert report.stack_hits["WIDTH"] == 1
+        assert len(report.sinks) == 1
+
+    def test_large_value_no_false_positive(self):
+        """A large unique value should not match unrelated entries."""
+        trace = make_trace([
+            ("D", 20, "5", "3,42,100,200"),
+            ("D", 21, "7", "4,999,888,777"),
+            ("W", 30, "output", "12345"),
+        ])
+        engine = TaintEngine(trace, sources={"custom.value": "2654435769"})
+        report = engine.analyze()
+
+        assert report.stack_hits[report.sources[0].label] == 0
+        assert len(report.sinks) == 0
+        assert len(report.unreached_sources) == 1
