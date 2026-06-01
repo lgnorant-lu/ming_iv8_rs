@@ -119,18 +119,74 @@ def probe_environment(
     calls: Counter = Counter()
     writes: Dict[str, str] = {}
     missing: List[str] = []
+    issues: List[Dict[str, str]] = []
 
     if trace:
         for entry in trace.reads:
             reads[entry.target] = entry.value
             if entry.value in ("undefined", "null", "", "NaN"):
                 missing.append(entry.target)
+                issues.append({
+                    "target": entry.target,
+                    "type": "NOT_EXIST",
+                    "detail": f"returned {entry.value}",
+                    "pc": str(entry.pc),
+                })
 
         for entry in trace.calls:
             calls[entry.target] += 1
+            # Detect call errors from value field
+            if entry.value and ("Error" in entry.value or "error" in entry.value):
+                issues.append({
+                    "target": entry.target,
+                    "type": "CALL_ERROR",
+                    "detail": entry.value,
+                    "pc": str(entry.pc),
+                })
 
         for entry in trace.writes:
             writes[entry.target] = entry.value
+
+    # Error classification from console
+    for err_msg in errors:
+        if "is not a function" in err_msg:
+            # Extract function name
+            parts = err_msg.split(" is not a function")
+            target = parts[0].strip().split(".")[-1] if parts else "unknown"
+            issues.append({
+                "target": target,
+                "type": "NOT_FUNCTION",
+                "detail": err_msg,
+                "pc": "-1",
+            })
+        elif "is not defined" in err_msg:
+            parts = err_msg.split(" is not defined")
+            target = parts[0].strip().split(" ")[-1] if parts else "unknown"
+            issues.append({
+                "target": target,
+                "type": "NOT_DEFINED",
+                "detail": err_msg,
+                "pc": "-1",
+            })
+        elif "Cannot read" in err_msg:
+            issues.append({
+                "target": "unknown",
+                "type": "NULL_ACCESS",
+                "detail": err_msg,
+                "pc": "-1",
+            })
+
+    # Coverage statistics
+    total_reads = len(reads)
+    missing_count = len(set(missing))
+    ok_count = total_reads - missing_count
+    coverage = {
+        "total_targets": total_reads,
+        "configured": ok_count,
+        "missing": missing_count,
+        "error_count": len(issues),
+        "coverage_pct": round(ok_count / total_reads * 100, 1) if total_reads > 0 else 0.0,
+    }
 
     return {
         "reads": reads,
@@ -138,6 +194,8 @@ def probe_environment(
         "writes": writes,
         "missing": sorted(set(missing)),
         "errors": errors,
+        "issues": issues,
+        "coverage": coverage,
         "vm_info": vm_info,
         "trace_stats": trace.summary() if trace else None,
     }

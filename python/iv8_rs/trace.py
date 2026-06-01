@@ -226,6 +226,60 @@ class StructuredTrace:
             [{"type": e.type, "pc": e.pc, "target": e.target, "value": e.value} for e in self.entries]
         )
 
+    # --- Sequence extraction (for pattern matching) ---
+
+    def pc_sequence(self) -> List[int]:
+        """Extract PC sequence from dispatch entries only.
+
+        Returns:
+            List of PCs in execution order (D entries only).
+            Useful for CFG construction.
+        """
+        return [e.pc for e in self.entries if e.type == "D"]
+
+    def value_sequence(self) -> List[str]:
+        """Extract value sequence from all entries.
+
+        Returns:
+            List of value strings in trace order.
+            Useful for Layer 2 sequence matching.
+        """
+        return [e.value for e in self.entries if e.value]
+
+    def unique_pcs(self) -> set:
+        """Get set of all unique PCs visited.
+
+        Returns:
+            Set of PC values from D entries.
+        """
+        return {e.pc for e in self.entries if e.type == "D" and e.pc >= 0}
+
+    def index_by_pc(self) -> Dict[int, List["TraceEntry"]]:
+        """Build index: PC -> list of entries at that PC.
+
+        Returns:
+            Dict mapping PC to all entries (D/R/C/W) at that PC.
+            O(1) lookup after construction.
+        """
+        idx: Dict[int, List[TraceEntry]] = {}
+        for e in self.entries:
+            if e.pc >= 0:
+                idx.setdefault(e.pc, []).append(e)
+        return idx
+
+    def index_by_target(self) -> Dict[str, List["TraceEntry"]]:
+        """Build index: target -> list of entries with that target.
+
+        Returns:
+            Dict mapping target string to all entries referencing it.
+            O(1) lookup after construction.
+        """
+        idx: Dict[str, List[TraceEntry]] = {}
+        for e in self.entries:
+            if e.target:
+                idx.setdefault(e.target, []).append(e)
+        return idx
+
     def __repr__(self) -> str:
         s = self.summary()
         return (
@@ -258,3 +312,140 @@ def parse_trace(raw: List[str]) -> StructuredTrace:
         if entry is not None:
             entries.append(entry)
     return StructuredTrace(entries)
+
+
+def parse_trace_stream(iterable) -> StructuredTrace:
+    """Parse trace from any iterable (file, generator, etc.).
+
+    Supports streaming from large files without loading all into memory first.
+    For files > 1M entries, prefer this over parse_trace(list).
+
+    Args:
+        iterable: Any iterable yielding raw trace strings (file object,
+                  generator, list, etc.).
+
+    Returns:
+        StructuredTrace with parsed entries.
+
+    Example::
+
+        # From file
+        with open("trace.log") as f:
+            trace = parse_trace_stream(f)
+
+        # From generator
+        def gen():
+            yield "D,100,5,3"
+            yield "R,100,screen.width,1920"
+        trace = parse_trace_stream(gen())
+    """
+    entries = []
+    for line in iterable:
+        if isinstance(line, bytes):
+            line = line.decode("utf-8", errors="replace")
+        line = line.rstrip("\n\r")
+        entry = _parse_entry(line)
+        if entry is not None:
+            entries.append(entry)
+    return StructuredTrace(entries)
+
+
+@dataclass(slots=True)
+class CompressedEntry:
+    """A compressed dispatch entry (consecutive same-PC dispatches merged)."""
+
+    type: str
+    pc: int
+    target: str
+    value: str
+    count: int
+    """Number of consecutive dispatches at this PC."""
+
+
+class CompressedTrace:
+    """Memory-efficient trace with consecutive same-PC dispatches merged.
+
+    Reduces memory for traces with tight loops (e.g. dispatch loop
+    executing 50000 times at the same PC → 1 CompressedEntry with count=50000).
+    """
+
+    __slots__ = ("entries",)
+
+    def __init__(self, entries: List[CompressedEntry]):
+        self.entries = entries
+
+    def __len__(self) -> int:
+        return len(self.entries)
+
+    @property
+    def total_dispatches(self) -> int:
+        """Total dispatch count (sum of all counts)."""
+        return sum(e.count for e in self.entries if e.type == "D")
+
+    @property
+    def compression_ratio(self) -> float:
+        """Ratio of compressed entries to original (lower = better compression)."""
+        total = sum(e.count for e in self.entries)
+        return len(self.entries) / total if total > 0 else 1.0
+
+    def expand(self) -> StructuredTrace:
+        """Expand back to full StructuredTrace (for compatibility)."""
+        expanded = []
+        for ce in self.entries:
+            raw = f"{ce.type},{ce.pc},{ce.target},{ce.value}"
+            for _ in range(ce.count):
+                expanded.append(TraceEntry(
+                    type=ce.type, pc=ce.pc, target=ce.target,
+                    value=ce.value, raw=raw,
+                ))
+        return StructuredTrace(expanded)
+
+    def __repr__(self) -> str:
+        total = sum(e.count for e in self.entries)
+        return f"CompressedTrace({len(self.entries)} entries, {total} original, ratio={self.compression_ratio:.3f})"
+
+
+def compress_trace(trace: StructuredTrace) -> CompressedTrace:
+    """Compress a trace by merging consecutive same-PC dispatch entries.
+
+    Non-dispatch entries (R/C/W) are kept as-is with count=1.
+    Consecutive D entries at the same PC are merged into one with count=N.
+
+    Args:
+        trace: StructuredTrace to compress.
+
+    Returns:
+        CompressedTrace with merged entries.
+
+    Example::
+
+        trace = parse_trace(raw)
+        compressed = compress_trace(trace)
+        print(compressed)  # CompressedTrace(500 entries, 100000 original, ratio=0.005)
+    """
+    if not trace.entries:
+        return CompressedTrace([])
+
+    result: List[CompressedEntry] = []
+    prev = trace.entries[0]
+    count = 1
+
+    for entry in trace.entries[1:]:
+        if (entry.type == "D" and prev.type == "D"
+                and entry.pc == prev.pc and entry.target == prev.target):
+            count += 1
+        else:
+            result.append(CompressedEntry(
+                type=prev.type, pc=prev.pc, target=prev.target,
+                value=prev.value, count=count,
+            ))
+            prev = entry
+            count = 1
+
+    # Don't forget the last entry
+    result.append(CompressedEntry(
+        type=prev.type, pc=prev.pc, target=prev.target,
+        value=prev.value, count=count,
+    ))
+
+    return CompressedTrace(result)

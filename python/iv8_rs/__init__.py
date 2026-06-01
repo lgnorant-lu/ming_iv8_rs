@@ -9,7 +9,7 @@ from iv8_rs._iv8 import __version__, JSContext as _JSContextRust, Debugger, enab
 from iv8_rs._iv8 import instrument_source, trace_diff
 from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, JSPanic
 from iv8_rs.analysis import diff_analysis
-from iv8_rs.trace import parse_trace, StructuredTrace
+from iv8_rs.trace import parse_trace, StructuredTrace, parse_trace_stream, compress_trace, CompressedTrace
 from iv8_rs.probe import probe_environment
 
 # --- Profile System ---
@@ -106,7 +106,10 @@ __all__ = [
     "trace_diff",
     "diff_analysis",
     "parse_trace",
+    "parse_trace_stream",
+    "compress_trace",
     "StructuredTrace",
+    "CompressedTrace",
     "probe_environment",
     "load_profile",
     "JSError",

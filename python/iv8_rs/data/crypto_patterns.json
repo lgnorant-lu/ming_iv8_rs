@@ -1,13 +1,17 @@
 {
   "_meta": {
     "description": "Crypto algorithm detection patterns for JS VM opcode analysis",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "note": "Patterns match computational structure, not specific opcode numbers. Use opcode_behavior (shift/xor/add/and/or/not/rot/load/store/cmp/jmp) for matching. User can extend by adding new entries.",
     "references": [
-      "FoC: Figure out Cryptographic Functions (2024)",
-      "FindCrypt2 / Signsrch signature databases",
-      "NIST SP 800-131A approved algorithms"
-    ]
+      "FoC: Figure out Cryptographic Functions (2024) — 47 primitives",
+      "FindCrypt2 / ghidra-findcrypt signature databases — 32 algorithms",
+      "Signsrch — 3000+ signatures",
+      "NIST SP 800-131A approved algorithms",
+      "RFC 7539 (ChaCha20-Poly1305), RFC 8439",
+      "GM/T 0002-2012 (SM4), GM/T 0004-2012 (SM3)"
+    ],
+    "total_patterns": 38
   },
 
   "XTEA": {
@@ -30,6 +34,39 @@
     "block_size": 64,
     "notes": "Predecessor of XTEA. Used in QQ protocol and some game anti-cheat.",
     "min_confidence": 0.7
+  },
+
+  "XXTEA": {
+    "description": "XXTEA (Corrected Block TEA)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["shr", "xor", "shl", "add", "xor", "shr", "and"],
+    "constants": ["0x9E3779B9"],
+    "rounds": "6+52/n",
+    "block_size": "variable",
+    "notes": "Variable-length block cipher. MX = (z>>5^y<<2) + (y>>3^z<<4) ^ (sum^y) + (key[(p&3)^e]^z). Used in some JS obfuscators.",
+    "min_confidence": 0.65
+  },
+
+  "MD2": {
+    "description": "MD2 message digest (128-bit, legacy)",
+    "category": "hash_substitution",
+    "behavior_pattern": ["xor", "load", "store", "xor", "load", "store"],
+    "constants": [],
+    "rounds": 18,
+    "block_size": 128,
+    "notes": "18 rounds of S-box substitution (256-byte permutation table derived from pi). Extremely rare in modern JS but exists in legacy systems.",
+    "min_confidence": 0.5
+  },
+
+  "MD4": {
+    "description": "MD4 message digest (128-bit, legacy)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["and", "or", "xor", "add", "rot"],
+    "constants": ["0x5A827999", "0x6ED9EBA1"],
+    "rounds": 48,
+    "block_size": 512,
+    "notes": "3 rounds x 16 operations. Predecessor of MD5. Constants shared with SHA-1 K1/K2. Used in NTLM hashing.",
+    "min_confidence": 0.55
   },
 
   "MD5": {
@@ -65,6 +102,17 @@
     "min_confidence": 0.6
   },
 
+  "SHA384": {
+    "description": "SHA-384 secure hash (384-bit, truncated SHA-512)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["shr", "xor", "rot", "and", "xor", "add"],
+    "constants": ["0xCBBB9D5DC1059ED8", "0x629A292A367CD507"],
+    "rounds": 80,
+    "block_size": 1024,
+    "notes": "Same algorithm as SHA-512 but different IV and truncated output. 64-bit words.",
+    "min_confidence": 0.6
+  },
+
   "SHA512": {
     "description": "SHA-512 secure hash (512-bit)",
     "category": "hash_merkle_damgard",
@@ -74,6 +122,50 @@
     "block_size": 1024,
     "notes": "Same structure as SHA-256 but 64-bit words and 80 rounds.",
     "min_confidence": 0.6
+  },
+
+  "SHA3_Keccak": {
+    "description": "SHA-3 / Keccak sponge construction (224/256/384/512-bit)",
+    "category": "hash_sponge",
+    "behavior_pattern": ["xor", "rot", "xor", "and", "not", "xor"],
+    "constants": ["0x0000000000000001", "0x0000000000008082", "0x800000000000808A"],
+    "rounds": 24,
+    "block_size": 1600,
+    "notes": "24 rounds of theta/rho/pi/chi/iota. 5x5 state matrix of 64-bit lanes. RC constants are round-dependent. Detect by 24 distinct round constants.",
+    "min_confidence": 0.6
+  },
+
+  "BLAKE2b": {
+    "description": "BLAKE2b hash (up to 512-bit)",
+    "category": "hash_haifa",
+    "behavior_pattern": ["add", "xor", "rot", "add", "xor", "rot"],
+    "constants": ["0x6A09E667F3BCC908", "0xBB67AE8584CAA73B"],
+    "rounds": 12,
+    "block_size": 1024,
+    "notes": "12 rounds of G function (add-xor-rotate). IV same as SHA-512 fractional parts. Faster than SHA-256 on 64-bit.",
+    "min_confidence": 0.6
+  },
+
+  "BLAKE2s": {
+    "description": "BLAKE2s hash (up to 256-bit)",
+    "category": "hash_haifa",
+    "behavior_pattern": ["add", "xor", "rot", "add", "xor", "rot"],
+    "constants": ["0x6A09E667", "0xBB67AE85", "0x3C6EF372", "0xA54FF53A"],
+    "rounds": 10,
+    "block_size": 512,
+    "notes": "10 rounds. 32-bit version of BLAKE2b. IV same as SHA-256. Rotation amounts: 16,12,8,7.",
+    "min_confidence": 0.6
+  },
+
+  "BLAKE3": {
+    "description": "BLAKE3 hash (256-bit, tree hashing)",
+    "category": "hash_tree",
+    "behavior_pattern": ["add", "xor", "rot", "add", "xor", "rot"],
+    "constants": ["0x6A09E667", "0xBB67AE85", "0x3C6EF372", "0xA54FF53A"],
+    "rounds": 7,
+    "block_size": 512,
+    "notes": "7 rounds (reduced from BLAKE2s). Same G function. Tree structure for parallelism. IV = SHA-256 IV.",
+    "min_confidence": 0.55
   },
 
   "HMAC": {
@@ -105,6 +197,28 @@
     "rounds": 256,
     "notes": "KSA: 256 iterations of swap(S[i], S[j]). PRGA: continuous swap+XOR. Detect by 256-iteration init loop + swap pattern.",
     "min_confidence": 0.5
+  },
+
+  "RC5": {
+    "description": "RC5 block cipher (variable rounds/block/key)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["xor", "rot", "add", "xor", "rot", "add"],
+    "constants": ["0xB7E15163", "0x9E3779B9"],
+    "rounds_options": [12, 16, 20],
+    "block_size": 64,
+    "notes": "Data-dependent rotations. P=0xB7E15163 (odd(e-2)*2^32), Q=0x9E3779B9 (golden ratio). Key expansion uses P+i*Q.",
+    "min_confidence": 0.6
+  },
+
+  "RC6": {
+    "description": "RC6 block cipher (AES finalist)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["mul", "rot", "xor", "rot", "add"],
+    "constants": ["0xB7E15163", "0x9E3779B9"],
+    "rounds": 20,
+    "block_size": 128,
+    "notes": "Based on RC5 with multiplication. Same P/Q constants. 4 working registers (A,B,C,D).",
+    "min_confidence": 0.6
   },
 
   "ChaCha20": {
@@ -149,6 +263,105 @@
     "min_confidence": 0.6
   },
 
+  "Twofish": {
+    "description": "Twofish block cipher (AES finalist)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["xor", "sub_bytes", "mds_mul", "add", "rot", "xor"],
+    "constants": ["0xBCBC3275", "0xECEC21F3"],
+    "rounds": 16,
+    "block_size": 128,
+    "notes": "16 rounds Feistel with key-dependent S-boxes + MDS matrix. PHT (Pseudo-Hadamard Transform) + 1-bit rotation.",
+    "min_confidence": 0.6
+  },
+
+  "Serpent": {
+    "description": "Serpent block cipher (AES finalist)",
+    "category": "symmetric_spn",
+    "behavior_pattern": ["xor", "sub_bytes", "rot", "xor", "rot", "xor"],
+    "constants": ["0x9E3779B9"],
+    "rounds": 32,
+    "block_size": 128,
+    "notes": "32 rounds SPN. 8 different 4-bit S-boxes applied bitslice. Key schedule uses golden ratio. Conservative design (most rounds of AES finalists).",
+    "min_confidence": 0.55
+  },
+
+  "Camellia": {
+    "description": "Camellia block cipher (ISO/IEC 18033-3)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["xor", "sub_bytes", "permute", "xor", "rot"],
+    "constants": ["0xA09E667F", "0xB67AE858", "0x3C6EF372", "0xA54FF53A"],
+    "rounds_options": [18, 24],
+    "block_size": 128,
+    "notes": "Feistel with FL/FL^-1 layers. Sigma constants derived from SHA-256 IV. Japanese/EU standard (CRYPTREC/NESSIE).",
+    "min_confidence": 0.6
+  },
+
+  "SEED": {
+    "description": "SEED block cipher (Korean standard, KISA)",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["xor", "sub_bytes", "xor", "add", "xor"],
+    "constants": ["0x9E3779B9"],
+    "rounds": 16,
+    "block_size": 128,
+    "notes": "16 rounds modified Feistel. Uses golden ratio for key schedule (same as TEA). Two 8-bit S-boxes (SS0, SS1).",
+    "min_confidence": 0.55
+  },
+
+  "CAST128": {
+    "description": "CAST-128 (CAST5) block cipher",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["add", "xor", "sub", "rot", "xor"],
+    "constants": ["0x30FB40D4", "0x9B56C2B5"],
+    "rounds_options": [12, 16],
+    "block_size": 64,
+    "notes": "12 or 16 rounds Feistel. Three types of round function (add/xor/sub). 4 S-boxes (256 entries each). Used in PGP.",
+    "min_confidence": 0.55
+  },
+
+  "GOST_28147": {
+    "description": "GOST 28147-89 (Magma) block cipher",
+    "category": "symmetric_feistel",
+    "behavior_pattern": ["add", "sub_bytes", "rot", "xor"],
+    "constants": [],
+    "rounds": 32,
+    "block_size": 64,
+    "notes": "32 rounds Feistel. 8 different 4-bit S-boxes (implementation-defined). 11-bit left rotation. Russian standard.",
+    "min_confidence": 0.5
+  },
+
+  "Tiger": {
+    "description": "Tiger hash (192-bit)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["xor", "sub", "load", "xor", "shr", "mul"],
+    "constants": ["0x0123456789ABCDEF"],
+    "rounds": 24,
+    "block_size": 512,
+    "notes": "3 passes x 8 rounds. 4 S-boxes (256 entries of 64-bit). Designed for 64-bit platforms. Used in some P2P protocols.",
+    "min_confidence": 0.5
+  },
+
+  "Whirlpool": {
+    "description": "Whirlpool hash (512-bit)",
+    "category": "hash_miyaguchi_preneel",
+    "behavior_pattern": ["sub_bytes", "shift_cols", "mix_rows", "add_key"],
+    "constants": ["0x18186018C07830D8"],
+    "rounds": 10,
+    "block_size": 512,
+    "notes": "AES-like structure (SubBytes/ShiftColumns/MixRows/AddRoundKey) on 8x8 state. 10 rounds. ISO/IEC 10118-3.",
+    "min_confidence": 0.55
+  },
+
+  "RIPEMD160": {
+    "description": "RIPEMD-160 hash (160-bit)",
+    "category": "hash_merkle_damgard",
+    "behavior_pattern": ["xor", "or", "and", "not", "add", "rot"],
+    "constants": ["0x50A28BE6", "0x5A827999", "0x6ED9EBA1"],
+    "rounds": 80,
+    "block_size": 512,
+    "notes": "Dual-path Merkle-Damgard. 80 rounds (5 groups of 16). Used in Bitcoin address generation.",
+    "min_confidence": 0.5
+  },
+
   "CRC32": {
     "description": "CRC-32 checksum (not crypto, but common)",
     "category": "checksum",
@@ -157,6 +370,16 @@
     "rounds": 8,
     "notes": "Per-byte: 8 iterations of shift-right + conditional XOR with polynomial 0xEDB88320. Very common in data integrity checks.",
     "min_confidence": 0.7
+  },
+
+  "Adler32": {
+    "description": "Adler-32 checksum (zlib)",
+    "category": "checksum",
+    "behavior_pattern": ["add", "mod", "add", "mod"],
+    "constants": ["0xFFF1"],
+    "rounds": 1,
+    "notes": "s1 = (s1 + byte) % 65521; s2 = (s2 + s1) % 65521. Faster than CRC32 but weaker. Used in zlib/deflate.",
+    "min_confidence": 0.6
   },
 
   "PBKDF2": {
@@ -210,14 +433,43 @@
     "min_confidence": 0.6
   },
 
-  "RIPEMD160": {
-    "description": "RIPEMD-160 hash (160-bit)",
-    "category": "hash_merkle_damgard",
-    "behavior_pattern": ["xor", "or", "and", "not", "add", "rot"],
-    "constants": ["0x50A28BE6", "0x5A827999", "0x6ED9EBA1"],
-    "rounds": 80,
-    "block_size": 512,
-    "notes": "Dual-path Merkle-Damgard. 80 rounds (5 groups of 16). Used in Bitcoin address generation.",
-    "min_confidence": 0.5
+  "MurmurHash3": {
+    "description": "MurmurHash3 non-cryptographic hash",
+    "category": "hash_non_crypto",
+    "behavior_pattern": ["mul", "xor", "shr", "mul", "xor", "shr"],
+    "constants": ["0xCC9E2D51", "0x1B873593"],
+    "rounds": 1,
+    "notes": "Finalization: h ^= h >> 16; h *= 0x85EBCA6B; h ^= h >> 13; h *= 0xC2B2AE35; h ^= h >> 16. Very common in JS hash tables and fingerprinting.",
+    "min_confidence": 0.65
+  },
+
+  "FNV1a": {
+    "description": "FNV-1a non-cryptographic hash",
+    "category": "hash_non_crypto",
+    "behavior_pattern": ["xor", "mul"],
+    "constants": ["0x811C9DC5", "0x01000193"],
+    "rounds": 1,
+    "notes": "Per-byte: hash ^= byte; hash *= FNV_prime. Extremely simple. Common in JS string hashing. 32-bit: offset=0x811C9DC5, prime=0x01000193.",
+    "min_confidence": 0.65
+  },
+
+  "xxHash32": {
+    "description": "xxHash32 non-cryptographic hash",
+    "category": "hash_non_crypto",
+    "behavior_pattern": ["add", "mul", "rot", "mul"],
+    "constants": ["0x9E3779B1", "0x85EBCA77", "0xC2B2AE3D"],
+    "rounds": 1,
+    "notes": "Accumulator: acc = (acc + input * PRIME2) <<< 13 * PRIME1. Finalization uses multiply-shift-multiply. Very fast.",
+    "min_confidence": 0.6
+  },
+
+  "SipHash": {
+    "description": "SipHash-2-4 MAC (64-bit output)",
+    "category": "mac",
+    "behavior_pattern": ["add", "rot", "xor", "rot", "add", "rot", "xor", "rot"],
+    "constants": ["0x736F6D6570736575", "0x646F72616E646F6D"],
+    "rounds": 4,
+    "notes": "2 compression rounds + 4 finalization rounds. ARX structure. Constants = 'somepseudorandomlygeneratedbytes'. Used in hash table DoS protection.",
+    "min_confidence": 0.6
   }
 }
