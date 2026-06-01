@@ -10,7 +10,7 @@
       "Schneier, Applied Cryptography (Blowfish)",
       "GM/T 0002-2012 (SM4), GM/T 0004-2012 (SM3)"
     ],
-    "total_sequences": 26
+    "total_sequences": 24
   },
   "AES_SBOX": {
     "algorithm": "AES",
@@ -274,7 +274,7 @@
       187,
       22
     ],
-    "min_match": 8
+    "min_match": 12
   },
   "AES_INV_SBOX": {
     "algorithm": "AES",
@@ -538,7 +538,7 @@
       12,
       125
     ],
-    "min_match": 8
+    "min_match": 12
   },
   "SHA256_K": {
     "algorithm": "SHA-256",
@@ -1112,7 +1112,7 @@
       57,
       72
     ],
-    "min_match": 8
+    "min_match": 12
   },
   "CHACHA_SIGMA": {
     "algorithm": "ChaCha20/Salsa20",
@@ -1212,7 +1212,7 @@
       15,
       7
     ],
-    "min_match": 8
+    "min_match": 16
   },
   "DES_FP": {
     "algorithm": "DES",
@@ -1284,7 +1284,7 @@
       57,
       25
     ],
-    "min_match": 8
+    "min_match": 16
   },
   "DES_E_BIT": {
     "algorithm": "DES",
@@ -1340,7 +1340,7 @@
       32,
       1
     ],
-    "min_match": 8
+    "min_match": 16
   },
   "KECCAK_RC": {
     "algorithm": "SHA-3/Keccak",
@@ -1373,182 +1373,6 @@
       9223372039002292232
     ],
     "min_match": 4
-  },
-  "RIPEMD160_R_LEFT": {
-    "algorithm": "RIPEMD-160",
-    "description": "RIPEMD-160 left message word selection (80 entries)",
-    "element_size": 8,
-    "values": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      7,
-      4,
-      13,
-      1,
-      10,
-      6,
-      15,
-      3,
-      12,
-      0,
-      9,
-      5,
-      2,
-      14,
-      11,
-      8,
-      3,
-      10,
-      14,
-      4,
-      9,
-      15,
-      8,
-      1,
-      2,
-      7,
-      0,
-      6,
-      13,
-      11,
-      5,
-      12,
-      1,
-      9,
-      11,
-      10,
-      0,
-      8,
-      12,
-      4,
-      13,
-      3,
-      7,
-      15,
-      14,
-      5,
-      6,
-      2,
-      4,
-      0,
-      5,
-      9,
-      7,
-      12,
-      2,
-      10,
-      14,
-      1,
-      3,
-      8,
-      11,
-      6,
-      15,
-      13
-    ],
-    "min_match": 8
-  },
-  "RIPEMD160_S_LEFT": {
-    "algorithm": "RIPEMD-160",
-    "description": "RIPEMD-160 left rotation amounts (80 entries)",
-    "element_size": 8,
-    "values": [
-      11,
-      14,
-      15,
-      12,
-      5,
-      8,
-      7,
-      9,
-      11,
-      13,
-      14,
-      15,
-      6,
-      7,
-      9,
-      8,
-      7,
-      6,
-      8,
-      13,
-      11,
-      9,
-      7,
-      15,
-      7,
-      12,
-      15,
-      9,
-      11,
-      7,
-      13,
-      12,
-      11,
-      13,
-      6,
-      7,
-      14,
-      9,
-      13,
-      15,
-      14,
-      8,
-      13,
-      6,
-      5,
-      12,
-      7,
-      5,
-      11,
-      12,
-      14,
-      15,
-      14,
-      15,
-      9,
-      8,
-      9,
-      14,
-      5,
-      6,
-      8,
-      6,
-      5,
-      12,
-      9,
-      15,
-      5,
-      11,
-      6,
-      8,
-      13,
-      12,
-      5,
-      12,
-      13,
-      14,
-      11,
-      8,
-      5,
-      6
-    ],
-    "min_match": 8
   },
   "MURMUR3_CONSTANTS": {
     "algorithm": "MurmurHash3",
@@ -1913,7 +1737,7 @@
       131,
       20
     ],
-    "min_match": 8
+    "min_match": 12
   },
   "BASE64_ALPHABET": {
     "algorithm": "Base64",
@@ -1985,7 +1809,7 @@
       43,
       47
     ],
-    "min_match": 8
+    "min_match": 16
   },
   "SKIPJACK_F": {
     "algorithm": "Skipjack",
@@ -2057,6 +1881,6 @@
       106,
       162
     ],
-    "min_match": 8
+    "min_match": 12
   }
 }

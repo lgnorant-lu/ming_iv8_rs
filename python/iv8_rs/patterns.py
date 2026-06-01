@@ -344,6 +344,7 @@ class ConstantMatch:
 def detect_constants(
     trace: StructuredTrace,
     constants_db: Optional[Dict[int, Dict[str, str]]] = None,
+    min_value: int = 0x10000,
 ) -> List[ConstantMatch]:
     """Detect known cryptographic constants in trace values.
 
@@ -356,7 +357,12 @@ def detect_constants(
     Args:
         trace: StructuredTrace to analyze.
         constants_db: Custom constants dict {int_value: {name, algorithm, ...}}.
-                      If None, uses built-in database (60+ constants).
+                      If None, uses built-in database.
+        min_value: Minimum constant value to match (default 0x10000 = 65536).
+                   Values below this (single bytes, small magic numbers like
+                   Keccak RC[0]=1) collide with normal program data and cause
+                   false positives, so they are filtered out. Set to 0 to
+                   match all values (NOT recommended for noisy traces).
 
     Returns:
         List of ConstantMatch objects, sorted by PC.
@@ -411,6 +417,9 @@ def detect_constants(
 
         # Match against database
         for v in values_to_check:
+            # Filter out small values that collide with normal program data
+            if v < min_value:
+                continue
             if v in constants_db:
                 info = constants_db[v]
                 matches.append(ConstantMatch(
@@ -635,7 +644,7 @@ def detect_sequences(
                     match_length=best_run_len,
                     total_length=total_len,
                     confidence=round(conf, 3),
-                    pc_start=trace_pcs[trace_values.index(best_run_values[0])] if best_run_values else -1,
+                    pc_start=trace.entries[first_idx].pc if first_idx < len(trace.entries) else -1,
                     pc_end=trace.entries[last_idx].pc if last_idx < len(trace.entries) else -1,
                     matched_values=best_run_values[:20],  # Cap for display
                     trace_indices=best_run_trace_indices[:20],

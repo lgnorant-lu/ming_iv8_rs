@@ -4,8 +4,8 @@
     "version": "0.5.1",
     "source": "FindCrypt2, Signsrch, ghidra-findcrypt, NIST FIPS 180-4, RFC 7539, GM/T standards",
     "usage": "Search trace R/C/W value fields for these hex constants",
-    "total_constants": 235,
-    "note": "Constants are mathematically derived (not empirical): SHA-256 K = cube roots of primes, Blowfish P = pi hex expansion, XTEA delta = golden ratio * 2^32, MD5 T = floor(abs(sin(i+1)) * 2^32)"
+    "total_constants": 216,
+    "note": "Constants are mathematically derived (not empirical): SHA-256 K = cube roots of primes, Blowfish P = pi hex expansion, XTEA delta = golden ratio * 2^32, MD5 T = floor(abs(sin(i+1)) * 2^32) Single-byte and small (<0x10000) constants removed to prevent false positives; their algorithms are detected via full S-box sequences instead."
   },
   "XTEA_DELTA": {
     "value": "0x9E3779B9",
@@ -703,54 +703,6 @@
     "algorithm": "CRC32C",
     "description": "CRC-32C (Castagnoli) polynomial reversed"
   },
-  "AES_SBOX_00": {
-    "value": "0x63",
-    "int": 99,
-    "algorithm": "AES",
-    "description": "AES S-box[0] = 0x63"
-  },
-  "AES_SBOX_01": {
-    "value": "0x7C",
-    "int": 124,
-    "algorithm": "AES",
-    "description": "AES S-box[1] = 0x7C"
-  },
-  "AES_SBOX_02": {
-    "value": "0x77",
-    "int": 119,
-    "algorithm": "AES",
-    "description": "AES S-box[2] = 0x77"
-  },
-  "AES_SBOX_03": {
-    "value": "0x7B",
-    "int": 123,
-    "algorithm": "AES",
-    "description": "AES S-box[3] = 0x7B"
-  },
-  "AES_SBOX_04": {
-    "value": "0xF2",
-    "int": 242,
-    "algorithm": "AES",
-    "description": "AES S-box[4] = 0xF2"
-  },
-  "AES_SBOX_05": {
-    "value": "0x6B",
-    "int": 107,
-    "algorithm": "AES",
-    "description": "AES S-box[5] = 0x6B"
-  },
-  "AES_SBOX_06": {
-    "value": "0x6F",
-    "int": 111,
-    "algorithm": "AES",
-    "description": "AES S-box[6] = 0x6F"
-  },
-  "AES_SBOX_07": {
-    "value": "0xC5",
-    "int": 197,
-    "algorithm": "AES",
-    "description": "AES S-box[7] = 0xC5"
-  },
   "AES_RCON_1": {
     "value": "0x01000000",
     "int": 16777216,
@@ -907,18 +859,6 @@
     "algorithm": "HMAC",
     "description": "HMAC outer padding (0x5C repeated)"
   },
-  "HMAC_IPAD_BYTE": {
-    "value": "0x36",
-    "int": 54,
-    "algorithm": "HMAC",
-    "description": "HMAC ipad single byte"
-  },
-  "HMAC_OPAD_BYTE": {
-    "value": "0x5C",
-    "int": 92,
-    "algorithm": "HMAC",
-    "description": "HMAC opad single byte"
-  },
   "SM3_IV_0": {
     "value": "0x7380166F",
     "int": 1937774191,
@@ -978,12 +918,6 @@
     "int": 2055708042,
     "algorithm": "SM3",
     "description": "SM3 constant Tj (rounds 16-63)"
-  },
-  "SM4_SBOX_0": {
-    "value": "0xD6",
-    "int": 214,
-    "algorithm": "SM4",
-    "description": "SM4 S-box first byte"
   },
   "SM4_FK_0": {
     "value": "0xA3B1BAC6",
@@ -1219,36 +1153,6 @@
     "algorithm": "SipHash",
     "description": "SipHash c3 ('tedbytes' ASCII)"
   },
-  "ZLIB_DEFLATE": {
-    "value": "0x78",
-    "int": 120,
-    "algorithm": "zlib",
-    "description": "zlib deflate magic byte (CMF, deflate + 32K window)"
-  },
-  "ZLIB_DEFLATE_BEST": {
-    "value": "0x789C",
-    "int": 30876,
-    "algorithm": "zlib",
-    "description": "zlib default compression header"
-  },
-  "GZIP_MAGIC": {
-    "value": "0x1F8B",
-    "int": 8075,
-    "algorithm": "gzip",
-    "description": "gzip file magic number"
-  },
-  "DES_IP_FIRST": {
-    "value": "0x3A",
-    "int": 58,
-    "algorithm": "DES",
-    "description": "DES initial permutation first entry (bit 58)"
-  },
-  "DES_IP_LAST": {
-    "value": "0x19",
-    "int": 25,
-    "algorithm": "DES",
-    "description": "DES initial permutation last entry (bit 25)"
-  },
   "CAMELLIA_SIGMA1": {
     "value": "0xA09E667F",
     "int": 2694735487,
@@ -1267,18 +1171,6 @@
     "algorithm": "SEED",
     "description": "SEED key schedule constant (golden ratio)"
   },
-  "KECCAK_RC_0": {
-    "value": "0x0000000000000001",
-    "int": 1,
-    "algorithm": "SHA-3/Keccak",
-    "description": "Keccak round constant RC[0]"
-  },
-  "KECCAK_RC_1": {
-    "value": "0x0000000000008082",
-    "int": 32898,
-    "algorithm": "SHA-3/Keccak",
-    "description": "Keccak round constant RC[1]"
-  },
   "KECCAK_RC_2": {
     "value": "0x800000000000808A",
     "int": 9223372036854808714,
@@ -1290,12 +1182,6 @@
     "int": 9223372039002292224,
     "algorithm": "SHA-3/Keccak",
     "description": "Keccak round constant RC[3]"
-  },
-  "KECCAK_RC_4": {
-    "value": "0x000000000000808B",
-    "int": 32907,
-    "algorithm": "SHA-3/Keccak",
-    "description": "Keccak round constant RC[4]"
   },
   "SHA384_INIT_H0": {
     "value": "0xCBBB9D5DC1059ED8",

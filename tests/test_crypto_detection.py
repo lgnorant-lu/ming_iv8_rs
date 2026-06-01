@@ -193,8 +193,10 @@ class TestConstantDetection:
         assert any("RC5" in m.algorithm or "RC6" in m.algorithm for m in matches)
 
     def test_adler32_mod(self):
+        # Adler-32 modulus 0xFFF1=65521 is below the min_value filter (0x10000)
+        # because it collides with normal data. Must explicitly lower min_value.
         trace = make_constant_trace(65521)
-        matches = detect_constants(trace)
+        matches = detect_constants(trace, min_value=0)
         assert any("Adler" in m.algorithm for m in matches)
 
     def test_ripemd160_k_right0(self):
@@ -326,19 +328,19 @@ class TestSequenceDetection:
         assert any("MD5" in m.algorithm for m in matches)
 
     def test_aes_sbox_sequence(self):
-        """AES S-box: 8 consecutive values."""
+        """AES S-box: 12 consecutive values (new min_match for byte tables)."""
         seq_db = _load_sequences_db()
-        sbox_vals = seq_db["AES_SBOX"]["values"][:8]
+        sbox_vals = seq_db["AES_SBOX"]["values"][:12]
         trace = make_trace(make_sequence_trace(sbox_vals))
-        matches = detect_sequences(trace, min_match_length=8)
+        matches = detect_sequences(trace, min_match_length=12)
         assert any("AES" in m.algorithm for m in matches)
 
     def test_aes_sbox_middle(self):
-        """AES S-box: 8 values from middle of table."""
+        """AES S-box: 12 values from middle of table."""
         seq_db = _load_sequences_db()
-        sbox_vals = seq_db["AES_SBOX"]["values"][100:108]
+        sbox_vals = seq_db["AES_SBOX"]["values"][100:112]
         trace = make_trace(make_sequence_trace(sbox_vals))
-        matches = detect_sequences(trace, min_match_length=8)
+        matches = detect_sequences(trace, min_match_length=12)
         assert any("AES" in m.algorithm for m in matches)
 
     def test_blowfish_p_sequence(self):
@@ -358,19 +360,19 @@ class TestSequenceDetection:
         assert any("CRC32" in m.algorithm for m in matches)
 
     def test_des_ip_sequence(self):
-        """DES IP table: 8 consecutive values."""
+        """DES IP table: 16 consecutive values (new min_match for permutation tables)."""
         seq_db = _load_sequences_db()
-        ip_vals = seq_db["DES_IP"]["values"][:8]
+        ip_vals = seq_db["DES_IP"]["values"][:16]
         trace = make_trace(make_sequence_trace(ip_vals))
-        matches = detect_sequences(trace, min_match_length=8)
+        matches = detect_sequences(trace, min_match_length=16)
         assert any("DES" in m.algorithm for m in matches)
 
     def test_sm4_sbox_sequence(self):
-        """SM4 S-box: 8 consecutive values."""
+        """SM4 S-box: 12 consecutive values."""
         seq_db = _load_sequences_db()
-        sbox_vals = seq_db["SM4_SBOX"]["values"][:8]
+        sbox_vals = seq_db["SM4_SBOX"]["values"][:12]
         trace = make_trace(make_sequence_trace(sbox_vals))
-        matches = detect_sequences(trace, min_match_length=8)
+        matches = detect_sequences(trace, min_match_length=12)
         assert any("SM4" in m.algorithm for m in matches)
 
     def test_sm3_iv_sequence(self):
@@ -397,12 +399,11 @@ class TestSequenceDetection:
         matches = detect_sequences(trace, min_match_length=3)
         assert any("ChaCha" in m.algorithm or "Salsa" in m.algorithm for m in matches)
 
-    def test_ripemd160_r_left_sequence(self):
-        """RIPEMD-160 R_LEFT: 8 consecutive values."""
-        seq_db = _load_sequences_db()
-        r_vals = seq_db["RIPEMD160_R_LEFT"]["values"][16:24]
-        trace = make_trace(make_sequence_trace(r_vals))
-        matches = detect_sequences(trace, min_match_length=8)
+    def test_ripemd160_constant_detection(self):
+        """RIPEMD-160 is detected via its large K constants, not rotation tables.
+        (Rotation/word-selection sequences were removed as false-positive-prone.)"""
+        trace = make_constant_trace(0x50A28BE6)  # RIPEMD-160 right K0
+        matches = detect_constants(trace)
         assert any("RIPEMD" in m.algorithm for m in matches)
 
     def test_sm4_ck_sequence(self):
@@ -422,27 +423,27 @@ class TestSequenceDetection:
         assert any("SHA-512" in m.algorithm for m in matches)
 
     def test_md2_sbox_sequence(self):
-        """MD2 S-box: 8 consecutive values."""
+        """MD2 S-box: 12 consecutive values (byte table min_match)."""
         seq_db = _load_sequences_db()
-        sbox_vals = seq_db["MD2_SBOX"]["values"][:8]
+        sbox_vals = seq_db["MD2_SBOX"]["values"][:12]
         trace = make_trace(make_sequence_trace(sbox_vals))
-        matches = detect_sequences(trace, min_match_length=8)
+        matches = detect_sequences(trace, min_match_length=12)
         assert any("MD2" in m.algorithm for m in matches)
 
     def test_base64_alphabet_sequence(self):
-        """Base64 alphabet: 8 consecutive ASCII codes."""
+        """Base64 alphabet: 16 consecutive ASCII codes (min_match for ASCII tables)."""
         seq_db = _load_sequences_db()
-        b64_vals = seq_db["BASE64_ALPHABET"]["values"][:8]
+        b64_vals = seq_db["BASE64_ALPHABET"]["values"][:16]
         trace = make_trace(make_sequence_trace(b64_vals))
-        matches = detect_sequences(trace, min_match_length=8)
+        matches = detect_sequences(trace, min_match_length=16)
         assert any("Base64" in m.algorithm for m in matches)
 
     def test_skipjack_f_sequence(self):
-        """Skipjack F-table: 8 consecutive values."""
+        """Skipjack F-table: 12 consecutive values."""
         seq_db = _load_sequences_db()
-        f_vals = seq_db["SKIPJACK_F"]["values"][:8]
+        f_vals = seq_db["SKIPJACK_F"]["values"][:12]
         trace = make_trace(make_sequence_trace(f_vals))
-        matches = detect_sequences(trace, min_match_length=8)
+        matches = detect_sequences(trace, min_match_length=12)
         assert any("Skipjack" in m.algorithm for m in matches)
 
 
@@ -474,9 +475,9 @@ class TestDetectAll:
         assert_algorithm_detected(detections, "MD5")
 
     def test_aes_combined(self):
-        """AES: S-box sequence → detection."""
+        """AES: S-box sequence (12 values) → detection."""
         seq_db = _load_sequences_db()
-        sbox_vals = seq_db["AES_SBOX"]["values"][:10]
+        sbox_vals = seq_db["AES_SBOX"]["values"][:14]
         trace = make_trace(make_sequence_trace(sbox_vals))
         detections = detect_all(trace, min_confidence=0.3)
         assert_algorithm_detected(detections, "AES")
@@ -748,7 +749,12 @@ class TestFullCoverage:
         assert count == 51, f"Expected exactly 51 patterns, got {count}"
 
     def test_all_detectable_algorithms_actually_detect(self):
-        """For every algorithm with constants, verify detection works end-to-end."""
+        """For every algorithm with constants, verify detection works end-to-end.
+
+        Uses min_value=0 to test ALL constants including small ones (like
+        Adler-32 mod 0xFFF1) which are filtered by default to prevent false
+        positives but ARE valid signatures when explicitly searched for.
+        """
         const_db = _load_constants_db()
         # Group constants by algorithm, pick one representative int per algorithm
         algo_to_int = {}
@@ -761,9 +767,88 @@ class TestFullCoverage:
         failures = []
         for algo, int_val in algo_to_int.items():
             trace = make_constant_trace(int_val)
-            matches = detect_constants(trace)
+            matches = detect_constants(trace, min_value=0)
             detected = any(algo in m.algorithm for m in matches)
             if not detected:
                 failures.append(f"{algo} (const {hex(int_val)})")
 
         assert not failures, f"These algorithms have constants but detection failed: {failures}"
+
+    def test_default_min_value_filters_small_constants(self):
+        """Regression guard: default detect_constants must NOT match small values."""
+        # Single byte / small magic values must be filtered by default
+        for small_val in [1, 0x36, 0x63, 65521, 0x1F8B]:
+            trace = make_constant_trace(small_val)
+            matches = detect_constants(trace)  # default min_value=0x10000
+            assert not matches, (
+                f"Small value {hex(small_val)} should be filtered by default "
+                f"but matched: {[m.name for m in matches]}"
+            )
+
+
+# ============================================================
+# False Positive Regression Guards
+# ============================================================
+
+class TestFalsePositives:
+    """Ensure unrelated/random traces do NOT trigger crypto detection.
+
+    These are regression guards for the false-positive audit that found
+    a VM dispatch loop was hallucinating 1250 RIPEMD-160 matches and
+    SHA-3 constants. Must stay at zero.
+    """
+
+    def _random_trace(self, kind):
+        import random
+        rng = random.Random(99)
+        entries = []
+        if kind == "dispatch_loop":
+            for i in range(5000):
+                entries.append(("D", 1000 + (i % 50), str(i % 66), str(i % 8)))
+        elif kind == "random_bytes":
+            for i in range(3000):
+                entries.append(("R", 2000 + i, "byte", str(rng.randint(0, 255))))
+        elif kind == "small_indices":
+            for i in range(2000):
+                entries.append(("R", 3000 + i, "idx", str(i % 16)))
+        elif kind == "permutation_1_64":
+            for _ in range(30):
+                perm = list(range(1, 65))
+                rng.shuffle(perm)
+                for i, v in enumerate(perm):
+                    entries.append(("R", 4000 + i, "perm", str(v)))
+        elif kind == "realistic":
+            vals = [1920, 1080, 24, 8, 1, 0, 60, 100, 404, 1234567890, 16, 32, 64, 255, 256, 65535]
+            for i in range(2000):
+                entries.append(("R", 5000 + (i % 100), "prop", str(rng.choice(vals))))
+        return make_trace(entries)
+
+    def test_dispatch_loop_no_false_positive(self):
+        trace = self._random_trace("dispatch_loop")
+        assert len(detect_sequences(trace)) == 0, "VM dispatch loop triggered sequence match!"
+        assert len(detect_constants(trace)) == 0, "VM dispatch loop triggered constant match!"
+        assert len(detect_all(trace, min_confidence=0.5)) == 0
+
+    def test_random_bytes_no_false_positive(self):
+        trace = self._random_trace("random_bytes")
+        assert len(detect_sequences(trace)) == 0
+        assert len(detect_all(trace, min_confidence=0.5)) == 0
+
+    def test_small_indices_no_false_positive(self):
+        trace = self._random_trace("small_indices")
+        assert len(detect_sequences(trace)) == 0, "Loop indices 0-15 triggered sequence match!"
+
+    def test_permutation_no_false_positive(self):
+        trace = self._random_trace("permutation_1_64")
+        assert len(detect_sequences(trace)) == 0, "Permutation 1-64 triggered DES match!"
+
+    def test_realistic_no_false_positive(self):
+        trace = self._random_trace("realistic")
+        dets = detect_all(trace, min_confidence=0.5)
+        assert len(dets) == 0, f"Realistic non-crypto trace triggered: {[d.algorithm for d in dets]}"
+
+    def test_empty_trace_no_detection(self):
+        empty = make_trace([])
+        assert len(detect_sequences(empty)) == 0
+        assert len(detect_constants(empty)) == 0
+        assert len(detect_all(empty)) == 0
