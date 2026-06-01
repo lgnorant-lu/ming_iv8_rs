@@ -4,7 +4,7 @@
     "version": "0.5.1",
     "source": "FindCrypt2, Signsrch, ghidra-findcrypt, NIST FIPS 180-4, RFC 7539, GM/T standards",
     "usage": "Search trace R/C/W value fields for these hex constants",
-    "total_constants": 225,
+    "total_constants": 235,
     "note": "Constants are mathematically derived (not empirical): SHA-256 K = cube roots of primes, Blowfish P = pi hex expansion, XTEA delta = golden ratio * 2^32, MD5 T = floor(abs(sin(i+1)) * 2^32)"
   },
   "XTEA_DELTA": {
@@ -1356,5 +1356,65 @@
     "int": 953160567,
     "algorithm": "HAVAL",
     "description": "HAVAL pass 3 constant (same as Blowfish P9)"
+  },
+  "SHA512_INIT_H0": {
+    "value": "0x6A09E667F3BCC908",
+    "int": 7640891576956012808,
+    "algorithm": "SHA-512",
+    "description": "SHA-512 initial H0 = frac(sqrt(2)) * 2^64"
+  },
+  "SHA512_INIT_H1": {
+    "value": "0xBB67AE8584CAA73B",
+    "int": 13503953896175478587,
+    "algorithm": "SHA-512",
+    "description": "SHA-512 initial H1 = frac(sqrt(3)) * 2^64"
+  },
+  "SHA512_INIT_H2": {
+    "value": "0x3C6EF372FE94F82B",
+    "int": 4354685564936845355,
+    "algorithm": "SHA-512",
+    "description": "SHA-512 initial H2 = frac(sqrt(5)) * 2^64"
+  },
+  "SHA512_INIT_H3": {
+    "value": "0xA54FF53A5F1D36F1",
+    "int": 11912009170470909681,
+    "algorithm": "SHA-512",
+    "description": "SHA-512 initial H3 = frac(sqrt(7)) * 2^64"
+  },
+  "SHA512_INIT_H7": {
+    "value": "0x5BE0CD19137E2179",
+    "int": 6620516959819538809,
+    "algorithm": "SHA-512",
+    "description": "SHA-512 initial H7 = frac(sqrt(19)) * 2^64"
+  },
+  "SHA512_K0": {
+    "value": "0x428A2F98D728AE22",
+    "int": 4794697086780616226,
+    "algorithm": "SHA-512",
+    "description": "SHA-512 K[0] = frac(cbrt(2)) * 2^64"
+  },
+  "SHA512_K1": {
+    "value": "0x7137449123EF65CD",
+    "int": 8158064640168781261,
+    "algorithm": "SHA-512",
+    "description": "SHA-512 K[1] = frac(cbrt(3)) * 2^64"
+  },
+  "SHA512_K2": {
+    "value": "0xB5C0FBCFEC4D3B2F",
+    "int": 13096744586834688815,
+    "algorithm": "SHA-512",
+    "description": "SHA-512 K[2]"
+  },
+  "SHA384_INIT_H2": {
+    "value": "0x9159015A3070DD17",
+    "int": 10473403895298186519,
+    "algorithm": "SHA-384",
+    "description": "SHA-384 initial H2"
+  },
+  "SHA384_INIT_H7": {
+    "value": "0x47B5481DBEFA4FA4",
+    "int": 5167115440072839076,
+    "algorithm": "SHA-384",
+    "description": "SHA-384 initial H7"
   }
 }

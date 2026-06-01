@@ -227,6 +227,70 @@ class TestConstantDetection:
         matches = detect_constants(trace)
         assert any("MARS" in m.algorithm for m in matches)
 
+    # --- Additional L1 coverage (algorithms previously untested) ---
+
+    def test_xxtea_delta(self):
+        trace = make_constant_trace(0x9E3779B9)
+        matches = detect_constants(trace)
+        assert any("XXTEA" in m.algorithm for m in matches)
+
+    def test_md4_constant(self):
+        trace = make_constant_trace(0x5A827999)
+        matches = detect_constants(trace)
+        # MD4 shares K1 with SHA-1
+        assert any("MD4" in m.algorithm or "SHA-1" in m.algorithm for m in matches)
+
+    def test_sha384_iv(self):
+        trace = make_constant_trace(0xCBBB9D5DC1059ED8)
+        matches = detect_constants(trace)
+        assert any("SHA-384" in m.algorithm for m in matches)
+
+    def test_sha512_iv(self):
+        trace = make_constant_trace(0x6A09E667F3BCC908)
+        matches = detect_constants(trace)
+        assert any("SHA-512" in m.algorithm or "BLAKE2b" in m.algorithm for m in matches)
+
+    def test_sha512_k0(self):
+        trace = make_constant_trace(0x428A2F98D728AE22)
+        matches = detect_constants(trace)
+        assert any("SHA-512" in m.algorithm for m in matches)
+
+    def test_blake2b_iv(self):
+        trace = make_constant_trace(0x6A09E667F3BCC908)
+        matches = detect_constants(trace)
+        assert any("BLAKE2b" in m.algorithm or "SHA-512" in m.algorithm for m in matches)
+
+    def test_blake2s_iv(self):
+        trace = make_constant_trace(0x6A09E667)
+        matches = detect_constants(trace)
+        assert any("BLAKE" in m.algorithm or "SHA-256" in m.algorithm for m in matches)
+
+    def test_tiger_init(self):
+        trace = make_constant_trace(0x0123456789ABCDEF)
+        matches = detect_constants(trace)
+        assert any("Tiger" in m.algorithm for m in matches)
+
+    def test_whirlpool_c0(self):
+        trace = make_constant_trace(0x18186018C07830D8)
+        matches = detect_constants(trace)
+        assert any("Whirlpool" in m.algorithm for m in matches)
+
+    def test_siphash_c0(self):
+        trace = make_constant_trace(0x736F6D6570736575)
+        matches = detect_constants(trace)
+        assert any("SipHash" in m.algorithm for m in matches)
+
+    def test_poly1305_clamp(self):
+        trace = make_constant_trace(0x0FFFFFFC0FFFFFFC)
+        matches = detect_constants(trace)
+        assert any("Poly1305" in m.algorithm for m in matches)
+
+    def test_haval_constant(self):
+        trace = make_constant_trace(0x452821E6)
+        matches = detect_constants(trace)
+        # HAVAL shares constant with Blowfish (pi-derived)
+        assert any("HAVAL" in m.algorithm or "Blowfish" in m.algorithm for m in matches)
+
 
 # ============================================================
 # Layer 2: Sequence Detection Tests
@@ -348,6 +412,38 @@ class TestSequenceDetection:
         trace = make_trace(make_sequence_trace(ck_vals))
         matches = detect_sequences(trace, min_match_length=4)
         assert any("SM4" in m.algorithm for m in matches)
+
+    def test_sha512_k_sequence(self):
+        """SHA-512 K table: consecutive 64-bit values."""
+        seq_db = _load_sequences_db()
+        k_vals = seq_db["SHA512_K"]["values"][:4]
+        trace = make_trace(make_sequence_trace(k_vals))
+        matches = detect_sequences(trace, min_match_length=3)
+        assert any("SHA-512" in m.algorithm for m in matches)
+
+    def test_md2_sbox_sequence(self):
+        """MD2 S-box: 8 consecutive values."""
+        seq_db = _load_sequences_db()
+        sbox_vals = seq_db["MD2_SBOX"]["values"][:8]
+        trace = make_trace(make_sequence_trace(sbox_vals))
+        matches = detect_sequences(trace, min_match_length=8)
+        assert any("MD2" in m.algorithm for m in matches)
+
+    def test_base64_alphabet_sequence(self):
+        """Base64 alphabet: 8 consecutive ASCII codes."""
+        seq_db = _load_sequences_db()
+        b64_vals = seq_db["BASE64_ALPHABET"]["values"][:8]
+        trace = make_trace(make_sequence_trace(b64_vals))
+        matches = detect_sequences(trace, min_match_length=8)
+        assert any("Base64" in m.algorithm for m in matches)
+
+    def test_skipjack_f_sequence(self):
+        """Skipjack F-table: 8 consecutive values."""
+        seq_db = _load_sequences_db()
+        f_vals = seq_db["SKIPJACK_F"]["values"][:8]
+        trace = make_trace(make_sequence_trace(f_vals))
+        matches = detect_sequences(trace, min_match_length=8)
+        assert any("Skipjack" in m.algorithm for m in matches)
 
 
 # ============================================================
@@ -573,3 +669,101 @@ class TestDatabaseCoverage:
         db = _load_constants_db()
         for int_val, info in db.items():
             assert info["algorithm"], f"Constant {info['name']} has empty algorithm field"
+
+
+# ============================================================
+# 100% Coverage Verification
+# ============================================================
+
+# Map pattern key -> canonical algorithm name (as used in constants/sequences)
+PATTERN_TO_ALGO = {
+    "XTEA": "XTEA", "TEA": "TEA", "XXTEA": "XXTEA",
+    "MD2": "MD2", "MD4": "MD4", "MD5": "MD5",
+    "SHA1": "SHA-1", "SHA256": "SHA-256", "SHA384": "SHA-384", "SHA512": "SHA-512",
+    "SHA3_Keccak": "SHA-3", "BLAKE2b": "BLAKE2b", "BLAKE2s": "BLAKE2s", "BLAKE3": "BLAKE3",
+    "HMAC": "HMAC", "AES": "AES", "RC4": "RC4", "RC5": "RC5", "RC6": "RC6",
+    "ChaCha20": "ChaCha20", "Salsa20": "Salsa20", "DES": "DES", "Blowfish": "Blowfish",
+    "Twofish": "Twofish", "Serpent": "Serpent", "Camellia": "Camellia", "SEED": "SEED",
+    "CAST128": "CAST-128", "GOST_28147": "GOST", "Tiger": "Tiger", "Whirlpool": "Whirlpool",
+    "RIPEMD160": "RIPEMD-160", "CRC32": "CRC32", "Adler32": "Adler-32", "PBKDF2": "PBKDF2",
+    "Base64": "Base64", "XOR_Cipher": "XOR", "SM3": "SM3", "SM4": "SM4",
+    "MurmurHash3": "MurmurHash3", "FNV1a": "FNV-1a", "xxHash32": "xxHash", "SipHash": "SipHash",
+    "IDEA": "IDEA", "Poly1305": "Poly1305", "HKDF": "HKDF", "HAVAL": "HAVAL",
+    "SAFER": "SAFER", "Skipjack": "Skipjack", "WAKE": "WAKE", "MARS": "MARS",
+}
+
+# Algorithms that are LEGITIMATELY constant-free (key-dependent tables or
+# constructions over other primitives). These can ONLY be detected via Layer 3
+# (behavior_pattern), not constants/sequences. Documented limitation.
+LAYER3_ONLY = {"RC4", "IDEA", "XOR_Cipher", "WAKE", "PBKDF2", "HKDF", "GOST_28147", "SAFER"}
+
+
+class TestFullCoverage:
+    """Verify 100% of patterns are accounted for: either detectable or documented L3-only."""
+
+    def test_every_pattern_has_signature_or_is_layer3(self):
+        """Every algorithm must have constants/sequences OR be a documented L3-only algorithm."""
+        patterns = _load_builtin_patterns()
+        const_db = _load_constants_db()
+        seq_db = _load_sequences_db()
+
+        # Build sets of algorithms with constants/sequences
+        const_algos = set()
+        for info in const_db.values():
+            for a in info["algorithm"].split("/"):
+                const_algos.add(a.strip())
+        seq_algos = set()
+        for s in seq_db.values():
+            for a in s.get("algorithm", "").split("/"):
+                seq_algos.add(a.strip())
+
+        uncovered = []
+        for pname in patterns:
+            if pname.startswith("_"):
+                continue
+            algo = PATTERN_TO_ALGO.get(pname, pname)
+            has_const = any(algo in ca or ca in algo for ca in const_algos if ca)
+            has_seq = any(algo in sa or sa in algo for sa in seq_algos if sa)
+            if not has_const and not has_seq and pname not in LAYER3_ONLY:
+                uncovered.append(pname)
+
+        assert not uncovered, (
+            f"These patterns have NO detection signature and are NOT documented "
+            f"as Layer-3-only: {uncovered}. Either add constants/sequences or "
+            f"add them to LAYER3_ONLY set."
+        )
+
+    def test_layer3_only_have_behavior_patterns(self):
+        """All Layer-3-only algorithms must have a behavior_pattern defined."""
+        patterns = _load_builtin_patterns()
+        for pname in LAYER3_ONLY:
+            assert pname in patterns, f"{pname} in LAYER3_ONLY but not in patterns DB"
+            bp = patterns[pname].get("behavior_pattern", [])
+            assert bp, f"{pname} is Layer-3-only but has no behavior_pattern"
+            assert len(bp) >= 2, f"{pname} behavior_pattern too short: {bp}"
+
+    def test_pattern_count_is_51(self):
+        patterns = _load_builtin_patterns()
+        count = len([k for k in patterns if not k.startswith("_")])
+        assert count == 51, f"Expected exactly 51 patterns, got {count}"
+
+    def test_all_detectable_algorithms_actually_detect(self):
+        """For every algorithm with constants, verify detection works end-to-end."""
+        const_db = _load_constants_db()
+        # Group constants by algorithm, pick one representative int per algorithm
+        algo_to_int = {}
+        for int_val, info in const_db.items():
+            for a in info["algorithm"].split("/"):
+                a = a.strip()
+                if a and a not in algo_to_int:
+                    algo_to_int[a] = int_val
+
+        failures = []
+        for algo, int_val in algo_to_int.items():
+            trace = make_constant_trace(int_val)
+            matches = detect_constants(trace)
+            detected = any(algo in m.algorithm for m in matches)
+            if not detected:
+                failures.append(f"{algo} (const {hex(int_val)})")
+
+        assert not failures, f"These algorithms have constants but detection failed: {failures}"
