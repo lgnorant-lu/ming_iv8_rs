@@ -4,7 +4,7 @@
     "version": "0.5.1",
     "source": "FindCrypt2, Signsrch, ghidra-findcrypt, NIST FIPS 180-4, RFC 7539, GM/T standards",
     "usage": "Search trace R/C/W value fields for these hex constants",
-    "total_constants": 168,
+    "total_constants": 225,
     "note": "Constants are mathematically derived (not empirical): SHA-256 K = cube roots of primes, Blowfish P = pi hex expansion, XTEA delta = golden ratio * 2^32, MD5 T = floor(abs(sin(i+1)) * 2^32)"
   },
   "XTEA_DELTA": {

@@ -11,7 +11,7 @@
       "RFC 7539 (ChaCha20-Poly1305), RFC 8439",
       "GM/T 0002-2012 (SM4), GM/T 0004-2012 (SM3)"
     ],
-    "total_patterns": 47
+    "total_patterns": 51
   },
 
   "XTEA": {
