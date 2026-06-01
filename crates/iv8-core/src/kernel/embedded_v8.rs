@@ -1048,6 +1048,27 @@ impl EmbeddedV8Kernel {
         cdp.as_ref().and_then(|c| c.get_call_frames().cloned())
     }
 
+    /// Get properties of a remote object (scope variable enumeration).
+    pub fn cdp_get_properties(
+        &mut self,
+        object_id: &str,
+        own_properties: bool,
+    ) -> Result<serde_json::Value, String> {
+        unsafe { self.isolate.enter(); }
+        let result = {
+            let state = RuntimeState::get(&self.isolate);
+            let session_guard = state.inspector_session.borrow();
+            let session = session_guard.as_ref()
+                .and_then(|s| s.session_ref())
+                .ok_or_else(|| "Inspector not started.".to_string())?;
+            let mut cdp = state.cdp_client.borrow_mut();
+            let cdp = cdp.as_mut().ok_or("CDP client not initialized.")?;
+            cdp.get_properties(session, object_id, own_properties)
+        };
+        unsafe { self.isolate.exit(); }
+        result
+    }
+
     /// Process CDP events (check for paused/resumed).
     pub fn cdp_process_events(&mut self) -> bool {
         let state = RuntimeState::get(&self.isolate);

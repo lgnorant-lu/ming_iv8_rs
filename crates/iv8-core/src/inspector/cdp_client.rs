@@ -248,4 +248,24 @@ impl CdpClient {
     pub fn get_call_frames(&self) -> Option<&serde_json::Value> {
         self.last_paused_frames.as_ref()
     }
+
+    /// Get properties of a remote object (e.g. scope object).
+    /// Uses Runtime.getProperties CDP method.
+    pub fn get_properties(
+        &mut self,
+        session: &v8::inspector::V8InspectorSession,
+        object_id: &str,
+        own_properties: bool,
+    ) -> Result<serde_json::Value, String> {
+        let params = serde_json::json!({
+            "objectId": object_id,
+            "ownProperties": own_properties,
+            "generatePreview": false,
+        });
+        let response = self.send_and_wait(session, "Runtime.getProperties", params)?;
+        Ok(response
+            .get("result")
+            .cloned()
+            .unwrap_or(serde_json::Value::Null))
+    }
 }

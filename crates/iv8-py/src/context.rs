@@ -534,6 +534,28 @@ impl JSContext {
         }
     }
 
+    /// Get properties of a scope object (enumerate closure/local variables).
+    ///
+    /// Use while paused at a breakpoint. Get the objectId from call frames'
+    /// scopeChain[i].object.objectId.
+    ///
+    /// Args:
+    ///     object_id: The remote object ID (from scope chain)
+    ///     own_properties: If True, only own properties (default True)
+    ///
+    /// Returns:
+    ///     dict with 'result' (list of property descriptors) from Runtime.getProperties
+    #[pyo3(signature = (object_id, own_properties=true))]
+    fn cdp_get_scope_properties(&self, object_id: &str, own_properties: bool) -> PyResult<PyObject> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let result = kernel.cdp_get_properties(object_id, own_properties)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))?;
+        Python::with_gil(|py| {
+            json_value_to_py(py, &result)
+        })
+    }
+
     /// Process CDP events (check if execution paused at breakpoint).
     /// Returns True if a Debugger.paused event was received.
     fn cdp_process_events(&self) -> PyResult<bool> {
