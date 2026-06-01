@@ -10,6 +10,7 @@ from iv8_rs._iv8 import instrument_source, trace_diff
 from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, JSPanic
 from iv8_rs.analysis import diff_analysis
 from iv8_rs.trace import parse_trace, StructuredTrace
+from iv8_rs.probe import probe_environment
 
 # --- Profile System ---
 
@@ -106,6 +107,7 @@ __all__ = [
     "diff_analysis",
     "parse_trace",
     "StructuredTrace",
+    "probe_environment",
     "load_profile",
     "JSError",
     "JSCompileError",
