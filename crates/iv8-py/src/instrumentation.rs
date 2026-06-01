@@ -210,9 +210,12 @@ fn detect_stack_var(source: &str, near_offset: usize) -> String {
 fn generate_head_code(capture_env: bool, env_targets_json: &str, limit: u32) -> String {
     let mut code = String::new();
 
-    // Always create the unified log array
+    // Always create the unified log array (non-enumerable to avoid detection by Object.keys)
     code.push_str(&format!(
-        ";(function(){{globalThis.__iv8i_log__=[];globalThis.__iv8i_lim__={limit};globalThis.__iv8i_pc__=-1;}})();\n",
+        ";(function(){{var g=globalThis;\
+         Object.defineProperty(g,'__iv8i_log__',{{value:[],writable:true,enumerable:false,configurable:true}});\
+         Object.defineProperty(g,'__iv8i_lim__',{{value:{limit},writable:true,enumerable:false,configurable:true}});\
+         Object.defineProperty(g,'__iv8i_pc__',{{value:-1,writable:true,enumerable:false,configurable:true}});}})();\n",
         limit = limit
     ));
 
