@@ -11,6 +11,7 @@ from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, 
 from iv8_rs.analysis import diff_analysis
 from iv8_rs.trace import parse_trace, StructuredTrace, parse_trace_stream, compress_trace, CompressedTrace
 from iv8_rs.probe import probe_environment
+from iv8_rs.cfg import CFG
 
 # --- Profile System ---
 
@@ -110,6 +111,7 @@ __all__ = [
     "compress_trace",
     "StructuredTrace",
     "CompressedTrace",
+    "CFG",
     "probe_environment",
     "load_profile",
     "JSError",
