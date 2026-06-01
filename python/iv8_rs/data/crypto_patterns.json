@@ -1,0 +1,26 @@
+{
+  "XTEA": {
+    "description": "XTEA block cipher (shift-xor-add pattern)",
+    "opcode_sequence": [4, 7, 1, 5, 7, 1],
+    "opcode_names": ["SHL", "XOR", "ADD", "SHR", "XOR", "ADD"],
+    "notes": "XTEA round: (v0 << 4 ^ v0 >> 5) + v0 ^ sum + key[sum & 3]",
+    "min_window": 6,
+    "min_confidence": 0.7
+  },
+  "MD5_ROUND": {
+    "description": "MD5 hash round (rotate-add pattern)",
+    "opcode_sequence": [4, 1, 7, 2, 1],
+    "opcode_names": ["SHL", "ADD", "XOR", "OR", "ADD"],
+    "notes": "MD5 F/G/H/I round: rotate_left + add + bitwise",
+    "min_window": 5,
+    "min_confidence": 0.6
+  },
+  "RC4_SWAP": {
+    "description": "RC4 key scheduling (swap pattern)",
+    "opcode_sequence": [11, 11, 12, 12],
+    "opcode_names": ["LOAD", "LOAD", "STORE", "STORE"],
+    "notes": "RC4 KSA: swap(S[i], S[j])",
+    "min_window": 4,
+    "min_confidence": 0.5
+  }
+}
