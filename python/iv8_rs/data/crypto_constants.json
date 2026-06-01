@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "description": "Cryptographic magic constants for detection in trace values",
+    "version": "0.5.0",
+    "source": "FindCrypt2, Signsrch, ghidra-findcrypt, NIST standards",
+    "usage": "Search trace R/C/W value fields for these hex constants"
+  },
+
+  "XTEA_DELTA": {"value": "0x9E3779B9", "int": 2654435769, "algorithm": "XTEA/TEA", "description": "Golden ratio constant (delta)"},
+  "XTEA_DELTA_NEG": {"value": "0xC6EF3720", "int": 3337565472, "algorithm": "XTEA/TEA", "description": "XTEA sum after 32 rounds (delta*32)"},
+
+  "MD5_INIT_A": {"value": "0x67452301", "int": 1732584193, "algorithm": "MD5", "description": "MD5 initial hash value A"},
+  "MD5_INIT_B": {"value": "0xEFCDAB89", "int": 4023233417, "algorithm": "MD5", "description": "MD5 initial hash value B"},
+  "MD5_INIT_C": {"value": "0x98BADCFE", "int": 2562383102, "algorithm": "MD5", "description": "MD5 initial hash value C"},
+  "MD5_INIT_D": {"value": "0x10325476", "int": 271733878, "algorithm": "MD5", "description": "MD5 initial hash value D"},
+  "MD5_T1": {"value": "0xD76AA478", "int": 3614090360, "algorithm": "MD5", "description": "MD5 T[1] constant"},
+  "MD5_T2": {"value": "0xE8C7B756", "int": 3905402710, "algorithm": "MD5", "description": "MD5 T[2] constant"},
+  "MD5_T3": {"value": "0x242070DB", "int": 606105819, "algorithm": "MD5", "description": "MD5 T[3] constant"},
+
+  "SHA1_INIT_H0": {"value": "0x67452301", "int": 1732584193, "algorithm": "SHA-1", "description": "SHA-1 initial H0 (same as MD5 A)"},
+  "SHA1_INIT_H1": {"value": "0xEFCDAB89", "int": 4023233417, "algorithm": "SHA-1", "description": "SHA-1 initial H1"},
+  "SHA1_INIT_H2": {"value": "0x98BADCFE", "int": 2562383102, "algorithm": "SHA-1", "description": "SHA-1 initial H2"},
+  "SHA1_INIT_H3": {"value": "0x10325476", "int": 271733878, "algorithm": "SHA-1", "description": "SHA-1 initial H3"},
+  "SHA1_INIT_H4": {"value": "0xC3D2E1F0", "int": 3285377520, "algorithm": "SHA-1", "description": "SHA-1 initial H4"},
+  "SHA1_K1": {"value": "0x5A827999", "int": 1518500249, "algorithm": "SHA-1", "description": "SHA-1 round constant K1 (rounds 0-19)"},
+  "SHA1_K2": {"value": "0x6ED9EBA1", "int": 1859775393, "algorithm": "SHA-1", "description": "SHA-1 round constant K2 (rounds 20-39)"},
+  "SHA1_K3": {"value": "0x8F1BBCDC", "int": 2400959708, "algorithm": "SHA-1", "description": "SHA-1 round constant K3 (rounds 40-59)"},
+  "SHA1_K4": {"value": "0xCA62C1D6", "int": 3395469782, "algorithm": "SHA-1", "description": "SHA-1 round constant K4 (rounds 60-79)"},
+
+  "SHA256_INIT_H0": {"value": "0x6A09E667", "int": 1779033703, "algorithm": "SHA-256", "description": "SHA-256 initial H0"},
+  "SHA256_INIT_H1": {"value": "0xBB67AE85", "int": 3144134277, "algorithm": "SHA-256", "description": "SHA-256 initial H1"},
+  "SHA256_INIT_H2": {"value": "0x3C6EF372", "int": 1013904242, "algorithm": "SHA-256", "description": "SHA-256 initial H2"},
+  "SHA256_INIT_H3": {"value": "0xA54FF53A", "int": 2773480762, "algorithm": "SHA-256", "description": "SHA-256 initial H3"},
+  "SHA256_K0": {"value": "0x428A2F98", "int": 1116352408, "algorithm": "SHA-256", "description": "SHA-256 K[0]"},
+  "SHA256_K1": {"value": "0x71374491", "int": 1899447441, "algorithm": "SHA-256", "description": "SHA-256 K[1]"},
+  "SHA256_K2": {"value": "0xB5C0FBCF", "int": 3049323471, "algorithm": "SHA-256", "description": "SHA-256 K[2]"},
+  "SHA256_K3": {"value": "0xE9B5DBA5", "int": 3921009573, "algorithm": "SHA-256", "description": "SHA-256 K[3]"},
+
+  "CRC32_POLY": {"value": "0xEDB88320", "int": 3988292384, "algorithm": "CRC32", "description": "CRC-32 polynomial (reversed)"},
+  "CRC32_POLY_NORMAL": {"value": "0x04C11DB7", "int": 79764919, "algorithm": "CRC32", "description": "CRC-32 polynomial (normal)"},
+  "CRC32_INIT": {"value": "0xFFFFFFFF", "int": 4294967295, "algorithm": "CRC32", "description": "CRC-32 initial value"},
+
+  "AES_SBOX_0": {"value": "0x63", "int": 99, "algorithm": "AES", "description": "AES S-box first byte"},
+  "AES_SBOX_1": {"value": "0x7C", "int": 124, "algorithm": "AES", "description": "AES S-box second byte"},
+  "AES_RCON_1": {"value": "0x01000000", "int": 16777216, "algorithm": "AES", "description": "AES Rcon[1]"},
+
+  "CHACHA_CONST_0": {"value": "0x61707865", "int": 1634760805, "algorithm": "ChaCha20/Salsa20", "description": "'expa' in little-endian"},
+  "CHACHA_CONST_1": {"value": "0x3320646E", "int": 857760878, "algorithm": "ChaCha20/Salsa20", "description": "'nd 3' in little-endian"},
+  "CHACHA_CONST_2": {"value": "0x79622D32", "int": 2036477234, "algorithm": "ChaCha20/Salsa20", "description": "'2-by' in little-endian"},
+  "CHACHA_CONST_3": {"value": "0x6B206574", "int": 1797285508, "algorithm": "ChaCha20/Salsa20", "description": "'te k' in little-endian"},
+
+  "BLOWFISH_P0": {"value": "0x243F6A88", "int": 608135816, "algorithm": "Blowfish", "description": "Blowfish P-array[0] (pi digits)"},
+  "BLOWFISH_P1": {"value": "0x85A308D3", "int": 2242054355, "algorithm": "Blowfish", "description": "Blowfish P-array[1]"},
+  "BLOWFISH_P2": {"value": "0x13198A2E", "int": 320440878, "algorithm": "Blowfish", "description": "Blowfish P-array[2]"},
+
+  "HMAC_IPAD": {"value": "0x36363636", "int": 909522486, "algorithm": "HMAC", "description": "HMAC inner padding (0x36 repeated)"},
+  "HMAC_OPAD": {"value": "0x5C5C5C5C", "int": 1549556828, "algorithm": "HMAC", "description": "HMAC outer padding (0x5C repeated)"},
+
+  "SM3_IV_0": {"value": "0x7380166F", "int": 1937774191, "algorithm": "SM3", "description": "SM3 initial value IV[0]"},
+  "SM3_IV_1": {"value": "0x4914B2B9", "int": 1226093625, "algorithm": "SM3", "description": "SM3 initial value IV[1]"},
+  "SM3_TJ_0": {"value": "0x79CC4519", "int": 2043430169, "algorithm": "SM3", "description": "SM3 constant Tj (rounds 0-15)"},
+  "SM3_TJ_16": {"value": "0x7A879D8A", "int": 2055708042, "algorithm": "SM3", "description": "SM3 constant Tj (rounds 16-63)"},
+
+  "SM4_SBOX_0": {"value": "0xD6", "int": 214, "algorithm": "SM4", "description": "SM4 S-box first byte"},
+  "SM4_FK_0": {"value": "0xA3B1BAC6", "int": 2746333894, "algorithm": "SM4", "description": "SM4 system parameter FK[0]"},
+  "SM4_CK_0": {"value": "0x00070E15", "int": 462357, "algorithm": "SM4", "description": "SM4 constant key CK[0]"},
+
+  "RIPEMD160_INIT_H0": {"value": "0x67452301", "int": 1732584193, "algorithm": "RIPEMD-160", "description": "RIPEMD-160 initial H0"},
+  "RIPEMD160_K1": {"value": "0x50A28BE6", "int": 1352829926, "algorithm": "RIPEMD-160", "description": "RIPEMD-160 left K1"},
+
+  "ZLIB_DEFLATE": {"value": "0x78", "int": 120, "algorithm": "zlib", "description": "zlib deflate magic byte (CMF)"},
+  "GZIP_MAGIC": {"value": "0x1F8B", "int": 8075, "algorithm": "gzip", "description": "gzip file magic number"},
+
+  "DES_IP_FIRST": {"value": "0x3A", "int": 58, "algorithm": "DES", "description": "DES initial permutation first entry (58)"},
+
+  "WHIRLPOOL_C0": {"value": "0x18186018C07830D8", "int": 1733191688287236312, "algorithm": "Whirlpool", "description": "Whirlpool C0[0]"},
+
+  "CAST_S1_0": {"value": "0x30FB40D4", "int": 821479636, "algorithm": "CAST-128", "description": "CAST S-box 1 first entry"},
+
+  "TWOFISH_MDS_0": {"value": "0xBCBC3275", "int": 3166536309, "algorithm": "Twofish", "description": "Twofish MDS matrix constant"},
+
+  "SERPENT_PHI": {"value": "0x9E3779B9", "int": 2654435769, "algorithm": "Serpent", "description": "Serpent key schedule (golden ratio, same as TEA)"},
+
+  "RC5_P32": {"value": "0xB7E15163", "int": 3084996963, "algorithm": "RC5/RC6", "description": "RC5/RC6 P constant (odd(e-2)*2^32)"},
+  "RC5_Q32": {"value": "0x9E3779B9", "int": 2654435769, "algorithm": "RC5/RC6", "description": "RC5/RC6 Q constant (odd(phi-1)*2^32, same as TEA delta)"},
+
+  "MURMUR3_C1": {"value": "0xCC9E2D51", "int": 3432918353, "algorithm": "MurmurHash3", "description": "MurmurHash3 c1 constant"},
+  "MURMUR3_C2": {"value": "0x1B873593", "int": 461845907, "algorithm": "MurmurHash3", "description": "MurmurHash3 c2 constant"},
+  "MURMUR3_FMIX1": {"value": "0x85EBCA6B", "int": 2246822507, "algorithm": "MurmurHash3", "description": "MurmurHash3 fmix constant 1"},
+  "MURMUR3_FMIX2": {"value": "0xC2B2AE35", "int": 3266489909, "algorithm": "MurmurHash3", "description": "MurmurHash3 fmix constant 2"},
+
+  "FNV_OFFSET_32": {"value": "0x811C9DC5", "int": 2166136261, "algorithm": "FNV-1/FNV-1a", "description": "FNV-1 32-bit offset basis"},
+  "FNV_PRIME_32": {"value": "0x01000193", "int": 16777619, "algorithm": "FNV-1/FNV-1a", "description": "FNV-1 32-bit prime"},
+
+  "XXHASH_PRIME1": {"value": "0x9E3779B1", "int": 2654435761, "algorithm": "xxHash", "description": "xxHash32 prime 1"},
+  "XXHASH_PRIME2": {"value": "0x85EBCA77", "int": 2246822519, "algorithm": "xxHash", "description": "xxHash32 prime 2"},
+
+  "ADLER32_MOD": {"value": "0xFFF1", "int": 65521, "algorithm": "Adler-32", "description": "Adler-32 modulus (largest prime < 2^16)"},
+
+  "SIPHASH_C0": {"value": "0x736F6D6570736575", "int": 8317987319222330197, "algorithm": "SipHash", "description": "SipHash c0 ('somepseu')"},
+  "SIPHASH_C1": {"value": "0x646F72616E646F6D", "int": 7237128888997146989, "algorithm": "SipHash", "description": "SipHash c1 ('dorandom')"}
+}

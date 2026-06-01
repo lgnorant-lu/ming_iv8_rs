@@ -215,3 +215,163 @@ def detect_hotspots(trace: StructuredTrace, top_n: int = 10) -> List[Dict[str, A
         })
 
     return hotspots
+
+
+# --- Constant-based detection (most reliable for custom VMs) ---
+
+_CONSTANTS_CACHE: Optional[Dict[int, Dict[str, str]]] = None
+
+
+def _load_constants_db() -> Dict[int, Dict[str, str]]:
+    """Load the crypto constants database. Returns {int_value: {name, algorithm, description}}."""
+    global _CONSTANTS_CACHE
+    if _CONSTANTS_CACHE is not None:
+        return _CONSTANTS_CACHE
+
+    data_dir = Path(__file__).parent / "data"
+    const_file = data_dir / "crypto_constants.json"
+    if not const_file.exists():
+        _CONSTANTS_CACHE = {}
+        return _CONSTANTS_CACHE
+
+    with open(const_file, "r", encoding="utf-8") as f:
+        raw = json.load(f)
+
+    db: Dict[int, Dict[str, str]] = {}
+    for name, entry in raw.items():
+        if name.startswith("_"):
+            continue
+        int_val = entry.get("int")
+        if int_val is not None:
+            db[int_val] = {
+                "name": name,
+                "algorithm": entry.get("algorithm", ""),
+                "description": entry.get("description", ""),
+                "hex": entry.get("value", ""),
+            }
+    _CONSTANTS_CACHE = db
+    return db
+
+
+@dataclass
+class ConstantMatch:
+    """A detected cryptographic constant in the trace."""
+
+    name: str
+    """Constant identifier (e.g. 'XTEA_DELTA')."""
+
+    algorithm: str
+    """Associated algorithm (e.g. 'XTEA/TEA')."""
+
+    description: str
+    """Human-readable description."""
+
+    value: int
+    """The integer value found."""
+
+    hex_str: str
+    """Hex representation."""
+
+    pc: int
+    """PC where the constant was found."""
+
+    entry_type: str
+    """Trace entry type where found (D/R/C/W)."""
+
+    context: str
+    """The full trace entry target/value for context."""
+
+
+def detect_constants(
+    trace: StructuredTrace,
+    constants_db: Optional[Dict[int, Dict[str, str]]] = None,
+) -> List[ConstantMatch]:
+    """Detect known cryptographic constants in trace values.
+
+    This is the MOST RELIABLE detection method for custom VMs because
+    magic constants (like 0x9E3779B9 for XTEA) cannot be hidden by
+    opcode remapping — they must appear as literal values.
+
+    Searches all trace entries' value fields for known constants.
+
+    Args:
+        trace: StructuredTrace to analyze.
+        constants_db: Custom constants dict {int_value: {name, algorithm, ...}}.
+                      If None, uses built-in database (60+ constants).
+
+    Returns:
+        List of ConstantMatch objects, sorted by PC.
+
+    Example::
+
+        from iv8_rs.trace import parse_trace
+        from iv8_rs.patterns import detect_constants
+
+        trace = parse_trace(ctx.get_unified_trace())
+        constants = detect_constants(trace)
+        for c in constants:
+            print(f"{c.algorithm}: {c.name} ({c.hex_str}) at PC={c.pc}")
+    """
+    if constants_db is None:
+        constants_db = _load_constants_db()
+
+    if not constants_db:
+        return []
+
+    matches: List[ConstantMatch] = []
+
+    for entry in trace.entries:
+        # Try to extract integer values from the entry
+        values_to_check: List[int] = []
+
+        # Check the value field
+        val_str = entry.value.strip()
+        if val_str:
+            try:
+                if val_str.startswith("0x") or val_str.startswith("0X"):
+                    values_to_check.append(int(val_str, 16))
+                elif val_str.lstrip("-").isdigit():
+                    v = int(val_str)
+                    if v >= 0:
+                        values_to_check.append(v)
+                    # Also check unsigned interpretation of negative
+                    if v < 0:
+                        values_to_check.append(v & 0xFFFFFFFF)
+            except (ValueError, OverflowError):
+                pass
+
+        # For dispatch entries, check the target (opcode) as potential constant
+        if entry.type == "D":
+            try:
+                opc = int(entry.target)
+                # Only check large values (small opcodes are not constants)
+                if opc > 65535:
+                    values_to_check.append(opc)
+            except (ValueError, TypeError):
+                pass
+
+        # Match against database
+        for v in values_to_check:
+            if v in constants_db:
+                info = constants_db[v]
+                matches.append(ConstantMatch(
+                    name=info["name"],
+                    algorithm=info["algorithm"],
+                    description=info["description"],
+                    value=v,
+                    hex_str=info.get("hex", hex(v)),
+                    pc=entry.pc,
+                    entry_type=entry.type,
+                    context=f"{entry.target}={entry.value}" if entry.type != "D" else f"opcode={entry.target}",
+                ))
+
+    # Sort by PC, deduplicate same constant at same PC
+    seen = set()
+    deduplicated = []
+    for m in sorted(matches, key=lambda x: x.pc):
+        key = (m.name, m.pc)
+        if key not in seen:
+            deduplicated.append(m)
+            seen.add(key)
+
+    return deduplicated
