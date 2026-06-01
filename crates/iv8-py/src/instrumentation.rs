@@ -256,21 +256,39 @@ T.forEach(function(nm){{
 
 /// Generate the dispatch expression replacement.
 ///
-/// For ChaosVM `A[Q[U++]]()` → `(globalThis.__iv8i_pc__=U, globalThis.__iv8i_log__.length<globalThis.__iv8i_lim__&&globalThis.__iv8i_log__.push('D,'+U+','+Q[U]+','+g.length), A[Q[U++]]())`
-fn generate_dispatch_replacement(detection: &VmDetection, _capture_stack_depth: u32) -> String {
+/// For ChaosVM `A[Q[U++]]()` → `(globalThis.__iv8i_pc__=U, log D entry with stack top values, A[Q[U++]]())`
+fn generate_dispatch_replacement(detection: &VmDetection, capture_stack_depth: u32) -> String {
     let pc = &detection.pc_var;
     let stack = &detection.stack_var;
 
     if detection.mode == "chaosvm" {
         let ha = &detection.handler_array;
         let ia = &detection.index_array;
+        // Build the stack-value capture expression.
+        // D entry format: D,pc,opcode_idx,stack_depth[,stack_top[,stack_top-1[,...]]]
+        // capture_stack_depth controls how many stack values to include (0 = depth only).
+        let stack_capture = if capture_stack_depth == 0 {
+            format!("'+{stack}.length", stack = stack)
+        } else {
+            // Capture top N stack values after the depth field.
+            // e.g. for depth=2: ','+g.length+','+g[g.length-1]+','+g[g.length-2]
+            let mut parts = format!("'+{stack}.length", stack = stack);
+            for i in 1..=capture_stack_depth {
+                parts.push_str(&format!(
+                    "+','+({stack}.length>={i}?{stack}[{stack}.length-{i}]:'')",
+                    stack = stack, i = i,
+                ));
+            }
+            parts
+        };
+
         // Comma expression: (set_pc, log, original_dispatch)
         format!(
             "(globalThis.__iv8i_pc__={pc},\
              globalThis.__iv8i_log__.length<globalThis.__iv8i_lim__&&\
-             globalThis.__iv8i_log__.push('D,'+{pc}+','+{ia}[{pc}]+','+{stack}.length),\
+             globalThis.__iv8i_log__.push('D,'+{pc}+','+{ia}[{pc}]+',{stack_capture}),\
              {ha}[{ia}[{pc}++]]())",
-            pc = pc, ia = ia, stack = stack, ha = ha,
+            pc = pc, ia = ia, stack_capture = stack_capture, ha = ha,
         )
     } else {
         // switch_vm: can't easily replace switch expression, just prepend log

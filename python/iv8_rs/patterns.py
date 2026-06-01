@@ -412,21 +412,27 @@ def detect_constants(
         # Try to extract integer values from the entry
         values_to_check: List[int] = []
 
-        # Check the value field
+        # Check the value field. For D entries with stack capture, the value
+        # field may contain comma-separated values: "stack_depth,val1,val2,..."
         val_str = entry.value.strip()
         if val_str:
-            try:
-                if val_str.startswith("0x") or val_str.startswith("0X"):
-                    values_to_check.append(int(val_str, 16))
-                elif val_str.lstrip("-").isdigit():
-                    v = int(val_str)
-                    if v >= 0:
-                        values_to_check.append(v)
-                    # Also check unsigned interpretation of negative
-                    if v < 0:
-                        values_to_check.append(v & 0xFFFFFFFF)
-            except (ValueError, OverflowError):
-                pass
+            # Split on commas to handle multi-value D entries (stack capture)
+            val_parts = val_str.split(",") if "," in val_str else [val_str]
+            for part in val_parts:
+                part = part.strip()
+                if not part:
+                    continue
+                try:
+                    if part.startswith("0x") or part.startswith("0X"):
+                        values_to_check.append(int(part, 16))
+                    elif part.lstrip("-").isdigit():
+                        v = int(part)
+                        if v >= 0:
+                            values_to_check.append(v)
+                        if v < 0:
+                            values_to_check.append(v & 0xFFFFFFFF)
+                except (ValueError, OverflowError):
+                    pass
 
         # For dispatch entries, check the target (opcode) as potential constant
         if entry.type == "D":
