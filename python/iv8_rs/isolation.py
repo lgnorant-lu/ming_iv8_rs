@@ -17,6 +17,7 @@ Usage::
 """
 
 from __future__ import annotations
+import warnings
 from typing import Any, Dict, List, Optional
 import json
 
@@ -115,12 +116,12 @@ def exec_vm_handler(
     if not isinstance(stack_after, list):
         stack_after = []
 
-    # Restore environment
+    # Restore environment (best-effort)
     if restore_code:
         try:
             ctx.eval(restore_code)
-        except Exception:
-            pass
+        except Exception as e:
+            warnings.warn(f"environment restore failed: {e}")
 
     # Compute diff
     before_len = len(stack_before)

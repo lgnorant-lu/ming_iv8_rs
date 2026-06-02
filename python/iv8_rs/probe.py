@@ -7,6 +7,7 @@ which ones returned undefined/error, and VM detection info.
 """
 
 from __future__ import annotations
+import warnings
 from typing import Any, Dict, List, Optional
 from collections import Counter
 
@@ -69,7 +70,7 @@ def probe_environment(
         patched, info = instrument_source(js_source)
         vm_info = info
         source_to_run = patched
-    except (RuntimeError, Exception):
+    except Exception:
         # No VM pattern detected, use recording instead
         source_to_run = js_source
 
@@ -95,8 +96,8 @@ def probe_environment(
         if entry_expr:
             try:
                 ctx.eval(entry_expr)
-            except Exception:
-                pass
+            except Exception as e:
+                warnings.warn(f"entry_expr failed: {e}")
 
         # Collect trace
         if vm_info is not None:
