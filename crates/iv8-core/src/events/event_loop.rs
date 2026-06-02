@@ -2,6 +2,7 @@
 //!
 //! Microsecond precision internal clock. Timers fire when advance/sleep/tick
 //! moves the clock past their deadline.
+#![expect(clippy::expect_used, reason = "macro_tasks pop: guarded by peek() check")]
 //!
 //! IMPORTANT: The EventLoop does NOT execute callbacks directly.
 //! It only manages the queue and clock. The binding layer handles:
@@ -186,6 +187,7 @@ impl EventLoop {
             if task.due_us > self.current_us {
                 break;
             }
+            // SAFETY: peek() confirmed non-empty
             due.push(self.macro_tasks.pop().expect("peek succeeded").0);
         }
         due
@@ -195,6 +197,7 @@ impl EventLoop {
     pub fn collect_one_due_task(&mut self) -> Option<TimedTask> {
         if let Some(Reverse(task)) = self.macro_tasks.peek() {
             if task.due_us <= self.current_us {
+                // SAFETY: peek() confirmed non-empty
                 return Some(self.macro_tasks.pop().expect("peek succeeded").0);
             }
         }

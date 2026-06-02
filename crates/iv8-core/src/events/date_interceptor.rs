@@ -15,8 +15,8 @@ use crate::state::{RuntimeState, TimeMode};
 pub fn install_date_interceptor(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Install __iv8_now__ as a hidden native function (used by the Date shim)
     let now_tmpl = v8::FunctionTemplate::builder_raw(iv8_now_callback).build(scope);
-    let now_fn = now_tmpl.get_function(scope).expect("fn");
-    let now_key = v8::String::new(scope, "__iv8_now__").expect("key");
+    let now_fn = crate::v8_utils::v8_fn(scope, &*now_tmpl);
+    let now_key = crate::v8_utils::v8_string(scope, "__iv8_now__");
     global.define_own_property(
         scope,
         now_key.into(),
@@ -26,18 +26,18 @@ pub fn install_date_interceptor(scope: &v8::PinScope<'_, '_>, global: v8::Local<
 
     // Override Date.now with native function
     let date_now_tmpl = v8::FunctionTemplate::builder_raw(date_now_callback).build(scope);
-    let date_now_fn = date_now_tmpl.get_function(scope).expect("fn");
-    let date_key = v8::String::new(scope, "Date").expect("key");
+    let date_now_fn = crate::v8_utils::v8_fn(scope, &*date_now_tmpl);
+    let date_key = crate::v8_utils::v8_string(scope, "Date");
     if let Some(date_val) = global.get(scope, date_key.into()) {
         if date_val.is_function() {
             let date_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(date_val) };
-            let now_key = v8::String::new(scope, "now").expect("key");
+            let now_key = crate::v8_utils::v8_string(scope, "now");
             date_obj.set(scope, now_key.into(), date_now_fn.into());
         }
     }
 
     // Install performance.now
-    let perf_key = v8::String::new(scope, "performance").expect("key");
+    let perf_key = crate::v8_utils::v8_string(scope, "performance");
     let perf_obj = if let Some(perf_val) = global.get(scope, perf_key.into()) {
         if perf_val.is_object() {
             unsafe { v8::Local::<v8::Object>::cast_unchecked(perf_val) }
@@ -53,8 +53,8 @@ pub fn install_date_interceptor(scope: &v8::PinScope<'_, '_>, global: v8::Local<
     };
 
     let perf_now_tmpl = v8::FunctionTemplate::builder_raw(performance_now_callback).build(scope);
-    let perf_now_fn = perf_now_tmpl.get_function(scope).expect("fn");
-    let now_method_key = v8::String::new(scope, "now").expect("key");
+    let perf_now_fn = crate::v8_utils::v8_fn(scope, &*perf_now_tmpl);
+    let now_method_key = crate::v8_utils::v8_string(scope, "now");
     perf_obj.set(scope, now_method_key.into(), perf_now_fn.into());
 
     // Install Date constructor shim (wraps original to use logical time for no-arg calls)

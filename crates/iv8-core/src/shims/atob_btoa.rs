@@ -6,14 +6,14 @@
 /// Install atob and btoa as global functions.
 pub fn install_atob_btoa(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     let btoa_tmpl = v8::FunctionTemplate::builder_raw(btoa_callback).build(scope);
-    let btoa_fn = btoa_tmpl.get_function(scope).expect("fn");
-    let btoa_key = v8::String::new(scope, "btoa").expect("key");
+    let btoa_fn = crate::v8_utils::v8_fn(scope, &*btoa_tmpl);
+    let btoa_key = crate::v8_utils::v8_string(scope, "btoa");
     btoa_fn.set_name(btoa_key);
     global.set(scope, btoa_key.into(), btoa_fn.into());
 
     let atob_tmpl = v8::FunctionTemplate::builder_raw(atob_callback).build(scope);
-    let atob_fn = atob_tmpl.get_function(scope).expect("fn");
-    let atob_key = v8::String::new(scope, "atob").expect("key");
+    let atob_fn = crate::v8_utils::v8_fn(scope, &*atob_tmpl);
+    let atob_key = crate::v8_utils::v8_string(scope, "atob");
     atob_fn.set_name(atob_key);
     global.set(scope, atob_key.into(), atob_fn.into());
 }
@@ -27,7 +27,7 @@ unsafe extern "C" fn btoa_callback(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         if args.length() < 1 {
-            let msg = v8::String::new(scope, "btoa requires 1 argument").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "btoa requires 1 argument");
             let exc = v8::Exception::type_error(scope, msg);
             scope.throw_exception(exc);
             return;
@@ -38,10 +38,10 @@ unsafe extern "C" fn btoa_callback(info: *const v8::FunctionCallbackInfo) {
         // Check Latin-1 range (each char must be <= 255)
         for ch in input.chars() {
             if ch as u32 > 255 {
-                let msg = v8::String::new(
+                let msg = crate::v8_utils::v8_string(
                     scope,
                     "InvalidCharacterError: The string to be encoded contains characters outside of the Latin1 range.",
-                ).expect("msg");
+                );
                 let exc = v8::Exception::error(scope, msg);
                 scope.throw_exception(exc);
                 return;
@@ -67,7 +67,7 @@ unsafe extern "C" fn atob_callback(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         if args.length() < 1 {
-            let msg = v8::String::new(scope, "atob requires 1 argument").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "atob requires 1 argument");
             let exc = v8::Exception::type_error(scope, msg);
             scope.throw_exception(exc);
             return;
@@ -87,10 +87,10 @@ unsafe extern "C" fn atob_callback(info: *const v8::FunctionCallbackInfo) {
                 }
             }
             Err(_) => {
-                let msg = v8::String::new(
+                let msg = crate::v8_utils::v8_string(
                     scope,
                     "InvalidCharacterError: The string to be decoded is not correctly encoded.",
-                ).expect("msg");
+                );
                 let exc = v8::Exception::error(scope, msg);
                 scope.throw_exception(exc);
             }

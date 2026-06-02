@@ -2,6 +2,7 @@
 //!
 //! `EnvironmentMap` holds 393 dot-path → value entries representing the
 //! browser fingerprint (navigator.*, screen.*, webgl.*, etc.).
+#![expect(clippy::expect_used, reason = "serde_json::from_str on compile-time embedded JSON")]
 
 use serde_json::Value as JsonValue;
 use std::collections::HashMap;
@@ -20,6 +21,7 @@ impl EnvironmentMap {
     /// Build from defaults, optionally overriding with user-provided entries.
     /// `user_overrides` is a flat map of dot-path → value.
     pub fn build(user_overrides: Option<&HashMap<String, JsonValue>>) -> Self {
+        // SAFETY: DEFAULTS_JSON is compile-time embedded; build breaks if invalid
         let mut entries: HashMap<String, JsonValue> = serde_json::from_str(DEFAULTS_JSON)
             .expect("iv8-defaults.json is invalid JSON");
 

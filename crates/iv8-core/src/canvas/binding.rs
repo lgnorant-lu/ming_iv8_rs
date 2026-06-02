@@ -14,8 +14,8 @@ pub fn install_canvas_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
     macro_rules! install_fn {
         ($name:literal, $cb:ident) => {
             let tmpl = v8::FunctionTemplate::builder_raw($cb).build(scope);
-            let func = tmpl.get_function(scope).expect("fn");
-            let key = v8::String::new(scope, $name).expect("key");
+            let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+            let key = crate::v8_utils::v8_string(scope, $name);
             global.define_own_property(scope, key.into(), func.into(), v8::PropertyAttribute::DONT_ENUM);
         };
     }

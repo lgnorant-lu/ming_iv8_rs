@@ -3,14 +3,6 @@
 //! This crate provides the core Rust API for creating and managing
 //! JavaScript contexts with full browser surface emulation.
 
-// V8 callback code extensively uses `expect("key")` for string creation.
-// These are safe because v8::String::new only fails on OOM, which is
-// handled by V8's OOM handler. We allow these patterns in this crate.
-#![allow(clippy::expect_used)]
-// unwrap_used: V8 API returns Option in many places where None is unreachable
-// in practice (e.g., after is_object() check). Allow for now.
-#![allow(clippy::unwrap_used)]
-
 pub mod config;
 pub mod convert;
 pub mod canvas;
@@ -27,6 +19,7 @@ pub mod shims;
 pub mod state;
 pub mod v8_extra;
 pub mod v8_init;
+pub mod v8_utils;
 #[macro_use]
 pub mod safe_callback;
 

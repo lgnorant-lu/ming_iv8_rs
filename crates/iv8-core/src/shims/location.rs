@@ -36,29 +36,29 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
 
     // toString() and valueOf() return href
     let to_string_tmpl = v8::FunctionTemplate::builder_raw(location_to_string).build(scope);
-    let to_string_fn = to_string_tmpl.get_function(scope).expect("fn");
-    let ts_key = v8::String::new(scope, "toString").expect("key");
+    let to_string_fn = crate::v8_utils::v8_fn(scope, &*to_string_tmpl);
+    let ts_key = crate::v8_utils::v8_string(scope, "toString");
     location_obj.set(scope, ts_key.into(), to_string_fn.into());
 
-    let vo_key = v8::String::new(scope, "valueOf").expect("key");
+    let vo_key = crate::v8_utils::v8_string(scope, "valueOf");
     location_obj.set(scope, vo_key.into(), to_string_fn.into());
 
     // assign/replace/reload are no-ops in v0.1
     let noop_tmpl = v8::FunctionTemplate::builder_raw(location_noop).build(scope);
-    let noop_fn = noop_tmpl.get_function(scope).expect("fn");
+    let noop_fn = crate::v8_utils::v8_fn(scope, &*noop_tmpl);
     for name in &["assign", "replace", "reload"] {
-        let key = v8::String::new(scope, name).expect("key");
+        let key = crate::v8_utils::v8_string(scope, name);
         location_obj.set(scope, key.into(), noop_fn.into());
     }
 
     // Set on global as 'location'
-    let loc_key = v8::String::new(scope, "location").expect("key");
+    let loc_key = crate::v8_utils::v8_string(scope, "location");
     global.set(scope, loc_key.into(), location_obj.into());
 }
 
 fn set_str_prop(scope: &v8::PinScope<'_, '_>, obj: v8::Local<v8::Object>, name: &str, value: &str) {
-    let key = v8::String::new(scope, name).expect("key");
-    let val = v8::String::new(scope, value).expect("val");
+    let key = crate::v8_utils::v8_string(scope, name);
+    let val = crate::v8_utils::v8_string(scope, value);
     obj.set(scope, key.into(), val.into());
 }
 
@@ -71,7 +71,7 @@ unsafe extern "C" fn location_to_string(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         let this = args.this();
-        let href_key = v8::String::new(scope, "href").expect("key");
+        let href_key = crate::v8_utils::v8_string(scope, "href");
         if let Some(href) = this.get(scope, href_key.into()) {
             rv.set(href);
         }

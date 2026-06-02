@@ -14,18 +14,18 @@ pub fn install_webgl_stubs(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::O
     // Install via JS shim that creates the WebGL context stub
     // The shim is evaluated after this function sets up the native getParameter callback
     let get_param_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_parameter).build(scope);
-    let get_param_fn = get_param_tmpl.get_function(scope).expect("fn");
-    let key = v8::String::new(scope, "__webgl_getParameter__").expect("key");
+    let get_param_fn = crate::v8_utils::v8_fn(scope, &*get_param_tmpl);
+    let key = crate::v8_utils::v8_string(scope, "__webgl_getParameter__");
     global.define_own_property(scope, key.into(), get_param_fn.into(), v8::PropertyAttribute::DONT_ENUM);
 
     let get_ext_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_extension).build(scope);
-    let get_ext_fn = get_ext_tmpl.get_function(scope).expect("fn");
-    let ext_key = v8::String::new(scope, "__webgl_getExtension__").expect("key");
+    let get_ext_fn = crate::v8_utils::v8_fn(scope, &*get_ext_tmpl);
+    let ext_key = crate::v8_utils::v8_string(scope, "__webgl_getExtension__");
     global.define_own_property(scope, ext_key.into(), get_ext_fn.into(), v8::PropertyAttribute::DONT_ENUM);
 
     let get_supp_ext_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_supported_extensions).build(scope);
-    let get_supp_ext_fn = get_supp_ext_tmpl.get_function(scope).expect("fn");
-    let supp_key = v8::String::new(scope, "__webgl_getSupportedExtensions__").expect("key");
+    let get_supp_ext_fn = crate::v8_utils::v8_fn(scope, &*get_supp_ext_tmpl);
+    let supp_key = crate::v8_utils::v8_string(scope, "__webgl_getSupportedExtensions__");
     global.define_own_property(scope, supp_key.into(), get_supp_ext_fn.into(), v8::PropertyAttribute::DONT_ENUM);
 }
 
@@ -414,15 +414,15 @@ unsafe extern "C" fn webgl_get_extension(info: *const v8::FunctionCallbackInfo) 
         match name.as_str() {
             "WEBGL_debug_renderer_info" => {
                 let obj = v8::Object::new(scope);
-                let vendor_key = v8::String::new(scope, "UNMASKED_VENDOR_WEBGL").expect("key");
+                let vendor_key = crate::v8_utils::v8_string(scope, "UNMASKED_VENDOR_WEBGL");
                 obj.set(scope, vendor_key.into(), v8::Integer::new(scope, UNMASKED_VENDOR_WEBGL as i32).into());
-                let renderer_key = v8::String::new(scope, "UNMASKED_RENDERER_WEBGL").expect("key");
+                let renderer_key = crate::v8_utils::v8_string(scope, "UNMASKED_RENDERER_WEBGL");
                 obj.set(scope, renderer_key.into(), v8::Integer::new(scope, UNMASKED_RENDERER_WEBGL as i32).into());
                 rv.set(obj.into());
             }
             "EXT_texture_filter_anisotropic" | "WEBKIT_EXT_texture_filter_anisotropic" => {
                 let obj = v8::Object::new(scope);
-                let key = v8::String::new(scope, "MAX_TEXTURE_MAX_ANISOTROPY_EXT").expect("key");
+                let key = crate::v8_utils::v8_string(scope, "MAX_TEXTURE_MAX_ANISOTROPY_EXT");
                 obj.set(scope, key.into(), v8::Integer::new(scope, 0x84FF_u32 as i32).into());
                 rv.set(obj.into());
             }

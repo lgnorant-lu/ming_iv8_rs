@@ -94,7 +94,7 @@ fn make_template<'s>(
     class_name: &str,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
-    let name = v8::String::new(scope, class_name).expect("class name");
+    let name = crate::v8_utils::v8_string(scope, class_name);
     tmpl.set_class_name(name);
     // Set internal field count on the instance template
     let inst = tmpl.instance_template(scope);
@@ -115,7 +115,7 @@ fn install_proto_method(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let fn_tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
-    let name_str = v8::String::new(scope, name).expect("method name");
+    let name_str = crate::v8_utils::v8_string(scope, name);
     fn_tmpl.set_class_name(name_str);
     proto.set(name_str.into(), fn_tmpl.into());
 }
@@ -130,7 +130,7 @@ fn install_proto_accessor(
 ) {
     let getter_tmpl = v8::FunctionTemplate::builder_raw(getter).build(scope);
     let setter_tmpl = setter.map(|s| v8::FunctionTemplate::builder_raw(s).build(scope));
-    let name_str = v8::String::new(scope, name).expect("accessor name");
+    let name_str = crate::v8_utils::v8_string(scope, name);
     proto.set_accessor_property(
         name_str.into(),
         Some(getter_tmpl),
@@ -549,7 +549,7 @@ pub fn install_dom_constructors(
     for (name, tmpl_global) in pairs {
         let tmpl = v8::Local::new(scope, *tmpl_global);
         if let Some(func) = tmpl.get_function(scope) {
-            let key = v8::String::new(scope, name).expect("key");
+            let key = crate::v8_utils::v8_string(scope, name);
             global.define_own_property(
                 scope,
                 key.into(),
@@ -944,10 +944,10 @@ unsafe extern "C" fn class_list_getter(info: *const v8::FunctionCallbackInfo) {
             doc.as_ref().and_then(|d| d.get(node_id)).map(|n| n.value().class_list().to_vec()).unwrap_or_default()
         };
         let obj = v8::Object::new(scope);
-        let len_key = v8::String::new(scope, "length").expect("key");
+        let len_key = crate::v8_utils::v8_string(scope, "length");
         obj.set(scope, len_key.into(), v8::Integer::new(scope, classes.len() as i32).into());
         // Store nodeId for mutation methods
-        let nid_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         let nid_val = v8::Number::new(scope, super::binding::node_id_to_usize(node_id) as f64);
         obj.define_own_property(scope, nid_key.into(), nid_val.into(), v8::PropertyAttribute::DONT_ENUM);
         for (name, cb) in &[
@@ -959,8 +959,8 @@ unsafe extern "C" fn class_list_getter(info: *const v8::FunctionCallbackInfo) {
             ("toString", class_list_tostring_cb),
         ] {
             let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
-            let fn_obj = fn_tmpl.get_function(scope).expect("fn");
-            let key = v8::String::new(scope, name).expect("key");
+            let fn_obj = crate::v8_utils::v8_fn(scope, &*fn_tmpl);
+            let key = crate::v8_utils::v8_string(scope, name);
             obj.set(scope, key.into(), fn_obj.into());
         }
         rv.set(obj.into());
@@ -975,7 +975,7 @@ unsafe extern "C" fn class_list_item_cb(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let nid_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         if let Some(nid_val) = this.get(scope, nid_key.into()) {
             if nid_val.is_number() {
                 let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
@@ -1008,7 +1008,7 @@ unsafe extern "C" fn class_list_contains_cb(info: *const v8::FunctionCallbackInf
         if args.length() < 1 { rv.set(v8::Boolean::new(scope, false).into()); return; }
         let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
-        let nid_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         let mut found = false;
         if let Some(nid_val) = this.get(scope, nid_key.into()) {
             if nid_val.is_number() {
@@ -1037,7 +1037,7 @@ unsafe extern "C" fn class_list_add_cb(info: *const v8::FunctionCallbackInfo) {
         if args.length() < 1 { return; }
         let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
-        let nid_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         if let Some(nid_val) = this.get(scope, nid_key.into()) {
             if nid_val.is_number() {
                 let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
@@ -1070,7 +1070,7 @@ unsafe extern "C" fn class_list_remove_cb(info: *const v8::FunctionCallbackInfo)
         if args.length() < 1 { return; }
         let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
-        let nid_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         if let Some(nid_val) = this.get(scope, nid_key.into()) {
             if nid_val.is_number() {
                 let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
@@ -1102,7 +1102,7 @@ unsafe extern "C" fn class_list_toggle_cb(info: *const v8::FunctionCallbackInfo)
         if args.length() < 1 { rv.set(v8::Boolean::new(scope, false).into()); return; }
         let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
-        let nid_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         let mut result = false;
         if let Some(nid_val) = this.get(scope, nid_key.into()) {
             if nid_val.is_number() {
@@ -1134,7 +1134,7 @@ unsafe extern "C" fn class_list_tostring_cb(info: *const v8::FunctionCallbackInf
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let nid_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         if let Some(nid_val) = this.get(scope, nid_key.into()) {
             if nid_val.is_number() {
                 let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
@@ -1151,7 +1151,7 @@ unsafe extern "C" fn class_list_tostring_cb(info: *const v8::FunctionCallbackInf
                 }
             }
         }
-        rv.set(v8::String::new(scope, "").expect("empty").into());
+        rv.set(crate::v8_utils::v8_string(scope, "").into());
     }));
 }
 
@@ -1801,7 +1801,7 @@ unsafe extern "C" fn get_bounding_client_rect_cb(info: *const v8::FunctionCallba
     run_callback(info, |scope, _args, rv, _state, _node_id| {
         let obj = v8::Object::new(scope);
         for key in &["x", "y", "width", "height", "top", "left", "bottom", "right"] {
-            let k = v8::String::new(scope, key).expect("key");
+            let k = crate::v8_utils::v8_string(scope, key);
             obj.set(scope, k.into(), v8::Number::new(scope, 0.0).into());
         }
         rv.set(obj.into());
@@ -1908,9 +1908,9 @@ unsafe extern "C" fn dispatch_event_cb(info: *const v8::FunctionCallbackInfo) {
             (event_arg.to_rust_string_lossy(scope), true)
         } else if event_arg.is_object() {
             let evt_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(event_arg) };
-            let type_key = v8::String::new(scope, "type").expect("key");
+            let type_key = crate::v8_utils::v8_string(scope, "type");
             let event_type = evt_obj.get(scope, type_key.into()).map(|v| v.to_rust_string_lossy(scope)).unwrap_or_default();
-            let bubbles_key = v8::String::new(scope, "bubbles").expect("key");
+            let bubbles_key = crate::v8_utils::v8_string(scope, "bubbles");
             let bubbles = evt_obj.get(scope, bubbles_key.into()).map(|v| v.is_true()).unwrap_or(true);
             (event_type, bubbles)
         } else {
@@ -1955,8 +1955,8 @@ unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
             ("removeProperty", style_remove_property_cb),
         ] {
             let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
-            let fn_obj = fn_tmpl.get_function(scope).expect("fn");
-            let key = v8::String::new(scope, name).expect("key");
+            let fn_obj = crate::v8_utils::v8_fn(scope, &*fn_tmpl);
+            let key = crate::v8_utils::v8_string(scope, name);
             obj.set(scope, key.into(), fn_obj.into());
         }
         rv.set(obj.into());
@@ -1970,7 +1970,7 @@ unsafe extern "C" fn style_get_property_cb(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::String::new(scope, "").expect("empty").into());
+        rv.set(crate::v8_utils::v8_string(scope, "").into());
     }));
 }
 
@@ -2142,11 +2142,11 @@ unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
         };
 
         // Ensure canvas is registered with Rust backend
-        let set_size_key = v8::String::new(scope, "__canvas_set_size__").expect("key");
+        let set_size_key = crate::v8_utils::v8_string(scope, "__canvas_set_size__");
         if let Some(set_size_fn) = global.get(scope, set_size_key.into()) {
             if set_size_fn.is_function() {
                 let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(set_size_fn) };
-                let id_str = v8::String::new(scope, &canvas_id).expect("str");
+                let id_str = crate::v8_utils::v8_string(scope, &canvas_id);
                 let w = v8::Integer::new(scope, 300);
                 let h = v8::Integer::new(scope, 150);
                 let undefined = v8::undefined(scope);
@@ -2155,12 +2155,12 @@ unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
         }
 
         // Call __getCanvasContext__(canvasId, type)
-        let get_ctx_key = v8::String::new(scope, "__getCanvasContext__").expect("key");
+        let get_ctx_key = crate::v8_utils::v8_string(scope, "__getCanvasContext__");
         if let Some(get_ctx_fn) = global.get(scope, get_ctx_key.into()) {
             if get_ctx_fn.is_function() {
                 let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(get_ctx_fn) };
-                let id_str = v8::String::new(scope, &canvas_id).expect("str");
-                let ctx_str = v8::String::new(scope, &ctx_type).expect("str");
+                let id_str = crate::v8_utils::v8_string(scope, &canvas_id);
+                let ctx_str = crate::v8_utils::v8_string(scope, &ctx_type);
                 let undefined = v8::undefined(scope);
                 if let Some(result) = func.call(scope, undefined.into(), &[id_str.into(), ctx_str.into()]) {
                     rv.set(result);
@@ -2183,12 +2183,12 @@ unsafe extern "C" fn to_data_url_cb(info: *const v8::FunctionCallbackInfo) {
         };
         let global = scope.get_current_context().global(scope);
 
-        let to_data_url_key = v8::String::new(scope, "__canvas_to_data_url__").expect("key");
+        let to_data_url_key = crate::v8_utils::v8_string(scope, "__canvas_to_data_url__");
         if let Some(to_data_url_fn) = global.get(scope, to_data_url_key.into()) {
             if to_data_url_fn.is_function() {
                 let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(to_data_url_fn) };
-                let id_str = v8::String::new(scope, &canvas_id).expect("str");
-                let mime_str = v8::String::new(scope, &mime_type).expect("str");
+                let id_str = crate::v8_utils::v8_string(scope, &canvas_id);
+                let mime_str = crate::v8_utils::v8_string(scope, &mime_type);
                 let quality_num = v8::Number::new(scope, quality);
                 let undefined = v8::undefined(scope);
                 if let Some(result) = func.call(scope, undefined.into(), &[id_str.into(), mime_str.into(), quality_num.into()]) {
@@ -2251,11 +2251,11 @@ unsafe extern "C" fn capture_stream_cb(info: *const v8::FunctionCallbackInfo) {
 unsafe extern "C" fn media_play_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, _state, _node_id| {
         let global = scope.get_current_context().global(scope);
-        let promise_key = v8::String::new(scope, "Promise").expect("key");
+        let promise_key = crate::v8_utils::v8_string(scope, "Promise");
         if let Some(promise_ctor) = global.get(scope, promise_key.into()) {
             if promise_ctor.is_function() {
                 let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(promise_ctor) };
-                let resolve_key = v8::String::new(scope, "resolve").expect("key");
+                let resolve_key = crate::v8_utils::v8_string(scope, "resolve");
                 if let Some(resolve_fn) = ctor.get(scope, resolve_key.into()) {
                     if resolve_fn.is_function() {
                         let resolve: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(resolve_fn) };

@@ -13,7 +13,7 @@ pub fn install_event_loop_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Loc
         state.js_api_name.clone()
     };
 
-    let api_key = v8::String::new(scope, &js_api_name).expect("api key");
+    let api_key = crate::v8_utils::v8_string(scope, &js_api_name);
     let api_obj = global.get(scope, api_key.into());
     let api_obj = match api_obj {
         Some(v) if v.is_object() => unsafe { v8::Local::<v8::Object>::cast_unchecked(v) },
@@ -32,15 +32,15 @@ pub fn install_event_loop_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Loc
     install_method(scope, el_obj, "reset", el_reset);
     install_method(scope, el_obj, "setAutoAdvanceStep", el_set_auto_advance_step);
 
-    let el_key = v8::String::new(scope, "eventLoop").expect("key");
+    let el_key = crate::v8_utils::v8_string(scope, "eventLoop");
     api_obj.set(scope, el_key.into(), el_obj.into());
 
     // Install netLog on __iv8__
     let netlog_obj = v8::Object::new(scope);
     let entries_arr = v8::Array::new(scope, 0);
-    let entries_key = v8::String::new(scope, "entries").expect("key");
+    let entries_key = crate::v8_utils::v8_string(scope, "entries");
     netlog_obj.set(scope, entries_key.into(), entries_arr.into());
-    let netlog_key = v8::String::new(scope, "netLog").expect("key");
+    let netlog_key = crate::v8_utils::v8_string(scope, "netLog");
     api_obj.set(scope, netlog_key.into(), netlog_obj.into());
 }
 
@@ -51,8 +51,8 @@ fn install_method(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
-    let func = tmpl.get_function(scope).expect("get_function");
-    let name_str = v8::String::new(scope, name).expect("name");
+    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     obj.set(scope, name_str.into(), func.into());
 }

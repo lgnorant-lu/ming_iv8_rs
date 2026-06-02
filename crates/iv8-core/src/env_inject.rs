@@ -44,11 +44,11 @@ pub fn install_environment(
     }
 
     // Set window = globalThis (self-reference)
-    let window_key = v8::String::new(scope, "window").expect("key");
+    let window_key = crate::v8_utils::v8_string(scope, "window");
     global.set(scope, window_key.into(), global.into());
 
     // Set self = globalThis
-    let self_key = v8::String::new(scope, "self").expect("key");
+    let self_key = crate::v8_utils::v8_string(scope, "self");
     global.set(scope, self_key.into(), global.into());
 }
 
@@ -58,7 +58,7 @@ fn get_or_create_object<'s>(
     parent: v8::Local<'s, v8::Object>,
     name: &str,
 ) -> v8::Local<'s, v8::Object> {
-    let key = v8::String::new(scope, name).expect("valid key");
+    let key = crate::v8_utils::v8_string(scope, name);
 
     // Check if it already exists
     if let Some(existing) = parent.get(scope, key.into()) {
@@ -101,7 +101,7 @@ fn install_fields_on_object(
 
     // Set direct fields with ReadOnly + DontDelete (prevents JS from modifying/deleting)
     for (field_name, value) in &direct {
-        let key = v8::String::new(scope, field_name).expect("valid field name");
+        let key = crate::v8_utils::v8_string(scope, field_name);
         let v8_value = json_to_v8(scope, value);
         obj.define_own_property(
             scope,
@@ -152,7 +152,7 @@ fn json_to_v8<'s>(
         serde_json::Value::Object(map) => {
             let obj = v8::Object::new(scope);
             for (k, v) in map {
-                let key = v8::String::new(scope, k).expect("valid key");
+                let key = crate::v8_utils::v8_string(scope, k);
                 let val = json_to_v8(scope, v);
                 obj.set(scope, key.into(), val);
             }

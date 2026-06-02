@@ -529,15 +529,15 @@ fn truncate_function_body(source: &str) -> String {
 fn call_object_to_string(scope: &v8::PinScope<'_, '_>, value: v8::Local<v8::Value>) -> String {
     // Try to call Object.prototype.toString.call(value)
     let global = scope.get_current_context().global(scope);
-    let obj_key = v8::String::new(scope, "Object").expect("key");
+    let obj_key = crate::v8_utils::v8_string(scope, "Object");
     if let Some(obj_ctor) = global.get(scope, obj_key.into()) {
         if obj_ctor.is_function() {
             let obj_ctor: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj_ctor) };
-            let proto_key = v8::String::new(scope, "prototype").expect("key");
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
             if let Some(proto) = obj_ctor.get(scope, proto_key.into()) {
                 if proto.is_object() {
                     let proto_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(proto) };
-                    let ts_key = v8::String::new(scope, "toString").expect("key");
+                    let ts_key = crate::v8_utils::v8_string(scope, "toString");
                     if let Some(ts_fn) = proto_obj.get(scope, ts_key.into()) {
                         if ts_fn.is_function() {
                             let ts_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ts_fn) };

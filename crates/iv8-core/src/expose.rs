@@ -30,8 +30,8 @@ pub fn expose_function(
         .data(external.into())
         .build(scope);
 
-    let func = tmpl.get_function(scope).expect("get_function");
-    let name_str = v8::String::new(scope, name).expect("name");
+    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     global.set(scope, name_str.into(), func.into());
 }

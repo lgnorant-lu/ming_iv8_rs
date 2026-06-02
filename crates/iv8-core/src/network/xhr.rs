@@ -11,8 +11,8 @@ use crate::state::RuntimeState;
 pub fn install_xhr(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Install native __xhr_send__(method, url) → {status, responseText} or null
     let send_tmpl = v8::FunctionTemplate::builder_raw(xhr_send_callback).build(scope);
-    let send_fn = send_tmpl.get_function(scope).expect("fn");
-    let key = v8::String::new(scope, "__xhr_send__").expect("key");
+    let send_fn = crate::v8_utils::v8_fn(scope, &*send_tmpl);
+    let key = crate::v8_utils::v8_string(scope, "__xhr_send__");
     global.define_own_property(scope, key.into(), send_fn.into(), v8::PropertyAttribute::DONT_ENUM);
 }
 
@@ -162,12 +162,12 @@ unsafe extern "C" fn xhr_send_callback(info: *const v8::FunctionCallbackInfo) {
             Some(res) => {
                 let obj = v8::Object::new(scope);
 
-                let status_key = v8::String::new(scope, "status").expect("key");
+                let status_key = crate::v8_utils::v8_string(scope, "status");
                 obj.set(scope, status_key.into(), v8::Integer::new(scope, res.status as i32).into());
 
-                let text_key = v8::String::new(scope, "responseText").expect("key");
+                let text_key = crate::v8_utils::v8_string(scope, "responseText");
                 let body_str = String::from_utf8_lossy(&res.body);
-                let text_val = v8::String::new(scope, &body_str).expect("val");
+                let text_val = crate::v8_utils::v8_string(scope, &body_str);
                 obj.set(scope, text_key.into(), text_val.into());
 
                 // Headers as object
@@ -177,7 +177,7 @@ unsafe extern "C" fn xhr_send_callback(info: *const v8::FunctionCallbackInfo) {
                         headers_obj.set(scope, hk.into(), hv.into());
                     }
                 }
-                let headers_key = v8::String::new(scope, "headers").expect("key");
+                let headers_key = crate::v8_utils::v8_string(scope, "headers");
                 obj.set(scope, headers_key.into(), headers_obj.into());
 
                 rv.set(obj.into());

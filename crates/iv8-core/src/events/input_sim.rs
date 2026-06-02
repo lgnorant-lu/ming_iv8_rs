@@ -29,7 +29,7 @@ pub fn install_input_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
         state.js_api_name.clone()
     };
 
-    let api_key = v8::String::new(scope, &js_api_name).expect("api key");
+    let api_key = crate::v8_utils::v8_string(scope, &js_api_name);
     let api_obj = match global.get(scope, api_key.into()) {
         Some(v) if v.is_object() => unsafe { v8::Local::<v8::Object>::cast_unchecked(v) },
         _ => return,
@@ -39,23 +39,23 @@ pub fn install_input_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
 
     // dispatchMouseEvent
     let mouse_tmpl = v8::FunctionTemplate::builder_raw(dispatch_mouse_event).build(scope);
-    let mouse_fn = mouse_tmpl.get_function(scope).expect("fn");
-    let mouse_key = v8::String::new(scope, "dispatchMouseEvent").expect("key");
+    let mouse_fn = crate::v8_utils::v8_fn(scope, &*mouse_tmpl);
+    let mouse_key = crate::v8_utils::v8_string(scope, "dispatchMouseEvent");
     input_obj.set(scope, mouse_key.into(), mouse_fn.into());
 
     // dispatchPointerEvent
     let ptr_tmpl = v8::FunctionTemplate::builder_raw(dispatch_pointer_event).build(scope);
-    let ptr_fn = ptr_tmpl.get_function(scope).expect("fn");
-    let ptr_key = v8::String::new(scope, "dispatchPointerEvent").expect("key");
+    let ptr_fn = crate::v8_utils::v8_fn(scope, &*ptr_tmpl);
+    let ptr_key = crate::v8_utils::v8_string(scope, "dispatchPointerEvent");
     input_obj.set(scope, ptr_key.into(), ptr_fn.into());
 
     // dispatchKeyboardEvent
     let kbd_tmpl = v8::FunctionTemplate::builder_raw(dispatch_keyboard_event).build(scope);
-    let kbd_fn = kbd_tmpl.get_function(scope).expect("fn");
-    let kbd_key = v8::String::new(scope, "dispatchKeyboardEvent").expect("key");
+    let kbd_fn = crate::v8_utils::v8_fn(scope, &*kbd_tmpl);
+    let kbd_key = crate::v8_utils::v8_string(scope, "dispatchKeyboardEvent");
     input_obj.set(scope, kbd_key.into(), kbd_fn.into());
 
-    let input_key = v8::String::new(scope, "input").expect("key");
+    let input_key = crate::v8_utils::v8_string(scope, "input");
     api_obj.set(scope, input_key.into(), input_obj.into());
 }
 
@@ -150,7 +150,7 @@ unsafe extern "C" fn dispatch_mouse_event(info: *const v8::FunctionCallbackInfo)
                     if let Some(fn_val) = script.run(tc) {
                         if fn_val.is_function() {
                             let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(fn_val) };
-                            let type_str = v8::String::new(tc, &event_type).expect("str");
+                            let type_str = crate::v8_utils::v8_string(tc, &event_type);
                             let cx = v8::Number::new(tc, client_x);
                             let cy = v8::Number::new(tc, client_y);
                             let btn = v8::Integer::new(tc, button);
@@ -230,13 +230,13 @@ unsafe extern "C" fn dispatch_pointer_event(info: *const v8::FunctionCallbackInf
                     if let Some(fn_val) = script.run(tc) {
                         if fn_val.is_function() {
                             let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(fn_val) };
-                            let type_str = v8::String::new(tc, &event_type).expect("str");
+                            let type_str = crate::v8_utils::v8_string(tc, &event_type);
                             let cx = v8::Number::new(tc, client_x);
                             let cy = v8::Number::new(tc, client_y);
                             let btn = v8::Integer::new(tc, button);
                             let btns = v8::Integer::new(tc, buttons);
                             let pid = v8::Integer::new(tc, pointer_id);
-                            let ptype = v8::String::new(tc, &pointer_type).expect("str");
+                            let ptype = crate::v8_utils::v8_string(tc, &pointer_type);
                             let prim = v8::Boolean::new(tc, is_primary);
                             let bub = v8::Boolean::new(tc, bubbles);
                             let can = v8::Boolean::new(tc, cancelable);
@@ -304,9 +304,9 @@ unsafe extern "C" fn dispatch_keyboard_event(info: *const v8::FunctionCallbackIn
                     if let Some(fn_val) = script.run(tc) {
                         if fn_val.is_function() {
                             let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(fn_val) };
-                            let type_str = v8::String::new(tc, &event_type).expect("str");
-                            let key_str = v8::String::new(tc, &key).expect("str");
-                            let code_str = v8::String::new(tc, &code).expect("str");
+                            let type_str = crate::v8_utils::v8_string(tc, &event_type);
+                            let key_str = crate::v8_utils::v8_string(tc, &key);
+                            let code_str = crate::v8_utils::v8_string(tc, &code);
                             let kc = v8::Integer::new(tc, key_code);
                             let bub = v8::Boolean::new(tc, bubbles);
                             let can = v8::Boolean::new(tc, cancelable);

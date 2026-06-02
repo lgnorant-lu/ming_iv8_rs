@@ -1,4 +1,6 @@
 //! EmbeddedV8Kernel: the primary kernel implementation using v8 crate.
+// SAFETY: remaining expects are OOM-only or logic invariants
+#![expect(clippy::expect_used, reason = "OOM or logic invariant")]
 
 use crate::config::EnvironmentMap;
 use crate::error::IV8Error;
@@ -198,7 +200,7 @@ impl EmbeddedV8Kernel {
         // Set up script origin if provided
         let origin = if let Some(ref url) = opts.source_url {
             let name = v8::String::new(scope, url).unwrap_or_else(|| {
-                v8::String::new(scope, "<eval>").expect("infallible")
+                crate::v8_utils::v8_string(scope, "<eval>")
             });
             Some(v8::ScriptOrigin::new(
                 scope,
@@ -258,6 +260,7 @@ impl EmbeddedV8Kernel {
 
         // Check exception
         if tc.has_caught() {
+            // SAFETY: guarded by has_caught() check above
             let exception = tc.exception().expect("has_caught but no exception");
             let message = exception.to_rust_string_lossy(tc);
             let stack = tc
@@ -267,7 +270,7 @@ impl EmbeddedV8Kernel {
 
             let name = if exception.is_native_error() {
                 if let Some(obj) = exception.to_object(tc) {
-                    let name_key = v8::String::new(tc, "name").expect("infallible");
+                    let name_key = crate::v8_utils::v8_string(tc, "name");
                     obj.get(tc, name_key.into())
                         .map(|v| v.to_rust_string_lossy(tc))
                         .unwrap_or_else(|| "Error".to_string())
@@ -446,7 +449,7 @@ impl EmbeddedV8Kernel {
                 .new_instance(scope)
                 .expect("failed to create undetectable __iv8__ instance");
 
-            let key = v8::String::new(scope, &js_api_name).expect("api name");
+            let key = crate::v8_utils::v8_string(scope, &js_api_name);
             global.define_own_property(
                 scope,
                 key.into(),
@@ -1140,7 +1143,7 @@ impl EmbeddedV8Kernel {
             v8::tc_scope!(tc, scope);
 
             let promise_local = v8::Local::new(tc, &global);
-            let fn_src = v8::String::new(tc, settle_script).expect("str");
+            let fn_src = crate::v8_utils::v8_string(tc, settle_script);
             let script = v8::Script::compile(tc, fn_src, None).expect("compile");
             let fn_val = script.run(tc).expect("run");
             let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(fn_val) };
@@ -1164,7 +1167,7 @@ impl EmbeddedV8Kernel {
                     v8::tc_scope!(tc, scope);
                     let tracker_local = v8::Local::new(tc, &tracker);
                     let tracker_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(tracker_local) };
-                    let settled_key = v8::String::new(tc, "settled").expect("key");
+                    let settled_key = crate::v8_utils::v8_string(tc, "settled");
                     if let Some(settled_fn) = tracker_obj.get(tc, settled_key.into()) {
                         if settled_fn.is_function() {
                             let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(settled_fn) };
@@ -1189,7 +1192,7 @@ impl EmbeddedV8Kernel {
                     v8::tc_scope!(tc, scope);
                     let tracker_local = v8::Local::new(tc, &tracker);
                     let tracker_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(tracker_local) };
-                    let result_key = v8::String::new(tc, "result").expect("key");
+                    let result_key = crate::v8_utils::v8_string(tc, "result");
                     if let Some(result_fn) = tracker_obj.get(tc, result_key.into()) {
                         if result_fn.is_function() {
                             let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(result_fn) };

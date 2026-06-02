@@ -29,13 +29,13 @@ pub fn install_console(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Objec
         ("clear", console_clear_cb),
     ] {
         let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
-        let func = fn_tmpl.get_function(scope).expect("fn");
-        let key = v8::String::new(scope, name).expect("key");
+        let func = crate::v8_utils::v8_fn(scope, &*fn_tmpl);
+        let key = crate::v8_utils::v8_string(scope, name);
         func.set_name(key);
         console_obj.set(scope, key.into(), func.into());
     }
 
-    let key = v8::String::new(scope, "console").expect("key");
+    let key = crate::v8_utils::v8_string(scope, "console");
     global.define_own_property(
         scope,
         key.into(),

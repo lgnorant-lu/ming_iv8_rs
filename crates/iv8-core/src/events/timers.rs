@@ -23,8 +23,8 @@ fn install_fn(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
-    let func = tmpl.get_function(scope).expect("get_function");
-    let name_str = v8::String::new(scope, name).expect("name");
+    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     obj.set(scope, name_str.into(), func.into());
 }

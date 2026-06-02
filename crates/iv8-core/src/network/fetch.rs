@@ -152,8 +152,8 @@ fn parse_fetch_init<'s>(
 /// Install the global fetch() function.
 pub fn install_fetch(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     let tmpl = v8::FunctionTemplate::builder_raw(fetch_callback).build(scope);
-    let func = tmpl.get_function(scope).expect("fn");
-    let key = v8::String::new(scope, "fetch").expect("key");
+    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let key = crate::v8_utils::v8_string(scope, "fetch");
     func.set_name(key);
     global.set(scope, key.into(), func.into());
 }
@@ -167,12 +167,12 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         // Create a Promise resolver
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 1 {
-            let msg = v8::String::new(scope, "TypeError: Failed to execute 'fetch': 1 argument required").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "TypeError: Failed to execute 'fetch': 1 argument required");
             let err = v8::Exception::type_error(scope, msg);
             resolver.reject(scope, err);
             return;
@@ -225,10 +225,10 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
                     }
                     None => {
                         // Network error (offline mode)
-                        let msg = v8::String::new(
+                        let msg = crate::v8_utils::v8_string(
                             scope,
                             &format!("TypeError: Failed to fetch '{}': NetworkError when attempting to fetch resource.", url_str),
-                        ).expect("msg");
+                        );
                         let err = v8::Exception::type_error(scope, msg);
                         resolver.reject(scope, err);
                     }
@@ -246,23 +246,23 @@ fn build_response_object<'s>(
     let obj = v8::Object::new(scope);
 
     // status
-    let status_key = v8::String::new(scope, "status").expect("key");
+    let status_key = crate::v8_utils::v8_string(scope, "status");
     let status_val = v8::Integer::new(scope, resource.status as i32);
     obj.set(scope, status_key.into(), status_val.into());
 
     // ok (status 200-299)
-    let ok_key = v8::String::new(scope, "ok").expect("key");
+    let ok_key = crate::v8_utils::v8_string(scope, "ok");
     let ok_val = v8::Boolean::new(scope, resource.status >= 200 && resource.status < 300);
     obj.set(scope, ok_key.into(), ok_val.into());
 
     // statusText
-    let st_key = v8::String::new(scope, "statusText").expect("key");
-    let st_val = v8::String::new(scope, if resource.status == 200 { "OK" } else { "" }).expect("val");
+    let st_key = crate::v8_utils::v8_string(scope, "statusText");
+    let st_val = crate::v8_utils::v8_string(scope, if resource.status == 200 { "OK" } else { "" });
     obj.set(scope, st_key.into(), st_val.into());
 
     // url (empty for now)
-    let url_key = v8::String::new(scope, "url").expect("key");
-    let url_val = v8::String::new(scope, "").expect("val");
+    let url_key = crate::v8_utils::v8_string(scope, "url");
+    let url_val = crate::v8_utils::v8_string(scope, "");
     obj.set(scope, url_key.into(), url_val.into());
 
     // headers — build a Headers-like object
@@ -274,45 +274,45 @@ fn build_response_object<'s>(
     }
     // Install get() method on headers
     let get_tmpl = v8::FunctionTemplate::builder_raw(headers_get_cb).build(scope);
-    let get_fn = get_tmpl.get_function(scope).expect("fn");
-    let get_key = v8::String::new(scope, "get").expect("key");
+    let get_fn = crate::v8_utils::v8_fn(scope, &*get_tmpl);
+    let get_key = crate::v8_utils::v8_string(scope, "get");
     headers_obj.set(scope, get_key.into(), get_fn.into());
     // Install has() method
     let has_tmpl = v8::FunctionTemplate::builder_raw(headers_has_cb).build(scope);
-    let has_fn = has_tmpl.get_function(scope).expect("fn");
-    let has_key = v8::String::new(scope, "has").expect("key");
+    let has_fn = crate::v8_utils::v8_fn(scope, &*has_tmpl);
+    let has_key = crate::v8_utils::v8_string(scope, "has");
     headers_obj.set(scope, has_key.into(), has_fn.into());
-    let headers_key = v8::String::new(scope, "headers").expect("key");
+    let headers_key = crate::v8_utils::v8_string(scope, "headers");
     obj.set(scope, headers_key.into(), headers_obj.into());
 
     // Store body as hidden property for text()/json()/arrayBuffer()
     let body_str = String::from_utf8_lossy(&resource.body);
-    let body_key = v8::String::new(scope, "__body__").expect("key");
-    let body_val = v8::String::new(scope, &body_str).expect("val");
+    let body_key = crate::v8_utils::v8_string(scope, "__body__");
+    let body_val = crate::v8_utils::v8_string(scope, &body_str);
     obj.define_own_property(scope, body_key.into(), body_val.into(), v8::PropertyAttribute::DONT_ENUM);
 
     // Store raw bytes for arrayBuffer
     let store = v8::ArrayBuffer::new_backing_store_from_vec(resource.body.clone());
     let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
-    let ab_key = v8::String::new(scope, "__arrayBuffer__").expect("key");
+    let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
     obj.define_own_property(scope, ab_key.into(), ab.into(), v8::PropertyAttribute::DONT_ENUM);
 
     // text() → Promise<string>
     let text_tmpl = v8::FunctionTemplate::builder_raw(response_text).build(scope);
-    let text_fn = text_tmpl.get_function(scope).expect("fn");
-    let text_key = v8::String::new(scope, "text").expect("key");
+    let text_fn = crate::v8_utils::v8_fn(scope, &*text_tmpl);
+    let text_key = crate::v8_utils::v8_string(scope, "text");
     obj.set(scope, text_key.into(), text_fn.into());
 
     // json() → Promise<object>
     let json_tmpl = v8::FunctionTemplate::builder_raw(response_json).build(scope);
-    let json_fn = json_tmpl.get_function(scope).expect("fn");
-    let json_key = v8::String::new(scope, "json").expect("key");
+    let json_fn = crate::v8_utils::v8_fn(scope, &*json_tmpl);
+    let json_key = crate::v8_utils::v8_string(scope, "json");
     obj.set(scope, json_key.into(), json_fn.into());
 
     // arrayBuffer() → Promise<ArrayBuffer>
     let ab_tmpl = v8::FunctionTemplate::builder_raw(response_array_buffer).build(scope);
-    let ab_fn = ab_tmpl.get_function(scope).expect("fn");
-    let ab_fn_key = v8::String::new(scope, "arrayBuffer").expect("key");
+    let ab_fn = crate::v8_utils::v8_fn(scope, &*ab_tmpl);
+    let ab_fn_key = crate::v8_utils::v8_string(scope, "arrayBuffer");
     obj.set(scope, ab_fn_key.into(), ab_fn.into());
 
     obj
@@ -335,7 +335,7 @@ unsafe extern "C" fn headers_get_cb(info: *const v8::FunctionCallbackInfo) {
         let this = args.this();
 
         // Look up the header by name (case-insensitive)
-        if let Some(val) = this.get(scope, v8::String::new(scope, &name).expect("key").into()) {
+        if let Some(val) = this.get(scope, crate::v8_utils::v8_string(scope, &name).into()) {
             if !val.is_undefined() && !val.is_null() {
                 rv.set(val);
                 return;
@@ -361,7 +361,7 @@ unsafe extern "C" fn headers_has_cb(info: *const v8::FunctionCallbackInfo) {
         let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
         let this = args.this();
 
-        let has = if let Some(val) = this.get(scope, v8::String::new(scope, &name).expect("key").into()) {
+        let has = if let Some(val) = this.get(scope, crate::v8_utils::v8_string(scope, &name).into()) {
             !val.is_undefined() && !val.is_null()
         } else { false };
 
@@ -378,15 +378,15 @@ unsafe extern "C" fn response_text(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         let this = args.this();
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
-        let body_key = v8::String::new(scope, "__body__").expect("key");
+        let body_key = crate::v8_utils::v8_string(scope, "__body__");
         if let Some(body) = this.get(scope, body_key.into()) {
             resolver.resolve(scope, body);
         } else {
-            let empty = v8::String::new(scope, "").expect("empty");
+            let empty = crate::v8_utils::v8_string(scope, "");
             resolver.resolve(scope, empty.into());
         }
     }));
@@ -401,24 +401,24 @@ unsafe extern "C" fn response_json(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         let this = args.this();
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
-        let body_key = v8::String::new(scope, "__body__").expect("key");
+        let body_key = crate::v8_utils::v8_string(scope, "__body__");
         if let Some(body_val) = this.get(scope, body_key.into()) {
             let body_str = body_val.to_rust_string_lossy(scope);
             // Parse JSON using V8's JSON.parse
-            let json_key = v8::String::new(scope, "JSON").expect("key");
+            let json_key = crate::v8_utils::v8_string(scope, "JSON");
             let global = scope.get_current_context().global(scope);
             if let Some(json_obj) = global.get(scope, json_key.into()) {
                 if json_obj.is_object() {
                     let json_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(json_obj) };
-                    let parse_key = v8::String::new(scope, "parse").expect("key");
+                    let parse_key = crate::v8_utils::v8_string(scope, "parse");
                     if let Some(parse_fn) = json_obj.get(scope, parse_key.into()) {
                         if parse_fn.is_function() {
                             let parse_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(parse_fn) };
-                            let body_v8 = v8::String::new(scope, &body_str).expect("body");
+                            let body_v8 = crate::v8_utils::v8_string(scope, &body_str);
                             if let Some(parsed) = parse_fn.call(scope, json_obj.into(), &[body_v8.into()]) { resolver.resolve(scope, parsed); return; }
                         }
                     }
@@ -441,11 +441,11 @@ unsafe extern "C" fn response_array_buffer(info: *const v8::FunctionCallbackInfo
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         let this = args.this();
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
-        let ab_key = v8::String::new(scope, "__arrayBuffer__").expect("key");
+        let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
         if let Some(ab) = this.get(scope, ab_key.into()) {
             resolver.resolve(scope, ab);
         } else {

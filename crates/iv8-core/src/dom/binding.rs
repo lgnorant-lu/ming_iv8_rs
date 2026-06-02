@@ -100,7 +100,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
         .as_ref()
         .map(|doc| doc.root_id());
     if let Some(root_id) = root_id_opt {
-        let id_key = v8::String::new(scope, "__nodeId__").expect("key");
+        let id_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         let nz: std::num::NonZeroUsize = unsafe { std::mem::transmute(root_id) };
         let id_val = v8::Number::new(scope, nz.get() as f64);
         // Use DontEnum so Object.keys(document) doesn't show __nodeId__.
@@ -113,7 +113,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     }
 
     // Set document on global
-    let key = v8::String::new(scope, "document").expect("document key");
+    let key = crate::v8_utils::v8_string(scope, "document");
     global.set(scope, key.into(), doc_obj.into());
 }
 
@@ -125,23 +125,23 @@ fn install_doc_accessor(
     getter: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let getter_tmpl = v8::FunctionTemplate::builder_raw(getter).build(scope);
-    let getter_fn = getter_tmpl.get_function(scope).expect("getter fn");
-    let name_str = v8::String::new(scope, name).expect("name");
+    let getter_fn = crate::v8_utils::v8_fn(scope, &*getter_tmpl);
+    let name_str = crate::v8_utils::v8_string(scope, name);
     // Use defineProperty to install as a getter
     let desc = v8::Object::new(scope);
-    let get_key = v8::String::new(scope, "get").expect("get");
-    let enum_key = v8::String::new(scope, "enumerable").expect("enumerable");
-    let conf_key = v8::String::new(scope, "configurable").expect("configurable");
+    let get_key = crate::v8_utils::v8_string(scope, "get");
+    let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+    let conf_key = crate::v8_utils::v8_string(scope, "configurable");
     desc.set(scope, get_key.into(), getter_fn.into());
     desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
     desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
     // Use Object.defineProperty via JS
     let global = scope.get_current_context().global(scope);
-    let obj_key = v8::String::new(scope, "Object").expect("Object");
+    let obj_key = crate::v8_utils::v8_string(scope, "Object");
     if let Some(obj_ctor) = global.get(scope, obj_key.into()) {
         if obj_ctor.is_object() {
             let obj_ctor: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj_ctor) };
-            let def_prop_key = v8::String::new(scope, "defineProperty").expect("defineProperty");
+            let def_prop_key = crate::v8_utils::v8_string(scope, "defineProperty");
             if let Some(def_prop) = obj_ctor.get(scope, def_prop_key.into()) {
                 if def_prop.is_function() {
                     let def_prop_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(def_prop) };
@@ -240,7 +240,7 @@ unsafe extern "C" fn doc_title(info: *const v8::FunctionCallbackInfo) {
         if let Some(s) = v8::String::new(scope, &title) {
             rv.set(s.into());
         } else {
-            rv.set(v8::String::new(scope, "").expect("empty").into());
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
         }
     }));
 }
@@ -264,7 +264,7 @@ unsafe extern "C" fn doc_url(info: *const v8::FunctionCallbackInfo) {
                 }
             }
         }
-        rv.set(v8::String::new(scope, "about:blank").expect("str").into());
+        rv.set(crate::v8_utils::v8_string(scope, "about:blank").into());
     }));
 }
 
@@ -291,8 +291,8 @@ fn install_method(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
-    let func = tmpl.get_function(scope).expect("get_function");
-    let name_str = v8::String::new(scope, name).expect("name");
+    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     obj.set(scope, name_str.into(), func.into());
 }
@@ -336,7 +336,7 @@ fn node_to_v8_object_plain<'s>(
     let obj = v8::Object::new(scope);
 
     // Store hidden node ID for mutation methods
-    let nid_key = v8::String::new(scope, "__nodeId__").expect("key");
+    let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
     // ego-tree NodeId is a NonZeroUsize, store as integer
     let nid_val = v8::Number::new(scope, node_id_to_usize(node_id) as f64);
     obj.define_own_property(
@@ -347,36 +347,36 @@ fn node_to_v8_object_plain<'s>(
     );
 
     // nodeType
-    let node_type_key = v8::String::new(scope, "nodeType").expect("key");
+    let node_type_key = crate::v8_utils::v8_string(scope, "nodeType");
     let node_type_val = v8::Integer::new(scope, data.node_type() as i32);
     obj.set(scope, node_type_key.into(), node_type_val.into());
 
     // nodeName
-    let node_name_key = v8::String::new(scope, "nodeName").expect("key");
-    let node_name_val = v8::String::new(scope, data.node_name()).expect("val");
+    let node_name_key = crate::v8_utils::v8_string(scope, "nodeName");
+    let node_name_val = crate::v8_utils::v8_string(scope, data.node_name());
     obj.set(scope, node_name_key.into(), node_name_val.into());
 
     match data {
         NodeData::Element { tag_name, attrs, id, classes, .. } => {
             // tagName (uppercase for HTML)
-            let tag_key = v8::String::new(scope, "tagName").expect("key");
-            let tag_val = v8::String::new(scope, &tag_name.to_ascii_uppercase()).expect("val");
+            let tag_key = crate::v8_utils::v8_string(scope, "tagName");
+            let tag_val = crate::v8_utils::v8_string(scope, &tag_name.to_ascii_uppercase());
             obj.set(scope, tag_key.into(), tag_val.into());
 
             // id
-            let id_key = v8::String::new(scope, "id").expect("key");
-            let id_val = v8::String::new(scope, id.as_deref().unwrap_or("")).expect("val");
+            let id_key = crate::v8_utils::v8_string(scope, "id");
+            let id_val = crate::v8_utils::v8_string(scope, id.as_deref().unwrap_or(""));
             obj.set(scope, id_key.into(), id_val.into());
 
             // className
-            let class_key = v8::String::new(scope, "className").expect("key");
-            let class_val = v8::String::new(scope, &classes.join(" ")).expect("val");
+            let class_key = crate::v8_utils::v8_string(scope, "className");
+            let class_val = crate::v8_utils::v8_string(scope, &classes.join(" "));
             obj.set(scope, class_key.into(), class_val.into());
 
             // textContent
-            let text_key = v8::String::new(scope, "textContent").expect("key");
+            let text_key = crate::v8_utils::v8_string(scope, "textContent");
             let text_content = doc.text_content_of(node_id);
-            let text_val = v8::String::new(scope, &text_content).expect("val");
+            let text_val = crate::v8_utils::v8_string(scope, &text_content);
             obj.set(scope, text_key.into(), text_val.into());
 
             // getAttribute method
@@ -388,108 +388,108 @@ fn node_to_v8_object_plain<'s>(
                     attrs_obj.set(scope, ak.into(), av.into());
                 }
             }
-            let attrs_key = v8::String::new(scope, "__attrs__").expect("key");
+            let attrs_key = crate::v8_utils::v8_string(scope, "__attrs__");
             obj.set(scope, attrs_key.into(), attrs_obj.into());
 
             // Install getAttribute as a native function
             let get_attr_tmpl = v8::FunctionTemplate::builder_raw(get_attribute_callback).build(scope);
-            let get_attr_fn = get_attr_tmpl.get_function(scope).expect("fn");
-            let get_attr_key = v8::String::new(scope, "getAttribute").expect("key");
+            let get_attr_fn = crate::v8_utils::v8_fn(scope, &*get_attr_tmpl);
+            let get_attr_key = crate::v8_utils::v8_string(scope, "getAttribute");
             obj.set(scope, get_attr_key.into(), get_attr_fn.into());
 
             // Install setAttribute
             let set_attr_tmpl = v8::FunctionTemplate::builder_raw(set_attribute_callback).build(scope);
-            let set_attr_fn = set_attr_tmpl.get_function(scope).expect("fn");
-            let set_attr_key = v8::String::new(scope, "setAttribute").expect("key");
+            let set_attr_fn = crate::v8_utils::v8_fn(scope, &*set_attr_tmpl);
+            let set_attr_key = crate::v8_utils::v8_string(scope, "setAttribute");
             obj.set(scope, set_attr_key.into(), set_attr_fn.into());
 
             // Install removeAttribute
             let rm_attr_tmpl = v8::FunctionTemplate::builder_raw(remove_attribute_callback).build(scope);
-            let rm_attr_fn = rm_attr_tmpl.get_function(scope).expect("fn");
-            let rm_attr_key = v8::String::new(scope, "removeAttribute").expect("key");
+            let rm_attr_fn = crate::v8_utils::v8_fn(scope, &*rm_attr_tmpl);
+            let rm_attr_key = crate::v8_utils::v8_string(scope, "removeAttribute");
             obj.set(scope, rm_attr_key.into(), rm_attr_fn.into());
 
             // Install hasAttribute
             let has_attr_tmpl = v8::FunctionTemplate::builder_raw(has_attribute_callback).build(scope);
-            let has_attr_fn = has_attr_tmpl.get_function(scope).expect("fn");
-            let has_attr_key = v8::String::new(scope, "hasAttribute").expect("key");
+            let has_attr_fn = crate::v8_utils::v8_fn(scope, &*has_attr_tmpl);
+            let has_attr_key = crate::v8_utils::v8_string(scope, "hasAttribute");
             obj.set(scope, has_attr_key.into(), has_attr_fn.into());
 
             // Install appendChild
             let append_tmpl = v8::FunctionTemplate::builder_raw(append_child_callback).build(scope);
-            let append_fn = append_tmpl.get_function(scope).expect("fn");
-            let append_key = v8::String::new(scope, "appendChild").expect("key");
+            let append_fn = crate::v8_utils::v8_fn(scope, &*append_tmpl);
+            let append_key = crate::v8_utils::v8_string(scope, "appendChild");
             obj.set(scope, append_key.into(), append_fn.into());
 
             // Install removeChild
             let remove_tmpl = v8::FunctionTemplate::builder_raw(remove_child_callback).build(scope);
-            let remove_fn = remove_tmpl.get_function(scope).expect("fn");
-            let remove_key = v8::String::new(scope, "removeChild").expect("key");
+            let remove_fn = crate::v8_utils::v8_fn(scope, &*remove_tmpl);
+            let remove_key = crate::v8_utils::v8_string(scope, "removeChild");
             obj.set(scope, remove_key.into(), remove_fn.into());
 
             // Install replaceChild
             let replace_tmpl = v8::FunctionTemplate::builder_raw(replace_child_callback).build(scope);
-            let replace_fn = replace_tmpl.get_function(scope).expect("fn");
-            let replace_key = v8::String::new(scope, "replaceChild").expect("key");
+            let replace_fn = crate::v8_utils::v8_fn(scope, &*replace_tmpl);
+            let replace_key = crate::v8_utils::v8_string(scope, "replaceChild");
             obj.set(scope, replace_key.into(), replace_fn.into());
 
             // Install insertBefore
             let ib_tmpl = v8::FunctionTemplate::builder_raw(insert_before_callback).build(scope);
-            let ib_fn = ib_tmpl.get_function(scope).expect("fn");
-            let ib_key = v8::String::new(scope, "insertBefore").expect("key");
+            let ib_fn = crate::v8_utils::v8_fn(scope, &*ib_tmpl);
+            let ib_key = crate::v8_utils::v8_string(scope, "insertBefore");
             obj.set(scope, ib_key.into(), ib_fn.into());
 
             // Install addEventListener
             let ael_tmpl = v8::FunctionTemplate::builder_raw(add_event_listener_callback).build(scope);
-            let ael_fn = ael_tmpl.get_function(scope).expect("fn");
-            let ael_key = v8::String::new(scope, "addEventListener").expect("key");
+            let ael_fn = crate::v8_utils::v8_fn(scope, &*ael_tmpl);
+            let ael_key = crate::v8_utils::v8_string(scope, "addEventListener");
             obj.set(scope, ael_key.into(), ael_fn.into());
 
             // Install removeEventListener
             let rel_tmpl = v8::FunctionTemplate::builder_raw(remove_event_listener_callback).build(scope);
-            let rel_fn = rel_tmpl.get_function(scope).expect("fn");
-            let rel_key = v8::String::new(scope, "removeEventListener").expect("key");
+            let rel_fn = crate::v8_utils::v8_fn(scope, &*rel_tmpl);
+            let rel_key = crate::v8_utils::v8_string(scope, "removeEventListener");
             obj.set(scope, rel_key.into(), rel_fn.into());
 
             // Install dispatchEvent
             let de_tmpl = v8::FunctionTemplate::builder_raw(dispatch_event_callback).build(scope);
-            let de_fn = de_tmpl.get_function(scope).expect("fn");
-            let de_key = v8::String::new(scope, "dispatchEvent").expect("key");
+            let de_fn = crate::v8_utils::v8_fn(scope, &*de_tmpl);
+            let de_key = crate::v8_utils::v8_string(scope, "dispatchEvent");
             obj.set(scope, de_key.into(), de_fn.into());
 
             // Install innerHTML getter (as a method for now — proper getter needs accessor)
             let ih_tmpl = v8::FunctionTemplate::builder_raw(inner_html_getter_callback).build(scope);
-            let ih_fn = ih_tmpl.get_function(scope).expect("fn");
-            let ih_key = v8::String::new(scope, "__getInnerHTML__").expect("key");
+            let ih_fn = crate::v8_utils::v8_fn(scope, &*ih_tmpl);
+            let ih_key = crate::v8_utils::v8_string(scope, "__getInnerHTML__");
             obj.set(scope, ih_key.into(), ih_fn.into());
 
             // Install innerHTML setter
             let ihs_tmpl = v8::FunctionTemplate::builder_raw(inner_html_setter_callback).build(scope);
-            let ihs_fn = ihs_tmpl.get_function(scope).expect("fn");
-            let ihs_key = v8::String::new(scope, "__setInnerHTML__").expect("key");
+            let ihs_fn = crate::v8_utils::v8_fn(scope, &*ihs_tmpl);
+            let ihs_key = crate::v8_utils::v8_string(scope, "__setInnerHTML__");
             obj.set(scope, ihs_key.into(), ihs_fn.into());
 
             // Install insertAdjacentHTML
             let iah_tmpl = v8::FunctionTemplate::builder_raw(insert_adjacent_html_callback).build(scope);
-            let iah_fn = iah_tmpl.get_function(scope).expect("fn");
-            let iah_key = v8::String::new(scope, "insertAdjacentHTML").expect("key");
+            let iah_fn = crate::v8_utils::v8_fn(scope, &*iah_tmpl);
+            let iah_key = crate::v8_utils::v8_string(scope, "insertAdjacentHTML");
             obj.set(scope, iah_key.into(), iah_fn.into());
 
             // Install outerHTML getter
             let oh_tmpl = v8::FunctionTemplate::builder_raw(outer_html_getter_callback).build(scope);
-            let oh_fn = oh_tmpl.get_function(scope).expect("fn");
-            let oh_key = v8::String::new(scope, "__getOuterHTML__").expect("key");
+            let oh_fn = crate::v8_utils::v8_fn(scope, &*oh_tmpl);
+            let oh_key = crate::v8_utils::v8_string(scope, "__getOuterHTML__");
             obj.set(scope, oh_key.into(), oh_fn.into());
 
             // Install textContent setter (as method)
             let tcs_tmpl = v8::FunctionTemplate::builder_raw(text_content_setter_callback).build(scope);
-            let tcs_fn = tcs_tmpl.get_function(scope).expect("fn");
-            let tcs_key = v8::String::new(scope, "__setTextContent__").expect("key");
+            let tcs_fn = crate::v8_utils::v8_fn(scope, &*tcs_tmpl);
+            let tcs_key = crate::v8_utils::v8_string(scope, "__setTextContent__");
             obj.set(scope, tcs_key.into(), tcs_fn.into());
         }
         NodeData::Text(text) => {
-            let text_key = v8::String::new(scope, "textContent").expect("key");
-            let text_val = v8::String::new(scope, text).expect("val");
+            let text_key = crate::v8_utils::v8_string(scope, "textContent");
+            let text_val = crate::v8_utils::v8_string(scope, text);
             obj.set(scope, text_key.into(), text_val.into());
         }
         _ => {}
@@ -497,7 +497,7 @@ fn node_to_v8_object_plain<'s>(
 
     // Set prototype chain (if __setNodePrototype__ is available)
     let global = scope.get_current_context().global(scope);
-    let proto_key = v8::String::new(scope, "__setNodePrototype__").expect("key");
+    let proto_key = crate::v8_utils::v8_string(scope, "__setNodePrototype__");
     if let Some(proto_fn) = global.get(scope, proto_key.into()) {
         if proto_fn.is_function() && !proto_fn.is_undefined() {
             let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(proto_fn) };
@@ -746,7 +746,7 @@ unsafe extern "C" fn get_attribute_callback(info: *const v8::FunctionCallbackInf
         let attr_name = args.get(0);
         let this = args.this();
 
-        let attrs_key = v8::String::new(scope, "__attrs__").expect("key");
+        let attrs_key = crate::v8_utils::v8_string(scope, "__attrs__");
         if let Some(attrs_val) = this.get(scope, attrs_key.into()) {
             if attrs_val.is_object() {
                 let attrs_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(attrs_val) };
@@ -1006,7 +1006,7 @@ unsafe extern "C" fn remove_attribute_callback(info: *const v8::FunctionCallback
         }
 
         // Also update __attrs__ on the JS object
-        let attrs_key = v8::String::new(scope, "__attrs__").expect("key");
+        let attrs_key = crate::v8_utils::v8_string(scope, "__attrs__");
         if let Some(attrs_val) = this.get(scope, attrs_key.into()) {
             if attrs_val.is_object() {
                 let attrs_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(attrs_val) };
@@ -1178,7 +1178,7 @@ unsafe extern "C" fn set_attribute_callback(info: *const v8::FunctionCallbackInf
         }
 
         // Also update the __attrs__ object on `this` for getAttribute consistency
-        let attrs_key = v8::String::new(scope, "__attrs__").expect("key");
+        let attrs_key = crate::v8_utils::v8_string(scope, "__attrs__");
         if let Some(attrs_val) = this.get(scope, attrs_key.into()) {
             if attrs_val.is_object() {
                 let attrs_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(attrs_val) };
@@ -1299,12 +1299,12 @@ unsafe extern "C" fn dispatch_event_callback(info: *const v8::FunctionCallbackIn
             (event_arg.to_rust_string_lossy(scope), true)
         } else if event_arg.is_object() {
             let evt_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(event_arg) };
-            let type_key = v8::String::new(scope, "type").expect("key");
+            let type_key = crate::v8_utils::v8_string(scope, "type");
             let event_type = evt_obj
                 .get(scope, type_key.into())
                 .map(|v| v.to_rust_string_lossy(scope))
                 .unwrap_or_default();
-            let bubbles_key = v8::String::new(scope, "bubbles").expect("key");
+            let bubbles_key = crate::v8_utils::v8_string(scope, "bubbles");
             let bubbles = evt_obj
                 .get(scope, bubbles_key.into())
                 .map(|v| v.is_true())
@@ -1366,7 +1366,7 @@ unsafe extern "C" fn inner_html_getter_callback(info: *const v8::FunctionCallbac
                 }
             }
         }
-        let empty = v8::String::new(scope, "").expect("empty");
+        let empty = crate::v8_utils::v8_string(scope, "");
         rv.set(empty.into());
     }));
 }
@@ -1393,7 +1393,7 @@ unsafe extern "C" fn outer_html_getter_callback(info: *const v8::FunctionCallbac
                 }
             }
         }
-        let empty = v8::String::new(scope, "").expect("empty");
+        let empty = crate::v8_utils::v8_string(scope, "");
         rv.set(empty.into());
     }));
 }

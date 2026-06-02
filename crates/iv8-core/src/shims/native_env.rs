@@ -38,7 +38,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     macro_rules! nav_getter {
         ($name:literal, $cb:ident) => {
             let getter = v8::FunctionTemplate::builder_raw($cb).build(scope);
-            let name = v8::String::new(scope, $name).expect("key");
+            let name = crate::v8_utils::v8_string(scope, $name);
             // Set the getter's name so toString() returns "function <name>() { [native code] }"
             getter.set_class_name(name);
             nav_tmpl.set_accessor_property(
@@ -77,7 +77,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
         // Install userAgentData sub-object on navigator
         crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
 
-        let key = v8::String::new(scope, "navigator").expect("key");
+        let key = crate::v8_utils::v8_string(scope, "navigator");
         global.define_own_property(
             scope,
             key.into(),
@@ -198,8 +198,8 @@ unsafe extern "C" fn nav_permissions(info: *const v8::FunctionCallbackInfo) {
         let obj = v8::Object::new(scope);
         // query(descriptor) → Promise<{state: 'granted'|'denied'|'prompt'}>
         let query_tmpl = v8::FunctionTemplate::builder_raw(permissions_query_cb).build(scope);
-        let query_fn = query_tmpl.get_function(scope).expect("fn");
-        let query_key = v8::String::new(scope, "query").expect("key");
+        let query_fn = crate::v8_utils::v8_fn(scope, &*query_tmpl);
+        let query_key = crate::v8_utils::v8_string(scope, "query");
         obj.set(scope, query_key.into(), query_fn.into());
         rv.set(obj.into());
     }));
@@ -212,17 +212,17 @@ unsafe extern "C" fn permissions_query_cb(info: *const v8::FunctionCallbackInfo)
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         // Return Promise.resolve({state: 'prompt'})
         let global = scope.get_current_context().global(scope);
-        let promise_key = v8::String::new(scope, "Promise").expect("key");
+        let promise_key = crate::v8_utils::v8_string(scope, "Promise");
         if let Some(promise_ctor) = global.get(scope, promise_key.into()) {
             if promise_ctor.is_function() {
                 let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(promise_ctor) };
-                let resolve_key = v8::String::new(scope, "resolve").expect("key");
+                let resolve_key = crate::v8_utils::v8_string(scope, "resolve");
                 if let Some(resolve_fn) = ctor.get(scope, resolve_key.into()) {
                     if resolve_fn.is_function() {
                         let resolve: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(resolve_fn) };
                         let result_obj = v8::Object::new(scope);
-                        let state_key = v8::String::new(scope, "state").expect("key");
-                        let state_val = v8::String::new(scope, "prompt").expect("val");
+                        let state_key = crate::v8_utils::v8_string(scope, "state");
+                        let state_val = crate::v8_utils::v8_string(scope, "prompt");
                         result_obj.set(scope, state_key.into(), state_val.into());
                         let _undefined = v8::undefined(scope);
                         if let Some(promise) = resolve.call(scope, ctor.into(), &[result_obj.into()]) {
@@ -246,8 +246,8 @@ unsafe extern "C" fn nav_media_devices(info: *const v8::FunctionCallbackInfo) {
         let obj = v8::Object::new(scope);
         // enumerateDevices() → Promise<[]>
         let enum_tmpl = v8::FunctionTemplate::builder_raw(media_devices_enumerate_cb).build(scope);
-        let enum_fn = enum_tmpl.get_function(scope).expect("fn");
-        let enum_key = v8::String::new(scope, "enumerateDevices").expect("key");
+        let enum_fn = crate::v8_utils::v8_fn(scope, &*enum_tmpl);
+        let enum_key = crate::v8_utils::v8_string(scope, "enumerateDevices");
         obj.set(scope, enum_key.into(), enum_fn.into());
         rv.set(obj.into());
     }));
@@ -259,11 +259,11 @@ unsafe extern "C" fn media_devices_enumerate_cb(info: *const v8::FunctionCallbac
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let global = scope.get_current_context().global(scope);
-        let promise_key = v8::String::new(scope, "Promise").expect("key");
+        let promise_key = crate::v8_utils::v8_string(scope, "Promise");
         if let Some(promise_ctor) = global.get(scope, promise_key.into()) {
             if promise_ctor.is_function() {
                 let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(promise_ctor) };
-                let resolve_key = v8::String::new(scope, "resolve").expect("key");
+                let resolve_key = crate::v8_utils::v8_string(scope, "resolve");
                 if let Some(resolve_fn) = ctor.get(scope, resolve_key.into()) {
                     if resolve_fn.is_function() {
                         let resolve: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(resolve_fn) };
@@ -288,7 +288,7 @@ unsafe extern "C" fn nav_service_worker(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let obj = v8::Object::new(scope);
-        let state_key = v8::String::new(scope, "controller").expect("key");
+        let state_key = crate::v8_utils::v8_string(scope, "controller");
         obj.set(scope, state_key.into(), v8::null(scope).into());
         rv.set(obj.into());
     }));
@@ -331,7 +331,7 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     macro_rules! screen_getter {
         ($name:literal, $cb:ident) => {
             let getter = v8::FunctionTemplate::builder_raw($cb).build(scope);
-            let name = v8::String::new(scope, $name).expect("key");
+            let name = crate::v8_utils::v8_string(scope, $name);
             getter.set_class_name(name);
             screen_tmpl.set_accessor_property(
                 name.into(),
@@ -352,7 +352,7 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     screen_getter!("availTop",    screen_avail_top);
 
     if let Some(screen_obj) = screen_tmpl.new_instance(scope) {
-        let key = v8::String::new(scope, "screen").expect("key");
+        let key = crate::v8_utils::v8_string(scope, "screen");
         global.define_own_property(
             scope,
             key.into(),

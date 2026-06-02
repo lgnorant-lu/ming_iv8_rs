@@ -10,7 +10,7 @@
 /// Install crypto.getRandomValues and crypto.randomUUID on the global `crypto` object.
 pub fn install_crypto_random(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Get or create the crypto object
-    let crypto_key = v8::String::new(scope, "crypto").expect("key");
+    let crypto_key = crate::v8_utils::v8_string(scope, "crypto");
     let crypto_obj = if let Some(existing) = global.get(scope, crypto_key.into()) {
         if existing.is_object() && !existing.is_null_or_undefined() {
             unsafe { v8::Local::<v8::Object>::cast_unchecked(existing) }
@@ -27,14 +27,14 @@ pub fn install_crypto_random(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
 
     // Install getRandomValues
     let grv_tmpl = v8::FunctionTemplate::builder_raw(get_random_values_callback).build(scope);
-    let grv_fn = grv_tmpl.get_function(scope).expect("fn");
-    let grv_key = v8::String::new(scope, "getRandomValues").expect("key");
+    let grv_fn = crate::v8_utils::v8_fn(scope, &*grv_tmpl);
+    let grv_key = crate::v8_utils::v8_string(scope, "getRandomValues");
     crypto_obj.set(scope, grv_key.into(), grv_fn.into());
 
     // Install randomUUID
     let uuid_tmpl = v8::FunctionTemplate::builder_raw(random_uuid_callback).build(scope);
-    let uuid_fn = uuid_tmpl.get_function(scope).expect("fn");
-    let uuid_key = v8::String::new(scope, "randomUUID").expect("key");
+    let uuid_fn = crate::v8_utils::v8_fn(scope, &*uuid_tmpl);
+    let uuid_key = crate::v8_utils::v8_string(scope, "randomUUID");
     crypto_obj.set(scope, uuid_key.into(), uuid_fn.into());
 }
 
@@ -47,7 +47,7 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
         if args.length() < 1 {
-            let msg = v8::String::new(scope, "getRandomValues requires 1 argument").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "getRandomValues requires 1 argument");
             let exc = v8::Exception::type_error(scope, msg);
             scope.throw_exception(exc);
             return;
@@ -57,7 +57,7 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
 
         // Must be a TypedArray (Uint8Array, Uint16Array, Uint32Array, Int8Array, etc.)
         if !arg.is_typed_array() {
-            let msg = v8::String::new(scope, "getRandomValues: argument must be a TypedArray").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "getRandomValues: argument must be a TypedArray");
             let exc = v8::Exception::type_error(scope, msg);
             scope.throw_exception(exc);
             return;
@@ -68,7 +68,7 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
 
         // Spec limit: max 65536 bytes
         if byte_length > 65536 {
-            let msg = v8::String::new(scope, "getRandomValues: quota exceeded (max 65536 bytes)").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "getRandomValues: quota exceeded (max 65536 bytes)");
             let exc = v8::Exception::error(scope, msg);
             scope.throw_exception(exc);
             return;
@@ -106,6 +106,7 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
         }
 
         // Write into the TypedArray's backing store
+        // SAFETY: guarded by is_typed_array() check above
         let ab = ta.buffer(scope).expect("buffer");
         let byte_offset = ta.byte_offset();
         let store = ab.get_backing_store();

@@ -1,9 +1,6 @@
 //! iv8-py: Python binding for iv8-rs via PyO3.
 
-// Allow expect_used in PyO3 binding code where panics are caught by PyO3's
-// exception handling mechanism.
-#![allow(clippy::expect_used)]
-#![allow(clippy::unwrap_used)]
+// too_many_arguments: PyO3 binding functions need many args; suppress.
 #![allow(clippy::too_many_arguments)]
 
 use pyo3::prelude::*;

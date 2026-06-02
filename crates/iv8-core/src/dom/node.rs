@@ -3,6 +3,7 @@
 //! ego-tree stores nodes in a Vec<Node<T>> where T is our NodeData enum.
 //! Each node has parent/first_child/last_child/prev_sibling/next_sibling indices.
 //! NodeId is a typed wrapper around the arena index.
+#![expect(clippy::expect_used, reason = "tree.get_mut expects: node IDs validated at call sites")]
 
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -301,6 +302,7 @@ impl Document {
     pub fn append_child(&mut self, parent_id: NodeId, data: NodeData) -> NodeId {
         // Register id if it's an element with an id
         let new_id = {
+            // SAFETY: parent_id is validated before append_child is called
             let mut parent = self.tree.get_mut(parent_id).expect("parent not found");
             parent.append(data).id()
         };
@@ -319,6 +321,7 @@ impl Document {
     /// Prepend a child node to a parent. Returns the new NodeId.
     pub fn prepend_child(&mut self, parent_id: NodeId, data: NodeData) -> NodeId {
         let new_id = {
+            // SAFETY: parent_id is validated before prepend_child is called
             let mut parent = self.tree.get_mut(parent_id).expect("parent not found");
             parent.prepend(data).id()
         };
@@ -336,6 +339,7 @@ impl Document {
     /// Insert a node before a sibling. Returns the new NodeId.
     pub fn insert_before(&mut self, sibling_id: NodeId, data: NodeData) -> NodeId {
         let new_id = {
+            // SAFETY: sibling_id is validated before insert_before is called
             let mut sibling = self.tree.get_mut(sibling_id).expect("sibling not found");
             sibling.insert_before(data).id()
         };
@@ -353,6 +357,7 @@ impl Document {
     /// Insert a node after a sibling. Returns the new NodeId.
     pub fn insert_after(&mut self, sibling_id: NodeId, data: NodeData) -> NodeId {
         let new_id = {
+            // SAFETY: sibling_id is validated before insert_after is called
             let mut sibling = self.tree.get_mut(sibling_id).expect("sibling not found");
             sibling.insert_after(data).id()
         };

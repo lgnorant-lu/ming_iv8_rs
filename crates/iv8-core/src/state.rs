@@ -2,6 +2,7 @@
 //!
 //! All V8 callbacks access shared state through `RuntimeState::get(isolate)`.
 //! Internal mutability via `RefCell` (V8 Isolate is single-threaded, no Mutex needed).
+#![expect(clippy::expect_used, reason = "get_slot: RuntimeState must be installed before use")]
 
 use std::cell::RefCell;
 use std::sync::Arc;
@@ -126,6 +127,7 @@ impl RuntimeState {
     /// Get a reference to the RuntimeState from an Isolate.
     /// Panics if not installed (programming error).
     pub fn get(isolate: &v8::Isolate) -> &Self {
+        // SAFETY: get_slot only fails if state not installed (programming error)
         isolate
             .get_slot::<Self>()
             .expect("RuntimeState not installed on this isolate")

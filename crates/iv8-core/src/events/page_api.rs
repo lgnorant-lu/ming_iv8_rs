@@ -18,7 +18,7 @@ pub fn install_page_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
         state.js_api_name.clone()
     };
 
-    let api_key = v8::String::new(scope, &js_api_name).expect("api key");
+    let api_key = crate::v8_utils::v8_string(scope, &js_api_name);
     let api_obj = match global.get(scope, api_key.into()) {
         Some(v) if v.is_object() => unsafe { v8::Local::<v8::Object>::cast_unchecked(v) },
         _ => return,
@@ -28,11 +28,11 @@ pub fn install_page_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
 
     // __iv8__.page.load(snapshot)
     let load_tmpl = v8::FunctionTemplate::builder_raw(page_load_callback).build(scope);
-    let load_fn = load_tmpl.get_function(scope).expect("fn");
-    let load_key = v8::String::new(scope, "load").expect("key");
+    let load_fn = crate::v8_utils::v8_fn(scope, &*load_tmpl);
+    let load_key = crate::v8_utils::v8_string(scope, "load");
     page_obj.set(scope, load_key.into(), load_fn.into());
 
-    let page_key = v8::String::new(scope, "page").expect("key");
+    let page_key = crate::v8_utils::v8_string(scope, "page");
     api_obj.set(scope, page_key.into(), page_obj.into());
 }
 

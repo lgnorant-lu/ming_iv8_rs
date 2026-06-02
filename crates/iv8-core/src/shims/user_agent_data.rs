@@ -22,17 +22,17 @@ pub fn install_user_agent_data(
 
     // brands getter
     let brands_tmpl = v8::FunctionTemplate::builder_raw(uad_brands_getter).build(scope);
-    let brands_name = v8::String::new(scope, "brands").expect("key");
+    let brands_name = crate::v8_utils::v8_string(scope, "brands");
     brands_tmpl.set_class_name(brands_name);
 
     // mobile getter
     let mobile_tmpl = v8::FunctionTemplate::builder_raw(uad_mobile_getter).build(scope);
-    let mobile_name = v8::String::new(scope, "mobile").expect("key");
+    let mobile_name = crate::v8_utils::v8_string(scope, "mobile");
     mobile_tmpl.set_class_name(mobile_name);
 
     // platform getter
     let platform_tmpl = v8::FunctionTemplate::builder_raw(uad_platform_getter).build(scope);
-    let platform_name = v8::String::new(scope, "platform").expect("key");
+    let platform_name = crate::v8_utils::v8_string(scope, "platform");
     platform_tmpl.set_class_name(platform_name);
 
     // Install as accessor properties on uad_obj
@@ -43,25 +43,25 @@ pub fn install_user_agent_data(
 
     // getHighEntropyValues method
     let ghev_tmpl = v8::FunctionTemplate::builder_raw(uad_get_high_entropy_values).build(scope);
-    let ghev_name = v8::String::new(scope, "getHighEntropyValues").expect("key");
+    let ghev_name = crate::v8_utils::v8_string(scope, "getHighEntropyValues");
     ghev_tmpl.set_class_name(ghev_name);
-    let ghev_fn = ghev_tmpl.get_function(scope).expect("fn");
+    let ghev_fn = crate::v8_utils::v8_fn(scope, &*ghev_tmpl);
     uad_obj.set(scope, ghev_name.into(), ghev_fn.into());
 
     // toJSON method
     let to_json_tmpl = v8::FunctionTemplate::builder_raw(uad_to_json).build(scope);
-    let to_json_name = v8::String::new(scope, "toJSON").expect("key");
+    let to_json_name = crate::v8_utils::v8_string(scope, "toJSON");
     to_json_tmpl.set_class_name(to_json_name);
-    let to_json_fn = to_json_tmpl.get_function(scope).expect("fn");
+    let to_json_fn = crate::v8_utils::v8_fn(scope, &*to_json_tmpl);
     uad_obj.set(scope, to_json_name.into(), to_json_fn.into());
 
     // Set Symbol.toStringTag = "NavigatorUAData"
     let tag_key = v8::Symbol::get_to_string_tag(scope);
-    let tag_val = v8::String::new(scope, "NavigatorUAData").expect("tag");
+    let tag_val = crate::v8_utils::v8_string(scope, "NavigatorUAData");
     uad_obj.set(scope, tag_key.into(), tag_val.into());
 
     // Install on navigator
-    let uad_key = v8::String::new(scope, "userAgentData").expect("key");
+    let uad_key = crate::v8_utils::v8_string(scope, "userAgentData");
     navigator.define_own_property(
         scope,
         uad_key.into(),
@@ -77,23 +77,23 @@ fn install_getter(
     name: &str,
     getter_tmpl: v8::Local<v8::FunctionTemplate>,
 ) {
-    let getter_fn = getter_tmpl.get_function(scope).expect("getter fn");
-    let name_str = v8::String::new(scope, name).expect("name");
+    let getter_fn = crate::v8_utils::v8_fn(scope, &*getter_tmpl);
+    let name_str = crate::v8_utils::v8_string(scope, name);
     let desc = v8::Object::new(scope);
-    let get_key = v8::String::new(scope, "get").expect("get");
-    let enum_key = v8::String::new(scope, "enumerable").expect("enumerable");
-    let conf_key = v8::String::new(scope, "configurable").expect("configurable");
+    let get_key = crate::v8_utils::v8_string(scope, "get");
+    let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+    let conf_key = crate::v8_utils::v8_string(scope, "configurable");
     desc.set(scope, get_key.into(), getter_fn.into());
     desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
     desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
 
     // Call Object.defineProperty(obj, name, desc)
     let global = scope.get_current_context().global(scope);
-    let object_key = v8::String::new(scope, "Object").expect("Object");
+    let object_key = crate::v8_utils::v8_string(scope, "Object");
     if let Some(object_val) = global.get(scope, object_key.into()) {
         if object_val.is_object() {
             let object_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(object_val) };
-            let def_prop_key = v8::String::new(scope, "defineProperty").expect("defineProperty");
+            let def_prop_key = crate::v8_utils::v8_string(scope, "defineProperty");
             if let Some(def_prop) = object_obj.get(scope, def_prop_key.into()) {
                 if def_prop.is_function() {
                     let def_prop_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(def_prop) };
@@ -126,13 +126,13 @@ unsafe extern "C" fn uad_brands_getter(info: *const v8::FunctionCallbackInfo) {
             for (i, brand_val) in parsed.iter().enumerate() {
                 let obj = v8::Object::new(scope);
                 if let Some(brand) = brand_val.get("brand").and_then(|v| v.as_str()) {
-                    let k = v8::String::new(scope, "brand").expect("k");
-                    let v = v8::String::new(scope, brand).expect("v");
+                    let k = crate::v8_utils::v8_string(scope, "brand");
+                    let v = crate::v8_utils::v8_string(scope, brand);
                     obj.set(scope, k.into(), v.into());
                 }
                 if let Some(version) = brand_val.get("version").and_then(|v| v.as_str()) {
-                    let k = v8::String::new(scope, "version").expect("k");
-                    let v = v8::String::new(scope, version).expect("v");
+                    let k = crate::v8_utils::v8_string(scope, "version");
+                    let v = crate::v8_utils::v8_string(scope, version);
                     obj.set(scope, k.into(), v.into());
                 }
                 arr.set_index(scope, i as u32, obj.into());
@@ -196,27 +196,27 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
             for (i, brand_val) in parsed.iter().enumerate() {
                 let obj = v8::Object::new(scope);
                 if let Some(brand) = brand_val.get("brand").and_then(|v| v.as_str()) {
-                    let k = v8::String::new(scope, "brand").expect("k");
-                    let v = v8::String::new(scope, brand).expect("v");
+                    let k = crate::v8_utils::v8_string(scope, "brand");
+                    let v = crate::v8_utils::v8_string(scope, brand);
                     obj.set(scope, k.into(), v.into());
                 }
                 if let Some(version) = brand_val.get("version").and_then(|v| v.as_str()) {
-                    let k = v8::String::new(scope, "version").expect("k");
-                    let v = v8::String::new(scope, version).expect("v");
+                    let k = crate::v8_utils::v8_string(scope, "version");
+                    let v = crate::v8_utils::v8_string(scope, version);
                     obj.set(scope, k.into(), v.into());
                 }
                 arr.set_index(scope, i as u32, obj.into());
             }
-            let brands_key = v8::String::new(scope, "brands").expect("k");
+            let brands_key = crate::v8_utils::v8_string(scope, "brands");
             result.set(scope, brands_key.into(), arr.into());
         }
 
         let mobile = state.environment.get_bool("navigator.userAgentData.mobile").unwrap_or(false);
-        let mobile_key = v8::String::new(scope, "mobile").expect("k");
+        let mobile_key = crate::v8_utils::v8_string(scope, "mobile");
         result.set(scope, mobile_key.into(), v8::Boolean::new(scope, mobile).into());
 
         let platform = state.environment.get_str("navigator.userAgentData.platform").unwrap_or("Windows");
-        let platform_key = v8::String::new(scope, "platform").expect("k");
+        let platform_key = crate::v8_utils::v8_string(scope, "platform");
         if let Some(s) = v8::String::new(scope, platform) {
             result.set(scope, platform_key.into(), s.into());
         }
@@ -233,31 +233,31 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
                         match hint.as_str() {
                             "architecture" => {
                                 let val = state.environment.get_str("navigator.userAgentData.architecture").unwrap_or("x86");
-                                let k = v8::String::new(scope, "architecture").expect("k");
-                                let v = v8::String::new(scope, val).expect("v");
+                                let k = crate::v8_utils::v8_string(scope, "architecture");
+                                let v = crate::v8_utils::v8_string(scope, val);
                                 result.set(scope, k.into(), v.into());
                             }
                             "bitness" => {
                                 let val = state.environment.get_str("navigator.userAgentData.bitness").unwrap_or("64");
-                                let k = v8::String::new(scope, "bitness").expect("k");
-                                let v = v8::String::new(scope, val).expect("v");
+                                let k = crate::v8_utils::v8_string(scope, "bitness");
+                                let v = crate::v8_utils::v8_string(scope, val);
                                 result.set(scope, k.into(), v.into());
                             }
                             "model" => {
                                 let val = state.environment.get_str("navigator.userAgentData.model").unwrap_or("");
-                                let k = v8::String::new(scope, "model").expect("k");
-                                let v = v8::String::new(scope, val).expect("v");
+                                let k = crate::v8_utils::v8_string(scope, "model");
+                                let v = crate::v8_utils::v8_string(scope, val);
                                 result.set(scope, k.into(), v.into());
                             }
                             "platformVersion" => {
                                 let val = state.environment.get_str("navigator.userAgentData.platformVersion").unwrap_or("10.0.0");
-                                let k = v8::String::new(scope, "platformVersion").expect("k");
-                                let v = v8::String::new(scope, val).expect("v");
+                                let k = crate::v8_utils::v8_string(scope, "platformVersion");
+                                let v = crate::v8_utils::v8_string(scope, val);
                                 result.set(scope, k.into(), v.into());
                             }
                             "wow64" => {
                                 let val = state.environment.get_bool("navigator.userAgentData.wow64").unwrap_or(false);
-                                let k = v8::String::new(scope, "wow64").expect("k");
+                                let k = crate::v8_utils::v8_string(scope, "wow64");
                                 result.set(scope, k.into(), v8::Boolean::new(scope, val).into());
                             }
                             "fullVersionList" => {
@@ -269,18 +269,18 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
                                     for (j, brand_val) in parsed.iter().enumerate() {
                                         let obj = v8::Object::new(scope);
                                         if let Some(brand) = brand_val.get("brand").and_then(|v| v.as_str()) {
-                                            let bk = v8::String::new(scope, "brand").expect("k");
-                                            let bv = v8::String::new(scope, brand).expect("v");
+                                            let bk = crate::v8_utils::v8_string(scope, "brand");
+                                            let bv = crate::v8_utils::v8_string(scope, brand);
                                             obj.set(scope, bk.into(), bv.into());
                                         }
                                         if let Some(version) = brand_val.get("version").and_then(|v| v.as_str()) {
-                                            let vk = v8::String::new(scope, "version").expect("k");
-                                            let vv = v8::String::new(scope, version).expect("v");
+                                            let vk = crate::v8_utils::v8_string(scope, "version");
+                                            let vv = crate::v8_utils::v8_string(scope, version);
                                             obj.set(scope, vk.into(), vv.into());
                                         }
                                         arr.set_index(scope, j as u32, obj.into());
                                     }
-                                    let k = v8::String::new(scope, "fullVersionList").expect("k");
+                                    let k = crate::v8_utils::v8_string(scope, "fullVersionList");
                                     result.set(scope, k.into(), arr.into());
                                 }
                             }
@@ -292,7 +292,7 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
         }
 
         // Return a resolved Promise
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         resolver.resolve(scope, result.into());
         rv.set(resolver.get_promise(scope).into());
     }));
@@ -317,29 +317,29 @@ unsafe extern "C" fn uad_to_json(info: *const v8::FunctionCallbackInfo) {
             for (i, brand_val) in parsed.iter().enumerate() {
                 let obj = v8::Object::new(scope);
                 if let Some(brand) = brand_val.get("brand").and_then(|v| v.as_str()) {
-                    let k = v8::String::new(scope, "brand").expect("k");
-                    let v = v8::String::new(scope, brand).expect("v");
+                    let k = crate::v8_utils::v8_string(scope, "brand");
+                    let v = crate::v8_utils::v8_string(scope, brand);
                     obj.set(scope, k.into(), v.into());
                 }
                 if let Some(version) = brand_val.get("version").and_then(|v| v.as_str()) {
-                    let k = v8::String::new(scope, "version").expect("k");
-                    let v = v8::String::new(scope, version).expect("v");
+                    let k = crate::v8_utils::v8_string(scope, "version");
+                    let v = crate::v8_utils::v8_string(scope, version);
                     obj.set(scope, k.into(), v.into());
                 }
                 arr.set_index(scope, i as u32, obj.into());
             }
-            let brands_key = v8::String::new(scope, "brands").expect("k");
+            let brands_key = crate::v8_utils::v8_string(scope, "brands");
             result.set(scope, brands_key.into(), arr.into());
         }
 
         // mobile
         let mobile = state.environment.get_bool("navigator.userAgentData.mobile").unwrap_or(false);
-        let mobile_key = v8::String::new(scope, "mobile").expect("k");
+        let mobile_key = crate::v8_utils::v8_string(scope, "mobile");
         result.set(scope, mobile_key.into(), v8::Boolean::new(scope, mobile).into());
 
         // platform
         let platform = state.environment.get_str("navigator.userAgentData.platform").unwrap_or("Windows");
-        let platform_key = v8::String::new(scope, "platform").expect("k");
+        let platform_key = crate::v8_utils::v8_string(scope, "platform");
         if let Some(s) = v8::String::new(scope, platform) {
             result.set(scope, platform_key.into(), s.into());
         }

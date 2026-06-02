@@ -203,46 +203,46 @@ fn create_event_object<'s>(
 ) -> v8::Local<'s, v8::Object> {
     let obj = v8::Object::new(scope);
 
-    let type_key = v8::String::new(scope, "type").expect("key");
-    let type_val = v8::String::new(scope, event_type).expect("val");
+    let type_key = crate::v8_utils::v8_string(scope, "type");
+    let type_val = crate::v8_utils::v8_string(scope, event_type);
     obj.set(scope, type_key.into(), type_val.into());
 
-    let bubbles_key = v8::String::new(scope, "bubbles").expect("key");
+    let bubbles_key = crate::v8_utils::v8_string(scope, "bubbles");
     let bubbles_val = v8::Boolean::new(scope, bubbles);
     obj.set(scope, bubbles_key.into(), bubbles_val.into());
 
-    let cancelable_key = v8::String::new(scope, "cancelable").expect("key");
+    let cancelable_key = crate::v8_utils::v8_string(scope, "cancelable");
     let cancelable_val = v8::Boolean::new(scope, true);
     obj.set(scope, cancelable_key.into(), cancelable_val.into());
 
-    let prevented_key = v8::String::new(scope, "defaultPrevented").expect("key");
+    let prevented_key = crate::v8_utils::v8_string(scope, "defaultPrevented");
     let prevented_val = v8::Boolean::new(scope, false);
     obj.set(scope, prevented_key.into(), prevented_val.into());
 
     // Install stopPropagation and preventDefault as real methods
     // These set hidden flags on the event object that the dispatch loop checks
-    let stop_key = v8::String::new(scope, "__stopped__").expect("key");
+    let stop_key = crate::v8_utils::v8_string(scope, "__stopped__");
     obj.set(scope, stop_key.into(), v8::Boolean::new(scope, false).into());
 
-    let prevent_key = v8::String::new(scope, "__prevented__").expect("key");
+    let prevent_key = crate::v8_utils::v8_string(scope, "__prevented__");
     obj.set(scope, prevent_key.into(), v8::Boolean::new(scope, false).into());
 
     // stopPropagation
     let sp_tmpl = v8::FunctionTemplate::builder_raw(stop_propagation_cb).build(scope);
-    let sp_fn = sp_tmpl.get_function(scope).expect("fn");
-    let sp_key = v8::String::new(scope, "stopPropagation").expect("key");
+    let sp_fn = crate::v8_utils::v8_fn(scope, &*sp_tmpl);
+    let sp_key = crate::v8_utils::v8_string(scope, "stopPropagation");
     obj.set(scope, sp_key.into(), sp_fn.into());
 
     // stopImmediatePropagation
     let sip_tmpl = v8::FunctionTemplate::builder_raw(stop_propagation_cb).build(scope);
-    let sip_fn = sip_tmpl.get_function(scope).expect("fn");
-    let sip_key = v8::String::new(scope, "stopImmediatePropagation").expect("key");
+    let sip_fn = crate::v8_utils::v8_fn(scope, &*sip_tmpl);
+    let sip_key = crate::v8_utils::v8_string(scope, "stopImmediatePropagation");
     obj.set(scope, sip_key.into(), sip_fn.into());
 
     // preventDefault
     let pd_tmpl = v8::FunctionTemplate::builder_raw(prevent_default_cb).build(scope);
-    let pd_fn = pd_tmpl.get_function(scope).expect("fn");
-    let pd_key = v8::String::new(scope, "preventDefault").expect("key");
+    let pd_fn = crate::v8_utils::v8_fn(scope, &*pd_tmpl);
+    let pd_key = crate::v8_utils::v8_string(scope, "preventDefault");
     obj.set(scope, pd_key.into(), pd_fn.into());
 
     obj
@@ -254,7 +254,7 @@ unsafe extern "C" fn stop_propagation_cb(info: *const v8::FunctionCallbackInfo) 
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let this = args.this();
-        let key = v8::String::new(scope, "__stopped__").expect("key");
+        let key = crate::v8_utils::v8_string(scope, "__stopped__");
         this.set(scope, key.into(), v8::Boolean::new(scope, true).into());
     }));
 }
@@ -265,9 +265,9 @@ unsafe extern "C" fn prevent_default_cb(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let this = args.this();
-        let key = v8::String::new(scope, "__prevented__").expect("key");
+        let key = crate::v8_utils::v8_string(scope, "__prevented__");
         this.set(scope, key.into(), v8::Boolean::new(scope, true).into());
-        let dp_key = v8::String::new(scope, "defaultPrevented").expect("key");
+        let dp_key = crate::v8_utils::v8_string(scope, "defaultPrevented");
         this.set(scope, dp_key.into(), v8::Boolean::new(scope, true).into());
     }));
 }
@@ -293,7 +293,7 @@ fn invoke_listeners(
         func.call(scope, undefined.into(), &[event_obj.into()]);
 
         // Check if stopPropagation was called
-        let stop_key = v8::String::new(scope, "__stopped__").expect("key");
+        let stop_key = crate::v8_utils::v8_string(scope, "__stopped__");
         if let Some(stopped_val) = event_obj.get(scope, stop_key.into()) {
             if stopped_val.is_true() {
                 stopped.set(true);
@@ -301,7 +301,7 @@ fn invoke_listeners(
         }
 
         // Check if preventDefault was called
-        let prevent_key = v8::String::new(scope, "__prevented__").expect("key");
+        let prevent_key = crate::v8_utils::v8_string(scope, "__prevented__");
         if let Some(prevented_val) = event_obj.get(scope, prevent_key.into()) {
             if prevented_val.is_true() {
                 _prevented.set(true);

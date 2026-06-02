@@ -1,4 +1,6 @@
 //! SubtleCrypto: complete Web Crypto API implementation.
+// SAFETY: remaining expects are OOM-only or logic invariants
+#![expect(clippy::expect_used, reason = "OOM or logic invariant")]
 //!
 //! Algorithms supported:
 //! - digest: SHA-1, SHA-256, SHA-384, SHA-512
@@ -88,46 +90,46 @@ fn make_crypto_key<'s>(
     let key_obj = v8::Object::new(scope);
 
     // type
-    let type_key = v8::String::new(scope, "type").expect("key");
-    let type_val = v8::String::new(scope, &meta.key_type).expect("val");
+    let type_key = crate::v8_utils::v8_string(scope, "type");
+    let type_val = crate::v8_utils::v8_string(scope, &meta.key_type);
     key_obj.set(scope, type_key.into(), type_val.into());
 
     // algorithm
-    let algo_key = v8::String::new(scope, "algorithm").expect("key");
+    let algo_key = crate::v8_utils::v8_string(scope, "algorithm");
     let algo_obj = v8::Object::new(scope);
-    let name_key = v8::String::new(scope, "name").expect("key");
-    let name_val = v8::String::new(scope, &meta.algo).expect("val");
+    let name_key = crate::v8_utils::v8_string(scope, "name");
+    let name_val = crate::v8_utils::v8_string(scope, &meta.algo);
     algo_obj.set(scope, name_key.into(), name_val.into());
     if let Some(ref hash) = meta.hash {
-        let hash_key = v8::String::new(scope, "hash").expect("key");
-        let hash_val = v8::String::new(scope, hash).expect("val");
+        let hash_key = crate::v8_utils::v8_string(scope, "hash");
+        let hash_val = crate::v8_utils::v8_string(scope, hash);
         algo_obj.set(scope, hash_key.into(), hash_val.into());
     }
     if let Some(ref curve) = meta.curve {
-        let curve_key = v8::String::new(scope, "namedCurve").expect("key");
-        let curve_val = v8::String::new(scope, curve).expect("val");
+        let curve_key = crate::v8_utils::v8_string(scope, "namedCurve");
+        let curve_val = crate::v8_utils::v8_string(scope, curve);
         algo_obj.set(scope, curve_key.into(), curve_val.into());
     }
     if let Some(ml) = meta.modulus_length {
-        let ml_key = v8::String::new(scope, "modulusLength").expect("key");
+        let ml_key = crate::v8_utils::v8_string(scope, "modulusLength");
         algo_obj.set(scope, ml_key.into(), v8::Integer::new(scope, ml as i32).into());
     }
     // For symmetric keys (AES/HMAC), set length from key bytes
     if meta.key_type == "secret" {
         if let Ok(raw) = b64_decode(&meta.key_bytes_b64) {
             let len_bits = (raw.len() * 8) as i32;
-            let len_key = v8::String::new(scope, "length").expect("key");
+            let len_key = crate::v8_utils::v8_string(scope, "length");
             algo_obj.set(scope, len_key.into(), v8::Integer::new(scope, len_bits).into());
         }
     }
     key_obj.set(scope, algo_key.into(), algo_obj.into());
 
     // extractable
-    let ext_key = v8::String::new(scope, "extractable").expect("key");
+    let ext_key = crate::v8_utils::v8_string(scope, "extractable");
     key_obj.set(scope, ext_key.into(), v8::Boolean::new(scope, meta.extractable).into());
 
     // usages
-    let usages_key = v8::String::new(scope, "usages").expect("key");
+    let usages_key = crate::v8_utils::v8_string(scope, "usages");
     let usages_arr = v8::Array::new(scope, meta.usages.len() as i32);
     for (i, u) in meta.usages.iter().enumerate() {
         if let Some(s) = v8::String::new(scope, u) {
@@ -138,15 +140,15 @@ fn make_crypto_key<'s>(
 
     // __keyMeta__ (hidden, stores JSON for reconstruction)
     let meta_json = serde_json::to_string(meta).unwrap_or_default();
-    let meta_key = v8::String::new(scope, "__keyMeta__").expect("key");
-    let meta_val = v8::String::new(scope, &meta_json).expect("val");
+    let meta_key = crate::v8_utils::v8_string(scope, "__keyMeta__");
+    let meta_val = crate::v8_utils::v8_string(scope, &meta_json);
     key_obj.define_own_property(scope, meta_key.into(), meta_val.into(), v8::PropertyAttribute::DONT_ENUM);
 
     // __rawKey__ (for backward compat with existing HMAC/AES code)
     if let Ok(raw) = b64_decode(&meta.key_bytes_b64) {
         let store = v8::ArrayBuffer::new_backing_store_from_vec(raw);
         let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
-        let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+        let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
         key_obj.define_own_property(scope, raw_key.into(), ab.into(), v8::PropertyAttribute::DONT_ENUM);
     }
 
@@ -200,7 +202,7 @@ fn meta_to_ec_key(meta: &KeyMeta) -> Result<EcKeyMaterial, String> {
 fn get_hash_from_algo(scope: &v8::PinScope<'_, '_>, algo_arg: v8::Local<v8::Value>) -> String {
     if algo_arg.is_object() {
         let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-        let hash_key = v8::String::new(scope, "hash").expect("key");
+        let hash_key = crate::v8_utils::v8_string(scope, "hash");
         if let Some(hash_val) = obj.get(scope, hash_key.into()) {
             return get_algorithm_name(scope, hash_val);
         }
@@ -212,7 +214,7 @@ fn get_hash_from_algo(scope: &v8::PinScope<'_, '_>, algo_arg: v8::Local<v8::Valu
 fn get_salt_length(scope: &v8::PinScope<'_, '_>, algo_arg: v8::Local<v8::Value>) -> usize {
     if algo_arg.is_object() {
         let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-        let key = v8::String::new(scope, "saltLength").expect("key");
+        let key = crate::v8_utils::v8_string(scope, "saltLength");
         if let Some(val) = obj.get(scope, key.into()) {
             return val.number_value(scope).unwrap_or(32.0) as usize;
         }
@@ -223,7 +225,7 @@ fn get_salt_length(scope: &v8::PinScope<'_, '_>, algo_arg: v8::Local<v8::Value>)
 /// Install crypto.subtle on the global crypto object.
 pub fn install_subtle_crypto(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Get or create crypto object
-    let crypto_key = v8::String::new(scope, "crypto").expect("key");
+    let crypto_key = crate::v8_utils::v8_string(scope, "crypto");
     let crypto_obj = if let Some(existing) = global.get(scope, crypto_key.into()) {
         if existing.is_object() && !existing.is_null_or_undefined() {
             unsafe { v8::Local::<v8::Object>::cast_unchecked(existing) }
@@ -255,7 +257,7 @@ pub fn install_subtle_crypto(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
     install_method(scope, subtle_obj, "wrapKey", subtle_wrap_key);
     install_method(scope, subtle_obj, "unwrapKey", subtle_unwrap_key);
 
-    let subtle_key = v8::String::new(scope, "subtle").expect("key");
+    let subtle_key = crate::v8_utils::v8_string(scope, "subtle");
     crypto_obj.set(scope, subtle_key.into(), subtle_obj.into());
 }
 
@@ -266,8 +268,8 @@ fn install_method(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
-    let func = tmpl.get_function(scope).expect("fn");
-    let name_str = v8::String::new(scope, name).expect("name");
+    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     obj.set(scope, name_str.into(), func.into());
 }
@@ -306,7 +308,7 @@ fn get_algorithm_name(scope: &v8::PinScope<'_, '_>, value: v8::Local<v8::Value>)
     }
     if value.is_object() {
         let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(value) };
-        let name_key = v8::String::new(scope, "name").expect("key");
+        let name_key = crate::v8_utils::v8_string(scope, "name");
         if let Some(name_val) = obj.get(scope, name_key.into()) {
             return name_val.to_rust_string_lossy(scope);
         }
@@ -333,12 +335,12 @@ unsafe extern "C" fn subtle_digest(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 2 {
-            let msg = v8::String::new(scope, "digest requires 2 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "digest requires 2 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -347,7 +349,7 @@ unsafe extern "C" fn subtle_digest(info: *const v8::FunctionCallbackInfo) {
         let data = match extract_bytes(scope, args.get(1)) {
             Some(d) => d,
             None => {
-                let msg = v8::String::new(scope, "digest: data must be BufferSource").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "digest: data must be BufferSource");
                 resolver.reject(scope, v8::Exception::type_error(scope, msg));
                 return;
             }
@@ -375,7 +377,7 @@ unsafe extern "C" fn subtle_digest(info: *const v8::FunctionCallbackInfo) {
                 hasher.finalize().to_vec()
             }
             _ => {
-                let msg = v8::String::new(scope, &format!("digest: unsupported algorithm '{}'", algo)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("digest: unsupported algorithm '{}'", algo));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
                 return;
             }
@@ -394,12 +396,12 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 3 {
-            let msg = v8::String::new(scope, "importKey requires at least 3 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "importKey requires at least 3 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -418,7 +420,7 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
         // Get curve for EC algorithms
         let curve_name = if algo_arg.is_object() {
             let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-            let curve_key = v8::String::new(scope, "namedCurve").expect("key");
+            let curve_key = crate::v8_utils::v8_string(scope, "namedCurve");
             obj.get(scope, curve_key.into()).map(|v| v.to_rust_string_lossy(scope))
         } else { None };
 
@@ -434,7 +436,7 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
         let key_data = match extract_bytes(scope, args.get(1)) {
             Some(d) => d,
             None => {
-                let msg = v8::String::new(scope, "importKey: keyData must be BufferSource").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "importKey: keyData must be BufferSource");
                 resolver.reject(scope, v8::Exception::type_error(scope, msg));
                 return;
             }
@@ -466,14 +468,14 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
                                 match rsa_impl::export_rsa_public_key_spki(&pub_key) {
                                     Ok(der) => ("public".to_string(), der),
                                     Err(e) => {
-                                        let msg = v8::String::new(scope, &format!("importKey RSA spki: {}", e)).expect("msg");
+                                        let msg = crate::v8_utils::v8_string(scope, &format!("importKey RSA spki: {}", e));
                                         resolver.reject(scope, v8::Exception::error(scope, msg));
                                         return;
                                     }
                                 }
                             }
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("importKey RSA spki: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("importKey RSA spki: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
@@ -485,21 +487,21 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
                                 match rsa_impl::export_rsa_private_key_pkcs8(&priv_key) {
                                     Ok(der) => ("private".to_string(), der),
                                     Err(e) => {
-                                        let msg = v8::String::new(scope, &format!("importKey RSA pkcs8: {}", e)).expect("msg");
+                                        let msg = crate::v8_utils::v8_string(scope, &format!("importKey RSA pkcs8: {}", e));
                                         resolver.reject(scope, v8::Exception::error(scope, msg));
                                         return;
                                     }
                                 }
                             }
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("importKey RSA pkcs8: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("importKey RSA pkcs8: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
                         }
                     }
                     _ => {
-                        let msg = v8::String::new(scope, &format!("importKey RSA: unsupported format '{}'", format)).expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, &format!("importKey RSA: unsupported format '{}'", format));
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -524,7 +526,7 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
                 let curve = match curve_name.as_deref().and_then(EcCurve::from_str) {
                     Some(c) => c,
                     None => {
-                        let msg = v8::String::new(scope, "importKey EC: missing or unsupported namedCurve").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "importKey EC: missing or unsupported namedCurve");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -536,7 +538,7 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
                         match crate::crypto::ec_impl::import_ec_key_raw(&key_data, curve, "public") {
                             Ok(k) => ("public".to_string(), k.to_raw_bytes()),
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("importKey EC raw: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("importKey EC raw: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
@@ -548,14 +550,14 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
                                 match k.to_spki_der() {
                                     Ok(der) => ("public".to_string(), der),
                                     Err(e) => {
-                                        let msg = v8::String::new(scope, &format!("importKey EC spki export: {}", e)).expect("msg");
+                                        let msg = crate::v8_utils::v8_string(scope, &format!("importKey EC spki export: {}", e));
                                         resolver.reject(scope, v8::Exception::error(scope, msg));
                                         return;
                                     }
                                 }
                             }
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("importKey EC spki: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("importKey EC spki: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
@@ -567,21 +569,21 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
                                 match k.to_pkcs8_der() {
                                     Ok(der) => ("private".to_string(), der),
                                     Err(e) => {
-                                        let msg = v8::String::new(scope, &format!("importKey EC pkcs8 export: {}", e)).expect("msg");
+                                        let msg = crate::v8_utils::v8_string(scope, &format!("importKey EC pkcs8 export: {}", e));
                                         resolver.reject(scope, v8::Exception::error(scope, msg));
                                         return;
                                     }
                                 }
                             }
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("importKey EC pkcs8: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("importKey EC pkcs8: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
                         }
                     }
                     _ => {
-                        let msg = v8::String::new(scope, &format!("importKey EC: unsupported format '{}'", format)).expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, &format!("importKey EC: unsupported format '{}'", format));
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -632,14 +634,14 @@ fn import_key_jwk(
     usages: Vec<String>,
 ) {
     if !jwk_val.is_object() {
-        let msg = v8::String::new(scope, "importKey JWK: keyData must be an object").expect("msg");
+        let msg = crate::v8_utils::v8_string(scope, "importKey JWK: keyData must be an object");
         resolver.reject(scope, v8::Exception::type_error(scope, msg));
         return;
     }
     let jwk_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(jwk_val) };
 
     // Extract 'k' field for symmetric keys (base64url-encoded key bytes)
-    let k_key = v8::String::new(scope, "k").expect("key");
+    let k_key = crate::v8_utils::v8_string(scope, "k");
     if let Some(k_val) = jwk_obj.get(scope, k_key.into()) {
         if k_val.is_string() {
             let k_b64 = k_val.to_rust_string_lossy(scope);
@@ -667,12 +669,12 @@ fn import_key_jwk(
     // For EC JWK: extract x, y (public) or x, y, d (private)
     // Simplified: just create a placeholder key with the JWK JSON stored
     let json_str = {
-        let json_key = v8::String::new(scope, "JSON").expect("key");
+        let json_key = crate::v8_utils::v8_string(scope, "JSON");
         let global = scope.get_current_context().global(scope);
         if let Some(json_obj) = global.get(scope, json_key.into()) {
             if json_obj.is_object() {
                 let json_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(json_obj) };
-                let stringify_key = v8::String::new(scope, "stringify").expect("key");
+                let stringify_key = crate::v8_utils::v8_string(scope, "stringify");
                 if let Some(stringify_fn) = json_obj.get(scope, stringify_key.into()) {
                     if stringify_fn.is_function() {
                         let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(stringify_fn) };
@@ -709,12 +711,12 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 3 {
-            let msg = v8::String::new(scope, "sign requires 3 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "sign requires 3 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -727,7 +729,7 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
         let data = match extract_bytes(scope, args.get(2)) {
             Some(d) => d,
             None => {
-                let msg = v8::String::new(scope, "sign: data must be BufferSource").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "sign: data must be BufferSource");
                 resolver.reject(scope, v8::Exception::type_error(scope, msg));
                 return;
             }
@@ -742,7 +744,7 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
                 // Check if algo_arg has an explicit hash field
                 let has_explicit_hash = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let hash_key = v8::String::new(scope, "hash").expect("key");
+                    let hash_key = crate::v8_utils::v8_string(scope, "hash");
                     obj.get(scope, hash_key.into()).map(|v| !v.is_null_or_undefined()).unwrap_or(false)
                 } else { false };
 
@@ -766,14 +768,14 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
                             match rsa_impl::rsa_pss_sign(&priv_key, &data, &hash_algo, salt_length) {
                                 Ok(sig) => Some(sig),
                                 Err(e) => {
-                                    let msg = v8::String::new(scope, &format!("RSA-PSS sign failed: {}", e)).expect("msg");
+                                    let msg = crate::v8_utils::v8_string(scope, &format!("RSA-PSS sign failed: {}", e));
                                     resolver.reject(scope, v8::Exception::error(scope, msg));
                                     return;
                                 }
                             }
                         }
                         Err(e) => {
-                            let msg = v8::String::new(scope, &format!("RSA-PSS: key import failed: {}", e)).expect("msg");
+                            let msg = crate::v8_utils::v8_string(scope, &format!("RSA-PSS: key import failed: {}", e));
                             resolver.reject(scope, v8::Exception::error(scope, msg));
                             return;
                         }
@@ -795,7 +797,7 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
             match result {
                 Some(sig) => resolve_with_array_buffer(scope, resolver, &sig),
                 None => {
-                    let msg = v8::String::new(scope, &format!("sign: operation failed for '{}'", algo)).expect("msg");
+                    let msg = crate::v8_utils::v8_string(scope, &format!("sign: operation failed for '{}'", algo));
                     resolver.reject(scope, v8::Exception::error(scope, msg));
                 }
             }
@@ -806,14 +808,14 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
         let key_arg = args.get(1);
         let key_bytes = if key_arg.is_object() {
             let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-            let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+            let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
             key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v))
         } else { None };
 
         let key_bytes = match key_bytes {
             Some(k) => k,
             None => {
-                let msg = v8::String::new(scope, "sign: invalid key").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "sign: invalid key");
                 resolver.reject(scope, v8::Exception::error(scope, msg));
                 return;
             }
@@ -822,7 +824,7 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
         let result = match algo_upper.as_str() {
             "HMAC" => hmac_sign(&hash_algo_from_arg, &key_bytes, &data),
             _ => {
-                let msg = v8::String::new(scope, &format!("sign: unsupported algorithm '{}'", algo)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("sign: unsupported algorithm '{}'", algo));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
                 return;
             }
@@ -831,7 +833,7 @@ unsafe extern "C" fn subtle_sign(info: *const v8::FunctionCallbackInfo) {
         match result {
             Some(sig) => resolve_with_array_buffer(scope, resolver, &sig),
             None => {
-                let msg = v8::String::new(scope, "sign: operation failed").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "sign: operation failed");
                 resolver.reject(scope, v8::Exception::error(scope, msg));
             }
         }
@@ -846,12 +848,12 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 4 {
-            let msg = v8::String::new(scope, "verify requires 4 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "verify requires 4 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -869,7 +871,7 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
             let hash_algo = {
                 let has_explicit_hash = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let hash_key = v8::String::new(scope, "hash").expect("key");
+                    let hash_key = crate::v8_utils::v8_string(scope, "hash");
                     obj.get(scope, hash_key.into()).map(|v| !v.is_null_or_undefined()).unwrap_or(false)
                 } else { false };
                 if has_explicit_hash { hash_algo_from_arg.clone() }
@@ -907,7 +909,7 @@ unsafe extern "C" fn subtle_verify(info: *const v8::FunctionCallbackInfo) {
         let key_arg = args.get(1);
         let key_bytes = if key_arg.is_object() {
             let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-            let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+            let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
             key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v))
         } else { None };
 
@@ -975,12 +977,12 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 3 {
-            let msg = v8::String::new(scope, "encrypt requires 3 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "encrypt requires 3 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -994,14 +996,14 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
         let key_arg = args.get(1);
         let key_bytes_opt = if key_arg.is_object() {
             let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-            let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+            let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
             key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v))
         } else { None };
 
         let plaintext = match extract_bytes(scope, args.get(2)) {
             Some(d) => d,
             None => {
-                let msg = v8::String::new(scope, "encrypt: data must be BufferSource").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "encrypt: data must be BufferSource");
                 resolver.reject(scope, v8::Exception::type_error(scope, msg));
                 return;
             }
@@ -1012,7 +1014,7 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
                 let key_bytes = match key_bytes_opt {
                     Some(k) => k,
                     None => {
-                        let msg = v8::String::new(scope, "encrypt: invalid key").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "encrypt: invalid key");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1020,7 +1022,7 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
                 let iv = match iv {
                     Some(iv) => iv,
                     None => {
-                        let msg = v8::String::new(scope, "encrypt: AES-GCM requires iv").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "encrypt: AES-GCM requires iv");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1031,7 +1033,7 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
                 let key_bytes = match key_bytes_opt {
                     Some(k) => k,
                     None => {
-                        let msg = v8::String::new(scope, "encrypt: invalid key").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "encrypt: invalid key");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1039,7 +1041,7 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
                 let iv = match iv {
                     Some(iv) => iv,
                     None => {
-                        let msg = v8::String::new(scope, "encrypt: AES-CBC requires iv").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "encrypt: AES-CBC requires iv");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1060,7 +1062,7 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
                 }
             }
             _ => {
-                let msg = v8::String::new(scope, &format!("encrypt: unsupported algorithm '{}'", algo)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("encrypt: unsupported algorithm '{}'", algo));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
                 return;
             }
@@ -1069,7 +1071,7 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
         match result {
             Ok(ciphertext) => resolve_with_array_buffer(scope, resolver, &ciphertext),
             Err(e) => {
-                let msg = v8::String::new(scope, &format!("encrypt failed: {}", e)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("encrypt failed: {}", e));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
             }
         }
@@ -1084,12 +1086,12 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 3 {
-            let msg = v8::String::new(scope, "decrypt requires 3 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "decrypt requires 3 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -1102,14 +1104,14 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
         let key_arg = args.get(1);
         let key_bytes_opt = if key_arg.is_object() {
             let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-            let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+            let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
             key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v))
         } else { None };
 
         let ciphertext = match extract_bytes(scope, args.get(2)) {
             Some(d) => d,
             None => {
-                let msg = v8::String::new(scope, "decrypt: data must be BufferSource").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "decrypt: data must be BufferSource");
                 resolver.reject(scope, v8::Exception::type_error(scope, msg));
                 return;
             }
@@ -1120,7 +1122,7 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
                 let key_bytes = match key_bytes_opt {
                     Some(k) => k,
                     None => {
-                        let msg = v8::String::new(scope, "decrypt: invalid key").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "decrypt: invalid key");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1128,7 +1130,7 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
                 let iv = match iv {
                     Some(iv) => iv,
                     None => {
-                        let msg = v8::String::new(scope, "decrypt: AES-GCM requires iv").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "decrypt: AES-GCM requires iv");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1139,7 +1141,7 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
                 let key_bytes = match key_bytes_opt {
                     Some(k) => k,
                     None => {
-                        let msg = v8::String::new(scope, "decrypt: invalid key").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "decrypt: invalid key");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1147,7 +1149,7 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
                 let iv = match iv {
                     Some(iv) => iv,
                     None => {
-                        let msg = v8::String::new(scope, "decrypt: AES-CBC requires iv").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "decrypt: AES-CBC requires iv");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1168,7 +1170,7 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
                 }
             }
             _ => {
-                let msg = v8::String::new(scope, &format!("decrypt: unsupported algorithm '{}'", algo)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("decrypt: unsupported algorithm '{}'", algo));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
                 return;
             }
@@ -1177,7 +1179,7 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
         match result {
             Ok(plaintext) => resolve_with_array_buffer(scope, resolver, &plaintext),
             Err(e) => {
-                let msg = v8::String::new(scope, &format!("decrypt failed: {}", e)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("decrypt failed: {}", e));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
             }
         }
@@ -1226,12 +1228,12 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 3 {
-            let msg = v8::String::new(scope, "deriveBits requires 3 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "deriveBits requires 3 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -1247,11 +1249,11 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
                 // Extract PBKDF2 parameters
                 let (salt, iterations, hash) = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let salt_key = v8::String::new(scope, "salt").expect("key");
+                    let salt_key = crate::v8_utils::v8_string(scope, "salt");
                     let salt = obj.get(scope, salt_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default();
-                    let iter_key = v8::String::new(scope, "iterations").expect("key");
+                    let iter_key = crate::v8_utils::v8_string(scope, "iterations");
                     let iterations = obj.get(scope, iter_key.into()).and_then(|v| v.number_value(scope)).unwrap_or(1000.0) as u32;
-                    let hash_key = v8::String::new(scope, "hash").expect("key");
+                    let hash_key = crate::v8_utils::v8_string(scope, "hash");
                     let hash = obj.get(scope, hash_key.into()).map(|v| get_algorithm_name(scope, v)).unwrap_or_else(|| "SHA-256".to_string());
                     (salt, iterations, hash)
                 } else { (vec![], 1000, "SHA-256".to_string()) };
@@ -1262,7 +1264,7 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
                     let key_arg = args.get(1);
                     if key_arg.is_object() {
                         let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-                        let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+                        let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
                         key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default()
                     } else { vec![] }
                 };
@@ -1272,11 +1274,11 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
             "HKDF" => {
                 let (salt, info_bytes, hash) = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let salt_key = v8::String::new(scope, "salt").expect("key");
+                    let salt_key = crate::v8_utils::v8_string(scope, "salt");
                     let salt = obj.get(scope, salt_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default();
-                    let info_key = v8::String::new(scope, "info").expect("key");
+                    let info_key = crate::v8_utils::v8_string(scope, "info");
                     let info_bytes = obj.get(scope, info_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default();
-                    let hash_key = v8::String::new(scope, "hash").expect("key");
+                    let hash_key = crate::v8_utils::v8_string(scope, "hash");
                     let hash = obj.get(scope, hash_key.into()).map(|v| get_algorithm_name(scope, v)).unwrap_or_else(|| "SHA-256".to_string());
                     (salt, info_bytes, hash)
                 } else { (vec![], vec![], "SHA-256".to_string()) };
@@ -1287,7 +1289,7 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
                     let key_arg = args.get(1);
                     if key_arg.is_object() {
                         let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-                        let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+                        let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
                         key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default()
                     } else { vec![] }
                 };
@@ -1299,7 +1301,7 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
                 let priv_meta = extract_key_meta(scope, args.get(1));
                 let pub_key_arg = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let pub_key_key = v8::String::new(scope, "public").expect("key");
+                    let pub_key_key = crate::v8_utils::v8_string(scope, "public");
                     obj.get(scope, pub_key_key.into())
                 } else { None };
 
@@ -1317,7 +1319,7 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
                 }
             }
             _ => {
-                let msg = v8::String::new(scope, &format!("deriveBits: unsupported algorithm '{}'", algo)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("deriveBits: unsupported algorithm '{}'", algo));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
                 return;
             }
@@ -1326,7 +1328,7 @@ unsafe extern "C" fn subtle_derive_bits(info: *const v8::FunctionCallbackInfo) {
         match result {
             Ok(derived) => resolve_with_array_buffer(scope, resolver, &derived),
             Err(e) => {
-                let msg = v8::String::new(scope, &format!("deriveBits failed: {}", e)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("deriveBits failed: {}", e));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
             }
         }
@@ -1495,12 +1497,12 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 1 {
-            let msg = v8::String::new(scope, "generateKey requires at least 1 argument").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "generateKey requires at least 1 argument");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -1521,7 +1523,7 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
             "HMAC" | "AESGCM" | "AESCBC" | "AESCTR" => {
                 let key_length = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let len_key = v8::String::new(scope, "length").expect("key");
+                    let len_key = crate::v8_utils::v8_string(scope, "length");
                     obj.get(scope, len_key.into())
                         .and_then(|v| v.number_value(scope))
                         .unwrap_or(256.0) as usize
@@ -1549,7 +1551,7 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
             "RSAOAEP" | "RSAPSS" | "RSASSAPKCS1V15" => {
                 let modulus_length = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let ml_key = v8::String::new(scope, "modulusLength").expect("key");
+                    let ml_key = crate::v8_utils::v8_string(scope, "modulusLength");
                     obj.get(scope, ml_key.into())
                         .and_then(|v| v.number_value(scope))
                         .unwrap_or(2048.0) as usize
@@ -1560,7 +1562,7 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
                         let pub_der = match rsa_impl::export_rsa_public_key_spki(&pub_key) {
                             Ok(d) => d,
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("generateKey RSA: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("generateKey RSA: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
@@ -1568,7 +1570,7 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
                         let priv_der = match rsa_impl::export_rsa_private_key_pkcs8(&priv_key) {
                             Ok(d) => d,
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("generateKey RSA: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("generateKey RSA: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
@@ -1600,14 +1602,14 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
 
                         // Return CryptoKeyPair {publicKey, privateKey}
                         let pair_obj = v8::Object::new(scope);
-                        let pub_key_str = v8::String::new(scope, "publicKey").expect("key");
-                        let priv_key_str = v8::String::new(scope, "privateKey").expect("key");
+                        let pub_key_str = crate::v8_utils::v8_string(scope, "publicKey");
+                        let priv_key_str = crate::v8_utils::v8_string(scope, "privateKey");
                         pair_obj.set(scope, pub_key_str.into(), pub_obj.into());
                         pair_obj.set(scope, priv_key_str.into(), priv_obj.into());
                         resolver.resolve(scope, pair_obj.into());
                     }
                     Err(e) => {
-                        let msg = v8::String::new(scope, &format!("generateKey RSA failed: {}", e)).expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, &format!("generateKey RSA failed: {}", e));
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                     }
                 }
@@ -1617,14 +1619,14 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
             "ECDSA" | "ECDH" => {
                 let curve_name = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let curve_key = v8::String::new(scope, "namedCurve").expect("key");
+                    let curve_key = crate::v8_utils::v8_string(scope, "namedCurve");
                     obj.get(scope, curve_key.into()).map(|v| v.to_rust_string_lossy(scope))
                 } else { None };
 
                 let curve = match curve_name.as_deref().and_then(EcCurve::from_str) {
                     Some(c) => c,
                     None => {
-                        let msg = v8::String::new(scope, "generateKey EC: missing or unsupported namedCurve").expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, "generateKey EC: missing or unsupported namedCurve");
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                         return;
                     }
@@ -1635,7 +1637,7 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
                         let priv_der = match priv_key.to_pkcs8_der() {
                             Ok(d) => d,
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("generateKey EC: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("generateKey EC: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
@@ -1643,7 +1645,7 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
                         let pub_der = match pub_key.to_spki_der() {
                             Ok(d) => d,
                             Err(e) => {
-                                let msg = v8::String::new(scope, &format!("generateKey EC: {}", e)).expect("msg");
+                                let msg = crate::v8_utils::v8_string(scope, &format!("generateKey EC: {}", e));
                                 resolver.reject(scope, v8::Exception::error(scope, msg));
                                 return;
                             }
@@ -1674,14 +1676,14 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
                         let priv_obj = make_crypto_key(scope, &priv_meta);
 
                         let pair_obj = v8::Object::new(scope);
-                        let pub_key_str = v8::String::new(scope, "publicKey").expect("key");
-                        let priv_key_str = v8::String::new(scope, "privateKey").expect("key");
+                        let pub_key_str = crate::v8_utils::v8_string(scope, "publicKey");
+                        let priv_key_str = crate::v8_utils::v8_string(scope, "privateKey");
                         pair_obj.set(scope, pub_key_str.into(), pub_obj.into());
                         pair_obj.set(scope, priv_key_str.into(), priv_obj.into());
                         resolver.resolve(scope, pair_obj.into());
                     }
                     Err(e) => {
-                        let msg = v8::String::new(scope, &format!("generateKey EC failed: {}", e)).expect("msg");
+                        let msg = crate::v8_utils::v8_string(scope, &format!("generateKey EC failed: {}", e));
                         resolver.reject(scope, v8::Exception::error(scope, msg));
                     }
                 }
@@ -1717,12 +1719,12 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 2 {
-            let msg = v8::String::new(scope, "exportKey requires 2 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "exportKey requires 2 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -1732,7 +1734,7 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
         // Try KeyMeta path
         if let Some(meta) = extract_key_meta(scope, args.get(1)) {
             if !meta.extractable {
-                let msg = v8::String::new(scope, "exportKey: key is not extractable").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "exportKey: key is not extractable");
                 resolver.reject(scope, v8::Exception::error(scope, msg));
                 return;
             }
@@ -1748,7 +1750,7 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
                             match meta_to_ec_key(&meta) {
                                 Ok(ec_key) => resolve_with_array_buffer(scope, resolver, &ec_key.to_raw_bytes()),
                                 Err(e) => {
-                                    let msg = v8::String::new(scope, &format!("exportKey EC raw: {}", e)).expect("msg");
+                                    let msg = crate::v8_utils::v8_string(scope, &format!("exportKey EC raw: {}", e));
                                     resolver.reject(scope, v8::Exception::error(scope, msg));
                                 }
                             }
@@ -1758,7 +1760,7 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
                             match b64_decode(&meta.key_bytes_b64) {
                                 Ok(bytes) => resolve_with_array_buffer(scope, resolver, &bytes),
                                 Err(e) => {
-                                    let msg = v8::String::new(scope, &format!("exportKey raw: {}", e)).expect("msg");
+                                    let msg = crate::v8_utils::v8_string(scope, &format!("exportKey raw: {}", e));
                                     resolver.reject(scope, v8::Exception::error(scope, msg));
                                 }
                             }
@@ -1779,7 +1781,7 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
                     match result {
                         Ok(der) => resolve_with_array_buffer(scope, resolver, &der),
                         Err(e) => {
-                            let msg = v8::String::new(scope, &format!("exportKey spki: {}", e)).expect("msg");
+                            let msg = crate::v8_utils::v8_string(scope, &format!("exportKey spki: {}", e));
                             resolver.reject(scope, v8::Exception::error(scope, msg));
                         }
                     }
@@ -1798,7 +1800,7 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
                     match result {
                         Ok(der) => resolve_with_array_buffer(scope, resolver, &der),
                         Err(e) => {
-                            let msg = v8::String::new(scope, &format!("exportKey pkcs8: {}", e)).expect("msg");
+                            let msg = crate::v8_utils::v8_string(scope, &format!("exportKey pkcs8: {}", e));
                             resolver.reject(scope, v8::Exception::error(scope, msg));
                         }
                     }
@@ -1814,11 +1816,11 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
                             if let Some(s) = v8::String::new(scope, &jwk_json) {
                                 // Parse as JSON object
                                 let global = scope.get_current_context().global(scope);
-                                let json_key = v8::String::new(scope, "JSON").expect("key");
+                                let json_key = crate::v8_utils::v8_string(scope, "JSON");
                                 if let Some(json_obj) = global.get(scope, json_key.into()) {
                                     if json_obj.is_object() {
                                         let json_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(json_obj) };
-                                        let parse_key = v8::String::new(scope, "parse").expect("key");
+                                        let parse_key = crate::v8_utils::v8_string(scope, "parse");
                                         if let Some(parse_fn) = json_obj.get(scope, parse_key.into()) {
                                             if parse_fn.is_function() {
                                                 let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(parse_fn) };
@@ -1836,13 +1838,13 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
                             }
                         }
                         Err(e) => {
-                            let msg = v8::String::new(scope, &format!("exportKey jwk: {}", e)).expect("msg");
+                            let msg = crate::v8_utils::v8_string(scope, &format!("exportKey jwk: {}", e));
                             resolver.reject(scope, v8::Exception::error(scope, msg));
                         }
                     }
                 }
                 _ => {
-                    let msg = v8::String::new(scope, &format!("exportKey: unsupported format '{}'", format)).expect("msg");
+                    let msg = crate::v8_utils::v8_string(scope, &format!("exportKey: unsupported format '{}'", format));
                     resolver.reject(scope, v8::Exception::error(scope, msg));
                 }
             }
@@ -1853,14 +1855,14 @@ unsafe extern "C" fn subtle_export_key(info: *const v8::FunctionCallbackInfo) {
         let key_arg = args.get(1);
         let key_bytes = if key_arg.is_object() {
             let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-            let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+            let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
             key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v))
         } else { None };
 
         match key_bytes {
             Some(bytes) => resolve_with_array_buffer(scope, resolver, &bytes),
             None => {
-                let msg = v8::String::new(scope, "exportKey: invalid key").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "exportKey: invalid key");
                 resolver.reject(scope, v8::Exception::error(scope, msg));
             }
         }
@@ -1875,12 +1877,12 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 5 {
-            let msg = v8::String::new(scope, "deriveKey requires 5 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "deriveKey requires 5 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -1898,7 +1900,7 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
         // Get derived key length
         let derived_key_length = if derived_key_algo_arg.is_object() {
             let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(derived_key_algo_arg) };
-            let len_key = v8::String::new(scope, "length").expect("key");
+            let len_key = crate::v8_utils::v8_string(scope, "length");
             obj.get(scope, len_key.into())
                 .and_then(|v| v.number_value(scope))
                 .unwrap_or(256.0) as usize
@@ -1912,11 +1914,11 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
                 // Extract parameters
                 let (salt, iterations, hash) = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let salt_key = v8::String::new(scope, "salt").expect("key");
+                    let salt_key = crate::v8_utils::v8_string(scope, "salt");
                     let salt = obj.get(scope, salt_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default();
-                    let iter_key = v8::String::new(scope, "iterations").expect("key");
+                    let iter_key = crate::v8_utils::v8_string(scope, "iterations");
                     let iterations = obj.get(scope, iter_key.into()).and_then(|v| v.number_value(scope)).unwrap_or(1000.0) as u32;
-                    let hash_key = v8::String::new(scope, "hash").expect("key");
+                    let hash_key = crate::v8_utils::v8_string(scope, "hash");
                     let hash = obj.get(scope, hash_key.into()).map(|v| get_algorithm_name(scope, v)).unwrap_or_else(|| "SHA-256".to_string());
                     (salt, iterations, hash)
                 } else { (vec![], 1000, "SHA-256".to_string()) };
@@ -1927,7 +1929,7 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
                     let key_arg = args.get(1);
                     if key_arg.is_object() {
                         let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-                        let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+                        let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
                         key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default()
                     } else { vec![] }
                 };
@@ -1937,11 +1939,11 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
             "HKDF" => {
                 let (salt, info_bytes, hash) = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let salt_key = v8::String::new(scope, "salt").expect("key");
+                    let salt_key = crate::v8_utils::v8_string(scope, "salt");
                     let salt = obj.get(scope, salt_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default();
-                    let info_key = v8::String::new(scope, "info").expect("key");
+                    let info_key = crate::v8_utils::v8_string(scope, "info");
                     let info_bytes = obj.get(scope, info_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default();
-                    let hash_key = v8::String::new(scope, "hash").expect("key");
+                    let hash_key = crate::v8_utils::v8_string(scope, "hash");
                     let hash = obj.get(scope, hash_key.into()).map(|v| get_algorithm_name(scope, v)).unwrap_or_else(|| "SHA-256".to_string());
                     (salt, info_bytes, hash)
                 } else { (vec![], vec![], "SHA-256".to_string()) };
@@ -1952,7 +1954,7 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
                     let key_arg = args.get(1);
                     if key_arg.is_object() {
                         let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-                        let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+                        let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
                         key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default()
                     } else { vec![] }
                 };
@@ -1964,7 +1966,7 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
                 let priv_meta = extract_key_meta(scope, args.get(1));
                 let pub_key_arg = if algo_arg.is_object() {
                     let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(algo_arg) };
-                    let pub_key_key = v8::String::new(scope, "public").expect("key");
+                    let pub_key_key = crate::v8_utils::v8_string(scope, "public");
                     obj.get(scope, pub_key_key.into())
                 } else { None };
 
@@ -2000,7 +2002,7 @@ unsafe extern "C" fn subtle_derive_key(info: *const v8::FunctionCallbackInfo) {
                 resolver.resolve(scope, key_obj.into());
             }
             Err(e) => {
-                let msg = v8::String::new(scope, &format!("deriveKey failed: {}", e)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("deriveKey failed: {}", e));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
             }
         }
@@ -2015,12 +2017,12 @@ unsafe extern "C" fn subtle_wrap_key(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 4 {
-            let msg = v8::String::new(scope, "wrapKey requires 4 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "wrapKey requires 4 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -2033,7 +2035,7 @@ unsafe extern "C" fn subtle_wrap_key(info: *const v8::FunctionCallbackInfo) {
                 let key_arg = args.get(1);
                 if key_arg.is_object() {
                     let key_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(key_arg) };
-                    let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+                    let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
                     key_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default()
                 } else { vec![] }
             }
@@ -2050,7 +2052,7 @@ unsafe extern "C" fn subtle_wrap_key(info: *const v8::FunctionCallbackInfo) {
                 let wk_arg = args.get(2);
                 if wk_arg.is_object() {
                     let wk_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(wk_arg) };
-                    let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+                    let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
                     wk_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default()
                 } else { vec![] }
             }
@@ -2071,7 +2073,7 @@ unsafe extern "C" fn subtle_wrap_key(info: *const v8::FunctionCallbackInfo) {
         match result {
             Ok(wrapped) => resolve_with_array_buffer(scope, resolver, &wrapped),
             Err(e) => {
-                let msg = v8::String::new(scope, &format!("wrapKey failed: {}", e)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("wrapKey failed: {}", e));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
             }
         }
@@ -2086,12 +2088,12 @@ unsafe extern "C" fn subtle_unwrap_key(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let resolver = v8::PromiseResolver::new(scope).expect("resolver");
+        let resolver = crate::v8_utils::v8_resolver(scope);
         let promise = resolver.get_promise(scope);
         rv.set(promise.into());
 
         if args.length() < 7 {
-            let msg = v8::String::new(scope, "unwrapKey requires 7 arguments").expect("msg");
+            let msg = crate::v8_utils::v8_string(scope, "unwrapKey requires 7 arguments");
             resolver.reject(scope, v8::Exception::type_error(scope, msg));
             return;
         }
@@ -2099,7 +2101,7 @@ unsafe extern "C" fn subtle_unwrap_key(info: *const v8::FunctionCallbackInfo) {
         let wrapped_key_bytes = match extract_bytes(scope, args.get(1)) {
             Some(b) => b,
             None => {
-                let msg = v8::String::new(scope, "unwrapKey: wrappedKey must be BufferSource").expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, "unwrapKey: wrappedKey must be BufferSource");
                 resolver.reject(scope, v8::Exception::type_error(scope, msg));
                 return;
             }
@@ -2116,7 +2118,7 @@ unsafe extern "C" fn subtle_unwrap_key(info: *const v8::FunctionCallbackInfo) {
                 let uk_arg = args.get(2);
                 if uk_arg.is_object() {
                     let uk_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(uk_arg) };
-                    let raw_key = v8::String::new(scope, "__rawKey__").expect("key");
+                    let raw_key = crate::v8_utils::v8_string(scope, "__rawKey__");
                     uk_obj.get(scope, raw_key.into()).and_then(|v| extract_bytes(scope, v)).unwrap_or_default()
                 } else { vec![] }
             }
@@ -2158,7 +2160,7 @@ unsafe extern "C" fn subtle_unwrap_key(info: *const v8::FunctionCallbackInfo) {
                 resolver.resolve(scope, key_obj.into());
             }
             Err(e) => {
-                let msg = v8::String::new(scope, &format!("unwrapKey failed: {}", e)).expect("msg");
+                let msg = crate::v8_utils::v8_string(scope, &format!("unwrapKey failed: {}", e));
                 resolver.reject(scope, v8::Exception::error(scope, msg));
             }
         }

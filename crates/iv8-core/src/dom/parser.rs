@@ -1,6 +1,8 @@
 //! HTML parser: html5ever TreeSink implementation for ego-tree.
 //!
 //! Parses HTML strings into our Document/ego-tree DOM structure.
+// SAFETY: tree.get_mut/.get expects guarded by parser invariants
+#![expect(clippy::expect_used, reason = "parser invariants: node IDs are valid")]
 
 use std::borrow::Cow;
 use std::cell::RefCell;
