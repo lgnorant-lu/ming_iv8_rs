@@ -12,6 +12,14 @@ from iv8_rs.analysis import diff_analysis
 from iv8_rs.trace import parse_trace, StructuredTrace, parse_trace_stream, compress_trace, CompressedTrace
 from iv8_rs.probe import probe_environment
 from iv8_rs.cfg import CFG
+from iv8_rs.taint import TaintEngine, TaintReport
+from iv8_rs.patterns import (
+    detect_constants, detect_sequences, detect_patterns, detect_all,
+    detect_loops, detect_hotspots,
+    ConstantMatch, SequenceMatch, PatternMatch, CryptoDetection,
+)
+from iv8_rs.vm_diff import compare_vm_versions, DiffReport, HandlerDiff
+from iv8_rs.isolation import exec_vm_handler
 
 # --- Profile System ---
 
@@ -114,6 +122,22 @@ __all__ = [
     "CFG",
     "probe_environment",
     "load_profile",
+    "TaintEngine",
+    "TaintReport",
+    "detect_constants",
+    "detect_sequences",
+    "detect_patterns",
+    "detect_all",
+    "detect_loops",
+    "detect_hotspots",
+    "ConstantMatch",
+    "SequenceMatch",
+    "PatternMatch",
+    "CryptoDetection",
+    "compare_vm_versions",
+    "DiffReport",
+    "HandlerDiff",
+    "exec_vm_handler",
     "JSError",
     "JSCompileError",
     "JSTimeoutError",

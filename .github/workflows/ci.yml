@@ -266,6 +266,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             ~/.cargo/.rusty_v8
+            target
           key: ${{ runner.os }}-${{ matrix.platform.arch }}-cargo-wheel-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.platform.arch }}-cargo-wheel-
