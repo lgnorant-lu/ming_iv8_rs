@@ -14,6 +14,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **CDP Inspector**: V8Inspector + WebSocket server + programmatic Python API
 - **Observability (v0.3)**: trace mode / deterministic mode / VM instrumentation / recording / profiler / coverage / instrument_source / trace_diff
 - **Environment Precision (v0.4)**: NavigatorUAData / Profile System / Diff Analysis / browser API stubs
+- **Analysis (v0.5)**: StructuredTrace / CFG reconstruction / Taint Tracking / 4-layer Crypto Detection / VM handler diff / Module Isolation / CDP Scope API / Environment Probe / Quality Harness
 - **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
 - **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
 
@@ -92,18 +93,20 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 
 ## Documentation
 
-- **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive, 22 sections)
-- **Roadmap**: [docs/roadmap-v0.4-and-beyond.md](docs/roadmap-v0.4-and-beyond.md)
+- **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive, 31 sections)
 - **Progress**: [docs/PROGRESS.md](docs/PROGRESS.md)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+- **TDC Testing Guide**: [docs/tdc-testing-guide.md](docs/tdc-testing-guide.md)
+- **Quality Harness**: [docs/quality-harness/HARNESS-CHARTER.md](docs/quality-harness/HARNESS-CHARTER.md)
+- **Research**: [docs/research/](docs/research/) (28 documents)
 
 ## Tests
 
 ```bash
-# Python tests (552 tests)
+# Python tests (747 tests)
 uv run --with pytest pytest tests -q
 
-# Rust tests (425 tests)
+# Rust tests
 cargo test --workspace
 
 # Benchmark
@@ -118,9 +121,9 @@ iv8-rs/
 │   ├── iv8-core/     # Rust core (V8 + DOM + Crypto + Canvas + Network + Inspector)
 │   ├── iv8-undetect/ # Anti-detection (wrapNative / hookNative / window.chrome)
 │   └── iv8-py/       # PyO3 Python binding
-├── python/iv8_rs/    # Python package (__init__.py + type stubs)
-├── tests/            # Python integration tests (552)
-└── docs/             # Design docs + research
+├── python/iv8_rs/    # Python package (analysis/cfg/taint/patterns/probe/trace/vm_diff/isolation + type stubs)
+├── tests/            # Python integration tests (747)
+└── docs/             # Design docs + research + quality-harness
 ```
 
 ## License

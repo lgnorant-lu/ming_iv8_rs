@@ -6,6 +6,72 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-03
+
+### Added
+
+- **M25 StructuredTrace**: `parse_trace` / `parse_trace_stream` / `compress_trace` /
+  `StructuredTrace` with typed access (dispatches/reads/calls/writes), filtering
+  (`filter`/`between`), statistics (`summary`), export (`to_jsonl`/`to_dataframe`),
+  sequence extraction (`pc_sequence`/`value_sequence`/`unique_pcs`),
+  indexing (`index_by_pc`/`index_by_target`), and `CompressedTrace`.
+- **M25b CFG Construction**: `CFG.from_trace` builds directed graph from D entry
+  PC sequence. Loop detection (`find_loops`, back edge), module boundary detection
+  (`find_modules`, PC gap), cyclomatic complexity, DOT/JSON/DataFrame export,
+  basic block collapsing (`collapse_to_blocks`).
+- **M26 Taint Tracking**: `TaintEngine` value-matching propagation engine.
+  Tracks source values through D entry stack values to W entry outputs.
+  `TaintReport` with sources/sinks/flows/unreached_sources/stack_hits.
+- **M27 Crypto Detection (4-layer)**:
+  - L1: `detect_constants` — 216 constants across 51 algorithms, min_value filtering
+  - L2: `detect_sequences` — 24 known tables (AES S-box, SHA-256 K, MD5 T, etc.)
+  - L3: `detect_patterns` — behavior pattern matching via opcode_map contract
+  - L4: `detect_all` — cross-validation, confidence boost, ambiguity annotation
+  - Loop/hotspot detection (`detect_loops`/`detect_hotspots`)
+- **M28 Cross-version VM Diff**: `compare_vm_versions` extracts handler arrays
+  from two JS VM sources and diffs via SequenceMatcher. `DiffReport` with
+  new/removed/modified/unchanged handlers and similarity score.
+- **M29 Module Isolation**: `exec_vm_handler` runs a single VM handler in
+  controlled conditions with specified stack input, PC setting, and env mocking.
+- **M30 CDP Scope API**: `cdp_get_scope_properties(object_id, own_properties)`
+  retrieves JS object properties via CDP Runtime.getProperties protocol.
+- **M31 Environment Probe**: `probe_environment(js_source, ...)` auto-detects VM
+  patterns, instruments or records, executes, and produces structured report
+  with reads/calls/writes/missing/issues/coverage/vm_info.
+- **TDC dispatch trace**: Deferred stack capture via `__iv8i_cap__` switch,
+  instrument_source D entries extended with stack values (comma-separated).
+- **Quality Harness**: `docs/quality-harness/HARNESS-CHARTER.md` (10 principles),
+  `H01-crypto-detection.md` (A-E categories, thresholded), `evaluate_detection.py`,
+  `verify_crypto_data_integrity.py` (7 sections, 4149 checks), `audit_false_positives.py`,
+  `audit_m27_realworld.py`, `check_coverage.py`.
+
+### Changed
+
+- **detect_patterns (L3)**: Now requires explicit `opcode_map` parameter.
+  Without opcode→semantic token mapping, returns `[]` (was silently non-functional).
+- **instrument_source D entries**: Extended from `D,pc,opcode,stack_depth` to
+  `D,pc,opcode,depth,val1,val2,val3` for stack value capture.
+- **Python test count**: 552 → 681 (Phase 1) → 747 (v0.5 complete).
+- `_parse_entry` now correctly handles 3-field (TYPE,target,value) vs 4-field
+  (TYPE,pc,target,value) trace formats.
+- pyproject.toml version aligned to 0.5.0-dev.
+
+### Fixed
+
+- **3-field trace parse bug**: `start_recording` 3-field format was parsed as
+  4-field, causing probe (non-VM mode) to silently produce garbage.
+- **False positives in crypto detection**: min_value filter + removed dangerous
+  small-int sequences + raised min_match thresholds. 6 adversarial trace types
+  produce zero false matches.
+
+### Quality
+
+- Crypto detection: 51 patterns / 216 constants / 24 sequences / 104 tests.
+- H01 harness: OVERALL PASS (A 4149 checks/0 errors, B recall 100%+L3 8/8 fire,
+  C false positives 0, D coverage 100%, E robustness 100%).
+- Ground truth tests (`test_ground_truth.py`): real V8 execution pipeline verification.
+- Real-world adversarial audit (`scripts/audit_m27_realworld.py`).
+
 ## [0.4.0] - 2026-06-01
 
 ### Added
