@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "iv8-rs"
-version = "0.5.0-dev"
+version = "0.5.0"
 requires-python = ">=3.13"
 description = "High-fidelity browser runtime for Python, powered by V8"
 license = { text = "MIT" }

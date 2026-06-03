@@ -54,7 +54,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - **Python test count**: 552 → 681 (Phase 1) → 775 passed, 1 skipped (current v0.5 tree).
 - `_parse_entry` now correctly handles 3-field (TYPE,target,value) vs 4-field
   (TYPE,pc,target,value) trace formats.
-- pyproject.toml version aligned to 0.5.0-dev.
+- pyproject.toml version aligned to 0.5.0 for release.
 
 ### Fixed
 
