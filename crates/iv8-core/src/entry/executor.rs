@@ -255,4 +255,78 @@ fn collect_evidence(
             }))
         }
     };
+
+    // Assemble trace_meta
+    let trace_sources = derive_trace_sources(&plan.selected_strategy.strategy_kind);
+    let executed_ids: Vec<String> = result.executed_strategies
+        .iter()
+        .map(|e| e.strategy_id.clone())
+        .collect();
+
+    // Build event-level metadata for trace entries that have recognizable prefixes
+    let mut events = std::collections::HashMap::new();
+    for (idx, entry) in result.trace.iter().enumerate() {
+        let (source_kind, confidence) = classify_trace_entry(entry, &plan.selected_strategy.strategy_kind);
+        if let Some(sk) = source_kind {
+            events.insert(idx, EventMeta {
+                source_kind: sk,
+                strategy_id: plan.selected_strategy.strategy_id.clone(),
+                phase: "invoked".to_string(),
+                confidence,
+                module_id: None,
+                chunk_id: None,
+            });
+        }
+    }
+
+    result.trace_meta = Some(TraceMeta {
+        trace_format: "raw_drcw_v1".to_string(),
+        plan_id: plan.plan_id.clone(),
+        persona: plan.persona,
+        sample_kind: plan.sample_kind,
+        selected_strategy_id: plan.selected_strategy.strategy_id.clone(),
+        executed_strategy_ids: executed_ids,
+        trace_sources,
+        events,
+    });
+}
+
+/// Map strategy kind to trace source categories.
+fn derive_trace_sources(kind: &StrategyKind) -> Vec<TraceSourceKind> {
+    match kind {
+        StrategyKind::Dispatch => vec![TraceSourceKind::Dispatch],
+        StrategyKind::WebpackBridge => vec![TraceSourceKind::ModuleBridge, TraceSourceKind::RuntimeProxy],
+        StrategyKind::RuntimeTransparent => vec![TraceSourceKind::TransparentHook],
+        StrategyKind::RuntimeAggressive => vec![TraceSourceKind::RuntimeProxy],
+        StrategyKind::SourceAst => vec![TraceSourceKind::SourceAst],
+        StrategyKind::SourceRegex => vec![TraceSourceKind::SourceAst],
+        StrategyKind::CdpProbe => vec![TraceSourceKind::Cdp],
+    }
+}
+
+/// Best-effort classification of a raw trace entry string.
+/// Returns (source_kind, confidence) or (None, _) if unrecognized.
+fn classify_trace_entry(entry: &str, _strategy: &StrategyKind) -> (Option<TraceSourceKind>, String) {
+    if entry.starts_with("D,") {
+        return (Some(TraceSourceKind::Dispatch), "high".into());
+    }
+    if entry.starts_with("R,") || entry.starts_with("W,") {
+        return (Some(TraceSourceKind::TransparentHook), "medium".into());
+    }
+    if entry.starts_with("C,") {
+        return (Some(TraceSourceKind::TransparentHook), "medium".into());
+    }
+    if entry.starts_with("eval,") || entry.starts_with("fn_ctor,") {
+        return (Some(TraceSourceKind::TransparentHook), "medium".into());
+    }
+    if entry.starts_with("aggressive_") {
+        return (Some(TraceSourceKind::RuntimeProxy), "high".into());
+    }
+    if entry.starts_with("require,") || entry.starts_with("chunk_") {
+        return (Some(TraceSourceKind::ModuleBridge), "high".into());
+    }
+    if entry.starts_with("env_read,") {
+        return (Some(TraceSourceKind::TransparentHook), "low".into());
+    }
+    (None, "unknown".into())
 }
