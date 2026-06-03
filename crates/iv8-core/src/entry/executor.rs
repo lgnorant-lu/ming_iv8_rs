@@ -5,6 +5,7 @@
 //! an `EntryResult` with collected evidence.
 
 use crate::entry::types::*;
+use crate::entry::hooks;
 use crate::kernel::embedded_v8::EmbeddedV8Kernel;
 use crate::kernel::{EvalOpts, KernelConfig};
 
@@ -164,39 +165,16 @@ fn apply_strategy_setup(
             Ok(())
         }
         StrategyKind::RuntimeTransparent => {
-            // Install transparent runtime observation hooks
-            let hook_js = r#"
-(function() {
-    var __iv8_log = [];
-    var origEval = globalThis.eval;
-    globalThis.eval = function(code) {
-        __iv8_log.push('eval_source,' + String(code).substring(0, 200));
-        return origEval.apply(this, arguments);
-    };
-    globalThis.__iv8_runtime_log = __iv8_log;
-})();
-"#;
+            let hook_js = crate::entry::hooks::transparent::prelude();
             kernel
-                .eval(hook_js, EvalOpts::default())
+                .eval(&hook_js, EvalOpts::default())
                 .map_err(|e| format!("transparent hook: {}", e))?;
             Ok(())
         }
         StrategyKind::RuntimeAggressive => {
-            // Aggressive hooks — only for analysis persona with explicit opt-in
-            let hook_js = r#"
-(function() {
-    var __iv8_log = [];
-    __iv8_log.push('aggressive_mode_enabled');
-    var origEval = globalThis.eval;
-    globalThis.eval = function(code) {
-        __iv8_log.push('aggressive_eval,' + String(code).substring(0, 200));
-        return origEval.apply(this, arguments);
-    };
-    globalThis.__iv8_runtime_log = __iv8_log;
-})();
-"#;
+            let hook_js = crate::entry::hooks::aggressive::prelude();
             kernel
-                .eval(hook_js, EvalOpts::default())
+                .eval(&hook_js, EvalOpts::default())
                 .map_err(|e| format!("aggressive hook: {}", e))?;
             Ok(())
         }
@@ -261,9 +239,20 @@ fn collect_evidence(
         }
     }
 
-    // Collect hook report
-    result.hook_report = Some(serde_json::json!({
-        "strategy_id": plan.selected_strategy.strategy_id,
-        "strategy_kind": format!("{:?}", plan.selected_strategy.strategy_kind),
-    }));
+    // Collect hook report (strategy-specific)
+    let trace_entries: Vec<String> = result.trace.iter().map(|s| s.to_string()).collect();
+    result.hook_report = match plan.selected_strategy.strategy_kind {
+        StrategyKind::RuntimeTransparent => {
+            Some(hooks::transparent::collect(&trace_entries))
+        }
+        StrategyKind::RuntimeAggressive => {
+            Some(hooks::aggressive::collect(&trace_entries))
+        }
+        _ => {
+            Some(serde_json::json!({
+                "strategy_id": plan.selected_strategy.strategy_id,
+                "strategy_kind": format!("{:?}", plan.selected_strategy.strategy_kind),
+            }))
+        }
+    };
 }
