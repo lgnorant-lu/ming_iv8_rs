@@ -12,6 +12,13 @@ use crate::entry::types::SampleKind;
 /// Not intended to be perfectly accurate for edge samples — the EntryPlanner
 /// always has fallback strategies.
 pub fn classify(source: &str, _signals: &[String]) -> SampleKind {
+    // HTML content should be classified as plain_script
+    // (executor will correctly fail on SyntaxError)
+    let trimmed = source.trim_start();
+    if trimmed.starts_with("<!") || trimmed.starts_with('<') {
+        return SampleKind::PlainScript;
+    }
+
     let raw_signals = SignalSet::from_source(source);
 
     // Priority 1: VM dispatch patterns
