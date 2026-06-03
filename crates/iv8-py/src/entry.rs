@@ -74,7 +74,7 @@ pub fn run_with_entry(
         ))?;
 
     let result = executor::run_entry(&entry_plan, source, entry_expr)
-        .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))?;
+        .map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
 
     let json = serde_json::to_value(&result)
         .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("serialization: {}", e)))?;
