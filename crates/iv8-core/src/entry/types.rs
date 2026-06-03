@@ -222,6 +222,7 @@ pub struct ExecutedStrategy {
     pub strategy_id: String,
     pub phase_entered: PlanState,
     pub outcome: Outcome,
+    pub diagnostics: Vec<ErrorEntry>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -275,9 +276,51 @@ pub struct EventMeta {
     pub source_kind: TraceSourceKind,
     pub strategy_id: String,
     pub phase: String,
-    pub confidence: String,
+    /// Confidence level for this event: 1.0 = source deterministic, 0.7 = probe,
+    /// 0.5 = hook probabilistic, 0.0 = unknown / no confidence.
+    pub confidence: f64,
     pub module_id: Option<u32>,
     pub chunk_id: Option<String>,
+}
+
+/// Results of static viability probing before strategy selection.
+/// Each field answers: "is this strategy potentially viable for this source?"
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ProbeResult {
+    /// SWC successfully parsed the source without error.
+    pub can_swc_parse: bool,
+    /// A known dispatch pattern (X[Y[Z++]]() or switch(X[Y++])) was found.
+    pub has_dispatch_pattern: bool,
+    /// Webpack-like runtime (webpackJsonp, __webpack_require__) detected.
+    pub has_webpack_runtime: bool,
+    /// Early reference capture pattern (references captured before IIFE) detected.
+    pub has_closure_capture: bool,
+    /// Heavy eval / Function constructor usage detected.
+    pub has_eval_heavy: bool,
+    /// Source has minimal obfuscation — AST-based transform is low-risk.
+    pub is_low_obfuscation: bool,
+}
+
+impl ProbeResult {
+    /// Whether the source can be meaningfully transformed at the AST level.
+    pub fn source_rewrite_viable(&self) -> bool {
+        self.can_swc_parse && self.is_low_obfuscation
+    }
+
+    /// Whether regex-based dispatch hook can be applied.
+    pub fn dispatch_regex_viable(&self) -> bool {
+        self.has_dispatch_pattern
+    }
+
+    /// Whether a runtime probe (webpack bridge) is applicable.
+    pub fn webpack_probe_viable(&self) -> bool {
+        self.has_webpack_runtime
+    }
+
+    /// Whether pre-install hooks are likely to survive closure capture.
+    pub fn pre_install_required(&self) -> bool {
+        self.has_closure_capture
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

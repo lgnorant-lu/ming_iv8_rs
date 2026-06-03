@@ -7,6 +7,7 @@
 use crate::entry::classification;
 use crate::entry::types::*;
 use crate::entry::webpack;
+use crate::entry::dispatch;
 
 // ───
 // Public API
@@ -22,6 +23,9 @@ pub fn plan_entry(
     explicit_policy: Option<Policy>,
     entry_targets: Vec<EntryTarget>,
 ) -> EntryPlan {
+    // 0. Probe static viability (fast, no side effects)
+    let probe = probe_viability(source);
+
     // 1. Classify sample
     let signals = classification::extract_signals(source);
     let sample_kind = classification::classify(source, &signals);
@@ -39,16 +43,36 @@ pub fn plan_entry(
         }
     }
 
+    // Add probe results to signals
+    if probe.can_swc_parse {
+        all_signals.push("probe:can_swc_parse".into());
+    }
+    if probe.has_dispatch_pattern {
+        all_signals.push("probe:has_dispatch_pattern".into());
+    }
+    if probe.has_webpack_runtime {
+        all_signals.push("probe:has_webpack_runtime".into());
+    }
+    if probe.has_closure_capture {
+        all_signals.push("probe:has_closure_capture".into());
+    }
+    if probe.is_low_obfuscation {
+        all_signals.push("probe:low_obfuscation".into());
+    }
+
     // 2. Merge policy
     let effective_policy = persona.merge_policy(explicit_policy);
 
     // 3. Generate candidates
-    let candidates = generate_candidates(sample_kind, persona, &effective_policy);
+    let mut candidates = generate_candidates(sample_kind, persona, &effective_policy);
 
-    // 4. Select primary strategy
+    // 3b. Adjust candidate fit scores by probe results
+    adjust_fit_by_probe(&mut candidates, &probe);
+
+    // 4. Select primary strategy (now uses probe-adjusted fit)
     let selected = select_primary_strategy(&candidates, sample_kind, persona, &effective_policy);
 
-    // 5. Build fallback chain
+    // 5. Build fallback chain ordered by viability
     let fallback_chain = build_fallback_chain(&candidates, &selected);
 
     // 6. Determine phase requirements
@@ -66,7 +90,13 @@ pub fn plan_entry(
 
     let diagnostics = Diagnostics {
         sample_signals: all_signals.clone(),
-        selected_strategy_reason: Some(selected.selection_reason.clone()),
+        selected_strategy_reason: Some(format!(
+            "{}. probe: swc={} dispatch={} webpack={} closure={} low_obf={}",
+            selected.selection_reason,
+            probe.can_swc_parse, probe.has_dispatch_pattern,
+            probe.has_webpack_runtime, probe.has_closure_capture,
+            probe.is_low_obfuscation,
+        )),
         fallback_attempts: Vec::new(),
         activation_timing: None,
         policy_constraints: Vec::new(),
@@ -93,6 +123,99 @@ pub fn plan_entry(
         risk_level,
         diagnostics,
         state,
+    }
+}
+
+// ───
+// Probe phase
+// ───
+
+/// Run static viability probes on the source before committing to a strategy.
+/// Each probe is fast (no runtime execution, no side effects).
+pub fn probe_viability(source: &str) -> ProbeResult {
+    // Check dispatch patterns (reuse dispatch::detect)
+    let dispatch_det = dispatch::detect(source);
+
+    // Check webpack runtime (reuse webpack::detect)
+    let wp_det = webpack::detect(source);
+
+    // SWC parse check: attempt a silent parse, return true on success
+    let can_swc = crate::entry::ast::can_parse(source);
+
+    // Evaluate obfuscation level: heuristic based on identifier length distribution
+    // and presence of encoded strings
+    let is_low_ob = is_low_obfuscation(source);
+
+    ProbeResult {
+        can_swc_parse: can_swc,
+        has_dispatch_pattern: dispatch_det.detected,
+        has_webpack_runtime: wp_det.detected,
+        has_closure_capture: classification::detect_early_capture(source),
+        has_eval_heavy: source.matches("eval(").count() >= 3,
+        is_low_obfuscation: is_low_ob,
+    }
+}
+
+/// Heuristic: does the source appear to be low-obfuscation (SWC-transform-safe)?
+/// Checks for short identifier prevalence and lack of heavy encoding.
+fn is_low_obfuscation(source: &str) -> bool {
+    // Sources shorter than 5KB are generally low-obfuscation
+    if source.len() < 5 * 1024 {
+        return true;
+    }
+    // High obfuscation heuristics: heavy hex encoding, char code manipulation,
+    // or excessive string splitting/joining (common in VM bytecode payloads)
+    let encoded_strings = source.matches("\\x").count();
+    let char_code_refs = source.matches("charCodeAt").count();
+    let from_char_code = source.matches("fromCharCode").count();
+    if encoded_strings > 50 || char_code_refs > 20 || from_char_code > 10 {
+        return false;
+    }
+    true
+}
+
+/// Adjust candidate fit scores based on probe viability results.
+/// A strategy whose preconditions are not met by the probe gets a
+/// significant fit penalty, making it less likely to be selected.
+fn adjust_fit_by_probe(candidates: &mut Vec<CandidateStrategy>, probe: &ProbeResult) {
+    for c in candidates.iter_mut() {
+        match c.strategy_kind {
+            StrategyKind::Dispatch => {
+                if !probe.has_dispatch_pattern {
+                    c.fit_score = c.fit_score.saturating_sub(40);
+                    c.known_limitations.push("probe: no dispatch pattern found".into());
+                }
+            }
+            StrategyKind::SourceAst => {
+                if !probe.can_swc_parse {
+                    c.fit_score = c.fit_score.saturating_sub(50);
+                    c.known_limitations.push("probe: SWC parse failed".into());
+                }
+                if !probe.is_low_obfuscation {
+                    c.fit_score = c.fit_score.saturating_sub(20);
+                    c.known_limitations.push("probe: high obfuscation".into());
+                }
+            }
+            StrategyKind::SourceRegex => {
+                if !probe.has_dispatch_pattern && !probe.has_eval_heavy {
+                    c.fit_score = c.fit_score.saturating_sub(30);
+                    c.known_limitations.push("probe: no regex-targetable pattern".into());
+                }
+            }
+            StrategyKind::WebpackBridge => {
+                if !probe.has_webpack_runtime {
+                    c.fit_score = c.fit_score.saturating_sub(60);
+                    c.known_limitations.push("probe: no webpack runtime".into());
+                }
+            }
+            StrategyKind::RuntimeTransparent | StrategyKind::RuntimeAggressive => {
+                if probe.pre_install_required() && !c.requires_preload {
+                    c.fit_score = c.fit_score.saturating_sub(20);
+                    c.known_limitations.push("probe: closure capture may bypass hook".into());
+                }
+            }
+            _ => {}
+        }
     }
 }
 
@@ -178,6 +301,12 @@ pub fn generate_candidates(
                 StrategyKind::Dispatch, 60, false, true,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["dispatch pattern may be closure-captured"],
+                None,
+            );
+            try_add(
+                StrategyKind::SourceAst, 55, false, false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["__iv8_trap transform may catch non-dispatch computed calls"],
                 None,
             );
             try_add(
@@ -295,21 +424,27 @@ fn select_primary_strategy(
 // Fallback chain
 // ───
 
-/// Build fallback chain from candidates, ordered by fit descending.
+/// Build fallback chain from candidates, ordered by fit_score descending.
+/// The highest-fit non-selected strategy will be tried first on fallback.
 pub fn build_fallback_chain(
     candidates: &[CandidateStrategy],
     selected: &SelectedStrategy,
 ) -> Vec<String> {
-    let mut chain: Vec<String> = candidates
+    let mut sorted: Vec<&CandidateStrategy> = candidates
         .iter()
         .filter(|c| {
             c.rejection_reason.is_none()
                 && c.strategy_id != selected.strategy_id
         })
-        .map(|c| c.strategy_id.clone())
         .collect();
-    chain.sort(); // not strictly meaningful — kept for deterministic order
-    chain.push("cdp_probe.last_resort".into());
+    // Sort by fit_score descending so higher-fit candidates are tried first
+    sorted.sort_by(|a, b| b.fit_score.cmp(&a.fit_score));
+
+    let mut chain: Vec<String> = sorted.iter().map(|c| c.strategy_id.clone()).collect();
+    // Ensure CDP probe is always the absolute last resort if not already in chain
+    if !chain.iter().any(|s| s.contains("cdp_probe")) {
+        chain.push("cdp_probe.last_resort".into());
+    }
     chain
 }
 

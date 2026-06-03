@@ -13,6 +13,25 @@ use swc_ecma_codegen::{text_writer::JsWriter, Config, Emitter};
 use swc_ecma_parser::{lexer::Lexer, Parser, StringInput, Syntax};
 use swc_ecma_visit::{VisitMut, VisitMutWith};
 
+/// Quick viability probe: check whether SWC can successfully parse the source.
+/// Returns false if parsing fails for any reason (syntax error, unsupported feature, etc.).
+/// Does not perform any transform — just parse and discard.
+pub fn can_parse(source: &str) -> bool {
+    let cm: Lrc<SourceMap> = Default::default();
+    let fm = cm.new_source_file(
+        FileName::Custom("input.js".into()).into(),
+        source.to_string(),
+    );
+    let lexer = Lexer::new(
+        Syntax::default(),
+        EsVersion::Es2020,
+        StringInput::from(&*fm),
+        None,
+    );
+    let mut parser = Parser::new_from(lexer);
+    parser.parse_module().is_ok()
+}
+
 /// Apply AST-level instrumentation to a JS source string.
 ///
 /// Rewrites the 3 join points:
@@ -53,66 +72,65 @@ pub fn instrument(source: &str) -> (String, Option<String>) {
         Some(format!("{} parse warnings", errors.len()))
     };
 
-    // Apply the dispatch wrapper transform
-    module.visit_mut_with(&mut DispatchWrapper);
+    // Apply the universal dispatch trap transform
+    module.visit_mut_with(&mut TrapTransform);
 
     // Emit back to string
     let output = emit_js(&cm, &module);
 
-    // Prepend __iv8_trace helper + log infrastructure
+    // Prepend __iv8_trap helper + log infrastructure
     let helper = r#"
 ;(function(){var g=globalThis;
 Object.defineProperty(g,'__iv8i_log__',{value:[],writable:true,enumerable:false,configurable:true});
 Object.defineProperty(g,'__iv8i_lim__',{value:200000,writable:true,enumerable:false,configurable:true});
-Object.defineProperty(g,'__iv8i_pc__',{value:-1,writable:true,enumerable:false,configurable:true});
-g.__iv8_trace=function(fn){if(typeof fn!=='function')return function(){__iv8i_log__.push('D,'+__iv8i_pc__+',?');};
-return function(){var a=Array.prototype.slice.call(arguments);
-if(__iv8i_log__.length<__iv8i_lim__)__iv8i_log__.push('D,'+__iv8i_pc__+','+(fn.name||'?'));
-return fn.apply(this,a);};};
+g.__iv8_trap=function(h,k){var f=h[k];
+if(g.__iv8i_log__.length<g.__iv8i_lim__)g.__iv8i_log__.push('D,'+(typeof f==='function'?(f.name||'?'):'!')+','+k);
+return f.apply(h,Array.prototype.slice.call(arguments,2));};
 })();
 "#;
     (format!("{}{}", helper, output), diag)
 }
 
 // ───
-// Wrapper: dispatcher wraps the CALLEE (not injects args)
-//   handlers[opcode](x, y) → __iv8_trace(handlers[opcode])(x, y)
+// Transform: universal dispatch instrumentation via __iv8_trap helper
+//   X[Y](a1, a2, ..., aN) → __iv8_trap(X, Y, a1, a2, ..., aN)
+//
+// Semantics preserved:
+//   - X evaluated once (passed as first arg)
+//   - Y evaluated once (passed as second arg)
+//   - this binding = X (via .apply(h, ...) inside helper)
+//   - Arguments evaluated once (passed as trailing args)
+//   - Return value preserved (helper returns the result)
 // ───
 
-struct DispatchWrapper;
+struct TrapTransform;
 
-impl VisitMut for DispatchWrapper {
+impl VisitMut for TrapTransform {
     fn visit_mut_call_expr(&mut self, call: &mut CallExpr) {
         call.visit_mut_children_with(self);
 
-        if let Callee::Expr(expr) = &call.callee {
-            match &**expr {
-                // Computed member call: potential dispatch — wrap callee
-                Expr::Member(member) if has_any_computed_access(member) => {
-                    // Replace callee with __iv8_trace(callee)
-                    let callee_span = call.span;
-                    let old_callee = call.callee.clone();
-                    // Create __iv8_trace(old_callee) call expression
-                    call.callee = Callee::Expr(Box::new(Expr::Call(CallExpr {
-                        span: callee_span,
-                        callee: Callee::Expr(Box::new(Expr::Ident(Ident::new(
-                            "__iv8_trace".into(),
-                            callee_span,
-                            swc_common::SyntaxContext::empty(),
-                        )))),
-                        args: vec![ExprOrSpread {
-                            spread: None,
-                            expr: match old_callee {
-                                Callee::Expr(e) => e,
-                                _ => Box::new(Expr::Ident(Ident::new(
-                                    "undefined".into(),
-                                    callee_span,
-                                    swc_common::SyntaxContext::empty(),
-                                ))),
-                            },
-                        }],
-                        ..Default::default()
-                    })));
+        if let Callee::Expr(callee_expr) = &call.callee {
+            match &**callee_expr {
+                // Computed member call: X[Y](...) → __iv8_trap(X, Y, ...)
+                Expr::Member(member) if matches!(&member.prop, MemberProp::Computed(_)) => {
+                    // Prepend (obj, prop) to existing args
+                    let obj_expr = member.obj.clone();
+                    let prop_expr = match &member.prop {
+                        MemberProp::Computed(c) => c.expr.clone(),
+                        _ => unreachable!(),
+                    };
+                    let mut new_args = vec![
+                        ExprOrSpread { spread: None, expr: obj_expr },
+                        ExprOrSpread { spread: None, expr: prop_expr },
+                    ];
+                    new_args.extend(std::mem::take(&mut call.args));
+
+                    call.callee = Callee::Expr(Box::new(Expr::Ident(Ident::new(
+                        "__iv8_trap".into(),
+                        call.span,
+                        swc_common::SyntaxContext::empty(),
+                    ))));
+                    call.args = new_args;
                 }
                 // Eval/Function: dynamic code execution
                 Expr::Ident(ident)
@@ -124,13 +142,6 @@ impl VisitMut for DispatchWrapper {
             }
         }
     }
-    }
-
-/// Check if any MemberExpr in the chain has a computed property access.
-/// Matches patterns: A[B](), A.B[C](), A[B[C]](), A[B][C]() etc.
-fn has_any_computed_access(member: &MemberExpr) -> bool {
-    matches!(&member.prop, MemberProp::Computed(_)) ||
-    matches!(&*member.obj, Expr::Member(m) if has_any_computed_access(m))
 }
 
 fn emit_js(cm: &Lrc<SourceMap>, module: &Module) -> String {
@@ -159,15 +170,14 @@ mod tests {
     fn test_dispatch_expression() {
         let (output, diag) = instrument("var r = A[Q[U++]]();");
         assert!(diag.is_none(), "unexpected diagnostic: {:?}", diag);
-        assert!(output.contains("__iv8_trace"),
-            "expected __iv8_trace wrapper in output, got: {}", output);
+        assert!(output.contains("__iv8_trap"),
+            "expected __iv8_trap wrapper in output, got: {}", output);
     }
 
     #[test]
     fn test_webpack_require() {
         let (output, diag) = instrument("__webpack_require__(42);");
         assert!(diag.is_none());
-        // __webpack_require__ is an Ident, not computed — passes through
         assert!(output.contains("__webpack_require__"));
     }
 
@@ -175,7 +185,6 @@ mod tests {
     fn test_eval_function() {
         let (output, diag) = instrument("eval('1+1'); Function('return 1');");
         assert!(diag.is_none());
-        // eval/Function pass through (TODO: wrap for source capture)
         assert!(output.contains("eval"));
     }
 
@@ -183,8 +192,7 @@ mod tests {
     fn test_plain_script_passthrough() {
         let (output, diag) = instrument("var x = 1 + 1;");
         assert!(diag.is_none());
-        // Helper __iv8_trace is prepended but no dispatch calls should be wrapped
-        assert!(!output.contains("__iv8_trace(var"),
+        assert!(!output.contains("__iv8_trap(var"),
             "no dispatch calls, so no wrapping should occur: {}", output);
         assert!(output.contains("var x = 1 + 1;"));
     }
@@ -201,14 +209,14 @@ mod tests {
     fn test_combined_transform() {
         let src = "A[Q[U++]](); __webpack_require__(7); eval(code);";
         let (output, _) = instrument(src);
-        assert!(output.contains("__iv8_trace"));
+        assert!(output.contains("__iv8_trap"));
     }
 
     #[test]
     fn test_single_computed_dispatch() {
         let (output, diag) = instrument("var r = handlers[opcode]();");
         assert!(diag.is_none());
-        assert!(output.contains("__iv8_trace"),
+        assert!(output.contains("__iv8_trap"),
             "single computed dispatch not instrumented: {}", output);
     }
 
@@ -216,7 +224,93 @@ mod tests {
     fn test_dot_then_computed() {
         let (output, diag) = instrument("var r = vm.handlers[opcode]();");
         assert!(diag.is_none());
-        assert!(output.contains("__iv8_trace"),
+        assert!(output.contains("__iv8_trap"),
             "dot-then-computed dispatch not instrumented: {}", output);
+    }
+
+    /// Helper: extract the inner string from a RustValue::String or panic.
+    fn entry_str(item: &crate::convert::RustValue) -> &str {
+        match item {
+            crate::convert::RustValue::String(s) => s.as_str(),
+            _ => panic!("expected String, got {:?}", item),
+        }
+    }
+
+    #[test]
+    fn test_trap_produces_trace_on_execution() {
+        let src = "var handlers = [function a() {}, function b() {}]; var pc = 0; handlers[pc]();";
+        let (transformed, diag) = instrument(src);
+        assert!(diag.is_none(), "transform should succeed: {:?}", diag);
+        assert!(transformed.contains("__iv8_trap"));
+
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel.eval(&transformed, crate::kernel::EvalOpts::default()).unwrap();
+
+        let trace = kernel.eval_to_rust_value(
+            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
+        );
+        if let crate::convert::RustValue::Array(items) = trace {
+            assert!(!items.is_empty(), "expected at least one D entry");
+            assert!(entry_str(&items[0]).starts_with("D,"), "expected D entry, got: {:?}", items[0]);
+        } else {
+            panic!("expected array, got {:?}", trace);
+        }
+    }
+
+    #[test]
+    fn test_trap_multi_arg() {
+        let src = "var handlers = [function(x,y){}]; var op=0; handlers[op](1,2);";
+        let (transformed, diag) = instrument(src);
+        assert!(diag.is_none());
+        assert!(transformed.contains("__iv8_trap"));
+
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel.eval(&transformed, crate::kernel::EvalOpts::default()).unwrap();
+
+        let trace = kernel.eval_to_rust_value(
+            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
+        );
+        if let crate::convert::RustValue::Array(items) = trace {
+            assert!(!items.is_empty(), "expected D entries for multi-arg dispatch");
+            assert!(entry_str(&items[0]).starts_with("D,"));
+        } else {
+            panic!("expected array, got {:?}", trace);
+        }
+    }
+
+    #[test]
+    fn test_trap_this_binding() {
+        let src = r#"
+var obj = {
+    name: "test",
+    method: function() { return this.name; }
+};
+var key = "method";
+obj[key]();
+"#;
+        let (transformed, diag) = instrument(src);
+        assert!(diag.is_none());
+        assert!(transformed.contains("__iv8_trap"));
+
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel.eval(&transformed, crate::kernel::EvalOpts::default()).unwrap();
+
+        let trace = kernel.eval_to_rust_value(
+            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
+        );
+        if let crate::convert::RustValue::Array(items) = trace {
+            assert!(!items.is_empty(), "expected D entry for method dispatch");
+            let first = entry_str(&items[0]);
+            assert!(first.starts_with("D,"), "expected D entry, got: {}", first);
+            assert!(first.contains("method"), "expected 'method' name, got: {}", first);
+        } else {
+            panic!("expected array, got {:?}", trace);
+        }
     }
 }

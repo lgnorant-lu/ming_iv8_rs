@@ -183,7 +183,7 @@ fn count_eval_calls(source: &str) -> usize {
 
 /// Heuristic: check for patterns that suggest early reference capture.
 /// E.g. `var R = navigator;` before an IIFE.
-fn detect_early_capture(source: &str) -> bool {
+pub fn detect_early_capture(source: &str) -> bool {
     // Look for global-object reference captured before a function/IIFE
     let globals = [
         "navigator", "screen", "document", "window", "location",

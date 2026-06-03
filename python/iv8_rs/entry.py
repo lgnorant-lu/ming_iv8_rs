@@ -26,10 +26,30 @@ class SelectedStrategy:
 
 
 @dataclass
+class ErrorEntry:
+    code: str
+    stage: str
+    message: str
+    strategy_id: Optional[str] = None
+    recoverable: bool = True
+
+    @classmethod
+    def from_dict(cls, d: dict) -> ErrorEntry:
+        return cls(
+            code=d["code"],
+            stage=d["stage"],
+            message=d["message"],
+            strategy_id=d.get("strategy_id"),
+            recoverable=d.get("recoverable", True),
+        )
+
+
+@dataclass
 class ExecutedStrategy:
     strategy_id: str
     phase_entered: str
     outcome: str
+    diagnostics: List[ErrorEntry] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, d: dict) -> ExecutedStrategy:
@@ -37,6 +57,49 @@ class ExecutedStrategy:
             strategy_id=d["strategy_id"],
             phase_entered=d["phase_entered"],
             outcome=d["outcome"],
+            diagnostics=[ErrorEntry.from_dict(e) for e in d.get("diagnostics", [])],
+        )
+
+
+@dataclass
+class ProbeResult:
+    can_swc_parse: bool = False
+    has_dispatch_pattern: bool = False
+    has_webpack_runtime: bool = False
+    has_closure_capture: bool = False
+    has_eval_heavy: bool = False
+    is_low_obfuscation: bool = False
+
+    @classmethod
+    def from_dict(cls, d: dict) -> ProbeResult:
+        return cls(
+            can_swc_parse=d.get("can_swc_parse", False),
+            has_dispatch_pattern=d.get("has_dispatch_pattern", False),
+            has_webpack_runtime=d.get("has_webpack_runtime", False),
+            has_closure_capture=d.get("has_closure_capture", False),
+            has_eval_heavy=d.get("has_eval_heavy", False),
+            is_low_obfuscation=d.get("is_low_obfuscation", False),
+        )
+
+
+@dataclass
+class EventMeta:
+    source_kind: str
+    strategy_id: str
+    phase: str
+    confidence: float = 0.0
+    module_id: Optional[int] = None
+    chunk_id: Optional[str] = None
+
+    @classmethod
+    def from_dict(cls, d: dict) -> EventMeta:
+        return cls(
+            source_kind=d["source_kind"],
+            strategy_id=d["strategy_id"],
+            phase=d["phase"],
+            confidence=d.get("confidence", 0.0),
+            module_id=d.get("module_id"),
+            chunk_id=d.get("chunk_id"),
         )
 
 
@@ -47,6 +110,10 @@ class Diagnostics:
     fallback_attempts: List[str]
     policy_constraints: List[str]
     missing_capabilities: List[str]
+    activation_timing: Optional[str] = None
+    reload_reason: Optional[str] = None
+    collection_summary: Optional[str] = None
+    cleanup_summary: Optional[str] = None
 
     @classmethod
     def from_dict(cls, d: dict) -> Diagnostics:
@@ -56,6 +123,10 @@ class Diagnostics:
             fallback_attempts=d.get("fallback_attempts", []),
             policy_constraints=d.get("policy_constraints", []),
             missing_capabilities=d.get("missing_capabilities", []),
+            activation_timing=d.get("activation_timing"),
+            reload_reason=d.get("reload_reason"),
+            collection_summary=d.get("collection_summary"),
+            cleanup_summary=d.get("cleanup_summary"),
         )
 
 
@@ -67,6 +138,12 @@ class EntryPlan:
     selected_strategy: SelectedStrategy
     state: str
     diagnostics: Diagnostics
+    sample_signals: List[str] = field(default_factory=list)
+    expected_evidence: List[str] = field(default_factory=list)
+    fallback_chain: List[str] = field(default_factory=list)
+    risk_level: str = "low"
+    requires_preload: bool = False
+    requires_reload: bool = False
 
     @classmethod
     def from_dict(cls, d: dict) -> EntryPlan:
@@ -77,6 +154,44 @@ class EntryPlan:
             selected_strategy=SelectedStrategy.from_dict(d["selected_strategy"]),
             state=d["state"],
             diagnostics=Diagnostics.from_dict(d.get("diagnostics", {})),
+            sample_signals=d.get("sample_signals", []),
+            expected_evidence=d.get("expected_evidence", []),
+            fallback_chain=d.get("fallback_chain", []),
+            risk_level=d.get("risk_level", "low"),
+            requires_preload=d.get("requires_preload", False),
+            requires_reload=d.get("requires_reload", False),
+        )
+
+
+@dataclass
+class TraceMeta:
+    trace_format: str
+    plan_id: str
+    persona: str
+    sample_kind: str
+    selected_strategy_id: str
+    executed_strategy_ids: List[str]
+    trace_sources: List[str]
+    events: Dict[int, EventMeta] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, d: dict) -> TraceMeta:
+        raw_events = d.get("events", {})
+        events = {}
+        for k, v in raw_events.items():
+            try:
+                events[int(k)] = EventMeta.from_dict(v)
+            except (ValueError, KeyError):
+                continue
+        return cls(
+            trace_format=d["trace_format"],
+            plan_id=d["plan_id"],
+            persona=d["persona"],
+            sample_kind=d["sample_kind"],
+            selected_strategy_id=d["selected_strategy_id"],
+            executed_strategy_ids=d.get("executed_strategy_ids", []),
+            trace_sources=d.get("trace_sources", []),
+            events=events,
         )
 
 
@@ -90,6 +205,11 @@ class EntryResult:
     errors: List[dict]
     warnings: List[dict]
     diagnostics: Diagnostics
+    trace_meta: Optional[TraceMeta] = None
+    module_graph: Optional[dict] = None
+    hook_report: Optional[dict] = None
+    environment_report: Optional[dict] = None
+    cleanup_state: Optional[dict] = None
 
     @classmethod
     def from_dict(cls, d: dict) -> EntryResult:
@@ -102,4 +222,9 @@ class EntryResult:
             errors=d.get("errors", []),
             warnings=d.get("warnings", []),
             diagnostics=Diagnostics.from_dict(d.get("diagnostics", {})),
+            trace_meta=TraceMeta.from_dict(d["trace_meta"]) if d.get("trace_meta") else None,
+            module_graph=d.get("module_graph"),
+            hook_report=d.get("hook_report"),
+            environment_report=d.get("environment_report"),
+            cleanup_state=d.get("cleanup_state"),
         )

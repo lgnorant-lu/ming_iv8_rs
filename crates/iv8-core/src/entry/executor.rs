@@ -2,16 +2,19 @@
 //!
 //! Takes an `EntryPlan` produced by the planner, executes the JS source
 //! within the V8 engine according to the selected strategy, and returns
-//! an `EntryResult` with collected evidence.
+//! an `EntryResult` with collected evidence. Supports fallback chain:
+//! if the primary strategy fails, subsequent strategies are tried automatically.
 
 use crate::entry::types::*;
 use crate::entry::hooks;
 use crate::kernel::embedded_v8::EmbeddedV8Kernel;
 use crate::kernel::{EvalOpts, KernelConfig};
+use std::collections::HashMap;
 
-/// Execute a prepared entry plan and collect results.
+/// Execute a prepared entry plan with fallback chain support.
 ///
-/// This is the main execution entry point.
+/// Tries the primary strategy first. If it fails with a recoverable error,
+/// iterates through the fallback chain, creating a fresh kernel for each attempt.
 /// `chunks` are evaluated in order before the main `source`.
 /// If `entry_expr` is provided, it is evaluated after the main source.
 pub fn run_entry(
@@ -20,8 +23,11 @@ pub fn run_entry(
     chunks: &[String],
     entry_expr: Option<&str>,
 ) -> Result<EntryResult, String> {
-    let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default())
-        .map_err(|e| format!("kernel init failed: {}", e))?;
+    let primary_id = plan.selected_strategy.strategy_id.clone();
+    let cand_map: HashMap<&str, &CandidateStrategy> = plan
+        .candidate_strategies.iter()
+        .map(|c| (c.strategy_id.as_str(), c))
+        .collect();
 
     let mut result = EntryResult {
         plan_id: plan.plan_id.clone(),
@@ -39,107 +45,142 @@ pub fn run_entry(
         warnings: Vec::new(),
     };
 
-    // Phase: prepared — apply strategy-specific setup
-    result.final_state = PlanState::Prepared;
-    if let Err(e) = apply_strategy_setup(&mut kernel, plan) {
-        result.errors.push(ErrorEntry {
-            code: "ACT_STRATEGY_SETUP_FAILED".into(),
-            stage: "prepared".into(),
-            message: format!("strategy setup failed: {}", e),
-            strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
-            recoverable: true,
-        });
-        result.final_state = PlanState::Prepared;
-        return Ok(result);
-    }
-
-    // Phase: armed — evaluate chunks first (in order), then main source
-    result.final_state = PlanState::Armed;
-
-    // Evaluate pre-requisite chunks
-    for (i, chunk) in chunks.iter().enumerate() {
-        if let Err(e) = kernel.eval(chunk, EvalOpts::default()) {
-            result.warnings.push(ErrorEntry {
-                code: "ACT_CHUNK_EVAL_FAILED".into(),
-                stage: "armed".into(),
-                message: format!("chunk[{}] eval failed: {}", i, e),
-                strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
-                recoverable: true,
-            });
+    // Build ordered list of strategy IDs to try
+    let mut try_order: Vec<String> = Vec::new();
+    try_order.push(primary_id.clone());
+    for fb_id in &plan.fallback_chain {
+        if fb_id != &primary_id && !try_order.contains(fb_id) {
+            try_order.push(fb_id.clone());
         }
     }
 
-    // Apply AST transform if strategy requires it
-    let eval_source = match plan.selected_strategy.strategy_kind {
-        StrategyKind::SourceAst => {
-            let (transformed, diag) = crate::entry::ast::instrument(source);
-            if let Some(d) = diag {
+    let mut evidence_satisfied_by_any = false;
+
+    for (attempt_idx, strategy_id) in try_order.iter().enumerate() {
+        let strategy_kind = cand_map
+            .get(strategy_id.as_str())
+            .map(|c| c.strategy_kind)
+            .unwrap_or(StrategyKind::CdpProbe);
+
+        let label = if attempt_idx == 0 {
+            "primary".to_string()
+        } else {
+            format!("fallback[{}]", attempt_idx)
+        };
+
+        let mut kernel = match EmbeddedV8Kernel::new(KernelConfig::default()) {
+            Ok(k) => k,
+            Err(e) => {
+                result.diagnostics.fallback_attempts
+                    .push(format!("{}: kernel init failed: {}", label, e));
+                continue;
+            }
+        };
+
+        // Phase: prepared — apply strategy setup
+        if let Err(e) = apply_strategy_prelude(&mut kernel, strategy_kind, source) {
+            result.diagnostics.fallback_attempts
+                .push(format!("{}: setup failed: {}", label, e));
+            continue;
+        }
+
+        // Phase: armed — evaluate chunks then main source
+        for (i, chunk) in chunks.iter().enumerate() {
+            if let Err(e) = kernel.eval(chunk, EvalOpts::default()) {
                 result.warnings.push(ErrorEntry {
-                    code: "ACT_AST_TRANSFORM_WARNING".into(),
+                    code: "ACT_CHUNK_EVAL_FAILED".into(),
                     stage: "armed".into(),
-                    message: d,
-                    strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
+                    message: format!("chunk[{}] eval failed: {}", i, e),
+                    strategy_id: Some(strategy_id.clone()),
                     recoverable: true,
                 });
             }
-            transformed
         }
-        StrategyKind::Dispatch => {
-            // Dispatch tracing via source transform has known edge cases
-            // (bdms/h5st crash with Function.prototype.call / read-only .length).
-            // For now, dispatch classification is the primary value; AST-based
-            // wrapping is used on SourceAst path only.
-            source.to_string()
-        }
-        _ => source.to_string(),
-    };
 
-    match kernel.eval(&eval_source, EvalOpts::default()) {
-        Ok(_) => {
-            result.executed_strategies.push(ExecutedStrategy {
-                strategy_id: plan.selected_strategy.strategy_id.clone(),
-                phase_entered: PlanState::Armed,
-                outcome: Outcome::Success,
-            });
-        }
-        Err(e) => {
-            result.errors.push(ErrorEntry {
-                code: "ACT_SOURCE_EVAL_FAILED".into(),
-                stage: "armed".into(),
-                message: format!("source eval failed: {}", e),
-                strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
-                recoverable: false,
-            });
-            result.final_state = PlanState::Armed;
-            return Ok(result);
-        }
-    }
+        // Transform source if strategy requires it
+        let eval_source = match strategy_kind {
+            StrategyKind::SourceAst => {
+                let (transformed, diag) = crate::entry::ast::instrument(source);
+                if let Some(d) = diag {
+                    result.warnings.push(ErrorEntry {
+                        code: "ACT_AST_TRANSFORM_WARNING".into(),
+                        stage: "armed".into(),
+                        message: d,
+                        strategy_id: Some(strategy_id.clone()),
+                        recoverable: true,
+                    });
+                }
+                transformed
+            }
+            StrategyKind::Dispatch => {
+                // Dispatch: prepend the runtime dispatch hook prelude
+                // (the regex-based dispatch replacement is handled via SourceRegex)
+                source.to_string()
+            }
+            StrategyKind::SourceRegex => source.to_string(),
+            _ => source.to_string(),
+        };
 
-    // Phase: invoked — evaluate entry expression
-    result.final_state = PlanState::Invoked;
-    if let Some(expr) = entry_expr {
-        match kernel.eval(expr, EvalOpts::default()) {
-            Ok(_) => {}
+        let source_ok = match kernel.eval(&eval_source, EvalOpts::default()) {
+            Ok(_) => true,
             Err(e) => {
                 result.errors.push(ErrorEntry {
+                    code: "ACT_SOURCE_EVAL_FAILED".into(),
+                    stage: "armed".into(),
+                    message: format!("{} source eval: {}", strategy_id, e),
+                    strategy_id: Some(strategy_id.clone()),
+                    recoverable: true,
+                });
+                false
+            }
+        };
+        if !source_ok {
+            result.diagnostics.fallback_attempts
+                .push(format!("{}: source eval failed", label));
+            continue;
+        }
+
+        // Phase: invoked — evaluate entry expression
+        if let Some(expr) = entry_expr {
+            if let Err(e) = kernel.eval(expr, EvalOpts::default()) {
+                result.warnings.push(ErrorEntry {
                     code: "ACT_ENTRY_EXPR_FAILED".into(),
                     stage: "invoked".into(),
-                    message: format!("entry expression failed: {}", e),
-                    strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
-                    recoverable: false,
+                    message: format!("{} entry expr: {}", strategy_id, e),
+                    strategy_id: Some(strategy_id.clone()),
+                    recoverable: true,
                 });
-                result.final_state = PlanState::Invoked;
-                return Ok(result);
             }
+        }
+
+        // Phase: collected — gather trace and evidence for this strategy
+        collect_strategy_evidence(&mut kernel, &mut result, strategy_id, strategy_kind);
+
+        // Evaluate: does the cumulative evidence meet expected_evidence requirements?
+        let evidence_met = evidence_satisfied(&result, &plan.expected_evidence);
+        if evidence_met {
+            evidence_satisfied_by_any = true;
+            result.diagnostics.fallback_attempts
+                .push(format!("{}: evidence satisfied ({})", label, result.trace.len()));
+            break;
+        } else {
+            result.diagnostics.fallback_attempts
+                .push(format!("{}: evidence insufficient (trace={}), trying next",
+                    label, result.trace.len()));
         }
     }
 
-    // Phase: collected — gather trace and evidence
-    result.final_state = PlanState::Collected;
-    collect_evidence(&mut kernel, &mut result, plan);
+    if evidence_satisfied_by_any {
+        result.final_state = PlanState::Finalized;
+    } else if result.executed_strategies.is_empty() {
+        result.final_state = PlanState::Armed;
+    } else {
+        // At least one strategy ran but evidence requirements not met
+        result.final_state = PlanState::Collected;
+    }
 
-    // Phase: finalized — cleanup
-    result.final_state = PlanState::Finalized;
+    build_trace_meta(&mut result, plan);
+    collect_environment_report(&mut result);
     Ok(result)
 }
 
@@ -147,27 +188,52 @@ pub fn run_entry(
 // Strategy setup
 // ───
 
-fn apply_strategy_setup(
+/// Apply the runtime prelude for a given strategy kind.
+/// Called once per strategy attempt with a fresh kernel.
+/// `source` is the original (untransformed) JS source, needed by some
+/// runtime hook strategies (e.g. Dispatch) for pattern detection.
+fn apply_strategy_prelude(
     kernel: &mut EmbeddedV8Kernel,
-    plan: &EntryPlan,
+    kind: StrategyKind,
+    source: &str,
 ) -> Result<(), String> {
-    match plan.selected_strategy.strategy_kind {
+    match kind {
         StrategyKind::SourceAst | StrategyKind::SourceRegex => {
-            // For source-level strategies, the transform is applied before eval
-            // (currently handled by the caller passing modified source).
-            // No runtime setup needed.
+            // Source-level strategies: transform applied before eval, no runtime setup
+            Ok(())
+        }
+        StrategyKind::Dispatch => {
+            // Dispatch runtime hook: inject Proxy on handler array or switch VM marker.
+            // This is the RUNTIME-LEVEL dispatch instrumentation (complementary to
+            // source-level __iv8_trap transform under SourceAst strategy).
+            // Detection was already done during planning; we re-detect here to get
+            // the exact handler array / PC variable names needed by the prelude.
+            let dispatch_det = crate::entry::dispatch::detect(source);
+            if dispatch_det.detected {
+                match dispatch_det.flavor {
+                    crate::entry::dispatch::DispatchFlavor::HandlerArray => {
+                        let ha = dispatch_det.handler_array.as_deref().unwrap_or("handlers");
+                        let pc = dispatch_det.pc_var.as_deref().unwrap_or("pc");
+                        let idx = dispatch_det.index_array.as_deref().unwrap_or("");
+                        let st = dispatch_det.stack_var.as_deref().unwrap_or("S");
+                        let prelude = crate::entry::dispatch::handler_array_prelude(ha, pc, idx, st);
+                        kernel.eval(&prelude, EvalOpts::default())
+                            .map_err(|e| format!("dispatch proxy prelude: {}", e))?;
+                    }
+                    crate::entry::dispatch::DispatchFlavor::SwitchVM => {
+                        let prelude = crate::entry::dispatch::switch_vm_prelude();
+                        kernel.eval(&prelude, EvalOpts::default())
+                            .map_err(|e| format!("dispatch switch prelude: {}", e))?;
+                    }
+                    _ => {}
+                }
+            }
             Ok(())
         }
         StrategyKind::WebpackBridge => {
-            // Webpack bridge: hook chunk registration + module loading.
-            // Works with webpack 4 (webpackJsonp) and webpack 5 (webpackChunk).
-            // Captures module IDs, __webpack_require__, and optionally
-            // intercepts module factories to expose internal functions.
             let prelude = r#"
 (function() {
     var __iv8_log = [];
-
-    // 1. Hook Function.prototype.call to capture __webpack_require__
     if (typeof Function !== 'undefined' && Function.prototype) {
         var origCall = Function.prototype.call;
         Function.prototype.call = function() {
@@ -186,10 +252,6 @@ fn apply_strategy_setup(
             return origCall.apply(this, arguments);
         };
     }
-
-    // 2. Intercept webpackJsonp.push to modify module factories before
-    //    they are registered. This allows exposing internal closure
-    //    variables (e.g. _getSecuritySign) by patching the factory source.
     if (typeof window !== 'undefined') {
         var _origPush = Array.prototype.push;
         var _wrappedPush = function() {
@@ -201,7 +263,6 @@ fn apply_strategy_setup(
                             var factory = entry[1][mid];
                             if (typeof factory === 'function') {
                                 var src = factory.toString();
-                                // Generic pattern: capture ie variable from closure
                                 if (src.indexOf('_getSecuritySign') >= 0) {
                                     var modified = src.replace(
                                         'var ie=ne._getSecuritySign;delete ne._getSecuritySign;',
@@ -216,12 +277,9 @@ fn apply_strategy_setup(
             }
             return _origPush.apply(this, arguments);
         };
-
-        // Install interceptor when webpackJsonp is created
         var _realWP = undefined;
         Object.defineProperty(window, 'webpackJsonp', {
-            configurable: true,
-            enumerable: true,
+            configurable: true, enumerable: true,
             get: function() { return _realWP; },
             set: function(v) {
                 if (v && Array.isArray(v) && v !== _realWP) {
@@ -231,61 +289,48 @@ fn apply_strategy_setup(
             }
         });
     }
-
     try {
         if (typeof __webpack_require__ !== 'undefined') {
             globalThis.__iv8_wp_require = __webpack_require__;
             __iv8_log.push('wp_require_global');
         }
     } catch(e) {}
-
     globalThis.__iv8_wp_require = null;
     globalThis.__iv8_webpack_log = __iv8_log;
 })();
 "#;
-
             kernel.eval(prelude, EvalOpts::default())
-                .map_err(|e| format!("webpack bridge prelude: {}", e))?;
-
+                .map_err(|e| format!("webpack prelude: {}", e))?;
             Ok(())
         }
         StrategyKind::RuntimeTransparent => {
-            let hook_js = crate::entry::hooks::transparent::prelude();
-            kernel
-                .eval(&hook_js, EvalOpts::default())
+            let js = hooks::transparent::prelude();
+            kernel.eval(&js, EvalOpts::default())
                 .map_err(|e| format!("transparent hook: {}", e))?;
             Ok(())
         }
         StrategyKind::RuntimeAggressive => {
-            let hook_js = crate::entry::hooks::aggressive::prelude();
-            kernel
-                .eval(&hook_js, EvalOpts::default())
+            let js = hooks::aggressive::prelude();
+            kernel.eval(&js, EvalOpts::default())
                 .map_err(|e| format!("aggressive hook: {}", e))?;
             Ok(())
         }
-        StrategyKind::CdpProbe => {
-            // CDP probe — minimal setup, relies on devtools connection
-            // For now, just mark the probe as available
-            Ok(())
-        }
-        StrategyKind::Dispatch => {
-            // Dispatch instrumentation is now handled at source level
-            // by ast::instrument() which prepends __iv8_trace helper
-            Ok(())
-        }
+        StrategyKind::CdpProbe => Ok(()),
     }
 }
 
 // ───
-// Evidence collection
+// Evidence collection (per-strategy)
 // ───
 
-fn collect_evidence(
+/// Collect trace and evidence produced by a single strategy into the result.
+fn collect_strategy_evidence(
     kernel: &mut EmbeddedV8Kernel,
     result: &mut EntryResult,
-    plan: &EntryPlan,
+    strategy_id: &str,
+    kind: StrategyKind,
 ) {
-    // Collect trace if available (runtime_log for hooks, __iv8i_log__ for dispatch/AST)
+    // Pull trace from whichever log is present
     let trace_val = kernel.eval_to_rust_value(
         concat!(
             "(function(){",
@@ -295,45 +340,40 @@ fn collect_evidence(
             "})()"
         ),
     );
+    let mut per_strategy_trace: Vec<String> = Vec::new();
     if let crate::convert::RustValue::Array(items) = trace_val {
         for item in items {
             if let crate::convert::RustValue::String(s) = item {
-                result.trace.push(s);
+                per_strategy_trace.push(s);
             }
         }
     }
 
-    // Collect webpack module log if available
-    if matches!(plan.selected_strategy.strategy_kind, StrategyKind::WebpackBridge) {
+    // Collect webpack module log if applicable
+    if matches!(kind, StrategyKind::WebpackBridge) {
         let log_val = kernel.eval_to_rust_value(
             "typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []",
         );
         if let crate::convert::RustValue::Array(items) = log_val {
-            let mut chunk_events = Vec::new();
             let mut module_ids = Vec::new();
             for item in items {
                 if let crate::convert::RustValue::String(s) = item {
                     if s.starts_with("module_registered,") {
                         module_ids.push(s["module_registered,".len()..].to_string());
-                    } else {
-                        chunk_events.push(s);
                     }
                 }
             }
-
-            // Fallback: scan webpackJsonp entries directly (runs after all chunks loaded)
             if module_ids.is_empty() {
                 let js = concat!(
-                    "if(typeof window!=='undefined' && window.webpackJsonp){(function(){",
-                    "var ids=[];",
+                    "(typeof window!=='undefined' && window.webpackJsonp)",
+                    "?(function(){var ids=[];",
                     "for(var i=0;i<window.webpackJsonp.length;i++){",
                     "var e=window.webpackJsonp[i];",
                     "if(e&&e[1]){Object.keys(e[1]).forEach(function(k){ids.push(k);});}",
                     "}",
-                    "return ids;})()}else{[]}"
+                    "return ids;})():[]"
                 );
-                let jp_val = kernel.eval_to_rust_value(js);
-                if let crate::convert::RustValue::Array(items2) = jp_val {
+                if let crate::convert::RustValue::Array(items2) = kernel.eval_to_rust_value(js) {
                     for item in items2 {
                         if let crate::convert::RustValue::String(s) = item {
                             if !module_ids.contains(&s) {
@@ -343,43 +383,63 @@ fn collect_evidence(
                     }
                 }
             }
-
             let mut graph = serde_json::Map::new();
             graph.insert("module_ids".into(), serde_json::json!(module_ids));
             graph.insert("module_count".into(), serde_json::json!(module_ids.len()));
-            graph.insert("chunk_events".into(), serde_json::json!(chunk_events));
             result.module_graph = Some(serde_json::Value::Object(graph));
         }
     }
 
-    // Collect hook report (strategy-specific)
-    let trace_entries: Vec<String> = result.trace.iter().map(|s| s.to_string()).collect();
-    result.hook_report = match plan.selected_strategy.strategy_kind {
-        StrategyKind::RuntimeTransparent => {
-            Some(hooks::transparent::collect(&trace_entries))
-        }
-        StrategyKind::RuntimeAggressive => {
-            Some(hooks::aggressive::collect(&trace_entries))
-        }
-        _ => {
-            Some(serde_json::json!({
-                "strategy_id": plan.selected_strategy.strategy_id,
-                "strategy_kind": format!("{:?}", plan.selected_strategy.strategy_kind),
-            }))
-        }
-    };
+    // Merge per-strategy trace into result
+    result.trace.extend(per_strategy_trace.clone());
+    result.executed_strategies.push(ExecutedStrategy {
+        strategy_id: strategy_id.to_string(),
+        phase_entered: PlanState::Collected,
+        outcome: Outcome::Success,
+        diagnostics: Vec::new(),
+    });
+}
 
-    // Assemble trace_meta
-    let trace_sources = derive_trace_sources(&plan.selected_strategy.strategy_kind);
+// ───
+// Environment report
+// ───
+
+/// Collect environment state snapshot after execution.
+fn collect_environment_report(result: &mut EntryResult) {
+    result.environment_report = Some(serde_json::json!({
+        "collected_at": "finalized",
+        "trace_count": result.trace.len(),
+        "strategy_count": result.executed_strategies.len(),
+    }));
+}
+
+// ───
+// Trace metadata
+// ───
+
+/// Build final trace_meta from all accumulated evidence.
+fn build_trace_meta(result: &mut EntryResult, plan: &EntryPlan) {
     let executed_ids: Vec<String> = result.executed_strategies
         .iter()
         .map(|e| e.strategy_id.clone())
         .collect();
 
-    // Build event-level metadata for trace entries that have recognizable prefixes
-    let mut events = std::collections::HashMap::new();
+    let mut trace_sources: Vec<TraceSourceKind> = Vec::new();
+    for st in &result.executed_strategies {
+        let cand = plan.candidate_strategies.iter()
+            .find(|c| c.strategy_id == st.strategy_id);
+        if let Some(c) = cand {
+            for sk in derive_trace_sources(&c.strategy_kind) {
+                if !trace_sources.contains(&sk) {
+                    trace_sources.push(sk);
+                }
+            }
+        }
+    }
+
+    let mut events = HashMap::new();
     for (idx, entry) in result.trace.iter().enumerate() {
-        let (source_kind, confidence) = classify_trace_entry(entry, &plan.selected_strategy.strategy_kind);
+        let (source_kind, confidence) = classify_trace_entry(entry);
         if let Some(sk) = source_kind {
             events.insert(idx, EventMeta {
                 source_kind: sk,
@@ -404,6 +464,33 @@ fn collect_evidence(
     });
 }
 
+/// Check whether the collected evidence satisfies the expected evidence requirements.
+/// Returns true if ALL required evidence types have been met.
+fn evidence_satisfied(result: &EntryResult, expected: &[Evidence]) -> bool {
+    if expected.is_empty() {
+        return true;
+    }
+    for ev in expected {
+        let ok = match ev {
+            Evidence::Trace => !result.trace.is_empty(),
+            Evidence::ModuleGraph => result.module_graph.is_some(),
+            Evidence::ChunkEvents => result.trace.iter().any(|t| t.starts_with("chunk_")),
+            Evidence::EnvReport => result.environment_report.is_some(),
+            Evidence::Diagnostics => {
+                !result.diagnostics.sample_signals.is_empty()
+                    || result.diagnostics.selected_strategy_reason.is_some()
+            }
+            Evidence::EvalSources => result.trace.iter().any(|t| {
+                t.starts_with("eval,") || t.starts_with("fn_ctor,")
+            }),
+        };
+        if !ok {
+            return false;
+        }
+    }
+    true
+}
+
 /// Map strategy kind to trace source categories.
 fn derive_trace_sources(kind: &StrategyKind) -> Vec<TraceSourceKind> {
     match kind {
@@ -418,28 +505,28 @@ fn derive_trace_sources(kind: &StrategyKind) -> Vec<TraceSourceKind> {
 }
 
 /// Best-effort classification of a raw trace entry string.
-/// Returns (source_kind, confidence) or (None, _) if unrecognized.
-fn classify_trace_entry(entry: &str, _strategy: &StrategyKind) -> (Option<TraceSourceKind>, String) {
+/// Returns (source_kind, confidence: 1.0=deterministic, 0.7=probe, 0.5=hook, 0.0=unknown).
+fn classify_trace_entry(entry: &str) -> (Option<TraceSourceKind>, f64) {
     if entry.starts_with("D,") {
-        return (Some(TraceSourceKind::Dispatch), "high".into());
+        return (Some(TraceSourceKind::Dispatch), 1.0);
     }
     if entry.starts_with("R,") || entry.starts_with("W,") {
-        return (Some(TraceSourceKind::TransparentHook), "medium".into());
+        return (Some(TraceSourceKind::TransparentHook), 0.5);
     }
     if entry.starts_with("C,") {
-        return (Some(TraceSourceKind::TransparentHook), "medium".into());
+        return (Some(TraceSourceKind::TransparentHook), 0.5);
     }
     if entry.starts_with("eval,") || entry.starts_with("fn_ctor,") {
-        return (Some(TraceSourceKind::TransparentHook), "medium".into());
+        return (Some(TraceSourceKind::TransparentHook), 0.5);
     }
     if entry.starts_with("aggressive_") {
-        return (Some(TraceSourceKind::RuntimeProxy), "high".into());
+        return (Some(TraceSourceKind::RuntimeProxy), 0.5);
     }
     if entry.starts_with("require,") || entry.starts_with("chunk_") {
-        return (Some(TraceSourceKind::ModuleBridge), "high".into());
+        return (Some(TraceSourceKind::ModuleBridge), 1.0);
     }
     if entry.starts_with("env_read,") {
-        return (Some(TraceSourceKind::TransparentHook), "low".into());
+        return (Some(TraceSourceKind::TransparentHook), 0.3);
     }
-    (None, "unknown".into())
+    (None, 0.0)
 }
