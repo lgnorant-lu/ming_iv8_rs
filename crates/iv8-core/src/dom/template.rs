@@ -12,6 +12,7 @@
 use crate::dom::NodeData;
 use crate::dom::NodeId;
 use crate::state::RuntimeState;
+use url::Url;
 
 /// Index of the internal field that stores the NodeId.
 pub const NODE_ID_FIELD: i32 = 0;
@@ -282,6 +283,15 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "href", href_getter, Some(href_setter));
         install_proto_accessor(scope, proto, "target", target_getter, Some(target_setter));
         install_proto_accessor(scope, proto, "rel", rel_getter, Some(rel_setter));
+        // Computed URL properties (read-only, parsed from href)
+        install_proto_accessor(scope, proto, "pathname", anchor_pathname_getter, None);
+        install_proto_accessor(scope, proto, "hostname", anchor_hostname_getter, None);
+        install_proto_accessor(scope, proto, "protocol", anchor_protocol_getter, None);
+        install_proto_accessor(scope, proto, "host", anchor_host_getter, None);
+        install_proto_accessor(scope, proto, "port", anchor_port_getter, None);
+        install_proto_accessor(scope, proto, "search", anchor_search_getter, None);
+        install_proto_accessor(scope, proto, "hash", anchor_hash_getter, None);
+        install_proto_accessor(scope, proto, "origin", anchor_origin_getter, None);
     }
 
     let html_input_element = make_template(scope, "HTMLInputElement");
@@ -2028,6 +2038,63 @@ fn set_attr_str(state: &RuntimeState, node_id: NodeId, attr: &str, value: String
         }
     }
 }
+
+// ── HTMLAnchorElement computed URL properties ────────────────────────────────
+
+/// Helper: read href attribute and extract a URL component via url::Url.
+fn anchor_url_component(state: &RuntimeState, node_id: NodeId, sel: &str) -> String {
+    let href = get_attr_str(state, node_id, "href");
+    if href.is_empty() {
+        return String::new();
+    }
+    // If no scheme, prepend https: so url::Url can parse it
+    let url_str = if href.contains("://") { href } else { format!("https://{}", href) };
+    let parsed = match Url::parse(&url_str) {
+        Ok(u) => u,
+        Err(_) => return String::new(),
+    };
+    match sel {
+        "protocol" => format!("{}:", parsed.scheme()),
+        "hostname" => parsed.host_str().unwrap_or("").to_string(),
+        "port" => parsed.port().map(|p| p.to_string()).unwrap_or_default(),
+        "pathname" => parsed.path().to_string(),
+        "search" => parsed.query().map(|q| format!("?{}", q)).unwrap_or_default(),
+        "hash" => parsed.fragment().map(|f| format!("#{}", f)).unwrap_or_default(),
+        "host" => {
+            let host = parsed.host_str().unwrap_or("");
+            match parsed.port() {
+                Some(p) => format!("{}:{}", host, p),
+                None => host.to_string(),
+            }
+        }
+        "origin" => {
+            let scheme = parsed.scheme();
+            let host = parsed.host_str().unwrap_or("");
+            format!("{}://{}", scheme, host)
+        }
+        _ => String::new(),
+    }
+}
+
+macro_rules! anchor_url_getter {
+    ($name:ident, $component:literal) => {
+        unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
+            run_accessor(info, |scope, rv, state, node_id| {
+                let val = anchor_url_component(state, node_id, $component);
+                if let Some(s) = v8::String::new(scope, &val) { rv.set(s.into()); }
+            });
+        }
+    };
+}
+
+anchor_url_getter!(anchor_pathname_getter, "pathname");
+anchor_url_getter!(anchor_hostname_getter, "hostname");
+anchor_url_getter!(anchor_protocol_getter, "protocol");
+anchor_url_getter!(anchor_host_getter, "host");
+anchor_url_getter!(anchor_port_getter, "port");
+anchor_url_getter!(anchor_search_getter, "search");
+anchor_url_getter!(anchor_hash_getter, "hash");
+anchor_url_getter!(anchor_origin_getter, "origin");
 
 // Attribute-backed accessors using the helper
 macro_rules! attr_rw {
