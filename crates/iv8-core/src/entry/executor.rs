@@ -71,7 +71,7 @@ pub fn run_entry(
 
     // Apply AST transform if strategy requires it
     let eval_source = match plan.selected_strategy.strategy_kind {
-        StrategyKind::SourceAst => {
+        StrategyKind::SourceAst | StrategyKind::Dispatch => {
             let (transformed, diag) = crate::entry::ast::instrument(source);
             if let Some(d) = diag {
                 result.warnings.push(ErrorEntry {

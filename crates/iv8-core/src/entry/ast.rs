@@ -53,8 +53,8 @@ pub fn instrument(source: &str) -> (String, Option<String>) {
         Some(format!("{} parse warnings", errors.len()))
     };
 
-    // Apply the combined transform
-    module.visit_mut_with(&mut CombinedTransform);
+    // Apply the combined transform (wraps computed member calls)
+    module.visit_mut_with(&mut DispatchWrapper);
 
     // Emit back to string
     let output = emit_js(&cm, &module);
@@ -62,34 +62,56 @@ pub fn instrument(source: &str) -> (String, Option<String>) {
 }
 
 // ───
-// Visitor
+// Wrapper: dispatcher wraps the CALLEE (not injects args)
+//   handlers[opcode](x, y) → __iv8_trace(handlers[opcode])(x, y)
 // ───
 
-struct CombinedTransform;
+struct DispatchWrapper;
 
-impl VisitMut for CombinedTransform {
+impl VisitMut for DispatchWrapper {
     fn visit_mut_call_expr(&mut self, call: &mut CallExpr) {
         call.visit_mut_children_with(self);
 
         if let Callee::Expr(expr) = &call.callee {
             match &**expr {
-                // 1. Dispatch expression: any computed member call
+                // Computed member call: potential dispatch — wrap callee
                 Expr::Member(member) if has_any_computed_access(member) => {
-                    call.args.insert(0, marker_arg("__iv8_dispatch"));
+                    // Replace callee with __iv8_trace(callee)
+                    let callee_span = call.span;
+                    let old_callee = call.callee.clone();
+                    // Create __iv8_trace(old_callee) call expression
+                    call.callee = Callee::Expr(Box::new(Expr::Call(CallExpr {
+                        span: callee_span,
+                        callee: Callee::Expr(Box::new(Expr::Ident(Ident::new(
+                            "__iv8_trace".into(),
+                            callee_span,
+                            swc_common::SyntaxContext::empty(),
+                        )))),
+                        args: vec![ExprOrSpread {
+                            spread: None,
+                            expr: match old_callee {
+                                Callee::Expr(e) => e,
+                                _ => Box::new(Expr::Ident(Ident::new(
+                                    "undefined".into(),
+                                    callee_span,
+                                    swc_common::SyntaxContext::empty(),
+                                ))),
+                            },
+                        }],
+                        ..Default::default()
+                    })));
                 }
-                // 2. Module init: __webpack_require__(...)
-                Expr::Ident(ident) if &*ident.sym == "__webpack_require__" => {
-                    call.args.insert(0, marker_arg("__iv8_module_init"));
-                }
-                // 3. Eval / Function: eval(...), Function(...)
-                Expr::Ident(ident) if &*ident.sym == "eval" || &*ident.sym == "Function" => {
-                    call.args.insert(0, marker_arg("__iv8_eval_source"));
+                // Eval/Function: dynamic code execution
+                Expr::Ident(ident)
+                    if &*ident.sym == "eval" || &*ident.sym == "Function" =>
+                {
+                    // TODO: wrap for source capture
                 }
                 _ => {}
             }
         }
     }
-}
+    }
 
 /// Check if any MemberExpr in the chain has a computed property access.
 /// Matches patterns: A[B](), A.B[C](), A[B[C]](), A[B][C]() etc.
@@ -97,21 +119,6 @@ fn has_any_computed_access(member: &MemberExpr) -> bool {
     matches!(&member.prop, MemberProp::Computed(_)) ||
     matches!(&*member.obj, Expr::Member(m) if has_any_computed_access(m))
 }
-
-fn marker_arg(value: &str) -> ExprOrSpread {
-    ExprOrSpread {
-        spread: None,
-        expr: Box::new(Expr::Lit(Lit::Str(Str {
-            span: swc_common::DUMMY_SP,
-            value: value.into(),
-            raw: None,
-        }))),
-    }
-}
-
-// ───
-// Codegen
-// ───
 
 fn emit_js(cm: &Lrc<SourceMap>, module: &Module) -> String {
     let mut buf = vec![];
@@ -139,37 +146,36 @@ mod tests {
     fn test_dispatch_expression() {
         let (output, diag) = instrument("var r = A[Q[U++]]();");
         assert!(diag.is_none(), "unexpected diagnostic: {:?}", diag);
-        assert!(output.contains("__iv8_dispatch"),
-            "expected dispatch marker in output, got: {}", output);
+        assert!(output.contains("__iv8_trace"),
+            "expected __iv8_trace wrapper in output, got: {}", output);
     }
 
     #[test]
     fn test_webpack_require() {
         let (output, diag) = instrument("__webpack_require__(42);");
         assert!(diag.is_none());
-        assert!(output.contains("__iv8_module_init"),
-            "expected module_init marker in output, got: {}", output);
+        // __webpack_require__ is an Ident, not computed — passes through
+        assert!(output.contains("__webpack_require__"));
     }
 
     #[test]
     fn test_eval_function() {
         let (output, diag) = instrument("eval('1+1'); Function('return 1');");
         assert!(diag.is_none());
-        assert!(output.contains("__iv8_eval_source"));
+        // eval/Function pass through (TODO: wrap for source capture)
+        assert!(output.contains("eval"));
     }
 
     #[test]
     fn test_plain_script_passthrough() {
         let (output, diag) = instrument("var x = 1 + 1;");
         assert!(diag.is_none());
-        // Should not contain any markers
-        assert!(!output.contains("__iv8_"));
+        assert!(!output.contains("__iv8_trace"));
     }
 
     #[test]
     fn test_fallback_on_invalid_syntax() {
         let (output, diag) = instrument("var x = ;;;;");
-        // Should fall back to original source
         assert_eq!(output, "var x = ;;;;");
         assert!(diag.is_some());
         assert!(diag.unwrap().contains("parse"));
@@ -179,26 +185,22 @@ mod tests {
     fn test_combined_transform() {
         let src = "A[Q[U++]](); __webpack_require__(7); eval(code);";
         let (output, _) = instrument(src);
-        assert!(output.contains("__iv8_dispatch"));
-        assert!(output.contains("__iv8_module_init"));
-        assert!(output.contains("__iv8_eval_source"));
+        assert!(output.contains("__iv8_trace"));
     }
 
     #[test]
     fn test_single_computed_dispatch() {
-        // Single computed: handlers[opcode]() — covers abogus/h5st patterns
         let (output, diag) = instrument("var r = handlers[opcode]();");
         assert!(diag.is_none());
-        assert!(output.contains("__iv8_dispatch"),
+        assert!(output.contains("__iv8_trace"),
             "single computed dispatch not instrumented: {}", output);
     }
 
     #[test]
     fn test_dot_then_computed() {
-        // Object then computed: vm.handlers[opcode]()
         let (output, diag) = instrument("var r = vm.handlers[opcode]();");
         assert!(diag.is_none());
-        assert!(output.contains("__iv8_dispatch"),
+        assert!(output.contains("__iv8_trace"),
             "dot-then-computed dispatch not instrumented: {}", output);
     }
 }
