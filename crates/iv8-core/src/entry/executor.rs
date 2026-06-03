@@ -154,36 +154,92 @@ fn apply_strategy_setup(
         StrategyKind::WebpackBridge => {
             // Webpack bridge: hook chunk registration + module loading.
             // Works with webpack 4 (webpackJsonp) and webpack 5 (webpackChunk).
-            // Captures module IDs as they're registered, and tracks require().
+            // Captures module IDs, __webpack_require__, and optionally
+            // intercepts module factories to expose internal functions.
             let prelude = r#"
 (function() {
     var __iv8_log = [];
 
-    // Monitor for __webpack_require__ becoming available
-    // (some runtimes delegate it to a global)
-    var checkWp = function() {
-        try {
-            if (typeof __webpack_require__ !== 'undefined') {
-                var wr = __webpack_require__;
-                __iv8_log.push('wp_found');
-                if (typeof wr.e === 'function') {
-                    var origE = wr.e;
-                    wr.e = function(chunkId) {
-                        __iv8_log.push('chunk_ensure,' + chunkId);
-                        return origE.apply(this, arguments);
-                    };
+    // 1. Hook Function.prototype.call to capture __webpack_require__
+    if (typeof Function !== 'undefined' && Function.prototype) {
+        var origCall = Function.prototype.call;
+        Function.prototype.call = function() {
+            if (globalThis.__iv8_wp_require === null && arguments.length >= 4) {
+                var candidate = arguments[3];
+                if (typeof candidate === 'function'
+                    && typeof candidate.e === 'function'
+                    && typeof candidate.d === 'function'
+                    && typeof candidate.o === 'function'
+                    && typeof candidate.p === 'string') {
+                    globalThis.__iv8_wp_require = candidate;
+                    __iv8_log.push('wp_require_captured');
+                    Function.prototype.call = origCall;
                 }
             }
-        } catch(e) {}
-    };
-    checkWp();
+            return origCall.apply(this, arguments);
+        };
+    }
 
+    // 2. Intercept webpackJsonp.push to modify module factories before
+    //    they are registered. This allows exposing internal closure
+    //    variables (e.g. _getSecuritySign) by patching the factory source.
+    if (typeof window !== 'undefined') {
+        var _origPush = Array.prototype.push;
+        var _wrappedPush = function() {
+            for (var i = 0; i < arguments.length; i++) {
+                var entry = arguments[i];
+                if (entry && entry[1]) {
+                    for (var mid in entry[1]) {
+                        if (entry[1].hasOwnProperty(mid)) {
+                            var factory = entry[1][mid];
+                            if (typeof factory === 'function') {
+                                var src = factory.toString();
+                                // Generic pattern: capture ie variable from closure
+                                if (src.indexOf('_getSecuritySign') >= 0) {
+                                    var modified = src.replace(
+                                        'var ie=ne._getSecuritySign;delete ne._getSecuritySign;',
+                                        'var ie=ne._getSecuritySign;globalThis.__iv8_sign_captured=ie;delete ne._getSecuritySign;'
+                                    );
+                                    try { entry[1][mid] = eval('(' + modified + ')'); } catch(e) {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return _origPush.apply(this, arguments);
+        };
+
+        // Install interceptor when webpackJsonp is created
+        var _realWP = undefined;
+        Object.defineProperty(window, 'webpackJsonp', {
+            configurable: true,
+            enumerable: true,
+            get: function() { return _realWP; },
+            set: function(v) {
+                if (v && Array.isArray(v) && v !== _realWP) {
+                    v.push = _wrappedPush;
+                    _realWP = v;
+                }
+            }
+        });
+    }
+
+    try {
+        if (typeof __webpack_require__ !== 'undefined') {
+            globalThis.__iv8_wp_require = __webpack_require__;
+            __iv8_log.push('wp_require_global');
+        }
+    } catch(e) {}
+
+    globalThis.__iv8_wp_require = null;
     globalThis.__iv8_webpack_log = __iv8_log;
 })();
 "#;
-            kernel
-                .eval(prelude, EvalOpts::default())
+
+            kernel.eval(prelude, EvalOpts::default())
                 .map_err(|e| format!("webpack bridge prelude: {}", e))?;
+
             Ok(())
         }
         StrategyKind::RuntimeTransparent => {
