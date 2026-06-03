@@ -8,6 +8,7 @@ pub mod convert;
 pub mod canvas;
 pub mod crypto;
 pub mod dom;
+pub mod entry;
 pub mod env_inject;
 pub mod error;
 pub mod events;
