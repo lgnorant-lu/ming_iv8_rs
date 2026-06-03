@@ -7,6 +7,7 @@ use pyo3::prelude::*;
 
 mod context;
 mod debugger;
+mod entry;
 mod error;
 mod expose;
 mod instrumentation;
@@ -22,6 +23,8 @@ fn _iv8(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(logging::enable_logging, m)?)?;
     m.add_function(wrap_pyfunction!(trace_diff, m)?)?;
     m.add_function(wrap_pyfunction!(instrumentation::instrument_source, m)?)?;
+    m.add_function(wrap_pyfunction!(entry::prepare_entry, m)?)?;
+    m.add_function(wrap_pyfunction!(entry::run_with_entry, m)?)?;
     error::register(m)?;
     Ok(())
 }

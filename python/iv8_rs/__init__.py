@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 from iv8_rs._iv8 import __version__, JSContext as _JSContextRust, Debugger, enable_logging
-from iv8_rs._iv8 import instrument_source, trace_diff
+from iv8_rs._iv8 import instrument_source, trace_diff, prepare_entry, run_with_entry
 from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, JSPanic
 from iv8_rs.analysis import diff_analysis
 from iv8_rs.trace import parse_trace, StructuredTrace, parse_trace_stream, compress_trace, CompressedTrace
@@ -20,6 +20,7 @@ from iv8_rs.patterns import (
 )
 from iv8_rs.vm_diff import compare_vm_versions, DiffReport, HandlerDiff
 from iv8_rs.isolation import exec_vm_handler
+from iv8_rs.entry import EntryPlan, EntryResult, SelectedStrategy
 
 # --- Profile System ---
 
@@ -138,6 +139,11 @@ __all__ = [
     "DiffReport",
     "HandlerDiff",
     "exec_vm_handler",
+    "prepare_entry",
+    "run_with_entry",
+    "EntryPlan",
+    "EntryResult",
+    "SelectedStrategy",
     "JSError",
     "JSCompileError",
     "JSTimeoutError",
