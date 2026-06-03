@@ -159,21 +159,24 @@ fn apply_strategy_setup(
 (function() {
     var __iv8_log = [];
 
-    // Try to find __webpack_require__ and hook if exposed
-    try {
-        if (typeof __webpack_require__ !== 'undefined') {
-            var wr = __webpack_require__;
-            if (typeof wr.e === 'function') {
-                var origE = wr.e;
-                wr.e = function(chunkId) {
-                    __iv8_log.push('chunk_ensure,' + chunkId);
-                    return origE.apply(this, arguments);
-                };
+    // Monitor for __webpack_require__ becoming available
+    // (some runtimes delegate it to a global)
+    var checkWp = function() {
+        try {
+            if (typeof __webpack_require__ !== 'undefined') {
+                var wr = __webpack_require__;
+                __iv8_log.push('wp_found');
+                if (typeof wr.e === 'function') {
+                    var origE = wr.e;
+                    wr.e = function(chunkId) {
+                        __iv8_log.push('chunk_ensure,' + chunkId);
+                        return origE.apply(this, arguments);
+                    };
+                }
             }
-        }
-    } catch(e) {
-        __iv8_log.push('wp_hook_error,' + String(e));
-    }
+        } catch(e) {}
+    };
+    checkWp();
 
     globalThis.__iv8_webpack_log = __iv8_log;
 })();
