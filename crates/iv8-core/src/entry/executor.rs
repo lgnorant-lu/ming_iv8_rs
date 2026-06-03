@@ -53,7 +53,26 @@ pub fn run_entry(
 
     // Phase: armed — evaluate main source
     result.final_state = PlanState::Armed;
-    match kernel.eval(source, EvalOpts::default()) {
+
+    // Apply AST transform if strategy requires it
+    let eval_source = match plan.selected_strategy.strategy_kind {
+        StrategyKind::SourceAst => {
+            let (transformed, diag) = crate::entry::ast::instrument(source);
+            if let Some(d) = diag {
+                result.warnings.push(ErrorEntry {
+                    code: "ACT_AST_TRANSFORM_WARNING".into(),
+                    stage: "armed".into(),
+                    message: d,
+                    strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
+                    recoverable: true,
+                });
+            }
+            transformed
+        }
+        _ => source.to_string(),
+    };
+
+    match kernel.eval(&eval_source, EvalOpts::default()) {
         Ok(_) => {
             result.executed_strategies.push(ExecutedStrategy {
                 strategy_id: plan.selected_strategy.strategy_id.clone(),

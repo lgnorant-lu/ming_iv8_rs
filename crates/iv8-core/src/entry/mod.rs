@@ -6,3 +6,4 @@ pub mod executor;
 pub mod webpack;
 pub mod hooks;
 pub mod dispatch;
+pub mod ast;

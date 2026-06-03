@@ -42,6 +42,13 @@ rand = { workspace = true }
 tiny-skia = { workspace = true }
 png = { workspace = true }
 
+# SWC AST transform
+swc_common = "23"
+swc_ecma_ast = "25"
+swc_ecma_parser = "41"
+swc_ecma_visit = "25"
+swc_ecma_codegen = "28"
+
 [dev-dependencies]
 tracing-subscriber = { workspace = true }
 criterion = { version = "0.5", features = ["html_reports"] }
