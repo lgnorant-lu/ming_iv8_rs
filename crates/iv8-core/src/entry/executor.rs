@@ -12,10 +12,12 @@ use crate::kernel::{EvalOpts, KernelConfig};
 /// Execute a prepared entry plan and collect results.
 ///
 /// This is the main execution entry point.
+/// `chunks` are evaluated in order before the main `source`.
 /// If `entry_expr` is provided, it is evaluated after the main source.
 pub fn run_entry(
     plan: &EntryPlan,
     source: &str,
+    chunks: &[String],
     entry_expr: Option<&str>,
 ) -> Result<EntryResult, String> {
     let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default())
@@ -51,8 +53,21 @@ pub fn run_entry(
         return Ok(result);
     }
 
-    // Phase: armed — evaluate main source
+    // Phase: armed — evaluate chunks first (in order), then main source
     result.final_state = PlanState::Armed;
+
+    // Evaluate pre-requisite chunks
+    for (i, chunk) in chunks.iter().enumerate() {
+        if let Err(e) = kernel.eval(chunk, EvalOpts::default()) {
+            result.warnings.push(ErrorEntry {
+                code: "ACT_CHUNK_EVAL_FAILED".into(),
+                stage: "armed".into(),
+                message: format!("chunk[{}] eval failed: {}", i, e),
+                strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
+                recoverable: true,
+            });
+        }
+    }
 
     // Apply AST transform if strategy requires it
     let eval_source = match plan.selected_strategy.strategy_kind {

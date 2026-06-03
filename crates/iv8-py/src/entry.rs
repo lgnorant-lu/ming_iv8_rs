@@ -54,15 +54,17 @@ pub fn prepare_entry(
 /// Args:
 ///     plan: EntryPlan dict (from prepare_entry).
 ///     source: Original JS source (or transformed source).
+///     chunks: Optional list of JS chunks to evaluate before source.
 ///     entry_expr: Optional expression to evaluate after main source.
 ///
 /// Returns:
 ///     dict representing the EntryResult.
 #[pyfunction]
-#[pyo3(signature = (plan, source, entry_expr=None))]
+#[pyo3(signature = (plan, source, chunks=None, entry_expr=None))]
 pub fn run_with_entry(
     plan: &Bound<'_, PyDict>,
     source: &str,
+    chunks: Option<Vec<String>>,
     entry_expr: Option<&str>,
     py: Python<'_>,
 ) -> PyResult<PyObject> {
@@ -73,7 +75,8 @@ pub fn run_with_entry(
             format!("invalid EntryPlan: {}", e),
         ))?;
 
-    let result = executor::run_entry(&entry_plan, source, entry_expr)
+    let chunks_vec = chunks.unwrap_or_default();
+    let result = executor::run_entry(&entry_plan, source, &chunks_vec, entry_expr)
         .map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
 
     let json = serde_json::to_value(&result)
