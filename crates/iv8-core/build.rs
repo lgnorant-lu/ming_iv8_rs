@@ -9,22 +9,27 @@
 // against the prebuilt libv8 static library that the v8 crate already provides.
 
 use std::env;
+use std::io;
 use std::path::PathBuf;
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo:rerun-if-changed=cxx/iv8_v8_extra.cc");
     println!("cargo:rerun-if-changed=build.rs");
 
-    let v8_crate_dir = locate_v8_crate_dir();
+    let v8_crate_dir = locate_v8_crate_dir()?;
     let v8_include = v8_crate_dir.join("v8").join("include");
 
     if !v8_include.exists() {
-        panic!(
-            "iv8-core build.rs: V8 headers not found at {}.\n\
-             The v8 crate source must be available at build time.\n\
-             Run `cargo fetch` first if needed.",
-            v8_include.display()
-        );
+        return Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            format!(
+                "iv8-core build.rs: V8 headers not found at {}.\n\
+                 The v8 crate source must be available at build time.\n\
+                 Run `cargo fetch` first if needed.",
+                v8_include.display()
+            ),
+        )
+        .into());
     }
 
     // Compile our extra wrapper file
@@ -50,6 +55,8 @@ fn main() {
     build.compile("iv8_v8_extra");
 
     println!("cargo:rustc-link-lib=static=iv8_v8_extra");
+
+    Ok(())
 }
 
 /// Locate the v8 crate's source directory in the cargo registry cache.
@@ -57,27 +64,29 @@ fn main() {
 /// This is fragile — cargo doesn't expose dependency source paths directly.
 /// We rely on the fact that the v8 crate is in a known parent of OUT_DIR.
 /// As a fallback, we walk up from OUT_DIR looking for `registry/src/.../v8-*`.
-fn locate_v8_crate_dir() -> PathBuf {
+fn locate_v8_crate_dir() -> Result<PathBuf, Box<dyn std::error::Error>> {
     // First check explicit override
     if let Ok(custom) = env::var("IV8_V8_CRATE_DIR") {
-        return PathBuf::from(custom);
+        return Ok(PathBuf::from(custom));
     }
 
     // OUT_DIR is target/.../build/iv8-core-<hash>/out
     // Cargo registry: <CARGO_HOME>/registry/src/<index>/v8-<version>
-    let out_dir = PathBuf::from(env::var("OUT_DIR").expect("OUT_DIR not set"));
+    let out_dir = PathBuf::from(
+        env::var("OUT_DIR").map_err(|_| io::Error::other("OUT_DIR not set"))?,
+    );
 
     // Try CARGO_HOME-based paths first (most reliable)
     let cargo_home = env::var("CARGO_HOME")
         .ok()
         .map(PathBuf::from)
         .or_else(|| dirs_home_dir().map(|h| h.join(".cargo")))
-        .expect("Cannot locate CARGO_HOME");
+        .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "Cannot locate CARGO_HOME"))?;
 
     let registry_src = cargo_home.join("registry").join("src");
     if registry_src.exists() {
         if let Some(v8_dir) = find_v8_in_registry(&registry_src) {
-            return v8_dir;
+            return Ok(v8_dir);
         }
     }
 
@@ -87,16 +96,18 @@ fn locate_v8_crate_dir() -> PathBuf {
         let candidate = parent.join("registry").join("src");
         if candidate.exists() {
             if let Some(v8_dir) = find_v8_in_registry(&candidate) {
-                return v8_dir;
+                return Ok(v8_dir);
             }
         }
         current = parent;
     }
 
-    panic!(
+    Err(io::Error::new(
+        io::ErrorKind::NotFound,
         "iv8-core build.rs: could not locate v8 crate source directory.\n\
-         Set IV8_V8_CRATE_DIR environment variable to override."
-    );
+         Set IV8_V8_CRATE_DIR environment variable to override.",
+    )
+    .into())
 }
 
 fn find_v8_in_registry(registry_src: &std::path::Path) -> Option<PathBuf> {

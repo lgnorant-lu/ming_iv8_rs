@@ -46,8 +46,8 @@ pub fn expose_py_function(
         .data(external.into())
         .build(scope);
 
-    let func = tmpl.get_function(scope).expect("get_function");
-    let name_str = v8::String::new(scope, name).expect("name");
+    let func = iv8_core::v8_utils::v8_fn(scope, &tmpl);
+    let name_str = iv8_core::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     global.set(scope, name_str.into(), func.into());
 }
@@ -145,7 +145,7 @@ fn rust_value_to_v8<'s>(
         RustValue::Bytes(b) => {
             let store = v8::ArrayBuffer::new_backing_store_from_vec(b.clone());
             let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
-            Some(v8::Uint8Array::new(scope, ab, 0, b.len()).expect("Uint8Array").into())
+            v8::Uint8Array::new(scope, ab, 0, b.len()).map(|arr| arr.into())
         }
         RustValue::Array(arr) => {
             let v8_arr = v8::Array::new(scope, arr.len() as i32);
@@ -367,11 +367,11 @@ fn py_to_rust_value(_py: Python<'_>, obj: &Bound<'_, PyAny>) -> PyResult<RustVal
 fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
     match value {
         RustValue::Null => Ok(py.None()),
-        RustValue::Bool(b) => Ok((*b).into_pyobject(py).expect("bool").to_owned().into_any().into()),
-        RustValue::Int(i) => Ok((*i).into_pyobject(py).expect("int").into_any().into()),
-        RustValue::Float(f) => Ok((*f).into_pyobject(py).expect("float").into_any().into()),
-        RustValue::String(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
-        RustValue::Bytes(b) => Ok(b.as_slice().into_pyobject(py).expect("bytes").into_any().into()),
+        RustValue::Bool(b) => Ok((*b).into_pyobject(py)?.to_owned().into_any().into()),
+        RustValue::Int(i) => Ok((*i).into_pyobject(py)?.into_any().into()),
+        RustValue::Float(f) => Ok((*f).into_pyobject(py)?.into_any().into()),
+        RustValue::String(s) => Ok(s.as_str().into_pyobject(py)?.into_any().into()),
+        RustValue::Bytes(b) => Ok(b.as_slice().into_pyobject(py)?.into_any().into()),
         RustValue::Array(arr) => {
             let list = PyList::empty(py);
             for item in arr {
@@ -386,7 +386,7 @@ fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
             }
             Ok(dict.into_any().into())
         }
-        RustValue::JsObject(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
+        RustValue::JsObject(s) => Ok(s.as_str().into_pyobject(py)?.into_any().into()),
         RustValue::BigInt { negative, words } => {
             crate::value_convert::bigint_to_python(py, *negative, words)
         }

@@ -6,13 +6,13 @@
 /// Install atob and btoa as global functions.
 pub fn install_atob_btoa(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     let btoa_tmpl = v8::FunctionTemplate::builder_raw(btoa_callback).build(scope);
-    let btoa_fn = crate::v8_utils::v8_fn(scope, &*btoa_tmpl);
+    let btoa_fn = crate::v8_utils::v8_fn(scope, &btoa_tmpl);
     let btoa_key = crate::v8_utils::v8_string(scope, "btoa");
     btoa_fn.set_name(btoa_key);
     global.set(scope, btoa_key.into(), btoa_fn.into());
 
     let atob_tmpl = v8::FunctionTemplate::builder_raw(atob_callback).build(scope);
-    let atob_fn = crate::v8_utils::v8_fn(scope, &*atob_tmpl);
+    let atob_fn = crate::v8_utils::v8_fn(scope, &atob_tmpl);
     let atob_key = crate::v8_utils::v8_string(scope, "atob");
     atob_fn.set_name(atob_key);
     global.set(scope, atob_key.into(), atob_fn.into());

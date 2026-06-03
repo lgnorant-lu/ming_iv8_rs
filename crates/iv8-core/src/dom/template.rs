@@ -959,7 +959,7 @@ unsafe extern "C" fn class_list_getter(info: *const v8::FunctionCallbackInfo) {
             ("toString", class_list_tostring_cb),
         ] {
             let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
-            let fn_obj = crate::v8_utils::v8_fn(scope, &*fn_tmpl);
+            let fn_obj = crate::v8_utils::v8_fn(scope, &fn_tmpl);
             let key = crate::v8_utils::v8_string(scope, name);
             obj.set(scope, key.into(), fn_obj.into());
         }
@@ -1955,7 +1955,7 @@ unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
             ("removeProperty", style_remove_property_cb),
         ] {
             let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
-            let fn_obj = crate::v8_utils::v8_fn(scope, &*fn_tmpl);
+            let fn_obj = crate::v8_utils::v8_fn(scope, &fn_tmpl);
             let key = crate::v8_utils::v8_string(scope, name);
             obj.set(scope, key.into(), fn_obj.into());
         }

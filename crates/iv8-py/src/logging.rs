@@ -9,6 +9,10 @@ use tracing_subscriber::{fmt, EnvFilter};
 
 static LOGGING_INIT: Once = Once::new();
 
+fn parse_filter(spec: &str) -> EnvFilter {
+    EnvFilter::try_new(spec).unwrap_or_else(|_| EnvFilter::new("iv8=info"))
+}
+
 /// Enable iv8-rs logging output.
 ///
 /// Args:
@@ -31,11 +35,9 @@ pub fn enable_logging(level: &str, output: &str) -> PyResult<()> {
 
         // IV8_LOG env var takes precedence
         let filter = if let Ok(env_filter) = std::env::var("IV8_LOG") {
-            EnvFilter::try_new(env_filter)
-                .unwrap_or_else(|_| EnvFilter::try_new(format!("iv8={level}")).expect("valid filter"))
+            EnvFilter::try_new(env_filter).unwrap_or_else(|_| parse_filter(&format!("iv8={level}")))
         } else {
-            EnvFilter::try_new(format!("iv8={level}"))
-                .unwrap_or_else(|_| EnvFilter::try_new("iv8=info").expect("valid filter"))
+            parse_filter(&format!("iv8={level}"))
         };
 
         match output.as_str() {

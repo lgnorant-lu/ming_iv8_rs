@@ -18,7 +18,7 @@ pub enum EcCurve {
 }
 
 impl EcCurve {
-    pub fn from_str(s: &str) -> Option<Self> {
+    pub fn from_name(s: &str) -> Option<Self> {
         match s.to_uppercase().replace("-", "").as_str() {
             "P256" => Some(EcCurve::P256),
             "P384" => Some(EcCurve::P384),

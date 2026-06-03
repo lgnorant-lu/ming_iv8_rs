@@ -4,9 +4,11 @@
 
 use std::ffi::c_void;
 
+type ExposedCallback = Box<dyn Fn(&[String]) -> Result<String, String> + Send + 'static>;
+
 /// Data stored in V8 External for each exposed function.
 struct ExposedFnData {
-    callback: Box<dyn Fn(&[String]) -> Result<String, String> + Send + 'static>,
+    callback: ExposedCallback,
 }
 
 /// Register a named function on the V8 global object.
@@ -19,7 +21,7 @@ pub fn expose_function(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
     name: &str,
-    callback: Box<dyn Fn(&[String]) -> Result<String, String> + Send + 'static>,
+    callback: ExposedCallback,
 ) {
     let data = Box::new(ExposedFnData { callback });
     let data_ptr = Box::into_raw(data) as *mut c_void;
@@ -30,7 +32,7 @@ pub fn expose_function(
         .data(external.into())
         .build(scope);
 
-    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let func = crate::v8_utils::v8_fn(scope, &tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     global.set(scope, name_str.into(), func.into());

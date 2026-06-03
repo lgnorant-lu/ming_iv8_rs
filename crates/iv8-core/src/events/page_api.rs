@@ -28,7 +28,7 @@ pub fn install_page_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
 
     // __iv8__.page.load(snapshot)
     let load_tmpl = v8::FunctionTemplate::builder_raw(page_load_callback).build(scope);
-    let load_fn = crate::v8_utils::v8_fn(scope, &*load_tmpl);
+    let load_fn = crate::v8_utils::v8_fn(scope, &load_tmpl);
     let load_key = crate::v8_utils::v8_string(scope, "load");
     page_obj.set(scope, load_key.into(), load_fn.into());
 

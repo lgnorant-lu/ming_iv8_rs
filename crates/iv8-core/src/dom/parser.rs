@@ -97,16 +97,17 @@ impl EgoTreeSink {
                     .unwrap_or(false);
 
                 if should_merge {
-                    let last_child_id = doc
+                    if let Some(last_child_id) = doc
                         .tree
                         .get(parent_id)
-                        .unwrap()
-                        .last_child()
-                        .unwrap()
-                        .id();
-                    let mut node = doc.tree.get_mut(last_child_id).unwrap();
-                    if let NodeData::Text(ref mut existing) = node.value() {
-                        existing.push_str(&text);
+                        .and_then(|parent| parent.last_child())
+                        .map(|child| child.id())
+                    {
+                        if let Some(mut node) = doc.tree.get_mut(last_child_id) {
+                            if let NodeData::Text(ref mut existing) = node.value() {
+                                existing.push_str(&text);
+                            }
+                        }
                     }
                 } else {
                     let text_str: &str = &text;
@@ -142,16 +143,17 @@ impl EgoTreeSink {
                     .unwrap_or(false);
 
                 if prev_is_text {
-                    let prev_id = doc
+                    if let Some(prev_id) = doc
                         .tree
                         .get(sibling_id)
-                        .unwrap()
-                        .prev_sibling()
-                        .unwrap()
-                        .id();
-                    let mut node = doc.tree.get_mut(prev_id).unwrap();
-                    if let NodeData::Text(ref mut existing) = node.value() {
-                        existing.push_str(&text);
+                        .and_then(|sibling| sibling.prev_sibling())
+                        .map(|prev| prev.id())
+                    {
+                        if let Some(mut node) = doc.tree.get_mut(prev_id) {
+                            if let NodeData::Text(ref mut existing) = node.value() {
+                                existing.push_str(&text);
+                            }
+                        }
                     }
                 } else {
                     let text_str: &str = &text;
@@ -198,7 +200,10 @@ impl TreeSink for EgoTreeSink {
                 tag_name: tag_name.clone(),
                 namespace: namespace.clone(),
             },
-            _ => panic!("elem_name called on non-element"),
+            _ => ExpandedNameRef {
+                tag_name: String::new(),
+                namespace: String::new(),
+            },
         }
     }
 

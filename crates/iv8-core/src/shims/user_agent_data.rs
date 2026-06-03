@@ -45,14 +45,14 @@ pub fn install_user_agent_data(
     let ghev_tmpl = v8::FunctionTemplate::builder_raw(uad_get_high_entropy_values).build(scope);
     let ghev_name = crate::v8_utils::v8_string(scope, "getHighEntropyValues");
     ghev_tmpl.set_class_name(ghev_name);
-    let ghev_fn = crate::v8_utils::v8_fn(scope, &*ghev_tmpl);
+    let ghev_fn = crate::v8_utils::v8_fn(scope, &ghev_tmpl);
     uad_obj.set(scope, ghev_name.into(), ghev_fn.into());
 
     // toJSON method
     let to_json_tmpl = v8::FunctionTemplate::builder_raw(uad_to_json).build(scope);
     let to_json_name = crate::v8_utils::v8_string(scope, "toJSON");
     to_json_tmpl.set_class_name(to_json_name);
-    let to_json_fn = crate::v8_utils::v8_fn(scope, &*to_json_tmpl);
+    let to_json_fn = crate::v8_utils::v8_fn(scope, &to_json_tmpl);
     uad_obj.set(scope, to_json_name.into(), to_json_fn.into());
 
     // Set Symbol.toStringTag = "NavigatorUAData"
@@ -77,7 +77,7 @@ fn install_getter(
     name: &str,
     getter_tmpl: v8::Local<v8::FunctionTemplate>,
 ) {
-    let getter_fn = crate::v8_utils::v8_fn(scope, &*getter_tmpl);
+    let getter_fn = crate::v8_utils::v8_fn(scope, &getter_tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
     let desc = v8::Object::new(scope);
     let get_key = crate::v8_utils::v8_string(scope, "get");

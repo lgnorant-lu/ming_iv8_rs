@@ -169,7 +169,7 @@ pub fn v8_to_rust_impl(
 /// Defaults to true if RuntimeState is not yet installed (e.g. very early
 /// init or test contexts).
 fn current_strict_compat(scope: &v8::PinScope<'_, '_>) -> bool {
-    let isolate: &v8::Isolate = &*scope;
+    let isolate: &v8::Isolate = scope;
     if !crate::state::RuntimeState::has(isolate) {
         return true;
     }

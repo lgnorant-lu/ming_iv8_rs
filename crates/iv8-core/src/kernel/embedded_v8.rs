@@ -6,6 +6,8 @@ use crate::config::EnvironmentMap;
 use crate::error::IV8Error;
 use crate::kernel::{EvalOpts, KernelConfig};
 use crate::state::RuntimeState;
+
+type ExposedCallback = Box<dyn Fn(&[String]) -> Result<String, String> + Send + 'static>;
 use crate::v8_init::ensure_v8_initialized;
 use std::sync::Arc;
 
@@ -314,7 +316,7 @@ impl EmbeddedV8Kernel {
     pub fn expose_fn(
         &mut self,
         name: &str,
-        callback: Box<dyn Fn(&[String]) -> Result<String, String> + Send + 'static>,
+        callback: ExposedCallback,
     ) {
         unsafe { self.isolate.enter(); }
         {

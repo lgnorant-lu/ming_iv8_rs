@@ -14,17 +14,17 @@ pub fn install_webgl_stubs(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::O
     // Install via JS shim that creates the WebGL context stub
     // The shim is evaluated after this function sets up the native getParameter callback
     let get_param_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_parameter).build(scope);
-    let get_param_fn = crate::v8_utils::v8_fn(scope, &*get_param_tmpl);
+    let get_param_fn = crate::v8_utils::v8_fn(scope, &get_param_tmpl);
     let key = crate::v8_utils::v8_string(scope, "__webgl_getParameter__");
     global.define_own_property(scope, key.into(), get_param_fn.into(), v8::PropertyAttribute::DONT_ENUM);
 
     let get_ext_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_extension).build(scope);
-    let get_ext_fn = crate::v8_utils::v8_fn(scope, &*get_ext_tmpl);
+    let get_ext_fn = crate::v8_utils::v8_fn(scope, &get_ext_tmpl);
     let ext_key = crate::v8_utils::v8_string(scope, "__webgl_getExtension__");
     global.define_own_property(scope, ext_key.into(), get_ext_fn.into(), v8::PropertyAttribute::DONT_ENUM);
 
     let get_supp_ext_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_supported_extensions).build(scope);
-    let get_supp_ext_fn = crate::v8_utils::v8_fn(scope, &*get_supp_ext_tmpl);
+    let get_supp_ext_fn = crate::v8_utils::v8_fn(scope, &get_supp_ext_tmpl);
     let supp_key = crate::v8_utils::v8_string(scope, "__webgl_getSupportedExtensions__");
     global.define_own_property(scope, supp_key.into(), get_supp_ext_fn.into(), v8::PropertyAttribute::DONT_ENUM);
 }

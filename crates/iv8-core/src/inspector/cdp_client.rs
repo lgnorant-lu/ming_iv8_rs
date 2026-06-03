@@ -9,7 +9,7 @@
 //! - ctx.cdp_step_over() / step_into() / step_out() / resume()
 //! - ctx.cdp_get_call_frames()
 
-use crate::inspector::channel::{InspectorMessage, SharedChannelState};
+use crate::inspector::channel::{InspectorMessage, SharedChannelState, lock_channel_state};
 use std::sync::atomic::{AtomicU32, Ordering};
 
 /// A programmatic CDP client that talks directly to V8 Inspector.
@@ -79,7 +79,7 @@ impl CdpClient {
     /// Drain the outgoing queue looking for a response with the given id.
     /// Also processes notifications (events) along the way.
     fn drain_response(&self, target_id: u32) -> Result<serde_json::Value, String> {
-        let mut state = self.channel_state.lock().unwrap();
+        let mut state = lock_channel_state(&self.channel_state);
         // V8 Inspector processes messages synchronously in dispatch_protocol_message,
         // so the response should already be in the outgoing queue.
         let mut found_response: Option<String> = None;
@@ -117,7 +117,7 @@ impl CdpClient {
     /// Call this after operations that may trigger events (like resume/step).
     /// Returns true if a Debugger.paused event was found.
     pub fn process_events(&mut self) -> bool {
-        let mut state = self.channel_state.lock().unwrap();
+        let mut state = lock_channel_state(&self.channel_state);
         let mut paused = false;
         let mut remaining = Vec::new();
 

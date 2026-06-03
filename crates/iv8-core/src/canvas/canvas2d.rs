@@ -369,9 +369,7 @@ pub fn decode_png_to_pixmap(data: &[u8]) -> Option<Pixmap> {
                     let g = img_data[base + 1];
                     let b = img_data[base + 2];
                     let a = img_data[base + 3];
-                    if let Ok(p) = tiny_skia::ColorU8::from_rgba(r, g, b, a).premultiply().try_into() {
-                        *pixel = p;
-                    }
+                    *pixel = tiny_skia::ColorU8::from_rgba(r, g, b, a).premultiply();
                 }
             }
         }
@@ -382,9 +380,7 @@ pub fn decode_png_to_pixmap(data: &[u8]) -> Option<Pixmap> {
                     let r = img_data[base];
                     let g = img_data[base + 1];
                     let b = img_data[base + 2];
-                    if let Ok(p) = tiny_skia::ColorU8::from_rgba(r, g, b, 255).premultiply().try_into() {
-                        *pixel = p;
-                    }
+                    *pixel = tiny_skia::ColorU8::from_rgba(r, g, b, 255).premultiply();
                 }
             }
         }

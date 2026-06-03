@@ -103,7 +103,7 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 ## Tests
 
 ```bash
-# Python tests (747 tests)
+# Python tests (775 passed, 1 skipped)
 uv run --with pytest pytest tests -q
 
 # Rust tests
@@ -122,7 +122,7 @@ iv8-rs/
 │   ├── iv8-undetect/ # Anti-detection (wrapNative / hookNative / window.chrome)
 │   └── iv8-py/       # PyO3 Python binding
 ├── python/iv8_rs/    # Python package (analysis/cfg/taint/patterns/probe/trace/vm_diff/isolation + type stubs)
-├── tests/            # Python integration tests (747)
+├── tests/            # Python integration tests (775 passed, 1 skipped)
 └── docs/             # Design docs + research + quality-harness
 ```
 

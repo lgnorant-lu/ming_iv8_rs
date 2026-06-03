@@ -11,7 +11,7 @@ use crate::state::RuntimeState;
 pub fn install_xhr(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Install native __xhr_send__(method, url) → {status, responseText} or null
     let send_tmpl = v8::FunctionTemplate::builder_raw(xhr_send_callback).build(scope);
-    let send_fn = crate::v8_utils::v8_fn(scope, &*send_tmpl);
+    let send_fn = crate::v8_utils::v8_fn(scope, &send_tmpl);
     let key = crate::v8_utils::v8_string(scope, "__xhr_send__");
     global.define_own_property(scope, key.into(), send_fn.into(), v8::PropertyAttribute::DONT_ENUM);
 }

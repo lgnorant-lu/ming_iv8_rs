@@ -34,7 +34,7 @@ pub fn usize_to_node_id(val: usize) -> Option<NodeId> {
     );
     let nz = std::num::NonZeroUsize::new(val)?;
     // SAFETY: NodeId is a newtype around NonZeroUsize (ego-tree 0.10)
-    Some(unsafe { std::mem::transmute(nz) })
+    Some(unsafe { std::mem::transmute::<std::num::NonZeroUsize, NodeId>(nz) })
 }
 
 /// Extract __nodeId__ from a V8 object, returning the NodeId.
@@ -92,7 +92,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     // addEventListener/dispatchEvent can locate it via extract_node_id.
     // If no Document is loaded yet (e.g. JSContext init before page.load),
     // skip silently — the binding will be redone when set_document/page_load runs.
-    let isolate: &v8::Isolate = &*scope;
+    let isolate: &v8::Isolate = scope;
     let state = RuntimeState::get(isolate);
     let root_id_opt = state
         .document
@@ -125,7 +125,7 @@ fn install_doc_accessor(
     getter: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let getter_tmpl = v8::FunctionTemplate::builder_raw(getter).build(scope);
-    let getter_fn = crate::v8_utils::v8_fn(scope, &*getter_tmpl);
+    let getter_fn = crate::v8_utils::v8_fn(scope, &getter_tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
     // Use defineProperty to install as a getter
     let desc = v8::Object::new(scope);
@@ -291,7 +291,7 @@ fn install_method(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
-    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let func = crate::v8_utils::v8_fn(scope, &tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     obj.set(scope, name_str.into(), func.into());
@@ -393,97 +393,97 @@ fn node_to_v8_object_plain<'s>(
 
             // Install getAttribute as a native function
             let get_attr_tmpl = v8::FunctionTemplate::builder_raw(get_attribute_callback).build(scope);
-            let get_attr_fn = crate::v8_utils::v8_fn(scope, &*get_attr_tmpl);
+            let get_attr_fn = crate::v8_utils::v8_fn(scope, &get_attr_tmpl);
             let get_attr_key = crate::v8_utils::v8_string(scope, "getAttribute");
             obj.set(scope, get_attr_key.into(), get_attr_fn.into());
 
             // Install setAttribute
             let set_attr_tmpl = v8::FunctionTemplate::builder_raw(set_attribute_callback).build(scope);
-            let set_attr_fn = crate::v8_utils::v8_fn(scope, &*set_attr_tmpl);
+            let set_attr_fn = crate::v8_utils::v8_fn(scope, &set_attr_tmpl);
             let set_attr_key = crate::v8_utils::v8_string(scope, "setAttribute");
             obj.set(scope, set_attr_key.into(), set_attr_fn.into());
 
             // Install removeAttribute
             let rm_attr_tmpl = v8::FunctionTemplate::builder_raw(remove_attribute_callback).build(scope);
-            let rm_attr_fn = crate::v8_utils::v8_fn(scope, &*rm_attr_tmpl);
+            let rm_attr_fn = crate::v8_utils::v8_fn(scope, &rm_attr_tmpl);
             let rm_attr_key = crate::v8_utils::v8_string(scope, "removeAttribute");
             obj.set(scope, rm_attr_key.into(), rm_attr_fn.into());
 
             // Install hasAttribute
             let has_attr_tmpl = v8::FunctionTemplate::builder_raw(has_attribute_callback).build(scope);
-            let has_attr_fn = crate::v8_utils::v8_fn(scope, &*has_attr_tmpl);
+            let has_attr_fn = crate::v8_utils::v8_fn(scope, &has_attr_tmpl);
             let has_attr_key = crate::v8_utils::v8_string(scope, "hasAttribute");
             obj.set(scope, has_attr_key.into(), has_attr_fn.into());
 
             // Install appendChild
             let append_tmpl = v8::FunctionTemplate::builder_raw(append_child_callback).build(scope);
-            let append_fn = crate::v8_utils::v8_fn(scope, &*append_tmpl);
+            let append_fn = crate::v8_utils::v8_fn(scope, &append_tmpl);
             let append_key = crate::v8_utils::v8_string(scope, "appendChild");
             obj.set(scope, append_key.into(), append_fn.into());
 
             // Install removeChild
             let remove_tmpl = v8::FunctionTemplate::builder_raw(remove_child_callback).build(scope);
-            let remove_fn = crate::v8_utils::v8_fn(scope, &*remove_tmpl);
+            let remove_fn = crate::v8_utils::v8_fn(scope, &remove_tmpl);
             let remove_key = crate::v8_utils::v8_string(scope, "removeChild");
             obj.set(scope, remove_key.into(), remove_fn.into());
 
             // Install replaceChild
             let replace_tmpl = v8::FunctionTemplate::builder_raw(replace_child_callback).build(scope);
-            let replace_fn = crate::v8_utils::v8_fn(scope, &*replace_tmpl);
+            let replace_fn = crate::v8_utils::v8_fn(scope, &replace_tmpl);
             let replace_key = crate::v8_utils::v8_string(scope, "replaceChild");
             obj.set(scope, replace_key.into(), replace_fn.into());
 
             // Install insertBefore
             let ib_tmpl = v8::FunctionTemplate::builder_raw(insert_before_callback).build(scope);
-            let ib_fn = crate::v8_utils::v8_fn(scope, &*ib_tmpl);
+            let ib_fn = crate::v8_utils::v8_fn(scope, &ib_tmpl);
             let ib_key = crate::v8_utils::v8_string(scope, "insertBefore");
             obj.set(scope, ib_key.into(), ib_fn.into());
 
             // Install addEventListener
             let ael_tmpl = v8::FunctionTemplate::builder_raw(add_event_listener_callback).build(scope);
-            let ael_fn = crate::v8_utils::v8_fn(scope, &*ael_tmpl);
+            let ael_fn = crate::v8_utils::v8_fn(scope, &ael_tmpl);
             let ael_key = crate::v8_utils::v8_string(scope, "addEventListener");
             obj.set(scope, ael_key.into(), ael_fn.into());
 
             // Install removeEventListener
             let rel_tmpl = v8::FunctionTemplate::builder_raw(remove_event_listener_callback).build(scope);
-            let rel_fn = crate::v8_utils::v8_fn(scope, &*rel_tmpl);
+            let rel_fn = crate::v8_utils::v8_fn(scope, &rel_tmpl);
             let rel_key = crate::v8_utils::v8_string(scope, "removeEventListener");
             obj.set(scope, rel_key.into(), rel_fn.into());
 
             // Install dispatchEvent
             let de_tmpl = v8::FunctionTemplate::builder_raw(dispatch_event_callback).build(scope);
-            let de_fn = crate::v8_utils::v8_fn(scope, &*de_tmpl);
+            let de_fn = crate::v8_utils::v8_fn(scope, &de_tmpl);
             let de_key = crate::v8_utils::v8_string(scope, "dispatchEvent");
             obj.set(scope, de_key.into(), de_fn.into());
 
             // Install innerHTML getter (as a method for now — proper getter needs accessor)
             let ih_tmpl = v8::FunctionTemplate::builder_raw(inner_html_getter_callback).build(scope);
-            let ih_fn = crate::v8_utils::v8_fn(scope, &*ih_tmpl);
+            let ih_fn = crate::v8_utils::v8_fn(scope, &ih_tmpl);
             let ih_key = crate::v8_utils::v8_string(scope, "__getInnerHTML__");
             obj.set(scope, ih_key.into(), ih_fn.into());
 
             // Install innerHTML setter
             let ihs_tmpl = v8::FunctionTemplate::builder_raw(inner_html_setter_callback).build(scope);
-            let ihs_fn = crate::v8_utils::v8_fn(scope, &*ihs_tmpl);
+            let ihs_fn = crate::v8_utils::v8_fn(scope, &ihs_tmpl);
             let ihs_key = crate::v8_utils::v8_string(scope, "__setInnerHTML__");
             obj.set(scope, ihs_key.into(), ihs_fn.into());
 
             // Install insertAdjacentHTML
             let iah_tmpl = v8::FunctionTemplate::builder_raw(insert_adjacent_html_callback).build(scope);
-            let iah_fn = crate::v8_utils::v8_fn(scope, &*iah_tmpl);
+            let iah_fn = crate::v8_utils::v8_fn(scope, &iah_tmpl);
             let iah_key = crate::v8_utils::v8_string(scope, "insertAdjacentHTML");
             obj.set(scope, iah_key.into(), iah_fn.into());
 
             // Install outerHTML getter
             let oh_tmpl = v8::FunctionTemplate::builder_raw(outer_html_getter_callback).build(scope);
-            let oh_fn = crate::v8_utils::v8_fn(scope, &*oh_tmpl);
+            let oh_fn = crate::v8_utils::v8_fn(scope, &oh_tmpl);
             let oh_key = crate::v8_utils::v8_string(scope, "__getOuterHTML__");
             obj.set(scope, oh_key.into(), oh_fn.into());
 
             // Install textContent setter (as method)
             let tcs_tmpl = v8::FunctionTemplate::builder_raw(text_content_setter_callback).build(scope);
-            let tcs_fn = crate::v8_utils::v8_fn(scope, &*tcs_tmpl);
+            let tcs_fn = crate::v8_utils::v8_fn(scope, &tcs_tmpl);
             let tcs_key = crate::v8_utils::v8_string(scope, "__setTextContent__");
             obj.set(scope, tcs_key.into(), tcs_fn.into());
         }

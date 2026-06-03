@@ -152,7 +152,7 @@ fn parse_fetch_init<'s>(
 /// Install the global fetch() function.
 pub fn install_fetch(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     let tmpl = v8::FunctionTemplate::builder_raw(fetch_callback).build(scope);
-    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let func = crate::v8_utils::v8_fn(scope, &tmpl);
     let key = crate::v8_utils::v8_string(scope, "fetch");
     func.set_name(key);
     global.set(scope, key.into(), func.into());
@@ -274,12 +274,12 @@ fn build_response_object<'s>(
     }
     // Install get() method on headers
     let get_tmpl = v8::FunctionTemplate::builder_raw(headers_get_cb).build(scope);
-    let get_fn = crate::v8_utils::v8_fn(scope, &*get_tmpl);
+    let get_fn = crate::v8_utils::v8_fn(scope, &get_tmpl);
     let get_key = crate::v8_utils::v8_string(scope, "get");
     headers_obj.set(scope, get_key.into(), get_fn.into());
     // Install has() method
     let has_tmpl = v8::FunctionTemplate::builder_raw(headers_has_cb).build(scope);
-    let has_fn = crate::v8_utils::v8_fn(scope, &*has_tmpl);
+    let has_fn = crate::v8_utils::v8_fn(scope, &has_tmpl);
     let has_key = crate::v8_utils::v8_string(scope, "has");
     headers_obj.set(scope, has_key.into(), has_fn.into());
     let headers_key = crate::v8_utils::v8_string(scope, "headers");
@@ -299,19 +299,19 @@ fn build_response_object<'s>(
 
     // text() → Promise<string>
     let text_tmpl = v8::FunctionTemplate::builder_raw(response_text).build(scope);
-    let text_fn = crate::v8_utils::v8_fn(scope, &*text_tmpl);
+    let text_fn = crate::v8_utils::v8_fn(scope, &text_tmpl);
     let text_key = crate::v8_utils::v8_string(scope, "text");
     obj.set(scope, text_key.into(), text_fn.into());
 
     // json() → Promise<object>
     let json_tmpl = v8::FunctionTemplate::builder_raw(response_json).build(scope);
-    let json_fn = crate::v8_utils::v8_fn(scope, &*json_tmpl);
+    let json_fn = crate::v8_utils::v8_fn(scope, &json_tmpl);
     let json_key = crate::v8_utils::v8_string(scope, "json");
     obj.set(scope, json_key.into(), json_fn.into());
 
     // arrayBuffer() → Promise<ArrayBuffer>
     let ab_tmpl = v8::FunctionTemplate::builder_raw(response_array_buffer).build(scope);
-    let ab_fn = crate::v8_utils::v8_fn(scope, &*ab_tmpl);
+    let ab_fn = crate::v8_utils::v8_fn(scope, &ab_tmpl);
     let ab_fn_key = crate::v8_utils::v8_string(scope, "arrayBuffer");
     obj.set(scope, ab_fn_key.into(), ab_fn.into());
 

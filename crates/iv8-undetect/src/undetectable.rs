@@ -17,6 +17,16 @@
 
 use iv8_core::v8_extra;
 
+fn new_instance_oom_only<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    templ: &v8::ObjectTemplate,
+) -> v8::Local<'s, v8::Object> {
+    #[expect(clippy::panic, reason = "OOM-only helper mirrors iv8_core::v8_utils")]
+    templ
+        .new_instance(scope)
+        .unwrap_or_else(|| panic!("ObjectTemplate::new_instance failed (OOM-only path)"))
+}
+
 /// No-op CallAsFunctionHandler. Returns undefined.
 ///
 /// Required because V8 asserts that an undetectable ObjectTemplate has a
@@ -53,12 +63,10 @@ pub fn install_iv8_tool_object<'s>(
         v8::MapFnTo::map_fn_to(iv8_tool_call_handler),
         None,
     );
-    let tool_obj = templ
-        .new_instance(scope)
-        .expect("failed to create __iv8__ undetectable instance");
+    let tool_obj = new_instance_oom_only(scope, &templ);
 
     // Install on global with DontEnum so Object.keys does not show it
-    let key = v8::String::new(scope, name).expect("key");
+    let key = iv8_core::v8_utils::v8_string(scope, name);
     global.define_own_property(
         scope,
         key.into(),
@@ -87,11 +95,9 @@ pub fn install_document_all(scope: &v8::PinScope<'_, '_>, document: v8::Local<v8
         v8::MapFnTo::map_fn_to(iv8_tool_call_handler),
         None,
     );
-    let all_obj = templ
-        .new_instance(scope)
-        .expect("failed to create document.all undetectable instance");
+    let all_obj = new_instance_oom_only(scope, &templ);
 
-    let key = v8::String::new(scope, "all").expect("key");
+    let key = iv8_core::v8_utils::v8_string(scope, "all");
     document.define_own_property(
         scope,
         key.into(),

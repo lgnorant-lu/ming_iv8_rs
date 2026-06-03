@@ -198,7 +198,7 @@ unsafe extern "C" fn nav_permissions(info: *const v8::FunctionCallbackInfo) {
         let obj = v8::Object::new(scope);
         // query(descriptor) → Promise<{state: 'granted'|'denied'|'prompt'}>
         let query_tmpl = v8::FunctionTemplate::builder_raw(permissions_query_cb).build(scope);
-        let query_fn = crate::v8_utils::v8_fn(scope, &*query_tmpl);
+        let query_fn = crate::v8_utils::v8_fn(scope, &query_tmpl);
         let query_key = crate::v8_utils::v8_string(scope, "query");
         obj.set(scope, query_key.into(), query_fn.into());
         rv.set(obj.into());
@@ -246,7 +246,7 @@ unsafe extern "C" fn nav_media_devices(info: *const v8::FunctionCallbackInfo) {
         let obj = v8::Object::new(scope);
         // enumerateDevices() → Promise<[]>
         let enum_tmpl = v8::FunctionTemplate::builder_raw(media_devices_enumerate_cb).build(scope);
-        let enum_fn = crate::v8_utils::v8_fn(scope, &*enum_tmpl);
+        let enum_fn = crate::v8_utils::v8_fn(scope, &enum_tmpl);
         let enum_key = crate::v8_utils::v8_string(scope, "enumerateDevices");
         obj.set(scope, enum_key.into(), enum_fn.into());
         rv.set(obj.into());

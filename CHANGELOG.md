@@ -51,7 +51,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   Without opcode→semantic token mapping, returns `[]` (was silently non-functional).
 - **instrument_source D entries**: Extended from `D,pc,opcode,stack_depth` to
   `D,pc,opcode,depth,val1,val2,val3` for stack value capture.
-- **Python test count**: 552 → 681 (Phase 1) → 747 (v0.5 complete).
+- **Python test count**: 552 → 681 (Phase 1) → 775 passed, 1 skipped (current v0.5 tree).
 - `_parse_entry` now correctly handles 3-field (TYPE,target,value) vs 4-field
   (TYPE,pc,target,value) trace formats.
 - pyproject.toml version aligned to 0.5.0-dev.

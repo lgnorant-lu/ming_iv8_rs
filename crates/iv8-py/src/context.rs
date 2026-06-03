@@ -73,15 +73,11 @@ impl JSContext {
         let mut timezone: Option<String> = None;
         let mut locale: Option<String> = None;
         if let Some(cfg) = config {
-            if let Ok(tz) = cfg.get_item("timezone") {
-                if let Some(tz_val) = tz {
-                    timezone = tz_val.extract::<String>().ok();
-                }
+            if let Ok(Some(tz_val)) = cfg.get_item("timezone") {
+                timezone = tz_val.extract::<String>().ok();
             }
-            if let Ok(lc) = cfg.get_item("locale") {
-                if let Some(lc_val) = lc {
-                    locale = lc_val.extract::<String>().ok();
-                }
+            if let Ok(Some(lc_val)) = cfg.get_item("locale") {
+                locale = lc_val.extract::<String>().ok();
             }
         }
 
@@ -196,6 +192,7 @@ impl JSContext {
     }
 
     /// Context manager support: __exit__ closes the context.
+    #[pyo3(signature = (_exc_type=None, _exc_val=None, _exc_tb=None))]
     fn __exit__(
         &self,
         _exc_type: Option<&pyo3::Bound<'_, pyo3::PyAny>>,
@@ -462,7 +459,7 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         kernel.cdp_set_breakpoint(url, line, column, condition)
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
     /// Remove a breakpoint by id.
@@ -470,7 +467,7 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         kernel.cdp_remove_breakpoint(breakpoint_id)
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
     /// Evaluate an expression on a call frame while paused at a breakpoint.
@@ -485,7 +482,7 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         let result = kernel.cdp_evaluate_on_frame(call_frame_id, expression)
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))?;
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
         Python::with_gil(|py| {
             json_value_to_py(py, &result)
         })
@@ -496,7 +493,7 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         kernel.cdp_resume()
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
     /// Step over (next statement, skip function calls).
@@ -504,7 +501,7 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         kernel.cdp_step_over()
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
     /// Step into (enter function calls).
@@ -512,7 +509,7 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         kernel.cdp_step_into()
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
     /// Get call frames from the last breakpoint pause.
@@ -550,7 +547,7 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         let result = kernel.cdp_get_properties(object_id, own_properties)
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))?;
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
         Python::with_gil(|py| {
             json_value_to_py(py, &result)
         })
@@ -621,7 +618,7 @@ impl JSContext {
         // Set the breakpoint via CDP
         let mut kernel = self.inner.kernel.lock();
         kernel.cdp_set_breakpoint(url, line, column, Some(&condition))
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
     /// Remove a trace point by id (returned by set_trace_point).
@@ -629,7 +626,7 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         kernel.cdp_remove_breakpoint(trace_point_id)
-            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(e))
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
     /// Get the trace log: all entries recorded by trace points since last clear.
@@ -713,7 +710,7 @@ impl JSContext {
 
                 // Try to find stack variable (look for .push/.pop patterns near the dispatch)
                 let stack_re = regex_lite::Regex::new(
-                    &format!(r"([A-Za-z_$][A-Za-z0-9_$]*)\.push\(|([A-Za-z_$][A-Za-z0-9_$]*)\.pop\(\)")
+                    r"([A-Za-z_$][A-Za-z0-9_$]*)\.push\(|([A-Za-z_$][A-Za-z0-9_$]*)\.pop\(\)"
                 );
                 let stack_var = if let Ok(sre) = stack_re {
                     sre.captures(source)
@@ -1141,19 +1138,17 @@ impl JSContext {
 
         for _pattern in &search_patterns {
             // Use CDP Debugger.searchInContent if available
-            let search_js = format!(
-                r#"
-(function() {{
+            let search_js = r#"
+(function() {
     // Search in all evaluated scripts for the pattern
     // This is a heuristic — look for the pattern in the global source
-    try {{
+    try {
         var scripts = document.querySelectorAll('script');
         // Fallback: search in __iv8_script_sources__ if available
         return null;
-    }} catch(e) {{ return null; }}
-}})()
-"#
-            );
+    } catch(e) { return null; }
+})()
+"#.to_string();
             // For now, use a simpler approach: search the script source directly
             // The user typically knows the script URL and can find the line manually
             // or use Chrome DevTools. This method provides a programmatic hint.
@@ -1494,11 +1489,11 @@ fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
     use pyo3::types::PyList;
     match value {
         RustValue::Null => Ok(py.None()),
-        RustValue::Bool(b) => Ok((*b).into_pyobject(py).expect("bool").to_owned().into_any().into()),
-        RustValue::Int(i) => Ok((*i).into_pyobject(py).expect("int").into_any().into()),
-        RustValue::Float(f) => Ok((*f).into_pyobject(py).expect("float").into_any().into()),
-        RustValue::String(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
-        RustValue::Bytes(b) => Ok(b.as_slice().into_pyobject(py).expect("bytes").into_any().into()),
+        RustValue::Bool(b) => Ok((*b).into_pyobject(py)?.to_owned().into_any().into()),
+        RustValue::Int(i) => Ok((*i).into_pyobject(py)?.into_any().into()),
+        RustValue::Float(f) => Ok((*f).into_pyobject(py)?.into_any().into()),
+        RustValue::String(s) => Ok(s.as_str().into_pyobject(py)?.into_any().into()),
+        RustValue::Bytes(b) => Ok(b.as_slice().into_pyobject(py)?.into_any().into()),
         RustValue::Array(arr) => {
             let list = PyList::empty(py);
             for item in arr {
@@ -1513,7 +1508,7 @@ fn rust_value_to_py(py: Python<'_>, value: &RustValue) -> PyResult<PyObject> {
             }
             Ok(dict.into_any().into())
         }
-        RustValue::JsObject(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
+        RustValue::JsObject(s) => Ok(s.as_str().into_pyobject(py)?.into_any().into()),
         RustValue::BigInt { negative, words } => {
             crate::value_convert::bigint_to_python(py, *negative, words)
         }
@@ -1543,17 +1538,17 @@ fn json_value_to_py(py: Python<'_>, value: &serde_json::Value) -> PyResult<PyObj
     use pyo3::types::PyList;
     match value {
         serde_json::Value::Null => Ok(py.None()),
-        serde_json::Value::Bool(b) => Ok((*b).into_pyobject(py).expect("bool").to_owned().into_any().into()),
+        serde_json::Value::Bool(b) => Ok((*b).into_pyobject(py)?.to_owned().into_any().into()),
         serde_json::Value::Number(n) => {
             if let Some(i) = n.as_i64() {
-                Ok(i.into_pyobject(py).expect("int").into_any().into())
+                Ok(i.into_pyobject(py)?.into_any().into())
             } else if let Some(f) = n.as_f64() {
-                Ok(f.into_pyobject(py).expect("float").into_any().into())
+                Ok(f.into_pyobject(py)?.into_any().into())
             } else {
                 Ok(py.None())
             }
         }
-        serde_json::Value::String(s) => Ok(s.as_str().into_pyobject(py).expect("str").into_any().into()),
+        serde_json::Value::String(s) => Ok(s.as_str().into_pyobject(py)?.into_any().into()),
         serde_json::Value::Array(arr) => {
             let list = PyList::empty(py);
             for item in arr {

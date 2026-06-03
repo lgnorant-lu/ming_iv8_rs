@@ -9,7 +9,7 @@
 //! 1. Borrow EventLoop → advance time + collect due tasks → release borrow
 //! 2. Execute callbacks (EventLoop not borrowed, so callbacks can register new timers)
 //! 3. Borrow again → re-enqueue intervals
-//! This avoids RefCell reentrancy panics.
+//!    This avoids RefCell reentrancy panics.
 
 use std::cmp::Reverse;
 use std::collections::BinaryHeap;

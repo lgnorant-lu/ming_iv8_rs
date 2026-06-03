@@ -3,7 +3,7 @@
 use std::time::Duration;
 use std::thread;
 
-use crate::inspector::channel::{SharedChannelState, InspectorMessage};
+use crate::inspector::channel::{InspectorMessage, SharedChannelState, lock_channel_state};
 
 /// Configuration for the inspector session.
 pub struct InspectorConfig {
@@ -62,7 +62,7 @@ impl InspectorSession {
     /// Process pending CDP messages from DevTools client.
     pub fn process_messages(&mut self) {
         let incoming: Vec<String> = {
-            let mut state = self.channel_state.lock().unwrap();
+            let mut state = lock_channel_state(&self.channel_state);
             state.incoming.drain(..).collect()
         };
 
@@ -78,7 +78,7 @@ impl InspectorSession {
     pub fn wait_for_connection(&self, timeout_ms: u64) {
         let deadline = std::time::Instant::now() + Duration::from_millis(timeout_ms);
         loop {
-            if self.channel_state.lock().unwrap().connected {
+            if lock_channel_state(&self.channel_state).connected {
                 tracing::info!("DevTools client connected");
                 break;
             }
@@ -170,12 +170,12 @@ impl InspectorClientImpl {
 
 impl v8::inspector::V8InspectorClientImpl for InspectorClientImpl {
     fn run_message_loop_on_pause(&self, _context_group_id: i32) {
-        let mut state = self.channel_state.lock().unwrap();
+        let mut state = lock_channel_state(&self.channel_state);
         state.paused = true;
     }
 
     fn quit_message_loop_on_pause(&self) {
-        let mut state = self.channel_state.lock().unwrap();
+        let mut state = lock_channel_state(&self.channel_state);
         state.paused = false;
     }
 }
@@ -200,7 +200,7 @@ impl v8::inspector::ChannelImpl for InspectorChannelImpl {
     ) {
         if let Some(msg) = message.as_ref() {
             let text = msg.string().to_string();
-            let mut state = self.channel_state.lock().unwrap();
+            let mut state = lock_channel_state(&self.channel_state);
             state.outgoing.push(InspectorMessage::Response { call_id, message: text });
         }
     }
@@ -208,7 +208,7 @@ impl v8::inspector::ChannelImpl for InspectorChannelImpl {
     fn send_notification(&self, message: v8::UniquePtr<v8::inspector::StringBuffer>) {
         if let Some(msg) = message.as_ref() {
             let text = msg.string().to_string();
-            let mut state = self.channel_state.lock().unwrap();
+            let mut state = lock_channel_state(&self.channel_state);
             state.outgoing.push(InspectorMessage::Notification { message: text });
         }
     }

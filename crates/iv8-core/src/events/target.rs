@@ -229,19 +229,19 @@ fn create_event_object<'s>(
 
     // stopPropagation
     let sp_tmpl = v8::FunctionTemplate::builder_raw(stop_propagation_cb).build(scope);
-    let sp_fn = crate::v8_utils::v8_fn(scope, &*sp_tmpl);
+    let sp_fn = crate::v8_utils::v8_fn(scope, &sp_tmpl);
     let sp_key = crate::v8_utils::v8_string(scope, "stopPropagation");
     obj.set(scope, sp_key.into(), sp_fn.into());
 
     // stopImmediatePropagation
     let sip_tmpl = v8::FunctionTemplate::builder_raw(stop_propagation_cb).build(scope);
-    let sip_fn = crate::v8_utils::v8_fn(scope, &*sip_tmpl);
+    let sip_fn = crate::v8_utils::v8_fn(scope, &sip_tmpl);
     let sip_key = crate::v8_utils::v8_string(scope, "stopImmediatePropagation");
     obj.set(scope, sip_key.into(), sip_fn.into());
 
     // preventDefault
     let pd_tmpl = v8::FunctionTemplate::builder_raw(prevent_default_cb).build(scope);
-    let pd_fn = crate::v8_utils::v8_fn(scope, &*pd_tmpl);
+    let pd_fn = crate::v8_utils::v8_fn(scope, &pd_tmpl);
     let pd_key = crate::v8_utils::v8_string(scope, "preventDefault");
     obj.set(scope, pd_key.into(), pd_fn.into());
 
@@ -273,6 +273,7 @@ unsafe extern "C" fn prevent_default_cb(info: *const v8::FunctionCallbackInfo) {
 }
 
 /// Invoke listeners for a specific node/phase.
+#[expect(clippy::too_many_arguments, reason = "event dispatch needs explicit bubbling state")]
 fn invoke_listeners(
     scope: &v8::PinScope<'_, '_>,
     registry: &RefCell<EventListenerRegistry>,

@@ -39,19 +39,19 @@ pub fn install_input_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
 
     // dispatchMouseEvent
     let mouse_tmpl = v8::FunctionTemplate::builder_raw(dispatch_mouse_event).build(scope);
-    let mouse_fn = crate::v8_utils::v8_fn(scope, &*mouse_tmpl);
+    let mouse_fn = crate::v8_utils::v8_fn(scope, &mouse_tmpl);
     let mouse_key = crate::v8_utils::v8_string(scope, "dispatchMouseEvent");
     input_obj.set(scope, mouse_key.into(), mouse_fn.into());
 
     // dispatchPointerEvent
     let ptr_tmpl = v8::FunctionTemplate::builder_raw(dispatch_pointer_event).build(scope);
-    let ptr_fn = crate::v8_utils::v8_fn(scope, &*ptr_tmpl);
+    let ptr_fn = crate::v8_utils::v8_fn(scope, &ptr_tmpl);
     let ptr_key = crate::v8_utils::v8_string(scope, "dispatchPointerEvent");
     input_obj.set(scope, ptr_key.into(), ptr_fn.into());
 
     // dispatchKeyboardEvent
     let kbd_tmpl = v8::FunctionTemplate::builder_raw(dispatch_keyboard_event).build(scope);
-    let kbd_fn = crate::v8_utils::v8_fn(scope, &*kbd_tmpl);
+    let kbd_fn = crate::v8_utils::v8_fn(scope, &kbd_tmpl);
     let kbd_key = crate::v8_utils::v8_string(scope, "dispatchKeyboardEvent");
     input_obj.set(scope, kbd_key.into(), kbd_fn.into());
 

@@ -27,13 +27,13 @@ pub fn install_crypto_random(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
 
     // Install getRandomValues
     let grv_tmpl = v8::FunctionTemplate::builder_raw(get_random_values_callback).build(scope);
-    let grv_fn = crate::v8_utils::v8_fn(scope, &*grv_tmpl);
+    let grv_fn = crate::v8_utils::v8_fn(scope, &grv_tmpl);
     let grv_key = crate::v8_utils::v8_string(scope, "getRandomValues");
     crypto_obj.set(scope, grv_key.into(), grv_fn.into());
 
     // Install randomUUID
     let uuid_tmpl = v8::FunctionTemplate::builder_raw(random_uuid_callback).build(scope);
-    let uuid_fn = crate::v8_utils::v8_fn(scope, &*uuid_tmpl);
+    let uuid_fn = crate::v8_utils::v8_fn(scope, &uuid_tmpl);
     let uuid_key = crate::v8_utils::v8_string(scope, "randomUUID");
     crypto_obj.set(scope, uuid_key.into(), uuid_fn.into());
 }
@@ -107,7 +107,11 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
 
         // Write into the TypedArray's backing store
         // SAFETY: guarded by is_typed_array() check above
-        let ab = ta.buffer(scope).expect("buffer");
+        let Some(ab) = ta.buffer(scope) else {
+            let msg = crate::v8_utils::v8_string(scope, "getRandomValues: backing buffer unavailable");
+            scope.throw_exception(v8::Exception::type_error(scope, msg));
+            return;
+        };
         let byte_offset = ta.byte_offset();
         let store = ab.get_backing_store();
         if let Some(data_ptr) = store.data() {

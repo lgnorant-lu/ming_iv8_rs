@@ -187,7 +187,7 @@ fn meta_to_rsa_private(meta: &KeyMeta) -> Result<rsa::RsaPrivateKey, String> {
 fn meta_to_ec_key(meta: &KeyMeta) -> Result<EcKeyMaterial, String> {
     let der = b64_decode(&meta.key_bytes_b64)?;
     let curve = meta.curve.as_deref()
-        .and_then(EcCurve::from_str)
+        .and_then(EcCurve::from_name)
         .ok_or("EC key missing curve")?;
     match meta.key_type.as_str() {
         "private" => crate::crypto::ec_impl::import_ec_private_key_pkcs8(&der, curve)
@@ -268,7 +268,7 @@ fn install_method(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
     let tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
-    let func = crate::v8_utils::v8_fn(scope, &*tmpl);
+    let func = crate::v8_utils::v8_fn(scope, &tmpl);
     let name_str = crate::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     obj.set(scope, name_str.into(), func.into());
@@ -523,7 +523,7 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
 
             // EC algorithms
             "ECDSA" | "ECDH" => {
-                let curve = match curve_name.as_deref().and_then(EcCurve::from_str) {
+                let curve = match curve_name.as_deref().and_then(EcCurve::from_name) {
                     Some(c) => c,
                     None => {
                         let msg = crate::v8_utils::v8_string(scope, "importKey EC: missing or unsupported namedCurve");
@@ -623,6 +623,7 @@ unsafe extern "C" fn subtle_import_key(info: *const v8::FunctionCallbackInfo) {
 }
 
 /// Import key from JWK format.
+#[expect(clippy::too_many_arguments, reason = "JWK import needs explicit algorithm context")]
 fn import_key_jwk(
     scope: &v8::PinScope<'_, '_>,
     resolver: v8::Local<v8::PromiseResolver>,
@@ -1350,8 +1351,7 @@ fn pbkdf2_derive(password: &[u8], salt: &[u8], iterations: u32, hash: &str, leng
 
 fn pbkdf2_sha256(password: &[u8], salt: &[u8], iterations: u32, output: &mut [u8]) {
     let hlen = 32; // SHA-256 output size
-    let mut block_num: u32 = 1;
-    for chunk in output.chunks_mut(hlen) {
+    for (block_num, chunk) in (1_u32..).zip(output.chunks_mut(hlen)) {
         let mut salt_block = salt.to_vec();
         salt_block.extend_from_slice(&block_num.to_be_bytes());
         let mut mac = <Hmac<Sha256> as Mac>::new_from_slice(password).expect("key");
@@ -1366,14 +1366,12 @@ fn pbkdf2_sha256(password: &[u8], salt: &[u8], iterations: u32, output: &mut [u8
         }
         let copy_len = chunk.len().min(result.len());
         chunk[..copy_len].copy_from_slice(&result[..copy_len]);
-        block_num += 1;
     }
 }
 
 fn pbkdf2_sha1(password: &[u8], salt: &[u8], iterations: u32, output: &mut [u8]) {
     let hlen = 20; // SHA-1 output size
-    let mut block_num: u32 = 1;
-    for chunk in output.chunks_mut(hlen) {
+    for (block_num, chunk) in (1_u32..).zip(output.chunks_mut(hlen)) {
         let mut salt_block = salt.to_vec();
         salt_block.extend_from_slice(&block_num.to_be_bytes());
         let mut mac = <Hmac<Sha1> as Mac>::new_from_slice(password).expect("key");
@@ -1388,7 +1386,6 @@ fn pbkdf2_sha1(password: &[u8], salt: &[u8], iterations: u32, output: &mut [u8])
         }
         let copy_len = chunk.len().min(result.len());
         chunk[..copy_len].copy_from_slice(&result[..copy_len]);
-        block_num += 1;
     }
 }
 
@@ -1623,7 +1620,7 @@ unsafe extern "C" fn subtle_generate_key(info: *const v8::FunctionCallbackInfo) 
                     obj.get(scope, curve_key.into()).map(|v| v.to_rust_string_lossy(scope))
                 } else { None };
 
-                let curve = match curve_name.as_deref().and_then(EcCurve::from_str) {
+                let curve = match curve_name.as_deref().and_then(EcCurve::from_name) {
                     Some(c) => c,
                     None => {
                         let msg = crate::v8_utils::v8_string(scope, "generateKey EC: missing or unsupported namedCurve");

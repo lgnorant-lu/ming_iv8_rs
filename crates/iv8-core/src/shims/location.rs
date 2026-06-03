@@ -36,7 +36,7 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
 
     // toString() and valueOf() return href
     let to_string_tmpl = v8::FunctionTemplate::builder_raw(location_to_string).build(scope);
-    let to_string_fn = crate::v8_utils::v8_fn(scope, &*to_string_tmpl);
+    let to_string_fn = crate::v8_utils::v8_fn(scope, &to_string_tmpl);
     let ts_key = crate::v8_utils::v8_string(scope, "toString");
     location_obj.set(scope, ts_key.into(), to_string_fn.into());
 
@@ -45,7 +45,7 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
 
     // assign/replace/reload are no-ops in v0.1
     let noop_tmpl = v8::FunctionTemplate::builder_raw(location_noop).build(scope);
-    let noop_fn = crate::v8_utils::v8_fn(scope, &*noop_tmpl);
+    let noop_fn = crate::v8_utils::v8_fn(scope, &noop_tmpl);
     for name in &["assign", "replace", "reload"] {
         let key = crate::v8_utils::v8_string(scope, name);
         location_obj.set(scope, key.into(), noop_fn.into());

@@ -330,7 +330,7 @@ struct Iv8Parser;
 
 /// Custom error type that wraps SelectorParseErrorKind.
 #[derive(Debug)]
-pub struct SelectorError<'i>(SelectorParseErrorKind<'i>);
+pub struct SelectorError<'i>(pub SelectorParseErrorKind<'i>);
 
 impl<'i> From<SelectorParseErrorKind<'i>> for SelectorError<'i> {
     fn from(e: SelectorParseErrorKind<'i>) -> Self {
