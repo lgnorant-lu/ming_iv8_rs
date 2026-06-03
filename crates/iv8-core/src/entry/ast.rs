@@ -53,12 +53,25 @@ pub fn instrument(source: &str) -> (String, Option<String>) {
         Some(format!("{} parse warnings", errors.len()))
     };
 
-    // Apply the combined transform (wraps computed member calls)
+    // Apply the dispatch wrapper transform
     module.visit_mut_with(&mut DispatchWrapper);
 
     // Emit back to string
     let output = emit_js(&cm, &module);
-    (output, diag)
+
+    // Prepend __iv8_trace helper + log infrastructure
+    let helper = r#"
+;(function(){var g=globalThis;
+Object.defineProperty(g,'__iv8i_log__',{value:[],writable:true,enumerable:false,configurable:true});
+Object.defineProperty(g,'__iv8i_lim__',{value:200000,writable:true,enumerable:false,configurable:true});
+Object.defineProperty(g,'__iv8i_pc__',{value:-1,writable:true,enumerable:false,configurable:true});
+g.__iv8_trace=function(fn){if(typeof fn!=='function')return fn;
+return function(){var a=Array.prototype.slice.call(arguments);
+if(__iv8i_log__.length<__iv8i_lim__)__iv8i_log__.push('D,'+__iv8i_pc__+','+(fn.name||'?'));
+return fn.apply(this,a);};};
+})();
+"#;
+    (format!("{}{}", helper, output), diag)
 }
 
 // ───
@@ -170,7 +183,10 @@ mod tests {
     fn test_plain_script_passthrough() {
         let (output, diag) = instrument("var x = 1 + 1;");
         assert!(diag.is_none());
-        assert!(!output.contains("__iv8_trace"));
+        // Helper __iv8_trace is prepended but no dispatch calls should be wrapped
+        assert!(!output.contains("__iv8_trace(var"),
+            "no dispatch calls, so no wrapping should occur: {}", output);
+        assert!(output.contains("var x = 1 + 1;"));
     }
 
     #[test]

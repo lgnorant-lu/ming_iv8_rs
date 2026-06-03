@@ -262,9 +262,8 @@ fn apply_strategy_setup(
             Ok(())
         }
         StrategyKind::Dispatch => {
-            // Dispatch hook setup — instrument the dispatcher
-            // This would use instrument_source-like logic
-            // For MVP, we note that dispatch is handled at source level
+            // Dispatch instrumentation is now handled at source level
+            // by ast::instrument() which prepends __iv8_trace helper
             Ok(())
         }
     }
@@ -279,9 +278,15 @@ fn collect_evidence(
     result: &mut EntryResult,
     plan: &EntryPlan,
 ) {
-    // Collect trace if available
+    // Collect trace if available (runtime_log for hooks, __iv8i_log__ for dispatch/AST)
     let trace_val = kernel.eval_to_rust_value(
-        "typeof __iv8_runtime_log !== 'undefined' ? __iv8_runtime_log : []",
+        concat!(
+            "(function(){",
+            "if(typeof __iv8_runtime_log!=='undefined')return __iv8_runtime_log;",
+            "if(typeof __iv8i_log__!=='undefined')return __iv8i_log__;",
+            "return[];",
+            "})()"
+        ),
     );
     if let crate::convert::RustValue::Array(items) = trace_val {
         for item in items {
