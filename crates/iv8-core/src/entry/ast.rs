@@ -65,7 +65,7 @@ pub fn instrument(source: &str) -> (String, Option<String>) {
 Object.defineProperty(g,'__iv8i_log__',{value:[],writable:true,enumerable:false,configurable:true});
 Object.defineProperty(g,'__iv8i_lim__',{value:200000,writable:true,enumerable:false,configurable:true});
 Object.defineProperty(g,'__iv8i_pc__',{value:-1,writable:true,enumerable:false,configurable:true});
-g.__iv8_trace=function(fn){if(typeof fn!=='function')return fn;
+g.__iv8_trace=function(fn){if(typeof fn!=='function')return function(){__iv8i_log__.push('D,'+__iv8i_pc__+',?');};
 return function(){var a=Array.prototype.slice.call(arguments);
 if(__iv8i_log__.length<__iv8i_lim__)__iv8i_log__.push('D,'+__iv8i_pc__+','+(fn.name||'?'));
 return fn.apply(this,a);};};
