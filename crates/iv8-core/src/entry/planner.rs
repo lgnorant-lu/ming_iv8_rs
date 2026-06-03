@@ -6,6 +6,7 @@
 
 use crate::entry::classification;
 use crate::entry::types::*;
+use crate::entry::webpack;
 
 // ───
 // Public API
@@ -24,6 +25,19 @@ pub fn plan_entry(
     // 1. Classify sample
     let signals = classification::extract_signals(source);
     let sample_kind = classification::classify(source, &signals);
+
+    // 1b. Run webpack detection for richer signals
+    let wp_detection = webpack::detect(source);
+    let mut all_signals = signals.clone();
+    if wp_detection.detected {
+        all_signals.push(format!("webpack_flavor={:?}", wp_detection.flavor));
+        for h in &wp_detection.helpers_present {
+            all_signals.push(format!("wp_helper={}", h));
+        }
+        if wp_detection.module_count > 0 {
+            all_signals.push(format!("wp_module_count={}", wp_detection.module_count));
+        }
+    }
 
     // 2. Merge policy
     let effective_policy = persona.merge_policy(explicit_policy);
@@ -51,7 +65,7 @@ pub fn plan_entry(
     let state = PlanState::Planned;
 
     let diagnostics = Diagnostics {
-        sample_signals: signals.clone(),
+        sample_signals: all_signals.clone(),
         selected_strategy_reason: Some(selected.selection_reason.clone()),
         fallback_attempts: Vec::new(),
         activation_timing: None,
@@ -67,7 +81,7 @@ pub fn plan_entry(
         persona,
         effective_policy,
         sample_kind,
-        sample_signals: signals,
+        sample_signals: all_signals,
         selected_strategy: selected,
         candidate_strategies: candidates,
         phase_requirements: phase_reqs.clone(),

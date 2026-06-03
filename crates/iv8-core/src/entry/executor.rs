@@ -117,16 +117,46 @@ fn apply_strategy_setup(
             Ok(())
         }
         StrategyKind::WebpackBridge => {
-            // Webpack bridge hooks are installed as JS prelude
+            // Webpack bridge hooks are installed as JS prelude.
+            // Observes module require, cache access, chunk ensure, and chunk load.
             let prelude = r#"
-if (typeof __webpack_require__ !== 'undefined') {
-    var __iv8_orig_require = __webpack_require__;
-    var __iv8_module_log = [];
-    __webpack_require__ = function(moduleId) {
-        __iv8_module_log.push('require,' + moduleId);
-        return __iv8_orig_require.apply(this, arguments);
-    };
-}
+(function() {
+    var __iv8_log = [];
+    var wp = globalThis.__webpack_require__;
+    if (typeof wp !== 'undefined') {
+        // Hook chunk ensure (.e)
+        if (typeof wp.e === 'function') {
+            var origE = wp.e;
+            wp.e = function(chunkId) {
+                __iv8_log.push('chunk_ensure,' + chunkId);
+                return origE.apply(this, arguments);
+            };
+        }
+        // Hook chunk load (.l) — captures script URL
+        if (typeof wp.l === 'function') {
+            var origL = wp.l;
+            wp.l = function(url, done, key, chunkId) {
+                __iv8_log.push('chunk_load,' + (url || '') + ',' + (chunkId || ''));
+                return origL.apply(this, arguments);
+            };
+        }
+        // Hook module cache access (.c) — not a function, watch via defineProperty
+        // Main require function
+        var origRequire = wp;
+        var __iv8_orig_require = wp;
+        globalThis.__webpack_require__ = function(moduleId) {
+            __iv8_log.push('require,' + moduleId);
+            var result = __iv8_orig_require.apply(this, arguments);
+            __iv8_log.push('require_result,' + moduleId + ',' + typeof result);
+            return result;
+        };
+        // Copy back helpers to the new wrapper
+        Object.keys(origRequire).forEach(function(k) {
+            globalThis.__webpack_require__[k] = origRequire[k];
+        });
+    }
+    globalThis.__iv8_webpack_log = __iv8_log;
+})();
 "#;
             kernel
                 .eval(prelude, EvalOpts::default())
@@ -208,22 +238,26 @@ fn collect_evidence(
     // Collect webpack module log if available
     if matches!(plan.selected_strategy.strategy_kind, StrategyKind::WebpackBridge) {
         let log_val = kernel.eval_to_rust_value(
-            "typeof __iv8_module_log !== 'undefined' ? __iv8_module_log : []",
+            "typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []",
         );
         if let crate::convert::RustValue::Array(items) = log_val {
-            let mods: Vec<String> = items
-                .into_iter()
-                .filter_map(|v| {
-                    if let crate::convert::RustValue::String(s) = v {
-                        Some(s)
-                    } else {
-                        None
+            let mut requires = Vec::new();
+            let mut chunks = Vec::new();
+            for item in items {
+                if let crate::convert::RustValue::String(s) = item {
+                    if s.starts_with("require,") {
+                        requires.push(s);
+                    } else if s.starts_with("chunk_") {
+                        chunks.push(s);
                     }
-                })
-                .collect();
-            if !mods.is_empty() {
-                result.module_graph = Some(serde_json::json!({ "require_calls": mods }));
+                }
             }
+            let mut graph = serde_json::Map::new();
+            graph.insert("require_calls".into(), serde_json::json!(requires));
+            graph.insert("chunk_events".into(), serde_json::json!(chunks));
+            graph.insert("require_count".into(), serde_json::json!(requires.len()));
+            graph.insert("chunk_count".into(), serde_json::json!(chunks.len()));
+            result.module_graph = Some(serde_json::Value::Object(graph));
         }
     }
 
