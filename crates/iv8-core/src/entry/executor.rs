@@ -71,7 +71,7 @@ pub fn run_entry(
 
     // Apply AST transform if strategy requires it
     let eval_source = match plan.selected_strategy.strategy_kind {
-        StrategyKind::SourceAst | StrategyKind::Dispatch => {
+        StrategyKind::SourceAst => {
             let (transformed, diag) = crate::entry::ast::instrument(source);
             if let Some(d) = diag {
                 result.warnings.push(ErrorEntry {
@@ -83,6 +83,13 @@ pub fn run_entry(
                 });
             }
             transformed
+        }
+        StrategyKind::Dispatch => {
+            // Dispatch tracing via source transform has known edge cases
+            // (bdms/h5st crash with Function.prototype.call / read-only .length).
+            // For now, dispatch classification is the primary value; AST-based
+            // wrapping is used on SourceAst path only.
+            source.to_string()
         }
         _ => source.to_string(),
     };
