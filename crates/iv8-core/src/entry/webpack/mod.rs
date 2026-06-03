@@ -28,7 +28,7 @@ pub enum WebpackFlavor {
 /// Detect webpack runtime from JS source.
 pub fn detect(source: &str) -> WebpackDetection {
     let mut helpers: Vec<String> = Vec::new();
-    let mut flavor = WebpackFlavor::UnknownWebpackLike;
+    let flavor;
     // Check for main __webpack_require__ marker
     if !source.contains("__webpack_require__") {
         return WebpackDetection {
@@ -86,7 +86,7 @@ pub fn detect(source: &str) -> WebpackDetection {
 }
 
 /// Find the body of the modules table (content between outermost braces).
-fn find_modules_body<'a>(source: &'a str) -> Option<&'a str> {
+fn find_modules_body(source: &str) -> Option<&str> {
     let marker = "__webpack_require__.m";
     let pos = source.find(marker)?;
     let after = source[pos + marker.len()..].trim_start();
@@ -156,10 +156,8 @@ fn extract_module_ids(source: &str) -> Option<Vec<String>> {
                         depth -= 1;
                     }
                 }
-                b',' => {
-                    if depth == 0 {
-                        found_value_end = true;
-                    }
+                b',' if depth == 0 => {
+                    found_value_end = true;
                 }
                 _ => {}
             }
