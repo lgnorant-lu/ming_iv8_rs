@@ -73,8 +73,8 @@ impl VisitMut for CombinedTransform {
 
         if let Callee::Expr(expr) = &call.callee {
             match &**expr {
-                // 1. Dispatch expression: X[Y[Z++]]()
-                Expr::Member(member) if is_computed_member(member) => {
+                // 1. Dispatch expression: any computed member call
+                Expr::Member(member) if has_any_computed_access(member) => {
                     call.args.insert(0, marker_arg("__iv8_dispatch"));
                 }
                 // 2. Module init: __webpack_require__(...)
@@ -91,11 +91,11 @@ impl VisitMut for CombinedTransform {
     }
 }
 
-/// Check if a MemberExpr has nested computed properties (dispatch pattern).
-fn is_computed_member(member: &MemberExpr) -> bool {
-    matches!(&member.prop, MemberProp::Computed(c)
-        if matches!(&*c.expr, Expr::Member(inner)
-            if matches!(&inner.prop, MemberProp::Computed(_))))
+/// Check if any MemberExpr in the chain has a computed property access.
+/// Matches patterns: A[B](), A.B[C](), A[B[C]](), A[B][C]() etc.
+fn has_any_computed_access(member: &MemberExpr) -> bool {
+    matches!(&member.prop, MemberProp::Computed(_)) ||
+    matches!(&*member.obj, Expr::Member(m) if has_any_computed_access(m))
 }
 
 fn marker_arg(value: &str) -> ExprOrSpread {
@@ -182,5 +182,23 @@ mod tests {
         assert!(output.contains("__iv8_dispatch"));
         assert!(output.contains("__iv8_module_init"));
         assert!(output.contains("__iv8_eval_source"));
+    }
+
+    #[test]
+    fn test_single_computed_dispatch() {
+        // Single computed: handlers[opcode]() — covers abogus/h5st patterns
+        let (output, diag) = instrument("var r = handlers[opcode]();");
+        assert!(diag.is_none());
+        assert!(output.contains("__iv8_dispatch"),
+            "single computed dispatch not instrumented: {}", output);
+    }
+
+    #[test]
+    fn test_dot_then_computed() {
+        // Object then computed: vm.handlers[opcode]()
+        let (output, diag) = instrument("var r = vm.handlers[opcode]();");
+        assert!(diag.is_none());
+        assert!(output.contains("__iv8_dispatch"),
+            "dot-then-computed dispatch not instrumented: {}", output);
     }
 }
