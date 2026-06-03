@@ -1,0 +1,235 @@
+//! Entry plan execution harness.
+//!
+//! Takes an `EntryPlan` produced by the planner, executes the JS source
+//! within the V8 engine according to the selected strategy, and returns
+//! an `EntryResult` with collected evidence.
+
+use crate::entry::types::*;
+use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+use crate::kernel::{EvalOpts, KernelConfig};
+
+/// Execute a prepared entry plan and collect results.
+///
+/// This is the main execution entry point.
+/// If `entry_expr` is provided, it is evaluated after the main source.
+pub fn run_entry(
+    plan: &EntryPlan,
+    source: &str,
+    entry_expr: Option<&str>,
+) -> Result<EntryResult, String> {
+    let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default())
+        .map_err(|e| format!("kernel init failed: {}", e))?;
+
+    let mut result = EntryResult {
+        plan_id: plan.plan_id.clone(),
+        final_state: PlanState::Planned,
+        selected_strategy: plan.selected_strategy.clone(),
+        executed_strategies: Vec::new(),
+        trace: Vec::new(),
+        trace_meta: None,
+        module_graph: None,
+        hook_report: None,
+        environment_report: None,
+        diagnostics: plan.diagnostics.clone(),
+        cleanup_state: serde_json::json!({}),
+        errors: Vec::new(),
+        warnings: Vec::new(),
+    };
+
+    // Phase: prepared — apply strategy-specific setup
+    result.final_state = PlanState::Prepared;
+    if let Err(e) = apply_strategy_setup(&mut kernel, plan) {
+        result.errors.push(ErrorEntry {
+            code: "ACT_STRATEGY_SETUP_FAILED".into(),
+            stage: "prepared".into(),
+            message: format!("strategy setup failed: {}", e),
+            strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
+            recoverable: true,
+        });
+        result.final_state = PlanState::Prepared;
+        return Ok(result);
+    }
+
+    // Phase: armed — evaluate main source
+    result.final_state = PlanState::Armed;
+    match kernel.eval(source, EvalOpts::default()) {
+        Ok(_) => {
+            result.executed_strategies.push(ExecutedStrategy {
+                strategy_id: plan.selected_strategy.strategy_id.clone(),
+                phase_entered: PlanState::Armed,
+                outcome: Outcome::Success,
+            });
+        }
+        Err(e) => {
+            result.errors.push(ErrorEntry {
+                code: "ACT_SOURCE_EVAL_FAILED".into(),
+                stage: "armed".into(),
+                message: format!("source eval failed: {}", e),
+                strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
+                recoverable: false,
+            });
+            result.final_state = PlanState::Armed;
+            return Ok(result);
+        }
+    }
+
+    // Phase: invoked — evaluate entry expression
+    result.final_state = PlanState::Invoked;
+    if let Some(expr) = entry_expr {
+        match kernel.eval(expr, EvalOpts::default()) {
+            Ok(_) => {}
+            Err(e) => {
+                result.errors.push(ErrorEntry {
+                    code: "ACT_ENTRY_EXPR_FAILED".into(),
+                    stage: "invoked".into(),
+                    message: format!("entry expression failed: {}", e),
+                    strategy_id: Some(plan.selected_strategy.strategy_id.clone()),
+                    recoverable: false,
+                });
+                result.final_state = PlanState::Invoked;
+                return Ok(result);
+            }
+        }
+    }
+
+    // Phase: collected — gather trace and evidence
+    result.final_state = PlanState::Collected;
+    collect_evidence(&mut kernel, &mut result, plan);
+
+    // Phase: finalized — cleanup
+    result.final_state = PlanState::Finalized;
+    Ok(result)
+}
+
+// ───
+// Strategy setup
+// ───
+
+fn apply_strategy_setup(
+    kernel: &mut EmbeddedV8Kernel,
+    plan: &EntryPlan,
+) -> Result<(), String> {
+    match plan.selected_strategy.strategy_kind {
+        StrategyKind::SourceAst | StrategyKind::SourceRegex => {
+            // For source-level strategies, the transform is applied before eval
+            // (currently handled by the caller passing modified source).
+            // No runtime setup needed.
+            Ok(())
+        }
+        StrategyKind::WebpackBridge => {
+            // Webpack bridge hooks are installed as JS prelude
+            let prelude = r#"
+if (typeof __webpack_require__ !== 'undefined') {
+    var __iv8_orig_require = __webpack_require__;
+    var __iv8_module_log = [];
+    __webpack_require__ = function(moduleId) {
+        __iv8_module_log.push('require,' + moduleId);
+        return __iv8_orig_require.apply(this, arguments);
+    };
+}
+"#;
+            kernel
+                .eval(prelude, EvalOpts::default())
+                .map_err(|e| format!("webpack bridge prelude: {}", e))?;
+            Ok(())
+        }
+        StrategyKind::RuntimeTransparent => {
+            // Install transparent runtime observation hooks
+            let hook_js = r#"
+(function() {
+    var __iv8_log = [];
+    var origEval = globalThis.eval;
+    globalThis.eval = function(code) {
+        __iv8_log.push('eval_source,' + String(code).substring(0, 200));
+        return origEval.apply(this, arguments);
+    };
+    globalThis.__iv8_runtime_log = __iv8_log;
+})();
+"#;
+            kernel
+                .eval(hook_js, EvalOpts::default())
+                .map_err(|e| format!("transparent hook: {}", e))?;
+            Ok(())
+        }
+        StrategyKind::RuntimeAggressive => {
+            // Aggressive hooks — only for analysis persona with explicit opt-in
+            let hook_js = r#"
+(function() {
+    var __iv8_log = [];
+    __iv8_log.push('aggressive_mode_enabled');
+    var origEval = globalThis.eval;
+    globalThis.eval = function(code) {
+        __iv8_log.push('aggressive_eval,' + String(code).substring(0, 200));
+        return origEval.apply(this, arguments);
+    };
+    globalThis.__iv8_runtime_log = __iv8_log;
+})();
+"#;
+            kernel
+                .eval(hook_js, EvalOpts::default())
+                .map_err(|e| format!("aggressive hook: {}", e))?;
+            Ok(())
+        }
+        StrategyKind::CdpProbe => {
+            // CDP probe — minimal setup, relies on devtools connection
+            // For now, just mark the probe as available
+            Ok(())
+        }
+        StrategyKind::Dispatch => {
+            // Dispatch hook setup — instrument the dispatcher
+            // This would use instrument_source-like logic
+            // For MVP, we note that dispatch is handled at source level
+            Ok(())
+        }
+    }
+}
+
+// ───
+// Evidence collection
+// ───
+
+fn collect_evidence(
+    kernel: &mut EmbeddedV8Kernel,
+    result: &mut EntryResult,
+    plan: &EntryPlan,
+) {
+    // Collect trace if available
+    let trace_val = kernel.eval_to_rust_value(
+        "typeof __iv8_runtime_log !== 'undefined' ? __iv8_runtime_log : []",
+    );
+    if let crate::convert::RustValue::Array(items) = trace_val {
+        for item in items {
+            if let crate::convert::RustValue::String(s) = item {
+                result.trace.push(s);
+            }
+        }
+    }
+
+    // Collect webpack module log if available
+    if matches!(plan.selected_strategy.strategy_kind, StrategyKind::WebpackBridge) {
+        let log_val = kernel.eval_to_rust_value(
+            "typeof __iv8_module_log !== 'undefined' ? __iv8_module_log : []",
+        );
+        if let crate::convert::RustValue::Array(items) = log_val {
+            let mods: Vec<String> = items
+                .into_iter()
+                .filter_map(|v| {
+                    if let crate::convert::RustValue::String(s) = v {
+                        Some(s)
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+            if !mods.is_empty() {
+                result.module_graph = Some(serde_json::json!({ "require_calls": mods }));
+            }
+        }
+    }
+
+    // Collect hook report
+    result.hook_report = Some(serde_json::json!({
+        "strategy_id": plan.selected_strategy.strategy_id,
+        "strategy_kind": format!("{:?}", plan.selected_strategy.strategy_kind),
+    }));
+}
