@@ -30,7 +30,7 @@ pub fn detect(source: &str) -> WebpackDetection {
     let mut helpers: Vec<String> = Vec::new();
     let flavor;
     // Check for main __webpack_require__ marker
-    if !source.contains("__webpack_require__") {
+    if !source.contains("__webpack_require__") && !source.contains("window.webpackJsonp") {
         return WebpackDetection {
             detected: false,
             flavor: WebpackFlavor::UnknownWebpackLike,

@@ -86,8 +86,9 @@ struct SignalSet {
 
 impl SignalSet {
     fn from_source(source: &str) -> Self {
-        let has_webpack_require = source.contains("__webpack_require__")
-            || source.contains("webpackChunk");
+    let has_webpack_require = source.contains("__webpack_require__")
+        || source.contains("webpackChunk")
+        || source.contains("window.webpackJsonp");
         let has_chaosvm_dispatch = detect_chaosvm(source);
         let has_switch_vm = detect_switch_vm(source);
         let dispatch_extractable = has_chaosvm_dispatch || has_switch_vm;

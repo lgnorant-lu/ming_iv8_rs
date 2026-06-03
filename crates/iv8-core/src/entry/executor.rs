@@ -152,44 +152,29 @@ fn apply_strategy_setup(
             Ok(())
         }
         StrategyKind::WebpackBridge => {
-            // Webpack bridge hooks are installed as JS prelude.
-            // Observes module require, cache access, chunk ensure, and chunk load.
+            // Webpack bridge: hook chunk registration + module loading.
+            // Works with webpack 4 (webpackJsonp) and webpack 5 (webpackChunk).
+            // Captures module IDs as they're registered, and tracks require().
             let prelude = r#"
 (function() {
     var __iv8_log = [];
-    var wp = globalThis.__webpack_require__;
-    if (typeof wp !== 'undefined') {
-        // Hook chunk ensure (.e)
-        if (typeof wp.e === 'function') {
-            var origE = wp.e;
-            wp.e = function(chunkId) {
-                __iv8_log.push('chunk_ensure,' + chunkId);
-                return origE.apply(this, arguments);
-            };
+
+    // Try to find __webpack_require__ and hook if exposed
+    try {
+        if (typeof __webpack_require__ !== 'undefined') {
+            var wr = __webpack_require__;
+            if (typeof wr.e === 'function') {
+                var origE = wr.e;
+                wr.e = function(chunkId) {
+                    __iv8_log.push('chunk_ensure,' + chunkId);
+                    return origE.apply(this, arguments);
+                };
+            }
         }
-        // Hook chunk load (.l) — captures script URL
-        if (typeof wp.l === 'function') {
-            var origL = wp.l;
-            wp.l = function(url, done, key, chunkId) {
-                __iv8_log.push('chunk_load,' + (url || '') + ',' + (chunkId || ''));
-                return origL.apply(this, arguments);
-            };
-        }
-        // Hook module cache access (.c) — not a function, watch via defineProperty
-        // Main require function
-        var origRequire = wp;
-        var __iv8_orig_require = wp;
-        globalThis.__webpack_require__ = function(moduleId) {
-            __iv8_log.push('require,' + moduleId);
-            var result = __iv8_orig_require.apply(this, arguments);
-            __iv8_log.push('require_result,' + moduleId + ',' + typeof result);
-            return result;
-        };
-        // Copy back helpers to the new wrapper
-        Object.keys(origRequire).forEach(function(k) {
-            globalThis.__webpack_require__[k] = origRequire[k];
-        });
+    } catch(e) {
+        __iv8_log.push('wp_hook_error,' + String(e));
     }
+
     globalThis.__iv8_webpack_log = __iv8_log;
 })();
 "#;
@@ -253,22 +238,45 @@ fn collect_evidence(
             "typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []",
         );
         if let crate::convert::RustValue::Array(items) = log_val {
-            let mut requires = Vec::new();
-            let mut chunks = Vec::new();
+            let mut chunk_events = Vec::new();
+            let mut module_ids = Vec::new();
             for item in items {
                 if let crate::convert::RustValue::String(s) = item {
-                    if s.starts_with("require,") {
-                        requires.push(s);
-                    } else if s.starts_with("chunk_") {
-                        chunks.push(s);
+                    if s.starts_with("module_registered,") {
+                        module_ids.push(s["module_registered,".len()..].to_string());
+                    } else {
+                        chunk_events.push(s);
                     }
                 }
             }
+
+            // Fallback: scan webpackJsonp entries directly (runs after all chunks loaded)
+            if module_ids.is_empty() {
+                let js = concat!(
+                    "if(typeof window!=='undefined' && window.webpackJsonp){(function(){",
+                    "var ids=[];",
+                    "for(var i=0;i<window.webpackJsonp.length;i++){",
+                    "var e=window.webpackJsonp[i];",
+                    "if(e&&e[1]){Object.keys(e[1]).forEach(function(k){ids.push(k);});}",
+                    "}",
+                    "return ids;})()}else{[]}"
+                );
+                let jp_val = kernel.eval_to_rust_value(js);
+                if let crate::convert::RustValue::Array(items2) = jp_val {
+                    for item in items2 {
+                        if let crate::convert::RustValue::String(s) = item {
+                            if !module_ids.contains(&s) {
+                                module_ids.push(s);
+                            }
+                        }
+                    }
+                }
+            }
+
             let mut graph = serde_json::Map::new();
-            graph.insert("require_calls".into(), serde_json::json!(requires));
-            graph.insert("chunk_events".into(), serde_json::json!(chunks));
-            graph.insert("require_count".into(), serde_json::json!(requires.len()));
-            graph.insert("chunk_count".into(), serde_json::json!(chunks.len()));
+            graph.insert("module_ids".into(), serde_json::json!(module_ids));
+            graph.insert("module_count".into(), serde_json::json!(module_ids.len()));
+            graph.insert("chunk_events".into(), serde_json::json!(chunk_events));
             result.module_graph = Some(serde_json::Value::Object(graph));
         }
     }
