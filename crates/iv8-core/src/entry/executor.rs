@@ -233,75 +233,7 @@ fn apply_strategy_prelude(
             Ok(())
         }
         StrategyKind::WebpackBridge => {
-            let prelude = r#"
-(function() {
-    var __iv8_log = [];
-    if (typeof Function !== 'undefined' && Function.prototype) {
-        var origCall = Function.prototype.call;
-        Function.prototype.call = function() {
-            if (globalThis.__iv8_wp_require === null && arguments.length >= 4) {
-                var candidate = arguments[3];
-                if (typeof candidate === 'function'
-                    && typeof candidate.e === 'function'
-                    && typeof candidate.d === 'function'
-                    && typeof candidate.o === 'function'
-                    && typeof candidate.p === 'string') {
-                    globalThis.__iv8_wp_require = candidate;
-                    __iv8_log.push('wp_require_captured');
-                    Function.prototype.call = origCall;
-                }
-            }
-            return origCall.apply(this, arguments);
-        };
-    }
-    if (typeof window !== 'undefined') {
-        var _origPush = Array.prototype.push;
-        var _wrappedPush = function() {
-            for (var i = 0; i < arguments.length; i++) {
-                var entry = arguments[i];
-                if (entry && entry[1]) {
-                    for (var mid in entry[1]) {
-                        if (entry[1].hasOwnProperty(mid)) {
-                            var factory = entry[1][mid];
-                            if (typeof factory === 'function') {
-                                var src = factory.toString();
-                                if (src.indexOf('_getSecuritySign') >= 0) {
-                                    var modified = src.replace(
-                                        'var ie=ne._getSecuritySign;delete ne._getSecuritySign;',
-                                        'var ie=ne._getSecuritySign;globalThis.__iv8_sign_captured=ie;delete ne._getSecuritySign;'
-                                    );
-                                    try { entry[1][mid] = eval('(' + modified + ')'); } catch(e) {}
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return _origPush.apply(this, arguments);
-        };
-        var _realWP = undefined;
-        Object.defineProperty(window, 'webpackJsonp', {
-            configurable: true, enumerable: true,
-            get: function() { return _realWP; },
-            set: function(v) {
-                if (v && Array.isArray(v) && v !== _realWP) {
-                    v.push = _wrappedPush;
-                    _realWP = v;
-                }
-            }
-        });
-    }
-    try {
-        if (typeof __webpack_require__ !== 'undefined') {
-            globalThis.__iv8_wp_require = __webpack_require__;
-            __iv8_log.push('wp_require_global');
-        }
-    } catch(e) {}
-    globalThis.__iv8_wp_require = null;
-    globalThis.__iv8_webpack_log = __iv8_log;
-})();
-"#;
-            kernel.eval(prelude, EvalOpts::default())
+            kernel.eval(crate::entry::webpack::bridge_prelude(), EvalOpts::default())
                 .map_err(|e| format!("webpack prelude: {}", e))?;
             Ok(())
         }
@@ -353,43 +285,7 @@ fn collect_strategy_evidence(
 
     // Collect webpack module log if applicable
     if matches!(kind, StrategyKind::WebpackBridge) {
-        let log_val = kernel.eval_to_rust_value(
-            "typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []",
-        );
-        if let crate::convert::RustValue::Array(items) = log_val {
-            let mut module_ids = Vec::new();
-            for item in items {
-                if let crate::convert::RustValue::String(s) = item {
-                    if s.starts_with("module_registered,") {
-                        module_ids.push(s["module_registered,".len()..].to_string());
-                    }
-                }
-            }
-            if module_ids.is_empty() {
-                let js = concat!(
-                    "(typeof window!=='undefined' && window.webpackJsonp)",
-                    "?(function(){var ids=[];",
-                    "for(var i=0;i<window.webpackJsonp.length;i++){",
-                    "var e=window.webpackJsonp[i];",
-                    "if(e&&e[1]){Object.keys(e[1]).forEach(function(k){ids.push(k);});}",
-                    "}",
-                    "return ids;})():[]"
-                );
-                if let crate::convert::RustValue::Array(items2) = kernel.eval_to_rust_value(js) {
-                    for item in items2 {
-                        if let crate::convert::RustValue::String(s) = item {
-                            if !module_ids.contains(&s) {
-                                module_ids.push(s);
-                            }
-                        }
-                    }
-                }
-            }
-            let mut graph = serde_json::Map::new();
-            graph.insert("module_ids".into(), serde_json::json!(module_ids));
-            graph.insert("module_count".into(), serde_json::json!(module_ids.len()));
-            result.module_graph = Some(serde_json::Value::Object(graph));
-        }
+        result.module_graph = crate::entry::webpack::collect_module_graph(kernel);
     }
 
     // Merge per-strategy trace into result

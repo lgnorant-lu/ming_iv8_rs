@@ -2,6 +2,9 @@
 //!
 //! Detects and classifies webpack-like bundler runtimes from JS source.
 
+use crate::convert::RustValue;
+use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+
 /// Result of webpack runtime detection.
 #[derive(Debug, Clone)]
 pub struct WebpackDetection {
@@ -83,6 +86,123 @@ pub fn detect(source: &str) -> WebpackDetection {
         module_ids,
         module_count,
     }
+}
+
+/// Runtime bridge prelude used by the WebpackBridge strategy.
+pub fn bridge_prelude() -> &'static str {
+    r#"
+(function() {
+    var __iv8_log = [];
+    globalThis.__iv8_wp_require = null;
+    if (typeof Function !== 'undefined' && Function.prototype) {
+        var origCall = Function.prototype.call;
+        Function.prototype.call = function() {
+            if (globalThis.__iv8_wp_require === null && arguments.length >= 4) {
+                var candidate = arguments[3];
+                if (typeof candidate === 'function'
+                    && typeof candidate.e === 'function'
+                    && typeof candidate.d === 'function'
+                    && typeof candidate.o === 'function'
+                    && typeof candidate.p === 'string') {
+                    globalThis.__iv8_wp_require = candidate;
+                    __iv8_log.push('wp_require_captured');
+                    Function.prototype.call = origCall;
+                }
+            }
+            return origCall.apply(this, arguments);
+        };
+    }
+    if (typeof window !== 'undefined') {
+        var _origPush = Array.prototype.push;
+        var _wrappedPush = function() {
+            for (var i = 0; i < arguments.length; i++) {
+                var entry = arguments[i];
+                if (entry && entry[1]) {
+                    for (var mid in entry[1]) {
+                        if (entry[1].hasOwnProperty(mid)) {
+                            var factory = entry[1][mid];
+                            if (typeof factory === 'function') {
+                                var src = factory.toString();
+                                if (src.indexOf('_getSecuritySign') >= 0) {
+                                    var modified = src.replace(
+                                        'var ie=ne._getSecuritySign;delete ne._getSecuritySign;',
+                                        'var ie=ne._getSecuritySign;globalThis.__iv8_sign_captured=ie;delete ne._getSecuritySign;'
+                                    );
+                                    try { entry[1][mid] = eval('(' + modified + ')'); } catch(e) {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return _origPush.apply(this, arguments);
+        };
+        var _realWP = undefined;
+        Object.defineProperty(window, 'webpackJsonp', {
+            configurable: true, enumerable: true,
+            get: function() { return _realWP; },
+            set: function(v) {
+                if (v && Array.isArray(v) && v !== _realWP) {
+                    v.push = _wrappedPush;
+                    _realWP = v;
+                }
+            }
+        });
+    }
+    try {
+        if (typeof __webpack_require__ !== 'undefined') {
+            globalThis.__iv8_wp_require = __webpack_require__;
+            __iv8_log.push('wp_require_global');
+        }
+    } catch(e) {}
+    globalThis.__iv8_webpack_log = __iv8_log;
+})();
+"#
+}
+
+/// Collect module graph evidence produced by the WebpackBridge prelude.
+pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json::Value> {
+    let log_val = kernel.eval_to_rust_value(
+        "typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []",
+    );
+    let RustValue::Array(items) = log_val else {
+        return None;
+    };
+
+    let mut module_ids = Vec::new();
+    for item in items {
+        if let RustValue::String(s) = item {
+            if let Some(module_id) = s.strip_prefix("module_registered,") {
+                module_ids.push(module_id.to_string());
+            }
+        }
+    }
+
+    if module_ids.is_empty() {
+        let js = concat!(
+            "(typeof window!=='undefined' && window.webpackJsonp)",
+            "?(function(){var ids=[];",
+            "for(var i=0;i<window.webpackJsonp.length;i++){",
+            "var e=window.webpackJsonp[i];",
+            "if(e&&e[1]){Object.keys(e[1]).forEach(function(k){ids.push(k);});}",
+            "}",
+            "return ids;})():[]"
+        );
+        if let RustValue::Array(items2) = kernel.eval_to_rust_value(js) {
+            for item in items2 {
+                if let RustValue::String(s) = item {
+                    if !module_ids.contains(&s) {
+                        module_ids.push(s);
+                    }
+                }
+            }
+        }
+    }
+
+    let mut graph = serde_json::Map::new();
+    graph.insert("module_ids".into(), serde_json::json!(module_ids));
+    graph.insert("module_count".into(), serde_json::json!(module_ids.len()));
+    Some(serde_json::Value::Object(graph))
 }
 
 /// Find the body of the modules table (content between outermost braces).
@@ -242,5 +362,23 @@ globalThis.webpackChunk = [];
 "#;
         let d = detect(src);
         assert_eq!(d.flavor, WebpackFlavor::Webpack5);
+    }
+
+    #[test]
+    fn test_bridge_prelude_initializes_require_before_capture() {
+        let js = bridge_prelude();
+        let init = js.find("globalThis.__iv8_wp_require = null").unwrap();
+        let capture = js.find("globalThis.__iv8_wp_require === null").unwrap();
+        let global_capture = js.find("globalThis.__iv8_wp_require = __webpack_require__").unwrap();
+        assert!(init < capture);
+        assert!(init < global_capture);
+    }
+
+    #[test]
+    fn test_bridge_prelude_does_not_clear_captured_require_at_end() {
+        let js = bridge_prelude();
+        let global_capture = js.find("globalThis.__iv8_wp_require = __webpack_require__").unwrap();
+        let tail = &js[global_capture..];
+        assert!(!tail.contains("globalThis.__iv8_wp_require = null"));
     }
 }
