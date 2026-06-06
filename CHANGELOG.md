@@ -6,6 +6,67 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-06-07
+
+### Added
+
+- **共享诊断/证据/回退结构化类型**：Rust 端 `crates/iv8-core/src/entry/diagnostics.rs`
+  定义 `EvidenceRecord`、`DiagnosticRecord`、`FallbackAttempt` 等类型，
+  对齐 Python `iv8_rs/diagnostics.py`，全部 serde 序列化。
+- **诊断代码常量库**：common / webpack / dispatch / source-ast / corpus /
+  policy 六类共 50+ 诊断代码常量。
+- **Webpack module graph 运行时证据填充**：
+  - `runtime_flavor` 运行时探测（webpack4/webpack5/unknown）
+  - 节点 `executed` 元数据从 `__webpack_require__.c` 获取
+  - `module_cache_captured` / `entry_module_executed` / `chunk_event_observed` evidence
+  - WEBPACK_REQUIRE_CAPTURE_LATE / WEBPACK_RUNTIME_FLAVOR_UNKNOWN / WEBPACK_MODULE_CACHE_EMPTY
+    / WEBPACK_CHUNK_UNSUPPORTED / WEBPACK_EVIDENCE_WEAK 诊断
+  - require 运行时回退捕获（处理 IIFE 内 define 的场景）
+- **Dispatch detection 结构化输出**：
+  - `DispatchCandidate` schema（candidate_id, static_score, risk_level, decision）
+  - `to_candidate()` / `to_diagnostic_records()` / `to_evidence_records()`
+  - 扩展 trace 格式 `D,pc,opcode,stack_depth,handler_count,argc`
+  - `extract_argc()` 从调用表达式提取参数计数
+  - `is_overbroad_trap()` 过宽陷阱护栏（需 2+ VM 指示器）
+  - `handler_array_captured` / `multi_arg_dispatch_observed` / `switchvm_marker_only` evidence
+- **SourceAst transform report**：
+  - `SourceAstRequest` / `SourceAstReport` / `SourceAstCandidate` / `SourceAstEdit` 结构体
+  - `instrument_with_report()` 返回结构化 report + 转换后源码
+  - `source_ast_candidate_detected` / `source_ast_transform_applied` evidence
+- **Corpus Runner 稳定化**：
+  - CLI 入口 `main()` 支持 `--manifest` / `--out` / `--sample` / `--dry-run` / `--strict`
+  - exit codes 0-4 遵循 corpus-runner-contract.md section 17
+  - 样本报告嵌入 `module_graph` / `environment_report` 片段
+  - `observed_evidence` 从 EntryResult 获取取代空列表
+- **v0.7 验收基础设施**：
+  - 18 个 fixture JS 文件（webpack/dispatch/source-ast）
+  - `docs/acceptance/v0.7-real-sample-manifest.md`
+  - `tests/test_v07_acceptance.py` 14 项质量门禁
+  - `tests/test_webpack_bridge_solidification.py` 6 项 webpack 合约测试
+
+### Changed
+
+- `EntryResult` 结构：移除 `errors`/`warnings`，改用 `diagnostic_records`/`observed_evidence`
+- `Diagnostics` 结构：`fallback_attempts` 从字符串列表升级为结构化 `FallbackAttempt`
+- `ExecutedStrategy.diagnostics` 类型改为 `Vec<DiagnosticRecord>`
+- `run_with_entry` API 返回字段同步更新
+- `SOURCE_AST_RUNTIME_VALIDATION_FAILED` 降级为 warn 级别
+- `collect_module_graph` 在读取 prelude log 前执行运行时 require 捕获
+
+### Documentation
+
+- `docs/PROGRESS.md` — 新增 v0.6.x/v0.7.0 章节
+- `docs/roadmap/post-v0.6/CAPABILITY_INDEX.md` — webpack/dispatch/source-ast 三项 accepted
+- `docs/roadmap/post-v0.6/V0.7_ENTRY_SOLIDIFICATION.md` — v0.7 exit gates 定义
+- `docs/acceptance/v0.7-real-sample-manifest.md` — 18 fixture 条目
+
+### Quality Gates
+
+- Rust: 176 tests passed, 0 failed
+- Python: 884 passed, 1 skipped
+- v0.7 acceptance: 20 tests (14 v0.7 + 6 webpack bridge)
+- Corpus Runner: stable report emitted, evidence embedding, CLI exit codes
+
 ## [0.6.2] - 2026-06-07
 
 ### Added
