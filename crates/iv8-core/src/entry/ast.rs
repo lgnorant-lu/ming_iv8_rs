@@ -86,6 +86,13 @@ Object.defineProperty(g,'__iv8i_lim__',{value:200000,writable:true,enumerable:fa
 g.__iv8_trap=function(h,k){var f=h[k];
 if(g.__iv8i_log__.length<g.__iv8i_lim__)g.__iv8i_log__.push('D,'+(typeof f==='function'?(f.name||'?'):'!')+','+k);
 return f.apply(h,Array.prototype.slice.call(arguments,2));};
+g.__iv8_eval_trap=function(src){
+if(g.__iv8i_log__.length<g.__iv8i_lim__)g.__iv8i_log__.push('eval,'+String(src).slice(0,80));
+return (0,eval)(src);};
+g.__iv8_function_trap=function(){
+var args=Array.prototype.slice.call(arguments);
+if(g.__iv8i_log__.length<g.__iv8i_lim__)g.__iv8i_log__.push('fn_ctor,'+args.map(String).join('|').slice(0,80));
+return Function.apply(null,args);};
 })();
 "#;
     (format!("{}{}", helper, output), diag)
@@ -136,7 +143,16 @@ impl VisitMut for TrapTransform {
                 Expr::Ident(ident)
                     if &*ident.sym == "eval" || &*ident.sym == "Function" =>
                 {
-                    // TODO: wrap for source capture
+                    let trap_name = if &*ident.sym == "eval" {
+                        "__iv8_eval_trap"
+                    } else {
+                        "__iv8_function_trap"
+                    };
+                    call.callee = Callee::Expr(Box::new(Expr::Ident(Ident::new(
+                        trap_name.into(),
+                        call.span,
+                        swc_common::SyntaxContext::empty(),
+                    ))));
                 }
                 _ => {}
             }
@@ -185,7 +201,44 @@ mod tests {
     fn test_eval_function() {
         let (output, diag) = instrument("eval('1+1'); Function('return 1');");
         assert!(diag.is_none());
-        assert!(output.contains("eval"));
+        assert!(output.contains("__iv8_eval_trap"));
+        assert!(output.contains("__iv8_function_trap"));
+    }
+
+    #[test]
+    fn test_eval_function_source_points_on_execution() {
+        let src = r#"
+eval('globalThis.__iv8_eval_value = 2');
+var f = Function('return 3');
+globalThis.__iv8_function_value = f();
+"#;
+        let (transformed, diag) = instrument(src);
+        assert!(diag.is_none());
+        assert!(transformed.contains("__iv8_eval_trap"));
+        assert!(transformed.contains("__iv8_function_trap"));
+
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel.eval(&transformed, crate::kernel::EvalOpts::default()).unwrap();
+
+        let eval_value = kernel.eval_to_rust_value("globalThis.__iv8_eval_value");
+        let function_value = kernel.eval_to_rust_value("globalThis.__iv8_function_value");
+        assert_eq!(eval_value, crate::convert::RustValue::Int(2));
+        assert_eq!(function_value, crate::convert::RustValue::Int(3));
+
+        let trace = kernel.eval_to_rust_value(
+            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
+        );
+        if let crate::convert::RustValue::Array(items) = trace {
+            let entries: Vec<&str> = items.iter().map(entry_str).collect();
+            assert!(entries.iter().any(|e| e.starts_with("eval,")),
+                "expected eval source-point entry, got: {:?}", entries);
+            assert!(entries.iter().any(|e| e.starts_with("fn_ctor,")),
+                "expected Function source-point entry, got: {:?}", entries);
+        } else {
+            panic!("expected array, got {:?}", trace);
+        }
     }
 
     #[test]

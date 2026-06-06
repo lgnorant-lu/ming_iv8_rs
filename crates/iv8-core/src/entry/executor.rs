@@ -454,7 +454,7 @@ fn classify_trace_entry(entry: &str) -> (Option<TraceSourceKind>, f64) {
         return (Some(TraceSourceKind::TransparentHook), 0.5);
     }
     if entry.starts_with("eval,") || entry.starts_with("fn_ctor,") {
-        return (Some(TraceSourceKind::TransparentHook), 0.5);
+        return (Some(TraceSourceKind::SourceAst), 0.7);
     }
     if entry.starts_with("aggressive_") {
         return (Some(TraceSourceKind::RuntimeProxy), 0.5);
