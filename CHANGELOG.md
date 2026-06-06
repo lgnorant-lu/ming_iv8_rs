@@ -6,6 +6,54 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-06-07
+
+### Added
+
+- **Trace / Evidence / Diagnostics 共享契约**：`python/iv8_rs/diagnostics.py`
+  提供 `TraceEvent` 结构化事件信封、`EvidenceGateResult` 统一 PASS/WARN/FAIL、
+  `evaluate_evidence_gate()`、`build_trace_events()`、`TRACE_PARSE_PARTIAL`
+  已知前缀异常负载检测、`DIAGNOSTIC_CATALOG` 初始 14 代码。
+- **API Contract gate 加强**：context manager、post-close rejection、
+  expose callback error propagation、specialized API 存在性测试。
+- **Environment Patch Policy 策略引擎**：`runtime_safe` / `analysis_only` /
+  `unsafe_hook` 三级决策，`decide_patch_policy()` 全决策树，8 种补丁种类
+  最低策略映射，`block_mutation()` 5 种变异目标封锁。
+- **Environment Plane Automation**：`run_environment_plane()` 完整
+  probe → patch → rerun 工作流。报告含 `patch_candidates` / `applied_patches` /
+  `rejected_patches` / `coverage` / `evidence` / `diagnostics`。
+- **Corpus Runner**：`CorpusManifestItem` / `load_manifest()` Markdown
+  表格解析、`build_corpus_report()` corpus-report.v0.1 信封、
+  `default_executor()` 通过 Entry Plane 执行样本、`_decide_eligibility()`
+  9 种 skip reason、fixture 执行路径。
+
+### Changed
+
+- **Environment Policy 诊断代码细化**：`PATCH_POLICY_OPT_IN_MISSING`、
+  `PATCH_POLICY_PERSONA_MISMATCH`、`PATCH_POLICY_RECLASSIFIED` 专用代码。
+- **Environment Plane 诊断扩展**：`ENVIRONMENT_PATCH_CANDIDATE`、
+  `ENVIRONMENT_PATCH_CONFLICT`、`ENVIRONMENT_RERUN_NO_CHANGE`、
+  `ENVIRONMENT_RERUN_REGRESSED`、`ENVIRONMENT_PROFILE_WRITE_BLOCKED`。
+- **Environment Plane evidence 扩展**：`environment_gap_observed`、
+  `environment_patch_candidate`、`environment_patch_rejected`、
+  `environment_coverage_regressed`。
+- **Corpus Runner 可选字段**：`CorpusManifestItem` 新增 `fixtures`、
+  `policy_overrides`。artifact 记录支持。
+
+### Documentation
+
+- `docs/roadmap/post-v0.6/corpus-runner-contract.md` — Status: In Review
+- `docs/roadmap/post-v0.6/environment-patch-policy.md` — Status: In Review
+- `docs/roadmap/post-v0.6/environment-plane-automation.md` — Status: In Review
+- `docs/roadmap/post-v0.6/CAPABILITY_INDEX.md` — 三项 v0.6.2 标记 in_review
+- `docs/GUIDE.md` — 新增 4 节：Trace/Evidence/Diagnostics、
+  Environment Patch Policy、Environment Plane Automation、Corpus Runner
+
+### Fixed
+
+- 已知前缀异常负载现触发 `TRACE_PARSE_PARTIAL` 诊断
+- 回退 outcome 同时接受 `skip`（spec）与 `skipped`（runner）
+
 ## [0.6.1] - 2026-06-07
 
 ### Added
