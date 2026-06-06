@@ -77,6 +77,27 @@ def test_cross_thread_drop_does_not_crash():
     assert holder == []
 
 
+def test_eval_promise_resolve_reject_timeout():
+    ctx = iv8_rs.JSContext()
+    assert ctx.eval_promise("Promise.resolve(42)") == 42
+
+    try:
+        ctx.eval_promise("Promise.reject(new TypeError('bad promise'))")
+        assert False, "rejected promise should raise"
+    except iv8_rs.JSError as e:
+        message = str(e)
+        assert "TypeError" in message
+        assert "bad promise" in message
+
+    try:
+        ctx.eval_promise("new Promise(function(resolve) {})", max_ticks=1)
+        assert False, "pending promise should time out"
+    except iv8_rs.JSTimeoutError:
+        pass
+
+    ctx.close()
+
+
 def test_typed_array_to_bytes():
     ctx = iv8_rs.JSContext()
     result = ctx.eval("new Uint8Array([1, 2, 3])")

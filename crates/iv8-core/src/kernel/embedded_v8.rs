@@ -1099,7 +1099,8 @@ impl EmbeddedV8Kernel {
     }
 
     /// Eval and if the result is a Promise, await it by draining the event loop.
-    /// Returns the resolved value or Null on rejection/timeout.
+    /// Returns the resolved value. Rejections become IV8Error::Js and timeouts
+    /// become IV8Error::Terminated.
     pub fn eval_await(&mut self, source: &str, max_ticks: u32) -> Result<v8::Global<v8::Value>, crate::error::IV8Error> {
         let global = self.eval(source, crate::kernel::EvalOpts::default())?;
 
@@ -1121,19 +1122,30 @@ impl EmbeddedV8Kernel {
             return Ok(global);
         }
 
-        // It's a Promise — set up resolve/reject callbacks and drain the event loop
-        let _resolved_value: std::cell::Cell<Option<v8::Global<v8::Value>>> = std::cell::Cell::new(None);
-        let _rejected_value: std::cell::Cell<Option<v8::Global<v8::Value>>> = std::cell::Cell::new(None);
-
         // Use JS to attach .then/.catch and store the result
         let settle_script = r#"
 (function(__promise__) {
-    var __settled__ = false;
+    var __status__ = 'pending';
     var __result__ = undefined;
-    var __error__ = undefined;
-    __promise__.then(function(v) { __settled__ = true; __result__ = v; })
-               .catch(function(e) { __settled__ = true; __error__ = e; });
-    return { settled: function() { return __settled__; }, result: function() { return __result__; }, error: function() { return __error__; } };
+    var __error_name__ = 'Error';
+    var __error_message__ = '';
+    var __error_stack__ = '';
+    __promise__.then(function(v) {
+        __status__ = 'fulfilled';
+        __result__ = v;
+    }).catch(function(e) {
+        __status__ = 'rejected';
+        __error_name__ = e && e.name ? String(e.name) : 'Error';
+        __error_message__ = e && e.message != null ? String(e.message) : String(e);
+        __error_stack__ = e && e.stack ? String(e.stack) : '';
+    });
+    return {
+        status: function() { return __status__; },
+        result: function() { return __result__; },
+        errorName: function() { return __error_name__; },
+        errorMessage: function() { return __error_message__; },
+        errorStack: function() { return __error_stack__; }
+    };
 })
 "#;
 
@@ -1159,8 +1171,8 @@ impl EmbeddedV8Kernel {
         for _ in 0..max_ticks {
             self.drain_microtasks();
 
-            // Check if settled
-            let settled = {
+            // Check settlement status
+            let status = {
                 unsafe { self.isolate.enter(); }
                 let result = {
                     v8::scope!(handle_scope, &mut self.isolate);
@@ -1169,22 +1181,22 @@ impl EmbeddedV8Kernel {
                     v8::tc_scope!(tc, scope);
                     let tracker_local = v8::Local::new(tc, &tracker);
                     let tracker_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(tracker_local) };
-                    let settled_key = crate::v8_utils::v8_string(tc, "settled");
-                    if let Some(settled_fn) = tracker_obj.get(tc, settled_key.into()) {
-                        if settled_fn.is_function() {
-                            let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(settled_fn) };
+                    let status_key = crate::v8_utils::v8_string(tc, "status");
+                    if let Some(status_fn) = tracker_obj.get(tc, status_key.into()) {
+                        if status_fn.is_function() {
+                            let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(status_fn) };
                             let undefined = v8::undefined(tc);
                             if let Some(result) = func.call(tc, undefined.into(), &[]) {
-                                result.is_true()
-                            } else { false }
-                        } else { false }
-                    } else { false }
+                                result.to_rust_string_lossy(tc)
+                            } else { "pending".to_string() }
+                        } else { "pending".to_string() }
+                    } else { "pending".to_string() }
                 };
                 unsafe { self.isolate.exit(); }
                 result
             };
 
-            if settled {
+            if status == "fulfilled" {
                 // Extract the result
                 unsafe { self.isolate.enter(); }
                 let result = {
@@ -1216,23 +1228,52 @@ impl EmbeddedV8Kernel {
                 };
                 unsafe { self.isolate.exit(); }
                 return Ok(result);
+            } else if status == "rejected" {
+                unsafe { self.isolate.enter(); }
+                let (name, message, stack) = {
+                    v8::scope!(handle_scope, &mut self.isolate);
+                    let context = v8::Local::new(handle_scope, &self.context);
+                    v8::scope_with_context!(scope, handle_scope, context);
+                    v8::tc_scope!(tc, scope);
+                    let tracker_local = v8::Local::new(tc, &tracker);
+                    let tracker_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(tracker_local) };
+                    fn call_tracker_string<'s>(
+                        tc: &mut v8::PinScope<'s, '_>,
+                        tracker_obj: v8::Local<'s, v8::Object>,
+                        key: &str,
+                    ) -> String {
+                        let key = crate::v8_utils::v8_string(tc, key);
+                        if let Some(value) = tracker_obj.get(tc, key.into()) {
+                            if value.is_function() {
+                                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(value) };
+                                let undefined = v8::undefined(tc);
+                                if let Some(result) = func.call(tc, undefined.into(), &[]) {
+                                    return result.to_rust_string_lossy(tc);
+                                }
+                            }
+                        }
+                        String::new()
+                    }
+                    (
+                        call_tracker_string(tc, tracker_obj, "errorName"),
+                        call_tracker_string(tc, tracker_obj, "errorMessage"),
+                        call_tracker_string(tc, tracker_obj, "errorStack"),
+                    )
+                };
+                unsafe { self.isolate.exit(); }
+                return Err(crate::error::IV8Error::Js {
+                    name: if name.is_empty() { "Error".to_string() } else { name },
+                    message,
+                    stack,
+                    value: None,
+                });
             }
 
             // Advance event loop by one tick to process pending timers
             let _ = self.eval("__iv8__.eventLoop.tick()", crate::kernel::EvalOpts::default());
         }
 
-        // Timed out — return undefined
-        unsafe { self.isolate.enter(); }
-        let result = {
-            v8::scope!(handle_scope, &mut self.isolate);
-            let context = v8::Local::new(handle_scope, &self.context);
-            v8::scope_with_context!(scope, handle_scope, context);
-            let undef: v8::Local<v8::Value> = v8::undefined(scope).into();
-            v8::Global::new(scope, undef)
-        };
-        unsafe { self.isolate.exit(); }
-        Ok(result)
+        Err(crate::error::IV8Error::Terminated)
     }
 
     /// Convert a V8 Global<Value> to RustValue using this kernel's context.
