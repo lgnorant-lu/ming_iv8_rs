@@ -106,6 +106,8 @@ pub fn plan_entry(
         reload_reason: None,
         collection_summary: None,
         cleanup_summary: None,
+        diagnostic_records: Vec::new(),
+        observed_evidence: Vec::new(),
     };
 
     EntryPlan {

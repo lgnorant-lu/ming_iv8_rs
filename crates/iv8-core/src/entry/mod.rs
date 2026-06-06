@@ -1,5 +1,6 @@
 pub mod ast;
 pub mod classification;
+pub mod diagnostics;
 pub mod dispatch;
 pub mod executor;
 pub mod hooks;

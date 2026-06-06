@@ -1,10 +1,12 @@
-//! v0.6 entry plane canonical types.
+//! v0.6/v0.7 entry plane canonical types.
 //!
 //! These types define the shared vocabulary across EntryPlanner, WebpackBridge,
-//! RuntimeHookPack, AST instrumentation, and Acceptance Harness.
+//! RuntimeHookPack, AST instrumentation, Diagnostics, and Acceptance Harness.
 //! All types are serializable for cross-language consumption.
 
 use serde::{Deserialize, Serialize};
+
+use super::diagnostics; // Re-export for convenience
 
 // ───
 // Enums
@@ -222,29 +224,22 @@ pub struct ExecutedStrategy {
     pub strategy_id: String,
     pub phase_entered: PlanState,
     pub outcome: Outcome,
-    pub diagnostics: Vec<ErrorEntry>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ErrorEntry {
-    pub code: String,
-    pub stage: String,
-    pub message: String,
-    pub strategy_id: Option<String>,
-    pub recoverable: bool,
+    pub diagnostics: Vec<diagnostics::DiagnosticRecord>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Diagnostics {
     pub sample_signals: Vec<String>,
     pub selected_strategy_reason: Option<String>,
-    pub fallback_attempts: Vec<String>,
+    pub fallback_attempts: Vec<diagnostics::FallbackAttempt>,
     pub activation_timing: Option<String>,
     pub policy_constraints: Vec<String>,
     pub missing_capabilities: Vec<String>,
     pub reload_reason: Option<String>,
     pub collection_summary: Option<String>,
     pub cleanup_summary: Option<String>,
+    pub diagnostic_records: Vec<diagnostics::DiagnosticRecord>,
+    pub observed_evidence: Vec<diagnostics::EvidenceRecord>,
 }
 
 // ───
@@ -348,6 +343,8 @@ pub struct EntryResult {
     pub environment_report: Option<serde_json::Value>,
     pub diagnostics: Diagnostics,
     pub cleanup_state: serde_json::Value,
-    pub errors: Vec<ErrorEntry>,
-    pub warnings: Vec<ErrorEntry>,
+    /// Flat list of all structured diagnostic records produced during entry.
+    pub diagnostic_records: Vec<diagnostics::DiagnosticRecord>,
+    /// Structured evidence collected during execution.
+    pub observed_evidence: Vec<diagnostics::EvidenceRecord>,
 }

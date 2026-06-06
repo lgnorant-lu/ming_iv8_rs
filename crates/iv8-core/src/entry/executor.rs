@@ -5,6 +5,7 @@
 //! an `EntryResult` with collected evidence. Supports fallback chain:
 //! if the primary strategy fails, subsequent strategies are tried automatically.
 
+use crate::entry::diagnostics as diag;
 use crate::entry::hooks;
 use crate::entry::types::*;
 use crate::kernel::embedded_v8::EmbeddedV8Kernel;
@@ -42,8 +43,8 @@ pub fn run_entry(
         environment_report: None,
         diagnostics: plan.diagnostics.clone(),
         cleanup_state: serde_json::json!({}),
-        errors: Vec::new(),
-        warnings: Vec::new(),
+        diagnostic_records: Vec::new(),
+        observed_evidence: Vec::new(),
     };
 
     // Build ordered list of strategy IDs to try
@@ -74,33 +75,48 @@ pub fn run_entry(
         let mut kernel = match EmbeddedV8Kernel::new(KernelConfig::default()) {
             Ok(k) => k,
             Err(e) => {
-                result
-                    .diagnostics
-                    .fallback_attempts
-                    .push(format!("{}: kernel init failed: {}", label, e));
+                result.diagnostics.fallback_attempts.push(diag::FallbackAttempt {
+                    strategy_id: strategy_id.clone(),
+                    status: diag::FallbackStatus::Fail,
+                    reason: format!("kernel init failed: {}", e),
+                    next_strategy: None,
+                    diagnostics: vec![diag::error_diag(
+                        diag::codes::FALLBACK_EXHAUSTED,
+                        "entry.execute",
+                        &format!("kernel init failed: {}", e),
+                    )],
+                    evidence: vec![],
+                });
                 continue;
             }
         };
 
         // Phase: prepared — apply strategy setup
         if let Err(e) = apply_strategy_prelude(&mut kernel, strategy_kind, source) {
-            result
-                .diagnostics
-                .fallback_attempts
-                .push(format!("{}: setup failed: {}", label, e));
+            result.diagnostics.fallback_attempts.push(diag::FallbackAttempt {
+                strategy_id: strategy_id.clone(),
+                status: diag::FallbackStatus::Warn,
+                reason: format!("setup failed: {}", e),
+                next_strategy: None,
+                diagnostics: vec![diag::warn_diag(
+                    diag::codes::FALLBACK_USED,
+                    "entry.execute",
+                    &format!("setup failed: {}", e),
+                )],
+                evidence: vec![],
+            });
             continue;
         }
 
         // Phase: armed — evaluate chunks then main source
         for (i, chunk) in chunks.iter().enumerate() {
             if let Err(e) = kernel.eval(chunk, EvalOpts::default()) {
-                result.warnings.push(ErrorEntry {
-                    code: "ACT_CHUNK_EVAL_FAILED".into(),
-                    stage: "armed".into(),
-                    message: format!("chunk[{}] eval failed: {}", i, e),
-                    strategy_id: Some(strategy_id.clone()),
-                    recoverable: true,
-                });
+                result.diagnostic_records.push(diag::DiagnosticRecord::new(
+                    "ACT_CHUNK_EVAL_FAILED",
+                    diag::DiagnosticSeverity::Warn,
+                    "armed",
+                    &format!("chunk[{}] eval failed: {}", i, e),
+                ));
             }
         }
 
@@ -109,13 +125,12 @@ pub fn run_entry(
             StrategyKind::SourceAst => {
                 let (transformed, diag) = crate::entry::ast::instrument(source);
                 if let Some(d) = diag {
-                    result.warnings.push(ErrorEntry {
-                        code: "ACT_AST_TRANSFORM_WARNING".into(),
-                        stage: "armed".into(),
-                        message: d,
-                        strategy_id: Some(strategy_id.clone()),
-                        recoverable: true,
-                    });
+                    result.diagnostic_records.push(diag::DiagnosticRecord::new(
+                        "ACT_AST_TRANSFORM_WARNING",
+                        diag::DiagnosticSeverity::Warn,
+                        "armed",
+                        &d,
+                    ));
                 }
                 transformed
             }
@@ -131,34 +146,40 @@ pub fn run_entry(
         let source_ok = match kernel.eval(&eval_source, EvalOpts::default()) {
             Ok(_) => true,
             Err(e) => {
-                result.errors.push(ErrorEntry {
-                    code: "ACT_SOURCE_EVAL_FAILED".into(),
-                    stage: "armed".into(),
-                    message: format!("{} source eval: {}", strategy_id, e),
-                    strategy_id: Some(strategy_id.clone()),
-                    recoverable: true,
-                });
+                result.diagnostic_records.push(diag::DiagnosticRecord::new(
+                    "ACT_SOURCE_EVAL_FAILED",
+                    diag::DiagnosticSeverity::Error,
+                    "armed",
+                    &format!("{} source eval: {}", strategy_id, e),
+                ));
                 false
             }
         };
         if !source_ok {
-            result
-                .diagnostics
-                .fallback_attempts
-                .push(format!("{}: source eval failed", label));
+            result.diagnostics.fallback_attempts.push(diag::FallbackAttempt {
+                strategy_id: strategy_id.clone(),
+                status: diag::FallbackStatus::Fail,
+                reason: "source eval failed".to_string(),
+                next_strategy: None,
+                diagnostics: vec![diag::error_diag(
+                    diag::codes::FALLBACK_EXHAUSTED,
+                    "entry.execute",
+                    &format!("{} source eval failed", strategy_id),
+                )],
+                evidence: vec![],
+            });
             continue;
         }
 
         // Phase: invoked — evaluate entry expression
         if let Some(expr) = entry_expr {
             if let Err(e) = kernel.eval(expr, EvalOpts::default()) {
-                result.warnings.push(ErrorEntry {
-                    code: "ACT_ENTRY_EXPR_FAILED".into(),
-                    stage: "invoked".into(),
-                    message: format!("{} entry expr: {}", strategy_id, e),
-                    strategy_id: Some(strategy_id.clone()),
-                    recoverable: true,
-                });
+                result.diagnostic_records.push(diag::DiagnosticRecord::new(
+                    "ACT_ENTRY_EXPR_FAILED",
+                    diag::DiagnosticSeverity::Warn,
+                    "invoked",
+                    &format!("{} entry expr: {}", strategy_id, e),
+                ));
             }
         }
 
@@ -169,18 +190,24 @@ pub fn run_entry(
         let evidence_met = evidence_satisfied(&result, &plan.expected_evidence);
         if evidence_met {
             evidence_satisfied_by_any = true;
-            result.diagnostics.fallback_attempts.push(format!(
-                "{}: evidence satisfied ({})",
-                label,
-                result.trace.len()
-            ));
+            result.diagnostics.fallback_attempts.push(diag::FallbackAttempt {
+                strategy_id: strategy_id.clone(),
+                status: diag::FallbackStatus::Pass,
+                reason: format!("evidence satisfied ({})", result.trace.len()),
+                next_strategy: None,
+                diagnostics: vec![],
+                evidence: vec![],
+            });
             break;
         } else {
-            result.diagnostics.fallback_attempts.push(format!(
-                "{}: evidence insufficient (trace={}), trying next",
-                label,
-                result.trace.len()
-            ));
+            result.diagnostics.fallback_attempts.push(diag::FallbackAttempt {
+                strategy_id: strategy_id.clone(),
+                status: diag::FallbackStatus::Warn,
+                reason: format!("evidence insufficient (trace={}), trying next", result.trace.len()),
+                next_strategy: None,
+                diagnostics: vec![],
+                evidence: vec![],
+            });
         }
     }
 
@@ -356,13 +383,12 @@ fn record_strategy_semantics(
         if !result.diagnostics.missing_capabilities.contains(&entry) {
             result.diagnostics.missing_capabilities.push(entry.clone());
         }
-        result.warnings.push(ErrorEntry {
-            code: "ACT_STRATEGY_PARTIAL".into(),
-            stage: "planned".into(),
-            message: message.to_string(),
-            strategy_id: Some(strategy_id.to_string()),
-            recoverable: true,
-        });
+        result.diagnostic_records.push(diag::DiagnosticRecord::new(
+            "ACT_STRATEGY_PARTIAL",
+            diag::DiagnosticSeverity::Warn,
+            "planned",
+            message,
+        ));
     }
 }
 

@@ -1,0 +1,377 @@
+//! Structured evidence, diagnostic, and fallback records shared across all
+//! Entry / Environment / Corpus planes.  Aligned with
+//! `python/iv8_rs/diagnostics.py`.
+//!
+//! All types are `Serialize + Deserialize` so they can be consumed by Python
+//! callers and embedded in corpus report fragments.
+
+use serde::{Deserialize, Serialize};
+
+// ───
+// Evidence
+// ───
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EvidenceStrength {
+    Strong,
+    Weak,
+    MarkerOnly,
+    DiagnosticOnly,
+}
+
+impl EvidenceStrength {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Strong => "strong",
+            Self::Weak => "weak",
+            Self::MarkerOnly => "marker_only",
+            Self::DiagnosticOnly => "diagnostic_only",
+        }
+    }
+
+    pub fn can_satisfy_pass(&self) -> bool {
+        matches!(self, Self::Strong)
+    }
+}
+
+/// Normalized evidence envelope.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EvidenceRecord {
+    pub kind: String,
+    pub strength: EvidenceStrength,
+    pub source: String,
+    pub stage: String,
+    pub summary: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub producer: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_kind: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload: Option<serde_json::Value>,
+}
+
+impl EvidenceRecord {
+    pub fn new(kind: &str, strength: EvidenceStrength, source: &str, stage: &str, summary: &str) -> Self {
+        Self {
+            kind: kind.to_string(),
+            strength,
+            source: source.to_string(),
+            stage: stage.to_string(),
+            summary: summary.to_string(),
+            producer: None,
+            sample_kind: None,
+            payload: None,
+        }
+    }
+
+    pub fn with_producer(mut self, producer: &str) -> Self {
+        self.producer = Some(producer.to_string());
+        self
+    }
+
+    pub fn with_payload(mut self, payload: serde_json::Value) -> Self {
+        self.payload = Some(payload);
+        self
+    }
+}
+
+// ───
+// Diagnostics
+// ───
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DiagnosticSeverity {
+    Error,
+    Warn,
+    Info,
+}
+
+impl DiagnosticSeverity {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Error => "error",
+            Self::Warn => "warn",
+            Self::Info => "info",
+        }
+    }
+}
+
+/// Normalized diagnostic envelope.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DiagnosticRecord {
+    pub code: String,
+    pub severity: DiagnosticSeverity,
+    pub stage: String,
+    pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub strategy_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recovery_hint: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload: Option<serde_json::Value>,
+}
+
+impl DiagnosticRecord {
+    pub fn new(code: &str, severity: DiagnosticSeverity, stage: &str, message: &str) -> Self {
+        Self {
+            code: code.to_string(),
+            severity,
+            stage: stage.to_string(),
+            message: message.to_string(),
+            strategy_id: None,
+            recovery_hint: None,
+            payload: None,
+        }
+    }
+}
+
+// ───
+// Fallback Attempts
+// ───
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum FallbackStatus {
+    Pass,
+    Warn,
+    Fail,
+    Skip,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FallbackAttempt {
+    pub strategy_id: String,
+    pub status: FallbackStatus,
+    pub reason: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_strategy: Option<String>,
+    pub diagnostics: Vec<DiagnosticRecord>,
+    pub evidence: Vec<EvidenceRecord>,
+}
+
+// ───
+// Diagnostic code constants
+// ───
+
+/// Common codes (trace / evidence / diagnostics spec §9)
+pub mod codes {
+    // Trace
+    pub const TRACE_EMPTY: &str = "TRACE_EMPTY";
+    pub const TRACE_PREFIX_UNKNOWN: &str = "TRACE_PREFIX_UNKNOWN";
+    pub const TRACE_PARSE_PARTIAL: &str = "TRACE_PARSE_PARTIAL";
+
+    // Evidence
+    pub const EVIDENCE_EXPECTED_MISSING: &str = "EVIDENCE_EXPECTED_MISSING";
+    pub const EVIDENCE_MARKER_ONLY: &str = "EVIDENCE_MARKER_ONLY";
+    pub const CONFIDENCE_DOWNGRADED: &str = "CONFIDENCE_DOWNGRADED";
+
+    // Policy
+    pub const POLICY_BLOCKED_ACTION: &str = "POLICY_BLOCKED_ACTION";
+
+    // Fallback
+    pub const FALLBACK_USED: &str = "FALLBACK_USED";
+    pub const FALLBACK_EXHAUSTED: &str = "FALLBACK_EXHAUSTED";
+
+    // SourceRegex
+    pub const SOURCE_REGEX_PASS_THROUGH: &str = "SOURCE_REGEX_PASS_THROUGH";
+
+    // SwitchVM
+    pub const SWITCHVM_MARKER_ONLY: &str = "SWITCHVM_MARKER_ONLY";
+
+    // Environment
+    pub const ENVIRONMENT_GAP_OBSERVED: &str = "ENVIRONMENT_GAP_OBSERVED";
+    pub const ENVIRONMENT_PATCH_REJECTED: &str = "ENVIRONMENT_PATCH_REJECTED";
+    pub const ENVIRONMENT_PATCH_UNSAFE: &str = "ENVIRONMENT_PATCH_UNSAFE";
+    pub const ENVIRONMENT_PATCH_APPLIED: &str = "ENVIRONMENT_PATCH_APPLIED";
+    pub const ENVIRONMENT_RERUN_IMPROVED: &str = "ENVIRONMENT_RERUN_IMPROVED";
+    pub const ENVIRONMENT_RERUN_NO_CHANGE: &str = "ENVIRONMENT_RERUN_NO_CHANGE";
+    pub const ENVIRONMENT_RERUN_REGRESSED: &str = "ENVIRONMENT_RERUN_REGRESSED";
+    pub const ENVIRONMENT_PROFILE_WRITE_BLOCKED: &str = "ENVIRONMENT_PROFILE_WRITE_BLOCKED";
+
+    // Webpack (webpack-bridge-solidification.md §12)
+    pub mod webpack {
+        pub const RUNTIME_NOT_FOUND: &str = "WEBPACK_RUNTIME_NOT_FOUND";
+        pub const RUNTIME_FLAVOR_UNKNOWN: &str = "WEBPACK_RUNTIME_FLAVOR_UNKNOWN";
+        pub const REQUIRE_CAPTURE_FAILED: &str = "WEBPACK_REQUIRE_CAPTURE_FAILED";
+        pub const REQUIRE_CAPTURE_LATE: &str = "WEBPACK_REQUIRE_CAPTURE_LATE";
+        pub const MODULE_TABLE_EMPTY: &str = "WEBPACK_MODULE_TABLE_EMPTY";
+        pub const MODULE_CACHE_EMPTY: &str = "WEBPACK_MODULE_CACHE_EMPTY";
+        pub const CHUNK_UNSUPPORTED: &str = "WEBPACK_CHUNK_UNSUPPORTED";
+        pub const CHUNK_EVENT_WEAK: &str = "WEBPACK_CHUNK_EVENT_WEAK";
+        pub const EVIDENCE_WEAK: &str = "WEBPACK_EVIDENCE_WEAK";
+        pub const POLICY_BLOCKED: &str = "WEBPACK_POLICY_BLOCKED";
+    }
+
+    // Dispatch (dispatch-generalization.md §13)
+    pub mod dispatch {
+        pub const CANDIDATE_DETECTED: &str = "DISPATCH_CANDIDATE_DETECTED";
+        pub const CANDIDATE_REJECTED: &str = "DISPATCH_CANDIDATE_REJECTED";
+        pub const STATIC_WEAK: &str = "DISPATCH_STATIC_WEAK";
+        pub const TRAP_OVERBROAD: &str = "DISPATCH_TRAP_OVERBROAD";
+        pub const TRACE_EMPTY: &str = "DISPATCH_TRACE_EMPTY";
+        pub const MULTI_ARG_OBSERVED: &str = "DISPATCH_MULTI_ARG_OBSERVED";
+        pub const SWITCH_OBSERVED: &str = "DISPATCH_SWITCH_OBSERVED";
+        pub const RUNTIME_VALIDATION_FAILED: &str = "DISPATCH_RUNTIME_VALIDATION_FAILED";
+        pub const CLOSURE_CAPTURED: &str = "DISPATCH_CLOSURE_CAPTURED";
+        pub const SOURCE_REGEX_FALLBACK: &str = "DISPATCH_SOURCE_REGEX_FALLBACK";
+        pub const SWITCHVM_MARKER_ONLY: &str = "SWITCHVM_MARKER_ONLY";
+    }
+
+    // SourceAst (source-ast-pipeline.md §12)
+    pub mod source_ast {
+        pub const PARSE_FAILED: &str = "SOURCE_AST_PARSE_FAILED";
+        pub const CANDIDATE_EMPTY: &str = "SOURCE_AST_CANDIDATE_EMPTY";
+        pub const JOINPOINT_UNSUPPORTED: &str = "SOURCE_AST_JOINPOINT_UNSUPPORTED";
+        pub const TRANSFORM_FAILED: &str = "SOURCE_AST_TRANSFORM_FAILED";
+        pub const EMIT_FAILED: &str = "SOURCE_AST_EMIT_FAILED";
+        pub const POLICY_BLOCKED: &str = "SOURCE_AST_POLICY_BLOCKED";
+        pub const RUNTIME_VALIDATION_FAILED: &str = "SOURCE_AST_RUNTIME_VALIDATION_FAILED";
+        pub const REGEX_CAPTURED: &str = "SOURCE_REGEX_CAPTURED";
+        pub const REGEX_PASS_THROUGH: &str = "SOURCE_REGEX_PASS_THROUGH";
+    }
+
+    // Corpus (corpus-runner-contract.md §15)
+    pub mod corpus {
+        pub const MANIFEST_INVALID: &str = "CORPUS_MANIFEST_INVALID";
+        pub const SAMPLE_SKIPPED: &str = "CORPUS_SAMPLE_SKIPPED";
+        pub const SAMPLE_PATH_MISSING: &str = "CORPUS_SAMPLE_PATH_MISSING";
+        pub const EXTERNAL_UNRESOLVED: &str = "CORPUS_EXTERNAL_UNRESOLVED";
+        pub const EXPECTED_EVIDENCE_MISSING: &str = "CORPUS_EXPECTED_EVIDENCE_MISSING";
+        pub const POLICY_VIOLATION: &str = "CORPUS_POLICY_VIOLATION";
+        pub const REPORT_WRITE_FAILED: &str = "CORPUS_REPORT_WRITE_FAILED";
+        pub const FIXTURE_ONLY: &str = "CORPUS_FIXTURE_ONLY";
+    }
+
+    // Environment policy (environment-patch-policy.md §13)
+    pub mod policy {
+        pub const APPLIED: &str = "PATCH_POLICY_APPLIED";
+        pub const REJECTED: &str = "PATCH_POLICY_REJECTED";
+        pub const BLOCKED: &str = "PATCH_POLICY_BLOCKED";
+        pub const CONFLICT: &str = "PATCH_POLICY_CONFLICT";
+        pub const RECLASSIFIED: &str = "PATCH_POLICY_RECLASSIFIED";
+        pub const OPT_IN_MISSING: &str = "PATCH_POLICY_OPT_IN_MISSING";
+        pub const PERSONA_MISMATCH: &str = "PATCH_POLICY_PERSONA_MISMATCH";
+        pub const MUTATION_BLOCKED: &str = "PATCH_POLICY_MUTATION_BLOCKED";
+        pub const REGRESSION: &str = "PATCH_POLICY_REGRESSION";
+    }
+}
+
+/// Helper to build a common DiagnosticRecord with severity, stage & message.
+pub fn diag(code: &str, severity: DiagnosticSeverity, stage: &str, message: &str) -> DiagnosticRecord {
+    DiagnosticRecord::new(code, severity, stage, message)
+}
+
+pub fn info_diag(code: &str, stage: &str, message: &str) -> DiagnosticRecord {
+    diag(code, DiagnosticSeverity::Info, stage, message)
+}
+
+pub fn warn_diag(code: &str, stage: &str, message: &str) -> DiagnosticRecord {
+    diag(code, DiagnosticSeverity::Warn, stage, message)
+}
+
+pub fn error_diag(code: &str, stage: &str, message: &str) -> DiagnosticRecord {
+    diag(code, DiagnosticSeverity::Error, stage, message)
+}
+
+/// Verify that all required diagnostic codes exist in the Python catalog.
+/// Called from integration tests to keep both sides in sync.
+pub fn verify_diagnostic_catalog(catalog_keys: &[String]) -> Vec<String> {
+    let rust_codes = rust_diagnostic_codes();
+    let mut missing = Vec::new();
+    for code in &rust_codes {
+        if !catalog_keys.contains(code) {
+            missing.push(code.clone());
+        }
+    }
+    missing
+}
+
+fn rust_diagnostic_codes() -> Vec<String> {
+    let mut codes = vec![
+        // Common
+        codes::TRACE_EMPTY,
+        codes::TRACE_PREFIX_UNKNOWN,
+        codes::TRACE_PARSE_PARTIAL,
+        codes::EVIDENCE_EXPECTED_MISSING,
+        codes::EVIDENCE_MARKER_ONLY,
+        codes::CONFIDENCE_DOWNGRADED,
+        codes::POLICY_BLOCKED_ACTION,
+        codes::FALLBACK_USED,
+        codes::FALLBACK_EXHAUSTED,
+        codes::SOURCE_REGEX_PASS_THROUGH,
+        codes::SWITCHVM_MARKER_ONLY,
+        codes::ENVIRONMENT_GAP_OBSERVED,
+        codes::ENVIRONMENT_PATCH_REJECTED,
+        codes::ENVIRONMENT_PATCH_UNSAFE,
+        codes::ENVIRONMENT_PATCH_APPLIED,
+        codes::ENVIRONMENT_RERUN_IMPROVED,
+        codes::ENVIRONMENT_RERUN_NO_CHANGE,
+        codes::ENVIRONMENT_RERUN_REGRESSED,
+        codes::ENVIRONMENT_PROFILE_WRITE_BLOCKED,
+    ];
+    // Webpack
+    codes.extend_from_slice(&[
+        codes::webpack::RUNTIME_NOT_FOUND,
+        codes::webpack::RUNTIME_FLAVOR_UNKNOWN,
+        codes::webpack::REQUIRE_CAPTURE_FAILED,
+        codes::webpack::REQUIRE_CAPTURE_LATE,
+        codes::webpack::MODULE_TABLE_EMPTY,
+        codes::webpack::MODULE_CACHE_EMPTY,
+        codes::webpack::CHUNK_UNSUPPORTED,
+        codes::webpack::CHUNK_EVENT_WEAK,
+        codes::webpack::EVIDENCE_WEAK,
+        codes::webpack::POLICY_BLOCKED,
+    ]);
+    // Dispatch
+    codes.extend_from_slice(&[
+        codes::dispatch::CANDIDATE_DETECTED,
+        codes::dispatch::CANDIDATE_REJECTED,
+        codes::dispatch::STATIC_WEAK,
+        codes::dispatch::TRAP_OVERBROAD,
+        codes::dispatch::TRACE_EMPTY,
+        codes::dispatch::MULTI_ARG_OBSERVED,
+        codes::dispatch::SWITCH_OBSERVED,
+        codes::dispatch::RUNTIME_VALIDATION_FAILED,
+        codes::dispatch::CLOSURE_CAPTURED,
+        codes::dispatch::SOURCE_REGEX_FALLBACK,
+        codes::dispatch::SWITCHVM_MARKER_ONLY,
+    ]);
+    // SourceAst
+    codes.extend_from_slice(&[
+        codes::source_ast::PARSE_FAILED,
+        codes::source_ast::CANDIDATE_EMPTY,
+        codes::source_ast::JOINPOINT_UNSUPPORTED,
+        codes::source_ast::TRANSFORM_FAILED,
+        codes::source_ast::EMIT_FAILED,
+        codes::source_ast::POLICY_BLOCKED,
+        codes::source_ast::RUNTIME_VALIDATION_FAILED,
+        codes::source_ast::REGEX_CAPTURED,
+        codes::source_ast::REGEX_PASS_THROUGH,
+    ]);
+    // Corpus
+    codes.extend_from_slice(&[
+        codes::corpus::MANIFEST_INVALID,
+        codes::corpus::SAMPLE_SKIPPED,
+        codes::corpus::SAMPLE_PATH_MISSING,
+        codes::corpus::EXTERNAL_UNRESOLVED,
+        codes::corpus::EXPECTED_EVIDENCE_MISSING,
+        codes::corpus::POLICY_VIOLATION,
+        codes::corpus::REPORT_WRITE_FAILED,
+        codes::corpus::FIXTURE_ONLY,
+    ]);
+    // Policy
+    codes.extend_from_slice(&[
+        codes::policy::APPLIED,
+        codes::policy::REJECTED,
+        codes::policy::BLOCKED,
+        codes::policy::CONFLICT,
+        codes::policy::RECLASSIFIED,
+        codes::policy::OPT_IN_MISSING,
+        codes::policy::PERSONA_MISMATCH,
+        codes::policy::MUTATION_BLOCKED,
+        codes::policy::REGRESSION,
+    ]);
+    codes.into_iter().map(String::from).collect()
+}
