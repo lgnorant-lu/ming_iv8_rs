@@ -23,21 +23,31 @@ struct ExposedPyFnData {
     callable: Py<PyAny>,
 }
 
+/// Opaque handle for context-owned exposed Python callback metadata.
+pub type ExposedPyFnHandle = *mut c_void;
+
+/// Free metadata previously returned by `expose_py_function`.
+///
+/// # Safety
+/// The handle must come from `expose_py_function` and must be freed at most once,
+/// after the V8 function using its External data can no longer be invoked.
+pub unsafe fn free_exposed_py_function(handle: ExposedPyFnHandle) {
+    if !handle.is_null() {
+        drop(unsafe { Box::from_raw(handle as *mut ExposedPyFnData) });
+    }
+}
+
 /// Register a Python callable as a named function on the V8 global object.
 /// Must be called with the isolate entered and within a proper scope.
 ///
-/// NOTE: The ExposedPyFnData is intentionally leaked (Box::into_raw) and stored
-/// in a V8 External. It lives for the lifetime of the V8 context. When the
-/// Isolate is disposed, V8 drops the External but does NOT call back to free
-/// our data. This is a bounded leak (~40 bytes per expose call) that only
-/// accumulates within a single JSContext lifetime. For v0.2+, we should register
-/// a weak callback to properly free the data when GC collects the function.
+/// The returned handle is owned by JSContext and freed after the V8 kernel is
+/// closed. V8 External does not call back to free this Rust allocation.
 pub fn expose_py_function(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
     name: &str,
     callable: Py<PyAny>,
-) {
+) -> ExposedPyFnHandle {
     let data = Box::new(ExposedPyFnData { callable });
     let data_ptr = Box::into_raw(data) as *mut c_void;
     let external = v8::External::new(scope, data_ptr);
@@ -50,6 +60,7 @@ pub fn expose_py_function(
     let name_str = iv8_core::v8_utils::v8_string(scope, name);
     func.set_name(name_str);
     global.set(scope, name_str.into(), func.into());
+    data_ptr
 }
 
 /// The raw extern "C" trampoline that V8 calls for exposed Python functions.

@@ -15,14 +15,14 @@ use crate::expose;
 
 /// Extension trait to add Python-specific methods to EmbeddedV8Kernel.
 trait KernelPyExt {
-    fn expose_py_fn(&mut self, name: &str, callable: pyo3::Py<pyo3::PyAny>);
+    fn expose_py_fn(&mut self, name: &str, callable: pyo3::Py<pyo3::PyAny>) -> expose::ExposedPyFnHandle;
 }
 
 impl KernelPyExt for EmbeddedV8Kernel {
-    fn expose_py_fn(&mut self, name: &str, callable: pyo3::Py<pyo3::PyAny>) {
+    fn expose_py_fn(&mut self, name: &str, callable: pyo3::Py<pyo3::PyAny>) -> expose::ExposedPyFnHandle {
         self.with_global_scope(|scope, global| {
-            expose::expose_py_function(scope, global, name, callable);
-        });
+            expose::expose_py_function(scope, global, name, callable)
+        })
     }
 }
 
@@ -38,6 +38,7 @@ struct JSContextInner {
     kernel: ManuallyDrop<KernelCell>,
     creator_thread: std::thread::ThreadId,
     disposed: AtomicBool,
+    exposed_callbacks: Mutex<Vec<expose::ExposedPyFnHandle>>,
 }
 
 struct KernelCell {
@@ -77,12 +78,24 @@ impl Drop for JSContextInner {
             // SAFETY: the last Python reference is being dropped on the owner
             // thread, so it is safe to destroy the V8 isolate here.
             unsafe { ManuallyDrop::drop(&mut self.kernel); }
+            self.free_exposed_callbacks();
         } else {
             // Dropping V8 from a non-owner thread is not safe. Leaking the
             // context is preferable to process UB/crash; public cross-thread use
             // is already rejected by assert_thread().
             tracing::error!("JSContext dropped from non-creator thread; leaking V8 isolate");
         }
+    }
+}
+
+impl JSContextInner {
+    fn free_exposed_callbacks(&self) {
+        let handles: Vec<_> = self.exposed_callbacks.lock().drain(..).collect();
+        Python::with_gil(|_| {
+            for handle in handles {
+                unsafe { expose::free_exposed_py_function(handle); }
+            }
+        });
     }
 }
 
@@ -165,6 +178,7 @@ impl JSContext {
                 kernel: ManuallyDrop::new(KernelCell::new(kernel)),
                 creator_thread: std::thread::current().id(),
                 disposed: AtomicBool::new(false),
+                exposed_callbacks: Mutex::new(Vec::new()),
             }),
         })
     }
@@ -227,6 +241,7 @@ impl JSContext {
             return Ok(());
         }
         self.inner.kernel.close();
+        self.inner.free_exposed_callbacks();
         Ok(())
     }
 
@@ -285,7 +300,8 @@ impl JSContext {
                 )));
             }
             let mut kernel = self.inner.kernel.lock();
-            kernel.expose_py_fn(&name, callable);
+            let handle = kernel.expose_py_fn(&name, callable);
+            self.inner.exposed_callbacks.lock().push(handle);
         } else if let Some(data) = data_opt {
             // Mode 2: store data at __iv8__.data.name
             // Convert Python object to JSON string, then eval to set it
@@ -398,7 +414,8 @@ impl JSContext {
                 if attr.is_callable() {
                     let callable: PyObject = attr.into_pyobject(py)?.into_any().unbind();
                     let mut kernel = self.inner.kernel.lock();
-                    kernel.expose_py_fn(name, callable);
+                    let handle = kernel.expose_py_fn(name, callable);
+                    self.inner.exposed_callbacks.lock().push(handle);
                 }
             }
         }
