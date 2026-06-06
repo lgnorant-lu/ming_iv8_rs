@@ -98,6 +98,25 @@ def test_eval_promise_resolve_reject_timeout():
     ctx.close()
 
 
+def test_js_api_name_is_validated():
+    try:
+        iv8_rs.JSContext(js_api="__iv8__; globalThis.injected = true; //")
+        assert False, "invalid js_api should be rejected"
+    except RuntimeError as e:
+        assert "invalid js_api" in str(e)
+
+
+def test_page_load_base_url_is_json_encoded():
+    ctx = iv8_rs.JSContext()
+    ctx.page_load(
+        "<html><body></body></html>",
+        base_url="https://example.com/a'b\\n;globalThis.injected=true;//",
+    )
+    assert ctx.eval("globalThis.injected") is None
+    assert "example.com" in ctx.eval("location.href")
+    ctx.close()
+
+
 def test_typed_array_to_bytes():
     ctx = iv8_rs.JSContext()
     result = ctx.eval("new Uint8Array([1, 2, 3])")

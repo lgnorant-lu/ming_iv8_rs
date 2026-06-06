@@ -77,6 +77,17 @@ const TEXT_ENCODER_SHIM: &str = r#"
 })();
 "#;
 
+fn is_valid_js_identifier(name: &str) -> bool {
+    let mut chars = name.chars();
+    let Some(first) = chars.next() else {
+        return false;
+    };
+    if !(first == '_' || first == '$' || first.is_ascii_alphabetic()) {
+        return false;
+    }
+    chars.all(|ch| ch == '_' || ch == '$' || ch.is_ascii_alphanumeric())
+}
+
 /// The embedded V8 kernel — owns an Isolate + Context.
 pub struct EmbeddedV8Kernel {
     pub(crate) isolate: v8::OwnedIsolate,
@@ -89,6 +100,13 @@ impl EmbeddedV8Kernel {
     /// Create a new embedded V8 kernel with the given configuration.
     pub fn new(config: KernelConfig) -> Result<Self, IV8Error> {
         ensure_v8_initialized();
+
+        if !is_valid_js_identifier(&config.js_api_name) {
+            return Err(IV8Error::Internal(format!(
+                "invalid js_api name '{}': expected a JavaScript identifier",
+                config.js_api_name
+            )));
+        }
 
         // Extract deterministic config before moving config fields
         let random_seed = config.random_seed;
@@ -710,11 +728,11 @@ impl EmbeddedV8Kernel {
 
         // 4e. Update location.href if base_url is provided
         if let Some(url) = base_url {
-            let url_escaped = url.replace('\'', "\\'");
+            let url_literal = serde_json::to_string(url).unwrap_or_else(|_| "\"\"".to_string());
             let update_location = format!(r#"
 (function() {{
     try {{
-        var u = new URL('{}');
+        var u = new URL({url});
         location.href = u.href;
         location.origin = u.origin;
         location.protocol = u.protocol;
@@ -725,10 +743,10 @@ impl EmbeddedV8Kernel {
         location.search = u.search;
         location.hash = u.hash;
     }} catch(e) {{
-        location.href = '{}';
+        location.href = {url};
     }}
 }})();
-"#, url_escaped, url_escaped);
+"#, url = url_literal);
             self.eval(&update_location, crate::kernel::EvalOpts::default()).ok();
         }
 
