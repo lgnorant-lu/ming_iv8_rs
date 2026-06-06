@@ -44,9 +44,7 @@ pub fn detect(source: &str) -> WebpackDetection {
     }
 
     // Detect standard helpers
-    let helper_patterns = [
-        ".m", ".c", ".d", ".e", ".l", ".o", ".p", ".r", ".u", ".f",
-    ];
+    let helper_patterns = [".m", ".c", ".d", ".e", ".l", ".o", ".p", ".r", ".u", ".f"];
     for h in &helper_patterns {
         let pattern = format!("__webpack_require__{}", h);
         if source.contains(&pattern) {
@@ -162,21 +160,35 @@ pub fn bridge_prelude() -> &'static str {
 
 /// Collect module graph evidence produced by the WebpackBridge prelude.
 pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json::Value> {
-    let log_val = kernel.eval_to_rust_value(
-        "typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []",
-    );
+    let log_val = kernel
+        .eval_to_rust_value("typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []");
     let RustValue::Array(items) = log_val else {
         return None;
     };
 
     let mut module_ids = Vec::new();
+    let mut require_captured = false;
     for item in items {
         if let RustValue::String(s) = item {
+            if s == "wp_require_captured" || s == "wp_require_global" {
+                require_captured = true;
+            }
             if let Some(module_id) = s.strip_prefix("module_registered,") {
                 module_ids.push(module_id.to_string());
             }
         }
     }
+
+    if matches!(
+        kernel.eval_to_rust_value(
+            "typeof __iv8_wp_require === 'function' || typeof __webpack_require__ === 'function'"
+        ),
+        RustValue::Bool(true)
+    ) {
+        require_captured = true;
+    }
+
+    collect_require_module_ids(kernel, &mut module_ids);
 
     if module_ids.is_empty() {
         let js = concat!(
@@ -199,10 +211,95 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
         }
     }
 
+    module_ids.sort();
+    module_ids.dedup();
+
+    let nodes: Vec<serde_json::Value> = module_ids
+        .iter()
+        .map(|module_id| {
+            serde_json::json!({
+                "module_id": module_id,
+                "kind": "factory",
+                "executed": false,
+                "exports_seen": false,
+                "source_available": false,
+                "chunk_id": null,
+                "evidence": ["module_table_captured"],
+            })
+        })
+        .collect();
+
+    let mut evidence = Vec::new();
+    let mut diagnostics = Vec::new();
+    if !module_ids.is_empty() {
+        evidence.push(serde_json::json!({
+            "kind": "module_table_captured",
+            "strength": "strong",
+            "source": "webpack_bridge",
+            "stage": "webpack.capture",
+            "summary": "captured non-empty webpack module table",
+            "payload": {"module_count": module_ids.len()},
+        }));
+    } else {
+        diagnostics.push(serde_json::json!({
+            "code": "WEBPACK_MODULE_TABLE_EMPTY",
+            "severity": "error",
+            "stage": "webpack.capture",
+            "message": "webpack runtime marker present but module table was not captured",
+        }));
+    }
+    if require_captured {
+        evidence.push(serde_json::json!({
+            "kind": "require_captured",
+            "strength": "strong",
+            "source": "webpack_bridge",
+            "stage": "webpack.capture",
+            "summary": "captured callable webpack require reference",
+        }));
+    } else {
+        diagnostics.push(serde_json::json!({
+            "code": "WEBPACK_REQUIRE_CAPTURE_FAILED",
+            "severity": "error",
+            "stage": "webpack.capture",
+            "message": "webpack require function could not be retained",
+        }));
+    }
+
     let mut graph = serde_json::Map::new();
+    graph.insert(
+        "schema_version".into(),
+        serde_json::json!("module-graph.v0.1"),
+    );
+    graph.insert("runtime_family".into(), serde_json::json!("webpack_like"));
+    graph.insert(
+        "runtime_flavor".into(),
+        serde_json::json!("unknown_webpack_like"),
+    );
     graph.insert("module_ids".into(), serde_json::json!(module_ids));
-    graph.insert("module_count".into(), serde_json::json!(module_ids.len()));
+    graph.insert("module_count".into(), serde_json::json!(nodes.len()));
+    graph.insert("entry_module_id".into(), serde_json::Value::Null);
+    graph.insert("nodes".into(), serde_json::Value::Array(nodes));
+    graph.insert("edges".into(), serde_json::json!([]));
+    graph.insert("chunks".into(), serde_json::json!([]));
+    graph.insert("evidence".into(), serde_json::Value::Array(evidence));
+    graph.insert("diagnostics".into(), serde_json::Value::Array(diagnostics));
     Some(serde_json::Value::Object(graph))
+}
+
+fn collect_require_module_ids(kernel: &mut EmbeddedV8Kernel, module_ids: &mut Vec<String>) {
+    let js = concat!(
+        "(function(){var r=null;",
+        "if(typeof __iv8_wp_require === 'function') r=__iv8_wp_require;",
+        "else if(typeof __webpack_require__ === 'function') r=__webpack_require__;",
+        "return r && r.m ? Object.keys(r.m) : [];})()"
+    );
+    if let RustValue::Array(items) = kernel.eval_to_rust_value(js) {
+        for item in items {
+            if let RustValue::String(s) = item {
+                module_ids.push(s);
+            }
+        }
+    }
 }
 
 /// Find the body of the modules table (content between outermost braces).
@@ -237,8 +334,11 @@ fn extract_module_ids(source: &str) -> Option<Vec<String>> {
 
     while idx < body.len().min(5000) && ids.len() < limit {
         // Skip whitespace/newlines
-        while idx < body.len() && (bytes[idx] == b' ' || bytes[idx] == b'\n'
-            || bytes[idx] == b'\r' || bytes[idx] == b'\t')
+        while idx < body.len()
+            && (bytes[idx] == b' '
+                || bytes[idx] == b'\n'
+                || bytes[idx] == b'\r'
+                || bytes[idx] == b'\t')
         {
             idx += 1;
         }
@@ -287,7 +387,11 @@ fn extract_module_ids(source: &str) -> Option<Vec<String>> {
         }
     }
 
-    if ids.is_empty() { None } else { Some(ids) }
+    if ids.is_empty() {
+        None
+    } else {
+        Some(ids)
+    }
 }
 
 #[cfg(test)]
@@ -369,7 +473,9 @@ globalThis.webpackChunk = [];
         let js = bridge_prelude();
         let init = js.find("globalThis.__iv8_wp_require = null").unwrap();
         let capture = js.find("globalThis.__iv8_wp_require === null").unwrap();
-        let global_capture = js.find("globalThis.__iv8_wp_require = __webpack_require__").unwrap();
+        let global_capture = js
+            .find("globalThis.__iv8_wp_require = __webpack_require__")
+            .unwrap();
         assert!(init < capture);
         assert!(init < global_capture);
     }
@@ -377,8 +483,70 @@ globalThis.webpackChunk = [];
     #[test]
     fn test_bridge_prelude_does_not_clear_captured_require_at_end() {
         let js = bridge_prelude();
-        let global_capture = js.find("globalThis.__iv8_wp_require = __webpack_require__").unwrap();
+        let global_capture = js
+            .find("globalThis.__iv8_wp_require = __webpack_require__")
+            .unwrap();
         let tail = &js[global_capture..];
         assert!(!tail.contains("globalThis.__iv8_wp_require = null"));
+    }
+
+    #[test]
+    fn test_collect_module_graph_schema_from_global_require() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(
+                r#"
+function __webpack_require__(id) { return __webpack_require__.m[id](); }
+__webpack_require__.m = {
+  0: function(){ return "entry"; },
+  7: function(){ return "sign"; }
+};
+__webpack_require__.c = {};
+"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .unwrap();
+
+        let graph = collect_module_graph(&mut kernel).expect("module graph");
+        assert_eq!(graph["schema_version"], "module-graph.v0.1");
+        assert_eq!(graph["runtime_family"], "webpack_like");
+        assert_eq!(graph["module_count"], 2);
+        assert_eq!(graph["nodes"].as_array().unwrap().len(), 2);
+        assert!(graph["evidence"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|item| item["kind"] == "module_table_captured"));
+        assert!(graph["evidence"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|item| item["kind"] == "require_captured"));
+    }
+
+    #[test]
+    fn test_collect_module_graph_marker_only_emits_diagnostics() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
+        let graph = collect_module_graph(&mut kernel).expect("module graph");
+        assert_eq!(graph["module_count"], 0);
+        assert!(graph["evidence"].as_array().unwrap().is_empty());
+        assert!(graph["diagnostics"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|item| item["code"] == "WEBPACK_MODULE_TABLE_EMPTY"));
+        assert!(graph["diagnostics"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|item| item["code"] == "WEBPACK_REQUIRE_CAPTURE_FAILED"));
     }
 }
