@@ -3,12 +3,18 @@ from __future__ import annotations
 import pytest
 
 from iv8_rs import (
+    DIAGNOSTIC_CATALOG,
     DiagnosticRecord,
+    EvidenceGateResult,
     EvidenceRecord,
     FallbackAttempt,
+    TraceEvent,
+    build_evidence_diagnostics,
     build_trace_diagnostics,
+    build_trace_events,
     classify_trace_prefix,
     confidence_from_evidence,
+    evaluate_evidence_gate,
     evidence_satisfies,
 )
 
@@ -42,6 +48,29 @@ def test_trace_diagnostics_report_empty_and_unknown_prefixes():
         "TRACE_PREFIX_UNKNOWN",
     ]
     assert diagnostics[1].details["raw"] == "mystery,value"
+
+
+def test_initial_diagnostic_catalog_covers_v061_codes():
+    expected_codes = {
+        "TRACE_EMPTY",
+        "TRACE_PREFIX_UNKNOWN",
+        "TRACE_PARSE_PARTIAL",
+        "EVIDENCE_EXPECTED_MISSING",
+        "EVIDENCE_MARKER_ONLY",
+        "CONFIDENCE_DOWNGRADED",
+        "POLICY_BLOCKED_ACTION",
+        "FALLBACK_USED",
+        "FALLBACK_EXHAUSTED",
+        "SOURCE_REGEX_PASS_THROUGH",
+        "SWITCHVM_MARKER_ONLY",
+        "ENVIRONMENT_GAP_OBSERVED",
+        "ENVIRONMENT_PATCH_REJECTED",
+        "ENVIRONMENT_PATCH_UNSAFE",
+    }
+    assert expected_codes <= set(DIAGNOSTIC_CATALOG)
+    for code in expected_codes:
+        assert DIAGNOSTIC_CATALOG[code]["severity"] in {"info", "warn", "error"}
+        assert DIAGNOSTIC_CATALOG[code]["stage"]
 
 
 def test_evidence_record_validates_strength_and_roundtrips():
@@ -105,6 +134,32 @@ def test_marker_only_evidence_does_not_satisfy_expected_evidence():
     assert evidence_satisfies(["webpack_runtime_detected"], observed)
 
 
+def test_evidence_diagnostics_cover_missing_marker_only_and_policy_block():
+    observed = [
+        EvidenceRecord(
+            kind="webpack_runtime_detected",
+            strength="marker_only",
+            source="webpack_bridge",
+            stage="webpack.probe",
+            summary="webpack marker detected",
+        )
+    ]
+    diagnostics = build_evidence_diagnostics(
+        ["webpack_runtime_detected", "module_table_captured"],
+        observed,
+        policy_blocked=True,
+    )
+    codes = [item.code for item in diagnostics]
+    assert codes == [
+        "POLICY_BLOCKED_ACTION",
+        "EVIDENCE_MARKER_ONLY",
+        "EVIDENCE_EXPECTED_MISSING",
+    ]
+    assert diagnostics[0].severity == "error"
+    assert diagnostics[1].details["evidence_kind"] == "webpack_runtime_detected"
+    assert diagnostics[2].details["evidence_kind"] == "module_table_captured"
+
+
 def test_confidence_from_evidence_uses_shared_labels():
     assert confidence_from_evidence([]) == "none"
     assert confidence_from_evidence([
@@ -130,6 +185,15 @@ def test_fallback_attempt_roundtrips_with_evidence_and_diagnostics():
     )
     assert FallbackAttempt.from_dict(attempt.to_dict()) == attempt
 
+    skipped = FallbackAttempt(
+        attempt_id="fallback[skip]",
+        strategy_id="manual_hint",
+        stage="fallback.plan",
+        outcome="skip",
+        reason="not applicable",
+    )
+    assert FallbackAttempt.from_dict(skipped.to_dict()) == skipped
+
     with pytest.raises(ValueError, match="invalid fallback outcome"):
         FallbackAttempt(
             attempt_id="fallback[2]",
@@ -138,3 +202,99 @@ def test_fallback_attempt_roundtrips_with_evidence_and_diagnostics():
             outcome="maybe",
             reason="bad outcome",
         )
+
+
+def test_trace_event_from_raw_known_prefixes():
+    event = TraceEvent.from_raw("D,42,15,3")
+    assert event is not None
+    assert event.kind == "dispatch"
+    assert event.prefix == "D"
+    assert event.payload["pc"] == 42
+    assert event.payload["opcode"] == 15
+    assert event.payload["stack_depth"] == 3
+
+    event_r = TraceEvent.from_raw("R,100,navigator.userAgent,Mozilla/5.0")
+    assert event_r is not None
+    assert event_r.kind == "read"
+    assert event_r.payload["target"] == "navigator.userAgent"
+
+    event_eval = TraceEvent.from_raw("eval,source.js,alert(1)")
+    assert event_eval is not None
+    assert event_eval.kind == "eval_source"
+
+    event_require = TraceEvent.from_raw("require,7,0")
+    assert event_require is not None
+    assert event_require.kind == "module"
+
+    event_chunk = TraceEvent.from_raw("chunk_main,https://example.test/main.js")
+    assert event_chunk is not None
+    assert event_chunk.kind == "chunk"
+    assert event_chunk.payload["chunk_id"] == "main"
+
+
+def test_trace_event_from_raw_unknown_returns_none():
+    assert TraceEvent.from_raw("unknown,payload") is None
+    assert TraceEvent.from_raw("") is None
+
+
+def test_trace_event_roundtrip():
+    event = TraceEvent.from_raw("D,42,15,3", stage="dispatch.execute", strategy_id="dispatch.main", sample_kind="vm_dispatch_known")
+    assert event is not None
+    assert TraceEvent.from_dict(event.to_dict()) == event
+
+
+def test_build_trace_events():
+    raw = ["D,1,2,0", "R,100,screen.width,1920", "mystery,value"]
+    events = build_trace_events(raw, strategy_id="test")
+    assert len(events) == 2
+    assert events[0].kind == "dispatch"
+    assert events[1].kind == "read"
+    assert all(e.strategy_id == "test" for e in events)
+
+
+def test_trace_prefix_malformed_payload_detected():
+    diagnostics = build_trace_diagnostics(["D,1", "R,0"])
+    codes = [item.code for item in diagnostics]
+    assert "TRACE_PARSE_PARTIAL" in codes, f"TRACE_PARSE_PARTIAL missing from {codes}"
+
+    empty_prefix = build_trace_diagnostics(["D,"])
+    assert any(item.code == "TRACE_PARSE_PARTIAL" for item in empty_prefix)
+
+
+def test_evaluate_evidence_gate_pass():
+    observed = [
+        EvidenceRecord(kind="dispatch_trace_observed", strength="strong", source="dispatch", stage="distpatch.validate", summary="rt observed"),
+    ]
+    result = evaluate_evidence_gate(["dispatch_trace_observed"], observed)
+    assert result.status == "pass"
+    assert result.satisfied is True
+    assert result.confidence == "strong"
+    assert isinstance(result, EvidenceGateResult)
+
+
+def test_evaluate_evidence_gate_marker_only():
+    observed = [
+        EvidenceRecord(kind="webpack_runtime_detected", strength="marker_only", source="probe", stage="probe", summary="marker"),
+    ]
+    result = evaluate_evidence_gate(["webpack_runtime_detected"], observed)
+    assert result.status == "warn", "marker-only evidence should be WARN, not PASS or FAIL"
+    assert result.satisfied is False
+    assert result.confidence == "weak"
+
+
+def test_evaluate_evidence_gate_policy_blocked():
+    observed = [
+        EvidenceRecord(kind="dispatch_trace_observed", strength="strong", source="dispatch", stage="distpatch.validate", summary="rt observed"),
+    ]
+    result = evaluate_evidence_gate(["dispatch_trace_observed"], observed, policy_blocked=True)
+    assert result.status == "fail"
+    assert result.satisfied is False
+    assert any(item.code == "POLICY_BLOCKED_ACTION" for item in result.diagnostics)
+
+
+def test_evaluate_evidence_gate_empty():
+    result = evaluate_evidence_gate(["required_evidence"], [])
+    assert result.status == "fail"
+    assert result.satisfied is False
+    assert result.confidence == "none"
+    assert any(item.code == "EVIDENCE_EXPECTED_MISSING" for item in result.diagnostics)

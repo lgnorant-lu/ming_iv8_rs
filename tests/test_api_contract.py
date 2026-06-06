@@ -63,6 +63,16 @@ def test_eval_error_and_close_contract():
         ctx.eval("1 + 1")
 
 
+def test_context_manager_closes_context():
+    with iv8_rs.JSContext() as ctx:
+        assert ctx.eval("1 + 2") == 3
+        assert not ctx.is_disposed()
+
+    assert ctx.is_disposed()
+    with pytest.raises(RuntimeError, match="closed"):
+        ctx.eval("1 + 1")
+
+
 def test_eval_promise_contract():
     ctx = iv8_rs.JSContext()
     try:
@@ -96,6 +106,11 @@ def test_page_load_and_resource_bundle_contract():
     finally:
         ctx.close()
 
+    with pytest.raises(RuntimeError, match="closed"):
+        ctx.page_load("<html></html>")
+    with pytest.raises(RuntimeError, match="closed"):
+        ctx.add_resource("https://api.test/closed", b"closed", 200)
+
 
 def test_network_handler_contract():
     captured = []
@@ -118,6 +133,31 @@ def test_network_handler_contract():
             ctx.set_network_handler("not callable")
     finally:
         ctx.close()
+
+    with pytest.raises(RuntimeError, match="closed"):
+        ctx.set_network_handler(lambda url, method: (200, b"closed"))
+
+
+def test_expose_contract_success_error_and_closed_context():
+    ctx = iv8_rs.JSContext()
+    try:
+        ctx.expose("add", lambda a, b: a + b)
+        assert ctx.eval("add(2, 5)") == 7
+
+        def fail():
+            raise ValueError("callback boom")
+
+        ctx.expose("fail", fail)
+        with pytest.raises(iv8_rs.JSError, match="callback boom"):
+            ctx.eval("fail()")
+
+        with pytest.raises(TypeError, match="callable"):
+            ctx.expose("bad", 42)
+    finally:
+        ctx.close()
+
+    with pytest.raises(RuntimeError, match="closed"):
+        ctx.expose("afterClose", lambda: 1)
 
 
 def test_inspector_safe_api_contract():
@@ -152,3 +192,16 @@ def test_entry_environment_wrapper_contracts():
     assert "before" in as_dict
     assert "patch" in as_dict
     assert "after" in as_dict
+
+
+def test_specialized_stable_apis_exist():
+    assert callable(iv8_rs.parse_trace)
+    assert callable(iv8_rs.CFG.from_trace)
+    assert callable(iv8_rs.detect_constants)
+
+def test_expose_module_not_stable():
+    ctx = iv8_rs.JSContext()
+    try:
+        assert not hasattr(ctx, "expose_module") or callable(ctx.expose_module)
+    finally:
+        ctx.close()
