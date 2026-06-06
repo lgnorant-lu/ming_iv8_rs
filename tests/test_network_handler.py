@@ -3,7 +3,9 @@
 The handler runs as the second tier in the three-layer fallback chain
 (ResourceBundle -> Python handler -> NetworkError) regardless of the
 strict_compat flag. This was implicitly the case in v0.1; v0.2 makes it
-explicit and adds tests for both modes plus error paths.
+explicit and adds tests for both modes plus error paths. Handler exceptions or
+invalid return shapes are treated like None by the current contract and fall
+through to NetworkError.
 """
 
 import iv8_rs
@@ -105,8 +107,29 @@ def test_handler_works_with_fetch_too():
     ctx = iv8_rs.JSContext()
     ctx.set_network_handler(_make_handler(captured))
 
-    ctx.eval("fetch('https://api.test/fetched').then(r => r.text())")
+    result = ctx.eval_promise("fetch('https://api.test/fetched').then(r => r.text())")
+    assert result == '{"ok": true}'
     assert captured == [("GET", "https://api.test/fetched")]
+
+
+def test_fetch_without_bundle_or_handler_rejects():
+    ctx = iv8_rs.JSContext()
+    try:
+        ctx.eval_promise("fetch('https://offline.test/missing')")
+        raise AssertionError("expected fetch to reject")
+    except iv8_rs.JSError as e:
+        assert "NetworkError" in str(e)
+
+
+def test_invalid_handler_return_falls_through_to_fetch_error():
+    ctx = iv8_rs.JSContext()
+    ctx.set_network_handler(lambda url, method: {"status": 200, "body": "bad shape"})
+
+    try:
+        ctx.eval_promise("fetch('https://api.test/bad-shape')")
+        raise AssertionError("expected invalid handler return to reject")
+    except iv8_rs.JSError as e:
+        assert "NetworkError" in str(e)
 
 
 def test_set_handler_rejects_non_callable():
