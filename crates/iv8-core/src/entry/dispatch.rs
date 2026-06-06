@@ -17,15 +17,28 @@ pub enum DispatchFlavor {
     Unknown,
 }
 
+/// Static evidence level produced by dispatch detection.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DispatchEvidenceLevel {
+    /// Handler table and PC/index pattern are statically visible.
+    StrongStatic,
+    /// Dispatch-like marker is visible but runtime facts are still needed.
+    MarkerOnly,
+    /// Pattern is too broad to treat as dispatch evidence.
+    DiagnosticOnly,
+}
+
 /// Result of dispatch detection.
 #[derive(Debug, Clone)]
 pub struct DispatchDetection {
     pub detected: bool,
     pub flavor: DispatchFlavor,
+    pub evidence_level: DispatchEvidenceLevel,
     pub handler_array: Option<String>,
     pub pc_var: Option<String>,
     pub index_array: Option<String>,
     pub stack_var: Option<String>,
+    pub diagnostics: Vec<String>,
 }
 
 /// Detect dispatch pattern in JS source.
@@ -40,13 +53,28 @@ pub fn detect(source: &str) -> DispatchDetection {
         return det;
     }
 
+    if detect_ambiguous_computed_member_call(source) {
+        return DispatchDetection {
+            detected: false,
+            flavor: DispatchFlavor::Unknown,
+            evidence_level: DispatchEvidenceLevel::DiagnosticOnly,
+            handler_array: None,
+            pc_var: None,
+            index_array: None,
+            stack_var: None,
+            diagnostics: vec!["DISPATCH_COMPUTED_MEMBER_AMBIGUOUS".to_string()],
+        };
+    }
+
     DispatchDetection {
         detected: false,
         flavor: DispatchFlavor::Unknown,
+        evidence_level: DispatchEvidenceLevel::DiagnosticOnly,
         handler_array: None,
         pc_var: None,
         index_array: None,
         stack_var: None,
+        diagnostics: Vec::new(),
     }
 }
 
@@ -176,10 +204,12 @@ fn detect_handler_array(source: &str) -> Option<DispatchDetection> {
         return Some(DispatchDetection {
             detected: true,
             flavor: DispatchFlavor::HandlerArray,
+            evidence_level: DispatchEvidenceLevel::StrongStatic,
             handler_array: Some(handler_array.to_string()),
             pc_var: Some(pc_var.to_string()),
             index_array: Some(index_array_candidate.to_string()),
             stack_var,
+            diagnostics: vec!["DISPATCH_CANDIDATE_DETECTED".to_string()],
         });
     }
     None
@@ -192,14 +222,41 @@ fn detect_switch_vm(source: &str) -> Option<DispatchDetection> {
         Some(DispatchDetection {
             detected: true,
             flavor: DispatchFlavor::SwitchVM,
+            evidence_level: DispatchEvidenceLevel::MarkerOnly,
             handler_array: None,
             pc_var: None,
             index_array: None,
             stack_var: None,
+            diagnostics: vec![
+                "DISPATCH_CANDIDATE_DETECTED".to_string(),
+                "SWITCHVM_MARKER_ONLY".to_string(),
+            ],
         })
     } else {
         None
     }
+}
+
+fn detect_ambiguous_computed_member_call(source: &str) -> bool {
+    let bytes = source.as_bytes();
+    for i in 0..bytes.len().saturating_sub(3) {
+        if bytes[i] != b'[' {
+            continue;
+        }
+        let Some(close_rel) = source[i + 1..].find(']') else {
+            continue;
+        };
+        let after = source[i + 1 + close_rel + 1..].trim_start();
+        if !after.starts_with('(') {
+            continue;
+        }
+        let inside = source[i + 1..i + 1 + close_rel].trim();
+        if inside.is_empty() || inside.contains('[') || inside.contains("++") {
+            continue;
+        }
+        return true;
+    }
+    false
 }
 
 fn detect_stack_var(source: &str, near_offset: usize) -> Option<String> {
@@ -228,8 +285,12 @@ mod tests {
         let det = detect("var result = A[Q[U++]]();");
         assert!(det.detected);
         assert_eq!(det.flavor, DispatchFlavor::HandlerArray);
+        assert_eq!(det.evidence_level, DispatchEvidenceLevel::StrongStatic);
         assert_eq!(det.handler_array.as_deref(), Some("A"));
         assert_eq!(det.pc_var.as_deref(), Some("U"));
+        assert!(det
+            .diagnostics
+            .contains(&"DISPATCH_CANDIDATE_DETECTED".to_string()));
     }
 
     #[test]
@@ -240,6 +301,7 @@ mod tests {
         assert_eq!(det.handler_array.as_deref(), Some("A"));
         assert_eq!(det.index_array.as_deref(), Some("Q"));
         assert_eq!(det.pc_var.as_deref(), Some("U"));
+        assert_eq!(det.evidence_level, DispatchEvidenceLevel::StrongStatic);
     }
 
     #[test]
@@ -254,6 +316,21 @@ mod tests {
         let det = detect("switch(B[P++]) { case 0: break; }");
         assert!(det.detected);
         assert_eq!(det.flavor, DispatchFlavor::SwitchVM);
+        assert_eq!(det.evidence_level, DispatchEvidenceLevel::MarkerOnly);
+        assert!(det
+            .diagnostics
+            .contains(&"SWITCHVM_MARKER_ONLY".to_string()));
+    }
+
+    #[test]
+    fn test_computed_member_call_is_ambiguous_not_dispatch() {
+        let det = detect("var r = obj[key]();");
+        assert!(!det.detected);
+        assert_eq!(det.flavor, DispatchFlavor::Unknown);
+        assert_eq!(det.evidence_level, DispatchEvidenceLevel::DiagnosticOnly);
+        assert!(det
+            .diagnostics
+            .contains(&"DISPATCH_COMPUTED_MEMBER_AMBIGUOUS".to_string()));
     }
 
     #[test]
