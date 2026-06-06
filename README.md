@@ -18,9 +18,9 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
 - **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
 
-Current `0.6.0-dev` status is tracked in `docs/baseline/v0.6-dev-baseline.md`.
-Some v0.6 EntryPlane strategies are intentionally partial while the baseline is
-being stabilized.
+Current `0.6.0` status is tracked in `docs/baseline/v0.6-dev-baseline.md`.
+v0.6.0 is a stabilized Entry / Environment / Evidence baseline, not the final
+deobfuscation expansion. Some strategies remain intentionally partial.
 
 ## Install
 
@@ -100,6 +100,8 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 - **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive guide)
 - **Progress**: [docs/PROGRESS.md](docs/PROGRESS.md)
 - **v0.6 Baseline**: [docs/baseline/v0.6-dev-baseline.md](docs/baseline/v0.6-dev-baseline.md)
+- **Architecture Philosophy**: [docs/design/IV8_RUST_ARCHITECTURE_PHILOSOPHY.md](docs/design/IV8_RUST_ARCHITECTURE_PHILOSOPHY.md)
+- **v0.6 Stabilization Plan**: [docs/design/V0.6_STABILIZATION_PLAN.md](docs/design/V0.6_STABILIZATION_PLAN.md)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 - **TDC Testing Guide**: [docs/tdc-testing-guide.md](docs/tdc-testing-guide.md)
 - **Quality Harness**: [docs/quality-harness/HARNESS-CHARTER.md](docs/quality-harness/HARNESS-CHARTER.md)
@@ -108,12 +110,14 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 ## Tests
 
 ```bash
-# Historical full Python baseline (v0.5 tree): 775 passed, 1 skipped.
-# Current v0.6-dev baseline commands are recorded in docs/baseline/.
-uv run --with pytest pytest tests -q
+# Current v0.6.0 release gate is recorded in docs/baseline/.
+uv run python -m pytest tests -q
 
 # Rust tests
 cargo test --workspace
+
+# Release warning gate
+cargo clippy --workspace -- -D warnings
 
 # Benchmark
 cargo bench --bench iv8_bench

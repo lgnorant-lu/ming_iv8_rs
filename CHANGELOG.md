@@ -6,9 +6,11 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-06
+
 ### Added
 
-- **v0.6-dev baseline**: `docs/baseline/v0.6-dev-baseline.md` records
+- **v0.6 baseline**: `docs/baseline/v0.6-dev-baseline.md` records
   the current targeted validation commands, verified outputs, partial
   strategy status, and known stabilization blockers.
 - **Environment Plane workflow helper**: `run_environment_plane()` now provides
@@ -20,11 +22,14 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - **v0.6 real sample manifest**: `docs/acceptance/v0.6-real-sample-manifest.md`
   records current corpus candidates, path status, automation status, and
   validation status without treating missing or historical samples as verified.
+- **Architecture philosophy and stabilization plan**: v0.6.0 documents the
+  dual mission of Environment Runtime and Runtime Analysis, plus the staged
+  stabilization path for v0.6.1 / v0.7.
 
 ### Changed
 
 - Clarified release-facing documentation so historical test counts are not
-  presented as the current unverified `0.6.0-dev` baseline.
+  presented as the current `0.6.0` release baseline unless rerun and recorded.
 - Annotated the research index and legacy acceptance criteria as historical
   records with known placeholder corruption, preserving their original content
   while preventing damaged status data from being treated as current truth.
@@ -49,7 +54,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ### Known limitations
 
-- `0.6.0-dev` EntryPlane is a working skeleton, not a completed expansion:
+- `0.6.0` EntryPlane is a working skeleton, not a completed expansion:
   `SourceRegex` is pass-through, SwitchVM dispatch only records a detection
   marker, Environment Plane is a conservative workflow rather than a complete
   automatic patch/rerun loop, and real-sample corpus re-validation is still
