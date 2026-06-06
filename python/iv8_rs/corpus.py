@@ -37,6 +37,8 @@ class CorpusManifestItem:
     profile: Optional[str] = None
     environment: Optional[Dict[str, Any]] = None
     tags: List[str] = field(default_factory=list)
+    fixtures: List[str] = field(default_factory=list)
+    policy_overrides: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.path_status not in PATH_STATUSES:
@@ -68,6 +70,8 @@ class CorpusManifestItem:
             profile=data.get("profile"),
             environment=data.get("environment"),
             tags=list(data.get("tags", [])),
+            fixtures=list(data.get("fixtures", [])),
+            policy_overrides=dict(data.get("policy_overrides", {})),
         )
 
     def to_dict(self) -> Dict[str, Any]:
@@ -277,6 +281,7 @@ def _build_sample_report(
         result = execution["result_class"]
 
     diagnostics = _sample_diagnostics(item, eligibility, reason)
+    artifacts = _build_sample_artifacts(item.sample_id, execution)
     if execution:
         diagnostics.extend(execution.get("diagnostics", []))
 
@@ -299,7 +304,7 @@ def _build_sample_report(
         "fallback_attempts": execution.get("fallback_attempts", []) if execution else [],
         "diagnostics": diagnostics,
         "trace_meta": execution.get("trace_meta") if execution else None,
-        "artifacts": [],
+        "artifacts": artifacts,
         "notes": item.notes,
     }
 
@@ -379,6 +384,30 @@ def _runner_level_diagnostics(
             if d.get("stage") in {"corpus.execute"} and d.get("severity") == "error":
                 diag.append(d)
     return diag
+
+
+def _build_sample_artifacts(
+    sample_id: str,
+    execution: Optional[Dict[str, Any]] = None,
+) -> List[Dict[str, Any]]:
+    artifacts: List[Dict[str, Any]] = []
+    if execution and execution.get("trace_meta"):
+        artifacts.append({
+            "kind": "trace_meta",
+            "sample_id": sample_id,
+            "path": None,
+            "size_bytes": None,
+            "retention": "temporary",
+        })
+    if execution and execution.get("errors"):
+        artifacts.append({
+            "kind": "error_log",
+            "sample_id": sample_id,
+            "path": None,
+            "size_bytes": None,
+            "retention": "temporary",
+        })
+    return artifacts
 
 
 def _clean_markdown_cell(value: str) -> str:
