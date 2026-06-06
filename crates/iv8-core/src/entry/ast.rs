@@ -1,11 +1,26 @@
-//! SWC-based AST instrumentation for v0.6 EntryPlanner.
+//! SWC-based AST instrumentation for v0.6/v0.7 EntryPlanner.
 //!
 //! Provides source-level rewrite for the 3 join points defined in the
 //! AST Instrumentation MVP: dispatch expression, module init wrapper,
 //! and eval/Function constructor.
 //!
 //! Falls back to the original source if parsing fails.
+//! Also produces structured transform reports with evidence and diagnostics.
+//!
+//! ## Join Points (v0.7)
+//!
+//! | Join point | v0.7 status | Primary consumer |
+//! |---|---|---|
+//! | dispatch expression | stable | Dispatch Generalization |
+//! | module init wrapper | stable | WebpackBridge |
+//! | eval source point | stable | dynamic source capture |
+//! | Function constructor source point | stable | dynamic source capture |
+//!
+//! Deferred: generic member access, generic function calls,
+//! whole-bundle factory rewriting.
 
+use crate::entry::diagnostics;
+use serde::{Deserialize, Serialize};
 use swc_common::sync::Lrc;
 use swc_common::{FileName, SourceMap};
 use swc_ecma_ast::*;
@@ -13,9 +28,67 @@ use swc_ecma_codegen::{text_writer::JsWriter, Config, Emitter};
 use swc_ecma_parser::{lexer::Lexer, Parser, StringInput, Syntax};
 use swc_ecma_visit::{VisitMut, VisitMutWith};
 
+// ───
+// Structured types (source-ast-pipeline.md sections 6-9)
+// ───
+
+/// A transform request describing which join point to instrument.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SourceAstRequest {
+    pub request_id: String,
+    pub source_id: String,
+    pub join_point_kind: String,
+    pub target_hint: Option<String>,
+    pub policy: String,
+    pub persona: String,
+    pub expected_evidence: Vec<String>,
+}
+
+/// Report produced by a SourceAst transform attempt.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SourceAstReport {
+    pub schema_version: String,
+    pub request_id: String,
+    pub source_id: String,
+    pub parser: String,
+    pub parse_ok: bool,
+    pub candidates: Vec<SourceAstCandidate>,
+    pub selected_join_points: Vec<String>,
+    pub edits: Vec<SourceAstEdit>,
+    pub emit_ok: bool,
+    pub runtime_validated: bool,
+    pub evidence: Vec<diagnostics::EvidenceRecord>,
+    pub diagnostics: Vec<diagnostics::DiagnosticRecord>,
+}
+
+/// A candidate join point found during AST inspection.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SourceAstCandidate {
+    pub candidate_id: String,
+    pub kind: String,
+    pub span_start: usize,
+    pub span_end: usize,
+    pub score: f64,
+    pub reasons: Vec<String>,
+    pub decision: String,
+}
+
+/// A single edit/instrumentation applied to the source.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SourceAstEdit {
+    pub edit_id: String,
+    pub candidate_id: String,
+    pub kind: String,
+    pub span_before_start: usize,
+    pub span_before_end: usize,
+    pub span_after_start: usize,
+    pub span_after_end: usize,
+    pub helper: String,
+    pub policy: String,
+}
+
 /// Quick viability probe: check whether SWC can successfully parse the source.
-/// Returns false if parsing fails for any reason (syntax error, unsupported feature, etc.).
-/// Does not perform any transform — just parse and discard.
+/// Returns false if parsing fails for any reason.
 pub fn can_parse(source: &str) -> bool {
     let cm: Lrc<SourceMap> = Default::default();
     let fm = cm.new_source_file(
@@ -32,53 +105,261 @@ pub fn can_parse(source: &str) -> bool {
     parser.parse_module().is_ok()
 }
 
-/// Apply AST-level instrumentation to a JS source string.
-///
-/// Rewrites the 3 join points:
-/// 1. Dispatch expression: `A[Q[U++]]()` → tagged call
-/// 2. Module init: `__webpack_require__(id)` → tagged call
-/// 3. Eval/Function: `eval(x)` / `Function(x)` → tagged call
-///
-/// On parse failure, returns the original source unchanged and logs
-/// the error through the reason string.
-pub fn instrument(source: &str) -> (String, Option<String>) {
+/// Apply AST-level instrumentation, returning structured report alongside
+/// the transformed source.
+pub fn instrument_with_report(source: &str) -> (String, SourceAstReport) {
+    let request_id = format!("source_ast.transform.{}", std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_nanos());
     let cm: Lrc<SourceMap> = Default::default();
-
     let fm = cm.new_source_file(
         FileName::Custom("input.js".into()).into(),
         source.to_string(),
     );
-
     let lexer = Lexer::new(
         Syntax::default(),
         EsVersion::Es2020,
         StringInput::from(&*fm),
         None,
     );
+    let mut parser = Parser::new_from(lexer);
+    let parse_errors = parser.take_errors();
+    let mut module = match parser.parse_module() {
+        Ok(m) => m,
+        Err(e) => {
+            let diag = diagnostics::warn_diag(
+                diagnostics::codes::source_ast::PARSE_FAILED,
+                "source_ast.parse",
+                &format!("SWC parse failed: {:?}", e),
+            );
+            let report = SourceAstReport {
+                schema_version: "source-ast-report.v0.1".to_string(),
+                request_id,
+                source_id: "input.js".to_string(),
+                parser: "swc".to_string(),
+                parse_ok: false,
+                candidates: Vec::new(),
+                selected_join_points: Vec::new(),
+                edits: Vec::new(),
+                emit_ok: false,
+                runtime_validated: false,
+                evidence: vec![],
+                diagnostics: vec![diag],
+            };
+            return (source.to_string(), report);
+        }
+    };
 
+    let mut diags: Vec<diagnostics::DiagnosticRecord> = Vec::new();
+    if !parse_errors.is_empty() {
+        diags.push(diagnostics::warn_diag(
+            diagnostics::codes::source_ast::PARSE_FAILED,
+            "source_ast.parse",
+            &format!("{} parse warnings", parse_errors.len()),
+        ));
+    }
+
+    // Count candidates and apply transforms
+    let candidates = count_candidates(&module);
+    if candidates.is_empty() {
+        diags.push(diagnostics::warn_diag(
+            diagnostics::codes::source_ast::CANDIDATE_EMPTY,
+            "source_ast.probe",
+            "no transform candidates found in source",
+        ));
+    }
+
+    // Apply transforms
+    module.visit_mut_with(&mut TrapTransform);
+
+    // Emit back to string
+    let output = emit_js(&cm, &module);
+    let emit_ok = !output.is_empty();
+
+    // Prepend helper infrastructure
+    let helper = r#"
+;(function(){var g=globalThis;
+Object.defineProperty(g,'__iv8i_log__',{value:[],writable:true,enumerable:false,configurable:true});
+Object.defineProperty(g,'__iv8i_lim__',{value:200000,writable:true,enumerable:false,configurable:true});
+g.__iv8_trap=function(h,k){var f=h[k];
+if(g.__iv8i_log__.length<g.__iv8i_lim__)g.__iv8i_log__.push('D,'+(typeof f==='function'?(f.name||'?'):'!')+','+k);
+return f.apply(h,Array.prototype.slice.call(arguments,2));};
+g.__iv8_eval_trap=function(src){
+if(g.__iv8i_log__.length<g.__iv8i_lim__)g.__iv8i_log__.push('eval,'+String(src).slice(0,80));
+return (0,eval)(src);};
+g.__iv8_function_trap=function(){
+var args=Array.prototype.slice.call(arguments);
+if(g.__iv8i_log__.length<g.__iv8i_lim__)g.__iv8i_log__.push('fn_ctor,'+args.map(String).join('|').slice(0,80));
+return Function.apply(null,args);};
+})();
+"#;
+
+    let transformed = format!("{}{}", helper, output);
+
+    // Build evidence
+    let mut evidence = Vec::new();
+    if !candidates.is_empty() {
+        evidence.push(
+            diagnostics::EvidenceRecord::new(
+                "source_ast_candidate_detected",
+                diagnostics::EvidenceStrength::Weak,
+                "source_ast",
+                "source_ast.probe",
+                &format!("{} transform candidate(s) found", candidates.len()),
+            )
+            .with_producer("source_ast.main"),
+        );
+    }
+    if emit_ok {
+        evidence.push(
+            diagnostics::EvidenceRecord::new(
+                "source_ast_transform_applied",
+                diagnostics::EvidenceStrength::Weak,
+                "source_ast",
+                "source_ast.transform",
+                "transform emitted successfully; runtime validation needed for strong evidence",
+            )
+            .with_producer("source_ast.main"),
+        );
+    }
+
+    if !emit_ok {
+        diags.push(diagnostics::error_diag(
+            diagnostics::codes::source_ast::EMIT_FAILED,
+            "source_ast.emit",
+            "code generation produced empty output",
+        ));
+    }
+
+    let report = SourceAstReport {
+        schema_version: "source-ast-report.v0.1".to_string(),
+        request_id,
+        source_id: "input.js".to_string(),
+        parser: "swc".to_string(),
+        parse_ok: true,
+        candidates: candidates
+            .into_iter()
+            .enumerate()
+            .map(|(i, (kind, _start, _end, score))| SourceAstCandidate {
+                candidate_id: format!("source_ast.candidate.{:03}", i),
+                kind,
+                span_start: _start as usize,
+                span_end: _end as usize,
+                score,
+                reasons: vec!["matched join point pattern".to_string()],
+                decision: "selected".to_string(),
+            })
+            .collect(),
+        selected_join_points: vec!["dispatch_expression".to_string()],
+        edits: Vec::new(),
+        emit_ok,
+        runtime_validated: false,
+        evidence,
+        diagnostics: diags,
+    };
+
+    (transformed, report)
+}
+
+/// Count how many transform candidates exist in the module.
+fn count_candidates(module: &Module) -> Vec<(String, u32, u32, f64)> {
+    let mut result = Vec::new();
+    for stmt in &module.body {
+        if let ModuleItem::Stmt(s) = stmt {
+            collect_candidates_from_stmt(s, &mut result);
+        }
+    }
+    result
+}
+
+fn collect_candidates_from_stmt(stmt: &Stmt, result: &mut Vec<(String, u32, u32, f64)>) {
+    match stmt {
+        Stmt::Expr(s) => {
+            if let Expr::Call(call) = &*s.expr {
+                if let Callee::Expr(callee) = &call.callee {
+                    collect_call_candidate(callee, result);
+                }
+            }
+        }
+        Stmt::Decl(d) => {
+            if let Decl::Var(v) = d {
+                for decl in &v.decls {
+                    if let Some(init) = &decl.init {
+                        collect_expr_candidate(init, result);
+                    }
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
+fn collect_expr_candidate(expr: &Expr, result: &mut Vec<(String, u32, u32, f64)>) {
+    if let Expr::Call(call) = expr {
+        if let Callee::Expr(callee) = &call.callee {
+            collect_call_candidate(callee, result);
+        }
+    }
+    if let Expr::Paren(p) = expr {
+        collect_expr_candidate(&p.expr, result);
+    }
+}
+
+fn collect_call_candidate(callee: &Expr, result: &mut Vec<(String, u32, u32, f64)>) {
+    if let Expr::Member(member) = callee {
+        if is_dispatch_join_point(member) {
+            use swc_common::Spanned;
+            result.push((
+                "dispatch_expression".to_string(),
+                member.obj.span().lo.0,
+                member.span().hi.0,
+                0.84,
+            ));
+        }
+    }
+    if let Expr::Ident(ident) = callee {
+        let name = &*ident.sym;
+        if name == "eval" || name == "Function" {
+            use swc_common::Spanned;
+            let kind = if name == "eval" { "eval_source_point" } else { "function_ctor_source_point" };
+            result.push((kind.to_string(), ident.span().lo.0, ident.span().hi.0, 0.6));
+        }
+    }
+}
+
+/// Apply AST-level instrumentation to a JS source string.
+///
+/// Returns `(transformed_source, Option<diagnostic_message>)`.
+/// This is the backward-compatible API. Prefer `instrument_with_report` for
+/// structured output.
+pub fn instrument(source: &str) -> (String, Option<String>) {
+    let cm: Lrc<SourceMap> = Default::default();
+    let fm = cm.new_source_file(
+        FileName::Custom("input.js".into()).into(),
+        source.to_string(),
+    );
+    let lexer = Lexer::new(
+        Syntax::default(),
+        EsVersion::Es2020,
+        StringInput::from(&*fm),
+        None,
+    );
     let mut parser = Parser::new_from(lexer);
     let errors = parser.take_errors();
-
     let mut module = match parser.parse_module() {
         Ok(m) => m,
         Err(e) => {
             return (source.to_string(), Some(format!("parse error: {:?}", e)));
         }
     };
-
     let diag = if errors.is_empty() {
         None
     } else {
         Some(format!("{} parse warnings", errors.len()))
     };
-
-    // Apply the universal dispatch trap transform
     module.visit_mut_with(&mut TrapTransform);
-
-    // Emit back to string
     let output = emit_js(&cm, &module);
-
-    // Prepend __iv8_trap helper + log infrastructure
     let helper = r#"
 ;(function(){var g=globalThis;
 Object.defineProperty(g,'__iv8i_log__',{value:[],writable:true,enumerable:false,configurable:true});
@@ -100,14 +381,6 @@ return Function.apply(null,args);};
 
 // ───
 // Transform: universal dispatch instrumentation via __iv8_trap helper
-//   X[Y](a1, a2, ..., aN) → __iv8_trap(X, Y, a1, a2, ..., aN)
-//
-// Semantics preserved:
-//   - X evaluated once (passed as first arg)
-//   - Y evaluated once (passed as second arg)
-//   - this binding = X (via .apply(h, ...) inside helper)
-//   - Arguments evaluated once (passed as trailing args)
-//   - Return value preserved (helper returns the result)
 // ───
 
 struct TrapTransform;
@@ -115,30 +388,19 @@ struct TrapTransform;
 impl VisitMut for TrapTransform {
     fn visit_mut_call_expr(&mut self, call: &mut CallExpr) {
         call.visit_mut_children_with(self);
-
         if let Callee::Expr(callee_expr) = &call.callee {
             match &**callee_expr {
-                // Dispatch join point: A[Q[U++]](...) -> __iv8_trap(A, Q[U++], ...).
-                // Ordinary computed calls like obj[key]() are intentionally left alone.
                 Expr::Member(member) if is_dispatch_join_point(member) => {
-                    // Prepend (obj, prop) to existing args
                     let obj_expr = member.obj.clone();
                     let prop_expr = match &member.prop {
                         MemberProp::Computed(c) => c.expr.clone(),
                         _ => unreachable!(),
                     };
                     let mut new_args = vec![
-                        ExprOrSpread {
-                            spread: None,
-                            expr: obj_expr,
-                        },
-                        ExprOrSpread {
-                            spread: None,
-                            expr: prop_expr,
-                        },
+                        ExprOrSpread { spread: None, expr: obj_expr },
+                        ExprOrSpread { spread: None, expr: prop_expr },
                     ];
                     new_args.extend(std::mem::take(&mut call.args));
-
                     call.callee = Callee::Expr(Box::new(Expr::Ident(Ident::new(
                         "__iv8_trap".into(),
                         call.span,
@@ -146,7 +408,6 @@ impl VisitMut for TrapTransform {
                     ))));
                     call.args = new_args;
                 }
-                // Eval/Function: dynamic code execution
                 Expr::Ident(ident) if &*ident.sym == "eval" || &*ident.sym == "Function" => {
                     let trap_name = if &*ident.sym == "eval" {
                         "__iv8_eval_trap"
@@ -334,7 +595,6 @@ globalThis.__iv8_function_value = f();
         );
     }
 
-    /// Helper: extract the inner string from a RustValue::String or panic.
     fn entry_str(item: &crate::convert::RustValue) -> &str {
         match item {
             crate::convert::RustValue::String(s) => s.as_str(),
@@ -429,5 +689,85 @@ obj[key]();
         } else {
             panic!("expected array, got {:?}", trace);
         }
+    }
+
+    // ──
+    // New tests for instrument_with_report
+    // ──
+
+    #[test]
+    fn test_instrument_with_report_dispatch() {
+        let (source, report) = instrument_with_report("var r = A[Q[U++]]();");
+        assert_eq!(report.schema_version, "source-ast-report.v0.1");
+        assert!(report.parse_ok);
+        assert!(report.emit_ok);
+        assert!(!report.candidates.is_empty());
+        assert!(source.contains("__iv8_trap"));
+    }
+
+    #[test]
+    fn test_instrument_with_report_parse_failure() {
+        let (_, report) = instrument_with_report("var x = ;;;;");
+        assert!(!report.parse_ok);
+        assert!(report.diagnostics.iter().any(|d| d.code == "SOURCE_AST_PARSE_FAILED"));
+    }
+
+    #[test]
+    fn test_instrument_with_report_no_candidates() {
+        let (_, report) = instrument_with_report("var x = 1 + 1;");
+        assert!(report.parse_ok);
+        assert!(report.candidates.is_empty());
+        assert!(report.diagnostics.iter().any(|d| d.code == "SOURCE_AST_CANDIDATE_EMPTY"));
+    }
+
+    #[test]
+    fn test_instrument_with_report_evidence() {
+        let (_, report) = instrument_with_report("A[Q[U++]]();");
+        assert!(report.evidence.iter().any(|e| e.kind == "source_ast_candidate_detected"));
+        assert!(report.evidence.iter().any(|e| e.kind == "source_ast_transform_applied"));
+    }
+
+    #[test]
+    fn test_source_ast_request_schema() {
+        let req = SourceAstRequest {
+            request_id: "source_ast.001".to_string(),
+            source_id: "main.js".to_string(),
+            join_point_kind: "dispatch_expression".to_string(),
+            target_hint: Some("handlers[op](a,b)".to_string()),
+            policy: "analysis_only".to_string(),
+            persona: "analysis".to_string(),
+            expected_evidence: vec!["dispatch_trace_observed".to_string()],
+        };
+        let json = serde_json::to_string(&req).unwrap();
+        assert!(json.contains("dispatch_expression"));
+        assert!(json.contains("analysis_only"));
+    }
+
+    #[test]
+    fn test_source_ast_report_schema() {
+        let report = SourceAstReport {
+            schema_version: "source-ast-report.v0.1".to_string(),
+            request_id: "source_ast.001".to_string(),
+            source_id: "main.js".to_string(),
+            parser: "swc".to_string(),
+            parse_ok: true,
+            candidates: vec![SourceAstCandidate {
+                candidate_id: "source_ast.candidate.001".to_string(),
+                kind: "dispatch_expression".to_string(),
+                span_start: 120,
+                span_end: 148,
+                score: 0.84,
+                reasons: vec!["handler_array".to_string(), "pc_hint".to_string()],
+                decision: "selected".to_string(),
+            }],
+            selected_join_points: vec!["dispatch_expression".to_string()],
+            edits: vec![],
+            emit_ok: true,
+            runtime_validated: false,
+            evidence: vec![],
+            diagnostics: vec![],
+        };
+        let json = serde_json::to_string(&report).unwrap();
+        assert!(json.contains("source-ast-report.v0.1"));
     }
 }
