@@ -87,51 +87,42 @@ pub fn detect(source: &str) -> WebpackDetection {
 }
 
 /// Runtime bridge prelude used by the WebpackBridge strategy.
+///
+/// When `allow_prototype_patch` is false, a safe variant is returned that
+/// does not modify `Function.prototype.call` or rewrite module factories.
 pub fn bridge_prelude() -> &'static str {
-    r#"
+    static FULL: &str = r#"
 (function() {
     var __iv8_log = [];
     globalThis.__iv8_wp_require = null;
-    if (typeof Function !== 'undefined' && Function.prototype) {
-        try {
-            Object.defineProperty(Function.prototype, 'm', {
-                configurable: true, enumerable: true,
-                get: function() { return this.__iv8_m; },
-                set: function(v) {
-                    this.__iv8_m = v;
-                    globalThis.__iv8_wp_require = this;
-                    if (__iv8_log.indexOf('wp_require_proto') === -1) {
-                        __iv8_log.push('wp_require_proto');
-                    }
-                }
-            });
-            Object.defineProperty(Function.prototype, 'c', {
-                configurable: true, enumerable: true,
-                get: function() { return this.__iv8_c; },
-                set: function(v) {
-                    this.__iv8_c = v;
-                    globalThis.__iv8_wp_require = this;
-                    if (__iv8_log.indexOf('wp_require_proto') === -1) {
-                        __iv8_log.push('wp_require_proto');
-                    }
-                }
-            });
-        } catch(e) {}
-
-        var origCall = Function.prototype.call;
-        Function.prototype.call = function() {
-            if (globalThis.__iv8_wp_require === null && arguments.length >= 4) {
-                var candidate = arguments[3];
-                if (typeof candidate === 'function'
-                    && (
-                        (candidate.m && (typeof candidate.m === 'object' || typeof candidate.m === 'function')) ||
-                        (candidate.c && typeof candidate.c === 'object') ||
-                        (typeof candidate.e === 'function' && typeof candidate.d === 'function')
-                    )) {
+    try {
+        // Capture require via Function.prototype.c setter.
+        // When modules[id].call(module, module, exports, __webpack_require__) triggers
+        // __webpack_require__.c = installedModules, the setter fires and captures the ref.
+        var _origCP = undefined;
+        Object.defineProperty(Function.prototype, 'c', {
+            configurable: true, enumerable: true,
+            get: function() { return _origCP; },
+            set: function(v) {
+                _origCP = v;
+                var candidate = this;
+                if (typeof candidate === 'function' && candidate !== __iv8_wp_require) {
                     globalThis.__iv8_wp_require = candidate;
                     if (__iv8_log.indexOf('wp_require_captured') === -1) {
                         __iv8_log.push('wp_require_captured');
                     }
+                }
+            }
+        });
+    } catch(e) {}
+    if (typeof Function !== 'undefined' && Function.prototype) {
+        var origCall = Function.prototype.call;
+        Function.prototype.call = function() {
+            if (globalThis.__iv8_wp_require === null && arguments.length >= 4) {
+                var candidate = arguments[3];
+                if (typeof candidate === 'function') {
+                    globalThis.__iv8_wp_require = candidate;
+                    __iv8_log.push('wp_require_captured');
                     Function.prototype.call = origCall;
                 }
             }
@@ -176,19 +167,36 @@ pub fn bridge_prelude() -> &'static str {
         });
     }
     try {
-        var _realWPReq = undefined;
-        Object.defineProperty(globalThis, '__webpack_require__', {
+        if (typeof __webpack_require__ !== 'undefined') {
+            globalThis.__iv8_wp_require = __webpack_require__;
+            __iv8_log.push('wp_require_global');
+        }
+    } catch(e) {}
+    globalThis.__iv8_webpack_log = __iv8_log;
+})();
+"#;
+    FULL
+}
+
+/// Safe variant of the bridge prelude that avoids prototype patching and
+/// factory rewriting. Used when `allow_prototype_patch` is false.
+pub fn safe_bridge_prelude() -> &'static str {
+    static SAFE: &str = r#"
+(function() {
+    var __iv8_log = [];
+    globalThis.__iv8_wp_require = null;
+    if (typeof window !== 'undefined') {
+        var _realWP = undefined;
+        Object.defineProperty(window, 'webpackJsonp', {
             configurable: true, enumerable: true,
-            get: function() { return _realWPReq; },
+            get: function() { return _realWP; },
             set: function(v) {
-                _realWPReq = v;
-                if (typeof v === 'function') {
-                    globalThis.__iv8_wp_require = v;
-                    __iv8_log.push('wp_require_global');
+                if (v && Array.isArray(v) && v !== _realWP) {
+                    _realWP = v;
                 }
             }
         });
-    } catch(e) {}
+    }
     try {
         if (typeof __webpack_require__ !== 'undefined') {
             globalThis.__iv8_wp_require = __webpack_require__;
@@ -197,7 +205,8 @@ pub fn bridge_prelude() -> &'static str {
     } catch(e) {}
     globalThis.__iv8_webpack_log = __iv8_log;
 })();
-"#
+"#;
+    SAFE
 }
 
 /// Detect webpack runtime flavor at runtime inside the V8 isolate.

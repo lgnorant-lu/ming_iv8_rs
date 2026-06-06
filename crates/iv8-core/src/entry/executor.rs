@@ -66,7 +66,7 @@ pub fn run_entry(
 
         record_strategy_semantics(&mut result, strategy_id, strategy_kind);
 
-        let label = if attempt_idx == 0 {
+        let _label = if attempt_idx == 0 {
             "primary".to_string()
         } else {
             format!("fallback[{}]", attempt_idx)
@@ -92,7 +92,7 @@ pub fn run_entry(
         };
 
         // Phase: prepared — apply strategy setup
-        if let Err(e) = apply_strategy_prelude(&mut kernel, strategy_kind, source) {
+        if let Err(e) = apply_strategy_prelude(&mut kernel, strategy_kind, source, &plan.effective_policy) {
             result.diagnostics.fallback_attempts.push(diag::FallbackAttempt {
                 strategy_id: strategy_id.clone(),
                 status: diag::FallbackStatus::Warn,
@@ -223,26 +223,24 @@ pub fn run_entry(
 // Strategy setup
 // ───
 
-/// Apply the runtime prelude for a given strategy kind.
+/// Apply the runtime prelude for a given strategy kind, subject to policy.
 /// Called once per strategy attempt with a fresh kernel.
-/// `source` is the original (untransformed) JS source, needed by some
-/// runtime hook strategies (e.g. Dispatch) for pattern detection.
 fn apply_strategy_prelude(
     kernel: &mut EmbeddedV8Kernel,
     kind: StrategyKind,
     source: &str,
+    policy: &Policy,
 ) -> Result<(), String> {
     match kind {
         StrategyKind::SourceAst | StrategyKind::SourceRegex => {
-            // Source-level strategies: transform applied before eval, no runtime setup
             Ok(())
         }
         StrategyKind::Dispatch => {
-            // Dispatch runtime hook: inject Proxy on handler array or switch VM marker.
-            // This is the RUNTIME-LEVEL dispatch instrumentation (complementary to
-            // source-level __iv8_trap transform under SourceAst strategy).
-            // Detection was already done during planning; we re-detect here to get
-            // the exact handler array / PC variable names needed by the prelude.
+            // Dispatch Proxy instrumentation modifies get/apply traps.
+            // Skip if proxy on sensitive surfaces is forbidden.
+            if policy.forbid_proxy_on_sensitive_surfaces {
+                return Ok(());
+            }
             let dispatch_det = crate::entry::dispatch::detect(source);
             if dispatch_det.detected {
                 match dispatch_det.flavor {
@@ -269,12 +267,22 @@ fn apply_strategy_prelude(
             Ok(())
         }
         StrategyKind::WebpackBridge => {
-            kernel
-                .eval(crate::entry::webpack::bridge_prelude(), EvalOpts::default())
-                .map_err(|e| format!("webpack prelude: {}", e))?;
+            // Webpack prelude may modify Function.prototype.call and rewrite
+            // module factories. Use the safe variant when prototype patch is forbidden.
+            if policy.allow_prototype_patch {
+                kernel
+                    .eval(crate::entry::webpack::bridge_prelude(), EvalOpts::default())
+                    .map_err(|e| format!("webpack prelude: {}", e))?;
+            } else {
+                kernel
+                    .eval(crate::entry::webpack::safe_bridge_prelude(), EvalOpts::default())
+                    .map_err(|e| format!("webpack safe prelude: {}", e))?;
+            }
             Ok(())
         }
         StrategyKind::RuntimeTransparent => {
+            // Transparent hook reads existing getters without modifying prototypes.
+            // It is safe under all policies.
             let js = hooks::transparent::prelude();
             kernel
                 .eval(&js, EvalOpts::default())
@@ -282,6 +290,15 @@ fn apply_strategy_prelude(
             Ok(())
         }
         StrategyKind::RuntimeAggressive => {
+            // Aggressive hook uses Proxy on global objects. Skip if forbidden.
+            if policy.forbid_proxy_on_sensitive_surfaces {
+                return Ok(());
+            }
+            if !policy.allow_function_intrinsic_patch {
+                // Aggressive mode patches Function.prototype.toString.
+                // Skip if intrinsic patch is forbidden.
+                return Ok(());
+            }
             let js = hooks::aggressive::prelude();
             kernel
                 .eval(&js, EvalOpts::default())

@@ -21,6 +21,8 @@ def test_webpack4_runtime_captured():
         }
         __webpack_require__.m = modules;
         __webpack_require__.c = installedModules;
+        // Expose globally so WebpackBridge can capture after init
+        globalThis.__webpack_require__ = __webpack_require__;
         return __webpack_require__(0);
     })({
         0: function(module, exports, __webpack_require__) {
@@ -174,7 +176,7 @@ def test_webpack_vm_hybrid_integration():
         }
         __webpack_require__.m = modules;
         __webpack_require__.c = {};
-        
+        globalThis.__webpack_require__ = __webpack_require__;
         return __webpack_require__(0);
     })({
         0: function() {

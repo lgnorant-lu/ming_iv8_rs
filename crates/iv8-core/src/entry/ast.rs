@@ -177,6 +177,46 @@ pub fn instrument_with_report(source: &str) -> (String, SourceAstReport) {
     let output = emit_js(&cm, &module);
     let emit_ok = !output.is_empty();
 
+    // Build edit records for each candidate
+    let edits: Vec<SourceAstEdit> = candidates
+        .iter()
+        .enumerate()
+        .map(|(i, (kind, start, end, _score))| {
+            let edit_kind = if kind == "dispatch_expression" {
+                "insert_before_call"
+            } else if kind == "eval_source_point" || kind == "function_ctor_source_point" {
+                "replace_callee"
+            } else {
+                "unknown"
+            };
+            let helper = if kind == "dispatch_expression" {
+                "__iv8_trap"
+            } else if kind == "eval_source_point" {
+                "__iv8_eval_trap"
+            } else if kind == "function_ctor_source_point" {
+                "__iv8_function_trap"
+            } else {
+                "unknown"
+            };
+            SourceAstEdit {
+                edit_id: format!("source_ast.edit.{:03}", i),
+                candidate_id: format!("source_ast.candidate.{:03}", i),
+                kind: edit_kind.to_string(),
+                span_before_start: *start as usize,
+                span_before_end: *end as usize,
+                span_after_start: *start as usize,
+                span_after_end: *end as usize,
+                helper: helper.to_string(),
+                policy: "analysis_only".to_string(),
+            }
+        })
+        .collect();
+
+    let selected_join_points: Vec<String> = candidates
+        .iter()
+        .map(|(kind, _, _, _)| kind.clone())
+        .collect();
+
     // Prepend helper infrastructure
     let helper = r#"
 ;(function(){var g=globalThis;
@@ -251,8 +291,8 @@ return Function.apply(null,args);};
                 decision: "selected".to_string(),
             })
             .collect(),
-        selected_join_points: vec!["dispatch_expression".to_string()],
-        edits: Vec::new(),
+        selected_join_points,
+        edits,
         emit_ok,
         runtime_validated: false,
         evidence,

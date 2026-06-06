@@ -1,4 +1,5 @@
-// Only detectable by SourceRegex — required-like pattern
-// Has no handler array or switch pattern
+var require = function() { return function() {}; };
+var ctx = {}, arg = {};
 var req = require("./module");
 var result = req.call(ctx, arg);
+

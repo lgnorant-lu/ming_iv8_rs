@@ -124,8 +124,11 @@ def load_manifest(path: str | Path) -> List[CorpusManifestItem]:
             sample_kind=row["sample_kind"],
             runtime_family=row["runtime_family"],
             persona=row["persona"],
+            target_goal=row.get("target_goal", ""),
+            expected_evidence=_parse_list_cell(row.get("expected_evidence", "")),
             automation_status=row["automation_status"],
             validation_status=row.get("validation_status", "not_validated"),
+            notes=row.get("notes", ""),
         ))
 
     if not records:
@@ -169,6 +172,22 @@ def build_corpus_report(
     }
 
 
+def _classify_result(result_state: str, expected_evidence: List[str], observed_evidence: List[Dict[str, Any]]) -> str:
+    """Classify result per corpus-runner-contract.md section 12.
+
+    PASS requires:
+    - result_state is collected/completed/finalized
+    - all expected evidence kinds are present in observed_evidence with strong strength
+    """
+    if result_state not in {"collected", "completed", "finalized"}:
+        return "FAIL"
+    observed_kinds = {e.get("kind") for e in observed_evidence if isinstance(e, dict)}
+    for expected in expected_evidence:
+        if expected not in observed_kinds:
+            return "WARN"
+    return "PASS"
+
+
 def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
     """Default executor using Entry Plane via prepare_entry + run_with_entry."""
     source_path = Path(item.source_path)
@@ -203,19 +222,18 @@ def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
     environment_report = result.get("environment_report")
     result_state = result.get("final_state", "unknown")
 
-    # Use structured diagnostic_records and observed_evidence from Phase 1 EntryResult
+    # Use structured diagnostic_records and observed_evidence from EntryResult
     diagnostic_records = result.get("diagnostic_records", [])
     observed_evidence = result.get("observed_evidence", [])
     fallback_attempts = result.get("diagnostics", {}).get("fallback_attempts", [])
-    missing_evidence = list(item.expected_evidence)
 
-    # Determine outcome
-    if result_state in {"collected", "completed", "finalized"}:
-        result_class = "PASS"
-    elif result_state in {"partial", "degraded"}:
-        result_class = "WARN"
-    else:
-        result_class = "FAIL"
+    # Compute missing_evidence as expected minus observed
+    observed_kinds = {e.get("kind") for e in observed_evidence if isinstance(e, dict)}
+    expected_kinds = set(item.expected_evidence)
+    missing_evidence = list(expected_kinds - observed_kinds)
+
+    # Determine outcome based on result_state AND evidence gate
+    result_class = _classify_result(result_state, item.expected_evidence, observed_evidence)
 
     return {
         "plan_id": plan_id,
@@ -437,6 +455,17 @@ def _clean_markdown_cell(value: str) -> str:
     return value
 
 
+def _parse_list_cell(value: str) -> List[str]:
+    """Parse a Markdown cell containing a list-like value.
+    
+    Handles formats: `a, b, c` or `a` or empty.
+    """
+    raw = _clean_markdown_cell(value)
+    if not raw or raw == "-":
+        return []
+    return [item.strip() for item in raw.split(",") if item.strip()]
+
+
 # ───
 # CLI entry point with exit codes
 # ───
@@ -524,8 +553,15 @@ def main(argv: Optional[List[str]] = None) -> int:
         dry_run=dry_run,
         strict=strict,
     )
-    report = build_corpus_report(items, manifest_path=manifest_path, options=opts)
+    exec_fn = None if dry_run else default_executor
+    report = build_corpus_report(
+        items,
+        manifest_path=manifest_path,
+        options=opts,
+        executor=exec_fn,
+    )
     summary = report.get("summary", {})
+
 
     if output_path:
         import json
@@ -538,3 +574,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             return EXIT_CODE_WRITE_FAILURE
 
     return _resolve_exit_code(summary, strict=strict)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+
