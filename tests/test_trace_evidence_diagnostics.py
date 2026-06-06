@@ -175,31 +175,26 @@ def test_confidence_from_evidence_uses_shared_labels():
 
 def test_fallback_attempt_roundtrips_with_evidence_and_diagnostics():
     attempt = FallbackAttempt(
-        attempt_id="fallback[1]",
         strategy_id="source_regex.main",
-        stage="fallback.execute",
-        outcome="warn",
+        status="warn",
         reason="weak evidence only",
+        next_strategy="cdp_probe.main",
         evidence=[EvidenceRecord("source_regex_candidate", "weak", "source_regex", "probe", "candidate found")],
         diagnostics=[DiagnosticRecord("FALLBACK_USED", "warn", "fallback.execute", "fallback attempted")],
     )
     assert FallbackAttempt.from_dict(attempt.to_dict()) == attempt
 
     skipped = FallbackAttempt(
-        attempt_id="fallback[skip]",
         strategy_id="manual_hint",
-        stage="fallback.plan",
-        outcome="skip",
+        status="skip",
         reason="not applicable",
     )
     assert FallbackAttempt.from_dict(skipped.to_dict()) == skipped
 
     with pytest.raises(ValueError, match="invalid fallback outcome"):
         FallbackAttempt(
-            attempt_id="fallback[2]",
             strategy_id="bad",
-            stage="fallback.execute",
-            outcome="maybe",
+            status="maybe",
             reason="bad outcome",
         )
 

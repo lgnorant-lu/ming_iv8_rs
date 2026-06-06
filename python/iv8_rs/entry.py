@@ -1,4 +1,4 @@
-"""Dataclass wrappers for v0.6 Entry Plane result objects.
+"""Dataclass wrappers for v0.6/v0.7 Entry Plane result objects.
 
 These provide typed access to the dict payloads returned by
 prepare_entry() / run_with_entry(). The canonical schema lives
@@ -8,6 +8,8 @@ in the Rust types; these wrappers exist for Python ergonomics.
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
+
+from iv8_rs.diagnostics import DiagnosticRecord, FallbackAttempt, EvidenceRecord
 
 
 @dataclass
@@ -26,30 +28,11 @@ class SelectedStrategy:
 
 
 @dataclass
-class ErrorEntry:
-    code: str
-    stage: str
-    message: str
-    strategy_id: Optional[str] = None
-    recoverable: bool = True
-
-    @classmethod
-    def from_dict(cls, d: dict) -> ErrorEntry:
-        return cls(
-            code=d["code"],
-            stage=d["stage"],
-            message=d["message"],
-            strategy_id=d.get("strategy_id"),
-            recoverable=d.get("recoverable", True),
-        )
-
-
-@dataclass
 class ExecutedStrategy:
     strategy_id: str
     phase_entered: str
     outcome: str
-    diagnostics: List[ErrorEntry] = field(default_factory=list)
+    diagnostics: List[DiagnosticRecord] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, d: dict) -> ExecutedStrategy:
@@ -57,7 +40,7 @@ class ExecutedStrategy:
             strategy_id=d["strategy_id"],
             phase_entered=d["phase_entered"],
             outcome=d["outcome"],
-            diagnostics=[ErrorEntry.from_dict(e) for e in d.get("diagnostics", [])],
+            diagnostics=[DiagnosticRecord.from_dict(e) for e in d.get("diagnostics", [])],
         )
 
 
@@ -107,9 +90,11 @@ class EventMeta:
 class Diagnostics:
     sample_signals: List[str]
     selected_strategy_reason: Optional[str]
-    fallback_attempts: List[str]
+    fallback_attempts: List[FallbackAttempt]
     policy_constraints: List[str]
     missing_capabilities: List[str]
+    diagnostic_records: List[DiagnosticRecord] = field(default_factory=list)
+    observed_evidence: List[EvidenceRecord] = field(default_factory=list)
     activation_timing: Optional[str] = None
     reload_reason: Optional[str] = None
     collection_summary: Optional[str] = None
@@ -120,9 +105,11 @@ class Diagnostics:
         return cls(
             sample_signals=d.get("sample_signals", []),
             selected_strategy_reason=d.get("selected_strategy_reason"),
-            fallback_attempts=d.get("fallback_attempts", []),
+            fallback_attempts=[FallbackAttempt.from_dict(f) for f in d.get("fallback_attempts", [])],
             policy_constraints=d.get("policy_constraints", []),
             missing_capabilities=d.get("missing_capabilities", []),
+            diagnostic_records=[DiagnosticRecord.from_dict(r) for r in d.get("diagnostic_records", [])],
+            observed_evidence=[EvidenceRecord.from_dict(e) for e in d.get("observed_evidence", [])],
             activation_timing=d.get("activation_timing"),
             reload_reason=d.get("reload_reason"),
             collection_summary=d.get("collection_summary"),
@@ -202,8 +189,8 @@ class EntryResult:
     selected_strategy: SelectedStrategy
     executed_strategies: List[ExecutedStrategy]
     trace: List[str]
-    errors: List[dict]
-    warnings: List[dict]
+    diagnostic_records: List[DiagnosticRecord]
+    observed_evidence: List[EvidenceRecord]
     diagnostics: Diagnostics
     trace_meta: Optional[TraceMeta] = None
     module_graph: Optional[dict] = None
@@ -219,8 +206,8 @@ class EntryResult:
             selected_strategy=SelectedStrategy.from_dict(d["selected_strategy"]),
             executed_strategies=[ExecutedStrategy.from_dict(e) for e in d.get("executed_strategies", [])],
             trace=d.get("trace", []),
-            errors=d.get("errors", []),
-            warnings=d.get("warnings", []),
+            diagnostic_records=[DiagnosticRecord.from_dict(r) for r in d.get("diagnostic_records", [])],
+            observed_evidence=[EvidenceRecord.from_dict(e) for e in d.get("observed_evidence", [])],
             diagnostics=Diagnostics.from_dict(d.get("diagnostics", {})),
             trace_meta=TraceMeta.from_dict(d["trace_meta"]) if d.get("trace_meta") else None,
             module_graph=d.get("module_graph"),

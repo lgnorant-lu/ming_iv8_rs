@@ -123,15 +123,9 @@ pub fn run_entry(
         // Transform source if strategy requires it
         let eval_source = match strategy_kind {
             StrategyKind::SourceAst => {
-                let (transformed, diag) = crate::entry::ast::instrument(source);
-                if let Some(d) = diag {
-                    result.diagnostic_records.push(diag::DiagnosticRecord::new(
-                        "ACT_AST_TRANSFORM_WARNING",
-                        diag::DiagnosticSeverity::Warn,
-                        "armed",
-                        &d,
-                    ));
-                }
+                let (transformed, report) = crate::entry::ast::instrument_with_report(source);
+                result.observed_evidence.extend(report.evidence);
+                result.diagnostic_records.extend(report.diagnostics);
                 transformed
             }
             StrategyKind::Dispatch => {
@@ -184,7 +178,7 @@ pub fn run_entry(
         }
 
         // Phase: collected — gather trace and evidence for this strategy
-        collect_strategy_evidence(&mut kernel, &mut result, strategy_id, strategy_kind);
+        collect_strategy_evidence(&mut kernel, &mut result, strategy_id, strategy_kind, source);
 
         // Evaluate: does the cumulative evidence meet expected_evidence requirements?
         let evidence_met = evidence_satisfied(&result, &plan.expected_evidence);
@@ -308,6 +302,7 @@ fn collect_strategy_evidence(
     result: &mut EntryResult,
     strategy_id: &str,
     kind: StrategyKind,
+    source: &str,
 ) {
     // Pull trace from whichever log is present
     let trace_val = kernel.eval_to_rust_value(concat!(
@@ -329,6 +324,121 @@ fn collect_strategy_evidence(
     // Collect webpack module log if applicable
     if matches!(kind, StrategyKind::WebpackBridge) {
         result.module_graph = crate::entry::webpack::collect_module_graph(kernel);
+        if let Some(ref graph) = result.module_graph {
+            if let Some(ev_array) = graph.get("evidence").and_then(|v| v.as_array()) {
+                for ev in ev_array {
+                    if let Ok(record) = serde_json::from_value::<diag::EvidenceRecord>(ev.clone()) {
+                        result.observed_evidence.push(record);
+                    }
+                }
+            }
+            if let Some(diag_array) = graph.get("diagnostics").and_then(|v| v.as_array()) {
+                for d in diag_array {
+                    if let Ok(record) = serde_json::from_value::<diag::DiagnosticRecord>(d.clone()) {
+                        result.diagnostic_records.push(record);
+                    }
+                }
+            }
+        }
+    }
+
+    if matches!(kind, StrategyKind::Dispatch) {
+        let det = crate::entry::dispatch::detect(source);
+        result.observed_evidence.extend(det.to_evidence_records());
+        result.diagnostic_records.extend(det.to_diagnostic_records());
+        
+        let has_dispatch_trace = per_strategy_trace.iter().any(|t| t.starts_with("D,"));
+        if has_dispatch_trace {
+            result.observed_evidence.push(
+                diag::EvidenceRecord::new(
+                    "dispatch_trace_observed",
+                    diag::EvidenceStrength::Strong,
+                    "dispatch",
+                    "dispatch.execute",
+                    "dispatch trace observed at runtime",
+                ).with_producer("dispatch.main")
+            );
+        } else {
+            result.diagnostic_records.push(
+                diag::error_diag(
+                    diag::codes::dispatch::TRACE_EMPTY,
+                    "dispatch.execute",
+                    "dispatch strategy executed but produced no trace events",
+                )
+            );
+        }
+    }
+
+    if matches!(kind, StrategyKind::SourceAst) {
+        let has_candidates = result.observed_evidence.iter().any(|e| {
+            e.kind == "source_ast_candidate_detected"
+        });
+        let has_ast_trace = per_strategy_trace.iter().any(|t| {
+            t.starts_with("D,") || t.starts_with("eval,") || t.starts_with("fn_ctor,")
+        });
+        if has_ast_trace {
+            result.observed_evidence.push(
+                diag::EvidenceRecord::new(
+                    "source_ast_runtime_validated",
+                    diag::EvidenceStrength::Strong,
+                    "source_ast",
+                    "source_ast.validate",
+                    "AST join points validated by runtime trace",
+                ).with_producer("source_ast.main")
+            );
+            
+            let has_eval = per_strategy_trace.iter().any(|t| t.starts_with("eval,"));
+            if has_eval {
+                result.observed_evidence.push(
+                    diag::EvidenceRecord::new(
+                        "eval_source_captured",
+                        diag::EvidenceStrength::Strong,
+                        "source_ast",
+                        "source_ast.validate",
+                        "eval source captured at runtime",
+                    ).with_producer("source_ast.main")
+                );
+            }
+            let has_fn = per_strategy_trace.iter().any(|t| t.starts_with("fn_ctor,"));
+            if has_fn {
+                result.observed_evidence.push(
+                    diag::EvidenceRecord::new(
+                        "function_constructor_source_captured",
+                        diag::EvidenceStrength::Strong,
+                        "source_ast",
+                        "source_ast.validate",
+                        "Function constructor source captured at runtime",
+                    ).with_producer("source_ast.main")
+                );
+            }
+        } else if has_candidates {
+            result.diagnostic_records.push(
+                diag::warn_diag(
+                    diag::codes::source_ast::RUNTIME_VALIDATION_FAILED,
+                    "source_ast.validate",
+                    "AST strategy executed but produced no instrumented trace events",
+                )
+            );
+        }
+    }
+
+    if matches!(kind, StrategyKind::SourceRegex) {
+        result.observed_evidence.push(
+            diag::EvidenceRecord::new(
+                "source_regex_candidate",
+                diag::EvidenceStrength::Weak,
+                "source_regex",
+                "source_regex.capture",
+                "regex candidate matched statically",
+            ).with_producer("source_regex.main")
+        );
+        result.diagnostic_records.push(
+            diag::warn_diag(
+                diag::codes::source_ast::REGEX_PASS_THROUGH,
+                "source_regex.capture",
+                "regex fallback executed as pass-through",
+            )
+        );
     }
 
     // Merge per-strategy trace into result

@@ -93,17 +93,45 @@ pub fn bridge_prelude() -> &'static str {
     var __iv8_log = [];
     globalThis.__iv8_wp_require = null;
     if (typeof Function !== 'undefined' && Function.prototype) {
+        try {
+            Object.defineProperty(Function.prototype, 'm', {
+                configurable: true, enumerable: true,
+                get: function() { return this.__iv8_m; },
+                set: function(v) {
+                    this.__iv8_m = v;
+                    globalThis.__iv8_wp_require = this;
+                    if (__iv8_log.indexOf('wp_require_proto') === -1) {
+                        __iv8_log.push('wp_require_proto');
+                    }
+                }
+            });
+            Object.defineProperty(Function.prototype, 'c', {
+                configurable: true, enumerable: true,
+                get: function() { return this.__iv8_c; },
+                set: function(v) {
+                    this.__iv8_c = v;
+                    globalThis.__iv8_wp_require = this;
+                    if (__iv8_log.indexOf('wp_require_proto') === -1) {
+                        __iv8_log.push('wp_require_proto');
+                    }
+                }
+            });
+        } catch(e) {}
+
         var origCall = Function.prototype.call;
         Function.prototype.call = function() {
             if (globalThis.__iv8_wp_require === null && arguments.length >= 4) {
                 var candidate = arguments[3];
                 if (typeof candidate === 'function'
-                    && typeof candidate.e === 'function'
-                    && typeof candidate.d === 'function'
-                    && typeof candidate.o === 'function'
-                    && typeof candidate.p === 'string') {
+                    && (
+                        (candidate.m && (typeof candidate.m === 'object' || typeof candidate.m === 'function')) ||
+                        (candidate.c && typeof candidate.c === 'object') ||
+                        (typeof candidate.e === 'function' && typeof candidate.d === 'function')
+                    )) {
                     globalThis.__iv8_wp_require = candidate;
-                    __iv8_log.push('wp_require_captured');
+                    if (__iv8_log.indexOf('wp_require_captured') === -1) {
+                        __iv8_log.push('wp_require_captured');
+                    }
                     Function.prototype.call = origCall;
                 }
             }
@@ -147,6 +175,20 @@ pub fn bridge_prelude() -> &'static str {
             }
         });
     }
+    try {
+        var _realWPReq = undefined;
+        Object.defineProperty(globalThis, '__webpack_require__', {
+            configurable: true, enumerable: true,
+            get: function() { return _realWPReq; },
+            set: function(v) {
+                _realWPReq = v;
+                if (typeof v === 'function') {
+                    globalThis.__iv8_wp_require = v;
+                    __iv8_log.push('wp_require_global');
+                }
+            }
+        });
+    } catch(e) {}
     try {
         if (typeof __webpack_require__ !== 'undefined') {
             globalThis.__iv8_wp_require = __webpack_require__;
@@ -297,6 +339,26 @@ fn check_capture_late(kernel: &mut EmbeddedV8Kernel) -> bool {
 /// - nodes[], edges[], chunks[]
 /// - evidence[], diagnostics[]
 pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json::Value> {
+    // Step 1: Runtime capture of __webpack_require__ (handles IIFE-local requires)
+    // This must run before reading __iv8_webpack_log so the capture is recorded.
+    let require_callable = matches!(
+        kernel.eval_to_rust_value(
+            "(function(){ \
+             if (typeof __iv8_wp_require === 'function') return true; \
+             if (typeof __webpack_require__ === 'function') { \
+               globalThis.__iv8_wp_require = __webpack_require__; \
+               if (typeof __iv8_webpack_log !== 'undefined') { \
+                 __iv8_webpack_log.push('wp_require_global'); \
+               } \
+               return true; \
+             } \
+             return false; \
+             })()"
+        ),
+        RustValue::Bool(true)
+    );
+
+    // Step 2: Read webpack log entries
     let log_val = kernel
         .eval_to_rust_value("typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []");
     let RustValue::Array(items) = log_val else {
@@ -320,13 +382,6 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
         }
     }
 
-    // Double-check require is still callable
-    let require_callable = matches!(
-        kernel.eval_to_rust_value(
-            "typeof __iv8_wp_require === 'function' || typeof __webpack_require__ === 'function'"
-        ),
-        RustValue::Bool(true)
-    );
     let require_captured = require_captured_via_prelude || require_captured_via_global || require_callable;
 
     // Collect module IDs from require.m
@@ -552,7 +607,9 @@ fn collect_require_module_ids(kernel: &mut EmbeddedV8Kernel, module_ids: &mut Ve
     let js = concat!(
         "(function(){var r=null;",
         "if(typeof __iv8_wp_require === 'function') r=__iv8_wp_require;",
+        "else if(typeof globalThis.__webpack_require__ === 'function') r=globalThis.__webpack_require__;",
         "else if(typeof __webpack_require__ === 'function') r=__webpack_require__;",
+        "else if(typeof __webpack_require__ === 'object' && __webpack_require__ && __webpack_require__.m) r=__webpack_require__;",
         "return r && r.m ? Object.keys(r.m) : [];})()"
     );
     if let RustValue::Array(items) = kernel.eval_to_rust_value(js) {

@@ -194,34 +194,32 @@ class DiagnosticRecord:
 class FallbackAttempt:
     """A structured fallback attempt record."""
 
-    attempt_id: str
     strategy_id: str
-    stage: str
-    outcome: str
+    status: str
     reason: str
-    evidence: List[EvidenceRecord] = field(default_factory=list)
+    next_strategy: Optional[str] = None
     diagnostics: List[DiagnosticRecord] = field(default_factory=list)
+    evidence: List[EvidenceRecord] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        if self.outcome not in FALLBACK_OUTCOMES:
-            raise ValueError(f"invalid fallback outcome: {self.outcome}")
+        if self.status not in FALLBACK_OUTCOMES:
+            raise ValueError(f"invalid fallback outcome: {self.status}")
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "FallbackAttempt":
         return cls(
-            attempt_id=data["attempt_id"],
             strategy_id=data["strategy_id"],
-            stage=data["stage"],
-            outcome=data["outcome"],
+            status=data["status"],
             reason=data["reason"],
-            evidence=[EvidenceRecord.from_dict(item) for item in data.get("evidence", [])],
+            next_strategy=data.get("next_strategy"),
             diagnostics=[DiagnosticRecord.from_dict(item) for item in data.get("diagnostics", [])],
+            evidence=[EvidenceRecord.from_dict(item) for item in data.get("evidence", [])],
         )
 
     def to_dict(self) -> Dict[str, Any]:
         data = asdict(self)
-        data["evidence"] = [item.to_dict() for item in self.evidence]
         data["diagnostics"] = [item.to_dict() for item in self.diagnostics]
+        data["evidence"] = [item.to_dict() for item in self.evidence]
         return data
 
 

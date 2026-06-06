@@ -64,7 +64,7 @@ def test_build_corpus_report_emits_required_envelope_and_summary():
     report = build_corpus_report(_items(), manifest_path="manifest.md")
 
     assert report["schema_version"] == "corpus-report.v0.1"
-    assert report["runner_version"] == "0.6.2-draft"
+    assert report["runner_version"] == "0.7.0-dev"
     assert report["manifest_path"] == "manifest.md"
     assert report["policy"] == {"level": "runtime_safe"}
     assert report["summary"] == {

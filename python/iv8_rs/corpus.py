@@ -352,6 +352,9 @@ def _decide_eligibility(
 
 
 def _sample_diagnostics(item: CorpusManifestItem, eligibility: str, reason: str) -> List[Dict[str, Any]]:
+    if eligibility == "run":
+        # Running samples get diagnostics from execution results, not eligibility
+        return []
     if reason == "path_missing":
         code = "CORPUS_SAMPLE_PATH_MISSING"
         severity = "warning"
