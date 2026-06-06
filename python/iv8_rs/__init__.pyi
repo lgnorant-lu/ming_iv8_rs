@@ -15,6 +15,7 @@ from iv8_rs._iv8 import (
     JSPanic,
 )
 from iv8_rs._iv8 import JSContext as _RustJSContext
+from iv8_rs.environment import EnvironmentPatch, EnvironmentPlaneReport
 
 # --- v0.4: Profile System ---
 
@@ -71,6 +72,28 @@ def diff_analysis(
     """
     ...
 
+def build_environment_patch(
+    probe_report: Dict[str, Any],
+    *,
+    policy: str = "runtime_safe",
+    defaults: Optional[Dict[str, Any]] = None,
+) -> EnvironmentPatch:
+    ...
+
+def run_environment_plane(
+    js_source: str,
+    *,
+    profile: Optional[str] = "default",
+    environment: Optional[Dict[str, Any]] = None,
+    random_seed: Optional[int] = 42,
+    time_freeze: Optional[float] = None,
+    time_mode: str = "logical",
+    entry_expr: Optional[str] = None,
+    patch_defaults: Optional[Dict[str, Any]] = None,
+    policy: str = "runtime_safe",
+) -> EnvironmentPlaneReport:
+    ...
+
 __all__ = [
     "__version__",
     "JSContext",
@@ -79,6 +102,10 @@ __all__ = [
     "instrument_source",
     "trace_diff",
     "diff_analysis",
+    "EnvironmentPatch",
+    "EnvironmentPlaneReport",
+    "build_environment_patch",
+    "run_environment_plane",
     "load_profile",
     "JSError",
     "JSCompileError",

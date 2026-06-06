@@ -11,6 +11,12 @@ from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, 
 from iv8_rs.analysis import diff_analysis
 from iv8_rs.trace import parse_trace, StructuredTrace, parse_trace_stream, compress_trace, CompressedTrace
 from iv8_rs.probe import probe_environment
+from iv8_rs.environment import (
+    EnvironmentPatch,
+    EnvironmentPlaneReport,
+    build_environment_patch,
+    run_environment_plane,
+)
 from iv8_rs.cfg import CFG
 from iv8_rs.taint import TaintEngine, TaintReport
 from iv8_rs.patterns import (
@@ -122,6 +128,10 @@ __all__ = [
     "CompressedTrace",
     "CFG",
     "probe_environment",
+    "EnvironmentPatch",
+    "EnvironmentPlaneReport",
+    "build_environment_patch",
+    "run_environment_plane",
     "load_profile",
     "TaintEngine",
     "TaintReport",
