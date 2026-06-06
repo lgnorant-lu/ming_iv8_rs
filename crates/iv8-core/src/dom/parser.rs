@@ -68,11 +68,7 @@ impl EgoTreeSink {
     }
 
     /// Append a node or merge text with previous sibling.
-    fn append_common(
-        &self,
-        parent_id: NodeId,
-        child: NodeOrText<NodeId>,
-    ) {
+    fn append_common(&self, parent_id: NodeId, child: NodeOrText<NodeId>) {
         match child {
             NodeOrText::AppendNode(node_id) => {
                 // Reparent: detach from old parent, append to new parent
@@ -119,11 +115,7 @@ impl EgoTreeSink {
     }
 
     /// Insert before a sibling, merging text if needed.
-    fn insert_before_common(
-        &self,
-        sibling_id: NodeId,
-        child: NodeOrText<NodeId>,
-    ) {
+    fn insert_before_common(&self, sibling_id: NodeId, child: NodeOrText<NodeId>) {
         match child {
             NodeOrText::AppendNode(node_id) => {
                 let mut doc = self.doc.borrow_mut();
@@ -207,12 +199,7 @@ impl TreeSink for EgoTreeSink {
         }
     }
 
-    fn create_element(
-        &self,
-        name: QualName,
-        attrs: Vec<Attribute>,
-        flags: ElementFlags,
-    ) -> NodeId {
+    fn create_element(&self, name: QualName, attrs: Vec<Attribute>, flags: ElementFlags) -> NodeId {
         let tag_name = name.local.to_string();
         let namespace = name.ns.to_string();
         let attr_vec: Vec<(String, String)> = attrs
@@ -280,10 +267,7 @@ impl TreeSink for EgoTreeSink {
     ) {
         let has_parent = {
             let doc = self.doc.borrow();
-            doc.tree
-                .get(*element)
-                .and_then(|n| n.parent())
-                .is_some()
+            doc.tree.get(*element).and_then(|n| n.parent()).is_some()
         };
 
         if has_parent {
@@ -340,10 +324,7 @@ impl TreeSink for EgoTreeSink {
                         *id = Some(value.clone());
                     }
                     if name == "class" {
-                        *classes = value
-                            .split_whitespace()
-                            .map(|s| s.to_string())
-                            .collect();
+                        *classes = value.split_whitespace().map(|s| s.to_string()).collect();
                     }
                     existing_attrs.push((name, value));
                 }
@@ -443,7 +424,10 @@ mod tests {
 
     #[test]
     fn parse_simple_html() {
-        let doc = parse_html("<html><head><title>Test</title></head><body><p>Hello</p></body></html>", None);
+        let doc = parse_html(
+            "<html><head><title>Test</title></head><body><p>Hello</p></body></html>",
+            None,
+        );
         assert!(doc.document_element().is_some());
         assert!(doc.head().is_some());
         assert!(doc.body().is_some());
@@ -451,8 +435,11 @@ mod tests {
 
     #[test]
     fn parse_extracts_elements() {
-        let doc = parse_html("<div id=\"main\"><span class=\"foo bar\">text</span></div>", None);
-        
+        let doc = parse_html(
+            "<div id=\"main\"><span class=\"foo bar\">text</span></div>",
+            None,
+        );
+
         // Should have the div with id
         let main_id = doc.get_element_by_id("main");
         assert!(main_id.is_some(), "should find element with id='main'");
@@ -460,7 +447,7 @@ mod tests {
         // Check span
         let spans = doc.get_elements_by_tag_name("span");
         assert_eq!(spans.len(), 1);
-        
+
         let span_ref = doc.get(spans[0]).unwrap();
         assert_eq!(span_ref.value().class_list(), &["foo", "bar"]);
     }
@@ -478,10 +465,10 @@ mod tests {
         let doc = parse_html("<body><!-- a comment --><p>text</p></body>", None);
         let body_id = doc.body().unwrap();
         let body_ref = doc.get(body_id).unwrap();
-        
-        let has_comment = body_ref.children().any(|c| {
-            matches!(c.value(), NodeData::Comment(s) if s.contains("a comment"))
-        });
+
+        let has_comment = body_ref
+            .children()
+            .any(|c| matches!(c.value(), NodeData::Comment(s) if s.contains("a comment")));
         assert!(has_comment, "should have a comment node");
     }
 
@@ -489,21 +476,27 @@ mod tests {
     fn parse_doctype() {
         let doc = parse_html("<!DOCTYPE html><html><body></body></html>", None);
         let root = doc.tree.root();
-        
-        let has_doctype = root.children().any(|c| {
-            matches!(c.value(), NodeData::DocumentType { name, .. } if name == "html")
-        });
+
+        let has_doctype = root
+            .children()
+            .any(|c| matches!(c.value(), NodeData::DocumentType { name, .. } if name == "html"));
         assert!(has_doctype, "should have DOCTYPE node");
     }
 
     #[test]
     fn parse_attributes() {
-        let doc = parse_html("<a href=\"https://example.com\" target=\"_blank\">link</a>", None);
+        let doc = parse_html(
+            "<a href=\"https://example.com\" target=\"_blank\">link</a>",
+            None,
+        );
         let links = doc.get_elements_by_tag_name("a");
         assert_eq!(links.len(), 1);
-        
+
         let link_ref = doc.get(links[0]).unwrap();
-        assert_eq!(link_ref.value().get_attr("href"), Some("https://example.com"));
+        assert_eq!(
+            link_ref.value().get_attr("href"),
+            Some("https://example.com")
+        );
         assert_eq!(link_ref.value().get_attr("target"), Some("_blank"));
     }
 
@@ -516,10 +509,7 @@ mod tests {
 
     #[test]
     fn parse_nested_structure() {
-        let doc = parse_html(
-            "<div><div><div><span>deep</span></div></div></div>",
-            None,
-        );
+        let doc = parse_html("<div><div><div><span>deep</span></div></div></div>", None);
         let spans = doc.get_elements_by_tag_name("span");
         assert_eq!(spans.len(), 1);
         assert_eq!(doc.text_content_of(spans[0]), "deep");
@@ -534,10 +524,7 @@ mod tests {
 
     #[test]
     fn parse_script_tag() {
-        let doc = parse_html(
-            "<body><script>var x = 1;</script></body>",
-            None,
-        );
+        let doc = parse_html("<body><script>var x = 1;</script></body>", None);
         let scripts = doc.get_elements_by_tag_name("script");
         assert_eq!(scripts.len(), 1);
         assert_eq!(doc.text_content_of(scripts[0]), "var x = 1;");
@@ -546,9 +533,6 @@ mod tests {
     #[test]
     fn parse_with_base_url() {
         let doc = parse_html("<html></html>", Some("https://example.com/page"));
-        assert_eq!(
-            doc.base_url().unwrap().as_str(),
-            "https://example.com/page"
-        );
+        assert_eq!(doc.base_url().unwrap().as_str(), "https://example.com/page");
     }
 }

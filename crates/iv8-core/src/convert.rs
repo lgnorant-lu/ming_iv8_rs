@@ -183,7 +183,6 @@ fn v8_to_rust_with_seen(
     depth: u32,
     seen: &mut std::collections::HashSet<i32>,
 ) -> RustValue {
-
     // Circular reference protection
     if depth > 10 {
         return RustValue::JsObject("[object Object]".to_string());
@@ -220,7 +219,8 @@ fn v8_to_rust_with_seen(
 
     // Symbol → string representation
     if value.is_symbol() {
-        let desc = value.to_detail_string(scope)
+        let desc = value
+            .to_detail_string(scope)
             .map(|s| s.to_rust_string_lossy(scope))
             .unwrap_or_else(|| "Symbol()".to_string());
         return RustValue::String(desc);
@@ -263,9 +263,8 @@ fn v8_to_rust_with_seen(
         if len > 0 {
             let store = ab.get_backing_store();
             if let Some(data_ptr) = store.data() {
-                let slice = unsafe {
-                    std::slice::from_raw_parts(data_ptr.as_ptr() as *const u8, len)
-                };
+                let slice =
+                    unsafe { std::slice::from_raw_parts(data_ptr.as_ptr() as *const u8, len) };
                 buf.copy_from_slice(slice);
             }
         }
@@ -379,7 +378,8 @@ fn v8_to_rust_with_seen(
             || value.is_native_error()
         {
             let s = if value.is_function() {
-                let full = value.to_detail_string(scope)
+                let full = value
+                    .to_detail_string(scope)
                     .map(|s| s.to_rust_string_lossy(scope))
                     .unwrap_or_else(|| "function() {}".to_string());
                 truncate_function_body(&full)
@@ -406,7 +406,9 @@ fn v8_to_rust_with_seen(
             for i in 0..len {
                 if let Some(key) = keys.get_index(scope, i) {
                     let key_str = key.to_rust_string_lossy(scope);
-                    let val = obj.get(scope, key).unwrap_or_else(|| v8::undefined(scope).into());
+                    let val = obj
+                        .get(scope, key)
+                        .unwrap_or_else(|| v8::undefined(scope).into());
                     map.insert(key_str, v8_to_rust_with_seen(scope, val, depth + 1, seen));
                 }
             }
@@ -417,7 +419,8 @@ fn v8_to_rust_with_seen(
 
     // Fallback
     RustValue::JsObject(
-        value.to_detail_string(scope)
+        value
+            .to_detail_string(scope)
             .map(|s| s.to_rust_string_lossy(scope))
             .unwrap_or_else(|| "[unknown]".to_string()),
     )
@@ -437,9 +440,7 @@ fn decode_typed_array(kind: TypedArrayKind, buf: &[u8]) -> Vec<RustValue> {
     for i in 0..count {
         let chunk = &buf[i * elem_size..(i + 1) * elem_size];
         let val = match kind {
-            TypedArrayKind::Uint8 | TypedArrayKind::Uint8Clamped => {
-                RustValue::Int(chunk[0] as i64)
-            }
+            TypedArrayKind::Uint8 | TypedArrayKind::Uint8Clamped => RustValue::Int(chunk[0] as i64),
             TypedArrayKind::Int8 => RustValue::Int(chunk[0] as i8 as i64),
             TypedArrayKind::Uint16 => {
                 let arr: [u8; 2] = [chunk[0], chunk[1]];
@@ -482,7 +483,11 @@ fn decode_typed_array(kind: TypedArrayKind, buf: &[u8]) -> Vec<RustValue> {
                 } else {
                     (false, v as u64)
                 };
-                let words = if magnitude == 0 { vec![] } else { vec![magnitude] };
+                let words = if magnitude == 0 {
+                    vec![]
+                } else {
+                    vec![magnitude]
+                };
                 RustValue::BigInt { negative, words }
             }
             TypedArrayKind::BigUint64 => {
@@ -536,11 +541,13 @@ fn call_object_to_string(scope: &v8::PinScope<'_, '_>, value: v8::Local<v8::Valu
             let proto_key = crate::v8_utils::v8_string(scope, "prototype");
             if let Some(proto) = obj_ctor.get(scope, proto_key.into()) {
                 if proto.is_object() {
-                    let proto_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(proto) };
+                    let proto_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(proto) };
                     let ts_key = crate::v8_utils::v8_string(scope, "toString");
                     if let Some(ts_fn) = proto_obj.get(scope, ts_key.into()) {
                         if ts_fn.is_function() {
-                            let ts_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(ts_fn) };
+                            let ts_fn: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(ts_fn) };
                             if let Some(result) = ts_fn.call(scope, value, &[]) {
                                 return result.to_rust_string_lossy(scope);
                             }
@@ -569,7 +576,9 @@ fn convert_circular_object(
         for i in 0..len {
             if let Some(key) = keys.get_index(scope, i) {
                 let key_str = key.to_rust_string_lossy(scope);
-                let val = obj.get(scope, key).unwrap_or_else(|| v8::undefined(scope).into());
+                let val = obj
+                    .get(scope, key)
+                    .unwrap_or_else(|| v8::undefined(scope).into());
                 map.insert(key_str, v8_to_rust_impl(scope, val, depth + 1));
             }
         }
@@ -605,7 +614,10 @@ mod tests {
             other => panic!("expected Float(NaN), got {:?}", other),
         }
         assert_eq!(eval_to_rust("Infinity"), RustValue::Float(f64::INFINITY));
-        assert_eq!(eval_to_rust("-Infinity"), RustValue::Float(f64::NEG_INFINITY));
+        assert_eq!(
+            eval_to_rust("-Infinity"),
+            RustValue::Float(f64::NEG_INFINITY)
+        );
     }
 
     #[test]
@@ -666,19 +678,15 @@ mod tests {
     fn convert_nested_object() {
         let result = eval_to_rust("({x: {y: {z: 42}}})");
         match result {
-            RustValue::Object(map) => {
-                match map.get("x") {
-                    Some(RustValue::Object(inner)) => {
-                        match inner.get("y") {
-                            Some(RustValue::Object(innermost)) => {
-                                assert_eq!(innermost.get("z"), Some(&RustValue::Int(42)));
-                            }
-                            other => panic!("expected nested Object, got {:?}", other),
-                        }
+            RustValue::Object(map) => match map.get("x") {
+                Some(RustValue::Object(inner)) => match inner.get("y") {
+                    Some(RustValue::Object(innermost)) => {
+                        assert_eq!(innermost.get("z"), Some(&RustValue::Int(42)));
                     }
-                    other => panic!("expected Object at x, got {:?}", other),
-                }
-            }
+                    other => panic!("expected nested Object, got {:?}", other),
+                },
+                other => panic!("expected Object at x, got {:?}", other),
+            },
             other => panic!("expected Object, got {:?}", other),
         }
     }
@@ -701,7 +709,11 @@ mod tests {
         let result = eval_to_rust("new Date(0)");
         match result {
             RustValue::JsObject(s) => {
-                assert!(s.contains("1970") || s.contains("Date"), "date string: {}", s);
+                assert!(
+                    s.contains("1970") || s.contains("Date"),
+                    "date string: {}",
+                    s
+                );
             }
             other => panic!("expected JsObject for Date, got {:?}", other),
         }
@@ -712,7 +724,11 @@ mod tests {
         let result = eval_to_rust("(function foo() {})");
         match result {
             RustValue::JsObject(s) => {
-                assert!(s.contains("function") || s.contains("foo"), "fn string: {}", s);
+                assert!(
+                    s.contains("function") || s.contains("foo"),
+                    "fn string: {}",
+                    s
+                );
             }
             other => panic!("expected JsObject for Function, got {:?}", other),
         }

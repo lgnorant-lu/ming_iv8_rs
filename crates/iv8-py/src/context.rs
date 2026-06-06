@@ -15,11 +15,19 @@ use crate::expose;
 
 /// Extension trait to add Python-specific methods to EmbeddedV8Kernel.
 trait KernelPyExt {
-    fn expose_py_fn(&mut self, name: &str, callable: pyo3::Py<pyo3::PyAny>) -> expose::ExposedPyFnHandle;
+    fn expose_py_fn(
+        &mut self,
+        name: &str,
+        callable: pyo3::Py<pyo3::PyAny>,
+    ) -> expose::ExposedPyFnHandle;
 }
 
 impl KernelPyExt for EmbeddedV8Kernel {
-    fn expose_py_fn(&mut self, name: &str, callable: pyo3::Py<pyo3::PyAny>) -> expose::ExposedPyFnHandle {
+    fn expose_py_fn(
+        &mut self,
+        name: &str,
+        callable: pyo3::Py<pyo3::PyAny>,
+    ) -> expose::ExposedPyFnHandle {
         self.with_global_scope(|scope, global| {
             expose::expose_py_function(scope, global, name, callable)
         })
@@ -47,7 +55,9 @@ struct KernelCell {
 
 impl KernelCell {
     fn new(kernel: EmbeddedV8Kernel) -> Self {
-        Self { inner: Mutex::new(Some(kernel)) }
+        Self {
+            inner: Mutex::new(Some(kernel)),
+        }
     }
 
     #[allow(clippy::panic)]
@@ -81,7 +91,9 @@ impl Drop for JSContextInner {
         if std::thread::current().id() == self.creator_thread {
             // SAFETY: the last Python reference is being dropped on the owner
             // thread, so it is safe to destroy the V8 isolate here.
-            unsafe { ManuallyDrop::drop(&mut self.kernel); }
+            unsafe {
+                ManuallyDrop::drop(&mut self.kernel);
+            }
             self.free_exposed_callbacks();
         } else {
             // Dropping V8 from a non-owner thread is not safe. Leaking the
@@ -97,7 +109,9 @@ impl JSContextInner {
         let handles: Vec<_> = self.exposed_callbacks.lock().drain(..).collect();
         Python::with_gil(|_| {
             for handle in handles {
-                unsafe { expose::free_exposed_py_function(handle); }
+                unsafe {
+                    expose::free_exposed_py_function(handle);
+                }
             }
         });
     }
@@ -139,20 +153,28 @@ impl JSContext {
             }
         }
 
-        let mut env_overrides = environment.map(|d| pydict_to_json_map(d)).transpose()?
+        let mut env_overrides = environment
+            .map(|d| pydict_to_json_map(d))
+            .transpose()?
             .unwrap_or_default();
 
         // Apply config → environment mappings
         if let Some(ref tz) = timezone {
-            env_overrides.entry("timezone".to_string())
+            env_overrides
+                .entry("timezone".to_string())
                 .or_insert_with(|| serde_json::Value::String(tz.clone()));
         }
         if let Some(ref lc) = locale {
-            env_overrides.entry("navigator.language".to_string())
+            env_overrides
+                .entry("navigator.language".to_string())
                 .or_insert_with(|| serde_json::Value::String(lc.clone()));
         }
 
-        let env_overrides = if env_overrides.is_empty() { None } else { Some(env_overrides) };
+        let env_overrides = if env_overrides.is_empty() {
+            None
+        } else {
+            Some(env_overrides)
+        };
 
         let tm = match time_mode {
             "logical" => iv8_core::state::TimeMode::Logical,
@@ -220,7 +242,9 @@ impl JSContext {
             .map_err(error::iv8_error_to_pyerr)?
         } else {
             let mut kernel = self.inner.kernel.lock();
-            let global = kernel.eval(source, opts).map_err(error::iv8_error_to_pyerr)?;
+            let global = kernel
+                .eval(source, opts)
+                .map_err(error::iv8_error_to_pyerr)?;
             kernel.global_to_rust_value(&global)
         };
 
@@ -276,11 +300,18 @@ impl JSContext {
     ///   ctx.expose({"html": "...", "resources": {...}}, "s1")
     ///   ctx.eval("__iv8__.page.load(__iv8__.data.s1)")
     #[pyo3(signature = (name_or_data, callable_or_name=None))]
-    fn expose(&self, name_or_data: PyObject, callable_or_name: Option<PyObject>, py: Python<'_>) -> PyResult<()> {
+    fn expose(
+        &self,
+        name_or_data: PyObject,
+        callable_or_name: Option<PyObject>,
+        py: Python<'_>,
+    ) -> PyResult<()> {
         self.assert_thread()?;
 
         // Detect mode: expose(name, callable) vs expose(data, name)
-        let (name, callable_opt, data_opt) = if let Ok(name_str) = name_or_data.extract::<String>(py) {
+        let (name, callable_opt, data_opt) = if let Ok(name_str) =
+            name_or_data.extract::<String>(py)
+        {
             // Mode 1: expose(name, callable)
             let callable = callable_or_name.ok_or_else(|| {
                 pyo3::exceptions::PyTypeError::new_err("expose(name, callable): callable required")
@@ -292,7 +323,7 @@ impl JSContext {
             (name_str, None, Some(name_or_data))
         } else {
             return Err(pyo3::exceptions::PyTypeError::new_err(
-                "expose: use expose(name, callable) or expose(data_dict, name)"
+                "expose: use expose(name, callable) or expose(data_dict, name)",
             ));
         };
 
@@ -300,7 +331,8 @@ impl JSContext {
             // Mode 1: register as JS function
             if !callable.bind(py).is_callable() {
                 return Err(pyo3::exceptions::PyTypeError::new_err(format!(
-                    "expose: '{}' is not callable", name
+                    "expose: '{}' is not callable",
+                    name
                 )));
             }
             let mut kernel = self.inner.kernel.lock();
@@ -309,7 +341,10 @@ impl JSContext {
         } else if let Some(data) = data_opt {
             // Mode 2: store data at __iv8__.data.name
             // Convert Python object to JSON string, then eval to set it
-            let json_str = py.import("json")?.call_method1("dumps", (data,))?.extract::<String>()?;
+            let json_str = py
+                .import("json")?
+                .call_method1("dumps", (data,))?
+                .extract::<String>()?;
             let js_api = {
                 let kernel = self.inner.kernel.lock();
                 let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
@@ -321,11 +356,13 @@ impl JSContext {
                     {api}.data[{name_json}] = {json};
                 }})()"#,
                 api = js_api,
-                name_json = serde_json::to_string(&name).unwrap_or_else(|_| format!("\"{}\"", name)),
+                name_json =
+                    serde_json::to_string(&name).unwrap_or_else(|_| format!("\"{}\"", name)),
                 json = json_str,
             );
             let mut kernel = self.inner.kernel.lock();
-            kernel.eval(&script, iv8_core::EvalOpts::default())
+            kernel
+                .eval(&script, iv8_core::EvalOpts::default())
                 .map_err(crate::error::iv8_error_to_pyerr)?;
         }
 
@@ -391,7 +428,11 @@ impl JSContext {
     /// Args:
     ///     module: A Python module object.
     #[pyo3(signature = (module))]
-    fn expose_module(&self, module: &Bound<'_, pyo3::types::PyModule>, py: Python<'_>) -> PyResult<()> {
+    fn expose_module(
+        &self,
+        module: &Bound<'_, pyo3::types::PyModule>,
+        py: Python<'_>,
+    ) -> PyResult<()> {
         self.assert_thread()?;
 
         // Get names to expose
@@ -466,11 +507,9 @@ impl JSContext {
             let self_ref = ctx.borrow();
             self_ref.assert_thread()?;
             let mut kernel = self_ref.inner.kernel.lock();
-            let devtools_url = kernel.start_inspector(
-                port,
-                watch_apis.unwrap_or_default(),
-                enable_console,
-            ).map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
+            let devtools_url = kernel
+                .start_inspector(port, watch_apis.unwrap_or_default(), enable_console)
+                .map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
             println!("DevTools URL: {}", devtools_url);
             if wait {
                 // Wait for external DevTools client to connect (up to 30s)
@@ -521,7 +560,8 @@ impl JSContext {
     ) -> PyResult<String> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.cdp_set_breakpoint(url, line, column, condition)
+        kernel
+            .cdp_set_breakpoint(url, line, column, condition)
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
@@ -529,7 +569,8 @@ impl JSContext {
     fn cdp_remove_breakpoint(&self, breakpoint_id: &str) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.cdp_remove_breakpoint(breakpoint_id)
+        kernel
+            .cdp_remove_breakpoint(breakpoint_id)
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
@@ -544,18 +585,18 @@ impl JSContext {
     fn cdp_evaluate_on_frame(&self, call_frame_id: &str, expression: &str) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        let result = kernel.cdp_evaluate_on_frame(call_frame_id, expression)
+        let result = kernel
+            .cdp_evaluate_on_frame(call_frame_id, expression)
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
-        Python::with_gil(|py| {
-            json_value_to_py(py, &result)
-        })
+        Python::with_gil(|py| json_value_to_py(py, &result))
     }
 
     /// Resume execution after a breakpoint pause.
     fn cdp_resume(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.cdp_resume()
+        kernel
+            .cdp_resume()
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
@@ -563,7 +604,8 @@ impl JSContext {
     fn cdp_step_over(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.cdp_step_over()
+        kernel
+            .cdp_step_over()
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
@@ -571,7 +613,8 @@ impl JSContext {
     fn cdp_step_into(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.cdp_step_into()
+        kernel
+            .cdp_step_into()
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
@@ -584,12 +627,10 @@ impl JSContext {
         self.assert_thread()?;
         let kernel = self.inner.kernel.lock();
         match kernel.cdp_get_call_frames() {
-            Some(frames) => {
-                Python::with_gil(|py| {
-                    let obj = json_value_to_py(py, &frames)?;
-                    Ok(Some(obj))
-                })
-            }
+            Some(frames) => Python::with_gil(|py| {
+                let obj = json_value_to_py(py, &frames)?;
+                Ok(Some(obj))
+            }),
             None => Ok(None),
         }
     }
@@ -606,14 +647,17 @@ impl JSContext {
     /// Returns:
     ///     dict with 'result' (list of property descriptors) from Runtime.getProperties
     #[pyo3(signature = (object_id, own_properties=true))]
-    fn cdp_get_scope_properties(&self, object_id: &str, own_properties: bool) -> PyResult<PyObject> {
+    fn cdp_get_scope_properties(
+        &self,
+        object_id: &str,
+        own_properties: bool,
+    ) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        let result = kernel.cdp_get_properties(object_id, own_properties)
+        let result = kernel
+            .cdp_get_properties(object_id, own_properties)
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
-        Python::with_gil(|py| {
-            json_value_to_py(py, &result)
-        })
+        Python::with_gil(|py| json_value_to_py(py, &result))
     }
 
     /// Process CDP events (check if execution paused at breakpoint).
@@ -664,10 +708,12 @@ impl JSContext {
         // Ensure __iv8_trace__ array exists
         {
             let mut kernel = self.inner.kernel.lock();
-            kernel.eval(
-                "if (typeof __iv8_trace__ === 'undefined') { var __iv8_trace__ = []; }",
-                iv8_core::EvalOpts::default(),
-            ).ok();
+            kernel
+                .eval(
+                    "if (typeof __iv8_trace__ === 'undefined') { var __iv8_trace__ = []; }",
+                    iv8_core::EvalOpts::default(),
+                )
+                .ok();
         }
 
         // Build condition: push expression result to trace array, return false (don't pause)
@@ -680,7 +726,8 @@ impl JSContext {
 
         // Set the breakpoint via CDP
         let mut kernel = self.inner.kernel.lock();
-        kernel.cdp_set_breakpoint(url, line, column, Some(&condition))
+        kernel
+            .cdp_set_breakpoint(url, line, column, Some(&condition))
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
@@ -688,7 +735,8 @@ impl JSContext {
     fn remove_trace_point(&self, trace_point_id: &str) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.cdp_remove_breakpoint(trace_point_id)
+        kernel
+            .cdp_remove_breakpoint(trace_point_id)
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
@@ -699,10 +747,12 @@ impl JSContext {
     fn get_trace_log(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        let global = kernel.eval(
-            "typeof __iv8_trace__ !== 'undefined' ? __iv8_trace__ : []",
-            iv8_core::EvalOpts::default(),
-        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        let global = kernel
+            .eval(
+                "typeof __iv8_trace__ !== 'undefined' ? __iv8_trace__ : []",
+                iv8_core::EvalOpts::default(),
+            )
+            .map_err(crate::error::iv8_error_to_pyerr)?;
         let rust_value = kernel.global_to_rust_value(&global);
         rust_value_to_py(py, &rust_value)
     }
@@ -711,7 +761,8 @@ impl JSContext {
     fn clear_trace_log(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.eval("__iv8_trace__ = [];", iv8_core::EvalOpts::default())
+        kernel
+            .eval("__iv8_trace__ = [];", iv8_core::EvalOpts::default())
             .map_err(crate::error::iv8_error_to_pyerr)?;
         Ok(())
     }
@@ -725,13 +776,19 @@ impl JSContext {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
         if max_entries == 0 {
-            kernel.eval("__iv8_trace_limit__ = Infinity;", iv8_core::EvalOpts::default())
+            kernel
+                .eval(
+                    "__iv8_trace_limit__ = Infinity;",
+                    iv8_core::EvalOpts::default(),
+                )
                 .map_err(crate::error::iv8_error_to_pyerr)?;
         } else {
-            kernel.eval(
-                &format!("__iv8_trace_limit__ = {};", max_entries),
-                iv8_core::EvalOpts::default(),
-            ).map_err(crate::error::iv8_error_to_pyerr)?;
+            kernel
+                .eval(
+                    &format!("__iv8_trace_limit__ = {};", max_entries),
+                    iv8_core::EvalOpts::default(),
+                )
+                .map_err(crate::error::iv8_error_to_pyerr)?;
         }
         Ok(())
     }
@@ -762,7 +819,7 @@ impl JSContext {
 
         // Search for A[X[Y++]]() pattern (handler_array[index_array[pc++]]())
         let re_handler_dispatch = regex_lite::Regex::new(
-            r"([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\+\+\]\]"
+            r"([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\+\+\]\]",
         );
 
         if let Ok(re) = re_handler_dispatch {
@@ -773,7 +830,7 @@ impl JSContext {
 
                 // Try to find stack variable (look for .push/.pop patterns near the dispatch)
                 let stack_re = regex_lite::Regex::new(
-                    r"([A-Za-z_$][A-Za-z0-9_$]*)\.push\(|([A-Za-z_$][A-Za-z0-9_$]*)\.pop\(\)"
+                    r"([A-Za-z_$][A-Za-z0-9_$]*)\.push\(|([A-Za-z_$][A-Za-z0-9_$]*)\.pop\(\)",
                 );
                 let stack_var = if let Ok(sre) = stack_re {
                     sre.captures(source)
@@ -821,7 +878,8 @@ impl JSContext {
         limit: u32,
     ) -> PyResult<()> {
         self.assert_thread()?;
-        let js = format!(r#"
+        let js = format!(
+            r#"
 (function() {{
     var __orig_handlers = {handler};
     var __vm_log = [];
@@ -859,7 +917,8 @@ impl JSContext {
         );
 
         let mut kernel = self.inner.kernel.lock();
-        kernel.eval(&js, iv8_core::EvalOpts::default())
+        kernel
+            .eval(&js, iv8_core::EvalOpts::default())
             .map_err(crate::error::iv8_error_to_pyerr)?;
         Ok(())
     }
@@ -872,10 +931,12 @@ impl JSContext {
     fn get_vm_trace(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        let global = kernel.eval(
-            "typeof __iv8_vm_log__ !== 'undefined' ? __iv8_vm_log__ : []",
-            iv8_core::EvalOpts::default(),
-        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        let global = kernel
+            .eval(
+                "typeof __iv8_vm_log__ !== 'undefined' ? __iv8_vm_log__ : []",
+                iv8_core::EvalOpts::default(),
+            )
+            .map_err(crate::error::iv8_error_to_pyerr)?;
         let rv = kernel.global_to_rust_value(&global);
         rust_value_to_py(py, &rv)
     }
@@ -884,10 +945,12 @@ impl JSContext {
     fn clear_vm_trace(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.eval(
-            "if (typeof __iv8_vm_log__ !== 'undefined') __iv8_vm_log__.length = 0;",
-            iv8_core::EvalOpts::default(),
-        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        kernel
+            .eval(
+                "if (typeof __iv8_vm_log__ !== 'undefined') __iv8_vm_log__.length = 0;",
+                iv8_core::EvalOpts::default(),
+            )
+            .map_err(crate::error::iv8_error_to_pyerr)?;
         Ok(())
     }
 
@@ -899,7 +962,8 @@ impl JSContext {
             handler_array
         );
         let mut kernel = self.inner.kernel.lock();
-        kernel.eval(&js, iv8_core::EvalOpts::default())
+        kernel
+            .eval(&js, iv8_core::EvalOpts::default())
             .map_err(crate::error::iv8_error_to_pyerr)?;
         Ok(())
     }
@@ -914,10 +978,12 @@ impl JSContext {
     fn get_unified_trace(&self, py: Python<'_>) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        let global = kernel.eval(
-            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
-            iv8_core::EvalOpts::default(),
-        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        let global = kernel
+            .eval(
+                "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
+                iv8_core::EvalOpts::default(),
+            )
+            .map_err(crate::error::iv8_error_to_pyerr)?;
         let rv = kernel.global_to_rust_value(&global);
         rust_value_to_py(py, &rv)
     }
@@ -926,10 +992,12 @@ impl JSContext {
     fn clear_unified_trace(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.eval(
-            "if (typeof __iv8i_log__ !== 'undefined') __iv8i_log__.length = 0;",
-            iv8_core::EvalOpts::default(),
-        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        kernel
+            .eval(
+                "if (typeof __iv8i_log__ !== 'undefined') __iv8i_log__.length = 0;",
+                iv8_core::EvalOpts::default(),
+            )
+            .map_err(crate::error::iv8_error_to_pyerr)?;
         Ok(())
     }
 
@@ -956,14 +1024,22 @@ impl JSContext {
     ) -> PyResult<()> {
         self.assert_thread()?;
 
-        let target_list = targets.unwrap_or_else(|| vec![
-            "navigator".into(), "screen".into(), "document".into(),
-            "location".into(), "Math".into(), "crypto".into(), "performance".into(),
-        ]);
+        let target_list = targets.unwrap_or_else(|| {
+            vec![
+                "navigator".into(),
+                "screen".into(),
+                "document".into(),
+                "location".into(),
+                "Math".into(),
+                "crypto".into(),
+                "performance".into(),
+            ]
+        });
 
         let targets_json = serde_json::to_string(&target_list).unwrap_or("[]".into());
 
-        let js = format!(r#"
+        let js = format!(
+            r#"
 (function() {{
     var __rec = [];
     var __rec_limit = {limit};
@@ -1029,7 +1105,8 @@ impl JSContext {
         );
 
         let mut kernel = self.inner.kernel.lock();
-        kernel.eval(&js, iv8_core::EvalOpts::default())
+        kernel
+            .eval(&js, iv8_core::EvalOpts::default())
             .map_err(crate::error::iv8_error_to_pyerr)?;
         Ok(())
     }
@@ -1058,10 +1135,12 @@ impl JSContext {
 "#, iv8_core::EvalOpts::default()).ok();
 
         // Get recording
-        let global = kernel.eval(
-            "typeof __iv8_recording__ !== 'undefined' ? __iv8_recording__ : []",
-            iv8_core::EvalOpts::default(),
-        ).map_err(crate::error::iv8_error_to_pyerr)?;
+        let global = kernel
+            .eval(
+                "typeof __iv8_recording__ !== 'undefined' ? __iv8_recording__ : []",
+                iv8_core::EvalOpts::default(),
+            )
+            .map_err(crate::error::iv8_error_to_pyerr)?;
         let rv = kernel.global_to_rust_value(&global);
         rust_value_to_py(py, &rv)
     }
@@ -1073,16 +1152,20 @@ impl JSContext {
     fn start_profiler(&self) -> PyResult<()> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        kernel.cdp_set_breakpoint("__profiler_dummy__", 0, None, None).ok(); // ensure debugger enabled
-        // Use CDP to start profiler
+        kernel
+            .cdp_set_breakpoint("__profiler_dummy__", 0, None, None)
+            .ok(); // ensure debugger enabled
+                   // Use CDP to start profiler
         let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
         let session_guard = state.inspector_session.borrow();
         if let Some(ref session) = *session_guard {
             if let Some(v8_session) = session.session_ref() {
                 let cdp = state.cdp_client.borrow();
                 if let Some(ref c) = *cdp {
-                    c.send_and_wait(v8_session, "Profiler.enable", serde_json::json!({})).ok();
-                    c.send_and_wait(v8_session, "Profiler.start", serde_json::json!({})).ok();
+                    c.send_and_wait(v8_session, "Profiler.enable", serde_json::json!({}))
+                        .ok();
+                    c.send_and_wait(v8_session, "Profiler.start", serde_json::json!({}))
+                        .ok();
                 }
             }
         }
@@ -1102,7 +1185,9 @@ impl JSContext {
             if let Some(v8_session) = session.session_ref() {
                 let cdp = state.cdp_client.borrow();
                 if let Some(ref c) = *cdp {
-                    if let Ok(result) = c.send_and_wait(v8_session, "Profiler.stop", serde_json::json!({})) {
+                    if let Ok(result) =
+                        c.send_and_wait(v8_session, "Profiler.stop", serde_json::json!({}))
+                    {
                         if let Some(profile) = result.get("result").and_then(|r| r.get("profile")) {
                             return json_value_to_py(py, profile);
                         }
@@ -1125,9 +1210,14 @@ impl JSContext {
             if let Some(v8_session) = session.session_ref() {
                 let cdp = state.cdp_client.borrow();
                 if let Some(ref c) = *cdp {
-                    c.send_and_wait(v8_session, "Profiler.enable", serde_json::json!({})).ok();
-                    c.send_and_wait(v8_session, "Profiler.startPreciseCoverage",
-                        serde_json::json!({"callCount": true, "detailed": true})).ok();
+                    c.send_and_wait(v8_session, "Profiler.enable", serde_json::json!({}))
+                        .ok();
+                    c.send_and_wait(
+                        v8_session,
+                        "Profiler.startPreciseCoverage",
+                        serde_json::json!({"callCount": true, "detailed": true}),
+                    )
+                    .ok();
                 }
             }
         }
@@ -1147,7 +1237,11 @@ impl JSContext {
             if let Some(v8_session) = session.session_ref() {
                 let cdp = state.cdp_client.borrow();
                 if let Some(ref c) = *cdp {
-                    if let Ok(result) = c.send_and_wait(v8_session, "Profiler.takePreciseCoverage", serde_json::json!({})) {
+                    if let Ok(result) = c.send_and_wait(
+                        v8_session,
+                        "Profiler.takePreciseCoverage",
+                        serde_json::json!({}),
+                    ) {
                         if let Some(cov) = result.get("result").and_then(|r| r.get("result")) {
                             return json_value_to_py(py, cov);
                         }
@@ -1184,16 +1278,18 @@ impl JSContext {
     ) -> PyResult<Option<PyObject>> {
         self.assert_thread()?;
 
-        let search_patterns = patterns.unwrap_or_else(|| vec![
-            // ChaosVM / TDC pattern
-            "handlers[".to_string(),
-            "while(1)".to_string(),
-            "while(true)".to_string(),
-            // Generic JSVMP patterns
-            "switch(H[".to_string(),
-            "switch(b[".to_string(),
-            "case ".to_string(),
-        ]);
+        let search_patterns = patterns.unwrap_or_else(|| {
+            vec![
+                // ChaosVM / TDC pattern
+                "handlers[".to_string(),
+                "while(1)".to_string(),
+                "while(true)".to_string(),
+                // Generic JSVMP patterns
+                "switch(H[".to_string(),
+                "switch(b[".to_string(),
+                "case ".to_string(),
+            ]
+        });
 
         // Use eval to search in the script source via CDP
         // First, get the script ID by searching for the URL
@@ -1211,7 +1307,8 @@ impl JSContext {
         return null;
     } catch(e) { return null; }
 })()
-"#.to_string();
+"#
+            .to_string();
             // For now, use a simpler approach: search the script source directly
             // The user typically knows the script URL and can find the line manually
             // or use Chrome DevTools. This method provides a programmatic hint.
@@ -1279,8 +1376,8 @@ impl JSContext {
                 match rv {
                     iv8_core::convert::RustValue::String(s) if !s.is_empty() => {
                         // Parse the JSON result
-                        let parsed: serde_json::Value = serde_json::from_str(&s)
-                            .unwrap_or(serde_json::Value::Null);
+                        let parsed: serde_json::Value =
+                            serde_json::from_str(&s).unwrap_or(serde_json::Value::Null);
                         if parsed.is_null() {
                             Ok(None)
                         } else {
@@ -1331,11 +1428,14 @@ impl JSContext {
         let var_list = vars.unwrap_or_else(|| vec!["pc".to_string(), "H[pc]".to_string()]);
 
         // Build the trace expression: JSON.stringify({var1: var1, var2: var2, ...})
-        let obj_fields: Vec<String> = var_list.iter().map(|v| {
-            // Use the variable name as key, handle expressions with brackets
-            let key = v.replace('[', "_").replace(']', "").replace('.', "_");
-            format!("{}:{}", key, v)
-        }).collect();
+        let obj_fields: Vec<String> = var_list
+            .iter()
+            .map(|v| {
+                // Use the variable name as key, handle expressions with brackets
+                let key = v.replace('[', "_").replace(']', "").replace('.', "_");
+                format!("{}:{}", key, v)
+            })
+            .collect();
         let expression = format!("JSON.stringify({{{}}})", obj_fields.join(","));
 
         // Set trace limit
@@ -1383,29 +1483,30 @@ impl JSContext {
         }
 
         let handler_clone = handler.clone_ref(py);
-        let rust_handler: iv8_core::state::NetworkHandler = Box::new(move |url: &str, method: &str| {
-            Python::with_gil(|py| {
-                let result = handler_clone.call1(py, (url, method)).ok()?;
-                if result.is_none(py) {
-                    return None;
-                }
-                // Expect (status, body) tuple
-                let tuple = result.downcast_bound::<pyo3::types::PyTuple>(py).ok()?;
-                if tuple.len() < 2 {
-                    return None;
-                }
-                let status: u16 = tuple.get_item(0).ok()?.extract().ok()?;
-                let body_item = tuple.get_item(1).ok()?;
-                let body: Vec<u8> = if let Ok(s) = body_item.extract::<String>() {
-                    s.into_bytes()
-                } else if let Ok(b) = body_item.extract::<Vec<u8>>() {
-                    b
-                } else {
-                    return None;
-                };
-                Some((status, body))
-            })
-        });
+        let rust_handler: iv8_core::state::NetworkHandler =
+            Box::new(move |url: &str, method: &str| {
+                Python::with_gil(|py| {
+                    let result = handler_clone.call1(py, (url, method)).ok()?;
+                    if result.is_none(py) {
+                        return None;
+                    }
+                    // Expect (status, body) tuple
+                    let tuple = result.downcast_bound::<pyo3::types::PyTuple>(py).ok()?;
+                    if tuple.len() < 2 {
+                        return None;
+                    }
+                    let status: u16 = tuple.get_item(0).ok()?.extract().ok()?;
+                    let body_item = tuple.get_item(1).ok()?;
+                    let body: Vec<u8> = if let Ok(s) = body_item.extract::<String>() {
+                        s.into_bytes()
+                    } else if let Ok(b) = body_item.extract::<Vec<u8>>() {
+                        b
+                    } else {
+                        return None;
+                    };
+                    Some((status, body))
+                })
+            });
 
         let kernel = self.inner.kernel.lock();
         kernel.set_network_handler(rust_handler);
@@ -1432,7 +1533,9 @@ impl JSContext {
     fn eval_promise(&self, py: Python<'_>, source: &str, max_ticks: u32) -> PyResult<PyObject> {
         self.assert_thread()?;
         let mut kernel = self.inner.kernel.lock();
-        let global = kernel.eval_await(source, max_ticks).map_err(error::iv8_error_to_pyerr)?;
+        let global = kernel
+            .eval_await(source, max_ticks)
+            .map_err(error::iv8_error_to_pyerr)?;
         let rust_value = kernel.global_to_rust_value(&global);
         rust_value_to_py(py, &rust_value)
     }
@@ -1441,7 +1544,8 @@ impl JSContext {
     ///
     /// Returns a list of dicts with 'level' and 'text' keys.
     /// Levels: 'log', 'info', 'warn', 'error', 'debug', 'trace', 'assert'
-    fn get_console_messages(&self, py: Python<'_>) -> PyResult<PyObject> {        self.assert_thread()?;
+    fn get_console_messages(&self, py: Python<'_>) -> PyResult<PyObject> {
+        self.assert_thread()?;
         let kernel = self.inner.kernel.lock();
         let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
         let messages = state.console_messages.borrow();
@@ -1491,9 +1595,7 @@ impl JSContext {
 /// Convert a Python dict to HashMap<String, serde_json::Value>.
 /// Supports both flat format {"navigator.userAgent": "..."} and
 /// nested format {"navigator": {"userAgent": "..."}} (auto-flattened).
-fn pydict_to_json_map(
-    dict: &Bound<'_, PyDict>,
-) -> PyResult<HashMap<String, serde_json::Value>> {
+fn pydict_to_json_map(dict: &Bound<'_, PyDict>) -> PyResult<HashMap<String, serde_json::Value>> {
     let mut map = HashMap::new();
     for (key, value) in dict.iter() {
         let key_str: String = key.extract()?;

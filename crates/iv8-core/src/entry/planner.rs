@@ -5,9 +5,9 @@
 //! and assembles a complete EntryPlan.
 
 use crate::entry::classification;
+use crate::entry::dispatch;
 use crate::entry::types::*;
 use crate::entry::webpack;
-use crate::entry::dispatch;
 
 // ───
 // Public API
@@ -93,8 +93,10 @@ pub fn plan_entry(
         selected_strategy_reason: Some(format!(
             "{}. probe: swc={} dispatch={} webpack={} closure={} low_obf={}",
             selected.selection_reason,
-            probe.can_swc_parse, probe.has_dispatch_pattern,
-            probe.has_webpack_runtime, probe.has_closure_capture,
+            probe.can_swc_parse,
+            probe.has_dispatch_pattern,
+            probe.has_webpack_runtime,
+            probe.has_closure_capture,
             probe.is_low_obfuscation,
         )),
         fallback_attempts: Vec::new(),
@@ -182,7 +184,8 @@ fn adjust_fit_by_probe(candidates: &mut [CandidateStrategy], probe: &ProbeResult
         match c.strategy_kind {
             StrategyKind::Dispatch if !probe.has_dispatch_pattern => {
                 c.fit_score = c.fit_score.saturating_sub(40);
-                c.known_limitations.push("probe: no dispatch pattern found".into());
+                c.known_limitations
+                    .push("probe: no dispatch pattern found".into());
             }
             StrategyKind::SourceAst => {
                 if !probe.can_swc_parse {
@@ -196,7 +199,8 @@ fn adjust_fit_by_probe(candidates: &mut [CandidateStrategy], probe: &ProbeResult
             }
             StrategyKind::SourceRegex if !probe.has_dispatch_pattern && !probe.has_eval_heavy => {
                 c.fit_score = c.fit_score.saturating_sub(30);
-                c.known_limitations.push("probe: no regex-targetable pattern".into());
+                c.known_limitations
+                    .push("probe: no regex-targetable pattern".into());
             }
             StrategyKind::WebpackBridge if !probe.has_webpack_runtime => {
                 c.fit_score = c.fit_score.saturating_sub(60);
@@ -206,7 +210,8 @@ fn adjust_fit_by_probe(candidates: &mut [CandidateStrategy], probe: &ProbeResult
                 if probe.pre_install_required() && !c.requires_preload =>
             {
                 c.fit_score = c.fit_score.saturating_sub(20);
-                c.known_limitations.push("probe: closure capture may bypass hook".into());
+                c.known_limitations
+                    .push("probe: closure capture may bypass hook".into());
             }
             _ => {}
         }
@@ -252,19 +257,28 @@ pub fn generate_candidates(
     match sample_kind {
         SampleKind::VmDispatchKnown => {
             try_add(
-                StrategyKind::Dispatch, 90, false, true,
+                StrategyKind::Dispatch,
+                90,
+                false,
+                true,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["requires preload to intercept handler array"],
                 None,
             );
             try_add(
-                StrategyKind::SourceAst, 70, false, false,
+                StrategyKind::SourceAst,
+                70,
+                false,
+                false,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["may not parse correctly on heavily obfuscated VM code"],
                 None,
             );
             try_add(
-                StrategyKind::RuntimeTransparent, 50, false, true,
+                StrategyKind::RuntimeTransparent,
+                50,
+                false,
+                true,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["higher detectability"],
                 None,
@@ -272,13 +286,23 @@ pub fn generate_candidates(
         }
         SampleKind::WebpackRuntime => {
             try_add(
-                StrategyKind::WebpackBridge, 90, true, false,
-                vec![Evidence::ModuleGraph, Evidence::Trace, Evidence::Diagnostics],
+                StrategyKind::WebpackBridge,
+                90,
+                true,
+                false,
+                vec![
+                    Evidence::ModuleGraph,
+                    Evidence::Trace,
+                    Evidence::Diagnostics,
+                ],
                 vec!["requires reload to capture module init timing"],
                 None,
             );
             try_add(
-                StrategyKind::RuntimeTransparent, 60, false, true,
+                StrategyKind::RuntimeTransparent,
+                60,
+                false,
+                true,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["lower module-level evidence quality"],
                 None,
@@ -286,25 +310,41 @@ pub fn generate_candidates(
         }
         SampleKind::WebpackVmHybrid => {
             try_add(
-                StrategyKind::WebpackBridge, 80, true, false,
-                vec![Evidence::ModuleGraph, Evidence::Trace, Evidence::EvalSources],
+                StrategyKind::WebpackBridge,
+                80,
+                true,
+                false,
+                vec![
+                    Evidence::ModuleGraph,
+                    Evidence::Trace,
+                    Evidence::EvalSources,
+                ],
                 vec!["VM layer may not be visible through bridge alone"],
                 None,
             );
             try_add(
-                StrategyKind::Dispatch, 60, false, true,
+                StrategyKind::Dispatch,
+                60,
+                false,
+                true,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["dispatch pattern may be closure-captured"],
                 None,
             );
             try_add(
-                StrategyKind::SourceAst, 55, false, false,
+                StrategyKind::SourceAst,
+                55,
+                false,
+                false,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["__iv8_trap transform may catch non-dispatch computed calls"],
                 None,
             );
             try_add(
-                StrategyKind::RuntimeTransparent, 50, false, true,
+                StrategyKind::RuntimeTransparent,
+                50,
+                false,
+                true,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["may not capture module-graph level evidence"],
                 None,
@@ -312,13 +352,19 @@ pub fn generate_candidates(
         }
         SampleKind::VmDispatchUnknown => {
             try_add(
-                StrategyKind::RuntimeTransparent, 70, false, true,
+                StrategyKind::RuntimeTransparent,
+                70,
+                false,
+                true,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["cannot directly observe dispatch"],
                 None,
             );
             try_add(
-                StrategyKind::CdpProbe, 50, false, false,
+                StrategyKind::CdpProbe,
+                50,
+                false,
+                false,
                 vec![Evidence::Diagnostics],
                 vec!["lower evidence density"],
                 None,
@@ -326,13 +372,19 @@ pub fn generate_candidates(
         }
         SampleKind::EvalHeavy => {
             try_add(
-                StrategyKind::RuntimeTransparent, 80, false, true,
+                StrategyKind::RuntimeTransparent,
+                80,
+                false,
+                true,
                 vec![Evidence::Trace, Evidence::EvalSources],
                 vec!["eval sources may not all be captureable at runtime"],
                 None,
             );
             try_add(
-                StrategyKind::SourceAst, 70, false, false,
+                StrategyKind::SourceAst,
+                70,
+                false,
+                false,
                 vec![Evidence::Trace, Evidence::EvalSources],
                 vec!["AST-level eval interception is more reliable"],
                 None,
@@ -340,13 +392,19 @@ pub fn generate_candidates(
         }
         SampleKind::ClosureCapturedRuntime => {
             try_add(
-                StrategyKind::RuntimeTransparent, 60, true, true,
+                StrategyKind::RuntimeTransparent,
+                60,
+                true,
+                true,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["requires pre-init install window; may need reload"],
                 None,
             );
             try_add(
-                StrategyKind::CdpProbe, 40, false, false,
+                StrategyKind::CdpProbe,
+                40,
+                false,
+                false,
                 vec![Evidence::Diagnostics],
                 vec!["low evidence density"],
                 None,
@@ -354,13 +412,19 @@ pub fn generate_candidates(
         }
         SampleKind::PlainScript => {
             try_add(
-                StrategyKind::SourceAst, 90, false, false,
+                StrategyKind::SourceAst,
+                90,
+                false,
+                false,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec![],
                 None,
             );
             try_add(
-                StrategyKind::RuntimeTransparent, 50, false, false,
+                StrategyKind::RuntimeTransparent,
+                50,
+                false,
+                false,
                 vec![Evidence::Trace, Evidence::Diagnostics],
                 vec!["overkill for plain scripts"],
                 None,
@@ -370,7 +434,10 @@ pub fn generate_candidates(
 
     // Always add CDP probe as last-resort fallback
     try_add(
-        StrategyKind::CdpProbe, 10, false, false,
+        StrategyKind::CdpProbe,
+        10,
+        false,
+        false,
         vec![Evidence::Diagnostics],
         vec!["most limited evidence; only diagnostics"],
         None,
@@ -426,10 +493,7 @@ pub fn build_fallback_chain(
 ) -> Vec<String> {
     let mut sorted: Vec<&CandidateStrategy> = candidates
         .iter()
-        .filter(|c| {
-            c.rejection_reason.is_none()
-                && c.strategy_id != selected.strategy_id
-        })
+        .filter(|c| c.rejection_reason.is_none() && c.strategy_id != selected.strategy_id)
         .collect();
     // Sort by fit_score descending so higher-fit candidates are tried first
     sorted.sort_by_key(|c| std::cmp::Reverse(c.fit_score));
@@ -573,27 +637,23 @@ mod tests {
 
     #[test]
     fn test_plan_plain_script_analysis() {
-        let plan = plan_entry(
-            "var x = 1 + 1;",
-            Persona::Analysis,
-            None,
-            vec![],
-        );
+        let plan = plan_entry("var x = 1 + 1;", Persona::Analysis, None, vec![]);
         assert_eq!(plan.sample_kind, SampleKind::PlainScript);
-        assert_eq!(plan.selected_strategy.strategy_kind, StrategyKind::SourceAst);
+        assert_eq!(
+            plan.selected_strategy.strategy_kind,
+            StrategyKind::SourceAst
+        );
         assert_eq!(plan.state, PlanState::Planned);
     }
 
     #[test]
     fn test_plan_webpack_runtime() {
-        let plan = plan_entry(
-            "__webpack_require__(42);",
-            Persona::Analysis,
-            None,
-            vec![],
-        );
+        let plan = plan_entry("__webpack_require__(42);", Persona::Analysis, None, vec![]);
         assert_eq!(plan.sample_kind, SampleKind::WebpackRuntime);
-        assert_eq!(plan.selected_strategy.strategy_kind, StrategyKind::WebpackBridge);
+        assert_eq!(
+            plan.selected_strategy.strategy_kind,
+            StrategyKind::WebpackBridge
+        );
     }
 
     #[test]
@@ -611,21 +671,14 @@ mod tests {
     #[test]
     fn test_plan_runtime_persona_limits() {
         // Runtime persona does not allow source rewrite by default
-        let plan = plan_entry(
-            "var x = 1;",
-            Persona::Runtime,
-            None,
-            vec![],
-        );
+        let plan = plan_entry("var x = 1;", Persona::Runtime, None, vec![]);
         // Falls back to CDP probe since source_ast is not allowed
-        assert_eq!(
-            plan.selected_strategy.strategy_kind,
-            StrategyKind::CdpProbe
-        );
+        assert_eq!(plan.selected_strategy.strategy_kind, StrategyKind::CdpProbe);
         // Should have warnings indicating the limitation
-        assert!(
-            plan.candidate_strategies.iter().any(|c| !c.expected_outputs.is_empty())
-        );
+        assert!(plan
+            .candidate_strategies
+            .iter()
+            .any(|c| !c.expected_outputs.is_empty()));
     }
 
     #[test]
@@ -653,7 +706,9 @@ mod tests {
             &Persona::Runtime.default_policy(),
         );
         let selected = select_primary_strategy(
-            &candidates, SampleKind::VmDispatchUnknown, Persona::Runtime,
+            &candidates,
+            SampleKind::VmDispatchUnknown,
+            Persona::Runtime,
             &Persona::Runtime.default_policy(),
         );
         let chain = build_fallback_chain(&candidates, &selected);

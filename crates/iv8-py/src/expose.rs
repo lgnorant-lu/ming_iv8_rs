@@ -98,8 +98,8 @@ unsafe extern "C" fn py_fn_trampoline(info: *const v8::FunctionCallbackInfo) {
                 .collect::<PyResult<Vec<PyObject>>>()
                 .map_err(|e| format!("arg conversion error: {}", e))?;
 
-            let tuple = PyTuple::new(py, &py_args)
-                .map_err(|e| format!("tuple creation error: {}", e))?;
+            let tuple =
+                PyTuple::new(py, &py_args).map_err(|e| format!("tuple creation error: {}", e))?;
 
             // Call the Python callable
             let result = fn_data
@@ -170,7 +170,9 @@ fn rust_value_to_v8<'s>(
         RustValue::Object(map) => {
             let obj = v8::Object::new(scope);
             for (k, v) in map {
-                if let (Some(key), Some(val)) = (v8::String::new(scope, k), rust_value_to_v8(scope, v)) {
+                if let (Some(key), Some(val)) =
+                    (v8::String::new(scope, k), rust_value_to_v8(scope, v))
+                {
                     obj.set(scope, key.into(), val);
                 }
             }
@@ -191,10 +193,9 @@ fn rust_value_to_v8<'s>(
         RustValue::Map(entries) => {
             let m = v8::Map::new(scope);
             for (k, v) in entries {
-                if let (Some(key), Some(val)) = (
-                    rust_value_to_v8(scope, k),
-                    rust_value_to_v8(scope, v),
-                ) {
+                if let (Some(key), Some(val)) =
+                    (rust_value_to_v8(scope, k), rust_value_to_v8(scope, v))
+                {
                     m.set(scope, key, val);
                 }
             }
@@ -256,10 +257,7 @@ fn rust_value_to_v8<'s>(
 }
 
 /// Encode a list of typed scalar `RustValue`s back into bytes per element kind.
-fn encode_typed_array(
-    kind: iv8_core::convert::TypedArrayKind,
-    elements: &[RustValue],
-) -> Vec<u8> {
+fn encode_typed_array(kind: iv8_core::convert::TypedArrayKind, elements: &[RustValue]) -> Vec<u8> {
     use iv8_core::convert::TypedArrayKind as K;
     let mut buf = Vec::with_capacity(elements.len() * kind.element_size());
     for el in elements {
@@ -299,11 +297,7 @@ fn encode_typed_array(
             }
             (K::BigInt64, RustValue::BigInt { negative, words }) => {
                 let mag = words.first().copied().unwrap_or(0);
-                let v: i64 = if *negative {
-                    -(mag as i64)
-                } else {
-                    mag as i64
-                };
+                let v: i64 = if *negative { -(mag as i64) } else { mag as i64 };
                 buf.extend_from_slice(&v.to_le_bytes());
             }
             (K::BigUint64, RustValue::Int(i)) => {

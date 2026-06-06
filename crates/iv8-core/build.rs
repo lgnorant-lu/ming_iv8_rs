@@ -72,9 +72,8 @@ fn locate_v8_crate_dir() -> Result<PathBuf, Box<dyn std::error::Error>> {
 
     // OUT_DIR is target/.../build/iv8-core-<hash>/out
     // Cargo registry: <CARGO_HOME>/registry/src/<index>/v8-<version>
-    let out_dir = PathBuf::from(
-        env::var("OUT_DIR").map_err(|_| io::Error::other("OUT_DIR not set"))?,
-    );
+    let out_dir =
+        PathBuf::from(env::var("OUT_DIR").map_err(|_| io::Error::other("OUT_DIR not set"))?);
 
     // Try CARGO_HOME-based paths first (most reliable)
     let cargo_home = env::var("CARGO_HOME")

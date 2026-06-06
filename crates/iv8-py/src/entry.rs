@@ -5,8 +5,8 @@
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
-use iv8_core::entry::planner;
 use iv8_core::entry::executor;
+use iv8_core::entry::planner;
 use iv8_core::entry::types::*;
 
 /// Plan an entry strategy for a JS source.
@@ -29,9 +29,12 @@ pub fn prepare_entry(
     let p = match persona {
         "runtime" => Persona::Runtime,
         "analysis" => Persona::Analysis,
-        _ => return Err(pyo3::exceptions::PyValueError::new_err(
-            format!("persona must be 'runtime' or 'analysis', got '{}'", persona),
-        )),
+        _ => {
+            return Err(pyo3::exceptions::PyValueError::new_err(format!(
+                "persona must be 'runtime' or 'analysis', got '{}'",
+                persona
+            )))
+        }
     };
 
     let targets = entry_targets
@@ -71,9 +74,7 @@ pub fn run_with_entry(
     // Convert PyDict to serde_json::Value for deserialization
     let plan_json = py_dict_to_json(plan)?;
     let entry_plan: EntryPlan = serde_json::from_value(plan_json)
-        .map_err(|e| pyo3::exceptions::PyTypeError::new_err(
-            format!("invalid EntryPlan: {}", e),
-        ))?;
+        .map_err(|e| pyo3::exceptions::PyTypeError::new_err(format!("invalid EntryPlan: {}", e)))?;
 
     let chunks_vec = chunks.unwrap_or_default();
     let result = executor::run_entry(&entry_plan, source, &chunks_vec, entry_expr)
@@ -101,7 +102,9 @@ fn json_to_py(py: Python<'_>, value: &serde_json::Value) -> PyResult<PyObject> {
                 Ok(py.None())
             }
         }
-        serde_json::Value::String(s) => Ok(s.as_str().into_pyobject(py)?.to_owned().into_any().unbind()),
+        serde_json::Value::String(s) => {
+            Ok(s.as_str().into_pyobject(py)?.to_owned().into_any().unbind())
+        }
         serde_json::Value::Array(arr) => {
             let list = pyo3::types::PyList::empty(py);
             for item in arr {

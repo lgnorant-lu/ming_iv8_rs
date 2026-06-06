@@ -149,9 +149,7 @@ unsafe extern "C" fn performance_now_callback(info: *const v8::FunctionCallbackI
         let state = RuntimeState::get(isolate);
 
         let now_ms = match state.time_mode {
-            TimeMode::Logical => {
-                state.event_loop.borrow().get_time_ms()
-            }
+            TimeMode::Logical => state.event_loop.borrow().get_time_ms(),
             TimeMode::System => {
                 // Approximate: use process uptime
                 let duration = std::time::SystemTime::now()

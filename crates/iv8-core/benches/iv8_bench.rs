@@ -7,7 +7,7 @@
 //! - 8-thread speedup: target ≥ 3.5x (iv8: 4.71x)
 //! - 100-round memory drift: target ≤ +5MB (iv8: +2MB)
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, KernelConfig};
 use std::time::Duration;
 
@@ -54,42 +54,54 @@ fn bench_browser_api(c: &mut Criterion) {
 
     group.bench_function("navigator_userAgent", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("navigator.userAgent"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("navigator.userAgent"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
 
     group.bench_function("screen_width", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("screen.width"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("screen.width"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
 
     group.bench_function("date_now", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("Date.now()"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("Date.now()"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
 
     group.bench_function("performance_now", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("performance.now()"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("performance.now()"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
 
     group.bench_function("math_random", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("Math.random()"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("Math.random()"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
 
     group.bench_function("crypto_random_uuid", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("crypto.randomUUID()"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("crypto.randomUUID()"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
@@ -112,21 +124,30 @@ fn bench_dom_ops(c: &mut Criterion) {
 
     group.bench_function("getElementById", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("document.getElementById('t1')"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("document.getElementById('t1')"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
 
     group.bench_function("querySelector", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("document.querySelector('.item')"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("document.querySelector('.item')"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
 
     group.bench_function("querySelectorAll", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("document.querySelectorAll('.item').length"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(
+                    black_box("document.querySelectorAll('.item').length"),
+                    eval_opts(),
+                )
+                .expect("eval");
             black_box(result);
         });
     });
@@ -143,17 +164,21 @@ fn bench_crypto(c: &mut Criterion) {
 
     group.bench_function("getRandomValues_16", |b| {
         b.iter(|| {
-            let result = kernel.eval(
-                black_box("crypto.getRandomValues(new Uint8Array(16)).length"),
-                eval_opts(),
-            ).expect("eval");
+            let result = kernel
+                .eval(
+                    black_box("crypto.getRandomValues(new Uint8Array(16)).length"),
+                    eval_opts(),
+                )
+                .expect("eval");
             black_box(result);
         });
     });
 
     group.bench_function("randomUUID", |b| {
         b.iter(|| {
-            let result = kernel.eval(black_box("crypto.randomUUID()"), eval_opts()).expect("eval");
+            let result = kernel
+                .eval(black_box("crypto.randomUUID()"), eval_opts())
+                .expect("eval");
             black_box(result);
         });
     });
@@ -194,7 +219,10 @@ fn bench_multithread(c: &mut Criterion) {
         b.iter(|| {
             for _ in 0..8 {
                 let mut k = make_kernel();
-                black_box(k.eval(black_box("navigator.userAgent"), eval_opts()).expect("eval"));
+                black_box(
+                    k.eval(black_box("navigator.userAgent"), eval_opts())
+                        .expect("eval"),
+                );
                 k.dispose();
             }
         });
@@ -203,15 +231,17 @@ fn bench_multithread(c: &mut Criterion) {
     // 8-thread parallel (each thread creates its own context)
     group.bench_function("8_threads_parallel", |b| {
         b.iter(|| {
-            let handles: Vec<_> = (0..8).map(|_| {
-                std::thread::spawn(|| {
-                    let mut k = make_kernel();
-                    // Eval and convert to string (Send-safe)
-                    let r = k.eval("navigator.userAgent", eval_opts()).is_ok();
-                    k.dispose();
-                    r
+            let handles: Vec<_> = (0..8)
+                .map(|_| {
+                    std::thread::spawn(|| {
+                        let mut k = make_kernel();
+                        // Eval and convert to string (Send-safe)
+                        let r = k.eval("navigator.userAgent", eval_opts()).is_ok();
+                        k.dispose();
+                        r
+                    })
                 })
-            }).collect();
+                .collect();
             for h in handles {
                 black_box(h.join().expect("thread"));
             }
@@ -232,7 +262,9 @@ fn bench_memory_stability(c: &mut Criterion) {
         b.iter(|| {
             for _ in 0..100 {
                 let mut kernel = make_kernel();
-                kernel.eval(black_box("navigator.userAgent + screen.width"), eval_opts()).ok();
+                kernel
+                    .eval(black_box("navigator.userAgent + screen.width"), eval_opts())
+                    .ok();
                 kernel.dispose();
             }
         });
@@ -257,7 +289,11 @@ fn bench_throughput(c: &mut Criterion) {
 
     group.bench_function("navigator_ua_throughput", |b| {
         b.iter(|| {
-            black_box(kernel.eval(black_box("navigator.userAgent"), eval_opts()).expect("eval"));
+            black_box(
+                kernel
+                    .eval(black_box("navigator.userAgent"), eval_opts())
+                    .expect("eval"),
+            );
         });
     });
 

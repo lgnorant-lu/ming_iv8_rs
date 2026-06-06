@@ -5,8 +5,8 @@
 //! an `EntryResult` with collected evidence. Supports fallback chain:
 //! if the primary strategy fails, subsequent strategies are tried automatically.
 
-use crate::entry::types::*;
 use crate::entry::hooks;
+use crate::entry::types::*;
 use crate::kernel::embedded_v8::EmbeddedV8Kernel;
 use crate::kernel::{EvalOpts, KernelConfig};
 use std::collections::HashMap;
@@ -25,7 +25,8 @@ pub fn run_entry(
 ) -> Result<EntryResult, String> {
     let primary_id = plan.selected_strategy.strategy_id.clone();
     let cand_map: HashMap<&str, &CandidateStrategy> = plan
-        .candidate_strategies.iter()
+        .candidate_strategies
+        .iter()
         .map(|c| (c.strategy_id.as_str(), c))
         .collect();
 
@@ -73,7 +74,9 @@ pub fn run_entry(
         let mut kernel = match EmbeddedV8Kernel::new(KernelConfig::default()) {
             Ok(k) => k,
             Err(e) => {
-                result.diagnostics.fallback_attempts
+                result
+                    .diagnostics
+                    .fallback_attempts
                     .push(format!("{}: kernel init failed: {}", label, e));
                 continue;
             }
@@ -81,7 +84,9 @@ pub fn run_entry(
 
         // Phase: prepared — apply strategy setup
         if let Err(e) = apply_strategy_prelude(&mut kernel, strategy_kind, source) {
-            result.diagnostics.fallback_attempts
+            result
+                .diagnostics
+                .fallback_attempts
                 .push(format!("{}: setup failed: {}", label, e));
             continue;
         }
@@ -137,7 +142,9 @@ pub fn run_entry(
             }
         };
         if !source_ok {
-            result.diagnostics.fallback_attempts
+            result
+                .diagnostics
+                .fallback_attempts
                 .push(format!("{}: source eval failed", label));
             continue;
         }
@@ -162,13 +169,18 @@ pub fn run_entry(
         let evidence_met = evidence_satisfied(&result, &plan.expected_evidence);
         if evidence_met {
             evidence_satisfied_by_any = true;
-            result.diagnostics.fallback_attempts
-                .push(format!("{}: evidence satisfied ({})", label, result.trace.len()));
+            result.diagnostics.fallback_attempts.push(format!(
+                "{}: evidence satisfied ({})",
+                label,
+                result.trace.len()
+            ));
             break;
         } else {
-            result.diagnostics.fallback_attempts
-                .push(format!("{}: evidence insufficient (trace={}), trying next",
-                    label, result.trace.len()));
+            result.diagnostics.fallback_attempts.push(format!(
+                "{}: evidence insufficient (trace={}), trying next",
+                label,
+                result.trace.len()
+            ));
         }
     }
 
@@ -218,13 +230,16 @@ fn apply_strategy_prelude(
                         let pc = dispatch_det.pc_var.as_deref().unwrap_or("pc");
                         let idx = dispatch_det.index_array.as_deref().unwrap_or("");
                         let st = dispatch_det.stack_var.as_deref().unwrap_or("S");
-                        let prelude = crate::entry::dispatch::handler_array_prelude(ha, pc, idx, st);
-                        kernel.eval(&prelude, EvalOpts::default())
+                        let prelude =
+                            crate::entry::dispatch::handler_array_prelude(ha, pc, idx, st);
+                        kernel
+                            .eval(&prelude, EvalOpts::default())
                             .map_err(|e| format!("dispatch proxy prelude: {}", e))?;
                     }
                     crate::entry::dispatch::DispatchFlavor::SwitchVM => {
                         let prelude = crate::entry::dispatch::switch_vm_prelude();
-                        kernel.eval(&prelude, EvalOpts::default())
+                        kernel
+                            .eval(&prelude, EvalOpts::default())
                             .map_err(|e| format!("dispatch switch prelude: {}", e))?;
                     }
                     _ => {}
@@ -233,19 +248,22 @@ fn apply_strategy_prelude(
             Ok(())
         }
         StrategyKind::WebpackBridge => {
-            kernel.eval(crate::entry::webpack::bridge_prelude(), EvalOpts::default())
+            kernel
+                .eval(crate::entry::webpack::bridge_prelude(), EvalOpts::default())
                 .map_err(|e| format!("webpack prelude: {}", e))?;
             Ok(())
         }
         StrategyKind::RuntimeTransparent => {
             let js = hooks::transparent::prelude();
-            kernel.eval(&js, EvalOpts::default())
+            kernel
+                .eval(&js, EvalOpts::default())
                 .map_err(|e| format!("transparent hook: {}", e))?;
             Ok(())
         }
         StrategyKind::RuntimeAggressive => {
             let js = hooks::aggressive::prelude();
-            kernel.eval(&js, EvalOpts::default())
+            kernel
+                .eval(&js, EvalOpts::default())
                 .map_err(|e| format!("aggressive hook: {}", e))?;
             Ok(())
         }
@@ -265,15 +283,13 @@ fn collect_strategy_evidence(
     kind: StrategyKind,
 ) {
     // Pull trace from whichever log is present
-    let trace_val = kernel.eval_to_rust_value(
-        concat!(
-            "(function(){",
-            "if(typeof __iv8_runtime_log!=='undefined')return __iv8_runtime_log;",
-            "if(typeof __iv8i_log__!=='undefined')return __iv8i_log__;",
-            "return[];",
-            "})()"
-        ),
-    );
+    let trace_val = kernel.eval_to_rust_value(concat!(
+        "(function(){",
+        "if(typeof __iv8_runtime_log!=='undefined')return __iv8_runtime_log;",
+        "if(typeof __iv8i_log__!=='undefined')return __iv8i_log__;",
+        "return[];",
+        "})()"
+    ));
     let mut per_strategy_trace: Vec<String> = Vec::new();
     if let crate::convert::RustValue::Array(items) = trace_val {
         for item in items {
@@ -356,14 +372,17 @@ fn record_strategy_semantics(
 
 /// Build final trace_meta from all accumulated evidence.
 fn build_trace_meta(result: &mut EntryResult, plan: &EntryPlan) {
-    let executed_ids: Vec<String> = result.executed_strategies
+    let executed_ids: Vec<String> = result
+        .executed_strategies
         .iter()
         .map(|e| e.strategy_id.clone())
         .collect();
 
     let mut trace_sources: Vec<TraceSourceKind> = Vec::new();
     for st in &result.executed_strategies {
-        let cand = plan.candidate_strategies.iter()
+        let cand = plan
+            .candidate_strategies
+            .iter()
             .find(|c| c.strategy_id == st.strategy_id);
         if let Some(c) = cand {
             for sk in derive_trace_sources(&c.strategy_kind) {
@@ -378,14 +397,17 @@ fn build_trace_meta(result: &mut EntryResult, plan: &EntryPlan) {
     for (idx, entry) in result.trace.iter().enumerate() {
         let (source_kind, confidence) = classify_trace_entry(entry);
         if let Some(sk) = source_kind {
-            events.insert(idx, EventMeta {
-                source_kind: sk,
-                strategy_id: plan.selected_strategy.strategy_id.clone(),
-                phase: "invoked".to_string(),
-                confidence,
-                module_id: None,
-                chunk_id: None,
-            });
+            events.insert(
+                idx,
+                EventMeta {
+                    source_kind: sk,
+                    strategy_id: plan.selected_strategy.strategy_id.clone(),
+                    phase: "invoked".to_string(),
+                    confidence,
+                    module_id: None,
+                    chunk_id: None,
+                },
+            );
         }
     }
 
@@ -417,9 +439,10 @@ fn evidence_satisfied(result: &EntryResult, expected: &[Evidence]) -> bool {
                 !result.diagnostics.sample_signals.is_empty()
                     || result.diagnostics.selected_strategy_reason.is_some()
             }
-            Evidence::EvalSources => result.trace.iter().any(|t| {
-                t.starts_with("eval,") || t.starts_with("fn_ctor,")
-            }),
+            Evidence::EvalSources => result
+                .trace
+                .iter()
+                .any(|t| t.starts_with("eval,") || t.starts_with("fn_ctor,")),
         };
         if !ok {
             return false;
@@ -432,7 +455,9 @@ fn evidence_satisfied(result: &EntryResult, expected: &[Evidence]) -> bool {
 fn derive_trace_sources(kind: &StrategyKind) -> Vec<TraceSourceKind> {
     match kind {
         StrategyKind::Dispatch => vec![TraceSourceKind::Dispatch],
-        StrategyKind::WebpackBridge => vec![TraceSourceKind::ModuleBridge, TraceSourceKind::RuntimeProxy],
+        StrategyKind::WebpackBridge => {
+            vec![TraceSourceKind::ModuleBridge, TraceSourceKind::RuntimeProxy]
+        }
         StrategyKind::RuntimeTransparent => vec![TraceSourceKind::TransparentHook],
         StrategyKind::RuntimeAggressive => vec![TraceSourceKind::RuntimeProxy],
         StrategyKind::SourceAst => vec![TraceSourceKind::SourceAst],

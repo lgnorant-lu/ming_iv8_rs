@@ -54,7 +54,8 @@ impl Debugger {
     ///     api_path: Dot-path like 'Math.random', 'document.getElementById'
     fn trace_api(&mut self, api_path: &str, py: Python<'_>) -> PyResult<()> {
         let log_var = self.call_log_var.clone();
-        let script = format!(r#"
+        let script = format!(
+            r#"
 (function() {{
     var _log = globalThis.{log_var};
     __iv8__.hookNative('{api}', function(orig, args) {{
@@ -198,13 +199,20 @@ impl Debugger {
     ///     prop: Property name to watch (e.g. 'userAgent', 'cookie')
     ///     mode: 'read', 'write', or 'both' (default 'both')
     #[pyo3(signature = (obj_path, prop, mode="both"))]
-    fn watch_property(&mut self, obj_path: &str, prop: &str, mode: &str, py: Python<'_>) -> PyResult<()> {
+    fn watch_property(
+        &mut self,
+        obj_path: &str,
+        prop: &str,
+        mode: &str,
+        py: Python<'_>,
+    ) -> PyResult<()> {
         let log_var = self.call_log_var.clone();
         let api_path = format!("{}.{}", obj_path, prop);
         let watch_read = mode == "read" || mode == "both";
         let watch_write = mode == "write" || mode == "both";
 
-        let script = format!(r#"
+        let script = format!(
+            r#"
 (function() {{
     var _log = globalThis.{log_var};
     var _obj = (function() {{
@@ -304,7 +312,8 @@ impl Debugger {
 
     /// Get a summary of call counts per API.
     fn get_call_summary(&self, py: Python<'_>) -> PyResult<PyObject> {
-        let script = format!(r#"JSON.stringify((function() {{
+        let script = format!(
+            r#"JSON.stringify((function() {{
     var log = globalThis.{log_var};
     var counts = {{}};
     for (var i = 0; i < log.length; i++) {{
@@ -312,7 +321,9 @@ impl Debugger {
         counts[api] = (counts[api] || 0) + 1;
     }}
     return counts;
-}})())"#, log_var = self.call_log_var);
+}})())"#,
+            log_var = self.call_log_var
+        );
 
         let json_str: String = ctx_eval(&self.ctx, &script, py)?.extract(py)?;
         let value: serde_json::Value = serde_json::from_str(&json_str)

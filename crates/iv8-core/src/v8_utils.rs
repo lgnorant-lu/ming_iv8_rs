@@ -9,10 +9,7 @@
 #![expect(clippy::expect_used, reason = "OOM-only: v8_string/v8_fn/v8_resolver")]
 
 /// Create a V8 string. Only fails on OOM (process-terminating).
-pub fn v8_string<'s>(
-    scope: &v8::PinScope<'s, '_>,
-    s: &str,
-) -> v8::Local<'s, v8::String> {
+pub fn v8_string<'s>(scope: &v8::PinScope<'s, '_>, s: &str) -> v8::Local<'s, v8::String> {
     v8::String::new(scope, s).expect("v8_string: OOM")
 }
 
@@ -25,8 +22,6 @@ pub fn v8_fn<'s>(
 }
 
 /// Create a V8 PromiseResolver. Only fails on OOM.
-pub fn v8_resolver<'s>(
-    scope: &v8::PinScope<'s, '_>,
-) -> v8::Local<'s, v8::PromiseResolver> {
+pub fn v8_resolver<'s>(scope: &v8::PinScope<'s, '_>) -> v8::Local<'s, v8::PromiseResolver> {
     v8::PromiseResolver::new(scope).expect("v8_resolver: OOM")
 }

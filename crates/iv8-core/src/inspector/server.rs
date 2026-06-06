@@ -8,7 +8,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
-use crate::inspector::channel::{ChannelState, SharedChannelState, lock_channel_state};
+use crate::inspector::channel::{lock_channel_state, ChannelState, SharedChannelState};
 
 /// Start the CDP WebSocket server on the given port.
 /// Returns the shared channel state and the server URL.
@@ -57,7 +57,9 @@ fn handle_connection(stream: std::net::TcpStream, state: SharedChannelState) {
     use std::io::{Read, Write};
 
     let mut stream = stream;
-    stream.set_read_timeout(Some(Duration::from_millis(10))).ok();
+    stream
+        .set_read_timeout(Some(Duration::from_millis(10)))
+        .ok();
 
     // Read HTTP upgrade request
     let mut buf = [0u8; 4096];
@@ -69,7 +71,8 @@ fn handle_connection(stream: std::net::TcpStream, state: SharedChannelState) {
     let request = String::from_utf8_lossy(&buf[..n]);
 
     // Extract WebSocket key
-    let ws_key = request.lines()
+    let ws_key = request
+        .lines()
         .find(|l| l.to_lowercase().starts_with("sec-websocket-key:"))
         .and_then(|l| l.split_once(':').map(|x| x.1))
         .map(|s| s.trim().to_string());
@@ -127,7 +130,7 @@ fn handle_connection(stream: std::net::TcpStream, state: SharedChannelState) {
                 let mut s = lock_channel_state(&state);
                 s.incoming.push(text);
             }
-            Ok(None) => {} // timeout, no data
+            Ok(None) => {}   // timeout, no data
             Err(_) => break, // connection closed
         }
 
@@ -145,7 +148,6 @@ fn handle_connection(stream: std::net::TcpStream, state: SharedChannelState) {
 
 /// Compute WebSocket accept key from client key.
 fn compute_ws_accept(key: &str) -> String {
-    
     let magic = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
     let combined = format!("{}{}", key, magic);
 
@@ -171,23 +173,37 @@ fn sha1_bytes(data: &[u8]) -> [u8; 20] {
     for chunk in msg.chunks(64) {
         let mut w = [0u32; 80];
         for i in 0..16 {
-            w[i] = u32::from_be_bytes([chunk[i*4], chunk[i*4+1], chunk[i*4+2], chunk[i*4+3]]);
+            w[i] = u32::from_be_bytes([
+                chunk[i * 4],
+                chunk[i * 4 + 1],
+                chunk[i * 4 + 2],
+                chunk[i * 4 + 3],
+            ]);
         }
         for i in 16..80 {
-            w[i] = (w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16]).rotate_left(1);
+            w[i] = (w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16]).rotate_left(1);
         }
 
         let (mut a, mut b, mut c, mut d, mut e) = (h[0], h[1], h[2], h[3], h[4]);
 
         for (i, word) in w.iter().enumerate() {
             let (f, k) = match i {
-                0..=19  => ((b & c) | (!b & d), 0x5A827999u32),
+                0..=19 => ((b & c) | (!b & d), 0x5A827999u32),
                 20..=39 => (b ^ c ^ d, 0x6ED9EBA1),
                 40..=59 => ((b & c) | (b & d) | (c & d), 0x8F1BBCDC),
-                _       => (b ^ c ^ d, 0xCA62C1D6),
+                _ => (b ^ c ^ d, 0xCA62C1D6),
             };
-            let temp = a.rotate_left(5).wrapping_add(f).wrapping_add(e).wrapping_add(k).wrapping_add(*word);
-            e = d; d = c; c = b.rotate_left(30); b = a; a = temp;
+            let temp = a
+                .rotate_left(5)
+                .wrapping_add(f)
+                .wrapping_add(e)
+                .wrapping_add(k)
+                .wrapping_add(*word);
+            e = d;
+            d = c;
+            c = b.rotate_left(30);
+            b = a;
+            a = temp;
         }
 
         h[0] = h[0].wrapping_add(a);
@@ -199,7 +215,7 @@ fn sha1_bytes(data: &[u8]) -> [u8; 20] {
 
     let mut result = [0u8; 20];
     for i in 0..5 {
-        result[i*4..i*4+4].copy_from_slice(&h[i].to_be_bytes());
+        result[i * 4..i * 4 + 4].copy_from_slice(&h[i].to_be_bytes());
     }
     result
 }
@@ -210,13 +226,29 @@ fn base64_encode(data: &[u8]) -> String {
     let mut i = 0;
     while i < data.len() {
         let b0 = data[i] as u32;
-        let b1 = if i+1 < data.len() { data[i+1] as u32 } else { 0 };
-        let b2 = if i+2 < data.len() { data[i+2] as u32 } else { 0 };
+        let b1 = if i + 1 < data.len() {
+            data[i + 1] as u32
+        } else {
+            0
+        };
+        let b2 = if i + 2 < data.len() {
+            data[i + 2] as u32
+        } else {
+            0
+        };
         let n = (b0 << 16) | (b1 << 8) | b2;
         result.push(CHARS[((n >> 18) & 63) as usize] as char);
         result.push(CHARS[((n >> 12) & 63) as usize] as char);
-        result.push(if i+1 < data.len() { CHARS[((n >> 6) & 63) as usize] as char } else { '=' });
-        result.push(if i+2 < data.len() { CHARS[(n & 63) as usize] as char } else { '=' });
+        result.push(if i + 1 < data.len() {
+            CHARS[((n >> 6) & 63) as usize] as char
+        } else {
+            '='
+        });
+        result.push(if i + 2 < data.len() {
+            CHARS[(n & 63) as usize] as char
+        } else {
+            '='
+        });
         i += 3;
     }
     result
@@ -253,14 +285,22 @@ fn read_ws_text(stream: &mut std::net::TcpStream) -> std::io::Result<Option<Stri
     let mut header = [0u8; 2];
     match stream.read_exact(&mut header) {
         Ok(_) => {}
-        Err(e) if e.kind() == std::io::ErrorKind::WouldBlock ||
-                  e.kind() == std::io::ErrorKind::TimedOut => return Ok(None),
+        Err(e)
+            if e.kind() == std::io::ErrorKind::WouldBlock
+                || e.kind() == std::io::ErrorKind::TimedOut =>
+        {
+            return Ok(None)
+        }
         Err(e) => return Err(e),
     }
 
     let opcode = header[0] & 0x0F;
-    if opcode == 8 { // close
-        return Err(std::io::Error::new(std::io::ErrorKind::ConnectionAborted, "close"));
+    if opcode == 8 {
+        // close
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::ConnectionAborted,
+            "close",
+        ));
     }
 
     let masked = (header[1] & 0x80) != 0;

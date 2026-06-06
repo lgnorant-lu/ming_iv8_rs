@@ -38,7 +38,11 @@ fn serialize_node(doc: &Document, node_id: NodeId, output: &mut String) {
                 serialize_node(doc, child.id(), output);
             }
         }
-        NodeData::DocumentType { name, public_id, system_id } => {
+        NodeData::DocumentType {
+            name,
+            public_id,
+            system_id,
+        } => {
             output.push_str("<!DOCTYPE ");
             output.push_str(name);
             if !public_id.is_empty() {
@@ -57,7 +61,9 @@ fn serialize_node(doc: &Document, node_id: NodeId, output: &mut String) {
             }
             output.push('>');
         }
-        NodeData::Element { tag_name, attrs, .. } => {
+        NodeData::Element {
+            tag_name, attrs, ..
+        } => {
             // Opening tag
             output.push('<');
             output.push_str(tag_name);
@@ -122,8 +128,20 @@ fn escape_attr(s: &str) -> String {
 fn is_void_element(tag: &str) -> bool {
     matches!(
         tag,
-        "area" | "base" | "br" | "col" | "embed" | "hr" | "img" | "input"
-            | "link" | "meta" | "param" | "source" | "track" | "wbr"
+        "area"
+            | "base"
+            | "br"
+            | "col"
+            | "embed"
+            | "hr"
+            | "img"
+            | "input"
+            | "link"
+            | "meta"
+            | "param"
+            | "source"
+            | "track"
+            | "wbr"
     )
 }
 
@@ -148,7 +166,10 @@ mod tests {
 
     #[test]
     fn inner_html_with_attributes() {
-        let doc = parse_html("<a id='link' href='https://x.com' class='btn'>click</a>", None);
+        let doc = parse_html(
+            "<a id='link' href='https://x.com' class='btn'>click</a>",
+            None,
+        );
         let body = doc.body().unwrap();
         let html = doc.inner_html(body);
         assert!(html.contains("href=\"https://x.com\""));

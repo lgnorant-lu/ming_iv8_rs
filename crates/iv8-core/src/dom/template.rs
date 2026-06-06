@@ -148,7 +148,12 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = event_target.prototype_template(scope);
         install_proto_method(scope, proto, "addEventListener", add_event_listener_cb);
-        install_proto_method(scope, proto, "removeEventListener", remove_event_listener_cb);
+        install_proto_method(
+            scope,
+            proto,
+            "removeEventListener",
+            remove_event_listener_cb,
+        );
         install_proto_method(scope, proto, "dispatchEvent", dispatch_event_cb);
     }
 
@@ -160,8 +165,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         // nodeType, nodeName as accessors
         install_proto_accessor(scope, proto, "nodeType", node_type_getter, None);
         install_proto_accessor(scope, proto, "nodeName", node_name_getter, None);
-        install_proto_accessor(scope, proto, "textContent",
-            text_content_getter, Some(text_content_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "textContent",
+            text_content_getter,
+            Some(text_content_setter),
+        );
         // Navigation accessors
         install_proto_accessor(scope, proto, "parentNode", parent_node_getter, None);
         install_proto_accessor(scope, proto, "parentElement", parent_element_getter, None);
@@ -187,17 +197,58 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         let proto = element.prototype_template(scope);
         install_proto_accessor(scope, proto, "tagName", tag_name_getter, None);
         install_proto_accessor(scope, proto, "id", id_getter, Some(id_setter));
-        install_proto_accessor(scope, proto, "className", class_name_getter, Some(class_name_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "className",
+            class_name_getter,
+            Some(class_name_setter),
+        );
         install_proto_accessor(scope, proto, "classList", class_list_getter, None);
-        install_proto_accessor(scope, proto, "innerHTML",
-            inner_html_getter, Some(inner_html_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "innerHTML",
+            inner_html_getter,
+            Some(inner_html_setter),
+        );
         install_proto_accessor(scope, proto, "outerHTML", outer_html_getter, None);
         install_proto_accessor(scope, proto, "children", children_getter, None);
-        install_proto_accessor(scope, proto, "childElementCount", child_element_count_getter, None);
-        install_proto_accessor(scope, proto, "firstElementChild", first_element_child_getter, None);
-        install_proto_accessor(scope, proto, "lastElementChild", last_element_child_getter, None);
-        install_proto_accessor(scope, proto, "nextElementSibling", next_element_sibling_getter, None);
-        install_proto_accessor(scope, proto, "previousElementSibling", prev_element_sibling_getter, None);
+        install_proto_accessor(
+            scope,
+            proto,
+            "childElementCount",
+            child_element_count_getter,
+            None,
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "firstElementChild",
+            first_element_child_getter,
+            None,
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "lastElementChild",
+            last_element_child_getter,
+            None,
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "nextElementSibling",
+            next_element_sibling_getter,
+            None,
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "previousElementSibling",
+            prev_element_sibling_getter,
+            None,
+        );
         // Attribute methods
         install_proto_method(scope, proto, "getAttribute", get_attribute_cb);
         install_proto_method(scope, proto, "setAttribute", set_attribute_cb);
@@ -208,19 +259,39 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "replaceChild", replace_child_cb);
         install_proto_method(scope, proto, "insertBefore", insert_before_cb);
         install_proto_method(scope, proto, "insertAdjacentHTML", insert_adjacent_html_cb);
-        install_proto_method(scope, proto, "insertAdjacentElement", insert_adjacent_element_cb);
+        install_proto_method(
+            scope,
+            proto,
+            "insertAdjacentElement",
+            insert_adjacent_element_cb,
+        );
         install_proto_method(scope, proto, "insertAdjacentText", insert_adjacent_text_cb);
         install_proto_method(scope, proto, "cloneNode", clone_node_cb);
         install_proto_method(scope, proto, "contains", contains_cb);
         // Query methods
         install_proto_method(scope, proto, "querySelector", query_selector_cb);
         install_proto_method(scope, proto, "querySelectorAll", query_selector_all_cb);
-        install_proto_method(scope, proto, "getElementsByTagName", get_elements_by_tag_name_cb);
-        install_proto_method(scope, proto, "getElementsByClassName", get_elements_by_class_name_cb);
+        install_proto_method(
+            scope,
+            proto,
+            "getElementsByTagName",
+            get_elements_by_tag_name_cb,
+        );
+        install_proto_method(
+            scope,
+            proto,
+            "getElementsByClassName",
+            get_elements_by_class_name_cb,
+        );
         install_proto_method(scope, proto, "matches", matches_cb);
         install_proto_method(scope, proto, "closest", closest_cb);
         // Geometry
-        install_proto_method(scope, proto, "getBoundingClientRect", get_bounding_client_rect_cb);
+        install_proto_method(
+            scope,
+            proto,
+            "getBoundingClientRect",
+            get_bounding_client_rect_cb,
+        );
         install_proto_accessor(scope, proto, "offsetWidth", offset_width_getter, None);
         install_proto_accessor(scope, proto, "offsetHeight", offset_height_getter, None);
         install_proto_accessor(scope, proto, "offsetTop", offset_top_getter, None);
@@ -229,15 +300,30 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "clientHeight", client_height_getter, None);
         install_proto_accessor(scope, proto, "scrollWidth", scroll_width_getter, None);
         install_proto_accessor(scope, proto, "scrollHeight", scroll_height_getter, None);
-        install_proto_accessor(scope, proto, "scrollTop",
-            scroll_top_getter, Some(scroll_top_setter));
-        install_proto_accessor(scope, proto, "scrollLeft",
-            scroll_left_getter, Some(scroll_left_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "scrollTop",
+            scroll_top_getter,
+            Some(scroll_top_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "scrollLeft",
+            scroll_left_getter,
+            Some(scroll_left_setter),
+        );
         install_proto_method(scope, proto, "scrollIntoView", scroll_into_view_cb);
         install_proto_method(scope, proto, "getClientRects", get_client_rects_cb);
         // Event methods (also on EventTarget, but Element overrides for convenience)
         install_proto_method(scope, proto, "addEventListener", add_event_listener_cb);
-        install_proto_method(scope, proto, "removeEventListener", remove_event_listener_cb);
+        install_proto_method(
+            scope,
+            proto,
+            "removeEventListener",
+            remove_event_listener_cb,
+        );
         install_proto_method(scope, proto, "dispatchEvent", dispatch_event_cb);
     }
 
@@ -248,21 +334,38 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         let proto = html_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "style", style_getter, None);
         install_proto_accessor(scope, proto, "dataset", dataset_getter, None);
-        install_proto_accessor(scope, proto, "hidden",
-            hidden_getter, Some(hidden_setter));
-        install_proto_accessor(scope, proto, "tabIndex",
-            tab_index_getter, Some(tab_index_setter));
-        install_proto_accessor(scope, proto, "title",
-            title_getter, Some(title_setter));
-        install_proto_accessor(scope, proto, "lang",
-            lang_getter, Some(lang_setter));
-        install_proto_accessor(scope, proto, "dir",
-            dir_getter, Some(dir_setter));
-        install_proto_accessor(scope, proto, "draggable",
-            draggable_getter, Some(draggable_setter));
-        install_proto_accessor(scope, proto, "contentEditable",
-            content_editable_getter, Some(content_editable_setter));
-        install_proto_accessor(scope, proto, "isContentEditable", is_content_editable_getter, None);
+        install_proto_accessor(scope, proto, "hidden", hidden_getter, Some(hidden_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "tabIndex",
+            tab_index_getter,
+            Some(tab_index_setter),
+        );
+        install_proto_accessor(scope, proto, "title", title_getter, Some(title_setter));
+        install_proto_accessor(scope, proto, "lang", lang_getter, Some(lang_setter));
+        install_proto_accessor(scope, proto, "dir", dir_getter, Some(dir_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "draggable",
+            draggable_getter,
+            Some(draggable_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "contentEditable",
+            content_editable_getter,
+            Some(content_editable_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "isContentEditable",
+            is_content_editable_getter,
+            None,
+        );
         install_proto_accessor(scope, proto, "offsetParent", offset_parent_getter, None);
         install_proto_method(scope, proto, "focus", focus_cb);
         install_proto_method(scope, proto, "blur", blur_cb);
@@ -299,10 +402,34 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = html_input_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "value", value_getter, Some(value_setter));
-        install_proto_accessor(scope, proto, "type", input_type_getter, Some(input_type_setter));
-        install_proto_accessor(scope, proto, "checked", checked_getter, Some(checked_setter));
-        install_proto_accessor(scope, proto, "disabled", disabled_getter, Some(disabled_setter));
-        install_proto_accessor(scope, proto, "placeholder", placeholder_getter, Some(placeholder_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "type",
+            input_type_getter,
+            Some(input_type_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "checked",
+            checked_getter,
+            Some(checked_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "disabled",
+            disabled_getter,
+            Some(disabled_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "placeholder",
+            placeholder_getter,
+            Some(placeholder_setter),
+        );
         install_proto_accessor(scope, proto, "name", name_getter, Some(name_setter));
         install_proto_method(scope, proto, "focus", focus_cb);
         install_proto_method(scope, proto, "blur", blur_cb);
@@ -314,9 +441,21 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     html_button_element.inherit(html_element);
     {
         let proto = html_button_element.prototype_template(scope);
-        install_proto_accessor(scope, proto, "disabled", disabled_getter, Some(disabled_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "disabled",
+            disabled_getter,
+            Some(disabled_setter),
+        );
         install_proto_accessor(scope, proto, "name", name_getter, Some(name_setter));
-        install_proto_accessor(scope, proto, "type", input_type_getter, Some(input_type_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "type",
+            input_type_getter,
+            Some(input_type_setter),
+        );
         install_proto_method(scope, proto, "click", click_cb);
     }
 
@@ -333,8 +472,20 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     html_canvas_element.inherit(html_element);
     {
         let proto = html_canvas_element.prototype_template(scope);
-        install_proto_accessor(scope, proto, "width", canvas_width_getter, Some(canvas_width_setter));
-        install_proto_accessor(scope, proto, "height", canvas_height_getter, Some(canvas_height_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "width",
+            canvas_width_getter,
+            Some(canvas_width_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "height",
+            canvas_height_getter,
+            Some(canvas_height_setter),
+        );
         install_proto_method(scope, proto, "getContext", get_context_cb);
         install_proto_method(scope, proto, "toDataURL", to_data_url_cb);
         install_proto_method(scope, proto, "toBlob", to_blob_cb);
@@ -347,7 +498,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = html_script_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "src", src_getter, Some(src_setter));
-        install_proto_accessor(scope, proto, "type", input_type_getter, Some(input_type_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "type",
+            input_type_getter,
+            Some(input_type_setter),
+        );
         install_proto_accessor(scope, proto, "async", async_getter, Some(async_setter));
         install_proto_accessor(scope, proto, "defer", defer_getter, Some(defer_setter));
     }
@@ -358,8 +515,20 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         let proto = html_image_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "src", src_getter, Some(src_setter));
         install_proto_accessor(scope, proto, "alt", alt_getter, Some(alt_setter));
-        install_proto_accessor(scope, proto, "width", canvas_width_getter, Some(canvas_width_setter));
-        install_proto_accessor(scope, proto, "height", canvas_height_getter, Some(canvas_height_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "width",
+            canvas_width_getter,
+            Some(canvas_width_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "height",
+            canvas_height_getter,
+            Some(canvas_height_setter),
+        );
         install_proto_accessor(scope, proto, "naturalWidth", natural_width_getter, None);
         install_proto_accessor(scope, proto, "naturalHeight", natural_height_getter, None);
         install_proto_accessor(scope, proto, "complete", img_complete_getter, None);
@@ -370,7 +539,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = html_video_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "src", src_getter, Some(src_setter));
-        install_proto_accessor(scope, proto, "currentTime", current_time_getter, Some(current_time_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "currentTime",
+            current_time_getter,
+            Some(current_time_setter),
+        );
         install_proto_accessor(scope, proto, "duration", duration_getter, None);
         install_proto_accessor(scope, proto, "paused", paused_getter, None);
         install_proto_accessor(scope, proto, "muted", muted_getter, Some(muted_setter));
@@ -389,7 +564,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = html_audio_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "src", src_getter, Some(src_setter));
-        install_proto_accessor(scope, proto, "currentTime", current_time_getter, Some(current_time_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "currentTime",
+            current_time_getter,
+            Some(current_time_setter),
+        );
         install_proto_accessor(scope, proto, "duration", duration_getter, None);
         install_proto_accessor(scope, proto, "paused", paused_getter, None);
         install_proto_accessor(scope, proto, "muted", muted_getter, Some(muted_setter));
@@ -405,9 +586,27 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = html_select_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "value", value_getter, Some(value_setter));
-        install_proto_accessor(scope, proto, "selectedIndex", selected_index_getter, Some(selected_index_setter));
-        install_proto_accessor(scope, proto, "disabled", disabled_getter, Some(disabled_setter));
-        install_proto_accessor(scope, proto, "multiple", multiple_getter, Some(multiple_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "selectedIndex",
+            selected_index_getter,
+            Some(selected_index_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "disabled",
+            disabled_getter,
+            Some(disabled_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "multiple",
+            multiple_getter,
+            Some(multiple_setter),
+        );
     }
 
     let html_textarea_element = make_template(scope, "HTMLTextAreaElement");
@@ -415,8 +614,20 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = html_textarea_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "value", value_getter, Some(value_setter));
-        install_proto_accessor(scope, proto, "disabled", disabled_getter, Some(disabled_setter));
-        install_proto_accessor(scope, proto, "placeholder", placeholder_getter, Some(placeholder_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "disabled",
+            disabled_getter,
+            Some(disabled_setter),
+        );
+        install_proto_accessor(
+            scope,
+            proto,
+            "placeholder",
+            placeholder_getter,
+            Some(placeholder_setter),
+        );
         install_proto_method(scope, proto, "select", select_cb);
     }
 
@@ -463,7 +674,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     {
         let proto = html_meta_element.prototype_template(scope);
         install_proto_accessor(scope, proto, "name", name_getter, Some(name_setter));
-        install_proto_accessor(scope, proto, "content", content_getter, Some(content_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "content",
+            content_getter,
+            Some(content_setter),
+        );
     }
 
     // ── 6. Text node (inherits Node) ────────────────────────────────────────
@@ -634,9 +851,7 @@ pub fn create_node_object<'s>(
 
     // Select template based on node type
     let tmpl_local = match data {
-        NodeData::Element { tag_name, .. } => {
-            template_for_tag(scope, templates, tag_name)
-        }
+        NodeData::Element { tag_name, .. } => template_for_tag(scope, templates, tag_name),
         NodeData::Text(_) => v8::Local::new(scope, &templates.text_node),
         NodeData::Comment(_) => v8::Local::new(scope, &templates.comment_node),
         NodeData::Document => v8::Local::new(scope, &templates.document_node),
@@ -697,7 +912,8 @@ pub fn extract_node_id_from_internal(
 #[inline(always)]
 fn run_accessor<F>(info: *const v8::FunctionCallbackInfo, f: F)
 where
-    F: FnOnce(&v8::PinScope<'_, '_>, &mut v8::ReturnValue<'_>, &RuntimeState, NodeId) + std::panic::UnwindSafe,
+    F: FnOnce(&v8::PinScope<'_, '_>, &mut v8::ReturnValue<'_>, &RuntimeState, NodeId)
+        + std::panic::UnwindSafe,
 {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -717,7 +933,13 @@ where
 #[inline(always)]
 fn run_callback<F>(info: *const v8::FunctionCallbackInfo, f: F)
 where
-    F: FnOnce(&v8::PinScope<'_, '_>, &v8::FunctionCallbackArguments<'_>, &mut v8::ReturnValue<'_>, &RuntimeState, Option<NodeId>) + std::panic::UnwindSafe,
+    F: FnOnce(
+            &v8::PinScope<'_, '_>,
+            &v8::FunctionCallbackArguments<'_>,
+            &mut v8::ReturnValue<'_>,
+            &RuntimeState,
+            Option<NodeId>,
+        ) + std::panic::UnwindSafe,
 {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -731,7 +953,6 @@ where
         f(scope, &args, &mut rv, state, node_id);
     }));
 }
-
 
 // ── Node accessors ────────────────────────────────────────────────────────────
 
@@ -755,7 +976,9 @@ unsafe extern "C" fn node_name_getter(info: *const v8::FunctionCallbackInfo) {
                     NodeData::Element { tag_name, .. } => tag_name.to_ascii_uppercase(),
                     other => other.node_name().to_string(),
                 };
-                if let Some(s) = v8::String::new(scope, &name) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, &name) {
+                    rv.set(s.into());
+                }
             }
         }
     });
@@ -766,7 +989,9 @@ unsafe extern "C" fn text_content_getter(info: *const v8::FunctionCallbackInfo) 
         let doc = state.document.borrow();
         if let Some(ref doc) = *doc {
             let text = doc.text_content_of(node_id);
-            if let Some(s) = v8::String::new(scope, &text) { rv.set(s.into()); }
+            if let Some(s) = v8::String::new(scope, &text) {
+                rv.set(s.into());
+            }
         }
     });
 }
@@ -778,10 +1003,14 @@ unsafe extern "C" fn text_content_setter(info: *const v8::FunctionCallbackInfo) 
                 let val = args.get(0).to_rust_string_lossy(scope);
                 let mut doc = state.document.borrow_mut();
                 if let Some(ref mut doc) = *doc {
-                    let children: Vec<_> = doc.tree.get(nid)
+                    let children: Vec<_> = doc
+                        .tree
+                        .get(nid)
                         .map(|n| n.children().map(|c| c.id()).collect())
                         .unwrap_or_default();
-                    for child_id in children { doc.detach(child_id); }
+                    for child_id in children {
+                        doc.detach(child_id);
+                    }
                     doc.append_child(nid, NodeData::text(&val));
                     state.node_cache.borrow_mut().remove(&nid);
                 }
@@ -796,10 +1025,16 @@ unsafe extern "C" fn parent_node_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let parent_id = {
             let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.parent()).map(|p| p.id())
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.parent())
+                .map(|p| p.id())
         };
         if let Some(pid) = parent_id {
-            if let Some(obj) = create_node_object(scope, state, pid) { rv.set(obj); return; }
+            if let Some(obj) = create_node_object(scope, state, pid) {
+                rv.set(obj);
+                return;
+            }
         }
         rv.set(v8::null(scope).into());
     });
@@ -809,13 +1044,17 @@ unsafe extern "C" fn parent_element_getter(info: *const v8::FunctionCallbackInfo
     run_accessor(info, |scope, rv, state, node_id| {
         let parent_id = {
             let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get(node_id))
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
                 .and_then(|n| n.parent())
                 .filter(|p| p.value().is_element())
                 .map(|p| p.id())
         };
         if let Some(pid) = parent_id {
-            if let Some(obj) = create_node_object(scope, state, pid) { rv.set(obj); return; }
+            if let Some(obj) = create_node_object(scope, state, pid) {
+                rv.set(obj);
+                return;
+            }
         }
         rv.set(v8::null(scope).into());
     });
@@ -823,32 +1062,76 @@ unsafe extern "C" fn parent_element_getter(info: *const v8::FunctionCallbackInfo
 
 unsafe extern "C" fn first_child_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let cid = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.first_child()).map(|c| c.id()) };
-        if let Some(cid) = cid { if let Some(obj) = create_node_object(scope, state, cid) { rv.set(obj); return; } }
+        let cid = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.first_child())
+                .map(|c| c.id())
+        };
+        if let Some(cid) = cid {
+            if let Some(obj) = create_node_object(scope, state, cid) {
+                rv.set(obj);
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     });
 }
 
 unsafe extern "C" fn last_child_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let cid = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.last_child()).map(|c| c.id()) };
-        if let Some(cid) = cid { if let Some(obj) = create_node_object(scope, state, cid) { rv.set(obj); return; } }
+        let cid = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.last_child())
+                .map(|c| c.id())
+        };
+        if let Some(cid) = cid {
+            if let Some(obj) = create_node_object(scope, state, cid) {
+                rv.set(obj);
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     });
 }
 
 unsafe extern "C" fn next_sibling_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let sid = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.next_sibling()).map(|s| s.id()) };
-        if let Some(sid) = sid { if let Some(obj) = create_node_object(scope, state, sid) { rv.set(obj); return; } }
+        let sid = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.next_sibling())
+                .map(|s| s.id())
+        };
+        if let Some(sid) = sid {
+            if let Some(obj) = create_node_object(scope, state, sid) {
+                rv.set(obj);
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     });
 }
 
 unsafe extern "C" fn prev_sibling_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let sid = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.prev_sibling()).map(|s| s.id()) };
-        if let Some(sid) = sid { if let Some(obj) = create_node_object(scope, state, sid) { rv.set(obj); return; } }
+        let sid = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.prev_sibling())
+                .map(|s| s.id())
+        };
+        if let Some(sid) = sid {
+            if let Some(obj) = create_node_object(scope, state, sid) {
+                rv.set(obj);
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     });
 }
@@ -857,13 +1140,16 @@ unsafe extern "C" fn child_nodes_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let child_ids: Vec<NodeId> = {
             let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get(node_id))
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
                 .map(|n| n.children().map(|c| c.id()).collect())
                 .unwrap_or_default()
         };
         let arr = v8::Array::new(scope, child_ids.len() as i32);
         for (i, cid) in child_ids.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *cid) { arr.set_index(scope, i as u32, obj); }
+            if let Some(obj) = create_node_object(scope, state, *cid) {
+                arr.set_index(scope, i as u32, obj);
+            }
         }
         rv.set(arr.into());
     });
@@ -877,7 +1163,9 @@ unsafe extern "C" fn tag_name_getter(info: *const v8::FunctionCallbackInfo) {
         if let Some(ref doc) = *doc {
             if let Some(node_ref) = doc.get(node_id) {
                 if let NodeData::Element { tag_name, .. } = node_ref.value() {
-                    if let Some(s) = v8::String::new(scope, &tag_name.to_ascii_uppercase()) { rv.set(s.into()); }
+                    if let Some(s) = v8::String::new(scope, &tag_name.to_ascii_uppercase()) {
+                        rv.set(s.into());
+                    }
                 }
             }
         }
@@ -890,7 +1178,9 @@ unsafe extern "C" fn id_getter(info: *const v8::FunctionCallbackInfo) {
         if let Some(ref doc) = *doc {
             if let Some(node_ref) = doc.get(node_id) {
                 let id_val = node_ref.value().get_attr("id").unwrap_or("");
-                if let Some(s) = v8::String::new(scope, id_val) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, id_val) {
+                    rv.set(s.into());
+                }
             }
         }
     });
@@ -904,8 +1194,17 @@ unsafe extern "C" fn id_setter(info: *const v8::FunctionCallbackInfo) {
                 let mut doc = state.document.borrow_mut();
                 if let Some(ref mut doc) = *doc {
                     if let Some(mut node) = doc.tree.get_mut(nid) {
-                        if let NodeData::Element { ref mut attrs, ref mut id, .. } = node.value() {
-                            if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "id") { e.1 = val.clone(); } else { attrs.push(("id".to_string(), val.clone())); }
+                        if let NodeData::Element {
+                            ref mut attrs,
+                            ref mut id,
+                            ..
+                        } = node.value()
+                        {
+                            if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "id") {
+                                e.1 = val.clone();
+                            } else {
+                                attrs.push(("id".to_string(), val.clone()));
+                            }
                             *id = Some(val.clone());
                         }
                     }
@@ -922,7 +1221,9 @@ unsafe extern "C" fn class_name_getter(info: *const v8::FunctionCallbackInfo) {
         if let Some(ref doc) = *doc {
             if let Some(node_ref) = doc.get(node_id) {
                 let cls = node_ref.value().get_attr("class").unwrap_or("");
-                if let Some(s) = v8::String::new(scope, cls) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, cls) {
+                    rv.set(s.into());
+                }
             }
         }
     });
@@ -936,8 +1237,17 @@ unsafe extern "C" fn class_name_setter(info: *const v8::FunctionCallbackInfo) {
                 let mut doc = state.document.borrow_mut();
                 if let Some(ref mut doc) = *doc {
                     if let Some(mut node) = doc.tree.get_mut(nid) {
-                        if let NodeData::Element { ref mut attrs, ref mut classes, .. } = node.value() {
-                            if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") { e.1 = val.clone(); } else { attrs.push(("class".to_string(), val.clone())); }
+                        if let NodeData::Element {
+                            ref mut attrs,
+                            ref mut classes,
+                            ..
+                        } = node.value()
+                        {
+                            if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
+                                e.1 = val.clone();
+                            } else {
+                                attrs.push(("class".to_string(), val.clone()));
+                            }
                             *classes = val.split_whitespace().map(|s| s.to_string()).collect();
                         }
                     }
@@ -951,17 +1261,32 @@ unsafe extern "C" fn class_list_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let classes: Vec<String> = {
             let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get(node_id)).map(|n| n.value().class_list().to_vec()).unwrap_or_default()
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().class_list().to_vec())
+                .unwrap_or_default()
         };
         let obj = v8::Object::new(scope);
         let len_key = crate::v8_utils::v8_string(scope, "length");
-        obj.set(scope, len_key.into(), v8::Integer::new(scope, classes.len() as i32).into());
+        obj.set(
+            scope,
+            len_key.into(),
+            v8::Integer::new(scope, classes.len() as i32).into(),
+        );
         // Store nodeId for mutation methods
         let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         let nid_val = v8::Number::new(scope, super::binding::node_id_to_usize(node_id) as f64);
-        obj.define_own_property(scope, nid_key.into(), nid_val.into(), v8::PropertyAttribute::DONT_ENUM);
+        obj.define_own_property(
+            scope,
+            nid_key.into(),
+            nid_val.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
         for (name, cb) in &[
-            ("item", class_list_item_cb as unsafe extern "C" fn(*const v8::FunctionCallbackInfo)),
+            (
+                "item",
+                class_list_item_cb as unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
+            ),
             ("contains", class_list_contains_cb),
             ("add", class_list_add_cb),
             ("remove", class_list_remove_cb),
@@ -990,7 +1315,11 @@ unsafe extern "C" fn class_list_item_cb(info: *const v8::FunctionCallbackInfo) {
             if nid_val.is_number() {
                 let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
                 if let Some(node_id) = super::binding::usize_to_node_id(nid_usize) {
-                    let idx = if args.length() >= 1 { args.get(0).number_value(scope).unwrap_or(-1.0) as i32 } else { -1 };
+                    let idx = if args.length() >= 1 {
+                        args.get(0).number_value(scope).unwrap_or(-1.0) as i32
+                    } else {
+                        -1
+                    };
                     let isolate: &v8::Isolate = &*scope;
                     let state = RuntimeState::get(isolate);
                     let doc = state.document.borrow();
@@ -998,7 +1327,10 @@ unsafe extern "C" fn class_list_item_cb(info: *const v8::FunctionCallbackInfo) {
                         if let Some(node_ref) = doc.get(node_id) {
                             let classes = node_ref.value().class_list();
                             if idx >= 0 && (idx as usize) < classes.len() {
-                                if let Some(s) = v8::String::new(scope, &classes[idx as usize]) { rv.set(s.into()); return; }
+                                if let Some(s) = v8::String::new(scope, &classes[idx as usize]) {
+                                    rv.set(s.into());
+                                    return;
+                                }
                             }
                         }
                     }
@@ -1015,7 +1347,10 @@ unsafe extern "C" fn class_list_contains_cb(info: *const v8::FunctionCallbackInf
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        if args.length() < 1 { rv.set(v8::Boolean::new(scope, false).into()); return; }
+        if args.length() < 1 {
+            rv.set(v8::Boolean::new(scope, false).into());
+            return;
+        }
         let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
         let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
@@ -1044,7 +1379,9 @@ unsafe extern "C" fn class_list_add_cb(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if args.length() < 1 { return; }
+        if args.length() < 1 {
+            return;
+        }
         let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
         let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
@@ -1057,11 +1394,20 @@ unsafe extern "C" fn class_list_add_cb(info: *const v8::FunctionCallbackInfo) {
                     let mut doc = state.document.borrow_mut();
                     if let Some(ref mut doc) = *doc {
                         if let Some(mut node) = doc.tree.get_mut(node_id) {
-                            if let NodeData::Element { ref mut attrs, ref mut classes, .. } = node.value() {
+                            if let NodeData::Element {
+                                ref mut attrs,
+                                ref mut classes,
+                                ..
+                            } = node.value()
+                            {
                                 if !classes.contains(&cls) {
                                     classes.push(cls.clone());
                                     let new_class = classes.join(" ");
-                                    if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") { e.1 = new_class; } else { attrs.push(("class".to_string(), new_class)); }
+                                    if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
+                                        e.1 = new_class;
+                                    } else {
+                                        attrs.push(("class".to_string(), new_class));
+                                    }
                                 }
                             }
                         }
@@ -1077,7 +1423,9 @@ unsafe extern "C" fn class_list_remove_cb(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if args.length() < 1 { return; }
+        if args.length() < 1 {
+            return;
+        }
         let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
         let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
@@ -1090,10 +1438,17 @@ unsafe extern "C" fn class_list_remove_cb(info: *const v8::FunctionCallbackInfo)
                     let mut doc = state.document.borrow_mut();
                     if let Some(ref mut doc) = *doc {
                         if let Some(mut node) = doc.tree.get_mut(node_id) {
-                            if let NodeData::Element { ref mut attrs, ref mut classes, .. } = node.value() {
+                            if let NodeData::Element {
+                                ref mut attrs,
+                                ref mut classes,
+                                ..
+                            } = node.value()
+                            {
                                 classes.retain(|c| c != &cls);
                                 let new_class = classes.join(" ");
-                                if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") { e.1 = new_class; }
+                                if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
+                                    e.1 = new_class;
+                                }
                             }
                         }
                     }
@@ -1109,7 +1464,10 @@ unsafe extern "C" fn class_list_toggle_cb(info: *const v8::FunctionCallbackInfo)
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        if args.length() < 1 { rv.set(v8::Boolean::new(scope, false).into()); return; }
+        if args.length() < 1 {
+            rv.set(v8::Boolean::new(scope, false).into());
+            return;
+        }
         let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
         let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
@@ -1123,10 +1481,25 @@ unsafe extern "C" fn class_list_toggle_cb(info: *const v8::FunctionCallbackInfo)
                     let mut doc = state.document.borrow_mut();
                     if let Some(ref mut doc) = *doc {
                         if let Some(mut node) = doc.tree.get_mut(node_id) {
-                            if let NodeData::Element { ref mut attrs, ref mut classes, .. } = node.value() {
-                                if classes.contains(&cls) { classes.retain(|c| c != &cls); result = false; } else { classes.push(cls.clone()); result = true; }
+                            if let NodeData::Element {
+                                ref mut attrs,
+                                ref mut classes,
+                                ..
+                            } = node.value()
+                            {
+                                if classes.contains(&cls) {
+                                    classes.retain(|c| c != &cls);
+                                    result = false;
+                                } else {
+                                    classes.push(cls.clone());
+                                    result = true;
+                                }
                                 let new_class = classes.join(" ");
-                                if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") { e.1 = new_class; } else { attrs.push(("class".to_string(), new_class)); }
+                                if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
+                                    e.1 = new_class;
+                                } else {
+                                    attrs.push(("class".to_string(), new_class));
+                                }
                             }
                         }
                     }
@@ -1155,7 +1528,10 @@ unsafe extern "C" fn class_list_tostring_cb(info: *const v8::FunctionCallbackInf
                     if let Some(ref doc) = *doc {
                         if let Some(node_ref) = doc.get(node_id) {
                             let cls = node_ref.value().class_list().join(" ");
-                            if let Some(s) = v8::String::new(scope, &cls) { rv.set(s.into()); return; }
+                            if let Some(s) = v8::String::new(scope, &cls) {
+                                rv.set(s.into());
+                                return;
+                            }
                         }
                     }
                 }
@@ -1171,9 +1547,13 @@ unsafe extern "C" fn inner_html_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let html = {
             let doc = state.document.borrow();
-            doc.as_ref().map(|d| d.inner_html(node_id)).unwrap_or_default()
+            doc.as_ref()
+                .map(|d| d.inner_html(node_id))
+                .unwrap_or_default()
         };
-        if let Some(s) = v8::String::new(scope, &html) { rv.set(s.into()); }
+        if let Some(s) = v8::String::new(scope, &html) {
+            rv.set(s.into());
+        }
     });
 }
 
@@ -1185,15 +1565,23 @@ unsafe extern "C" fn inner_html_setter(info: *const v8::FunctionCallbackInfo) {
                 let mut doc = state.document.borrow_mut();
                 if let Some(ref mut doc) = *doc {
                     // Remove existing children
-                    let children: Vec<_> = doc.tree.get(nid).map(|n| n.children().map(|c| c.id()).collect()).unwrap_or_default();
-                    for child_id in children { doc.detach(child_id); }
+                    let children: Vec<_> = doc
+                        .tree
+                        .get(nid)
+                        .map(|n| n.children().map(|c| c.id()).collect())
+                        .unwrap_or_default();
+                    for child_id in children {
+                        doc.detach(child_id);
+                    }
 
                     // Parse the HTML fragment using the full parser
                     let fragment = super::parser::parse_html(&html, None);
 
                     // Get body children from the fragment (or root children)
                     let body_id = fragment.body().unwrap_or(fragment.root_id());
-                    let child_ids: Vec<_> = fragment.tree.get(body_id)
+                    let child_ids: Vec<_> = fragment
+                        .tree
+                        .get(body_id)
                         .map(|b| b.children().map(|c| c.id()).collect())
                         .unwrap_or_default();
 
@@ -1233,9 +1621,13 @@ unsafe extern "C" fn outer_html_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let html = {
             let doc = state.document.borrow();
-            doc.as_ref().map(|d| d.outer_html(node_id)).unwrap_or_default()
+            doc.as_ref()
+                .map(|d| d.outer_html(node_id))
+                .unwrap_or_default()
         };
-        if let Some(s) = v8::String::new(scope, &html) { rv.set(s.into()); }
+        if let Some(s) = v8::String::new(scope, &html) {
+            rv.set(s.into());
+        }
     });
 }
 
@@ -1245,13 +1637,21 @@ unsafe extern "C" fn children_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         let child_ids: Vec<NodeId> = {
             let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get(node_id))
-                .map(|n| n.children().filter(|c| c.value().is_element()).map(|c| c.id()).collect())
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| {
+                    n.children()
+                        .filter(|c| c.value().is_element())
+                        .map(|c| c.id())
+                        .collect()
+                })
                 .unwrap_or_default()
         };
         let arr = v8::Array::new(scope, child_ids.len() as i32);
         for (i, cid) in child_ids.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *cid) { arr.set_index(scope, i as u32, obj); }
+            if let Some(obj) = create_node_object(scope, state, *cid) {
+                arr.set_index(scope, i as u32, obj);
+            }
         }
         rv.set(arr.into());
     });
@@ -1259,23 +1659,51 @@ unsafe extern "C" fn children_getter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn child_element_count_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let count = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).map(|n| n.children().filter(|c| c.value().is_element()).count()).unwrap_or(0) };
+        let count = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.children().filter(|c| c.value().is_element()).count())
+                .unwrap_or(0)
+        };
         rv.set(v8::Integer::new(scope, count as i32).into());
     });
 }
 
 unsafe extern "C" fn first_element_child_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let cid = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.children().find(|c| c.value().is_element())).map(|c| c.id()) };
-        if let Some(cid) = cid { if let Some(obj) = create_node_object(scope, state, cid) { rv.set(obj); return; } }
+        let cid = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.children().find(|c| c.value().is_element()))
+                .map(|c| c.id())
+        };
+        if let Some(cid) = cid {
+            if let Some(obj) = create_node_object(scope, state, cid) {
+                rv.set(obj);
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     });
 }
 
 unsafe extern "C" fn last_element_child_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let cid = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.children().rfind(|c| c.value().is_element())).map(|c| c.id()) };
-        if let Some(cid) = cid { if let Some(obj) = create_node_object(scope, state, cid) { rv.set(obj); return; } }
+        let cid = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.children().rfind(|c| c.value().is_element()))
+                .map(|c| c.id())
+        };
+        if let Some(cid) = cid {
+            if let Some(obj) = create_node_object(scope, state, cid) {
+                rv.set(obj);
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     });
 }
@@ -1294,10 +1722,19 @@ unsafe extern "C" fn next_element_sibling_getter(info: *const v8::FunctionCallba
                             None => break None,
                         }
                     }
-                } else { None }
-            } else { None }
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
         };
-        if let Some(sid) = sib_id { if let Some(obj) = create_node_object(scope, state, sid) { rv.set(obj); return; } }
+        if let Some(sid) = sib_id {
+            if let Some(obj) = create_node_object(scope, state, sid) {
+                rv.set(obj);
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     });
 }
@@ -1316,10 +1753,19 @@ unsafe extern "C" fn prev_element_sibling_getter(info: *const v8::FunctionCallba
                             None => break None,
                         }
                     }
-                } else { None }
-            } else { None }
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
         };
-        if let Some(sid) = sib_id { if let Some(obj) = create_node_object(scope, state, sid) { rv.set(obj); return; } }
+        if let Some(sid) = sib_id {
+            if let Some(obj) = create_node_object(scope, state, sid) {
+                rv.set(obj);
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     });
 }
@@ -1335,7 +1781,10 @@ unsafe extern "C" fn get_attribute_cb(info: *const v8::FunctionCallbackInfo) {
                 if let Some(ref doc) = *doc {
                     if let Some(node_ref) = doc.get(nid) {
                         if let Some(val) = node_ref.value().get_attr(&attr_name) {
-                            if let Some(s) = v8::String::new(scope, val) { rv.set(s.into()); return; }
+                            if let Some(s) = v8::String::new(scope, val) {
+                                rv.set(s.into());
+                                return;
+                            }
                         }
                     }
                 }
@@ -1354,13 +1803,30 @@ unsafe extern "C" fn set_attribute_cb(info: *const v8::FunctionCallbackInfo) {
                 let mut doc = state.document.borrow_mut();
                 if let Some(ref mut doc) = *doc {
                     if let Some(mut node) = doc.tree.get_mut(nid) {
-                        if let NodeData::Element { ref mut attrs, ref mut id, ref mut classes, .. } = node.value() {
-                            if let Some(e) = attrs.iter_mut().find(|(k, _)| k == &name) { e.1 = value.clone(); } else { attrs.push((name.clone(), value.clone())); }
-                            if name == "id" { *id = Some(value.clone()); }
-                            if name == "class" { *classes = value.split_whitespace().map(|s| s.to_string()).collect(); }
+                        if let NodeData::Element {
+                            ref mut attrs,
+                            ref mut id,
+                            ref mut classes,
+                            ..
+                        } = node.value()
+                        {
+                            if let Some(e) = attrs.iter_mut().find(|(k, _)| k == &name) {
+                                e.1 = value.clone();
+                            } else {
+                                attrs.push((name.clone(), value.clone()));
+                            }
+                            if name == "id" {
+                                *id = Some(value.clone());
+                            }
+                            if name == "class" {
+                                *classes =
+                                    value.split_whitespace().map(|s| s.to_string()).collect();
+                            }
                         }
                     }
-                    if name == "id" { doc.register_id(value, nid); }
+                    if name == "id" {
+                        doc.register_id(value, nid);
+                    }
                 }
             }
         }
@@ -1375,10 +1841,20 @@ unsafe extern "C" fn remove_attribute_cb(info: *const v8::FunctionCallbackInfo) 
                 let mut doc = state.document.borrow_mut();
                 if let Some(ref mut doc) = *doc {
                     if let Some(mut node) = doc.tree.get_mut(nid) {
-                        if let NodeData::Element { ref mut attrs, ref mut id, ref mut classes, .. } = node.value() {
+                        if let NodeData::Element {
+                            ref mut attrs,
+                            ref mut id,
+                            ref mut classes,
+                            ..
+                        } = node.value()
+                        {
                             attrs.retain(|(k, _)| k != &name);
-                            if name == "id" { *id = None; }
-                            if name == "class" { classes.clear(); }
+                            if name == "id" {
+                                *id = None;
+                            }
+                            if name == "class" {
+                                classes.clear();
+                            }
                         }
                     }
                 }
@@ -1393,9 +1869,16 @@ unsafe extern "C" fn has_attribute_cb(info: *const v8::FunctionCallbackInfo) {
             if args.length() >= 1 {
                 let name = args.get(0).to_rust_string_lossy(scope);
                 let doc = state.document.borrow();
-                doc.as_ref().and_then(|d| d.get(nid)).map(|n| n.value().get_attr(&name).is_some()).unwrap_or(false)
-            } else { false }
-        } else { false };
+                doc.as_ref()
+                    .and_then(|d| d.get(nid))
+                    .map(|n| n.value().get_attr(&name).is_some())
+                    .unwrap_or(false)
+            } else {
+                false
+            }
+        } else {
+            false
+        };
         rv.set(v8::Boolean::new(scope, result).into());
     });
 }
@@ -1404,11 +1887,18 @@ unsafe extern "C" fn get_attribute_names_cb(info: *const v8::FunctionCallbackInf
     run_callback(info, |scope, _args, rv, state, node_id| {
         let names: Vec<String> = if let Some(nid) = node_id {
             let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get(nid)).map(|n| n.value().attrs().iter().map(|(k, _)| k.clone()).collect()).unwrap_or_default()
-        } else { vec![] };
+            doc.as_ref()
+                .and_then(|d| d.get(nid))
+                .map(|n| n.value().attrs().iter().map(|(k, _)| k.clone()).collect())
+                .unwrap_or_default()
+        } else {
+            vec![]
+        };
         let arr = v8::Array::new(scope, names.len() as i32);
         for (i, name) in names.iter().enumerate() {
-            if let Some(s) = v8::String::new(scope, name) { arr.set_index(scope, i as u32, s.into()); }
+            if let Some(s) = v8::String::new(scope, name) {
+                arr.set_index(scope, i as u32, s.into());
+            }
         }
         rv.set(arr.into());
     });
@@ -1420,10 +1910,14 @@ unsafe extern "C" fn get_attribute_names_cb(info: *const v8::FunctionCallbackInf
 
 unsafe extern "C" fn replace_child_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, rv, state, _node_id| {
-        if args.length() < 2 { return; }
+        if args.length() < 2 {
+            return;
+        }
         let new_arg = args.get(0);
         let old_arg = args.get(1);
-        if !new_arg.is_object() || !old_arg.is_object() { return; }
+        if !new_arg.is_object() || !old_arg.is_object() {
+            return;
+        }
         let new_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(new_arg) };
         let old_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(old_arg) };
         let new_id = extract_node_id_from_internal(scope, new_obj);
@@ -1458,15 +1952,23 @@ unsafe extern "C" fn insert_before_cb(info: *const v8::FunctionCallbackInfo) {
         if let Some(parent_id) = node_id {
             if args.length() >= 1 {
                 let new_node_arg = args.get(0);
-                let ref_node_arg = if args.length() >= 2 { Some(args.get(1)) } else { None };
+                let ref_node_arg = if args.length() >= 2 {
+                    Some(args.get(1))
+                } else {
+                    None
+                };
                 if new_node_arg.is_object() {
-                    let new_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(new_node_arg) };
+                    let new_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(new_node_arg) };
                     if let Some(new_id) = extract_node_id_from_internal(scope, new_obj) {
                         let ref_id = ref_node_arg.and_then(|r| {
                             if r.is_object() {
-                                let ref_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(r) };
+                                let ref_obj: v8::Local<v8::Object> =
+                                    unsafe { v8::Local::cast_unchecked(r) };
                                 extract_node_id_from_internal(scope, ref_obj)
-                            } else { None }
+                            } else {
+                                None
+                            }
                         });
                         // Edge case: insertBefore(node, node) — no-op in real browsers.
                         if ref_id == Some(new_id) {
@@ -1498,7 +2000,9 @@ unsafe extern "C" fn insert_before_cb(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn insert_adjacent_html_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, _rv, state, node_id| {
-        if args.length() < 2 { return; }
+        if args.length() < 2 {
+            return;
+        }
         let position = args.get(0).to_rust_string_lossy(scope).to_lowercase();
         let html_str = args.get(1).to_rust_string_lossy(scope);
         if let Some(nid) = node_id {
@@ -1507,18 +2011,26 @@ unsafe extern "C" fn insert_adjacent_html_cb(info: *const v8::FunctionCallbackIn
                 let fragment = crate::dom::parse_html(&html_str, None);
                 let body_id = fragment.body().unwrap_or(fragment.root_id());
                 let frag_children: Vec<(crate::dom::NodeId, crate::dom::NodeData)> = {
-                    fragment.tree.get(body_id)
+                    fragment
+                        .tree
+                        .get(body_id)
                         .map(|b| b.children().map(|c| (c.id(), c.value().clone())).collect())
                         .unwrap_or_default()
                 };
                 match position.as_str() {
                     "beforeend" => {
                         for (frag_id, _) in &frag_children {
-                            crate::dom::binding::append_node_recursive(doc, nid, &fragment, *frag_id);
+                            crate::dom::binding::append_node_recursive(
+                                doc, nid, &fragment, *frag_id,
+                            );
                         }
                     }
                     "afterbegin" => {
-                        let first_child = doc.tree.get(nid).and_then(|n| n.first_child()).map(|c| c.id());
+                        let first_child = doc
+                            .tree
+                            .get(nid)
+                            .and_then(|n| n.first_child())
+                            .map(|c| c.id());
                         for (frag_id, _) in frag_children.iter().rev() {
                             let data = fragment.tree.get(*frag_id).map(|n| n.value().clone());
                             if let Some(d) = data {
@@ -1531,17 +2043,25 @@ unsafe extern "C" fn insert_adjacent_html_cb(info: *const v8::FunctionCallbackIn
                         }
                     }
                     "beforebegin" => {
-                        if let Some(_parent_id) = doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id()) {
+                        if let Some(_parent_id) =
+                            doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id())
+                        {
                             for (frag_id, _) in &frag_children {
                                 let data = fragment.tree.get(*frag_id).map(|n| n.value().clone());
-                                if let Some(d) = data { doc.insert_before(nid, d); }
+                                if let Some(d) = data {
+                                    doc.insert_before(nid, d);
+                                }
                             }
                         }
                     }
                     "afterend" => {
-                        if let Some(parent_id) = doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id()) {
+                        if let Some(parent_id) =
+                            doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id())
+                        {
                             for (frag_id, _) in &frag_children {
-                                crate::dom::binding::append_node_recursive(doc, parent_id, &fragment, *frag_id);
+                                crate::dom::binding::append_node_recursive(
+                                    doc, parent_id, &fragment, *frag_id,
+                                );
                             }
                         }
                     }
@@ -1562,7 +2082,9 @@ unsafe extern "C" fn insert_adjacent_element_cb(info: *const v8::FunctionCallbac
 
 unsafe extern "C" fn insert_adjacent_text_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, _rv, state, node_id| {
-        if args.length() < 2 { return; }
+        if args.length() < 2 {
+            return;
+        }
         let position = args.get(0).to_rust_string_lossy(scope).to_lowercase();
         let text = args.get(1).to_rust_string_lossy(scope);
         if let Some(nid) = node_id {
@@ -1570,11 +2092,20 @@ unsafe extern "C" fn insert_adjacent_text_cb(info: *const v8::FunctionCallbackIn
             if let Some(ref mut doc) = *doc {
                 let text_data = crate::dom::NodeData::text(&text);
                 match position.as_str() {
-                    "beforeend" => { doc.append_child(nid, text_data); }
+                    "beforeend" => {
+                        doc.append_child(nid, text_data);
+                    }
                     "afterbegin" => {
-                        let fc = doc.tree.get(nid).and_then(|n| n.first_child()).map(|c| c.id());
-                        if let Some(fc_id) = fc { doc.insert_before(fc_id, text_data); }
-                        else { doc.append_child(nid, text_data); }
+                        let fc = doc
+                            .tree
+                            .get(nid)
+                            .and_then(|n| n.first_child())
+                            .map(|c| c.id());
+                        if let Some(fc_id) = fc {
+                            doc.insert_before(fc_id, text_data);
+                        } else {
+                            doc.append_child(nid, text_data);
+                        }
                     }
                     _ => {}
                 }
@@ -1591,15 +2122,20 @@ unsafe extern "C" fn clone_node_cb(info: *const v8::FunctionCallbackInfo) {
             let new_id = {
                 let data = {
                     let doc = state.document.borrow();
-                    doc.as_ref().and_then(|d| d.get(nid)).map(|n| n.value().clone())
+                    doc.as_ref()
+                        .and_then(|d| d.get(nid))
+                        .map(|n| n.value().clone())
                 };
                 if let Some(d) = data {
                     let children: Vec<crate::dom::NodeData> = if deep {
                         let doc = state.document.borrow();
-                        doc.as_ref().and_then(|d| d.get(nid))
+                        doc.as_ref()
+                            .and_then(|d| d.get(nid))
                             .map(|n| n.children().map(|c| c.value().clone()).collect())
                             .unwrap_or_default()
-                    } else { vec![] };
+                    } else {
+                        vec![]
+                    };
 
                     // Phase 2: mutate while holding mut borrow
                     let mut doc_guard = state.document.borrow_mut();
@@ -1615,9 +2151,13 @@ unsafe extern "C" fn clone_node_cb(info: *const v8::FunctionCallbackInfo) {
                         // to restore the original node's id mapping.
                         doc.rebuild_id_index();
                         Some(new_id)
-                    } else { None }
+                    } else {
+                        None
+                    }
                     // doc_guard drops here, releasing the mutable borrow
-                } else { None }
+                } else {
+                    None
+                }
             };
             // Phase 3: create JS object — no borrow held at this point
             if let Some(cid) = new_id {
@@ -1643,9 +2183,16 @@ unsafe extern "C" fn contains_cb(info: *const v8::FunctionCallbackInfo) {
             let doc = state.document.borrow();
             if let Some(ref doc) = *doc {
                 // Check if oid is a descendant of nid
-                doc.tree.get(nid).map(|n| n.descendants().any(|d| d.id() == oid)).unwrap_or(false)
-            } else { false }
-        } else { false };
+                doc.tree
+                    .get(nid)
+                    .map(|n| n.descendants().any(|d| d.id() == oid))
+                    .unwrap_or(false)
+            } else {
+                false
+            }
+        } else {
+            false
+        };
         rv.set(v8::Boolean::new(scope, result).into());
     });
 }
@@ -1655,9 +2202,16 @@ unsafe extern "C" fn query_selector_cb(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let sel = args.get(0).to_rust_string_lossy(scope);
-                let result_id = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.query_selector_from(&sel, nid).ok().flatten()) };
+                let result_id = {
+                    let doc = state.document.borrow();
+                    doc.as_ref()
+                        .and_then(|d| d.query_selector_from(&sel, nid).ok().flatten())
+                };
                 if let Some(rid) = result_id {
-                    if let Some(obj) = create_node_object(scope, state, rid) { rv.set(obj); return; }
+                    if let Some(obj) = create_node_object(scope, state, rid) {
+                        rv.set(obj);
+                        return;
+                    }
                 }
             }
         }
@@ -1671,12 +2225,20 @@ unsafe extern "C" fn query_selector_all_cb(info: *const v8::FunctionCallbackInfo
             if args.length() >= 1 {
                 let sel = args.get(0).to_rust_string_lossy(scope);
                 let doc = state.document.borrow();
-                doc.as_ref().and_then(|d| d.query_selector_all_from(&sel, nid).ok()).unwrap_or_default()
-            } else { vec![] }
-        } else { vec![] };
+                doc.as_ref()
+                    .and_then(|d| d.query_selector_all_from(&sel, nid).ok())
+                    .unwrap_or_default()
+            } else {
+                vec![]
+            }
+        } else {
+            vec![]
+        };
         let arr = v8::Array::new(scope, ids.len() as i32);
         for (i, id) in ids.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *id) { arr.set_index(scope, i as u32, obj); }
+            if let Some(obj) = create_node_object(scope, state, *id) {
+                arr.set_index(scope, i as u32, obj);
+            }
         }
         rv.set(arr.into());
     });
@@ -1688,12 +2250,20 @@ unsafe extern "C" fn get_elements_by_tag_name_cb(info: *const v8::FunctionCallba
             if args.length() >= 1 {
                 let tag = args.get(0).to_rust_string_lossy(scope);
                 let doc = state.document.borrow();
-                doc.as_ref().map(|d| d.get_elements_by_tag_name_from(&tag, nid)).unwrap_or_default()
-            } else { vec![] }
-        } else { vec![] };
+                doc.as_ref()
+                    .map(|d| d.get_elements_by_tag_name_from(&tag, nid))
+                    .unwrap_or_default()
+            } else {
+                vec![]
+            }
+        } else {
+            vec![]
+        };
         let arr = v8::Array::new(scope, ids.len() as i32);
         for (i, id) in ids.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *id) { arr.set_index(scope, i as u32, obj); }
+            if let Some(obj) = create_node_object(scope, state, *id) {
+                arr.set_index(scope, i as u32, obj);
+            }
         }
         rv.set(arr.into());
     });
@@ -1704,20 +2274,38 @@ unsafe extern "C" fn get_elements_by_class_name_cb(info: *const v8::FunctionCall
         let ids: Vec<NodeId> = if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let cls = args.get(0).to_rust_string_lossy(scope);
-                let target_classes: Vec<String> = cls.split_whitespace().map(|s| s.to_string()).collect();
+                let target_classes: Vec<String> =
+                    cls.split_whitespace().map(|s| s.to_string()).collect();
                 let doc = state.document.borrow();
                 if let Some(ref doc) = *doc {
                     if let Some(node_ref) = doc.get(nid) {
-                        node_ref.descendants()
-                            .filter(|n| { let classes = n.value().class_list(); target_classes.iter().all(|tc| classes.iter().any(|c| c == tc)) })
-                            .map(|n| n.id()).collect()
-                    } else { vec![] }
-                } else { vec![] }
-            } else { vec![] }
-        } else { vec![] };
+                        node_ref
+                            .descendants()
+                            .filter(|n| {
+                                let classes = n.value().class_list();
+                                target_classes
+                                    .iter()
+                                    .all(|tc| classes.iter().any(|c| c == tc))
+                            })
+                            .map(|n| n.id())
+                            .collect()
+                    } else {
+                        vec![]
+                    }
+                } else {
+                    vec![]
+                }
+            } else {
+                vec![]
+            }
+        } else {
+            vec![]
+        };
         let arr = v8::Array::new(scope, ids.len() as i32);
         for (i, id) in ids.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *id) { arr.set_index(scope, i as u32, obj); }
+            if let Some(obj) = create_node_object(scope, state, *id) {
+                arr.set_index(scope, i as u32, obj);
+            }
         }
         rv.set(arr.into());
     });
@@ -1729,9 +2317,15 @@ unsafe extern "C" fn matches_cb(info: *const v8::FunctionCallbackInfo) {
             if args.length() >= 1 {
                 let sel = args.get(0).to_rust_string_lossy(scope);
                 let doc = state.document.borrow();
-                doc.as_ref().map(|d| d.element_matches(nid, &sel)).unwrap_or(false)
-            } else { false }
-        } else { false };
+                doc.as_ref()
+                    .map(|d| d.element_matches(nid, &sel))
+                    .unwrap_or(false)
+            } else {
+                false
+            }
+        } else {
+            false
+        };
         rv.set(v8::Boolean::new(scope, result).into());
     });
 }
@@ -1741,9 +2335,15 @@ unsafe extern "C" fn closest_cb(info: *const v8::FunctionCallbackInfo) {
         if let Some(nid) = node_id {
             if args.length() >= 1 {
                 let sel = args.get(0).to_rust_string_lossy(scope);
-                let result_id = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.closest(nid, &sel)) };
+                let result_id = {
+                    let doc = state.document.borrow();
+                    doc.as_ref().and_then(|d| d.closest(nid, &sel))
+                };
                 if let Some(rid) = result_id {
-                    if let Some(obj) = create_node_object(scope, state, rid) { rv.set(obj); return; }
+                    if let Some(obj) = create_node_object(scope, state, rid) {
+                        rv.set(obj);
+                        return;
+                    }
                 }
             }
         }
@@ -1759,12 +2359,15 @@ unsafe extern "C" fn append_child_cb(info: *const v8::FunctionCallbackInfo) {
             if args.length() >= 1 {
                 let child_arg = args.get(0);
                 if child_arg.is_object() {
-                    let child_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(child_arg) };
+                    let child_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(child_arg) };
                     if let Some(child_id) = extract_node_id_from_internal(scope, child_obj) {
                         let mut doc = state.document.borrow_mut();
                         if let Some(ref mut doc) = *doc {
                             doc.detach(child_id);
-                            if let Some(mut parent) = doc.tree.get_mut(parent_id) { parent.append_id(child_id); }
+                            if let Some(mut parent) = doc.tree.get_mut(parent_id) {
+                                parent.append_id(child_id);
+                            }
                             doc.invalidate_tag_index();
                             // Rebuild id index to pick up id attributes in appended subtree
                             doc.rebuild_id_index();
@@ -1782,10 +2385,13 @@ unsafe extern "C" fn remove_child_cb(info: *const v8::FunctionCallbackInfo) {
         if args.length() >= 1 {
             let child_arg = args.get(0);
             if child_arg.is_object() {
-                let child_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(child_arg) };
+                let child_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(child_arg) };
                 if let Some(child_id) = extract_node_id_from_internal(scope, child_obj) {
                     let mut doc = state.document.borrow_mut();
-                    if let Some(ref mut doc) = *doc { doc.detach(child_id); }
+                    if let Some(ref mut doc) = *doc {
+                        doc.detach(child_id);
+                    }
                 }
             }
             rv.set(child_arg);
@@ -1797,8 +2403,13 @@ unsafe extern "C" fn has_child_nodes_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, state, node_id| {
         let result = if let Some(nid) = node_id {
             let doc = state.document.borrow();
-            doc.as_ref().and_then(|d| d.get(nid)).map(|n| n.first_child().is_some()).unwrap_or(false)
-        } else { false };
+            doc.as_ref()
+                .and_then(|d| d.get(nid))
+                .map(|n| n.first_child().is_some())
+                .unwrap_or(false)
+        } else {
+            false
+        };
         rv.set(v8::Boolean::new(scope, result).into());
     });
 }
@@ -1810,7 +2421,9 @@ unsafe extern "C" fn normalize_cb(_info: *const v8::FunctionCallbackInfo) {}
 unsafe extern "C" fn get_bounding_client_rect_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, _state, _node_id| {
         let obj = v8::Object::new(scope);
-        for key in &["x", "y", "width", "height", "top", "left", "bottom", "right"] {
+        for key in &[
+            "x", "y", "width", "height", "top", "left", "bottom", "right",
+        ] {
             let k = crate::v8_utils::v8_string(scope, key);
             obj.set(scope, k.into(), v8::Number::new(scope, 0.0).into());
         }
@@ -1819,7 +2432,9 @@ unsafe extern "C" fn get_bounding_client_rect_cb(info: *const v8::FunctionCallba
 }
 
 unsafe extern "C" fn get_client_rects_cb(info: *const v8::FunctionCallbackInfo) {
-    run_callback(info, |scope, _args, rv, _state, _node_id| { rv.set(v8::Array::new(scope, 0).into()); });
+    run_callback(info, |scope, _args, rv, _state, _node_id| {
+        rv.set(v8::Array::new(scope, 0).into());
+    });
 }
 
 unsafe extern "C" fn scroll_into_view_cb(_info: *const v8::FunctionCallbackInfo) {}
@@ -1838,34 +2453,78 @@ fn get_layout_value(state: &RuntimeState, primary: &str, fallback: &str, default
     default
 }
 
-unsafe extern "C" fn offset_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
-    let val = get_layout_value(state, "element.offsetWidth", "window.innerWidth", 1920.0);
-    rv.set(v8::Number::new(scope, val).into());
-}); }
-unsafe extern "C" fn offset_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
-    let val = get_layout_value(state, "element.offsetHeight", "window.innerHeight", 969.0);
-    rv.set(v8::Number::new(scope, val).into());
-}); }
-unsafe extern "C" fn offset_top_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn offset_left_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn client_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
-    let val = get_layout_value(state, "document.body.clientWidth", "window.innerWidth", 1920.0);
-    rv.set(v8::Number::new(scope, val).into());
-}); }
-unsafe extern "C" fn client_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
-    let val = get_layout_value(state, "document.body.clientHeight", "window.innerHeight", 969.0);
-    rv.set(v8::Number::new(scope, val).into());
-}); }
-unsafe extern "C" fn scroll_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, state, _nid| {
-    let val = get_layout_value(state, "element.scrollWidth", "window.innerWidth", 1920.0);
-    rv.set(v8::Number::new(scope, val).into());
-}); }
-unsafe extern "C" fn scroll_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn scroll_top_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
+unsafe extern "C" fn offset_width_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, _nid| {
+        let val = get_layout_value(state, "element.offsetWidth", "window.innerWidth", 1920.0);
+        rv.set(v8::Number::new(scope, val).into());
+    });
+}
+unsafe extern "C" fn offset_height_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, _nid| {
+        let val = get_layout_value(state, "element.offsetHeight", "window.innerHeight", 969.0);
+        rv.set(v8::Number::new(scope, val).into());
+    });
+}
+unsafe extern "C" fn offset_top_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
+unsafe extern "C" fn offset_left_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
+unsafe extern "C" fn client_width_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, _nid| {
+        let val = get_layout_value(
+            state,
+            "document.body.clientWidth",
+            "window.innerWidth",
+            1920.0,
+        );
+        rv.set(v8::Number::new(scope, val).into());
+    });
+}
+unsafe extern "C" fn client_height_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, _nid| {
+        let val = get_layout_value(
+            state,
+            "document.body.clientHeight",
+            "window.innerHeight",
+            969.0,
+        );
+        rv.set(v8::Number::new(scope, val).into());
+    });
+}
+unsafe extern "C" fn scroll_width_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, _nid| {
+        let val = get_layout_value(state, "element.scrollWidth", "window.innerWidth", 1920.0);
+        rv.set(v8::Number::new(scope, val).into());
+    });
+}
+unsafe extern "C" fn scroll_height_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
+unsafe extern "C" fn scroll_top_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
 unsafe extern "C" fn scroll_top_setter(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn scroll_left_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
+unsafe extern "C" fn scroll_left_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
 unsafe extern "C" fn scroll_left_setter(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn offset_parent_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::null(scope).into()); }); }
+unsafe extern "C" fn offset_parent_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::null(scope).into());
+    });
+}
 
 // ── EventTarget methods ───────────────────────────────────────────────────────
 
@@ -1876,20 +2535,37 @@ unsafe extern "C" fn add_event_listener_cb(info: *const v8::FunctionCallbackInfo
                 let event_type = args.get(0).to_rust_string_lossy(scope);
                 let listener_arg = args.get(1);
                 if listener_arg.is_function() {
-                    let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(listener_arg) };
+                    let func: v8::Local<v8::Function> =
+                        unsafe { v8::Local::cast_unchecked(listener_arg) };
                     let global_fn = v8::Global::new(scope, func);
                     let mut capture = false;
                     let mut once = false;
                     if args.length() >= 3 {
                         let opts = args.get(2);
-                        if opts.is_boolean() { capture = opts.is_true(); }
-                        else if opts.is_object() {
-                            let opts_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(opts) };
-                            if let Some(k) = v8::String::new(scope, "capture") { if let Some(v) = opts_obj.get(scope, k.into()) { capture = v.is_true(); } }
-                            if let Some(k) = v8::String::new(scope, "once") { if let Some(v) = opts_obj.get(scope, k.into()) { once = v.is_true(); } }
+                        if opts.is_boolean() {
+                            capture = opts.is_true();
+                        } else if opts.is_object() {
+                            let opts_obj: v8::Local<v8::Object> =
+                                unsafe { v8::Local::cast_unchecked(opts) };
+                            if let Some(k) = v8::String::new(scope, "capture") {
+                                if let Some(v) = opts_obj.get(scope, k.into()) {
+                                    capture = v.is_true();
+                                }
+                            }
+                            if let Some(k) = v8::String::new(scope, "once") {
+                                if let Some(v) = opts_obj.get(scope, k.into()) {
+                                    once = v.is_true();
+                                }
+                            }
                         }
                     }
-                    state.event_listeners.borrow_mut().add(nid, &event_type, global_fn, capture, once);
+                    state.event_listeners.borrow_mut().add(
+                        nid,
+                        &event_type,
+                        global_fn,
+                        capture,
+                        once,
+                    );
                 }
             }
         }
@@ -1901,9 +2577,20 @@ unsafe extern "C" fn remove_event_listener_cb(info: *const v8::FunctionCallbackI
         if let Some(nid) = node_id {
             if args.length() >= 2 && args.get(1).is_function() {
                 let event_type = args.get(0).to_rust_string_lossy(scope);
-                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(args.get(1)) };
-                let capture = if args.length() >= 3 { args.get(2).is_true() } else { false };
-                state.event_listeners.borrow_mut().remove_by_callback(scope, nid, &event_type, func, capture);
+                let func: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(args.get(1)) };
+                let capture = if args.length() >= 3 {
+                    args.get(2).is_true()
+                } else {
+                    false
+                };
+                state.event_listeners.borrow_mut().remove_by_callback(
+                    scope,
+                    nid,
+                    &event_type,
+                    func,
+                    capture,
+                );
             }
         }
     });
@@ -1911,7 +2598,10 @@ unsafe extern "C" fn remove_event_listener_cb(info: *const v8::FunctionCallbackI
 
 unsafe extern "C" fn dispatch_event_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, rv, state, node_id| {
-        if args.length() < 1 { rv.set(v8::Boolean::new(scope, true).into()); return; }
+        if args.length() < 1 {
+            rv.set(v8::Boolean::new(scope, true).into());
+            return;
+        }
 
         let event_arg = args.get(0);
         let (event_type, bubbles) = if event_arg.is_string() {
@@ -1919,9 +2609,15 @@ unsafe extern "C" fn dispatch_event_cb(info: *const v8::FunctionCallbackInfo) {
         } else if event_arg.is_object() {
             let evt_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(event_arg) };
             let type_key = crate::v8_utils::v8_string(scope, "type");
-            let event_type = evt_obj.get(scope, type_key.into()).map(|v| v.to_rust_string_lossy(scope)).unwrap_or_default();
+            let event_type = evt_obj
+                .get(scope, type_key.into())
+                .map(|v| v.to_rust_string_lossy(scope))
+                .unwrap_or_default();
             let bubbles_key = crate::v8_utils::v8_string(scope, "bubbles");
-            let bubbles = evt_obj.get(scope, bubbles_key.into()).map(|v| v.is_true()).unwrap_or(true);
+            let bubbles = evt_obj
+                .get(scope, bubbles_key.into())
+                .map(|v| v.is_true())
+                .unwrap_or(true);
             (event_type, bubbles)
         } else {
             rv.set(v8::Boolean::new(scope, true).into());
@@ -1932,8 +2628,17 @@ unsafe extern "C" fn dispatch_event_cb(info: *const v8::FunctionCallbackInfo) {
             let result = {
                 let doc = state.document.borrow();
                 if let Some(ref doc) = *doc {
-                    crate::events::target::dispatch_event(scope, &state.event_listeners, doc, nid, &event_type, bubbles)
-                } else { true }
+                    crate::events::target::dispatch_event(
+                        scope,
+                        &state.event_listeners,
+                        doc,
+                        nid,
+                        &event_type,
+                        bubbles,
+                    )
+                } else {
+                    true
+                }
             };
             rv.set(v8::Boolean::new(scope, result).into());
         } else {
@@ -1951,7 +2656,9 @@ unsafe extern "C" fn select_cb(_info: *const v8::FunctionCallbackInfo) {}
 unsafe extern "C" fn submit_cb(_info: *const v8::FunctionCallbackInfo) {}
 unsafe extern "C" fn reset_cb(_info: *const v8::FunctionCallbackInfo) {}
 unsafe extern "C" fn check_validity_cb(info: *const v8::FunctionCallbackInfo) {
-    run_callback(info, |scope, _args, rv, _state, _node_id| { rv.set(v8::Boolean::new(scope, true).into()); });
+    run_callback(info, |scope, _args, rv, _state, _node_id| {
+        rv.set(v8::Boolean::new(scope, true).into());
+    });
 }
 
 // ── HTMLElement accessors ─────────────────────────────────────────────────────
@@ -1960,7 +2667,10 @@ unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _state, _node_id| {
         let obj = v8::Object::new(scope);
         for (name, cb) in &[
-            ("setProperty", style_set_property_cb as unsafe extern "C" fn(*const v8::FunctionCallbackInfo)),
+            (
+                "setProperty",
+                style_set_property_cb as unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
+            ),
             ("getPropertyValue", style_get_property_cb),
             ("removeProperty", style_remove_property_cb),
         ] {
@@ -1985,12 +2695,20 @@ unsafe extern "C" fn style_get_property_cb(info: *const v8::FunctionCallbackInfo
 }
 
 unsafe extern "C" fn dataset_getter(info: *const v8::FunctionCallbackInfo) {
-    run_accessor(info, |scope, rv, _state, _node_id| { rv.set(v8::Object::new(scope).into()); });
+    run_accessor(info, |scope, rv, _state, _node_id| {
+        rv.set(v8::Object::new(scope).into());
+    });
 }
 
 unsafe extern "C" fn hidden_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).map(|n| n.value().get_attr("hidden").is_some()).unwrap_or(false) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().get_attr("hidden").is_some())
+                .unwrap_or(false)
+        };
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
@@ -2004,8 +2722,13 @@ unsafe extern "C" fn hidden_setter(info: *const v8::FunctionCallbackInfo) {
                 if let Some(ref mut doc) = *doc {
                     if let Some(mut node) = doc.tree.get_mut(nid) {
                         if let NodeData::Element { ref mut attrs, .. } = node.value() {
-                            if hidden { if !attrs.iter().any(|(k, _)| k == "hidden") { attrs.push(("hidden".to_string(), "".to_string())); } }
-                            else { attrs.retain(|(k, _)| k != "hidden"); }
+                            if hidden {
+                                if !attrs.iter().any(|(k, _)| k == "hidden") {
+                                    attrs.push(("hidden".to_string(), "".to_string()));
+                                }
+                            } else {
+                                attrs.retain(|(k, _)| k != "hidden");
+                            }
                         }
                     }
                 }
@@ -2016,7 +2739,14 @@ unsafe extern "C" fn hidden_setter(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn tab_index_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.value().get_attr("tabindex")).and_then(|v| v.parse::<i32>().ok()).unwrap_or(-1) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.value().get_attr("tabindex"))
+                .and_then(|v| v.parse::<i32>().ok())
+                .unwrap_or(-1)
+        };
         rv.set(v8::Integer::new(scope, val).into());
     });
 }
@@ -2025,7 +2755,11 @@ unsafe extern "C" fn tab_index_setter(_info: *const v8::FunctionCallbackInfo) {}
 // Generic attribute-backed accessor helper
 fn get_attr_str(state: &RuntimeState, node_id: NodeId, attr: &str) -> String {
     let doc = state.document.borrow();
-    doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.value().get_attr(attr)).unwrap_or("").to_string()
+    doc.as_ref()
+        .and_then(|d| d.get(node_id))
+        .and_then(|n| n.value().get_attr(attr))
+        .unwrap_or("")
+        .to_string()
 }
 
 fn set_attr_str(state: &RuntimeState, node_id: NodeId, attr: &str, value: String) {
@@ -2033,7 +2767,11 @@ fn set_attr_str(state: &RuntimeState, node_id: NodeId, attr: &str, value: String
     if let Some(ref mut doc) = *doc {
         if let Some(mut node) = doc.tree.get_mut(node_id) {
             if let NodeData::Element { ref mut attrs, .. } = node.value() {
-                if let Some(e) = attrs.iter_mut().find(|(k, _)| k == attr) { e.1 = value; } else { attrs.push((attr.to_string(), value)); }
+                if let Some(e) = attrs.iter_mut().find(|(k, _)| k == attr) {
+                    e.1 = value;
+                } else {
+                    attrs.push((attr.to_string(), value));
+                }
             }
         }
     }
@@ -2048,7 +2786,11 @@ fn anchor_url_component(state: &RuntimeState, node_id: NodeId, sel: &str) -> Str
         return String::new();
     }
     // If no scheme, prepend https: so url::Url can parse it
-    let url_str = if href.contains("://") { href } else { format!("https://{}", href) };
+    let url_str = if href.contains("://") {
+        href
+    } else {
+        format!("https://{}", href)
+    };
     let parsed = match Url::parse(&url_str) {
         Ok(u) => u,
         Err(_) => return String::new(),
@@ -2058,8 +2800,14 @@ fn anchor_url_component(state: &RuntimeState, node_id: NodeId, sel: &str) -> Str
         "hostname" => parsed.host_str().unwrap_or("").to_string(),
         "port" => parsed.port().map(|p| p.to_string()).unwrap_or_default(),
         "pathname" => parsed.path().to_string(),
-        "search" => parsed.query().map(|q| format!("?{}", q)).unwrap_or_default(),
-        "hash" => parsed.fragment().map(|f| format!("#{}", f)).unwrap_or_default(),
+        "search" => parsed
+            .query()
+            .map(|q| format!("?{}", q))
+            .unwrap_or_default(),
+        "hash" => parsed
+            .fragment()
+            .map(|f| format!("#{}", f))
+            .unwrap_or_default(),
         "host" => {
             let host = parsed.host_str().unwrap_or("");
             match parsed.port() {
@@ -2081,7 +2829,9 @@ macro_rules! anchor_url_getter {
         unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
             run_accessor(info, |scope, rv, state, node_id| {
                 let val = anchor_url_component(state, node_id, $component);
-                if let Some(s) = v8::String::new(scope, &val) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, &val) {
+                    rv.set(s.into());
+                }
             });
         }
     };
@@ -2102,13 +2852,17 @@ macro_rules! attr_rw {
         unsafe extern "C" fn $getter(info: *const v8::FunctionCallbackInfo) {
             run_accessor(info, |scope, rv, state, node_id| {
                 let val = get_attr_str(state, node_id, $attr);
-                if let Some(s) = v8::String::new(scope, &val) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, &val) {
+                    rv.set(s.into());
+                }
             });
         }
         unsafe extern "C" fn $setter(info: *const v8::FunctionCallbackInfo) {
             run_callback(info, |scope, args, _rv, state, node_id| {
                 if let Some(nid) = node_id {
-                    if args.length() >= 1 { set_attr_str(state, nid, $attr, args.get(0).to_rust_string_lossy(scope)); }
+                    if args.length() >= 1 {
+                        set_attr_str(state, nid, $attr, args.get(0).to_rust_string_lossy(scope));
+                    }
                 }
             });
         }
@@ -2130,19 +2884,38 @@ attr_rw!(content_getter, content_setter, "content");
 
 unsafe extern "C" fn input_type_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.value().get_attr("type")).unwrap_or("text").to_string() };
-        if let Some(s) = v8::String::new(scope, &val) { rv.set(s.into()); }
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.value().get_attr("type"))
+                .unwrap_or("text")
+                .to_string()
+        };
+        if let Some(s) = v8::String::new(scope, &val) {
+            rv.set(s.into());
+        }
     });
 }
 unsafe extern "C" fn input_type_setter(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, _rv, state, node_id| {
-        if let Some(nid) = node_id { if args.length() >= 1 { set_attr_str(state, nid, "type", args.get(0).to_rust_string_lossy(scope)); } }
+        if let Some(nid) = node_id {
+            if args.length() >= 1 {
+                set_attr_str(state, nid, "type", args.get(0).to_rust_string_lossy(scope));
+            }
+        }
     });
 }
 
 unsafe extern "C" fn checked_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).map(|n| n.value().get_attr("checked").is_some()).unwrap_or(false) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().get_attr("checked").is_some())
+                .unwrap_or(false)
+        };
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
@@ -2150,7 +2923,13 @@ unsafe extern "C" fn checked_setter(_info: *const v8::FunctionCallbackInfo) {}
 
 unsafe extern "C" fn disabled_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).map(|n| n.value().get_attr("disabled").is_some()).unwrap_or(false) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().get_attr("disabled").is_some())
+                .unwrap_or(false)
+        };
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
@@ -2158,7 +2937,14 @@ unsafe extern "C" fn disabled_setter(_info: *const v8::FunctionCallbackInfo) {}
 
 unsafe extern "C" fn draggable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.value().get_attr("draggable")).map(|v| v == "true").unwrap_or(false) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.value().get_attr("draggable"))
+                .map(|v| v == "true")
+                .unwrap_or(false)
+        };
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
@@ -2166,15 +2952,31 @@ unsafe extern "C" fn draggable_setter(_info: *const v8::FunctionCallbackInfo) {}
 
 unsafe extern "C" fn content_editable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.value().get_attr("contenteditable")).unwrap_or("false").to_string() };
-        if let Some(s) = v8::String::new(scope, &val) { rv.set(s.into()); }
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.value().get_attr("contenteditable"))
+                .unwrap_or("false")
+                .to_string()
+        };
+        if let Some(s) = v8::String::new(scope, &val) {
+            rv.set(s.into());
+        }
     });
 }
 unsafe extern "C" fn content_editable_setter(_info: *const v8::FunctionCallbackInfo) {}
 
 unsafe extern "C" fn is_content_editable_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.value().get_attr("contenteditable")).map(|v| v == "true").unwrap_or(false) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.value().get_attr("contenteditable"))
+                .map(|v| v == "true")
+                .unwrap_or(false)
+        };
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
@@ -2183,7 +2985,14 @@ unsafe extern "C" fn is_content_editable_getter(info: *const v8::FunctionCallbac
 
 unsafe extern "C" fn canvas_width_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.value().get_attr("width")).and_then(|v| v.parse::<f64>().ok()).unwrap_or(300.0) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.value().get_attr("width"))
+                .and_then(|v| v.parse::<f64>().ok())
+                .unwrap_or(300.0)
+        };
         rv.set(v8::Number::new(scope, val).into());
     });
 }
@@ -2191,7 +3000,14 @@ unsafe extern "C" fn canvas_width_setter(_info: *const v8::FunctionCallbackInfo)
 
 unsafe extern "C" fn canvas_height_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).and_then(|n| n.value().get_attr("height")).and_then(|v| v.parse::<f64>().ok()).unwrap_or(150.0) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .and_then(|n| n.value().get_attr("height"))
+                .and_then(|v| v.parse::<f64>().ok())
+                .unwrap_or(150.0)
+        };
         rv.set(v8::Number::new(scope, val).into());
     });
 }
@@ -2199,7 +3015,11 @@ unsafe extern "C" fn canvas_height_setter(_info: *const v8::FunctionCallbackInfo
 
 unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, rv, _state, node_id| {
-        let ctx_type = if args.length() >= 1 { args.get(0).to_rust_string_lossy(scope) } else { "2d".to_string() };
+        let ctx_type = if args.length() >= 1 {
+            args.get(0).to_rust_string_lossy(scope)
+        } else {
+            "2d".to_string()
+        };
         let global = scope.get_current_context().global(scope);
 
         // Use node_id as canvas ID for stable identity, or generate a random one
@@ -2212,12 +3032,17 @@ unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
         let set_size_key = crate::v8_utils::v8_string(scope, "__canvas_set_size__");
         if let Some(set_size_fn) = global.get(scope, set_size_key.into()) {
             if set_size_fn.is_function() {
-                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(set_size_fn) };
+                let func: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(set_size_fn) };
                 let id_str = crate::v8_utils::v8_string(scope, &canvas_id);
                 let w = v8::Integer::new(scope, 300);
                 let h = v8::Integer::new(scope, 150);
                 let undefined = v8::undefined(scope);
-                func.call(scope, undefined.into(), &[id_str.into(), w.into(), h.into()]);
+                func.call(
+                    scope,
+                    undefined.into(),
+                    &[id_str.into(), w.into(), h.into()],
+                );
             }
         }
 
@@ -2225,11 +3050,14 @@ unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
         let get_ctx_key = crate::v8_utils::v8_string(scope, "__getCanvasContext__");
         if let Some(get_ctx_fn) = global.get(scope, get_ctx_key.into()) {
             if get_ctx_fn.is_function() {
-                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(get_ctx_fn) };
+                let func: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(get_ctx_fn) };
                 let id_str = crate::v8_utils::v8_string(scope, &canvas_id);
                 let ctx_str = crate::v8_utils::v8_string(scope, &ctx_type);
                 let undefined = v8::undefined(scope);
-                if let Some(result) = func.call(scope, undefined.into(), &[id_str.into(), ctx_str.into()]) {
+                if let Some(result) =
+                    func.call(scope, undefined.into(), &[id_str.into(), ctx_str.into()])
+                {
                     rv.set(result);
                     return;
                 }
@@ -2241,8 +3069,16 @@ unsafe extern "C" fn get_context_cb(info: *const v8::FunctionCallbackInfo) {
 
 unsafe extern "C" fn to_data_url_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, args, rv, _state, node_id| {
-        let mime_type = if args.length() >= 1 { args.get(0).to_rust_string_lossy(scope) } else { "image/png".to_string() };
-        let quality = if args.length() >= 2 { args.get(1).number_value(scope).unwrap_or(0.92) } else { 0.92 };
+        let mime_type = if args.length() >= 1 {
+            args.get(0).to_rust_string_lossy(scope)
+        } else {
+            "image/png".to_string()
+        };
+        let quality = if args.length() >= 2 {
+            args.get(1).number_value(scope).unwrap_or(0.92)
+        } else {
+            0.92
+        };
 
         let canvas_id = match node_id {
             Some(nid) => format!("__canvas_node_{}__", super::binding::node_id_to_usize(nid)),
@@ -2253,19 +3089,26 @@ unsafe extern "C" fn to_data_url_cb(info: *const v8::FunctionCallbackInfo) {
         let to_data_url_key = crate::v8_utils::v8_string(scope, "__canvas_to_data_url__");
         if let Some(to_data_url_fn) = global.get(scope, to_data_url_key.into()) {
             if to_data_url_fn.is_function() {
-                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(to_data_url_fn) };
+                let func: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(to_data_url_fn) };
                 let id_str = crate::v8_utils::v8_string(scope, &canvas_id);
                 let mime_str = crate::v8_utils::v8_string(scope, &mime_type);
                 let quality_num = v8::Number::new(scope, quality);
                 let undefined = v8::undefined(scope);
-                if let Some(result) = func.call(scope, undefined.into(), &[id_str.into(), mime_str.into(), quality_num.into()]) {
+                if let Some(result) = func.call(
+                    scope,
+                    undefined.into(),
+                    &[id_str.into(), mime_str.into(), quality_num.into()],
+                ) {
                     rv.set(result);
                     return;
                 }
             }
         }
         // Fallback
-        if let Some(s) = v8::String::new(scope, "data:image/png;base64,") { rv.set(s.into()); }
+        if let Some(s) = v8::String::new(scope, "data:image/png;base64,") {
+            rv.set(s.into());
+        }
     });
 }
 
@@ -2273,15 +3116,33 @@ unsafe extern "C" fn to_blob_cb(_info: *const v8::FunctionCallbackInfo) {}
 
 // ── Image-specific ────────────────────────────────────────────────────────────
 
-unsafe extern "C" fn natural_width_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn natural_height_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn img_complete_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Boolean::new(scope, true).into()); }); }
+unsafe extern "C" fn natural_width_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
+unsafe extern "C" fn natural_height_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
+unsafe extern "C" fn img_complete_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Boolean::new(scope, true).into());
+    });
+}
 
 // ── Script-specific ───────────────────────────────────────────────────────────
 
 unsafe extern "C" fn async_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).map(|n| n.value().get_attr("async").is_some()).unwrap_or(false) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().get_attr("async").is_some())
+                .unwrap_or(false)
+        };
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
@@ -2289,7 +3150,13 @@ unsafe extern "C" fn async_setter(_info: *const v8::FunctionCallbackInfo) {}
 
 unsafe extern "C" fn defer_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let val = { let doc = state.document.borrow(); doc.as_ref().and_then(|d| d.get(node_id)).map(|n| n.value().get_attr("defer").is_some()).unwrap_or(false) };
+        let val = {
+            let doc = state.document.borrow();
+            doc.as_ref()
+                .and_then(|d| d.get(node_id))
+                .map(|n| n.value().get_attr("defer").is_some())
+                .unwrap_or(false)
+        };
         rv.set(v8::Boolean::new(scope, val).into());
     });
 }
@@ -2297,13 +3164,33 @@ unsafe extern "C" fn defer_setter(_info: *const v8::FunctionCallbackInfo) {}
 
 // ── Media-specific ────────────────────────────────────────────────────────────
 
-unsafe extern "C" fn current_time_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
+unsafe extern "C" fn current_time_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
 unsafe extern "C" fn current_time_setter(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn duration_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 0.0).into()); }); }
-unsafe extern "C" fn paused_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Boolean::new(scope, true).into()); }); }
-unsafe extern "C" fn muted_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Boolean::new(scope, false).into()); }); }
+unsafe extern "C" fn duration_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 0.0).into());
+    });
+}
+unsafe extern "C" fn paused_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Boolean::new(scope, true).into());
+    });
+}
+unsafe extern "C" fn muted_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Boolean::new(scope, false).into());
+    });
+}
 unsafe extern "C" fn muted_setter(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn volume_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Number::new(scope, 1.0).into()); }); }
+unsafe extern "C" fn volume_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Number::new(scope, 1.0).into());
+    });
+}
 unsafe extern "C" fn volume_setter(_info: *const v8::FunctionCallbackInfo) {}
 
 /// captureStream() stub — returns an empty MediaStream-like object.
@@ -2321,13 +3208,19 @@ unsafe extern "C" fn media_play_cb(info: *const v8::FunctionCallbackInfo) {
         let promise_key = crate::v8_utils::v8_string(scope, "Promise");
         if let Some(promise_ctor) = global.get(scope, promise_key.into()) {
             if promise_ctor.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(promise_ctor) };
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(promise_ctor) };
                 let resolve_key = crate::v8_utils::v8_string(scope, "resolve");
                 if let Some(resolve_fn) = ctor.get(scope, resolve_key.into()) {
                     if resolve_fn.is_function() {
-                        let resolve: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(resolve_fn) };
+                        let resolve: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(resolve_fn) };
                         let undefined = v8::undefined(scope);
-                        if let Some(promise) = resolve.call(scope, ctor.into(), &[undefined.into()]) { rv.set(promise); return; }
+                        if let Some(promise) = resolve.call(scope, ctor.into(), &[undefined.into()])
+                        {
+                            rv.set(promise);
+                            return;
+                        }
                     }
                 }
             }
@@ -2341,13 +3234,23 @@ unsafe extern "C" fn media_load_cb(_info: *const v8::FunctionCallbackInfo) {}
 
 unsafe extern "C" fn can_play_type_cb(info: *const v8::FunctionCallbackInfo) {
     run_callback(info, |scope, _args, rv, _state, _node_id| {
-        if let Some(s) = v8::String::new(scope, "maybe") { rv.set(s.into()); }
+        if let Some(s) = v8::String::new(scope, "maybe") {
+            rv.set(s.into());
+        }
     });
 }
 
 // ── Select-specific ───────────────────────────────────────────────────────────
 
-unsafe extern "C" fn selected_index_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Integer::new(scope, -1).into()); }); }
+unsafe extern "C" fn selected_index_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Integer::new(scope, -1).into());
+    });
+}
 unsafe extern "C" fn selected_index_setter(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn multiple_getter(info: *const v8::FunctionCallbackInfo) { run_accessor(info, |scope, rv, _, _| { rv.set(v8::Boolean::new(scope, false).into()); }); }
+unsafe extern "C" fn multiple_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, _, _| {
+        rv.set(v8::Boolean::new(scope, false).into());
+    });
+}
 unsafe extern "C" fn multiple_setter(_info: *const v8::FunctionCallbackInfo) {}

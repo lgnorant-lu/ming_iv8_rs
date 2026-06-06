@@ -68,7 +68,14 @@ fn trace_diff(trace_a: Vec<String>, trace_b: Vec<String>, py: Python<'_>) -> PyR
     }
 
     dict.set_item("index", diverge_idx)?;
-    dict.set_item("match_count", if diverge_idx >= 0 { diverge_idx } else { min_len as i64 })?;
+    dict.set_item(
+        "match_count",
+        if diverge_idx >= 0 {
+            diverge_idx
+        } else {
+            min_len as i64
+        },
+    )?;
 
     if diverge_idx >= 0 {
         let idx = diverge_idx as usize;

@@ -10,18 +10,21 @@ pub fn install_console(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Objec
     let console_obj = v8::Object::new(scope);
 
     for (name, cb) in &[
-        ("log",   console_log_cb   as unsafe extern "C" fn(*const v8::FunctionCallbackInfo)),
-        ("info",  console_info_cb),
-        ("warn",  console_warn_cb),
+        (
+            "log",
+            console_log_cb as unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
+        ),
+        ("info", console_info_cb),
+        ("warn", console_warn_cb),
         ("error", console_error_cb),
         ("debug", console_debug_cb),
         ("trace", console_trace_cb),
-        ("dir",   console_dir_cb),
+        ("dir", console_dir_cb),
         ("table", console_table_cb),
         ("group", console_group_cb),
         ("groupCollapsed", console_group_cb),
         ("groupEnd", console_group_end_cb),
-        ("time",  console_time_cb),
+        ("time", console_time_cb),
         ("timeEnd", console_time_end_cb),
         ("count", console_count_cb),
         ("countReset", console_count_reset_cb),
@@ -171,7 +174,11 @@ unsafe extern "C" fn console_time_cb(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let label = if args.length() >= 1 { args.get(0).to_rust_string_lossy(scope) } else { "default".to_string() };
+        let label = if args.length() >= 1 {
+            args.get(0).to_rust_string_lossy(scope)
+        } else {
+            "default".to_string()
+        };
         tracing::debug!(target: "iv8::console", "[console.time] {}", label);
     }));
 }
@@ -181,7 +188,11 @@ unsafe extern "C" fn console_time_end_cb(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let label = if args.length() >= 1 { args.get(0).to_rust_string_lossy(scope) } else { "default".to_string() };
+        let label = if args.length() >= 1 {
+            args.get(0).to_rust_string_lossy(scope)
+        } else {
+            "default".to_string()
+        };
         tracing::debug!(target: "iv8::console", "[console.timeEnd] {}", label);
     }));
 }
@@ -191,7 +202,11 @@ unsafe extern "C" fn console_count_cb(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let label = if args.length() >= 1 { args.get(0).to_rust_string_lossy(scope) } else { "default".to_string() };
+        let label = if args.length() >= 1 {
+            args.get(0).to_rust_string_lossy(scope)
+        } else {
+            "default".to_string()
+        };
         tracing::debug!(target: "iv8::console", "[console.count] {}", label);
     }));
 }
@@ -203,9 +218,14 @@ unsafe extern "C" fn console_assert_cb(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if args.length() >= 1 && args.get(0).is_true() { return; }
+        if args.length() >= 1 && args.get(0).is_true() {
+            return;
+        }
         let msg = if args.length() >= 2 {
-            format!("Assertion failed: {}", args.get(1).to_rust_string_lossy(scope))
+            format!(
+                "Assertion failed: {}",
+                args.get(1).to_rust_string_lossy(scope)
+            )
         } else {
             "Assertion failed".to_string()
         };

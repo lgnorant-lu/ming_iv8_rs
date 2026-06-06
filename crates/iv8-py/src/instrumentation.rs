@@ -73,25 +73,29 @@ pub fn instrument_source(
         detected.ok_or_else(|| {
             pyo3::exceptions::PyRuntimeError::new_err(
                 "instrument_source: could not detect JSVMP dispatch pattern. \
-                 Use manual parameters (handler_array, pc_var, stack_var, index_array)."
+                 Use manual parameters (handler_array, pc_var, stack_var, index_array).",
             )
         })?
     };
 
     // Step 2: Generate source-head Proxy code (for env tracking)
-    let targets = env_targets.unwrap_or_else(|| vec![
-        "navigator".into(), "screen".into(), "document".into(),
-        "location".into(), "Math".into(), "crypto".into(), "performance".into(),
-    ]);
+    let targets = env_targets.unwrap_or_else(|| {
+        vec![
+            "navigator".into(),
+            "screen".into(),
+            "document".into(),
+            "location".into(),
+            "Math".into(),
+            "crypto".into(),
+            "performance".into(),
+        ]
+    });
     let targets_json = serde_json::to_string(&targets).unwrap_or("[]".into());
 
     let head_code = generate_head_code(capture_env, &targets_json, limit);
 
     // Step 3: Replace dispatch expression with logging wrapper
-    let dispatch_replacement = generate_dispatch_replacement(
-        &detection,
-        capture_stack_depth,
-    );
+    let dispatch_replacement = generate_dispatch_replacement(&detection, capture_stack_depth);
 
     let patched = if detection.dispatch_offset > 0 {
         let before = &source[..detection.dispatch_offset];
@@ -162,8 +166,9 @@ fn detect_chaosvm(source: &str) -> Option<VmDetection> {
 /// Detect switch-based VM: switch(X[Y++]) { case ... }
 fn detect_switch_vm(source: &str) -> Option<VmDetection> {
     let re = regex_lite::Regex::new(
-        r"switch\s*\(\s*([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\+\+\]\s*\)"
-    ).ok()?;
+        r"switch\s*\(\s*([A-Za-z_$][A-Za-z0-9_$]*)\[([A-Za-z_$][A-Za-z0-9_$]*)\+\+\]\s*\)",
+    )
+    .ok()?;
 
     let caps = re.captures(source)?;
     let bytecode_array = caps.get(1)?.as_str().to_string();
@@ -290,12 +295,17 @@ fn generate_dispatch_replacement(detection: &VmDetection, capture_stack_depth: u
         //   ctx.eval("TDC.getData(true)")         # business logic (stack values recorded)
         let stack_capture = if capture_stack_depth == 0 {
             // No stack capture requested at all: just depth
-            format!("'+(({sg})?{stack}.length:0)", sg = stack_guard, stack = stack)
+            format!(
+                "'+(({sg})?{stack}.length:0)",
+                sg = stack_guard,
+                stack = stack
+            )
         } else {
             // Deferred capture: depth always, values only when __iv8i_cap__ is true
             let mut parts = format!(
                 "'+(({sg})?{stack}.length:0)",
-                sg = stack_guard, stack = stack,
+                sg = stack_guard,
+                stack = stack,
             );
             for i in 1..=capture_stack_depth {
                 // Gate each stack value read with __iv8i_cap__
@@ -313,7 +323,10 @@ fn generate_dispatch_replacement(detection: &VmDetection, capture_stack_depth: u
              globalThis.__iv8i_log__.length<globalThis.__iv8i_lim__&&\
              globalThis.__iv8i_log__.push('D,'+{pc}+','+{ia}[{pc}]+',{stack_capture}),\
              {ha}[{ia}[{pc}++]]())",
-            pc = pc, ia = ia, stack_capture = stack_capture, ha = ha,
+            pc = pc,
+            ia = ia,
+            stack_capture = stack_capture,
+            ha = ha,
         )
     } else {
         // switch_vm: can't easily replace switch expression, just prepend log

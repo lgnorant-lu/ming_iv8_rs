@@ -6,11 +6,11 @@
 //! Uses ego-tree (Vec-backed arena) for O(1) node access and
 //! full mutation support (append, prepend, insert_before, insert_after, detach).
 
+pub mod binding;
+pub mod navigation;
 pub mod node;
 pub mod parser;
 pub mod selector;
-pub mod binding;
-pub mod navigation;
 pub mod serialize;
 pub mod template;
 

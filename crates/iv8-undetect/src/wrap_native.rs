@@ -71,7 +71,9 @@ mod tests {
     fn make_kernel() -> EmbeddedV8Kernel {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
         // Create __iv8__ object and install wrapNative
-        kernel.eval("var __iv8__ = {}", EvalOpts::default()).unwrap();
+        kernel
+            .eval("var __iv8__ = {}", EvalOpts::default())
+            .unwrap();
         let script = get_install_script("__iv8__");
         kernel.eval(&script, EvalOpts::default()).unwrap();
         kernel
@@ -80,80 +82,108 @@ mod tests {
     #[test]
     fn wrap_native_tostring_native_code() {
         let mut kernel = make_kernel();
-        let result = kernel.eval_to_rust_value(r#"
+        let result = kernel.eval_to_rust_value(
+            r#"
             function original() {}
             var wrapped = __iv8__.wrapNative(original, 'myFunc');
             wrapped.toString()
-        "#);
-        assert_eq!(result, RustValue::String("function myFunc() { [native code] }".into()));
+        "#,
+        );
+        assert_eq!(
+            result,
+            RustValue::String("function myFunc() { [native code] }".into())
+        );
     }
 
     #[test]
     fn wrap_native_function_prototype_tostring_call() {
         let mut kernel = make_kernel();
-        let result = kernel.eval_to_rust_value(r#"
+        let result = kernel.eval_to_rust_value(
+            r#"
             function original() {}
             var wrapped = __iv8__.wrapNative(original, 'test');
             Function.prototype.toString.call(wrapped)
-        "#);
-        assert_eq!(result, RustValue::String("function test() { [native code] }".into()));
+        "#,
+        );
+        assert_eq!(
+            result,
+            RustValue::String("function test() { [native code] }".into())
+        );
     }
 
     #[test]
     fn wrap_native_preserves_behavior() {
         let mut kernel = make_kernel();
-        let result = kernel.eval_to_rust_value(r#"
+        let result = kernel.eval_to_rust_value(
+            r#"
             function add(a, b) { return a + b; }
             var wrapped = __iv8__.wrapNative(add, 'add');
             wrapped(3, 4)
-        "#);
+        "#,
+        );
         assert_eq!(result, RustValue::Int(7));
     }
 
     #[test]
     fn wrap_native_preserves_name() {
         let mut kernel = make_kernel();
-        let result = kernel.eval_to_rust_value(r#"
+        let result = kernel.eval_to_rust_value(
+            r#"
             function original() {}
             var wrapped = __iv8__.wrapNative(original, 'customName');
             wrapped.name
-        "#);
+        "#,
+        );
         assert_eq!(result, RustValue::String("customName".into()));
     }
 
     #[test]
     fn wrap_native_preserves_length() {
         let mut kernel = make_kernel();
-        let result = kernel.eval_to_rust_value(r#"
+        let result = kernel.eval_to_rust_value(
+            r#"
             function original(a, b, c) {}
             var wrapped = __iv8__.wrapNative(original, 'test');
             wrapped.length
-        "#);
+        "#,
+        );
         assert_eq!(result, RustValue::Int(3));
     }
 
     #[test]
     fn wrap_native_itself_looks_native() {
         let mut kernel = make_kernel();
-        let result = kernel.eval_to_rust_value(r#"
+        let result = kernel.eval_to_rust_value(
+            r#"
             __iv8__.wrapNative.toString()
-        "#);
-        assert_eq!(result, RustValue::String("function wrapNative() { [native code] }".into()));
+        "#,
+        );
+        assert_eq!(
+            result,
+            RustValue::String("function wrapNative() { [native code] }".into())
+        );
     }
 
     #[test]
     fn wrap_native_tostring_looks_native() {
         let mut kernel = make_kernel();
-        let result = kernel.eval_to_rust_value(r#"
+        let result = kernel.eval_to_rust_value(
+            r#"
             Function.prototype.toString.toString()
-        "#);
-        assert_eq!(result, RustValue::String("function toString() { [native code] }".into()));
+        "#,
+        );
+        assert_eq!(
+            result,
+            RustValue::String("function toString() { [native code] }".into())
+        );
     }
 
     #[test]
     fn wrap_native_throws_on_non_function() {
         let mut kernel = make_kernel();
-        let err = kernel.eval("__iv8__.wrapNative(42, 'test')", EvalOpts::default()).unwrap_err();
+        let err = kernel
+            .eval("__iv8__.wrapNative(42, 'test')", EvalOpts::default())
+            .unwrap_err();
         match err {
             iv8_core::IV8Error::Js { name, message, .. } => {
                 assert_eq!(name, "TypeError");

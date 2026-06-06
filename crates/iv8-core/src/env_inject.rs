@@ -8,10 +8,7 @@ use std::collections::HashMap;
 
 /// Install all environment fields into the V8 global object.
 /// Called once during JSContext creation, after RuntimeState is installed.
-pub fn install_environment(
-    scope: &v8::PinScope<'_, '_>,
-    global: v8::Local<v8::Object>,
-) {
+pub fn install_environment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     let state = RuntimeState::get(scope);
     let env = &state.environment;
 
@@ -107,15 +104,19 @@ fn install_fields_on_object(
             scope,
             key.into(),
             v8_value,
-            v8::PropertyAttribute::READ_ONLY
-                | v8::PropertyAttribute::DONT_DELETE,
+            v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE,
         );
     }
 
     // Recursively handle nested fields
     for (sub_prefix, sub_fields) in &nested {
         let sub_obj = get_or_create_object(scope, obj, sub_prefix);
-        install_fields_on_object(scope, sub_obj, sub_fields, &format!("{prefix}.{sub_prefix}"));
+        install_fields_on_object(
+            scope,
+            sub_obj,
+            sub_fields,
+            &format!("{prefix}.{sub_prefix}"),
+        );
     }
 }
 
@@ -136,11 +137,9 @@ fn json_to_v8<'s>(
                 v8::undefined(scope).into()
             }
         }
-        serde_json::Value::String(s) => {
-            v8::String::new(scope, s)
-                .map(|s| s.into())
-                .unwrap_or_else(|| v8::undefined(scope).into())
-        }
+        serde_json::Value::String(s) => v8::String::new(scope, s)
+            .map(|s| s.into())
+            .unwrap_or_else(|| v8::undefined(scope).into()),
         serde_json::Value::Array(arr) => {
             let v8_arr = v8::Array::new(scope, arr.len() as i32);
             for (i, item) in arr.iter().enumerate() {
@@ -203,7 +202,8 @@ mod tests {
         let mut kernel = make_kernel_with_env();
         kernel.install_environment();
         // navigator.connection.effectiveType should exist
-        let result = kernel.eval_to_rust_value("navigator.connection && navigator.connection.effectiveType");
+        let result =
+            kernel.eval_to_rust_value("navigator.connection && navigator.connection.effectiveType");
         // May be null if not in defaults, but shouldn't throw
         assert!(
             !matches!(result, RustValue::JsObject(_)),
@@ -246,7 +246,7 @@ mod tests {
         let mut kernel = make_kernel_with_env();
         kernel.install_environment();
         let result = kernel.eval_to_rust_value(
-            "'use strict'; try { delete navigator.userAgent; 'deleted' } catch(e) { 'protected' }"
+            "'use strict'; try { delete navigator.userAgent; 'deleted' } catch(e) { 'protected' }",
         );
         assert_eq!(result, RustValue::String("protected".into()));
     }

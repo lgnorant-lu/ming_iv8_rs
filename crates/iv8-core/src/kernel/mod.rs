@@ -5,7 +5,6 @@
 
 pub mod embedded_v8;
 
-
 /// Options for a single eval call.
 #[derive(Debug, Clone, Default)]
 pub struct EvalOpts {

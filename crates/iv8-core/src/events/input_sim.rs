@@ -60,8 +60,16 @@ pub fn install_input_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
 }
 
 /// Helper: get a number field from a JS object, with default.
-fn get_num(scope: &v8::PinScope<'_, '_>, obj: v8::Local<v8::Object>, key: &str, default: f64) -> f64 {
-    let k = match v8::String::new(scope, key) { Some(k) => k, None => return default };
+fn get_num(
+    scope: &v8::PinScope<'_, '_>,
+    obj: v8::Local<v8::Object>,
+    key: &str,
+    default: f64,
+) -> f64 {
+    let k = match v8::String::new(scope, key) {
+        Some(k) => k,
+        None => return default,
+    };
     match obj.get(scope, k.into()) {
         Some(v) if v.is_number() => v.number_value(scope).unwrap_or(default),
         _ => default,
@@ -69,8 +77,16 @@ fn get_num(scope: &v8::PinScope<'_, '_>, obj: v8::Local<v8::Object>, key: &str, 
 }
 
 /// Helper: get a bool field from a JS object, with default.
-fn get_bool(scope: &v8::PinScope<'_, '_>, obj: v8::Local<v8::Object>, key: &str, default: bool) -> bool {
-    let k = match v8::String::new(scope, key) { Some(k) => k, None => return default };
+fn get_bool(
+    scope: &v8::PinScope<'_, '_>,
+    obj: v8::Local<v8::Object>,
+    key: &str,
+    default: bool,
+) -> bool {
+    let k = match v8::String::new(scope, key) {
+        Some(k) => k,
+        None => return default,
+    };
     match obj.get(scope, k.into()) {
         Some(v) if v.is_boolean() => v.is_true(),
         _ => default,
@@ -89,7 +105,10 @@ fn get_str(scope: &v8::PinScope<'_, '_>, obj: v8::Local<v8::Object>, key: &str) 
 }
 
 /// Helper: get target element from opts.target.
-fn get_target<'s>(scope: &v8::PinScope<'s, '_>, opts: v8::Local<'s, v8::Object>) -> Option<v8::Local<'s, v8::Object>> {
+fn get_target<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    opts: v8::Local<'s, v8::Object>,
+) -> Option<v8::Local<'s, v8::Object>> {
     let k = v8::String::new(scope, "target")?;
     let v = opts.get(scope, k.into())?;
     if v.is_object() && !v.is_null_or_undefined() {
@@ -107,7 +126,9 @@ unsafe extern "C" fn dispatch_mouse_event(info: *const v8::FunctionCallbackInfo)
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 1 || !args.get(0).is_object() { return; }
+        if args.length() < 1 || !args.get(0).is_object() {
+            return;
+        }
         let opts: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(args.get(0)) };
 
         let event_type = get_str(scope, opts, "type").unwrap_or_else(|| "click".to_string());
@@ -140,7 +161,8 @@ unsafe extern "C" fn dispatch_mouse_event(info: *const v8::FunctionCallbackInfo)
     if (target) target.dispatchEvent(evt);
     return evt;
 })
-"#.to_string();
+"#
+        .to_string();
 
         let global = scope.get_current_context().global(scope);
         {
@@ -149,7 +171,8 @@ unsafe extern "C" fn dispatch_mouse_event(info: *const v8::FunctionCallbackInfo)
                 if let Some(script) = v8::Script::compile(tc, fn_str, None) {
                     if let Some(fn_val) = script.run(tc) {
                         if fn_val.is_function() {
-                            let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                            let func: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(fn_val) };
                             let type_str = crate::v8_utils::v8_string(tc, &event_type);
                             let cx = v8::Number::new(tc, client_x);
                             let cy = v8::Number::new(tc, client_y);
@@ -162,13 +185,20 @@ unsafe extern "C" fn dispatch_mouse_event(info: *const v8::FunctionCallbackInfo)
                                 None => v8::null(tc).into(),
                             };
                             let undefined = v8::undefined(tc);
-                            func.call(tc, undefined.into(), &[
-                                target_val,
-                                type_str.into(),
-                                cx.into(), cy.into(),
-                                btn.into(), btns.into(),
-                                bub.into(), can.into(),
-                            ]);
+                            func.call(
+                                tc,
+                                undefined.into(),
+                                &[
+                                    target_val,
+                                    type_str.into(),
+                                    cx.into(),
+                                    cy.into(),
+                                    btn.into(),
+                                    btns.into(),
+                                    bub.into(),
+                                    can.into(),
+                                ],
+                            );
                         }
                     }
                 }
@@ -185,7 +215,9 @@ unsafe extern "C" fn dispatch_pointer_event(info: *const v8::FunctionCallbackInf
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 1 || !args.get(0).is_object() { return; }
+        if args.length() < 1 || !args.get(0).is_object() {
+            return;
+        }
         let opts: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(args.get(0)) };
 
         let event_type = get_str(scope, opts, "type").unwrap_or_else(|| "pointerdown".to_string());
@@ -194,7 +226,8 @@ unsafe extern "C" fn dispatch_pointer_event(info: *const v8::FunctionCallbackInf
         let button = get_num(scope, opts, "button", 0.0) as i32;
         let buttons = get_num(scope, opts, "buttons", 0.0) as i32;
         let pointer_id = get_num(scope, opts, "pointerId", 1.0) as i32;
-        let pointer_type = get_str(scope, opts, "pointerType").unwrap_or_else(|| "mouse".to_string());
+        let pointer_type =
+            get_str(scope, opts, "pointerType").unwrap_or_else(|| "mouse".to_string());
         let is_primary = get_bool(scope, opts, "isPrimary", true);
         let bubbles = get_bool(scope, opts, "bubbles", true);
         let cancelable = get_bool(scope, opts, "cancelable", true);
@@ -229,7 +262,8 @@ unsafe extern "C" fn dispatch_pointer_event(info: *const v8::FunctionCallbackInf
                 if let Some(script) = v8::Script::compile(tc, fn_str, None) {
                     if let Some(fn_val) = script.run(tc) {
                         if fn_val.is_function() {
-                            let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                            let func: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(fn_val) };
                             let type_str = crate::v8_utils::v8_string(tc, &event_type);
                             let cx = v8::Number::new(tc, client_x);
                             let cy = v8::Number::new(tc, client_y);
@@ -245,14 +279,23 @@ unsafe extern "C" fn dispatch_pointer_event(info: *const v8::FunctionCallbackInf
                                 None => v8::null(tc).into(),
                             };
                             let undefined = v8::undefined(tc);
-                            func.call(tc, undefined.into(), &[
-                                target_val,
-                                type_str.into(),
-                                cx.into(), cy.into(),
-                                btn.into(), btns.into(),
-                                pid.into(), ptype.into(),
-                                prim.into(), bub.into(), can.into(),
-                            ]);
+                            func.call(
+                                tc,
+                                undefined.into(),
+                                &[
+                                    target_val,
+                                    type_str.into(),
+                                    cx.into(),
+                                    cy.into(),
+                                    btn.into(),
+                                    btns.into(),
+                                    pid.into(),
+                                    ptype.into(),
+                                    prim.into(),
+                                    bub.into(),
+                                    can.into(),
+                                ],
+                            );
                         }
                     }
                 }
@@ -268,7 +311,9 @@ unsafe extern "C" fn dispatch_keyboard_event(info: *const v8::FunctionCallbackIn
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 1 || !args.get(0).is_object() { return; }
+        if args.length() < 1 || !args.get(0).is_object() {
+            return;
+        }
         let opts: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(args.get(0)) };
 
         let event_type = get_str(scope, opts, "type").unwrap_or_else(|| "keydown".to_string());
@@ -295,7 +340,8 @@ unsafe extern "C" fn dispatch_keyboard_event(info: *const v8::FunctionCallbackIn
     else document.dispatchEvent(evt);
     return evt;
 })
-"#.to_string();
+"#
+        .to_string();
 
         {
             v8::tc_scope!(tc, scope);
@@ -303,7 +349,8 @@ unsafe extern "C" fn dispatch_keyboard_event(info: *const v8::FunctionCallbackIn
                 if let Some(script) = v8::Script::compile(tc, fn_str, None) {
                     if let Some(fn_val) = script.run(tc) {
                         if fn_val.is_function() {
-                            let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(fn_val) };
+                            let func: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(fn_val) };
                             let type_str = crate::v8_utils::v8_string(tc, &event_type);
                             let key_str = crate::v8_utils::v8_string(tc, &key);
                             let code_str = crate::v8_utils::v8_string(tc, &code);
@@ -315,12 +362,19 @@ unsafe extern "C" fn dispatch_keyboard_event(info: *const v8::FunctionCallbackIn
                                 None => v8::null(tc).into(),
                             };
                             let undefined = v8::undefined(tc);
-                            func.call(tc, undefined.into(), &[
-                                target_val,
-                                type_str.into(),
-                                key_str.into(), code_str.into(),
-                                kc.into(), bub.into(), can.into(),
-                            ]);
+                            func.call(
+                                tc,
+                                undefined.into(),
+                                &[
+                                    target_val,
+                                    type_str.into(),
+                                    key_str.into(),
+                                    code_str.into(),
+                                    kc.into(),
+                                    bub.into(),
+                                    can.into(),
+                                ],
+                            );
                         }
                     }
                 }

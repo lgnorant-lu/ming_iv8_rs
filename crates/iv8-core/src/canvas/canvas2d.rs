@@ -17,23 +17,81 @@ use tiny_skia::{Color, FillRule, Paint, PathBuilder, Pixmap, Rect, Stroke, Trans
 /// A draw command recorded from JS canvas operations.
 #[derive(Debug, Clone)]
 pub enum DrawCmd {
-    FillRect { x: f32, y: f32, w: f32, h: f32, color: [u8; 4] },
-    StrokeRect { x: f32, y: f32, w: f32, h: f32, color: [u8; 4], line_width: f32 },
-    ClearRect { x: f32, y: f32, w: f32, h: f32 },
-    FillText { text: String, x: f32, y: f32, color: [u8; 4], font_size: f32 },
-    Arc { x: f32, y: f32, r: f32, start: f32, end: f32, color: [u8; 4], fill: bool },
-    LineTo { x: f32, y: f32 },
-    MoveTo { x: f32, y: f32 },
+    FillRect {
+        x: f32,
+        y: f32,
+        w: f32,
+        h: f32,
+        color: [u8; 4],
+    },
+    StrokeRect {
+        x: f32,
+        y: f32,
+        w: f32,
+        h: f32,
+        color: [u8; 4],
+        line_width: f32,
+    },
+    ClearRect {
+        x: f32,
+        y: f32,
+        w: f32,
+        h: f32,
+    },
+    FillText {
+        text: String,
+        x: f32,
+        y: f32,
+        color: [u8; 4],
+        font_size: f32,
+    },
+    Arc {
+        x: f32,
+        y: f32,
+        r: f32,
+        start: f32,
+        end: f32,
+        color: [u8; 4],
+        fill: bool,
+    },
+    LineTo {
+        x: f32,
+        y: f32,
+    },
+    MoveTo {
+        x: f32,
+        y: f32,
+    },
     BeginPath,
     ClosePath,
-    Fill { color: [u8; 4] },
-    Stroke { color: [u8; 4], line_width: f32 },
+    Fill {
+        color: [u8; 4],
+    },
+    Stroke {
+        color: [u8; 4],
+        line_width: f32,
+    },
     Save,
     Restore,
-    SetTransform { a: f32, b: f32, c: f32, d: f32, e: f32, f: f32 },
-    Translate { x: f32, y: f32 },
-    Scale { x: f32, y: f32 },
-    Rotate { angle: f32 },
+    SetTransform {
+        a: f32,
+        b: f32,
+        c: f32,
+        d: f32,
+        e: f32,
+        f: f32,
+    },
+    Translate {
+        x: f32,
+        y: f32,
+    },
+    Scale {
+        x: f32,
+        y: f32,
+    },
+    Rotate {
+        angle: f32,
+    },
 }
 
 /// Canvas 2D state.
@@ -99,7 +157,7 @@ impl Canvas2D {
         }
         // rgb(r,g,b)
         if s.starts_with("rgb(") && s.ends_with(')') {
-            let inner = &s[4..s.len()-1];
+            let inner = &s[4..s.len() - 1];
             let parts: Vec<&str> = inner.split(',').collect();
             if parts.len() == 3 {
                 let r = parts[0].trim().parse::<u8>().unwrap_or(0);
@@ -110,7 +168,7 @@ impl Canvas2D {
         }
         // rgba(r,g,b,a)
         if s.starts_with("rgba(") && s.ends_with(')') {
-            let inner = &s[5..s.len()-1];
+            let inner = &s[5..s.len() - 1];
             let parts: Vec<&str> = inner.split(',').collect();
             if parts.len() == 4 {
                 let r = parts[0].trim().parse::<u8>().unwrap_or(0);
@@ -143,13 +201,19 @@ impl Canvas2D {
         // "14px Arial", "bold 12pt sans-serif", etc.
         for part in font.split_whitespace() {
             if let Some(px) = part.strip_suffix("px") {
-                if let Ok(v) = px.parse::<f32>() { return v; }
+                if let Ok(v) = px.parse::<f32>() {
+                    return v;
+                }
             }
             if let Some(pt) = part.strip_suffix("pt") {
-                if let Ok(v) = pt.parse::<f32>() { return v * 1.333; }
+                if let Ok(v) = pt.parse::<f32>() {
+                    return v * 1.333;
+                }
             }
             if let Some(em) = part.strip_suffix("em") {
-                if let Ok(v) = em.parse::<f32>() { return v * 16.0; }
+                if let Ok(v) = em.parse::<f32>() {
+                    return v * 16.0;
+                }
             }
         }
         10.0
@@ -395,20 +459,24 @@ fn apply_noise(pixmap: &mut Pixmap, seed: u64) {
     let mut rng = seed;
     let w = pixmap.width();
     let h = pixmap.height();
-    if w == 0 || h == 0 { return; }
+    if w == 0 || h == 0 {
+        return;
+    }
 
     let pixels = pixmap.pixels_mut();
     let noise_count = 3; // Flip 3 pixels for subtle variation
     for _ in 0..noise_count {
-        rng = rng.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+        rng = rng
+            .wrapping_mul(6364136223846793005)
+            .wrapping_add(1442695040888963407);
         let idx = (rng >> 33) as usize % pixels.len();
         let pixel = &mut pixels[idx];
         // Flip the least significant bit of red channel
         let c = pixel.demultiply();
         let new_r = c.red() ^ 1;
-        if let Some(new_pixel) = tiny_skia::PremultipliedColorU8::from_rgba(
-            new_r, c.green(), c.blue(), c.alpha()
-        ) {
+        if let Some(new_pixel) =
+            tiny_skia::PremultipliedColorU8::from_rgba(new_r, c.green(), c.blue(), c.alpha())
+        {
             *pixel = new_pixel;
         }
     }
@@ -425,8 +493,16 @@ pub fn base64_encode(data: &[u8]) -> String {
         let combined = (b0 << 16) | (b1 << 8) | b2;
         result.push(CHARS[((combined >> 18) & 63) as usize] as char);
         result.push(CHARS[((combined >> 12) & 63) as usize] as char);
-        result.push(if chunk.len() > 1 { CHARS[((combined >> 6) & 63) as usize] as char } else { '=' });
-        result.push(if chunk.len() > 2 { CHARS[(combined & 63) as usize] as char } else { '=' });
+        result.push(if chunk.len() > 1 {
+            CHARS[((combined >> 6) & 63) as usize] as char
+        } else {
+            '='
+        });
+        result.push(if chunk.len() > 2 {
+            CHARS[(combined & 63) as usize] as char
+        } else {
+            '='
+        });
     }
     result
 }
@@ -445,7 +521,10 @@ mod tests {
     #[test]
     fn test_parse_color_rgb() {
         assert_eq!(Canvas2D::parse_color("rgb(255, 0, 0)"), [255, 0, 0, 255]);
-        assert_eq!(Canvas2D::parse_color("rgba(0, 0, 255, 0.5)"), [0, 0, 255, 127]);
+        assert_eq!(
+            Canvas2D::parse_color("rgba(0, 0, 255, 0.5)"),
+            [0, 0, 255, 127]
+        );
     }
 
     #[test]
@@ -466,7 +545,10 @@ mod tests {
     fn test_canvas_fill_rect_to_png() {
         let mut canvas = Canvas2D::new(100, 100);
         canvas.commands.push(DrawCmd::FillRect {
-            x: 0.0, y: 0.0, w: 50.0, h: 50.0,
+            x: 0.0,
+            y: 0.0,
+            w: 50.0,
+            h: 50.0,
             color: [255, 0, 0, 255],
         });
         let png = canvas.to_png(None);
@@ -494,7 +576,10 @@ mod tests {
         // Note: for empty canvas this might be the same, so we add a rect
         let mut canvas2 = Canvas2D::new(50, 50);
         canvas2.commands.push(DrawCmd::FillRect {
-            x: 0.0, y: 0.0, w: 50.0, h: 50.0,
+            x: 0.0,
+            y: 0.0,
+            w: 50.0,
+            h: 50.0,
             color: [100, 150, 200, 255],
         });
         let png3 = canvas2.to_png(Some(12345));

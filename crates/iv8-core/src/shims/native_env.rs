@@ -50,28 +50,28 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
         };
     }
 
-    nav_getter!("userAgent",           nav_user_agent);
-    nav_getter!("appVersion",          nav_app_version);
-    nav_getter!("platform",            nav_platform);
-    nav_getter!("vendor",              nav_vendor);
-    nav_getter!("vendorSub",           nav_vendor_sub);
-    nav_getter!("product",             nav_product);
-    nav_getter!("productSub",          nav_product_sub);
-    nav_getter!("language",            nav_language);
-    nav_getter!("languages",           nav_languages);
+    nav_getter!("userAgent", nav_user_agent);
+    nav_getter!("appVersion", nav_app_version);
+    nav_getter!("platform", nav_platform);
+    nav_getter!("vendor", nav_vendor);
+    nav_getter!("vendorSub", nav_vendor_sub);
+    nav_getter!("product", nav_product);
+    nav_getter!("productSub", nav_product_sub);
+    nav_getter!("language", nav_language);
+    nav_getter!("languages", nav_languages);
     nav_getter!("hardwareConcurrency", nav_hardware_concurrency);
-    nav_getter!("deviceMemory",        nav_device_memory);
-    nav_getter!("maxTouchPoints",      nav_max_touch_points);
-    nav_getter!("cookieEnabled",       nav_cookie_enabled);
-    nav_getter!("onLine",              nav_online);
-    nav_getter!("doNotTrack",          nav_do_not_track);
-    nav_getter!("webdriver",           nav_webdriver);
-    nav_getter!("appName",             nav_app_name);
-    nav_getter!("appCodeName",         nav_app_code_name);
-    nav_getter!("permissions",         nav_permissions);
-    nav_getter!("mediaDevices",        nav_media_devices);
-    nav_getter!("serviceWorker",       nav_service_worker);
-    nav_getter!("pdfViewerEnabled",    nav_pdf_viewer_enabled);
+    nav_getter!("deviceMemory", nav_device_memory);
+    nav_getter!("maxTouchPoints", nav_max_touch_points);
+    nav_getter!("cookieEnabled", nav_cookie_enabled);
+    nav_getter!("onLine", nav_online);
+    nav_getter!("doNotTrack", nav_do_not_track);
+    nav_getter!("webdriver", nav_webdriver);
+    nav_getter!("appName", nav_app_name);
+    nav_getter!("appCodeName", nav_app_code_name);
+    nav_getter!("permissions", nav_permissions);
+    nav_getter!("mediaDevices", nav_media_devices);
+    nav_getter!("serviceWorker", nav_service_worker);
+    nav_getter!("pdfViewerEnabled", nav_pdf_viewer_enabled);
     // Instantiate and install on global
     if let Some(nav_obj) = nav_tmpl.new_instance(scope) {
         // Install userAgentData sub-object on navigator
@@ -139,21 +139,25 @@ macro_rules! env_bool_getter {
     };
 }
 
-env_str_getter!(nav_user_agent,    "navigator.userAgent",    "Mozilla/5.0");
-env_str_getter!(nav_app_version,   "navigator.appVersion",   "5.0");
-env_str_getter!(nav_platform,      "navigator.platform",     "Win32");
-env_str_getter!(nav_vendor,        "navigator.vendor",       "Google Inc.");
-env_str_getter!(nav_vendor_sub,    "navigator.vendorSub",    "");
-env_str_getter!(nav_product,       "navigator.product",      "Gecko");
-env_str_getter!(nav_product_sub,   "navigator.productSub",   "20030107");
-env_str_getter!(nav_language,      "navigator.language",     "en-US");
-env_str_getter!(nav_app_name,      "navigator.appName",      "Netscape");
-env_str_getter!(nav_app_code_name, "navigator.appCodeName",  "Mozilla");
-env_f64_getter!(nav_hardware_concurrency, "navigator.hardwareConcurrency", 8.0);
-env_f64_getter!(nav_device_memory,        "navigator.deviceMemory",        8.0);
-env_f64_getter!(nav_max_touch_points,     "navigator.maxTouchPoints",      0.0);
+env_str_getter!(nav_user_agent, "navigator.userAgent", "Mozilla/5.0");
+env_str_getter!(nav_app_version, "navigator.appVersion", "5.0");
+env_str_getter!(nav_platform, "navigator.platform", "Win32");
+env_str_getter!(nav_vendor, "navigator.vendor", "Google Inc.");
+env_str_getter!(nav_vendor_sub, "navigator.vendorSub", "");
+env_str_getter!(nav_product, "navigator.product", "Gecko");
+env_str_getter!(nav_product_sub, "navigator.productSub", "20030107");
+env_str_getter!(nav_language, "navigator.language", "en-US");
+env_str_getter!(nav_app_name, "navigator.appName", "Netscape");
+env_str_getter!(nav_app_code_name, "navigator.appCodeName", "Mozilla");
+env_f64_getter!(
+    nav_hardware_concurrency,
+    "navigator.hardwareConcurrency",
+    8.0
+);
+env_f64_getter!(nav_device_memory, "navigator.deviceMemory", 8.0);
+env_f64_getter!(nav_max_touch_points, "navigator.maxTouchPoints", 0.0);
 env_bool_getter!(nav_cookie_enabled, "navigator.cookieEnabled", true);
-env_bool_getter!(nav_online,         "navigator.onLine",         true);
+env_bool_getter!(nav_online, "navigator.onLine", true);
 
 // navigator.languages → array from environment
 unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
@@ -175,7 +179,10 @@ unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
             }
         } else {
             // Fall back to single language
-            let lang = state.environment.get_str("navigator.language").unwrap_or("en-US");
+            let lang = state
+                .environment
+                .get_str("navigator.language")
+                .unwrap_or("en-US");
             vec![lang.to_string()]
         };
 
@@ -215,17 +222,21 @@ unsafe extern "C" fn permissions_query_cb(info: *const v8::FunctionCallbackInfo)
         let promise_key = crate::v8_utils::v8_string(scope, "Promise");
         if let Some(promise_ctor) = global.get(scope, promise_key.into()) {
             if promise_ctor.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(promise_ctor) };
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(promise_ctor) };
                 let resolve_key = crate::v8_utils::v8_string(scope, "resolve");
                 if let Some(resolve_fn) = ctor.get(scope, resolve_key.into()) {
                     if resolve_fn.is_function() {
-                        let resolve: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(resolve_fn) };
+                        let resolve: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(resolve_fn) };
                         let result_obj = v8::Object::new(scope);
                         let state_key = crate::v8_utils::v8_string(scope, "state");
                         let state_val = crate::v8_utils::v8_string(scope, "prompt");
                         result_obj.set(scope, state_key.into(), state_val.into());
                         let _undefined = v8::undefined(scope);
-                        if let Some(promise) = resolve.call(scope, ctor.into(), &[result_obj.into()]) {
+                        if let Some(promise) =
+                            resolve.call(scope, ctor.into(), &[result_obj.into()])
+                        {
                             rv.set(promise);
                             return;
                         }
@@ -262,14 +273,17 @@ unsafe extern "C" fn media_devices_enumerate_cb(info: *const v8::FunctionCallbac
         let promise_key = crate::v8_utils::v8_string(scope, "Promise");
         if let Some(promise_ctor) = global.get(scope, promise_key.into()) {
             if promise_ctor.is_function() {
-                let ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(promise_ctor) };
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(promise_ctor) };
                 let resolve_key = crate::v8_utils::v8_string(scope, "resolve");
                 if let Some(resolve_fn) = ctor.get(scope, resolve_key.into()) {
                     if resolve_fn.is_function() {
-                        let resolve: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(resolve_fn) };
+                        let resolve: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(resolve_fn) };
                         let empty_arr = v8::Array::new(scope, 0);
                         let _undefined = v8::undefined(scope);
-                        if let Some(promise) = resolve.call(scope, ctor.into(), &[empty_arr.into()]) {
+                        if let Some(promise) = resolve.call(scope, ctor.into(), &[empty_arr.into()])
+                        {
                             rv.set(promise);
                             return;
                         }
@@ -342,14 +356,14 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
         };
     }
 
-    screen_getter!("width",       screen_width);
-    screen_getter!("height",      screen_height);
-    screen_getter!("availWidth",  screen_avail_width);
+    screen_getter!("width", screen_width);
+    screen_getter!("height", screen_height);
+    screen_getter!("availWidth", screen_avail_width);
     screen_getter!("availHeight", screen_avail_height);
-    screen_getter!("colorDepth",  screen_color_depth);
-    screen_getter!("pixelDepth",  screen_pixel_depth);
-    screen_getter!("availLeft",   screen_avail_left);
-    screen_getter!("availTop",    screen_avail_top);
+    screen_getter!("colorDepth", screen_color_depth);
+    screen_getter!("pixelDepth", screen_pixel_depth);
+    screen_getter!("availLeft", screen_avail_left);
+    screen_getter!("availTop", screen_avail_top);
 
     if let Some(screen_obj) = screen_tmpl.new_instance(scope) {
         let key = crate::v8_utils::v8_string(scope, "screen");
@@ -364,11 +378,11 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
 
 env_bool_getter!(nav_pdf_viewer_enabled, "navigator.pdfViewerEnabled", true);
 
-env_f64_getter!(screen_width,        "screen.width",       1920.0);
-env_f64_getter!(screen_height,       "screen.height",      1080.0);
-env_f64_getter!(screen_avail_width,  "screen.availWidth",  1920.0);
+env_f64_getter!(screen_width, "screen.width", 1920.0);
+env_f64_getter!(screen_height, "screen.height", 1080.0);
+env_f64_getter!(screen_avail_width, "screen.availWidth", 1920.0);
 env_f64_getter!(screen_avail_height, "screen.availHeight", 1040.0);
-env_f64_getter!(screen_color_depth,  "screen.colorDepth",  24.0);
-env_f64_getter!(screen_pixel_depth,  "screen.pixelDepth",  24.0);
-env_f64_getter!(screen_avail_left,   "screen.availLeft",   0.0);
-env_f64_getter!(screen_avail_top,    "screen.availTop",    0.0);
+env_f64_getter!(screen_color_depth, "screen.colorDepth", 24.0);
+env_f64_getter!(screen_pixel_depth, "screen.pixelDepth", 24.0);
+env_f64_getter!(screen_avail_left, "screen.availLeft", 0.0);
+env_f64_getter!(screen_avail_top, "screen.availTop", 0.0);

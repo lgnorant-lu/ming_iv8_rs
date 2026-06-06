@@ -4,19 +4,22 @@
 //! - RSA-OAEP: encrypt, decrypt, importKey (spki/pkcs8/jwk), generateKey, exportKey
 //! - RSA-PSS: sign, verify
 
-use rsa::{RsaPrivateKey, RsaPublicKey, Oaep};
-use rsa::pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey};
-use rsa::pkcs1::{DecodeRsaPrivateKey, DecodeRsaPublicKey};
-use sha2::{Sha256, Sha384, Sha512};
-use sha1::Sha1;
 use rand::rngs::OsRng;
+use rsa::pkcs1::{DecodeRsaPrivateKey, DecodeRsaPublicKey};
+use rsa::pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey};
+use rsa::{Oaep, RsaPrivateKey, RsaPublicKey};
+use sha1::Sha1;
+use sha2::{Sha256, Sha384, Sha512};
 
 /// RSA key material stored in a CryptoKey.
 #[derive(Clone)]
 pub enum RsaKeyMaterial {
     Public(RsaPublicKey),
     Private(RsaPrivateKey),
-    KeyPair { public: RsaPublicKey, private: RsaPrivateKey },
+    KeyPair {
+        public: RsaPublicKey,
+        private: RsaPrivateKey,
+    },
 }
 
 /// RSA-OAEP encrypt.
@@ -29,19 +32,27 @@ pub fn rsa_oaep_encrypt(
     match hash.to_uppercase().replace("-", "").as_str() {
         "SHA1" => {
             let padding = Oaep::new::<Sha1>();
-            public_key.encrypt(&mut rng, padding, data).map_err(|e| e.to_string())
+            public_key
+                .encrypt(&mut rng, padding, data)
+                .map_err(|e| e.to_string())
         }
         "SHA256" => {
             let padding = Oaep::new::<Sha256>();
-            public_key.encrypt(&mut rng, padding, data).map_err(|e| e.to_string())
+            public_key
+                .encrypt(&mut rng, padding, data)
+                .map_err(|e| e.to_string())
         }
         "SHA384" => {
             let padding = Oaep::new::<Sha384>();
-            public_key.encrypt(&mut rng, padding, data).map_err(|e| e.to_string())
+            public_key
+                .encrypt(&mut rng, padding, data)
+                .map_err(|e| e.to_string())
         }
         "SHA512" => {
             let padding = Oaep::new::<Sha512>();
-            public_key.encrypt(&mut rng, padding, data).map_err(|e| e.to_string())
+            public_key
+                .encrypt(&mut rng, padding, data)
+                .map_err(|e| e.to_string())
         }
         _ => Err(format!("RSA-OAEP: unsupported hash '{}'", hash)),
     }
@@ -56,19 +67,27 @@ pub fn rsa_oaep_decrypt(
     match hash.to_uppercase().replace("-", "").as_str() {
         "SHA1" => {
             let padding = Oaep::new::<Sha1>();
-            private_key.decrypt(padding, data).map_err(|e| e.to_string())
+            private_key
+                .decrypt(padding, data)
+                .map_err(|e| e.to_string())
         }
         "SHA256" => {
             let padding = Oaep::new::<Sha256>();
-            private_key.decrypt(padding, data).map_err(|e| e.to_string())
+            private_key
+                .decrypt(padding, data)
+                .map_err(|e| e.to_string())
         }
         "SHA384" => {
             let padding = Oaep::new::<Sha384>();
-            private_key.decrypt(padding, data).map_err(|e| e.to_string())
+            private_key
+                .decrypt(padding, data)
+                .map_err(|e| e.to_string())
         }
         "SHA512" => {
             let padding = Oaep::new::<Sha512>();
-            private_key.decrypt(padding, data).map_err(|e| e.to_string())
+            private_key
+                .decrypt(padding, data)
+                .map_err(|e| e.to_string())
         }
         _ => Err(format!("RSA-OAEP: unsupported hash '{}'", hash)),
     }
@@ -121,25 +140,31 @@ pub fn rsa_pss_verify(
 
     match hash.to_uppercase().replace("-", "").as_str() {
         "SHA256" => {
-            use rsa::pss::{VerifyingKey, Signature};
+            use rsa::pss::{Signature, VerifyingKey};
             let verifying_key = VerifyingKey::<Sha256>::new(public_key.clone());
             if let Ok(sig) = Signature::try_from(signature) {
                 verifying_key.verify(data, &sig).is_ok()
-            } else { false }
+            } else {
+                false
+            }
         }
         "SHA384" => {
-            use rsa::pss::{VerifyingKey, Signature};
+            use rsa::pss::{Signature, VerifyingKey};
             let verifying_key = VerifyingKey::<Sha384>::new(public_key.clone());
             if let Ok(sig) = Signature::try_from(signature) {
                 verifying_key.verify(data, &sig).is_ok()
-            } else { false }
+            } else {
+                false
+            }
         }
         "SHA512" => {
-            use rsa::pss::{VerifyingKey, Signature};
+            use rsa::pss::{Signature, VerifyingKey};
             let verifying_key = VerifyingKey::<Sha512>::new(public_key.clone());
             if let Ok(sig) = Signature::try_from(signature) {
                 verifying_key.verify(data, &sig).is_ok()
-            } else { false }
+            } else {
+                false
+            }
         }
         _ => false,
     }
@@ -148,8 +173,7 @@ pub fn rsa_pss_verify(
 /// Generate RSA key pair.
 pub fn rsa_generate_key(modulus_length: usize) -> Result<(RsaPublicKey, RsaPrivateKey), String> {
     let mut rng = OsRng;
-    let private_key = RsaPrivateKey::new(&mut rng, modulus_length)
-        .map_err(|e| e.to_string())?;
+    let private_key = RsaPrivateKey::new(&mut rng, modulus_length).map_err(|e| e.to_string())?;
     let public_key = RsaPublicKey::from(&private_key);
     Ok((public_key, private_key))
 }
@@ -166,12 +190,16 @@ pub fn import_rsa_private_key_pkcs8(der: &[u8]) -> Result<RsaPrivateKey, String>
 
 /// Export RSA public key to SPKI DER bytes.
 pub fn export_rsa_public_key_spki(key: &RsaPublicKey) -> Result<Vec<u8>, String> {
-    key.to_public_key_der().map(|d| d.to_vec()).map_err(|e| e.to_string())
+    key.to_public_key_der()
+        .map(|d| d.to_vec())
+        .map_err(|e| e.to_string())
 }
 
 /// Export RSA private key to PKCS8 DER bytes.
 pub fn export_rsa_private_key_pkcs8(key: &RsaPrivateKey) -> Result<Vec<u8>, String> {
-    key.to_pkcs8_der().map(|d| d.as_bytes().to_vec()).map_err(|e| e.to_string())
+    key.to_pkcs8_der()
+        .map(|d| d.as_bytes().to_vec())
+        .map_err(|e| e.to_string())
 }
 
 /// Import RSA public key from PKCS1 DER bytes.

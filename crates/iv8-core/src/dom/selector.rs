@@ -10,7 +10,10 @@ use ego_tree::NodeRef;
 use precomputed_hash::PrecomputedHash;
 use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint};
 use selectors::bloom::BloomFilter;
-use selectors::matching::{ElementSelectorFlags, MatchingContext, MatchingMode, MatchingForInvalidation, NeedsSelectorFlags, QuirksMode, SelectorCaches};
+use selectors::matching::{
+    ElementSelectorFlags, MatchingContext, MatchingForInvalidation, MatchingMode,
+    NeedsSelectorFlags, QuirksMode, SelectorCaches,
+};
 use selectors::parser::{self, SelectorParseErrorKind};
 use selectors::{self, OpaqueElement};
 
@@ -129,7 +132,10 @@ pub struct DomElement<'a> {
 impl<'a> DomElement<'a> {
     /// Create a DomElement from a NodeRef. Panics if not an Element.
     pub fn new(node: NodeRef<'a, NodeData>) -> Self {
-        debug_assert!(node.value().is_element(), "DomElement must wrap an Element node");
+        debug_assert!(
+            node.value().is_element(),
+            "DomElement must wrap an Element node"
+        );
         Self { node }
     }
 
@@ -216,9 +222,7 @@ impl<'a> selectors::Element for DomElement<'a> {
 
     fn has_namespace(&self, ns: &str) -> bool {
         match self.node.value() {
-            NodeData::Element { namespace, .. } => {
-                ns.is_empty() || namespace == ns
-            }
+            NodeData::Element { namespace, .. } => ns.is_empty() || namespace == ns,
             _ => false,
         }
     }
@@ -302,12 +306,10 @@ impl<'a> selectors::Element for DomElement<'a> {
     }
 
     fn is_empty(&self) -> bool {
-        !self.node.children().any(|child| {
-            match child.value() {
-                NodeData::Element { .. } => true,
-                NodeData::Text(t) => !t.is_empty(),
-                _ => false,
-            }
+        !self.node.children().any(|child| match child.value() {
+            NodeData::Element { .. } => true,
+            NodeData::Text(t) => !t.is_empty(),
+            _ => false,
         })
     }
 
@@ -404,7 +406,11 @@ impl Document {
     }
 
     /// querySelector scoped to a subtree rooted at `context_node`.
-    pub fn query_selector_from(&self, selector_str: &str, context_node: NodeId) -> Result<Option<NodeId>, String> {
+    pub fn query_selector_from(
+        &self,
+        selector_str: &str,
+        context_node: NodeId,
+    ) -> Result<Option<NodeId>, String> {
         let selector = Selector::parse(selector_str)?;
         if let Some(node_ref) = self.tree.get(context_node) {
             for descendant in node_ref.descendants() {
@@ -419,7 +425,11 @@ impl Document {
     }
 
     /// querySelectorAll scoped to a subtree rooted at `context_node`.
-    pub fn query_selector_all_from(&self, selector_str: &str, context_node: NodeId) -> Result<Vec<NodeId>, String> {
+    pub fn query_selector_all_from(
+        &self,
+        selector_str: &str,
+        context_node: NodeId,
+    ) -> Result<Vec<NodeId>, String> {
         let selector = Selector::parse(selector_str)?;
         let mut results = Vec::new();
         if let Some(node_ref) = self.tree.get(context_node) {
@@ -501,7 +511,10 @@ mod tests {
 
     #[test]
     fn selector_by_class() {
-        let doc = parse_html("<div class=\"a\"><p class=\"b c\">1</p><p class=\"b\">2</p></div>", None);
+        let doc = parse_html(
+            "<div class=\"a\"><p class=\"b c\">1</p><p class=\"b\">2</p></div>",
+            None,
+        );
         let results = doc.query_selector_all(".b").unwrap();
         assert_eq!(results.len(), 2);
 
@@ -525,7 +538,10 @@ mod tests {
 
     #[test]
     fn selector_attribute() {
-        let doc = parse_html("<a href=\"https://example.com\">link</a><a>no href</a>", None);
+        let doc = parse_html(
+            "<a href=\"https://example.com\">link</a><a>no href</a>",
+            None,
+        );
         let results = doc.query_selector_all("a[href]").unwrap();
         assert_eq!(results.len(), 1);
     }

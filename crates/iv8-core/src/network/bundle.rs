@@ -143,7 +143,10 @@ mod tests {
     #[test]
     fn bundle_json_resource() {
         let mut bundle = ResourceBundle::new();
-        bundle.add("https://api.com/data", Resource::json(r#"{"ok":true}"#, 200));
+        bundle.add(
+            "https://api.com/data",
+            Resource::json(r#"{"ok":true}"#, 200),
+        );
 
         let res = bundle.get("https://api.com/data").unwrap();
         assert_eq!(res.body_text(), r#"{"ok":true}"#);

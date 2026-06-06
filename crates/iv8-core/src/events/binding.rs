@@ -30,7 +30,12 @@ pub fn install_event_loop_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Loc
     install_method(scope, el_obj, "drainTimers", el_drain_timers);
     install_method(scope, el_obj, "getTime", el_get_time);
     install_method(scope, el_obj, "reset", el_reset);
-    install_method(scope, el_obj, "setAutoAdvanceStep", el_set_auto_advance_step);
+    install_method(
+        scope,
+        el_obj,
+        "setAutoAdvanceStep",
+        el_set_auto_advance_step,
+    );
 
     let el_key = crate::v8_utils::v8_string(scope, "eventLoop");
     api_obj.set(scope, el_key.into(), el_obj.into());
@@ -66,10 +71,14 @@ unsafe extern "C" fn el_advance(info: *const v8::FunctionCallbackInfo) {
 
         let total_ms = if args.length() >= 1 {
             args.get(0).number_value(scope).unwrap_or(0.0)
-        } else { 0.0 };
+        } else {
+            0.0
+        };
         let step_ms = if args.length() >= 2 {
             args.get(1).number_value(scope).unwrap_or(16.67)
-        } else { 16.67 };
+        } else {
+            16.67
+        };
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
@@ -80,7 +89,9 @@ unsafe extern "C" fn el_advance(info: *const v8::FunctionCallbackInfo) {
 
         loop {
             let current = state.event_loop.borrow().get_time_us();
-            if current >= end_us { break; }
+            if current >= end_us {
+                break;
+            }
             let next = (current + step_us).min(end_us);
             state.event_loop.borrow_mut().current_us = next;
             run_due_tasks(scope, state);
@@ -97,7 +108,9 @@ unsafe extern "C" fn el_sleep(info: *const v8::FunctionCallbackInfo) {
 
         let ms = if args.length() >= 1 {
             args.get(0).number_value(scope).unwrap_or(0.0)
-        } else { 0.0 };
+        } else {
+            0.0
+        };
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
@@ -115,7 +128,9 @@ unsafe extern "C" fn el_tick(info: *const v8::FunctionCallbackInfo) {
 
         let ms = if args.length() >= 1 {
             args.get(0).number_value(scope).unwrap_or(0.0)
-        } else { 0.0 };
+        } else {
+            0.0
+        };
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
@@ -193,7 +208,9 @@ unsafe extern "C" fn el_set_auto_advance_step(info: *const v8::FunctionCallbackI
 
         let us = if args.length() >= 1 {
             args.get(0).number_value(scope).unwrap_or(4000.0) as i64
-        } else { 4000 };
+        } else {
+            4000
+        };
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);

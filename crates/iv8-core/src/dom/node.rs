@@ -3,7 +3,10 @@
 //! ego-tree stores nodes in a Vec<Node<T>> where T is our NodeData enum.
 //! Each node has parent/first_child/last_child/prev_sibling/next_sibling indices.
 //! NodeId is a typed wrapper around the arena index.
-#![expect(clippy::expect_used, reason = "tree.get_mut expects: node IDs validated at call sites")]
+#![expect(
+    clippy::expect_used,
+    reason = "tree.get_mut expects: node IDs validated at call sites"
+)]
 
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -158,9 +161,10 @@ impl NodeData {
     /// Get an attribute value by name (only for Element nodes).
     pub fn get_attr(&self, name: &str) -> Option<&str> {
         match self {
-            NodeData::Element { attrs, .. } => {
-                attrs.iter().find(|(k, _)| k == name).map(|(_, v)| v.as_str())
-            }
+            NodeData::Element { attrs, .. } => attrs
+                .iter()
+                .find(|(k, _)| k == name)
+                .map(|(_, v)| v.as_str()),
             _ => None,
         }
     }
@@ -418,13 +422,22 @@ impl Document {
     }
 
     /// Collect a subtree as (data, children) recursively.
-    fn collect_subtree_recursive(&self, node_id: NodeId) -> (NodeData, Vec<(NodeData, Vec<NodeData>)>) {
-        let data = self.tree.get(node_id).map(|n| n.value().clone()).unwrap_or(NodeData::Document);
+    fn collect_subtree_recursive(
+        &self,
+        node_id: NodeId,
+    ) -> (NodeData, Vec<(NodeData, Vec<NodeData>)>) {
+        let data = self
+            .tree
+            .get(node_id)
+            .map(|n| n.value().clone())
+            .unwrap_or(NodeData::Document);
         let children = if let Some(node_ref) = self.tree.get(node_id) {
-            node_ref.children()
+            node_ref
+                .children()
                 .map(|c| {
                     let child_data = c.value().clone();
-                    let grandchildren: Vec<NodeData> = c.children().map(|gc| gc.value().clone()).collect();
+                    let grandchildren: Vec<NodeData> =
+                        c.children().map(|gc| gc.value().clone()).collect();
                     (child_data, grandchildren)
                 })
                 .collect()
@@ -434,7 +447,11 @@ impl Document {
         (data, children)
     }
 
-    fn restore_subtree_recursive(&mut self, parent_id: NodeId, children: Vec<(NodeData, Vec<NodeData>)>) {
+    fn restore_subtree_recursive(
+        &mut self,
+        parent_id: NodeId,
+        children: Vec<(NodeData, Vec<NodeData>)>,
+    ) {
         for (data, grandchildren) in children {
             let child_id = self.append_child(parent_id, data);
             for gc_data in grandchildren {
@@ -753,10 +770,7 @@ mod tests {
     fn base_url_parsing() {
         let doc = Document::new(Some("https://example.com/page"));
         assert!(doc.base_url().is_some());
-        assert_eq!(
-            doc.base_url().unwrap().as_str(),
-            "https://example.com/page"
-        );
+        assert_eq!(doc.base_url().unwrap().as_str(), "https://example.com/page");
 
         let doc2 = Document::new(Some("not a url"));
         assert!(doc2.base_url().is_none());

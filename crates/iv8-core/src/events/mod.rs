@@ -10,13 +10,13 @@
 //!
 //! Plus timer registration (setTimeout/setInterval) and rAF queue.
 
-pub mod event_loop;
 pub mod binding;
-pub mod timers;
 pub mod date_interceptor;
-pub mod target;
-pub mod page_api;
+pub mod event_loop;
 pub mod input_sim;
+pub mod page_api;
+pub mod target;
+pub mod timers;
 
 pub use event_loop::{EventLoop, TaskKind, TimedTask};
 pub use target::EventListenerRegistry;

@@ -1,9 +1,9 @@
 //! V8 Inspector Session — integrates V8 Inspector with the kernel.
 
-use std::time::Duration;
 use std::thread;
+use std::time::Duration;
 
-use crate::inspector::channel::{InspectorMessage, SharedChannelState, lock_channel_state};
+use crate::inspector::channel::{lock_channel_state, InspectorMessage, SharedChannelState};
 
 /// Configuration for the inspector session.
 pub struct InspectorConfig {
@@ -123,10 +123,11 @@ impl InspectorSession {
             return None;
         }
 
-        let apis_json = serde_json::to_string(&self.config.watch_apis)
-            .unwrap_or_else(|_| "[]".to_string());
+        let apis_json =
+            serde_json::to_string(&self.config.watch_apis).unwrap_or_else(|_| "[]".to_string());
 
-        Some(format!(r#"
+        Some(format!(
+            r#"
 (function() {{
     var watchApis = {apis_json};
     watchApis.forEach(function(path) {{
@@ -152,7 +153,8 @@ impl InspectorSession {
         }});
     }});
 }})();
-"#))
+"#
+        ))
     }
 }
 
@@ -193,15 +195,14 @@ impl InspectorChannelImpl {
 }
 
 impl v8::inspector::ChannelImpl for InspectorChannelImpl {
-    fn send_response(
-        &self,
-        call_id: i32,
-        message: v8::UniquePtr<v8::inspector::StringBuffer>,
-    ) {
+    fn send_response(&self, call_id: i32, message: v8::UniquePtr<v8::inspector::StringBuffer>) {
         if let Some(msg) = message.as_ref() {
             let text = msg.string().to_string();
             let mut state = lock_channel_state(&self.channel_state);
-            state.outgoing.push(InspectorMessage::Response { call_id, message: text });
+            state.outgoing.push(InspectorMessage::Response {
+                call_id,
+                message: text,
+            });
         }
     }
 
@@ -209,7 +210,9 @@ impl v8::inspector::ChannelImpl for InspectorChannelImpl {
         if let Some(msg) = message.as_ref() {
             let text = msg.string().to_string();
             let mut state = lock_channel_state(&self.channel_state);
-            state.outgoing.push(InspectorMessage::Notification { message: text });
+            state
+                .outgoing
+                .push(InspectorMessage::Notification { message: text });
         }
     }
 

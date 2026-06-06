@@ -3,9 +3,9 @@
 //! This crate provides the core Rust API for creating and managing
 //! JavaScript contexts with full browser surface emulation.
 
+pub mod canvas;
 pub mod config;
 pub mod convert;
-pub mod canvas;
 pub mod crypto;
 pub mod dom;
 pub mod entry;

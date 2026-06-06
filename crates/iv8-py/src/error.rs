@@ -14,11 +14,31 @@ use iv8_core::IV8Error;
 //   │     └── JSMemoryError (V8 OOM)
 //   └── JSPanic (Rust panic caught at FFI boundary — not a JS error)
 
-create_exception!(iv8_rs, JSError, PyException, "Base exception for JavaScript errors.");
-create_exception!(iv8_rs, JSCompileError, JSError, "JavaScript compile/syntax error.");
-create_exception!(iv8_rs, JSTimeoutError, JSError, "JavaScript execution terminated (timeout).");
+create_exception!(
+    iv8_rs,
+    JSError,
+    PyException,
+    "Base exception for JavaScript errors."
+);
+create_exception!(
+    iv8_rs,
+    JSCompileError,
+    JSError,
+    "JavaScript compile/syntax error."
+);
+create_exception!(
+    iv8_rs,
+    JSTimeoutError,
+    JSError,
+    "JavaScript execution terminated (timeout)."
+);
 create_exception!(iv8_rs, JSMemoryError, JSError, "V8 out of memory.");
-create_exception!(iv8_rs, JSPanic, PyException, "Rust panic caught at FFI boundary.");
+create_exception!(
+    iv8_rs,
+    JSPanic,
+    PyException,
+    "Rust panic caught at FFI boundary."
+);
 
 /// Convert IV8Error to PyErr.
 pub fn iv8_error_to_pyerr(err: IV8Error) -> PyErr {

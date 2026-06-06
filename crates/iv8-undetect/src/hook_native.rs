@@ -89,7 +89,10 @@ mod tests {
     fn hook_native_throws_on_non_string_path() {
         let mut kernel = make_kernel();
         let err = kernel
-            .eval("__iv8__.hookNative(123, function() {})", EvalOpts::default())
+            .eval(
+                "__iv8__.hookNative(123, function() {})",
+                EvalOpts::default(),
+            )
             .unwrap_err();
         match err {
             iv8_core::IV8Error::Js { name, message, .. } => {
@@ -108,11 +111,7 @@ mod tests {
             .unwrap_err();
         match err {
             iv8_core::IV8Error::Js { message, .. } => {
-                assert!(
-                    message.contains("api name is empty"),
-                    "msg: {}",
-                    message
-                );
+                assert!(message.contains("api name is empty"), "msg: {}", message);
             }
             other => panic!("expected Js error, got: {:?}", other),
         }

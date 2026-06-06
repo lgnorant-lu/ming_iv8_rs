@@ -54,8 +54,9 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
         let base_url = get_string_field(scope, snapshot, "baseURL");
 
         // Extract html
-        let html = get_string_field(scope, snapshot, "html")
-            .unwrap_or_else(|| "<!DOCTYPE html><html><head></head><body></body></html>".to_string());
+        let html = get_string_field(scope, snapshot, "html").unwrap_or_else(|| {
+            "<!DOCTYPE html><html><head></head><body></body></html>".to_string()
+        });
 
         // Extract resources: { url: content, ... }
         let resources = extract_resources(scope, snapshot);
@@ -94,14 +95,20 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
 
                 if let Some(src) = src_attr {
                     // External script: resolve URL and look up in resources
-                    let resolved_url = if src.starts_with("http://") || src.starts_with("https://") {
+                    let resolved_url = if src.starts_with("http://") || src.starts_with("https://")
+                    {
                         src.clone()
                     } else if let Some(ref base) = base_url {
                         // Resolve relative URL against base
                         if src.starts_with('/') {
                             // Absolute path
                             if let Ok(parsed) = url::Url::parse(base) {
-                                format!("{}://{}{}", parsed.scheme(), parsed.host_str().unwrap_or(""), src)
+                                format!(
+                                    "{}://{}{}",
+                                    parsed.scheme(),
+                                    parsed.host_str().unwrap_or(""),
+                                    src
+                                )
                             } else {
                                 src.clone()
                             }
@@ -113,7 +120,10 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
                     };
 
                     // Look up in resources map
-                    if let Some(content) = resources.iter().find(|(u, _)| u == &resolved_url || u == &src) {
+                    if let Some(content) = resources
+                        .iter()
+                        .find(|(u, _)| u == &resolved_url || u == &src)
+                    {
                         scripts.push(content.1.clone());
                     }
                 } else {
@@ -176,12 +186,21 @@ fn update_location(scope: &v8::PinScope<'_, '_>, url_str: &str) {
     let hostname = host.clone();
     let port = parsed.port().map(|p| p.to_string()).unwrap_or_default();
     let pathname = parsed.path().to_string();
-    let search = parsed.query().map(|q| format!("?{}", q)).unwrap_or_default();
-    let hash = parsed.fragment().map(|f| format!("#{}", f)).unwrap_or_default();
+    let search = parsed
+        .query()
+        .map(|q| format!("?{}", q))
+        .unwrap_or_default();
+    let hash = parsed
+        .fragment()
+        .map(|f| format!("#{}", f))
+        .unwrap_or_default();
 
     // Get the location object from global and update its properties directly
     let global = scope.get_current_context().global(scope);
-    let loc_key = match v8::String::new(scope, "location") { Some(k) => k, None => return };
+    let loc_key = match v8::String::new(scope, "location") {
+        Some(k) => k,
+        None => return,
+    };
     let loc_val = match global.get(scope, loc_key.into()) {
         Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
         _ => return,
@@ -260,8 +279,12 @@ fn extract_resources(
                     content_val.to_rust_string_lossy(scope)
                 } else if content_val.is_object() {
                     // Try to get .body property
-                    let content_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(content_val) };
-                    let body_key = match v8::String::new(scope, "body") { Some(k) => k, None => continue };
+                    let content_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(content_val) };
+                    let body_key = match v8::String::new(scope, "body") {
+                        Some(k) => k,
+                        None => continue,
+                    };
                     match content_obj.get(scope, body_key.into()) {
                         Some(body_val) if !body_val.is_null_or_undefined() => {
                             body_val.to_rust_string_lossy(scope)

@@ -4,10 +4,14 @@
 //! - ECDSA (P-256, P-384): sign, verify, importKey, generateKey, exportKey
 //! - ECDH (P-256, P-384): deriveBits
 
-use p256::ecdsa::{SigningKey as P256SigningKey, VerifyingKey as P256VerifyingKey, Signature as P256Signature};
-use p384::ecdsa::{SigningKey as P384SigningKey, VerifyingKey as P384VerifyingKey, Signature as P384Signature};
 #[allow(unused_imports)]
-use elliptic_curve::sec1::{ToEncodedPoint, FromEncodedPoint};
+use elliptic_curve::sec1::{FromEncodedPoint, ToEncodedPoint};
+use p256::ecdsa::{
+    Signature as P256Signature, SigningKey as P256SigningKey, VerifyingKey as P256VerifyingKey,
+};
+use p384::ecdsa::{
+    Signature as P384Signature, SigningKey as P384SigningKey, VerifyingKey as P384VerifyingKey,
+};
 use rand::rngs::OsRng;
 
 /// EC curve identifier.
@@ -65,12 +69,14 @@ impl EcKeyMaterial {
     pub fn to_pkcs8_der(&self) -> Result<Vec<u8>, String> {
         use pkcs8::EncodePrivateKey;
         match self {
-            EcKeyMaterial::P256Private(k) => {
-                k.to_pkcs8_der().map(|d| d.as_bytes().to_vec()).map_err(|e| e.to_string())
-            }
-            EcKeyMaterial::P384Private(k) => {
-                k.to_pkcs8_der().map(|d| d.as_bytes().to_vec()).map_err(|e| e.to_string())
-            }
+            EcKeyMaterial::P256Private(k) => k
+                .to_pkcs8_der()
+                .map(|d| d.as_bytes().to_vec())
+                .map_err(|e| e.to_string()),
+            EcKeyMaterial::P384Private(k) => k
+                .to_pkcs8_der()
+                .map(|d| d.as_bytes().to_vec())
+                .map_err(|e| e.to_string()),
             _ => Err("Cannot export public key as PKCS8".to_string()),
         }
     }
@@ -79,12 +85,14 @@ impl EcKeyMaterial {
     pub fn to_spki_der(&self) -> Result<Vec<u8>, String> {
         use spki::EncodePublicKey;
         match self {
-            EcKeyMaterial::P256Public(k) => {
-                k.to_public_key_der().map(|d| d.to_vec()).map_err(|e| e.to_string())
-            }
-            EcKeyMaterial::P384Public(k) => {
-                k.to_public_key_der().map(|d| d.to_vec()).map_err(|e| e.to_string())
-            }
+            EcKeyMaterial::P256Public(k) => k
+                .to_public_key_der()
+                .map(|d| d.to_vec())
+                .map_err(|e| e.to_string()),
+            EcKeyMaterial::P384Public(k) => k
+                .to_public_key_der()
+                .map(|d| d.to_vec())
+                .map_err(|e| e.to_string()),
             _ => Err("Cannot export private key as SPKI".to_string()),
         }
     }
@@ -97,12 +105,18 @@ pub fn ecdsa_generate_key(curve: EcCurve) -> Result<(EcKeyMaterial, EcKeyMateria
         EcCurve::P256 => {
             let signing_key = P256SigningKey::random(&mut rng);
             let verifying_key = P256VerifyingKey::from(&signing_key);
-            Ok((EcKeyMaterial::P256Private(signing_key), EcKeyMaterial::P256Public(verifying_key)))
+            Ok((
+                EcKeyMaterial::P256Private(signing_key),
+                EcKeyMaterial::P256Public(verifying_key),
+            ))
         }
         EcCurve::P384 => {
             let signing_key = P384SigningKey::random(&mut rng);
             let verifying_key = P384VerifyingKey::from(&signing_key);
-            Ok((EcKeyMaterial::P384Private(signing_key), EcKeyMaterial::P384Public(verifying_key)))
+            Ok((
+                EcKeyMaterial::P384Private(signing_key),
+                EcKeyMaterial::P384Public(verifying_key),
+            ))
         }
     }
 }
@@ -132,43 +146,50 @@ pub fn ecdsa_verify(key: &EcKeyMaterial, data: &[u8], signature: &[u8]) -> bool 
         EcKeyMaterial::P256Public(k) => {
             if let Ok(sig) = P256Signature::from_slice(signature) {
                 k.verify(data, &sig).is_ok()
-            } else { false }
+            } else {
+                false
+            }
         }
         EcKeyMaterial::P384Public(k) => {
             if let Ok(sig) = P384Signature::from_slice(signature) {
                 k.verify(data, &sig).is_ok()
-            } else { false }
+            } else {
+                false
+            }
         }
         _ => false,
     }
 }
 
 /// Import EC key from raw bytes.
-pub fn import_ec_key_raw(bytes: &[u8], curve: EcCurve, key_type: &str) -> Result<EcKeyMaterial, String> {
+pub fn import_ec_key_raw(
+    bytes: &[u8],
+    curve: EcCurve,
+    key_type: &str,
+) -> Result<EcKeyMaterial, String> {
     match (curve, key_type) {
-        (EcCurve::P256, "private") => {
-            P256SigningKey::from_slice(bytes)
-                .map(EcKeyMaterial::P256Private)
-                .map_err(|e| e.to_string())
-        }
+        (EcCurve::P256, "private") => P256SigningKey::from_slice(bytes)
+            .map(EcKeyMaterial::P256Private)
+            .map_err(|e| e.to_string()),
         (EcCurve::P256, "public") => {
             let point = p256::EncodedPoint::from_bytes(bytes).map_err(|e| e.to_string())?;
             P256VerifyingKey::from_encoded_point(&point)
                 .map(EcKeyMaterial::P256Public)
                 .map_err(|e| e.to_string())
         }
-        (EcCurve::P384, "private") => {
-            P384SigningKey::from_slice(bytes)
-                .map(EcKeyMaterial::P384Private)
-                .map_err(|e| e.to_string())
-        }
+        (EcCurve::P384, "private") => P384SigningKey::from_slice(bytes)
+            .map(EcKeyMaterial::P384Private)
+            .map_err(|e| e.to_string()),
         (EcCurve::P384, "public") => {
             let point = p384::EncodedPoint::from_bytes(bytes).map_err(|e| e.to_string())?;
             P384VerifyingKey::from_encoded_point(&point)
                 .map(EcKeyMaterial::P384Public)
                 .map_err(|e| e.to_string())
         }
-        _ => Err(format!("Unsupported curve/key_type combination: {:?}/{}", curve, key_type)),
+        _ => Err(format!(
+            "Unsupported curve/key_type combination: {:?}/{}",
+            curve, key_type
+        )),
     }
 }
 
@@ -176,16 +197,12 @@ pub fn import_ec_key_raw(bytes: &[u8], curve: EcCurve, key_type: &str) -> Result
 pub fn import_ec_private_key_pkcs8(der: &[u8], curve: EcCurve) -> Result<EcKeyMaterial, String> {
     use pkcs8::DecodePrivateKey;
     match curve {
-        EcCurve::P256 => {
-            P256SigningKey::from_pkcs8_der(der)
-                .map(EcKeyMaterial::P256Private)
-                .map_err(|e| e.to_string())
-        }
-        EcCurve::P384 => {
-            P384SigningKey::from_pkcs8_der(der)
-                .map(EcKeyMaterial::P384Private)
-                .map_err(|e| e.to_string())
-        }
+        EcCurve::P256 => P256SigningKey::from_pkcs8_der(der)
+            .map(EcKeyMaterial::P256Private)
+            .map_err(|e| e.to_string()),
+        EcCurve::P384 => P384SigningKey::from_pkcs8_der(der)
+            .map(EcKeyMaterial::P384Private)
+            .map_err(|e| e.to_string()),
     }
 }
 
@@ -193,16 +210,12 @@ pub fn import_ec_private_key_pkcs8(der: &[u8], curve: EcCurve) -> Result<EcKeyMa
 pub fn import_ec_public_key_spki(der: &[u8], curve: EcCurve) -> Result<EcKeyMaterial, String> {
     use spki::DecodePublicKey;
     match curve {
-        EcCurve::P256 => {
-            P256VerifyingKey::from_public_key_der(der)
-                .map(EcKeyMaterial::P256Public)
-                .map_err(|e| e.to_string())
-        }
-        EcCurve::P384 => {
-            P384VerifyingKey::from_public_key_der(der)
-                .map(EcKeyMaterial::P384Public)
-                .map_err(|e| e.to_string())
-        }
+        EcCurve::P256 => P256VerifyingKey::from_public_key_der(der)
+            .map(EcKeyMaterial::P256Public)
+            .map_err(|e| e.to_string()),
+        EcCurve::P384 => P384VerifyingKey::from_public_key_der(der)
+            .map(EcKeyMaterial::P384Public)
+            .map_err(|e| e.to_string()),
     }
 }
 
@@ -218,19 +231,13 @@ pub fn ecdh_derive_bits(
     match (private_key, public_key) {
         (EcKeyMaterial::P256Private(priv_k), EcKeyMaterial::P256Public(pub_k)) => {
             // Use diffie-hellman via p256
-            let shared = p256::ecdh::diffie_hellman(
-                priv_k.as_nonzero_scalar(),
-                pub_k.as_affine(),
-            );
+            let shared = p256::ecdh::diffie_hellman(priv_k.as_nonzero_scalar(), pub_k.as_affine());
             let raw = shared.raw_secret_bytes();
             let bytes = raw.as_slice();
             Ok(bytes[..length_bytes.min(bytes.len())].to_vec())
         }
         (EcKeyMaterial::P384Private(priv_k), EcKeyMaterial::P384Public(pub_k)) => {
-            let shared = p384::ecdh::diffie_hellman(
-                priv_k.as_nonzero_scalar(),
-                pub_k.as_affine(),
-            );
+            let shared = p384::ecdh::diffie_hellman(priv_k.as_nonzero_scalar(), pub_k.as_affine());
             let raw = shared.raw_secret_bytes();
             let bytes = raw.as_slice();
             Ok(bytes[..length_bytes.min(bytes.len())].to_vec())

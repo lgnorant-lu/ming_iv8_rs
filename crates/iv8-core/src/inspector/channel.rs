@@ -45,9 +45,7 @@ impl ChannelState {
 
 pub type SharedChannelState = Arc<Mutex<ChannelState>>;
 
-pub fn lock_channel_state(
-    state: &SharedChannelState,
-) -> std::sync::MutexGuard<'_, ChannelState> {
+pub fn lock_channel_state(state: &SharedChannelState) -> std::sync::MutexGuard<'_, ChannelState> {
     match state.lock() {
         Ok(guard) => guard,
         Err(poisoned) => poisoned.into_inner(),

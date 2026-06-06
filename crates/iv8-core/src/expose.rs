@@ -95,10 +95,13 @@ mod tests {
     #[test]
     fn expose_simple_function() {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.expose_fn("greet", Box::new(|args| {
-            let name = args.first().map(|s| s.as_str()).unwrap_or("world");
-            Ok(format!("hello {}", name))
-        }));
+        kernel.expose_fn(
+            "greet",
+            Box::new(|args| {
+                let name = args.first().map(|s| s.as_str()).unwrap_or("world");
+                Ok(format!("hello {}", name))
+            }),
+        );
         let result = kernel.eval_to_rust_value("greet('iv8')");
         assert_eq!(result, RustValue::String("hello iv8".into()));
     }
@@ -114,7 +117,10 @@ mod tests {
     #[test]
     fn expose_function_throws_error() {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.expose_fn("failMe", Box::new(|_| Err("something went wrong".to_string())));
+        kernel.expose_fn(
+            "failMe",
+            Box::new(|_| Err("something went wrong".to_string())),
+        );
         let err = kernel.eval("failMe()", EvalOpts::default()).unwrap_err();
         match err {
             crate::IV8Error::Js { message, .. } => {
@@ -127,11 +133,14 @@ mod tests {
     #[test]
     fn expose_function_multiple_args() {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.expose_fn("add", Box::new(|args| {
-            let a: f64 = args.get(0).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-            let b: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
-            Ok((a + b).to_string())
-        }));
+        kernel.expose_fn(
+            "add",
+            Box::new(|args| {
+                let a: f64 = args.get(0).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                let b: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                Ok((a + b).to_string())
+            }),
+        );
         let result = kernel.eval_to_rust_value("add(3, 4)");
         assert_eq!(result, RustValue::String("7".into()));
     }
@@ -141,12 +150,24 @@ mod tests {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
         let counter = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
         let counter_clone = counter.clone();
-        kernel.expose_fn("increment", Box::new(move |_| {
-            let val = counter_clone.fetch_add(1, std::sync::atomic::Ordering::SeqCst) + 1;
-            Ok(val.to_string())
-        }));
-        assert_eq!(kernel.eval_to_rust_value("increment()"), RustValue::String("1".into()));
-        assert_eq!(kernel.eval_to_rust_value("increment()"), RustValue::String("2".into()));
-        assert_eq!(kernel.eval_to_rust_value("increment()"), RustValue::String("3".into()));
+        kernel.expose_fn(
+            "increment",
+            Box::new(move |_| {
+                let val = counter_clone.fetch_add(1, std::sync::atomic::Ordering::SeqCst) + 1;
+                Ok(val.to_string())
+            }),
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("increment()"),
+            RustValue::String("1".into())
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("increment()"),
+            RustValue::String("2".into())
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("increment()"),
+            RustValue::String("3".into())
+        );
     }
 }

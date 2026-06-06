@@ -11,10 +11,10 @@
 //! The WebSocket server runs in a background thread. CDP messages are
 //! exchanged between the DevTools frontend and V8 via the Channel.
 
-pub mod session;
+pub mod cdp_client;
 pub mod channel;
 pub mod server;
-pub mod cdp_client;
+pub mod session;
 
-pub use session::InspectorSession;
 pub use cdp_client::CdpClient;
+pub use session::InspectorSession;

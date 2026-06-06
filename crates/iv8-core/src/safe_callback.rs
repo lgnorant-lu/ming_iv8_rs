@@ -45,10 +45,9 @@ mod tests {
     #[test]
     fn catch_unwind_prevents_abort() {
         // Simulate what safe_callback! does: catch a panic
-        let result =
-            std::panic::catch_unwind(AssertUnwindSafe(|| {
-                panic!("intentional test panic");
-            }));
+        let result = std::panic::catch_unwind(AssertUnwindSafe(|| {
+            panic!("intentional test panic");
+        }));
         assert!(result.is_err(), "panic should be caught");
 
         let payload = result.unwrap_err();
@@ -58,10 +57,9 @@ mod tests {
 
     #[test]
     fn catch_unwind_non_string_payload() {
-        let result =
-            std::panic::catch_unwind(AssertUnwindSafe(|| {
-                std::panic::panic_any(42_i32);
-            }));
+        let result = std::panic::catch_unwind(AssertUnwindSafe(|| {
+            std::panic::panic_any(42_i32);
+        }));
         assert!(result.is_err());
 
         let payload = result.unwrap_err();

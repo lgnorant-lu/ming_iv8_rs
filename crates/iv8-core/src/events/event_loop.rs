@@ -2,7 +2,10 @@
 //!
 //! Microsecond precision internal clock. Timers fire when advance/sleep/tick
 //! moves the clock past their deadline.
-#![expect(clippy::expect_used, reason = "macro_tasks pop: guarded by peek() check")]
+#![expect(
+    clippy::expect_used,
+    reason = "macro_tasks pop: guarded by peek() check"
+)]
 //!
 //! IMPORTANT: The EventLoop does NOT execute callbacks directly.
 //! It only manages the queue and clock. The binding layer handles:
@@ -140,10 +143,7 @@ impl EventLoop {
     pub fn remove_timer(&mut self, id: u32) -> bool {
         let before = self.macro_tasks.len();
         let tasks: Vec<_> = self.macro_tasks.drain().collect();
-        self.macro_tasks = tasks
-            .into_iter()
-            .filter(|Reverse(t)| t.id != id)
-            .collect();
+        self.macro_tasks = tasks.into_iter().filter(|Reverse(t)| t.id != id).collect();
         // Also track as cleared (for intervals currently being executed)
         self.cleared_ids.insert(id);
         self.macro_tasks.len() < before
@@ -264,7 +264,10 @@ pub fn run_one_due_task(scope: &v8::PinScope<'_, '_>, state: &crate::state::Runt
     if let Some(task) = task {
         execute_task(scope, &task);
         if let TaskKind::Interval { period_us } = task.kind {
-            state.event_loop.borrow_mut().re_enqueue_interval(&task, period_us);
+            state
+                .event_loop
+                .borrow_mut()
+                .re_enqueue_interval(&task, period_us);
         }
     }
 }

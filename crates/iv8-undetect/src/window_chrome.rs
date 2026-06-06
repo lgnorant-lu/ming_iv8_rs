@@ -165,7 +165,9 @@ mod tests {
     fn make_kernel_with_chrome() -> EmbeddedV8Kernel {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
         // Install __iv8__ + wrapNative first
-        kernel.eval("var __iv8__ = {}", EvalOpts::default()).unwrap();
+        kernel
+            .eval("var __iv8__ = {}", EvalOpts::default())
+            .unwrap();
         let wrap_script = crate::wrap_native::get_install_script("__iv8__");
         kernel.eval(&wrap_script, EvalOpts::default()).unwrap();
         // Install window.chrome
@@ -177,13 +179,19 @@ mod tests {
     #[test]
     fn chrome_exists() {
         let mut k = make_kernel_with_chrome();
-        assert_eq!(k.eval_to_rust_value("typeof window.chrome"), RustValue::String("object".into()));
+        assert_eq!(
+            k.eval_to_rust_value("typeof window.chrome"),
+            RustValue::String("object".into())
+        );
     }
 
     #[test]
     fn chrome_runtime_exists() {
         let mut k = make_kernel_with_chrome();
-        assert_eq!(k.eval_to_rust_value("typeof chrome.runtime"), RustValue::String("object".into()));
+        assert_eq!(
+            k.eval_to_rust_value("typeof chrome.runtime"),
+            RustValue::String("object".into())
+        );
     }
 
     #[test]
@@ -239,27 +247,38 @@ mod tests {
     #[test]
     fn chrome_app_is_installed_false() {
         let mut k = make_kernel_with_chrome();
-        assert_eq!(k.eval_to_rust_value("chrome.app.isInstalled"), RustValue::Bool(false));
+        assert_eq!(
+            k.eval_to_rust_value("chrome.app.isInstalled"),
+            RustValue::Bool(false)
+        );
     }
 
     #[test]
     fn chrome_load_times_tostring_native() {
         let mut k = make_kernel_with_chrome();
         let result = k.eval_to_rust_value("chrome.loadTimes.toString()");
-        assert_eq!(result, RustValue::String("function loadTimes() { [native code] }".into()));
+        assert_eq!(
+            result,
+            RustValue::String("function loadTimes() { [native code] }".into())
+        );
     }
 
     #[test]
     fn chrome_csi_tostring_native() {
         let mut k = make_kernel_with_chrome();
         let result = k.eval_to_rust_value("chrome.csi.toString()");
-        assert_eq!(result, RustValue::String("function csi() { [native code] }".into()));
+        assert_eq!(
+            result,
+            RustValue::String("function csi() { [native code] }".into())
+        );
     }
 
     #[test]
     fn chrome_runtime_connect_no_arg_throws() {
         let mut k = make_kernel_with_chrome();
-        let err = k.eval("chrome.runtime.connect()", EvalOpts::default()).unwrap_err();
+        let err = k
+            .eval("chrome.runtime.connect()", EvalOpts::default())
+            .unwrap_err();
         match err {
             iv8_core::IV8Error::Js { name, message, .. } => {
                 assert_eq!(name, "TypeError");
@@ -272,7 +291,9 @@ mod tests {
     #[test]
     fn chrome_runtime_connect_invalid_id_throws() {
         let mut k = make_kernel_with_chrome();
-        let err = k.eval("chrome.runtime.connect('invalid')", EvalOpts::default()).unwrap_err();
+        let err = k
+            .eval("chrome.runtime.connect('invalid')", EvalOpts::default())
+            .unwrap_err();
         match err {
             iv8_core::IV8Error::Js { name, message, .. } => {
                 assert_eq!(name, "TypeError");
@@ -286,7 +307,9 @@ mod tests {
     fn chrome_runtime_connect_valid_id_returns_port() {
         let mut k = make_kernel_with_chrome();
         // 32 chars [a-p]
-        let result = k.eval_to_rust_value("typeof chrome.runtime.connect('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'.slice(0,32))");
+        let result = k.eval_to_rust_value(
+            "typeof chrome.runtime.connect('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'.slice(0,32))",
+        );
         assert_eq!(result, RustValue::String("object".into()));
     }
 }

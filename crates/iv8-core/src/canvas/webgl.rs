@@ -16,17 +16,33 @@ pub fn install_webgl_stubs(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::O
     let get_param_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_parameter).build(scope);
     let get_param_fn = crate::v8_utils::v8_fn(scope, &get_param_tmpl);
     let key = crate::v8_utils::v8_string(scope, "__webgl_getParameter__");
-    global.define_own_property(scope, key.into(), get_param_fn.into(), v8::PropertyAttribute::DONT_ENUM);
+    global.define_own_property(
+        scope,
+        key.into(),
+        get_param_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     let get_ext_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_extension).build(scope);
     let get_ext_fn = crate::v8_utils::v8_fn(scope, &get_ext_tmpl);
     let ext_key = crate::v8_utils::v8_string(scope, "__webgl_getExtension__");
-    global.define_own_property(scope, ext_key.into(), get_ext_fn.into(), v8::PropertyAttribute::DONT_ENUM);
+    global.define_own_property(
+        scope,
+        ext_key.into(),
+        get_ext_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
-    let get_supp_ext_tmpl = v8::FunctionTemplate::builder_raw(webgl_get_supported_extensions).build(scope);
+    let get_supp_ext_tmpl =
+        v8::FunctionTemplate::builder_raw(webgl_get_supported_extensions).build(scope);
     let get_supp_ext_fn = crate::v8_utils::v8_fn(scope, &get_supp_ext_tmpl);
     let supp_key = crate::v8_utils::v8_string(scope, "__webgl_getSupportedExtensions__");
-    global.define_own_property(scope, supp_key.into(), get_supp_ext_fn.into(), v8::PropertyAttribute::DONT_ENUM);
+    global.define_own_property(
+        scope,
+        supp_key.into(),
+        get_supp_ext_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 }
 
 /// JS shim that installs the WebGL context stub on HTMLCanvasElement.
@@ -339,7 +355,9 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        if args.length() < 1 { return; }
+        if args.length() < 1 {
+            return;
+        }
         let pname = args.get(0).uint32_value(scope).unwrap_or(0);
 
         let isolate: &v8::Isolate = &*scope;
@@ -349,38 +367,73 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
         // Read from environment if available, otherwise use defaults
         let vendor = env.get_str("webgl.VENDOR").unwrap_or("WebKit");
         let renderer = env.get_str("webgl.RENDERER").unwrap_or("WebKit WebGL");
-        let unmasked_vendor = env.get_str("webgl.UNMASKED_VENDOR_WEBGL").unwrap_or("Google Inc. (NVIDIA)");
-        let unmasked_renderer = env.get_str("webgl.UNMASKED_RENDERER_WEBGL")
-            .unwrap_or("ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) Direct3D11 vs_5_0 ps_5_0, D3D11)");
+        let unmasked_vendor = env
+            .get_str("webgl.UNMASKED_VENDOR_WEBGL")
+            .unwrap_or("Google Inc. (NVIDIA)");
+        let unmasked_renderer = env.get_str("webgl.UNMASKED_RENDERER_WEBGL").unwrap_or(
+            "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        );
 
         match pname {
             GL_VENDOR => {
-                if let Some(s) = v8::String::new(scope, vendor) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, vendor) {
+                    rv.set(s.into());
+                }
             }
             UNMASKED_VENDOR_WEBGL => {
-                if let Some(s) = v8::String::new(scope, unmasked_vendor) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, unmasked_vendor) {
+                    rv.set(s.into());
+                }
             }
             GL_RENDERER => {
-                if let Some(s) = v8::String::new(scope, renderer) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, renderer) {
+                    rv.set(s.into());
+                }
             }
             UNMASKED_RENDERER_WEBGL => {
-                if let Some(s) = v8::String::new(scope, unmasked_renderer) { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, unmasked_renderer) {
+                    rv.set(s.into());
+                }
             }
             GL_VERSION => {
-                if let Some(s) = v8::String::new(scope, "WebGL 1.0 (OpenGL ES 2.0 Chromium)") { rv.set(s.into()); }
+                if let Some(s) = v8::String::new(scope, "WebGL 1.0 (OpenGL ES 2.0 Chromium)") {
+                    rv.set(s.into());
+                }
             }
             GL_SHADING_LANGUAGE_VERSION => {
-                if let Some(s) = v8::String::new(scope, "WebGL GLSL ES 1.0 (OpenGL ES GLSL ES 1.0 Chromium)") { rv.set(s.into()); }
+                if let Some(s) =
+                    v8::String::new(scope, "WebGL GLSL ES 1.0 (OpenGL ES GLSL ES 1.0 Chromium)")
+                {
+                    rv.set(s.into());
+                }
             }
-            GL_MAX_TEXTURE_SIZE => { rv.set(v8::Integer::new(scope, 16384).into()); }
-            GL_MAX_RENDERBUFFER_SIZE => { rv.set(v8::Integer::new(scope, 16384).into()); }
-            GL_MAX_VERTEX_ATTRIBS => { rv.set(v8::Integer::new(scope, 16).into()); }
-            GL_MAX_VERTEX_UNIFORM_VECTORS => { rv.set(v8::Integer::new(scope, 4096).into()); }
-            GL_MAX_FRAGMENT_UNIFORM_VECTORS => { rv.set(v8::Integer::new(scope, 1024).into()); }
-            GL_MAX_VARYING_VECTORS => { rv.set(v8::Integer::new(scope, 30).into()); }
-            GL_MAX_TEXTURE_IMAGE_UNITS => { rv.set(v8::Integer::new(scope, 16).into()); }
-            GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS => { rv.set(v8::Integer::new(scope, 32).into()); }
-            GL_MAX_CUBE_MAP_TEXTURE_SIZE => { rv.set(v8::Integer::new(scope, 16384).into()); }
+            GL_MAX_TEXTURE_SIZE => {
+                rv.set(v8::Integer::new(scope, 16384).into());
+            }
+            GL_MAX_RENDERBUFFER_SIZE => {
+                rv.set(v8::Integer::new(scope, 16384).into());
+            }
+            GL_MAX_VERTEX_ATTRIBS => {
+                rv.set(v8::Integer::new(scope, 16).into());
+            }
+            GL_MAX_VERTEX_UNIFORM_VECTORS => {
+                rv.set(v8::Integer::new(scope, 4096).into());
+            }
+            GL_MAX_FRAGMENT_UNIFORM_VECTORS => {
+                rv.set(v8::Integer::new(scope, 1024).into());
+            }
+            GL_MAX_VARYING_VECTORS => {
+                rv.set(v8::Integer::new(scope, 30).into());
+            }
+            GL_MAX_TEXTURE_IMAGE_UNITS => {
+                rv.set(v8::Integer::new(scope, 16).into());
+            }
+            GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS => {
+                rv.set(v8::Integer::new(scope, 32).into());
+            }
+            GL_MAX_CUBE_MAP_TEXTURE_SIZE => {
+                rv.set(v8::Integer::new(scope, 16384).into());
+            }
             GL_MAX_VIEWPORT_DIMS | GL_ALIASED_LINE_WIDTH_RANGE | GL_ALIASED_POINT_SIZE_RANGE => {
                 // Return a Float32Array [1, max]
                 let arr = v8::Array::new(scope, 2);
@@ -415,15 +468,27 @@ unsafe extern "C" fn webgl_get_extension(info: *const v8::FunctionCallbackInfo) 
             "WEBGL_debug_renderer_info" => {
                 let obj = v8::Object::new(scope);
                 let vendor_key = crate::v8_utils::v8_string(scope, "UNMASKED_VENDOR_WEBGL");
-                obj.set(scope, vendor_key.into(), v8::Integer::new(scope, UNMASKED_VENDOR_WEBGL as i32).into());
+                obj.set(
+                    scope,
+                    vendor_key.into(),
+                    v8::Integer::new(scope, UNMASKED_VENDOR_WEBGL as i32).into(),
+                );
                 let renderer_key = crate::v8_utils::v8_string(scope, "UNMASKED_RENDERER_WEBGL");
-                obj.set(scope, renderer_key.into(), v8::Integer::new(scope, UNMASKED_RENDERER_WEBGL as i32).into());
+                obj.set(
+                    scope,
+                    renderer_key.into(),
+                    v8::Integer::new(scope, UNMASKED_RENDERER_WEBGL as i32).into(),
+                );
                 rv.set(obj.into());
             }
             "EXT_texture_filter_anisotropic" | "WEBKIT_EXT_texture_filter_anisotropic" => {
                 let obj = v8::Object::new(scope);
                 let key = crate::v8_utils::v8_string(scope, "MAX_TEXTURE_MAX_ANISOTROPY_EXT");
-                obj.set(scope, key.into(), v8::Integer::new(scope, 0x84FF_u32 as i32).into());
+                obj.set(
+                    scope,
+                    key.into(),
+                    v8::Integer::new(scope, 0x84FF_u32 as i32).into(),
+                );
                 rv.set(obj.into());
             }
             _ => {

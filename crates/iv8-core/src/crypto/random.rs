@@ -6,7 +6,6 @@
 //! Uses OS random (getrandom crate) by default.
 //! v0.2+ will support seeded PRNG for deterministic output.
 
-
 /// Install crypto.getRandomValues and crypto.randomUUID on the global `crypto` object.
 pub fn install_crypto_random(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Get or create the crypto object
@@ -57,7 +56,8 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
 
         // Must be a TypedArray (Uint8Array, Uint16Array, Uint32Array, Int8Array, etc.)
         if !arg.is_typed_array() {
-            let msg = crate::v8_utils::v8_string(scope, "getRandomValues: argument must be a TypedArray");
+            let msg =
+                crate::v8_utils::v8_string(scope, "getRandomValues: argument must be a TypedArray");
             let exc = v8::Exception::type_error(scope, msg);
             scope.throw_exception(exc);
             return;
@@ -68,7 +68,10 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
 
         // Spec limit: max 65536 bytes
         if byte_length > 65536 {
-            let msg = crate::v8_utils::v8_string(scope, "getRandomValues: quota exceeded (max 65536 bytes)");
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "getRandomValues: quota exceeded (max 65536 bytes)",
+            );
             let exc = v8::Exception::error(scope, msg);
             scope.throw_exception(exc);
             return;
@@ -108,7 +111,8 @@ unsafe extern "C" fn get_random_values_callback(info: *const v8::FunctionCallbac
         // Write into the TypedArray's backing store
         // SAFETY: guarded by is_typed_array() check above
         let Some(ab) = ta.buffer(scope) else {
-            let msg = crate::v8_utils::v8_string(scope, "getRandomValues: backing buffer unavailable");
+            let msg =
+                crate::v8_utils::v8_string(scope, "getRandomValues: backing buffer unavailable");
             scope.throw_exception(v8::Exception::type_error(scope, msg));
             return;
         };
@@ -152,7 +156,7 @@ pub fn fill_random_bytes(buf: &mut [u8]) {
 fn fill_random(buf: &mut [u8]) {
     // Use getrandom crate for cross-platform cryptographic randomness
     // This works on Windows, Linux, macOS, and other platforms
-    
+
     #[cfg(target_os = "windows")]
     {
         // On Windows, use BCryptGenRandom via the windows API
@@ -184,7 +188,9 @@ fn fill_random(buf: &mut [u8]) {
             .as_nanos() as u64;
         let mut state = seed ^ 0xdeadbeefcafe1234;
         for byte in buf.iter_mut() {
-            state = state.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+            state = state
+                .wrapping_mul(6364136223846793005)
+                .wrapping_add(1442695040888963407);
             state ^= state >> 33;
             state = state.wrapping_mul(0xff51afd7ed558ccd);
             state ^= state >> 33;

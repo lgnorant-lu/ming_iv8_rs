@@ -12,7 +12,12 @@ pub fn install_timer_globals(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8:
     install_fn(scope, global, "setInterval", set_interval);
     install_fn(scope, global, "clearTimeout", clear_timer);
     install_fn(scope, global, "clearInterval", clear_timer);
-    install_fn(scope, global, "requestAnimationFrame", request_animation_frame);
+    install_fn(
+        scope,
+        global,
+        "requestAnimationFrame",
+        request_animation_frame,
+    );
     install_fn(scope, global, "queueMicrotask", queue_microtask);
 }
 

@@ -67,7 +67,9 @@ impl EventListenerRegistry {
             if let Some(listeners) = type_map.get_mut(event_type) {
                 // Find the listener with matching callback (strict equality) and capture phase
                 let pos = listeners.iter().position(|l| {
-                    if l.capture != capture { return false; }
+                    if l.capture != capture {
+                        return false;
+                    }
                     let stored = v8::Local::new(scope, &l.callback);
                     // Use strict_equals for function identity comparison
                     stored.strict_equals(callback.into())
@@ -80,12 +82,7 @@ impl EventListenerRegistry {
     }
 
     /// Remove an event listener (legacy: removes last added for the type).
-    pub fn remove(
-        &mut self,
-        node_id: NodeId,
-        event_type: &str,
-        _capture: bool,
-    ) {
+    pub fn remove(&mut self, node_id: NodeId, event_type: &str, _capture: bool) {
         if let Some(type_map) = self.listeners.get_mut(&node_id) {
             if let Some(listeners) = type_map.get_mut(event_type) {
                 listeners.pop();
@@ -152,15 +149,21 @@ pub fn dispatch_event(
         if stopped.get() {
             break;
         }
-        invoke_listeners(scope, registry, node_id, event_type, true, event_obj, &prevented, &stopped);
+        invoke_listeners(
+            scope, registry, node_id, event_type, true, event_obj, &prevented, &stopped,
+        );
     }
 
     // Phase 2: At target
     if !stopped.get() {
         // At target, both capture and bubble listeners fire
-        invoke_listeners(scope, registry, target_id, event_type, true, event_obj, &prevented, &stopped);
+        invoke_listeners(
+            scope, registry, target_id, event_type, true, event_obj, &prevented, &stopped,
+        );
         if !stopped.get() {
-            invoke_listeners(scope, registry, target_id, event_type, false, event_obj, &prevented, &stopped);
+            invoke_listeners(
+                scope, registry, target_id, event_type, false, event_obj, &prevented, &stopped,
+            );
         }
     }
 
@@ -171,13 +174,17 @@ pub fn dispatch_event(
             if stopped.get() {
                 break;
             }
-            invoke_listeners(scope, registry, node_id, event_type, false, event_obj, &prevented, &stopped);
+            invoke_listeners(
+                scope, registry, node_id, event_type, false, event_obj, &prevented, &stopped,
+            );
         }
     }
 
     // Clean up once-listeners
     for &node_id in &path {
-        registry.borrow_mut().remove_once_listeners(node_id, event_type);
+        registry
+            .borrow_mut()
+            .remove_once_listeners(node_id, event_type);
     }
 
     !prevented.get()
@@ -222,10 +229,18 @@ fn create_event_object<'s>(
     // Install stopPropagation and preventDefault as real methods
     // These set hidden flags on the event object that the dispatch loop checks
     let stop_key = crate::v8_utils::v8_string(scope, "__stopped__");
-    obj.set(scope, stop_key.into(), v8::Boolean::new(scope, false).into());
+    obj.set(
+        scope,
+        stop_key.into(),
+        v8::Boolean::new(scope, false).into(),
+    );
 
     let prevent_key = crate::v8_utils::v8_string(scope, "__prevented__");
-    obj.set(scope, prevent_key.into(), v8::Boolean::new(scope, false).into());
+    obj.set(
+        scope,
+        prevent_key.into(),
+        v8::Boolean::new(scope, false).into(),
+    );
 
     // stopPropagation
     let sp_tmpl = v8::FunctionTemplate::builder_raw(stop_propagation_cb).build(scope);
@@ -273,7 +288,10 @@ unsafe extern "C" fn prevent_default_cb(info: *const v8::FunctionCallbackInfo) {
 }
 
 /// Invoke listeners for a specific node/phase.
-#[expect(clippy::too_many_arguments, reason = "event dispatch needs explicit bubbling state")]
+#[expect(
+    clippy::too_many_arguments,
+    reason = "event dispatch needs explicit bubbling state"
+)]
 fn invoke_listeners(
     scope: &v8::PinScope<'_, '_>,
     registry: &RefCell<EventListenerRegistry>,
@@ -288,7 +306,9 @@ fn invoke_listeners(
     let listeners = reg.get_listeners(node_id, event_type, capture_phase);
 
     for listener in listeners {
-        if stopped.get() { break; }
+        if stopped.get() {
+            break;
+        }
         let func = v8::Local::new(scope, &listener.callback);
         let undefined = v8::undefined(scope);
         func.call(scope, undefined.into(), &[event_obj.into()]);

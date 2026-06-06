@@ -126,8 +126,10 @@ fn parse_fetch_init<'s>(
                             let name = name_val.to_rust_string_lossy(scope);
                             if let Some(val) = headers_obj.get(scope, name_val) {
                                 if !val.is_undefined() && !val.is_null() {
-                                    headers
-                                        .push((name.to_lowercase(), val.to_rust_string_lossy(scope)));
+                                    headers.push((
+                                        name.to_lowercase(),
+                                        val.to_rust_string_lossy(scope),
+                                    ));
                                 }
                             }
                         }
@@ -172,7 +174,10 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
         rv.set(promise.into());
 
         if args.length() < 1 {
-            let msg = crate::v8_utils::v8_string(scope, "TypeError: Failed to execute 'fetch': 1 argument required");
+            let msg = crate::v8_utils::v8_string(
+                scope,
+                "TypeError: Failed to execute 'fetch': 1 argument required",
+            );
             let err = v8::Exception::type_error(scope, msg);
             resolver.reject(scope, err);
             return;
@@ -289,13 +294,23 @@ fn build_response_object<'s>(
     let body_str = String::from_utf8_lossy(&resource.body);
     let body_key = crate::v8_utils::v8_string(scope, "__body__");
     let body_val = crate::v8_utils::v8_string(scope, &body_str);
-    obj.define_own_property(scope, body_key.into(), body_val.into(), v8::PropertyAttribute::DONT_ENUM);
+    obj.define_own_property(
+        scope,
+        body_key.into(),
+        body_val.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     // Store raw bytes for arrayBuffer
     let store = v8::ArrayBuffer::new_backing_store_from_vec(resource.body.clone());
     let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
     let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
-    obj.define_own_property(scope, ab_key.into(), ab.into(), v8::PropertyAttribute::DONT_ENUM);
+    obj.define_own_property(
+        scope,
+        ab_key.into(),
+        ab.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     // text() → Promise<string>
     let text_tmpl = v8::FunctionTemplate::builder_raw(response_text).build(scope);
@@ -361,9 +376,12 @@ unsafe extern "C" fn headers_has_cb(info: *const v8::FunctionCallbackInfo) {
         let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
         let this = args.this();
 
-        let has = if let Some(val) = this.get(scope, crate::v8_utils::v8_string(scope, &name).into()) {
-            !val.is_undefined() && !val.is_null()
-        } else { false };
+        let has =
+            if let Some(val) = this.get(scope, crate::v8_utils::v8_string(scope, &name).into()) {
+                !val.is_undefined() && !val.is_null()
+            } else {
+                false
+            };
 
         rv.set(v8::Boolean::new(scope, has).into());
     }));
@@ -413,13 +431,20 @@ unsafe extern "C" fn response_json(info: *const v8::FunctionCallbackInfo) {
             let global = scope.get_current_context().global(scope);
             if let Some(json_obj) = global.get(scope, json_key.into()) {
                 if json_obj.is_object() {
-                    let json_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(json_obj) };
+                    let json_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(json_obj) };
                     let parse_key = crate::v8_utils::v8_string(scope, "parse");
                     if let Some(parse_fn) = json_obj.get(scope, parse_key.into()) {
                         if parse_fn.is_function() {
-                            let parse_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(parse_fn) };
+                            let parse_fn: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(parse_fn) };
                             let body_v8 = crate::v8_utils::v8_string(scope, &body_str);
-                            if let Some(parsed) = parse_fn.call(scope, json_obj.into(), &[body_v8.into()]) { resolver.resolve(scope, parsed); return; }
+                            if let Some(parsed) =
+                                parse_fn.call(scope, json_obj.into(), &[body_v8.into()])
+                            {
+                                resolver.resolve(scope, parsed);
+                                return;
+                            }
                         }
                     }
                 }

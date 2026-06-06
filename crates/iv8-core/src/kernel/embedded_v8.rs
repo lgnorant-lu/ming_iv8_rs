@@ -161,7 +161,9 @@ impl EmbeddedV8Kernel {
         // This allows multiple JSContext instances to coexist without LIFO drop panic.
         // We re-enter before each eval/operation and exit after.
         // SAFETY: isolate was entered by v8::Isolate::new, we exit it here.
-        unsafe { kernel.isolate.exit(); }
+        unsafe {
+            kernel.isolate.exit();
+        }
 
         Ok(kernel)
     }
@@ -187,12 +189,18 @@ impl EmbeddedV8Kernel {
     }
 
     /// Evaluate JS source code and return the raw V8 Global value.
-    pub fn eval(&mut self, source: &str, opts: EvalOpts) -> Result<v8::Global<v8::Value>, IV8Error> {
+    pub fn eval(
+        &mut self,
+        source: &str,
+        opts: EvalOpts,
+    ) -> Result<v8::Global<v8::Value>, IV8Error> {
         self.assert_thread();
 
         // Enter isolate for this operation
         // SAFETY: we exit at the end of this function (or on error return)
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
 
         let result = self.eval_inner(source, opts);
 
@@ -200,14 +208,19 @@ impl EmbeddedV8Kernel {
         self.isolate.perform_microtask_checkpoint();
 
         // Exit isolate after operation
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
 
         result
     }
 
     /// Inner eval implementation (isolate must already be entered).
-    fn eval_inner(&mut self, source: &str, opts: EvalOpts) -> Result<v8::Global<v8::Value>, IV8Error> {
-
+    fn eval_inner(
+        &mut self,
+        source: &str,
+        opts: EvalOpts,
+    ) -> Result<v8::Global<v8::Value>, IV8Error> {
         v8::scope!(handle_scope, &mut self.isolate);
         let context = v8::Local::new(handle_scope, &self.context);
         v8::scope_with_context!(scope, handle_scope, context);
@@ -219,9 +232,8 @@ impl EmbeddedV8Kernel {
 
         // Set up script origin if provided
         let origin = if let Some(ref url) = opts.source_url {
-            let name = v8::String::new(scope, url).unwrap_or_else(|| {
-                crate::v8_utils::v8_string(scope, "<eval>")
-            });
+            let name = v8::String::new(scope, url)
+                .unwrap_or_else(|| crate::v8_utils::v8_string(scope, "<eval>"));
             Some(v8::ScriptOrigin::new(
                 scope,
                 name.into(),
@@ -323,20 +335,22 @@ impl EmbeddedV8Kernel {
 
     /// Perform microtask checkpoint.
     pub fn drain_microtasks(&mut self) {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         self.isolate.perform_microtask_checkpoint();
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
     }
 
     /// Expose a Rust function to JS global scope.
     /// The function receives args as Vec<String> and returns Result<String, String>.
     /// (Simplified for v0.1 — M2 will add proper V8 value conversion.)
-    pub fn expose_fn(
-        &mut self,
-        name: &str,
-        callback: ExposedCallback,
-    ) {
-        unsafe { self.isolate.enter(); }
+    pub fn expose_fn(&mut self, name: &str, callback: ExposedCallback) {
+        unsafe {
+            self.isolate.enter();
+        }
         {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -344,7 +358,9 @@ impl EmbeddedV8Kernel {
             let global = context.global(scope);
             crate::expose::expose_function(scope, global, name, callback);
         }
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
     }
 
     /// Execute a closure with access to the V8 scope and global object.
@@ -354,7 +370,9 @@ impl EmbeddedV8Kernel {
     where
         F: FnOnce(&v8::PinScope<'_, '_>, v8::Local<v8::Object>) -> R,
     {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let result = {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -362,7 +380,9 @@ impl EmbeddedV8Kernel {
             let global = context.global(scope);
             f(scope, global)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 
@@ -380,7 +400,8 @@ impl EmbeddedV8Kernel {
     ) {
         // Math.random seed: xorshift128+ PRNG in JS
         if let Some(seed) = random_seed {
-            let js = format!(r#"
+            let js = format!(
+                r#"
 (function() {{
     // xorshift128+ seeded PRNG (same algorithm as V8's Math.random)
     var s0 = BigInt({seed}) | 1n;  // ensure non-zero
@@ -400,13 +421,16 @@ impl EmbeddedV8Kernel {
         return Number(combined & 0x1FFFFFFFFFFFFFn) / 9007199254740992;
     }};
 }})();
-"#, seed = seed);
+"#,
+                seed = seed
+            );
             self.eval(&js, EvalOpts::default()).ok();
         }
 
         // time_freeze: override Date.now, performance.now, new Date()
         if let Some(freeze_ms) = time_freeze {
-            let js = format!(r#"
+            let js = format!(
+                r#"
 (function() {{
     var FROZEN = {freeze_ms};
     Date.now = function now() {{ return FROZEN; }};
@@ -423,7 +447,9 @@ impl EmbeddedV8Kernel {
         performance.now = function now() {{ return 0; }};
     }}
 }})();
-"#, freeze_ms = freeze_ms as u64);
+"#,
+                freeze_ms = freeze_ms as u64
+            );
             self.eval(&js, EvalOpts::default()).ok();
         }
 
@@ -451,7 +477,9 @@ impl EmbeddedV8Kernel {
 
         // 1. Create __iv8__ tool object with MarkAsUndetectable (DontEnum)
         //    This gives [[IsHTMLDDA]] semantics: typeof === 'undefined', == null, falsy
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -460,11 +488,7 @@ impl EmbeddedV8Kernel {
 
             let templ = v8::ObjectTemplate::new(scope);
             crate::v8_extra::mark_as_undetectable(&templ);
-            crate::v8_extra::set_call_as_function_handler(
-                &templ,
-                undetectable_noop_handler,
-                None,
-            );
+            crate::v8_extra::set_call_as_function_handler(&templ, undetectable_noop_handler, None);
             let tool_obj = templ
                 .new_instance(scope)
                 .expect("failed to create undetectable __iv8__ instance");
@@ -477,22 +501,41 @@ impl EmbeddedV8Kernel {
                 v8::PropertyAttribute::DONT_ENUM,
             );
         }
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
 
         // 2. Install wrapNative shim
-        let wrap_script = format!("{}({})", include_str!("../../../iv8-undetect/src/shims/wrap_native.js"), js_api_name);
-        self.eval(&wrap_script, crate::kernel::EvalOpts::default()).ok();
+        let wrap_script = format!(
+            "{}({})",
+            include_str!("../../../iv8-undetect/src/shims/wrap_native.js"),
+            js_api_name
+        );
+        self.eval(&wrap_script, crate::kernel::EvalOpts::default())
+            .ok();
 
         // 3. Install hookNative shim
-        let hook_script = format!("{}({})", include_str!("../../../iv8-undetect/src/shims/hook_native.js"), js_api_name);
-        self.eval(&hook_script, crate::kernel::EvalOpts::default()).ok();
+        let hook_script = format!(
+            "{}({})",
+            include_str!("../../../iv8-undetect/src/shims/hook_native.js"),
+            js_api_name
+        );
+        self.eval(&hook_script, crate::kernel::EvalOpts::default())
+            .ok();
 
         // 4. Install window.chrome shim
-        let chrome_script = format!("{}({}.wrapNative)", include_str!("../../../iv8-undetect/src/shims/window_chrome.js"), js_api_name);
-        self.eval(&chrome_script, crate::kernel::EvalOpts::default()).ok();
+        let chrome_script = format!(
+            "{}({}.wrapNative)",
+            include_str!("../../../iv8-undetect/src/shims/window_chrome.js"),
+            js_api_name
+        );
+        self.eval(&chrome_script, crate::kernel::EvalOpts::default())
+            .ok();
 
         // 5. Install eventLoop API on __iv8__
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -517,54 +560,106 @@ impl EmbeddedV8Kernel {
             // Install __iv8__.input.dispatchMouseEvent/dispatchPointerEvent
             crate::events::input_sim::install_input_api(scope, global);
         }
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
 
         // 6. Install Date constructor shim (JS-level, needs __iv8_now__ to be ready)
-        self.eval(crate::events::date_interceptor::DATE_SHIM_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::events::date_interceptor::DATE_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 7. Install WebGL context shim
-        self.eval(crate::canvas::webgl::WEBGL_SHIM_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::canvas::webgl::WEBGL_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 8. Install XMLHttpRequest class shim
-        self.eval(crate::network::xhr::XHR_SHIM_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::network::xhr::XHR_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 9. Install TextEncoder/TextDecoder polyfill
-        self.eval(TEXT_ENCODER_SHIM, crate::kernel::EvalOpts::default()).ok();
+        self.eval(TEXT_ENCODER_SHIM, crate::kernel::EvalOpts::default())
+            .ok();
 
         // 10. Install Event/CustomEvent/MouseEvent/KeyboardEvent/PointerEvent constructors
-        self.eval(crate::shims::event_constructors::EVENT_CONSTRUCTORS_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::event_constructors::EVENT_CONSTRUCTORS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 11. Install getBoundingClientRect + getComputedStyle + DOMRect
-        self.eval(crate::shims::geometry::GEOMETRY_SHIM_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::geometry::GEOMETRY_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 12. Install URL + URLSearchParams
-        self.eval(crate::shims::url::URL_SHIM_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::url::URL_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 13. Install MessageChannel
-        self.eval(crate::shims::message_channel::MESSAGE_CHANNEL_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::message_channel::MESSAGE_CHANNEL_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 14. Install localStorage/sessionStorage
-        self.eval(crate::shims::storage::STORAGE_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::storage::STORAGE_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 15. Install navigator.mimeTypes/plugins/connection + history
-        self.eval(crate::shims::navigator_extras::NAVIGATOR_EXTRAS_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::navigator_extras::NAVIGATOR_EXTRAS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 16. Install Tier 1 browser API surface stubs (empty constructors for typeof checks)
         // NOTE: DOM_PROTOTYPES_JS and ELEMENT_PROTOTYPES_JS removed — the ObjectTemplate
         // refactor (dom/template.rs) now handles the full prototype chain natively.
         // HTMLDivElement, HTMLElement, etc. are installed by install_dom_templates().
-        self.eval(crate::shims::tier1_stubs::TIER1_STUBS_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::tier1_stubs::TIER1_STUBS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 16b. Browser API stubs (P0/P1: navigator properties, matchMedia, performance.now fix)
-        self.eval(crate::shims::browser_apis::BROWSER_APIS_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::browser_apis::BROWSER_APIS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 17. Install timezone shim (override Intl.DateTimeFormat default timezone)
         {
             let tz = {
                 let state = crate::state::RuntimeState::get(&self.isolate);
-                state.environment.get_str("timezone").unwrap_or("UTC").to_string()
+                state
+                    .environment
+                    .get_str("timezone")
+                    .unwrap_or("UTC")
+                    .to_string()
             };
-            let tz_shim = format!(r#"
+            let tz_shim = format!(
+                r#"
 (function() {{
     var _tz = '{}';
     if (typeof Intl !== 'undefined' && Intl.DateTimeFormat) {{
@@ -592,24 +687,39 @@ impl EmbeddedV8Kernel {
         try {{ Intl.DateTimeFormat = _wrappedDTF; }} catch(e) {{}}
     }}
 }})();
-"#, tz);
+"#,
+                tz
+            );
             self.eval(&tz_shim, crate::kernel::EvalOpts::default()).ok();
         }
 
         // 18. Install default empty document so document.* methods are always available
-        self.set_document("<!DOCTYPE html><html><head></head><body></body></html>", None);
+        self.set_document(
+            "<!DOCTYPE html><html><head></head><body></body></html>",
+            None,
+        );
 
         // 19. Install document properties (cookie, referrer, hidden, visibilityState, DOM methods)
-        self.eval(crate::shims::document_props::DOCUMENT_PROPS_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::document_props::DOCUMENT_PROPS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 20. Install Canvas2D shim (after document.createElement is available)
-        self.eval(crate::canvas::binding::CANVAS2D_SHIM_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::canvas::binding::CANVAS2D_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
     }
 
     /// Install DOM FunctionTemplate hierarchy into the isolate.
     /// Called once after kernel creation.
     pub fn install_dom_templates(&mut self) {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -626,7 +736,9 @@ impl EmbeddedV8Kernel {
             let state = crate::state::RuntimeState::get(&*scope);
             *state.dom_templates.borrow_mut() = Some(templates);
         }
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
     }
 
     /// Install environment fields into the V8 global object.
@@ -634,7 +746,9 @@ impl EmbeddedV8Kernel {
     /// Phase 1: static value injection (all 393 entries via env_inject)
     /// Phase 2: native getter override for key objects (navigator, screen)
     pub fn install_environment(&mut self) {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -647,7 +761,9 @@ impl EmbeddedV8Kernel {
             // return a native getter instead of a plain value descriptor.
             crate::shims::native_env::install_native_env(scope, global);
         }
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
     }
 
     /// Dispose the kernel (explicit cleanup before drop).
@@ -677,7 +793,11 @@ impl EmbeddedV8Kernel {
         // are now native accessors on the ObjectTemplate prototype chain (dom/template.rs).
 
         // Re-install Canvas2D shim (DOM bindings may reset HTMLCanvasElement.prototype)
-        self.eval(crate::canvas::binding::CANVAS2D_SHIM_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::canvas::binding::CANVAS2D_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
     }
 
     /// Full page.load: parse HTML, install DOM, execute inline <script> tags,
@@ -696,9 +816,16 @@ impl EmbeddedV8Kernel {
             .iter()
             .map(|&nid| {
                 let inline = doc.text_content_of(nid);
-                let src = doc.get(nid).and_then(|n| n.value().get_attr("src")).map(|s| s.to_string());
+                let src = doc
+                    .get(nid)
+                    .and_then(|n| n.value().get_attr("src"))
+                    .map(|s| s.to_string());
                 ScriptInfo {
-                    inline: if inline.is_empty() { None } else { Some(inline) },
+                    inline: if inline.is_empty() {
+                        None
+                    } else {
+                        Some(inline)
+                    },
                     src,
                 }
             })
@@ -717,19 +844,29 @@ impl EmbeddedV8Kernel {
         });
 
         // 4b. Re-install Canvas2D shim (DOM bindings may have reset HTMLCanvasElement.prototype)
-        self.eval(crate::canvas::binding::CANVAS2D_SHIM_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::canvas::binding::CANVAS2D_SHIM_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 4c. Install document.write workaround shim
-        self.eval(DOCUMENT_WRITE_SHIM, crate::kernel::EvalOpts::default()).ok();
+        self.eval(DOCUMENT_WRITE_SHIM, crate::kernel::EvalOpts::default())
+            .ok();
 
         // 4d. Re-install document properties (readyState, cookie, etc.)
         // These are reset when install_document_bindings creates a new document object
-        self.eval(crate::shims::document_props::DOCUMENT_PROPS_JS, crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            crate::shims::document_props::DOCUMENT_PROPS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 4e. Update location.href if base_url is provided
         if let Some(url) = base_url {
             let url_literal = serde_json::to_string(url).unwrap_or_else(|_| "\"\"".to_string());
-            let update_location = format!(r#"
+            let update_location = format!(
+                r#"
 (function() {{
     try {{
         var u = new URL({url});
@@ -746,8 +883,11 @@ impl EmbeddedV8Kernel {
         location.href = {url};
     }}
 }})();
-"#, url = url_literal);
-            self.eval(&update_location, crate::kernel::EvalOpts::default()).ok();
+"#,
+                url = url_literal
+            );
+            self.eval(&update_location, crate::kernel::EvalOpts::default())
+                .ok();
         }
 
         // 5. Execute scripts in order (inline first, then external)
@@ -760,7 +900,10 @@ impl EmbeddedV8Kernel {
                 } else if let Some(base) = base_url {
                     // Simple URL resolution: join base + src
                     if let Ok(base_url_parsed) = url::Url::parse(base) {
-                        base_url_parsed.join(src).map(|u| u.to_string()).unwrap_or_else(|_| src.clone())
+                        base_url_parsed
+                            .join(src)
+                            .map(|u| u.to_string())
+                            .unwrap_or_else(|_| src.clone())
                     } else {
                         src.clone()
                     }
@@ -772,7 +915,9 @@ impl EmbeddedV8Kernel {
                 let script_src = {
                     let state = RuntimeState::get(&self.isolate);
                     let bundle = state.resource_bundle.borrow();
-                    bundle.get(&resolved_url).map(|r| String::from_utf8_lossy(&r.body).to_string())
+                    bundle
+                        .get(&resolved_url)
+                        .map(|r| String::from_utf8_lossy(&r.body).to_string())
                 };
 
                 if let Some(src_code) = script_src {
@@ -809,7 +954,11 @@ impl EmbeddedV8Kernel {
             }
         }
         // Update JS-side readyState
-        self.eval("try { document.readyState = 'interactive'; } catch(e) {}", crate::kernel::EvalOpts::default()).ok();
+        self.eval(
+            "try { document.readyState = 'interactive'; } catch(e) {}",
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 7. Fire DOMContentLoaded on document (simplified: dispatch on root)
         // In v0.1, we just advance the event loop slightly to process any pending microtasks
@@ -863,11 +1012,13 @@ impl EmbeddedV8Kernel {
 
         // Initialize inspector: create V8Inspector + session
         // Must be done with isolate entered but without an active scope
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
 
         // Step 1: Create inspector (needs &mut Isolate, no scope)
         let client = v8::inspector::V8InspectorClient::new(Box::new(
-            crate::inspector::session::InspectorClientImpl::new(session.channel_state.clone())
+            crate::inspector::session::InspectorClientImpl::new(session.channel_state.clone()),
         ));
         let inspector = v8::inspector::V8Inspector::create(&mut self.isolate, client);
 
@@ -882,7 +1033,7 @@ impl EmbeddedV8Kernel {
 
         // Step 3: Create session channel + session
         let channel = v8::inspector::Channel::new(Box::new(
-            crate::inspector::session::InspectorChannelImpl::new(session.channel_state.clone())
+            crate::inspector::session::InspectorChannelImpl::new(session.channel_state.clone()),
         ));
         let state_str = v8::inspector::StringView::from(b"{}" as &[u8]);
         let v8_session = inspector.connect(
@@ -894,17 +1045,21 @@ impl EmbeddedV8Kernel {
 
         session.set_inspector(inspector, v8_session);
 
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
 
         let devtools_url = session.devtools_url.clone();
 
         // Install vdebugger
         let vdebugger_js = crate::inspector::session::InspectorSession::vdebugger_js().to_string();
-        self.eval(&vdebugger_js, crate::kernel::EvalOpts::default()).ok();
+        self.eval(&vdebugger_js, crate::kernel::EvalOpts::default())
+            .ok();
 
         // Install watch_apis
         if let Some(watch_js) = session.watch_apis_js() {
-            self.eval(&watch_js, crate::kernel::EvalOpts::default()).ok();
+            self.eval(&watch_js, crate::kernel::EvalOpts::default())
+                .ok();
         }
 
         // Store session in RuntimeState
@@ -951,9 +1106,13 @@ impl EmbeddedV8Kernel {
         condition: Option<&str>,
     ) -> Result<String, String> {
         // V8 Inspector requires the isolate to be entered.
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let result = self.cdp_set_breakpoint_inner(url, line, column, condition);
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 
@@ -966,11 +1125,13 @@ impl EmbeddedV8Kernel {
     ) -> Result<String, String> {
         let state = RuntimeState::get(&self.isolate);
         let session_guard = state.inspector_session.borrow();
-        let session = session_guard.as_ref()
+        let session = session_guard
+            .as_ref()
             .and_then(|s| s.session_ref())
             .ok_or_else(|| "Inspector not started. Call with_devtools() first.".to_string())?;
         let mut cdp = state.cdp_client.borrow_mut();
-        let cdp = cdp.as_mut()
+        let cdp = cdp
+            .as_mut()
             .ok_or_else(|| "CDP client not initialized.".to_string())?;
         cdp.ensure_debugger_enabled(session);
         cdp.set_breakpoint_by_url(session, url, line, column, condition)
@@ -978,18 +1139,23 @@ impl EmbeddedV8Kernel {
 
     /// Remove a breakpoint by id.
     pub fn cdp_remove_breakpoint(&mut self, breakpoint_id: &str) -> Result<(), String> {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let result = {
             let state = RuntimeState::get(&self.isolate);
             let session_guard = state.inspector_session.borrow();
-            let session = session_guard.as_ref()
+            let session = session_guard
+                .as_ref()
                 .and_then(|s| s.session_ref())
                 .ok_or_else(|| "Inspector not started.".to_string())?;
             let cdp = state.cdp_client.borrow();
             let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
             cdp.remove_breakpoint(session, breakpoint_id)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 
@@ -999,69 +1165,89 @@ impl EmbeddedV8Kernel {
         call_frame_id: &str,
         expression: &str,
     ) -> Result<serde_json::Value, String> {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let result = {
             let state = RuntimeState::get(&self.isolate);
             let session_guard = state.inspector_session.borrow();
-            let session = session_guard.as_ref()
+            let session = session_guard
+                .as_ref()
                 .and_then(|s| s.session_ref())
                 .ok_or_else(|| "Inspector not started.".to_string())?;
             let cdp = state.cdp_client.borrow();
             let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
             cdp.evaluate_on_call_frame(session, call_frame_id, expression)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 
     /// Resume execution (after pause).
     pub fn cdp_resume(&mut self) -> Result<(), String> {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let result = {
             let state = RuntimeState::get(&self.isolate);
             let session_guard = state.inspector_session.borrow();
-            let session = session_guard.as_ref()
+            let session = session_guard
+                .as_ref()
                 .and_then(|s| s.session_ref())
                 .ok_or_else(|| "Inspector not started.".to_string())?;
             let cdp = state.cdp_client.borrow();
             let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
             cdp.resume(session)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 
     /// Step over (after pause).
     pub fn cdp_step_over(&mut self) -> Result<(), String> {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let result = {
             let state = RuntimeState::get(&self.isolate);
             let session_guard = state.inspector_session.borrow();
-            let session = session_guard.as_ref()
+            let session = session_guard
+                .as_ref()
                 .and_then(|s| s.session_ref())
                 .ok_or_else(|| "Inspector not started.".to_string())?;
             let cdp = state.cdp_client.borrow();
             let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
             cdp.step_over(session)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 
     /// Step into (after pause).
     pub fn cdp_step_into(&mut self) -> Result<(), String> {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let result = {
             let state = RuntimeState::get(&self.isolate);
             let session_guard = state.inspector_session.borrow();
-            let session = session_guard.as_ref()
+            let session = session_guard
+                .as_ref()
                 .and_then(|s| s.session_ref())
                 .ok_or_else(|| "Inspector not started.".to_string())?;
             let cdp = state.cdp_client.borrow();
             let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
             cdp.step_into(session)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 
@@ -1078,18 +1264,23 @@ impl EmbeddedV8Kernel {
         object_id: &str,
         own_properties: bool,
     ) -> Result<serde_json::Value, String> {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let result = {
             let state = RuntimeState::get(&self.isolate);
             let session_guard = state.inspector_session.borrow();
-            let session = session_guard.as_ref()
+            let session = session_guard
+                .as_ref()
                 .and_then(|s| s.session_ref())
                 .ok_or_else(|| "Inspector not started.".to_string())?;
             let mut cdp = state.cdp_client.borrow_mut();
             let cdp = cdp.as_mut().ok_or("CDP client not initialized.")?;
             cdp.get_properties(session, object_id, own_properties)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 
@@ -1120,12 +1311,18 @@ impl EmbeddedV8Kernel {
     /// Eval and if the result is a Promise, await it by draining the event loop.
     /// Returns the resolved value. Rejections become IV8Error::Js and timeouts
     /// become IV8Error::Terminated.
-    pub fn eval_await(&mut self, source: &str, max_ticks: u32) -> Result<v8::Global<v8::Value>, crate::error::IV8Error> {
+    pub fn eval_await(
+        &mut self,
+        source: &str,
+        max_ticks: u32,
+    ) -> Result<v8::Global<v8::Value>, crate::error::IV8Error> {
         let global = self.eval(source, crate::kernel::EvalOpts::default())?;
 
         // Check if result is a Promise
         let is_promise = {
-            unsafe { self.isolate.enter(); }
+            unsafe {
+                self.isolate.enter();
+            }
             let result = {
                 v8::scope!(handle_scope, &mut self.isolate);
                 let context = v8::Local::new(handle_scope, &self.context);
@@ -1133,7 +1330,9 @@ impl EmbeddedV8Kernel {
                 let local = v8::Local::new(scope, &global);
                 local.is_promise()
             };
-            unsafe { self.isolate.exit(); }
+            unsafe {
+                self.isolate.exit();
+            }
             result
         };
 
@@ -1168,7 +1367,9 @@ impl EmbeddedV8Kernel {
 })
 "#;
 
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         let tracker = {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -1181,10 +1382,14 @@ impl EmbeddedV8Kernel {
             let fn_val = script.run(tc).expect("run");
             let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(fn_val) };
             let undefined = v8::undefined(tc);
-            let tracker = func.call(tc, undefined.into(), &[promise_local]).expect("call");
+            let tracker = func
+                .call(tc, undefined.into(), &[promise_local])
+                .expect("call");
             v8::Global::new(tc, tracker)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
 
         // Drain microtasks + macrotasks until settled or max_ticks
         for _ in 0..max_ticks {
@@ -1192,43 +1397,59 @@ impl EmbeddedV8Kernel {
 
             // Check settlement status
             let status = {
-                unsafe { self.isolate.enter(); }
+                unsafe {
+                    self.isolate.enter();
+                }
                 let result = {
                     v8::scope!(handle_scope, &mut self.isolate);
                     let context = v8::Local::new(handle_scope, &self.context);
                     v8::scope_with_context!(scope, handle_scope, context);
                     v8::tc_scope!(tc, scope);
                     let tracker_local = v8::Local::new(tc, &tracker);
-                    let tracker_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(tracker_local) };
+                    let tracker_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(tracker_local) };
                     let status_key = crate::v8_utils::v8_string(tc, "status");
                     if let Some(status_fn) = tracker_obj.get(tc, status_key.into()) {
                         if status_fn.is_function() {
-                            let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(status_fn) };
+                            let func: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(status_fn) };
                             let undefined = v8::undefined(tc);
                             if let Some(result) = func.call(tc, undefined.into(), &[]) {
                                 result.to_rust_string_lossy(tc)
-                            } else { "pending".to_string() }
-                        } else { "pending".to_string() }
-                    } else { "pending".to_string() }
+                            } else {
+                                "pending".to_string()
+                            }
+                        } else {
+                            "pending".to_string()
+                        }
+                    } else {
+                        "pending".to_string()
+                    }
                 };
-                unsafe { self.isolate.exit(); }
+                unsafe {
+                    self.isolate.exit();
+                }
                 result
             };
 
             if status == "fulfilled" {
                 // Extract the result
-                unsafe { self.isolate.enter(); }
+                unsafe {
+                    self.isolate.enter();
+                }
                 let result = {
                     v8::scope!(handle_scope, &mut self.isolate);
                     let context = v8::Local::new(handle_scope, &self.context);
                     v8::scope_with_context!(scope, handle_scope, context);
                     v8::tc_scope!(tc, scope);
                     let tracker_local = v8::Local::new(tc, &tracker);
-                    let tracker_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(tracker_local) };
+                    let tracker_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(tracker_local) };
                     let result_key = crate::v8_utils::v8_string(tc, "result");
                     if let Some(result_fn) = tracker_obj.get(tc, result_key.into()) {
                         if result_fn.is_function() {
-                            let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(result_fn) };
+                            let func: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(result_fn) };
                             let undefined = v8::undefined(tc);
                             if let Some(val) = func.call(tc, undefined.into(), &[]) {
                                 v8::Global::new(tc, val)
@@ -1245,17 +1466,22 @@ impl EmbeddedV8Kernel {
                         v8::Global::new(tc, undef)
                     }
                 };
-                unsafe { self.isolate.exit(); }
+                unsafe {
+                    self.isolate.exit();
+                }
                 return Ok(result);
             } else if status == "rejected" {
-                unsafe { self.isolate.enter(); }
+                unsafe {
+                    self.isolate.enter();
+                }
                 let (name, message, stack) = {
                     v8::scope!(handle_scope, &mut self.isolate);
                     let context = v8::Local::new(handle_scope, &self.context);
                     v8::scope_with_context!(scope, handle_scope, context);
                     v8::tc_scope!(tc, scope);
                     let tracker_local = v8::Local::new(tc, &tracker);
-                    let tracker_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(tracker_local) };
+                    let tracker_obj: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(tracker_local) };
                     fn call_tracker_string<'s>(
                         tc: &mut v8::PinScope<'s, '_>,
                         tracker_obj: v8::Local<'s, v8::Object>,
@@ -1264,7 +1490,8 @@ impl EmbeddedV8Kernel {
                         let key = crate::v8_utils::v8_string(tc, key);
                         if let Some(value) = tracker_obj.get(tc, key.into()) {
                             if value.is_function() {
-                                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(value) };
+                                let func: v8::Local<v8::Function> =
+                                    unsafe { v8::Local::cast_unchecked(value) };
                                 let undefined = v8::undefined(tc);
                                 if let Some(result) = func.call(tc, undefined.into(), &[]) {
                                     return result.to_rust_string_lossy(tc);
@@ -1279,9 +1506,15 @@ impl EmbeddedV8Kernel {
                         call_tracker_string(tc, tracker_obj, "errorStack"),
                     )
                 };
-                unsafe { self.isolate.exit(); }
+                unsafe {
+                    self.isolate.exit();
+                }
                 return Err(crate::error::IV8Error::Js {
-                    name: if name.is_empty() { "Error".to_string() } else { name },
+                    name: if name.is_empty() {
+                        "Error".to_string()
+                    } else {
+                        name
+                    },
                     message,
                     stack,
                     value: None,
@@ -1289,15 +1522,23 @@ impl EmbeddedV8Kernel {
             }
 
             // Advance event loop by one tick to process pending timers
-            let _ = self.eval("__iv8__.eventLoop.tick()", crate::kernel::EvalOpts::default());
+            let _ = self.eval(
+                "__iv8__.eventLoop.tick()",
+                crate::kernel::EvalOpts::default(),
+            );
         }
 
         Err(crate::error::IV8Error::Terminated)
     }
 
     /// Convert a V8 Global<Value> to RustValue using this kernel's context.
-    pub fn global_to_rust_value(&mut self, global: &v8::Global<v8::Value>) -> crate::convert::RustValue {
-        unsafe { self.isolate.enter(); }
+    pub fn global_to_rust_value(
+        &mut self,
+        global: &v8::Global<v8::Value>,
+    ) -> crate::convert::RustValue {
+        unsafe {
+            self.isolate.enter();
+        }
         let result = {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -1306,7 +1547,9 @@ impl EmbeddedV8Kernel {
             let local = v8::Local::new(tc, global);
             crate::convert::v8_to_rust_impl(tc, local, 0)
         };
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
         result
     }
 }
@@ -1315,7 +1558,9 @@ impl Drop for EmbeddedV8Kernel {
     fn drop(&mut self) {
         // Re-enter the isolate before drop — OwnedIsolate expects to be entered
         // SAFETY: we exited after new(), now re-enter for proper cleanup
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         // OwnedIsolate::drop will exit and dispose
     }
 }

@@ -9,7 +9,7 @@
 //! - ctx.cdp_step_over() / step_into() / step_out() / resume()
 //! - ctx.cdp_get_call_frames()
 
-use crate::inspector::channel::{InspectorMessage, SharedChannelState, lock_channel_state};
+use crate::inspector::channel::{lock_channel_state, InspectorMessage, SharedChannelState};
 use std::sync::atomic::{AtomicU32, Ordering};
 
 /// A programmatic CDP client that talks directly to V8 Inspector.
@@ -36,10 +36,7 @@ impl CdpClient {
     }
 
     /// Ensure Debugger domain is enabled. Idempotent.
-    pub fn ensure_debugger_enabled(
-        &mut self,
-        session: &v8::inspector::V8InspectorSession,
-    ) {
+    pub fn ensure_debugger_enabled(&mut self, session: &v8::inspector::V8InspectorSession) {
         if self.debugger_enabled {
             return;
         }
@@ -105,11 +102,11 @@ impl CdpClient {
         drop(state);
 
         match found_response {
-            Some(json_str) => {
-                serde_json::from_str(&json_str)
-                    .map_err(|e| format!("Failed to parse CDP response: {e}"))
-            }
-            None => Err(format!("No response received for CDP message id={target_id}")),
+            Some(json_str) => serde_json::from_str(&json_str)
+                .map_err(|e| format!("Failed to parse CDP response: {e}")),
+            None => Err(format!(
+                "No response received for CDP message id={target_id}"
+            )),
         }
     }
 
@@ -125,13 +122,17 @@ impl CdpClient {
             match &msg {
                 InspectorMessage::Notification { message } => {
                     if let Ok(parsed) = serde_json::from_str::<serde_json::Value>(message) {
-                        if parsed.get("method").and_then(|m| m.as_str()) == Some("Debugger.paused") {
-                            self.last_paused_frames = parsed.get("params")
+                        if parsed.get("method").and_then(|m| m.as_str()) == Some("Debugger.paused")
+                        {
+                            self.last_paused_frames = parsed
+                                .get("params")
                                 .and_then(|p| p.get("callFrames"))
                                 .cloned();
                             self.is_paused = true;
                             paused = true;
-                        } else if parsed.get("method").and_then(|m| m.as_str()) == Some("Debugger.resumed") {
+                        } else if parsed.get("method").and_then(|m| m.as_str())
+                            == Some("Debugger.resumed")
+                        {
                             self.is_paused = false;
                             self.last_paused_frames = None;
                         }
@@ -209,37 +210,25 @@ impl CdpClient {
     }
 
     /// Resume execution.
-    pub fn resume(
-        &self,
-        session: &v8::inspector::V8InspectorSession,
-    ) -> Result<(), String> {
+    pub fn resume(&self, session: &v8::inspector::V8InspectorSession) -> Result<(), String> {
         self.send_and_wait(session, "Debugger.resume", serde_json::json!({}))?;
         Ok(())
     }
 
     /// Step over.
-    pub fn step_over(
-        &self,
-        session: &v8::inspector::V8InspectorSession,
-    ) -> Result<(), String> {
+    pub fn step_over(&self, session: &v8::inspector::V8InspectorSession) -> Result<(), String> {
         self.send_and_wait(session, "Debugger.stepOver", serde_json::json!({}))?;
         Ok(())
     }
 
     /// Step into.
-    pub fn step_into(
-        &self,
-        session: &v8::inspector::V8InspectorSession,
-    ) -> Result<(), String> {
+    pub fn step_into(&self, session: &v8::inspector::V8InspectorSession) -> Result<(), String> {
         self.send_and_wait(session, "Debugger.stepInto", serde_json::json!({}))?;
         Ok(())
     }
 
     /// Step out.
-    pub fn step_out(
-        &self,
-        session: &v8::inspector::V8InspectorSession,
-    ) -> Result<(), String> {
+    pub fn step_out(&self, session: &v8::inspector::V8InspectorSession) -> Result<(), String> {
         self.send_and_wait(session, "Debugger.stepOut", serde_json::json!({}))?;
         Ok(())
     }

@@ -1,9 +1,9 @@
-pub mod types;
-pub mod policy;
-pub mod classification;
-pub mod planner;
-pub mod executor;
-pub mod webpack;
-pub mod hooks;
-pub mod dispatch;
 pub mod ast;
+pub mod classification;
+pub mod dispatch;
+pub mod executor;
+pub mod hooks;
+pub mod planner;
+pub mod policy;
+pub mod types;
+pub mod webpack;

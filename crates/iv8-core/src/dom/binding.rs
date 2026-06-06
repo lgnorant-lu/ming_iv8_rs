@@ -59,8 +59,18 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     install_method(scope, doc_obj, "getElementById", get_element_by_id);
     install_method(scope, doc_obj, "querySelector", query_selector);
     install_method(scope, doc_obj, "querySelectorAll", query_selector_all);
-    install_method(scope, doc_obj, "getElementsByTagName", get_elements_by_tag_name);
-    install_method(scope, doc_obj, "getElementsByClassName", get_elements_by_class_name);
+    install_method(
+        scope,
+        doc_obj,
+        "getElementsByTagName",
+        get_elements_by_tag_name,
+    );
+    install_method(
+        scope,
+        doc_obj,
+        "getElementsByClassName",
+        get_elements_by_class_name,
+    );
     install_method(scope, doc_obj, "createElement", create_element);
 
     // EventTarget methods on document (v0.2: L-03 fix).
@@ -69,8 +79,18 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     // document because Document inherits from EventTarget. v0.1 had stub
     // versions installed via document_props.js that did nothing. v0.2 wires
     // them to the EventListenerRegistry using the DOM tree's root NodeId.
-    install_method(scope, doc_obj, "addEventListener", add_event_listener_callback);
-    install_method(scope, doc_obj, "removeEventListener", remove_event_listener_callback);
+    install_method(
+        scope,
+        doc_obj,
+        "addEventListener",
+        add_event_listener_callback,
+    );
+    install_method(
+        scope,
+        doc_obj,
+        "removeEventListener",
+        remove_event_listener_callback,
+    );
     install_method(scope, doc_obj, "dispatchEvent", dispatch_event_callback);
 
     // Install document.documentElement / document.body / document.head as accessors
@@ -94,11 +114,7 @@ pub fn install_document_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local
     // skip silently — the binding will be redone when set_document/page_load runs.
     let isolate: &v8::Isolate = scope;
     let state = RuntimeState::get(isolate);
-    let root_id_opt = state
-        .document
-        .borrow()
-        .as_ref()
-        .map(|doc| doc.root_id());
+    let root_id_opt = state.document.borrow().as_ref().map(|doc| doc.root_id());
     if let Some(root_id) = root_id_opt {
         let id_key = crate::v8_utils::v8_string(scope, "__nodeId__");
         let nz: std::num::NonZeroUsize = unsafe { std::mem::transmute(root_id) };
@@ -144,9 +160,14 @@ fn install_doc_accessor(
             let def_prop_key = crate::v8_utils::v8_string(scope, "defineProperty");
             if let Some(def_prop) = obj_ctor.get(scope, def_prop_key.into()) {
                 if def_prop.is_function() {
-                    let def_prop_fn: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(def_prop) };
+                    let def_prop_fn: v8::Local<v8::Function> =
+                        unsafe { v8::Local::cast_unchecked(def_prop) };
                     let undefined = v8::undefined(scope);
-                    def_prop_fn.call(scope, undefined.into(), &[obj.into(), name_str.into(), desc.into()]);
+                    def_prop_fn.call(
+                        scope,
+                        undefined.into(),
+                        &[obj.into(), name_str.into(), desc.into()],
+                    );
                 }
             }
         }
@@ -232,7 +253,10 @@ unsafe extern "C" fn doc_title(info: *const v8::FunctionCallbackInfo) {
             if let Some(ref doc) = *doc {
                 // Find <title> element and get its text content
                 let titles = doc.get_elements_by_tag_name("title");
-                titles.first().map(|&nid| doc.text_content_of(nid)).unwrap_or_default()
+                titles
+                    .first()
+                    .map(|&nid| doc.text_content_of(nid))
+                    .unwrap_or_default()
             } else {
                 String::new()
             }
@@ -253,11 +277,17 @@ unsafe extern "C" fn doc_url(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         // Read location.href from the global
         let global = scope.get_current_context().global(scope);
-        let loc_key = match v8::String::new(scope, "location") { Some(k) => k, None => return };
+        let loc_key = match v8::String::new(scope, "location") {
+            Some(k) => k,
+            None => return,
+        };
         if let Some(loc_val) = global.get(scope, loc_key.into()) {
             if loc_val.is_object() && !loc_val.is_null_or_undefined() {
                 let loc_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(loc_val) };
-                let href_key = match v8::String::new(scope, "href") { Some(k) => k, None => return };
+                let href_key = match v8::String::new(scope, "href") {
+                    Some(k) => k,
+                    None => return,
+                };
                 if let Some(href_val) = loc_obj.get(scope, href_key.into()) {
                     rv.set(href_val);
                     return;
@@ -276,7 +306,10 @@ unsafe extern "C" fn doc_location(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let global = scope.get_current_context().global(scope);
-        let loc_key = match v8::String::new(scope, "location") { Some(k) => k, None => return };
+        let loc_key = match v8::String::new(scope, "location") {
+            Some(k) => k,
+            None => return,
+        };
         if let Some(loc_val) = global.get(scope, loc_key.into()) {
             rv.set(loc_val);
         }
@@ -357,7 +390,13 @@ fn node_to_v8_object_plain<'s>(
     obj.set(scope, node_name_key.into(), node_name_val.into());
 
     match data {
-        NodeData::Element { tag_name, attrs, id, classes, .. } => {
+        NodeData::Element {
+            tag_name,
+            attrs,
+            id,
+            classes,
+            ..
+        } => {
             // tagName (uppercase for HTML)
             let tag_key = crate::v8_utils::v8_string(scope, "tagName");
             let tag_val = crate::v8_utils::v8_string(scope, &tag_name.to_ascii_uppercase());
@@ -384,7 +423,8 @@ fn node_to_v8_object_plain<'s>(
             // For simplicity, store attrs as a hidden property and provide getAttribute
             let attrs_obj = v8::Object::new(scope);
             for (k, v) in attrs {
-                if let (Some(ak), Some(av)) = (v8::String::new(scope, k), v8::String::new(scope, v)) {
+                if let (Some(ak), Some(av)) = (v8::String::new(scope, k), v8::String::new(scope, v))
+                {
                     attrs_obj.set(scope, ak.into(), av.into());
                 }
             }
@@ -392,25 +432,29 @@ fn node_to_v8_object_plain<'s>(
             obj.set(scope, attrs_key.into(), attrs_obj.into());
 
             // Install getAttribute as a native function
-            let get_attr_tmpl = v8::FunctionTemplate::builder_raw(get_attribute_callback).build(scope);
+            let get_attr_tmpl =
+                v8::FunctionTemplate::builder_raw(get_attribute_callback).build(scope);
             let get_attr_fn = crate::v8_utils::v8_fn(scope, &get_attr_tmpl);
             let get_attr_key = crate::v8_utils::v8_string(scope, "getAttribute");
             obj.set(scope, get_attr_key.into(), get_attr_fn.into());
 
             // Install setAttribute
-            let set_attr_tmpl = v8::FunctionTemplate::builder_raw(set_attribute_callback).build(scope);
+            let set_attr_tmpl =
+                v8::FunctionTemplate::builder_raw(set_attribute_callback).build(scope);
             let set_attr_fn = crate::v8_utils::v8_fn(scope, &set_attr_tmpl);
             let set_attr_key = crate::v8_utils::v8_string(scope, "setAttribute");
             obj.set(scope, set_attr_key.into(), set_attr_fn.into());
 
             // Install removeAttribute
-            let rm_attr_tmpl = v8::FunctionTemplate::builder_raw(remove_attribute_callback).build(scope);
+            let rm_attr_tmpl =
+                v8::FunctionTemplate::builder_raw(remove_attribute_callback).build(scope);
             let rm_attr_fn = crate::v8_utils::v8_fn(scope, &rm_attr_tmpl);
             let rm_attr_key = crate::v8_utils::v8_string(scope, "removeAttribute");
             obj.set(scope, rm_attr_key.into(), rm_attr_fn.into());
 
             // Install hasAttribute
-            let has_attr_tmpl = v8::FunctionTemplate::builder_raw(has_attribute_callback).build(scope);
+            let has_attr_tmpl =
+                v8::FunctionTemplate::builder_raw(has_attribute_callback).build(scope);
             let has_attr_fn = crate::v8_utils::v8_fn(scope, &has_attr_tmpl);
             let has_attr_key = crate::v8_utils::v8_string(scope, "hasAttribute");
             obj.set(scope, has_attr_key.into(), has_attr_fn.into());
@@ -428,7 +472,8 @@ fn node_to_v8_object_plain<'s>(
             obj.set(scope, remove_key.into(), remove_fn.into());
 
             // Install replaceChild
-            let replace_tmpl = v8::FunctionTemplate::builder_raw(replace_child_callback).build(scope);
+            let replace_tmpl =
+                v8::FunctionTemplate::builder_raw(replace_child_callback).build(scope);
             let replace_fn = crate::v8_utils::v8_fn(scope, &replace_tmpl);
             let replace_key = crate::v8_utils::v8_string(scope, "replaceChild");
             obj.set(scope, replace_key.into(), replace_fn.into());
@@ -440,13 +485,15 @@ fn node_to_v8_object_plain<'s>(
             obj.set(scope, ib_key.into(), ib_fn.into());
 
             // Install addEventListener
-            let ael_tmpl = v8::FunctionTemplate::builder_raw(add_event_listener_callback).build(scope);
+            let ael_tmpl =
+                v8::FunctionTemplate::builder_raw(add_event_listener_callback).build(scope);
             let ael_fn = crate::v8_utils::v8_fn(scope, &ael_tmpl);
             let ael_key = crate::v8_utils::v8_string(scope, "addEventListener");
             obj.set(scope, ael_key.into(), ael_fn.into());
 
             // Install removeEventListener
-            let rel_tmpl = v8::FunctionTemplate::builder_raw(remove_event_listener_callback).build(scope);
+            let rel_tmpl =
+                v8::FunctionTemplate::builder_raw(remove_event_listener_callback).build(scope);
             let rel_fn = crate::v8_utils::v8_fn(scope, &rel_tmpl);
             let rel_key = crate::v8_utils::v8_string(scope, "removeEventListener");
             obj.set(scope, rel_key.into(), rel_fn.into());
@@ -458,31 +505,36 @@ fn node_to_v8_object_plain<'s>(
             obj.set(scope, de_key.into(), de_fn.into());
 
             // Install innerHTML getter (as a method for now — proper getter needs accessor)
-            let ih_tmpl = v8::FunctionTemplate::builder_raw(inner_html_getter_callback).build(scope);
+            let ih_tmpl =
+                v8::FunctionTemplate::builder_raw(inner_html_getter_callback).build(scope);
             let ih_fn = crate::v8_utils::v8_fn(scope, &ih_tmpl);
             let ih_key = crate::v8_utils::v8_string(scope, "__getInnerHTML__");
             obj.set(scope, ih_key.into(), ih_fn.into());
 
             // Install innerHTML setter
-            let ihs_tmpl = v8::FunctionTemplate::builder_raw(inner_html_setter_callback).build(scope);
+            let ihs_tmpl =
+                v8::FunctionTemplate::builder_raw(inner_html_setter_callback).build(scope);
             let ihs_fn = crate::v8_utils::v8_fn(scope, &ihs_tmpl);
             let ihs_key = crate::v8_utils::v8_string(scope, "__setInnerHTML__");
             obj.set(scope, ihs_key.into(), ihs_fn.into());
 
             // Install insertAdjacentHTML
-            let iah_tmpl = v8::FunctionTemplate::builder_raw(insert_adjacent_html_callback).build(scope);
+            let iah_tmpl =
+                v8::FunctionTemplate::builder_raw(insert_adjacent_html_callback).build(scope);
             let iah_fn = crate::v8_utils::v8_fn(scope, &iah_tmpl);
             let iah_key = crate::v8_utils::v8_string(scope, "insertAdjacentHTML");
             obj.set(scope, iah_key.into(), iah_fn.into());
 
             // Install outerHTML getter
-            let oh_tmpl = v8::FunctionTemplate::builder_raw(outer_html_getter_callback).build(scope);
+            let oh_tmpl =
+                v8::FunctionTemplate::builder_raw(outer_html_getter_callback).build(scope);
             let oh_fn = crate::v8_utils::v8_fn(scope, &oh_tmpl);
             let oh_key = crate::v8_utils::v8_string(scope, "__getOuterHTML__");
             obj.set(scope, oh_key.into(), oh_fn.into());
 
             // Install textContent setter (as method)
-            let tcs_tmpl = v8::FunctionTemplate::builder_raw(text_content_setter_callback).build(scope);
+            let tcs_tmpl =
+                v8::FunctionTemplate::builder_raw(text_content_setter_callback).build(scope);
             let tcs_fn = crate::v8_utils::v8_fn(scope, &tcs_tmpl);
             let tcs_key = crate::v8_utils::v8_string(scope, "__setTextContent__");
             obj.set(scope, tcs_key.into(), tcs_fn.into());
@@ -510,7 +562,8 @@ fn node_to_v8_object_plain<'s>(
     let global_obj = v8::Global::new(scope, obj);
     state.node_cache.borrow_mut().insert(node_id, global_obj);
 
-    Some(obj.into())}
+    Some(obj.into())
+}
 
 /// Convert a list of NodeIds to a V8 array of node objects.
 fn node_list_to_v8_array<'s>(
@@ -711,7 +764,10 @@ unsafe extern "C" fn get_elements_by_class_name(info: *const v8::FunctionCallbac
                     let mut results = Vec::new();
                     for node_ref in doc.tree.root().descendants() {
                         let classes = node_ref.value().class_list();
-                        if target_classes.iter().all(|tc| classes.iter().any(|c| c == tc)) {
+                        if target_classes
+                            .iter()
+                            .all(|tc| classes.iter().any(|c| c == tc))
+                        {
                             results.push(node_ref.id());
                         }
                     }
@@ -749,7 +805,8 @@ unsafe extern "C" fn get_attribute_callback(info: *const v8::FunctionCallbackInf
         let attrs_key = crate::v8_utils::v8_string(scope, "__attrs__");
         if let Some(attrs_val) = this.get(scope, attrs_key.into()) {
             if attrs_val.is_object() {
-                let attrs_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(attrs_val) };
+                let attrs_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(attrs_val) };
                 if let Some(val) = attrs_obj.get(scope, attr_name) {
                     if !val.is_undefined() {
                         rv.set(val);
@@ -764,7 +821,6 @@ unsafe extern "C" fn get_attribute_callback(info: *const v8::FunctionCallbackInf
         tracing::error!("panic in getAttribute callback");
     }
 }
-
 
 /// document.createElement(tag) callback
 unsafe extern "C" fn create_element(info: *const v8::FunctionCallbackInfo) {
@@ -900,12 +956,16 @@ unsafe extern "C" fn replace_child_callback(info: *const v8::FunctionCallbackInf
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        if args.length() < 2 { return; }
+        if args.length() < 2 {
+            return;
+        }
 
         let new_child_arg = args.get(0);
         let old_child_arg = args.get(1);
 
-        if !new_child_arg.is_object() || !old_child_arg.is_object() { return; }
+        if !new_child_arg.is_object() || !old_child_arg.is_object() {
+            return;
+        }
 
         let new_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(new_child_arg) };
         let old_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(old_child_arg) };
@@ -937,11 +997,15 @@ unsafe extern "C" fn insert_before_callback(info: *const v8::FunctionCallbackInf
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        if args.length() < 1 { return; }
+        if args.length() < 1 {
+            return;
+        }
 
         let this = args.this();
         let new_child_arg = args.get(0);
-        if !new_child_arg.is_object() { return; }
+        if !new_child_arg.is_object() {
+            return;
+        }
 
         let new_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(new_child_arg) };
         let parent_id = extract_node_id(scope, this);
@@ -953,7 +1017,8 @@ unsafe extern "C" fn insert_before_callback(info: *const v8::FunctionCallbackInf
 
             // Reference node (2nd arg) — if null/undefined, append to end
             if args.length() >= 2 && args.get(1).is_object() {
-                let ref_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(args.get(1)) };
+                let ref_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(args.get(1)) };
                 if let Some(ref_id) = extract_node_id(scope, ref_obj) {
                     let mut doc = state.document.borrow_mut();
                     if let Some(ref mut doc) = *doc {
@@ -980,7 +1045,9 @@ unsafe extern "C" fn remove_attribute_callback(info: *const v8::FunctionCallback
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 1 { return; }
+        if args.length() < 1 {
+            return;
+        }
 
         let this = args.this();
         let name_arg = args.get(0).to_rust_string_lossy(scope);
@@ -992,10 +1059,20 @@ unsafe extern "C" fn remove_attribute_callback(info: *const v8::FunctionCallback
             let mut doc = state.document.borrow_mut();
             if let Some(ref mut doc) = *doc {
                 if let Some(mut node) = doc.tree.get_mut(nid) {
-                    if let NodeData::Element { ref mut attrs, ref mut id, ref mut classes, .. } = node.value() {
+                    if let NodeData::Element {
+                        ref mut attrs,
+                        ref mut id,
+                        ref mut classes,
+                        ..
+                    } = node.value()
+                    {
                         attrs.retain(|(k, _)| k != &name_arg);
-                        if name_arg == "id" { *id = None; }
-                        if name_arg == "class" { classes.clear(); }
+                        if name_arg == "id" {
+                            *id = None;
+                        }
+                        if name_arg == "class" {
+                            classes.clear();
+                        }
                     }
                 }
                 if name_arg == "id" {
@@ -1009,7 +1086,8 @@ unsafe extern "C" fn remove_attribute_callback(info: *const v8::FunctionCallback
         let attrs_key = crate::v8_utils::v8_string(scope, "__attrs__");
         if let Some(attrs_val) = this.get(scope, attrs_key.into()) {
             if attrs_val.is_object() {
-                let attrs_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(attrs_val) };
+                let attrs_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(attrs_val) };
                 if let Some(k) = v8::String::new(scope, &name_arg) {
                     attrs_obj.delete(scope, k.into());
                 }
@@ -1040,9 +1118,15 @@ unsafe extern "C" fn has_attribute_callback(info: *const v8::FunctionCallbackInf
             let state = RuntimeState::get(isolate);
             let doc = state.document.borrow();
             if let Some(ref doc) = *doc {
-                doc.get(nid).map(|n| n.value().get_attr(&name_arg).is_some()).unwrap_or(false)
-            } else { false }
-        } else { false };
+                doc.get(nid)
+                    .map(|n| n.value().get_attr(&name_arg).is_some())
+                    .unwrap_or(false)
+            } else {
+                false
+            }
+        } else {
+            false
+        };
 
         rv.set(v8::Boolean::new(scope, has).into());
     }));
@@ -1055,7 +1139,9 @@ unsafe extern "C" fn insert_adjacent_html_callback(info: *const v8::FunctionCall
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 2 { return; }
+        if args.length() < 2 {
+            return;
+        }
 
         let this = args.this();
         let position = args.get(0).to_rust_string_lossy(scope).to_lowercase();
@@ -1072,17 +1158,26 @@ unsafe extern "C" fn insert_adjacent_html_callback(info: *const v8::FunctionCall
                 let body_id = fragment.body().unwrap_or(fragment.root_id());
 
                 let frag_children: Vec<(crate::dom::NodeId, crate::dom::NodeData)> = {
-                    fragment.tree.get(body_id)
-                        .map(|body| body.children().map(|c| (c.id(), c.value().clone())).collect())
+                    fragment
+                        .tree
+                        .get(body_id)
+                        .map(|body| {
+                            body.children()
+                                .map(|c| (c.id(), c.value().clone()))
+                                .collect()
+                        })
                         .unwrap_or_default()
                 };
 
                 match position.as_str() {
                     "beforebegin" => {
                         // Insert before this element (as previous sibling)
-                        if let Some(parent_id) = doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id()) {
+                        if let Some(parent_id) =
+                            doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id())
+                        {
                             for (frag_id, _) in &frag_children {
-                                let frag_data = fragment.tree.get(*frag_id).map(|n| n.value().clone());
+                                let frag_data =
+                                    fragment.tree.get(*frag_id).map(|n| n.value().clone());
                                 if let Some(data) = frag_data {
                                     doc.insert_before(nid, data);
                                 }
@@ -1093,7 +1188,11 @@ unsafe extern "C" fn insert_adjacent_html_callback(info: *const v8::FunctionCall
                     "afterbegin" => {
                         // Insert as first children of this element
                         // Get current first child
-                        let first_child = doc.tree.get(nid).and_then(|n| n.first_child()).map(|c| c.id());
+                        let first_child = doc
+                            .tree
+                            .get(nid)
+                            .and_then(|n| n.first_child())
+                            .map(|c| c.id());
                         for (frag_id, _) in frag_children.iter().rev() {
                             let frag_data = fragment.tree.get(*frag_id).map(|n| n.value().clone());
                             if let Some(data) = frag_data {
@@ -1116,7 +1215,9 @@ unsafe extern "C" fn insert_adjacent_html_callback(info: *const v8::FunctionCall
                     "afterend" => {
                         // Insert after this element (before next sibling)
                         // Simplified: append to parent
-                        if let Some(parent_id) = doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id()) {
+                        if let Some(parent_id) =
+                            doc.tree.get(nid).and_then(|n| n.parent()).map(|p| p.id())
+                        {
                             for (frag_id, _) in &frag_children {
                                 append_node_recursive(doc, parent_id, &fragment, *frag_id);
                             }
@@ -1154,7 +1255,13 @@ unsafe extern "C" fn set_attribute_callback(info: *const v8::FunctionCallbackInf
             let mut doc = state.document.borrow_mut();
             if let Some(ref mut doc) = *doc {
                 if let Some(mut node) = doc.tree.get_mut(nid) {
-                    if let NodeData::Element { ref mut attrs, ref mut id, ref mut classes, .. } = node.value() {
+                    if let NodeData::Element {
+                        ref mut attrs,
+                        ref mut id,
+                        ref mut classes,
+                        ..
+                    } = node.value()
+                    {
                         // Update or add the attribute
                         if let Some(existing) = attrs.iter_mut().find(|(k, _)| k == &name_arg) {
                             existing.1 = value_arg.clone();
@@ -1166,7 +1273,10 @@ unsafe extern "C" fn set_attribute_callback(info: *const v8::FunctionCallbackInf
                             *id = Some(value_arg.clone());
                         }
                         if name_arg == "class" {
-                            *classes = value_arg.split_whitespace().map(|s| s.to_string()).collect();
+                            *classes = value_arg
+                                .split_whitespace()
+                                .map(|s| s.to_string())
+                                .collect();
                         }
                     }
                 }
@@ -1181,7 +1291,8 @@ unsafe extern "C" fn set_attribute_callback(info: *const v8::FunctionCallbackInf
         let attrs_key = crate::v8_utils::v8_string(scope, "__attrs__");
         if let Some(attrs_val) = this.get(scope, attrs_key.into()) {
             if attrs_val.is_object() {
-                let attrs_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(attrs_val) };
+                let attrs_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(attrs_val) };
                 if let Some(k) = v8::String::new(scope, &name_arg) {
                     if let Some(v) = v8::String::new(scope, &value_arg) {
                         attrs_obj.set(scope, k.into(), v.into());
@@ -1194,7 +1305,6 @@ unsafe extern "C" fn set_attribute_callback(info: *const v8::FunctionCallbackInf
         tracing::error!("panic in setAttribute callback");
     }
 }
-
 
 /// element.addEventListener(type, listener, options?) callback
 unsafe extern "C" fn add_event_listener_callback(info: *const v8::FunctionCallbackInfo) {
@@ -1266,13 +1376,23 @@ unsafe extern "C" fn remove_event_listener_callback(info: *const v8::FunctionCal
         let this = args.this();
         let event_type = args.get(0).to_rust_string_lossy(scope);
         let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(args.get(1)) };
-        let capture = if args.length() >= 3 { args.get(2).is_true() } else { false };
+        let capture = if args.length() >= 3 {
+            args.get(2).is_true()
+        } else {
+            false
+        };
 
         let node_id = extract_node_id(scope, this);
         if let Some(nid) = node_id {
             let isolate: &v8::Isolate = &*scope;
             let state = RuntimeState::get(isolate);
-            state.event_listeners.borrow_mut().remove_by_callback(scope, nid, &event_type, func, capture);
+            state.event_listeners.borrow_mut().remove_by_callback(
+                scope,
+                nid,
+                &event_type,
+                func,
+                capture,
+            );
         }
     }));
 }
@@ -1343,7 +1463,6 @@ unsafe extern "C" fn dispatch_event_callback(info: *const v8::FunctionCallbackIn
     }));
 }
 
-
 /// element.innerHTML getter callback
 unsafe extern "C" fn inner_html_getter_callback(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1405,7 +1524,9 @@ unsafe extern "C" fn text_content_setter_callback(info: *const v8::FunctionCallb
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 1 { return; }
+        if args.length() < 1 {
+            return;
+        }
 
         let this = args.this();
         let text_val = args.get(0).to_rust_string_lossy(scope);
@@ -1417,7 +1538,9 @@ unsafe extern "C" fn text_content_setter_callback(info: *const v8::FunctionCallb
             let mut doc = state.document.borrow_mut();
             if let Some(ref mut doc) = *doc {
                 // Remove all children
-                let children: Vec<crate::dom::NodeId> = doc.tree.get(nid)
+                let children: Vec<crate::dom::NodeId> = doc
+                    .tree
+                    .get(nid)
                     .map(|n| n.children().map(|c| c.id()).collect())
                     .unwrap_or_default();
                 for child_id in children {
@@ -1430,7 +1553,6 @@ unsafe extern "C" fn text_content_setter_callback(info: *const v8::FunctionCallb
     }));
 }
 
-
 /// element.innerHTML setter callback — parses HTML and replaces children.
 unsafe extern "C" fn inner_html_setter_callback(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1438,7 +1560,9 @@ unsafe extern "C" fn inner_html_setter_callback(info: *const v8::FunctionCallbac
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 1 { return; }
+        if args.length() < 1 {
+            return;
+        }
 
         let this = args.this();
         let html_str = args.get(0).to_rust_string_lossy(scope);
@@ -1450,7 +1574,9 @@ unsafe extern "C" fn inner_html_setter_callback(info: *const v8::FunctionCallbac
             let mut doc = state.document.borrow_mut();
             if let Some(ref mut doc) = *doc {
                 // 1. Remove all existing children
-                let children: Vec<crate::dom::NodeId> = doc.tree.get(nid)
+                let children: Vec<crate::dom::NodeId> = doc
+                    .tree
+                    .get(nid)
                     .map(|n| n.children().map(|c| c.id()).collect())
                     .unwrap_or_default();
                 for child_id in children {
@@ -1466,7 +1592,9 @@ unsafe extern "C" fn inner_html_setter_callback(info: *const v8::FunctionCallbac
                 let body_children: Vec<(crate::dom::NodeId, crate::dom::NodeData)> = {
                     // Find body in the fragment, get its children's data
                     let body_id = fragment.body().unwrap_or(fragment.root_id());
-                    fragment.tree.get(body_id)
+                    fragment
+                        .tree
+                        .get(body_id)
                         .map(|body| {
                             body.children()
                                 .map(|c| (c.id(), c.value().clone()))
@@ -1499,10 +1627,7 @@ pub fn append_node_recursive(
         let new_id = doc.append_child(parent_id, data);
 
         // Recursively append children
-        let child_ids: Vec<crate::dom::NodeId> = source_node
-            .children()
-            .map(|c| c.id())
-            .collect();
+        let child_ids: Vec<crate::dom::NodeId> = source_node.children().map(|c| c.id()).collect();
         for child_id in child_ids {
             append_node_recursive(doc, new_id, source, child_id);
         }

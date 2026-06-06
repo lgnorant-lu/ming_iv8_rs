@@ -2,15 +2,18 @@
 //!
 //! All V8 callbacks access shared state through `RuntimeState::get(isolate)`.
 //! Internal mutability via `RefCell` (V8 Isolate is single-threaded, no Mutex needed).
-#![expect(clippy::expect_used, reason = "get_slot: RuntimeState must be installed before use")]
+#![expect(
+    clippy::expect_used,
+    reason = "get_slot: RuntimeState must be installed before use"
+)]
 
 use std::cell::RefCell;
 use std::sync::Arc;
 
 use crate::config::EnvironmentMap;
-use crate::dom::Document;
 use crate::dom::template::DomTemplates;
-use crate::events::{EventLoop, EventListenerRegistry};
+use crate::dom::Document;
+use crate::events::{EventListenerRegistry, EventLoop};
 use crate::network::ResourceBundle;
 use crate::shims::console::ConsoleMessage;
 

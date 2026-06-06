@@ -16,7 +16,12 @@ pub fn install_canvas_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Local<v
             let tmpl = v8::FunctionTemplate::builder_raw($cb).build(scope);
             let func = crate::v8_utils::v8_fn(scope, &*tmpl);
             let key = crate::v8_utils::v8_string(scope, $name);
-            global.define_own_property(scope, key.into(), func.into(), v8::PropertyAttribute::DONT_ENUM);
+            global.define_own_property(
+                scope,
+                key.into(),
+                func.into(),
+                v8::PropertyAttribute::DONT_ENUM,
+            );
         };
     }
 
@@ -323,7 +328,9 @@ unsafe extern "C" fn canvas_cmd_callback(info: *const v8::FunctionCallbackInfo) 
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 2 { return; }
+        if args.length() < 2 {
+            return;
+        }
 
         let canvas_id = args.get(0).to_rust_string_lossy(scope);
         let cmd_name = args.get(1).to_rust_string_lossy(scope);
@@ -332,35 +339,66 @@ unsafe extern "C" fn canvas_cmd_callback(info: *const v8::FunctionCallbackInfo) 
         let state = RuntimeState::get(isolate);
         let mut canvases = state.canvases.borrow_mut();
 
-        let canvas = canvases.entry(canvas_id).or_insert_with(|| Canvas2D::new(300, 150));
+        let canvas = canvases
+            .entry(canvas_id)
+            .or_insert_with(|| Canvas2D::new(300, 150));
 
         // Parse command
         let cmd = match cmd_name.as_str() {
             "fillRect" => {
-                if args.length() < 6 { return; }
+                if args.length() < 6 {
+                    return;
+                }
                 let x = args.get(2).number_value(scope).unwrap_or(0.0) as f32;
                 let y = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 let w = args.get(4).number_value(scope).unwrap_or(0.0) as f32;
                 let h = args.get(5).number_value(scope).unwrap_or(0.0) as f32;
-                let color_str = if args.length() > 6 { args.get(6).to_rust_string_lossy(scope) } else { "#000000".to_string() };
-                let alpha = if args.length() > 7 { args.get(7).number_value(scope).unwrap_or(1.0) as f32 } else { 1.0 };
+                let color_str = if args.length() > 6 {
+                    args.get(6).to_rust_string_lossy(scope)
+                } else {
+                    "#000000".to_string()
+                };
+                let alpha = if args.length() > 7 {
+                    args.get(7).number_value(scope).unwrap_or(1.0) as f32
+                } else {
+                    1.0
+                };
                 let mut color = Canvas2D::parse_color(&color_str);
                 color[3] = (color[3] as f32 * alpha) as u8;
                 Some(DrawCmd::FillRect { x, y, w, h, color })
             }
             "strokeRect" => {
-                if args.length() < 6 { return; }
+                if args.length() < 6 {
+                    return;
+                }
                 let x = args.get(2).number_value(scope).unwrap_or(0.0) as f32;
                 let y = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 let w = args.get(4).number_value(scope).unwrap_or(0.0) as f32;
                 let h = args.get(5).number_value(scope).unwrap_or(0.0) as f32;
-                let color_str = if args.length() > 6 { args.get(6).to_rust_string_lossy(scope) } else { "#000000".to_string() };
-                let line_width = if args.length() > 7 { args.get(7).number_value(scope).unwrap_or(1.0) as f32 } else { 1.0 };
+                let color_str = if args.length() > 6 {
+                    args.get(6).to_rust_string_lossy(scope)
+                } else {
+                    "#000000".to_string()
+                };
+                let line_width = if args.length() > 7 {
+                    args.get(7).number_value(scope).unwrap_or(1.0) as f32
+                } else {
+                    1.0
+                };
                 let color = Canvas2D::parse_color(&color_str);
-                Some(DrawCmd::StrokeRect { x, y, w, h, color, line_width })
+                Some(DrawCmd::StrokeRect {
+                    x,
+                    y,
+                    w,
+                    h,
+                    color,
+                    line_width,
+                })
             }
             "clearRect" => {
-                if args.length() < 6 { return; }
+                if args.length() < 6 {
+                    return;
+                }
                 let x = args.get(2).number_value(scope).unwrap_or(0.0) as f32;
                 let y = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 let w = args.get(4).number_value(scope).unwrap_or(0.0) as f32;
@@ -368,73 +406,127 @@ unsafe extern "C" fn canvas_cmd_callback(info: *const v8::FunctionCallbackInfo) 
                 Some(DrawCmd::ClearRect { x, y, w, h })
             }
             "fillText" => {
-                if args.length() < 6 { return; }
+                if args.length() < 6 {
+                    return;
+                }
                 let text = args.get(2).to_rust_string_lossy(scope);
                 let x = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 let y = args.get(4).number_value(scope).unwrap_or(0.0) as f32;
-                let color_str = if args.length() > 5 { args.get(5).to_rust_string_lossy(scope) } else { "#000000".to_string() };
-                let font_str = if args.length() > 6 { args.get(6).to_rust_string_lossy(scope) } else { "10px sans-serif".to_string() };
+                let color_str = if args.length() > 5 {
+                    args.get(5).to_rust_string_lossy(scope)
+                } else {
+                    "#000000".to_string()
+                };
+                let font_str = if args.length() > 6 {
+                    args.get(6).to_rust_string_lossy(scope)
+                } else {
+                    "10px sans-serif".to_string()
+                };
                 let color = Canvas2D::parse_color(&color_str);
                 let font_size = Canvas2D::parse_font_size(&font_str);
-                Some(DrawCmd::FillText { text, x, y, color, font_size })
+                Some(DrawCmd::FillText {
+                    text,
+                    x,
+                    y,
+                    color,
+                    font_size,
+                })
             }
             "beginPath" => Some(DrawCmd::BeginPath),
             "closePath" => Some(DrawCmd::ClosePath),
             "moveTo" => {
-                if args.length() < 4 { return; }
+                if args.length() < 4 {
+                    return;
+                }
                 let x = args.get(2).number_value(scope).unwrap_or(0.0) as f32;
                 let y = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 Some(DrawCmd::MoveTo { x, y })
             }
             "lineTo" => {
-                if args.length() < 4 { return; }
+                if args.length() < 4 {
+                    return;
+                }
                 let x = args.get(2).number_value(scope).unwrap_or(0.0) as f32;
                 let y = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 Some(DrawCmd::LineTo { x, y })
             }
             "arc" => {
-                if args.length() < 7 { return; }
+                if args.length() < 7 {
+                    return;
+                }
                 let x = args.get(2).number_value(scope).unwrap_or(0.0) as f32;
                 let y = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 let r = args.get(4).number_value(scope).unwrap_or(0.0) as f32;
                 let start = args.get(5).number_value(scope).unwrap_or(0.0) as f32;
                 let end = args.get(6).number_value(scope).unwrap_or(0.0) as f32;
-                let color_str = if args.length() > 8 { args.get(8).to_rust_string_lossy(scope) } else { "#000000".to_string() };
+                let color_str = if args.length() > 8 {
+                    args.get(8).to_rust_string_lossy(scope)
+                } else {
+                    "#000000".to_string()
+                };
                 let color = Canvas2D::parse_color(&color_str);
-                Some(DrawCmd::Arc { x, y, r, start, end, color, fill: true })
+                Some(DrawCmd::Arc {
+                    x,
+                    y,
+                    r,
+                    start,
+                    end,
+                    color,
+                    fill: true,
+                })
             }
             "fill" => {
-                let color_str = if args.length() > 2 { args.get(2).to_rust_string_lossy(scope) } else { "#000000".to_string() };
+                let color_str = if args.length() > 2 {
+                    args.get(2).to_rust_string_lossy(scope)
+                } else {
+                    "#000000".to_string()
+                };
                 let color = Canvas2D::parse_color(&color_str);
                 Some(DrawCmd::Fill { color })
             }
             "stroke" => {
-                let color_str = if args.length() > 2 { args.get(2).to_rust_string_lossy(scope) } else { "#000000".to_string() };
-                let line_width = if args.length() > 3 { args.get(3).number_value(scope).unwrap_or(1.0) as f32 } else { 1.0 };
+                let color_str = if args.length() > 2 {
+                    args.get(2).to_rust_string_lossy(scope)
+                } else {
+                    "#000000".to_string()
+                };
+                let line_width = if args.length() > 3 {
+                    args.get(3).number_value(scope).unwrap_or(1.0) as f32
+                } else {
+                    1.0
+                };
                 let color = Canvas2D::parse_color(&color_str);
                 Some(DrawCmd::Stroke { color, line_width })
             }
             "save" => Some(DrawCmd::Save),
             "restore" => Some(DrawCmd::Restore),
             "translate" => {
-                if args.length() < 4 { return; }
+                if args.length() < 4 {
+                    return;
+                }
                 let x = args.get(2).number_value(scope).unwrap_or(0.0) as f32;
                 let y = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 Some(DrawCmd::Translate { x, y })
             }
             "scale" => {
-                if args.length() < 4 { return; }
+                if args.length() < 4 {
+                    return;
+                }
                 let x = args.get(2).number_value(scope).unwrap_or(1.0) as f32;
                 let y = args.get(3).number_value(scope).unwrap_or(1.0) as f32;
                 Some(DrawCmd::Scale { x, y })
             }
             "rotate" => {
-                if args.length() < 3 { return; }
+                if args.length() < 3 {
+                    return;
+                }
                 let angle = args.get(2).number_value(scope).unwrap_or(0.0) as f32;
                 Some(DrawCmd::Rotate { angle })
             }
             "setTransform" => {
-                if args.length() < 8 { return; }
+                if args.length() < 8 {
+                    return;
+                }
                 let a = args.get(2).number_value(scope).unwrap_or(1.0) as f32;
                 let b = args.get(3).number_value(scope).unwrap_or(0.0) as f32;
                 let c = args.get(4).number_value(scope).unwrap_or(0.0) as f32;
@@ -449,9 +541,17 @@ unsafe extern "C" fn canvas_cmd_callback(info: *const v8::FunctionCallbackInfo) 
         if let Some(cmd) = cmd {
             // Update path state for path commands
             match &cmd {
-                DrawCmd::BeginPath => { canvas.path_points.clear(); canvas.path_started = true; }
-                DrawCmd::MoveTo { x, y } => { canvas.path_points.clear(); canvas.path_points.push((*x, *y)); }
-                DrawCmd::LineTo { x, y } => { canvas.path_points.push((*x, *y)); }
+                DrawCmd::BeginPath => {
+                    canvas.path_points.clear();
+                    canvas.path_started = true;
+                }
+                DrawCmd::MoveTo { x, y } => {
+                    canvas.path_points.clear();
+                    canvas.path_points.push((*x, *y));
+                }
+                DrawCmd::LineTo { x, y } => {
+                    canvas.path_points.push((*x, *y));
+                }
                 _ => {}
             }
             canvas.commands.push(cmd);
@@ -467,8 +567,16 @@ unsafe extern "C" fn canvas_to_data_url_callback(info: *const v8::FunctionCallba
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        let canvas_id = if args.length() > 0 { args.get(0).to_rust_string_lossy(scope) } else { return; };
-        let mime_type = if args.length() > 1 { args.get(1).to_rust_string_lossy(scope) } else { "image/png".to_string() };
+        let canvas_id = if args.length() > 0 {
+            args.get(0).to_rust_string_lossy(scope)
+        } else {
+            return;
+        };
+        let mime_type = if args.length() > 1 {
+            args.get(1).to_rust_string_lossy(scope)
+        } else {
+            "image/png".to_string()
+        };
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
@@ -503,7 +611,9 @@ unsafe extern "C" fn canvas_to_data_url_callback(info: *const v8::FunctionCallba
             };
             let noise_seed = if noise_intensity > 0.0 {
                 // Use canvas ID as noise seed for deterministic but unique fingerprint
-                let seed: u64 = canvas_id.bytes().fold(0u64, |acc, b| acc.wrapping_mul(31).wrapping_add(b as u64));
+                let seed: u64 = canvas_id
+                    .bytes()
+                    .fold(0u64, |acc, b| acc.wrapping_mul(31).wrapping_add(b as u64));
                 Some(seed)
             } else {
                 None
@@ -532,7 +642,9 @@ unsafe extern "C" fn canvas_get_image_data_callback(info: *const v8::FunctionCal
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
 
-        if args.length() < 5 { return; }
+        if args.length() < 5 {
+            return;
+        }
 
         let canvas_id = args.get(0).to_rust_string_lossy(scope);
         let x = args.get(1).uint32_value(scope).unwrap_or(0);
@@ -566,7 +678,9 @@ unsafe extern "C" fn canvas_set_size_callback(info: *const v8::FunctionCallbackI
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
 
-        if args.length() < 3 { return; }
+        if args.length() < 3 {
+            return;
+        }
 
         let canvas_id = args.get(0).to_rust_string_lossy(scope);
         let width = args.get(1).uint32_value(scope).unwrap_or(300).max(1);
@@ -576,7 +690,9 @@ unsafe extern "C" fn canvas_set_size_callback(info: *const v8::FunctionCallbackI
         let state = RuntimeState::get(isolate);
         let mut canvases = state.canvases.borrow_mut();
 
-        let canvas = canvases.entry(canvas_id).or_insert_with(|| Canvas2D::new(width, height));
+        let canvas = canvases
+            .entry(canvas_id)
+            .or_insert_with(|| Canvas2D::new(width, height));
         if canvas.width != width || canvas.height != height {
             // Resize: create new canvas (clears content, matching browser behavior)
             *canvas = Canvas2D::new(width, height);

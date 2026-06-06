@@ -13,7 +13,12 @@ pub fn install_xhr(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) 
     let send_tmpl = v8::FunctionTemplate::builder_raw(xhr_send_callback).build(scope);
     let send_fn = crate::v8_utils::v8_fn(scope, &send_tmpl);
     let key = crate::v8_utils::v8_string(scope, "__xhr_send__");
-    global.define_own_property(scope, key.into(), send_fn.into(), v8::PropertyAttribute::DONT_ENUM);
+    global.define_own_property(
+        scope,
+        key.into(),
+        send_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 }
 
 /// JS shim that creates the XMLHttpRequest class.
@@ -153,7 +158,8 @@ unsafe extern "C" fn xhr_send_callback(info: *const v8::FunctionCallbackInfo) {
                     None
                 }
             };
-            handler_result.map(|(status, body)| crate::network::bundle::Resource::new(body, status, None))
+            handler_result
+                .map(|(status, body)| crate::network::bundle::Resource::new(body, status, None))
         } else {
             resource_ref
         };
@@ -163,7 +169,11 @@ unsafe extern "C" fn xhr_send_callback(info: *const v8::FunctionCallbackInfo) {
                 let obj = v8::Object::new(scope);
 
                 let status_key = crate::v8_utils::v8_string(scope, "status");
-                obj.set(scope, status_key.into(), v8::Integer::new(scope, res.status as i32).into());
+                obj.set(
+                    scope,
+                    status_key.into(),
+                    v8::Integer::new(scope, res.status as i32).into(),
+                );
 
                 let text_key = crate::v8_utils::v8_string(scope, "responseText");
                 let body_str = String::from_utf8_lossy(&res.body);
@@ -173,7 +183,9 @@ unsafe extern "C" fn xhr_send_callback(info: *const v8::FunctionCallbackInfo) {
                 // Headers as object
                 let headers_obj = v8::Object::new(scope);
                 for (k, v) in &res.headers {
-                    if let (Some(hk), Some(hv)) = (v8::String::new(scope, k), v8::String::new(scope, v)) {
+                    if let (Some(hk), Some(hv)) =
+                        (v8::String::new(scope, k), v8::String::new(scope, v))
+                    {
                         headers_obj.set(scope, hk.into(), hv.into());
                     }
                 }

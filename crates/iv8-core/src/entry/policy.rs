@@ -85,8 +85,7 @@ impl Persona {
         match self {
             Persona::Runtime => matches!(
                 kind,
-                super::types::StrategyKind::WebpackBridge
-                    | super::types::StrategyKind::CdpProbe
+                super::types::StrategyKind::WebpackBridge | super::types::StrategyKind::CdpProbe
             ),
             Persona::Analysis => match policy.hook_level {
                 HookLevel::Transparent => matches!(
