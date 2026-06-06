@@ -50,9 +50,13 @@ impl KernelCell {
         Self { inner: Mutex::new(Some(kernel)) }
     }
 
+    #[allow(clippy::panic)]
     fn lock(&self) -> MappedMutexGuard<'_, EmbeddedV8Kernel> {
-        MutexGuard::map(self.inner.lock(), |kernel| {
-            kernel.as_mut().expect("JSContext kernel already closed")
+        MutexGuard::map(self.inner.lock(), |kernel| match kernel.as_mut() {
+            Some(kernel) => kernel,
+            // Public methods check disposed state before taking the kernel.
+            // Reaching this branch means an internal lifecycle invariant broke.
+            None => panic!("JSContext kernel already closed"),
         })
     }
 

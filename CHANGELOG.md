@@ -11,6 +11,12 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - **v0.6-dev baseline**: `docs/baseline/v0.6-dev-baseline.md` records
   the current targeted validation commands, verified outputs, partial
   strategy status, and known stabilization blockers.
+- **Environment Plane workflow helper**: `run_environment_plane()` now provides
+  a conservative Python-level probe -> patch -> rerun workflow with
+  `EnvironmentPatch` and `EnvironmentPlaneReport` result types.
+- **SourceAst dynamic source points**: `eval(...)` and `Function(...)` calls are
+  captured by AST strategy traps and recorded as `eval,` / `fn_ctor,` trace
+  entries.
 
 ### Changed
 
@@ -19,13 +25,32 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - Annotated the research index and legacy acceptance criteria as historical
   records with known placeholder corruption, preserving their original content
   while preventing damaged status data from being treated as current truth.
+- WebpackBridge runtime glue was moved out of the executor into the webpack
+  entry module, with module graph collection behind a dedicated helper.
+- Handler-array dispatch detection now recognizes multi-argument calls such as
+  `A[Q[U++]](stack, ctx)` and whitespace before the call parentheses.
+
+### Fixed
+
+- `JSContext.close()` and public API lifecycle handling now reject use after
+  close and avoid unsafe non-owner-thread V8 teardown.
+- `eval_promise()` now surfaces Promise rejection and pending timeout instead
+  of silently returning `None`.
+- `page_load(base_url=...)` now uses JSON string encoding, and `js_api` names
+  are validated before being embedded into generated JavaScript.
+- DevTools inspector bind failures are reported synchronously to Python.
+- Python callback metadata created by `expose()` is owned by the context and
+  released on owner-thread close/drop.
+- WebpackBridge no longer clears `__iv8_wp_require` after capturing a global
+  require candidate.
 
 ### Known limitations
 
 - `0.6.0-dev` EntryPlane is a working skeleton, not a completed expansion:
-  `SourceRegex` is pass-through, `eval`/`Function` AST capture is still TODO,
-  SwitchVM dispatch only records a detection marker, and Environment Plane
-  formalization has not started.
+  `SourceRegex` is pass-through, SwitchVM dispatch only records a detection
+  marker, Environment Plane is a conservative workflow rather than a complete
+  automatic patch/rerun loop, and real-sample corpus re-validation is still
+  pending.
 - Current network runtime remains `ResourceBundle -> Python callback ->
   NetworkError`; real HTTP via `reqwest`, async network callbacks, and typed
   `NetworkRequest` / `NetworkResponse` are deferred design items.

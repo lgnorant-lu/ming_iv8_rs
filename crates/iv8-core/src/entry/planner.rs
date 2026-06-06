@@ -177,14 +177,12 @@ fn is_low_obfuscation(source: &str) -> bool {
 /// Adjust candidate fit scores based on probe viability results.
 /// A strategy whose preconditions are not met by the probe gets a
 /// significant fit penalty, making it less likely to be selected.
-fn adjust_fit_by_probe(candidates: &mut Vec<CandidateStrategy>, probe: &ProbeResult) {
+fn adjust_fit_by_probe(candidates: &mut [CandidateStrategy], probe: &ProbeResult) {
     for c in candidates.iter_mut() {
         match c.strategy_kind {
-            StrategyKind::Dispatch => {
-                if !probe.has_dispatch_pattern {
-                    c.fit_score = c.fit_score.saturating_sub(40);
-                    c.known_limitations.push("probe: no dispatch pattern found".into());
-                }
+            StrategyKind::Dispatch if !probe.has_dispatch_pattern => {
+                c.fit_score = c.fit_score.saturating_sub(40);
+                c.known_limitations.push("probe: no dispatch pattern found".into());
             }
             StrategyKind::SourceAst => {
                 if !probe.can_swc_parse {
@@ -196,23 +194,19 @@ fn adjust_fit_by_probe(candidates: &mut Vec<CandidateStrategy>, probe: &ProbeRes
                     c.known_limitations.push("probe: high obfuscation".into());
                 }
             }
-            StrategyKind::SourceRegex => {
-                if !probe.has_dispatch_pattern && !probe.has_eval_heavy {
-                    c.fit_score = c.fit_score.saturating_sub(30);
-                    c.known_limitations.push("probe: no regex-targetable pattern".into());
-                }
+            StrategyKind::SourceRegex if !probe.has_dispatch_pattern && !probe.has_eval_heavy => {
+                c.fit_score = c.fit_score.saturating_sub(30);
+                c.known_limitations.push("probe: no regex-targetable pattern".into());
             }
-            StrategyKind::WebpackBridge => {
-                if !probe.has_webpack_runtime {
-                    c.fit_score = c.fit_score.saturating_sub(60);
-                    c.known_limitations.push("probe: no webpack runtime".into());
-                }
+            StrategyKind::WebpackBridge if !probe.has_webpack_runtime => {
+                c.fit_score = c.fit_score.saturating_sub(60);
+                c.known_limitations.push("probe: no webpack runtime".into());
             }
-            StrategyKind::RuntimeTransparent | StrategyKind::RuntimeAggressive => {
-                if probe.pre_install_required() && !c.requires_preload {
-                    c.fit_score = c.fit_score.saturating_sub(20);
-                    c.known_limitations.push("probe: closure capture may bypass hook".into());
-                }
+            StrategyKind::RuntimeTransparent | StrategyKind::RuntimeAggressive
+                if probe.pre_install_required() && !c.requires_preload =>
+            {
+                c.fit_score = c.fit_score.saturating_sub(20);
+                c.known_limitations.push("probe: closure capture may bypass hook".into());
             }
             _ => {}
         }
@@ -438,7 +432,7 @@ pub fn build_fallback_chain(
         })
         .collect();
     // Sort by fit_score descending so higher-fit candidates are tried first
-    sorted.sort_by(|a, b| b.fit_score.cmp(&a.fit_score));
+    sorted.sort_by_key(|c| std::cmp::Reverse(c.fit_score));
 
     let mut chain: Vec<String> = sorted.iter().map(|c| c.strategy_id.clone()).collect();
     // Ensure CDP probe is always the absolute last resort if not already in chain

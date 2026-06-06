@@ -122,14 +122,17 @@ fn detect_chaosvm(source: &str) -> bool {
         // Check subsequent bytes for the pattern: X[Y[Z++]]()
         // Look for second '[' somewhere after position 1
         let rest = &bytes[pos+1..];
-        let second_brk = rest.iter().position(|&b| b == b'[');
-        if second_brk.is_none() || second_brk.unwrap() > 30 { continue; }
-        let sb = second_brk.unwrap() + 1;
+        let Some(second_brk) = rest.iter().position(|&b| b == b'[') else {
+            continue;
+        };
+        if second_brk > 30 { continue; }
+        let sb = second_brk + 1;
         let after_sb = &bytes[pos + 1 + sb..];
         // Look for "++" 
-        let pp = after_sb.windows(2).position(|w| w[0] == b'+' && w[1] == b'+');
-        if pp.is_none() { continue; }
-        let inc_pos = pp.unwrap() + 2;
+        let Some(pp) = after_sb.windows(2).position(|w| w[0] == b'+' && w[1] == b'+') else {
+            continue;
+        };
+        let inc_pos = pp + 2;
         let after_inc = &bytes[pos + 1 + sb + inc_pos..];
         // Check for "]]()"
         if after_inc.len() >= 4
