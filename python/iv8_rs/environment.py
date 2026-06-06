@@ -129,6 +129,8 @@ def run_environment_plane(
     unresolved_targets = sorted(after_missing)
     applied_patches = [d.to_dict() for d in decisions if d.decision == "applied"]
     rejected_patches = [d.to_dict() for d in decisions if d.decision != "applied"]
+    before_missing = before.get("missing", [])
+    after_missing = after.get("missing", [])
 
     return EnvironmentPlaneReport(
         before=before,
@@ -142,8 +144,17 @@ def run_environment_plane(
         applied_patches=applied_patches,
         rejected_patches=rejected_patches,
         coverage=_build_coverage(before, after, improved_targets, unresolved_targets),
-        evidence=_build_environment_evidence(applied_patches, improved_targets),
-        diagnostics=_build_environment_diagnostics(decisions, improved_targets),
+        evidence=_build_environment_evidence(
+            applied_patches, improved_targets,
+            before_missing,
+            [c.to_dict() for c in patch_candidates],
+            rejected_patches,
+            after_missing,
+        ),
+        diagnostics=_build_environment_diagnostics(
+            decisions, improved_targets,
+            before_missing, after_missing,
+        ),
     )
 
 
@@ -241,8 +252,32 @@ def _build_coverage(
 def _build_environment_evidence(
     applied_patches: List[Dict[str, Any]],
     improved_targets: List[str],
+    before_missing: List[str],
+    candidates: List[Dict[str, Any]],
+    rejected_patches: List[Dict[str, Any]],
+    after_missing: List[str],
 ) -> List[Dict[str, Any]]:
     evidence = []
+    for target in before_missing:
+        evidence.append({
+            "kind": "environment_gap_observed",
+            "strength": "diagnostic_only",
+            "source": "environment_plane",
+            "stage": "environment.probe",
+            "summary": f"missing target observed: {target}",
+            "payload": {"target": target},
+        })
+
+    for cand in candidates:
+        evidence.append({
+            "kind": "environment_patch_candidate",
+            "strength": "diagnostic_only",
+            "source": "environment_plane",
+            "stage": "environment.patch",
+            "summary": f"patch candidate considered: {cand.get('target', 'unknown')}",
+            "payload": {"patch_id": cand.get("patch_id")},
+        })
+
     for patch in applied_patches:
         evidence.append({
             "kind": "environment_patch_applied",
@@ -252,6 +287,17 @@ def _build_environment_evidence(
             "summary": f"applied patch for {patch['target']}",
             "payload": {"patch_id": patch["patch_id"]},
         })
+
+    for patch in rejected_patches:
+        evidence.append({
+            "kind": "environment_patch_rejected",
+            "strength": "diagnostic_only",
+            "source": "environment_plane",
+            "stage": "environment.patch",
+            "summary": f"patch rejected for {patch.get('target', 'unknown')}",
+            "payload": {"patch_id": patch.get("patch_id")},
+        })
+
     if improved_targets:
         evidence.append({
             "kind": "environment_coverage_improved",
@@ -261,22 +307,50 @@ def _build_environment_evidence(
             "summary": "post-patch probe improved environment coverage",
             "payload": {"targets": improved_targets},
         })
+
+    if after_missing and len(after_missing) > len(before_missing):
+        evidence.append({
+            "kind": "environment_coverage_regressed",
+            "strength": "diagnostic_only",
+            "source": "environment_plane",
+            "stage": "environment.rerun",
+            "summary": "post-patch probe had more missing targets",
+            "payload": {"before": len(before_missing), "after": len(after_missing)},
+        })
+
     return evidence
 
 
-def _build_environment_diagnostics(decisions, improved_targets: List[str]) -> List[Dict[str, Any]]:
+def _build_environment_diagnostics(
+    decisions,
+    improved_targets: List[str],
+    before_missing: List[str],
+    after_missing: List[str],
+    unsafe_attempted: bool = False,
+    profile_write_attempted: bool = False,
+) -> List[Dict[str, Any]]:
     diagnostics = []
     for decision in decisions:
         severity = "info" if decision.decision == "applied" else "warn"
         if decision.decision == "blocked":
             severity = "error"
+        code = "ENVIRONMENT_PATCH_CANDIDATE"
+        if decision.decision == "applied":
+            code = "ENVIRONMENT_PATCH_APPLIED"
+        elif decision.decision in {"rejected", "deferred"}:
+            code = "ENVIRONMENT_PATCH_REJECTED"
+            if "conflict" in decision.reason.lower():
+                code = "ENVIRONMENT_PATCH_CONFLICT"
+        elif decision.decision == "blocked" and "unsafe" in decision.reason.lower():
+            code = "ENVIRONMENT_PATCH_UNSAFE"
         diagnostics.append({
-            "code": "ENVIRONMENT_PATCH_APPLIED" if decision.decision == "applied" else "ENVIRONMENT_PATCH_REJECTED",
+            "code": code,
             "severity": severity,
             "stage": "environment.patch",
             "message": decision.reason,
             "details": decision.to_dict(),
         })
+
     if improved_targets:
         diagnostics.append({
             "code": "ENVIRONMENT_RERUN_IMPROVED",
@@ -285,6 +359,42 @@ def _build_environment_diagnostics(decisions, improved_targets: List[str]) -> Li
             "message": "post-patch probe improved observed gaps",
             "details": {"targets": improved_targets},
         })
+
+    before_set = set(before_missing)
+    after_set = set(after_missing)
+    if not improved_targets and before_set == after_set:
+        diagnostics.append({
+            "code": "ENVIRONMENT_RERUN_NO_CHANGE",
+            "severity": "warn",
+            "stage": "environment.rerun",
+            "message": "post-patch probe did not improve any observed gaps",
+            "details": {"targets": list(before_set & after_set)},
+        })
+    elif after_missing and len(after_missing) > len(before_missing):
+        diagnostics.append({
+            "code": "ENVIRONMENT_RERUN_REGRESSED",
+            "severity": "error",
+            "stage": "environment.rerun",
+            "message": "post-patch probe had more missing targets than before",
+            "details": {"before": len(before_missing), "after": len(after_missing)},
+        })
+
+    if unsafe_attempted:
+        diagnostics.append({
+            "code": "ENVIRONMENT_PATCH_UNSAFE",
+            "severity": "error",
+            "stage": "environment.patch",
+            "message": "unsafe hook candidate attempted without opt-in",
+        })
+
+    if profile_write_attempted:
+        diagnostics.append({
+            "code": "ENVIRONMENT_PROFILE_WRITE_BLOCKED",
+            "severity": "error",
+            "stage": "policy.check",
+            "message": "automatic profile write was blocked by mutation guard",
+        })
+
     return diagnostics
 
 

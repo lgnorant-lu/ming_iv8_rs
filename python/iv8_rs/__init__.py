@@ -45,6 +45,7 @@ from iv8_rs.corpus import (
     CorpusManifestItem,
     CorpusRunOptions,
     build_corpus_report,
+    default_executor,
     load_manifest,
     run_corpus_manifest,
 )
@@ -186,6 +187,7 @@ __all__ = [
     "CorpusManifestItem",
     "CorpusRunOptions",
     "build_corpus_report",
+    "default_executor",
     "load_manifest",
     "run_corpus_manifest",
     "load_profile",

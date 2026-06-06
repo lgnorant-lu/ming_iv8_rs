@@ -104,8 +104,13 @@ def decide_patch_policy(
     """Decide whether a candidate may be applied under current policy."""
     cand = candidate if isinstance(candidate, EnvironmentPatchCandidate) else EnvironmentPatchCandidate.from_dict(candidate)
     opts = options or PatchPolicyOptions()
-    effective_policy = _effective_policy(cand)
+    effective_policy, reclassified = _effective_policy(cand)
     conflicts = _conflicts(cand, opts)
+
+    if reclassified and cand.policy != effective_policy:
+        diagnostic_code = "PATCH_POLICY_RECLASSIFIED"
+    else:
+        diagnostic_code = None
 
     if conflicts and not opts.allow_explicit_override:
         return PatchPolicyDecision(
@@ -125,17 +130,22 @@ def decide_patch_policy(
         if not opts.allow_unsafe_hook:
             return _blocked(cand, opts, effective_policy, "unsafe hook requires explicit opt-in")
         if opts.persona != "analysis":
-            return _rejected(cand, opts, effective_policy, "unsafe hook requires analysis persona")
-        return _applied(cand, opts, effective_policy, requires_opt_in=True, opt_in_present=True)
+            return _rejected(cand, opts, effective_policy, "unsafe hook requires analysis persona",
+                             diagnostic_code="PATCH_POLICY_PERSONA_MISMATCH")
+        return _applied(cand, opts, effective_policy, requires_opt_in=True, opt_in_present=True,
+                        diagnostic_code=diagnostic_code)
 
     if effective_policy == "analysis_only":
         if not opts.allow_analysis_only:
-            return _rejected(cand, opts, effective_policy, "analysis-only patch requires explicit opt-in")
+            return _rejected(cand, opts, effective_policy, "analysis-only patch requires explicit opt-in",
+                             diagnostic_code="PATCH_POLICY_OPT_IN_MISSING")
         if opts.persona == "runtime" and not opts.allow_explicit_override:
-            return _rejected(cand, opts, effective_policy, "runtime persona rejects analysis-only patch")
-        return _applied(cand, opts, effective_policy, requires_opt_in=True, opt_in_present=True)
+            return _rejected(cand, opts, effective_policy, "runtime persona rejects analysis-only patch",
+                             diagnostic_code="PATCH_POLICY_PERSONA_MISMATCH")
+        return _applied(cand, opts, effective_policy, requires_opt_in=True, opt_in_present=True,
+                        diagnostic_code=diagnostic_code)
 
-    return _applied(cand, opts, effective_policy)
+    return _applied(cand, opts, effective_policy, diagnostic_code=diagnostic_code)
 
 
 def block_mutation(target: str, *, reason: Optional[str] = None) -> PatchPolicyDecision:
@@ -168,11 +178,11 @@ def runtime_safe_candidate(patch_id: str, target: str, value: Any, *, source: st
     )
 
 
-def _effective_policy(cand: EnvironmentPatchCandidate) -> str:
+def _effective_policy(cand: EnvironmentPatchCandidate) -> tuple[str, bool]:
     min_policy = _MIN_POLICY_BY_KIND[cand.kind]
     if _RISK_ORDER[min_policy] > _RISK_ORDER[cand.policy]:
-        return min_policy
-    return cand.policy
+        return min_policy, True
+    return cand.policy, False
 
 
 def _conflicts(cand: EnvironmentPatchCandidate, opts: PatchPolicyOptions) -> List[str]:
@@ -191,6 +201,7 @@ def _applied(
     *,
     requires_opt_in: bool = False,
     opt_in_present: bool = False,
+    diagnostic_code: Optional[str] = None,
 ) -> PatchPolicyDecision:
     return PatchPolicyDecision(
         patch_id=cand.patch_id,
@@ -203,7 +214,7 @@ def _applied(
         risk_reasons=list(cand.risk_reasons),
         requires_opt_in=requires_opt_in,
         opt_in_present=opt_in_present,
-        diagnostic_code="PATCH_POLICY_APPLIED",
+        diagnostic_code=diagnostic_code or "PATCH_POLICY_APPLIED",
     )
 
 
@@ -212,6 +223,8 @@ def _rejected(
     opts: PatchPolicyOptions,
     effective_policy: str,
     reason: str,
+    *,
+    diagnostic_code: str = "PATCH_POLICY_REJECTED",
 ) -> PatchPolicyDecision:
     return PatchPolicyDecision(
         patch_id=cand.patch_id,
@@ -223,7 +236,7 @@ def _rejected(
         reason=reason,
         risk_reasons=list(cand.risk_reasons),
         requires_opt_in=effective_policy in {"analysis_only", "unsafe_hook"},
-        diagnostic_code="PATCH_POLICY_REJECTED",
+        diagnostic_code=diagnostic_code,
     )
 
 

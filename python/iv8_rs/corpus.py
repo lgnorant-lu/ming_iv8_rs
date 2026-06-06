@@ -1,7 +1,8 @@
 """Minimal manifest-first corpus runner contract.
 
-The runner intentionally reports observations and eligibility decisions only. It
-does not mutate manifests, profiles, baselines, or samples.
+The runner reports observations and eligibility decisions. It may execute
+eligible samples through the Entry Plane. It does not mutate manifests,
+profiles, baselines, or samples.
 """
 
 from __future__ import annotations
@@ -9,7 +10,9 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Set
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set
+
+import iv8_rs
 
 
 PATH_STATUSES = {"present", "missing", "external", "unknown"}
@@ -130,18 +133,23 @@ def build_corpus_report(
     *,
     manifest_path: str,
     options: Optional[CorpusRunOptions] = None,
+    executor: Optional[Callable[[CorpusManifestItem], Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """Build a draft corpus report from manifest records.
 
-    This minimal implementation resolves selection and eligibility. It does not
-    execute samples yet; eligible samples are marked SKIP with a dry-run reason
-    unless `dry_run` is false and a future executor is wired in.
+    When `executor` is provided and a sample is eligible, the executor is
+    called with the manifest item and must return a dict with execution
+    metadata (plan, result, evidence, diagnostics).
+
+    When `executor` is None, the runner only resolves eligibility without
+    executing samples (default: skip with `executor_not_implemented`).
     """
     opts = options or CorpusRunOptions()
     normalized = [item if isinstance(item, CorpusManifestItem) else CorpusManifestItem.from_dict(item)
                   for item in items]
-    sample_reports = [_build_sample_report(item, opts) for item in normalized]
+    sample_reports = [_build_sample_report(item, opts, executor=executor) for item in normalized]
     summary = _build_summary(sample_reports, total=len(normalized))
+    runner_diagnostics = _runner_level_diagnostics(normalized, sample_reports)
 
     return {
         "schema_version": "corpus-report.v0.1",
@@ -151,8 +159,65 @@ def build_corpus_report(
         "policy": {"level": opts.policy},
         "summary": summary,
         "samples": sample_reports,
-        "diagnostics": [],
+        "diagnostics": runner_diagnostics,
         "artifacts": [],
+    }
+
+
+def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
+    """Default executor using Entry Plane via prepare_entry + run_with_entry."""
+    source_path = Path(item.source_path)
+    if not source_path.exists():
+        return {
+            "plan_id": None,
+            "result_class": "ERROR",
+            "selected_strategy": None,
+            "executed_strategies": [],
+            "observed_evidence": [],
+            "missing_evidence": list(item.expected_evidence),
+            "fallback_attempts": [],
+            "trace_meta": None,
+            "diagnostics": [{
+                "code": "CORPUS_SAMPLE_PATH_MISSING",
+                "severity": "error",
+                "stage": "corpus.execute",
+                "message": f"sample source not found: {item.source_path}",
+                "sample_id": item.sample_id,
+            }],
+            "errors": [f"source not found: {item.source_path}"],
+        }
+    source = source_path.read_text(encoding="utf-8")
+    plan = iv8_rs.prepare_entry(source, persona=item.persona)
+    plan_id = plan.get("plan_id")
+    result = iv8_rs.run_with_entry(plan, source)
+
+    executed_strategies = result.get("executed_strategies", [])
+    trace_meta = result.get("trace_meta")
+    result_state = result.get("final_state", "unknown")
+
+    observed_evidence = []
+    fallback_attempts = result.get("diagnostics", {}).get("fallback_attempts", [])
+    missing_evidence = list(item.expected_evidence)
+
+    # Determine outcome
+    if result_state in {"collected", "completed"}:
+        result_class = "PASS"
+    elif result_state in {"partial", "degraded"}:
+        result_class = "WARN"
+    else:
+        result_class = "FAIL"
+
+    return {
+        "plan_id": plan_id,
+        "result_class": result_class,
+        "selected_strategy": result.get("selected_strategy"),
+        "executed_strategies": executed_strategies,
+        "observed_evidence": observed_evidence,
+        "missing_evidence": missing_evidence,
+        "fallback_attempts": fallback_attempts,
+        "trace_meta": trace_meta,
+        "diagnostics": result.get("errors", []),
+        "errors": result.get("errors", []),
     }
 
 
@@ -171,15 +236,49 @@ def run_corpus_manifest(
     return report
 
 
-def _build_sample_report(item: CorpusManifestItem, opts: CorpusRunOptions) -> Dict[str, Any]:
+def _build_sample_report(
+    item: CorpusManifestItem,
+    opts: CorpusRunOptions,
+    *,
+    executor: Optional[Callable[[CorpusManifestItem], Dict[str, Any]]] = None,
+) -> Dict[str, Any]:
     if opts.sample_filter is not None and item.sample_id not in opts.sample_filter:
         eligibility, reason = "skipped", "not_selected"
     else:
-        eligibility, reason = _decide_eligibility(item, opts)
+        eligibility, reason = _decide_eligibility(item, opts, executor=executor)
 
     result = "SKIP"
     if eligibility == "error":
         result = "ERROR"
+
+    execution = None
+    if eligibility == "run" and executor is not None:
+        try:
+            execution = executor(item)
+        except Exception as exc:
+            execution = {
+                "plan_id": None,
+                "result_class": "ERROR",
+                "selected_strategy": None,
+                "executed_strategies": [],
+                "observed_evidence": [],
+                "missing_evidence": list(item.expected_evidence),
+                "fallback_attempts": [],
+                "trace_meta": None,
+                "diagnostics": [{
+                    "code": "CORPUS_SAMPLE_RUNNER_ERROR",
+                    "severity": "error",
+                    "stage": "corpus.execute",
+                    "message": f"execution failed: {exc}",
+                    "sample_id": item.sample_id,
+                }],
+                "errors": [str(exc)],
+            }
+        result = execution["result_class"]
+
+    diagnostics = _sample_diagnostics(item, eligibility, reason)
+    if execution:
+        diagnostics.extend(execution.get("diagnostics", []))
 
     return {
         "sample_id": item.sample_id,
@@ -190,22 +289,27 @@ def _build_sample_report(item: CorpusManifestItem, opts: CorpusRunOptions) -> Di
         "persona": item.persona,
         "target_goal": item.target_goal,
         "eligibility": eligibility,
-        "skip_reason": reason,
+        "skip_reason": reason if not execution else None,
         "result": result,
-        "selected_strategy": None,
-        "executed_strategies": [],
+        "selected_strategy": execution.get("selected_strategy") if execution else None,
+        "executed_strategies": execution.get("executed_strategies", []) if execution else [],
         "expected_evidence": item.expected_evidence,
-        "observed_evidence": [],
-        "missing_evidence": item.expected_evidence,
-        "fallback_attempts": [],
-        "diagnostics": _sample_diagnostics(item, eligibility, reason),
-        "trace_meta": None,
+        "observed_evidence": execution.get("observed_evidence", []) if execution else [],
+        "missing_evidence": execution.get("missing_evidence", item.expected_evidence) if execution else item.expected_evidence,
+        "fallback_attempts": execution.get("fallback_attempts", []) if execution else [],
+        "diagnostics": diagnostics,
+        "trace_meta": execution.get("trace_meta") if execution else None,
         "artifacts": [],
         "notes": item.notes,
     }
 
 
-def _decide_eligibility(item: CorpusManifestItem, opts: CorpusRunOptions) -> tuple[str, str]:
+def _decide_eligibility(
+    item: CorpusManifestItem,
+    opts: CorpusRunOptions,
+    *,
+    executor: Optional[Callable[[CorpusManifestItem], Dict[str, Any]]] = None,
+) -> tuple[str, str]:
     if item.path_status == "missing":
         return "skipped", "dry_run" if opts.include_missing and opts.dry_run else "path_missing"
     if item.path_status == "external":
@@ -220,6 +324,8 @@ def _decide_eligibility(item: CorpusManifestItem, opts: CorpusRunOptions) -> tup
         return "skipped", "not_started"
     if opts.dry_run:
         return "dry_run", "dry_run"
+    if executor is not None:
+        return "run", "executor_available"
     return "skipped", "executor_not_implemented"
 
 
@@ -261,6 +367,18 @@ def _build_summary(samples: Iterable[Dict[str, Any]], *, total: int) -> Dict[str
         "fail": sum(1 for sample in sample_list if sample["result"] == "FAIL"),
         "error": sum(1 for sample in sample_list if sample["result"] == "ERROR"),
     }
+
+
+def _runner_level_diagnostics(
+    items: List[CorpusManifestItem],
+    sample_reports: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    diag: List[Dict[str, Any]] = []
+    for report in sample_reports:
+        for d in report.get("diagnostics", []):
+            if d.get("stage") in {"corpus.execute"} and d.get("severity") == "error":
+                diag.append(d)
+    return diag
 
 
 def _clean_markdown_cell(value: str) -> str:

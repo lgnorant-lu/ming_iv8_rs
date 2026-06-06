@@ -8,6 +8,7 @@ from iv8_rs import (
     CorpusManifestItem,
     CorpusRunOptions,
     build_corpus_report,
+    default_executor,
     load_manifest,
     run_corpus_manifest,
 )
@@ -77,7 +78,6 @@ def test_build_corpus_report_emits_required_envelope_and_summary():
         "error": 0,
     }
     assert len(report["samples"]) == 3
-    assert report["diagnostics"] == []
     assert report["artifacts"] == []
 
 
@@ -161,3 +161,91 @@ def test_run_corpus_manifest_does_not_mutate_manifest(tmp_path):
 
     assert report["schema_version"] == "corpus-report.v0.1"
     assert manifest.read_text(encoding="utf-8") == original
+
+
+def test_fixture_execution_with_default_executor(tmp_path):
+    fixture = tmp_path / "fixture.js"
+    fixture.write_text("var x = 1 + 1;", encoding="utf-8")
+    item = CorpusManifestItem(
+        sample_id="fixture-test",
+        source_path=str(fixture),
+        path_status="present",
+        sample_kind="plain_script",
+        runtime_family="plain",
+        persona="analysis",
+        target_goal="execution succeeds",
+        expected_evidence=[],
+        automation_status="ready",
+    )
+    report = build_corpus_report(
+        [item],
+        manifest_path="inline",
+        executor=default_executor,
+    )
+    samples = {s["sample_id"]: s for s in report["samples"]}
+    assert samples["fixture-test"]["eligibility"] == "run"
+    assert samples["fixture-test"]["result"] in {"PASS", "WARN"}
+    assert samples["fixture-test"]["selected_strategy"] is not None
+    assert len(samples["fixture-test"]["executed_strategies"]) > 0
+    assert samples["fixture-test"]["trace_meta"] is not None
+
+
+def test_fixture_execution_missing_source_fails_gracefully(tmp_path):
+    item = CorpusManifestItem(
+        sample_id="missing-fixture",
+        source_path=str(tmp_path / "nonexistent.js"),
+        path_status="present",
+        sample_kind="plain_script",
+        runtime_family="plain",
+        persona="analysis",
+        target_goal="source should be present",
+        expected_evidence=[],
+        automation_status="ready",
+    )
+    report = build_corpus_report(
+        [item],
+        manifest_path="inline",
+        executor=default_executor,
+    )
+    samples = {s["sample_id"]: s for s in report["samples"]}
+    assert samples["missing-fixture"]["result"] == "ERROR"
+    assert any("source not found" in str(d.get("message", "")) for d in samples["missing-fixture"]["diagnostics"])
+
+
+def test_fixture_execution_not_triggered_without_executor():
+    item = CorpusManifestItem(
+        sample_id="no-exec",
+        source_path="samples/dummy.js",
+        path_status="present",
+        sample_kind="plain_script",
+        runtime_family="plain",
+        persona="analysis",
+        target_goal="should skip without executor",
+        expected_evidence=[],
+        automation_status="ready",
+    )
+    report = build_corpus_report([item], manifest_path="inline")
+    samples = {s["sample_id"]: s for s in report["samples"]}
+    assert samples["no-exec"]["eligibility"] == "skipped"
+    assert samples["no-exec"]["skip_reason"] == "executor_not_implemented"
+    assert samples["no-exec"]["result"] == "SKIP"
+
+
+def test_fixture_does_not_mutate_manifest(tmp_path):
+    source_path = tmp_path / "fixture.js"
+    source_path.write_text("var x = 1;", encoding="utf-8")
+    manifest_path = tmp_path / "manifest.md"
+    manifest_path.write_text("", encoding="utf-8")
+
+    item = CorpusManifestItem(
+        sample_id="non-mutate",
+        source_path=str(source_path),
+        path_status="present",
+        sample_kind="plain_script",
+        runtime_family="plain",
+        persona="analysis",
+        automation_status="ready",
+    )
+    before = manifest_path.read_text(encoding="utf-8")
+    build_corpus_report([item], manifest_path=str(manifest_path), executor=default_executor)
+    assert manifest_path.read_text(encoding="utf-8") == before
