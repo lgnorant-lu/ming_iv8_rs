@@ -27,6 +27,14 @@ from iv8_rs.environment import (
     build_environment_patch,
     run_environment_plane,
 )
+from iv8_rs.environment_policy import (
+    EnvironmentPatchCandidate,
+    PatchPolicyDecision,
+    PatchPolicyOptions,
+    block_mutation,
+    decide_patch_policy,
+    runtime_safe_candidate,
+)
 from iv8_rs.corpus import (
     CorpusManifestItem,
     CorpusRunOptions,
@@ -157,6 +165,12 @@ __all__ = [
     "EnvironmentPlaneReport",
     "build_environment_patch",
     "run_environment_plane",
+    "EnvironmentPatchCandidate",
+    "PatchPolicyDecision",
+    "PatchPolicyOptions",
+    "block_mutation",
+    "decide_patch_policy",
+    "runtime_safe_candidate",
     "CorpusManifestItem",
     "CorpusRunOptions",
     "build_corpus_report",
