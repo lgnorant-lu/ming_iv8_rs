@@ -137,8 +137,13 @@ fn detect_handler_array(source: &str) -> Option<DispatchDetection> {
         // Look for "++"
         let inc = after_second.find("++")?;
         let after_inc = &after_second[inc + 2..];
-        // Check closing pattern
-        if !after_inc.starts_with("]]()") && !after_inc.starts_with("]])") {
+        // Check closing pattern: X[Y[Z++]](...) with any argument list.
+        let after_inc_trimmed = after_inc.trim_start();
+        if !after_inc_trimmed.starts_with("]]") {
+            continue;
+        }
+        let after_nested = after_inc_trimmed[2..].trim_start();
+        if !after_nested.starts_with('(') {
             continue;
         }
 
@@ -225,6 +230,23 @@ mod tests {
         assert_eq!(det.flavor, DispatchFlavor::HandlerArray);
         assert_eq!(det.handler_array.as_deref(), Some("A"));
         assert_eq!(det.pc_var.as_deref(), Some("U"));
+    }
+
+    #[test]
+    fn test_detect_handler_array_with_args() {
+        let det = detect("var result = A[Q[U++]](stack, ctx);");
+        assert!(det.detected);
+        assert_eq!(det.flavor, DispatchFlavor::HandlerArray);
+        assert_eq!(det.handler_array.as_deref(), Some("A"));
+        assert_eq!(det.index_array.as_deref(), Some("Q"));
+        assert_eq!(det.pc_var.as_deref(), Some("U"));
+    }
+
+    #[test]
+    fn test_detect_handler_array_with_whitespace_before_call() {
+        let det = detect("var result = A[Q[U++]]   (stack);");
+        assert!(det.detected);
+        assert_eq!(det.flavor, DispatchFlavor::HandlerArray);
     }
 
     #[test]
