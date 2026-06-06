@@ -158,7 +158,144 @@ pub fn bridge_prelude() -> &'static str {
 "#
 }
 
+/// Detect webpack runtime flavor at runtime inside the V8 isolate.
+fn detect_runtime_flavor(kernel: &mut EmbeddedV8Kernel) -> String {
+    let js = concat!(
+        "(function(){",
+        "var r = typeof __iv8_wp_require === 'function'",
+        "  ? __iv8_wp_require",
+        "  : (typeof __webpack_require__ === 'function'",
+        "    ? __webpack_require__ : null);",
+        "if (!r) return 'unknown_webpack_like';",
+        "if (typeof r.e === 'function') return 'webpack5';",
+        "if (typeof window !== 'undefined' && (window.webpackChunk || self.webpackChunk))",
+        "  return 'webpack5';",
+        "if (r.m && r.c) return 'webpack4';",
+        "return 'unknown_webpack_like';",
+        "})()"
+    );
+    match kernel.eval_to_rust_value(js) {
+        RustValue::String(s) => s,
+        _ => "unknown_webpack_like".to_string(),
+    }
+}
+
+/// Check which module IDs exist in the require cache (executed modules).
+fn collect_cache_executed(kernel: &mut EmbeddedV8Kernel) -> Vec<String> {
+    let js = concat!(
+        "(function(){",
+        "var r = typeof __iv8_wp_require === 'function'",
+        "  ? __iv8_wp_require",
+        "  : (typeof __webpack_require__ === 'function'",
+        "    ? __webpack_require__ : null);",
+        "if (!r || !r.c) return [];",
+        "return Object.keys(r.c);",
+        "})()"
+    );
+    match kernel.eval_to_rust_value(js) {
+        RustValue::Array(items) => {
+            let mut ids = Vec::new();
+            for item in items {
+                if let RustValue::String(s) = item {
+                    ids.push(s);
+                }
+            }
+            ids
+        }
+        _ => Vec::new(),
+    }
+}
+
+/// Detect chunk entries installed via webpackJsonp or webpackChunk.
+fn detect_chunks(kernel: &mut EmbeddedV8Kernel) -> Vec<serde_json::Value> {
+    let js = concat!(
+        "(function(){",
+        "var result = [];",
+        "var seen = {};",
+        // Check webpackJsonp (webpack 4)
+        "if (typeof window !== 'undefined' && Array.isArray(window.webpackJsonp)) {",
+        "  for (var ci = 0; ci < window.webpackJsonp.length; ci++) {",
+        "    var entry = window.webpackJsonp[ci];",
+        "    if (entry && entry[0]) {",
+        "      var cid = typeof entry[0] === 'string' ? entry[0] : String(entry[0]);",
+        "      if (!seen[cid]) {",
+        "        seen[cid] = true;",
+        "        var mcount = entry[1] ? Object.keys(entry[1]).length : 0;",
+        "        result.push({chunk_id: cid, state: 'requested', modules_added: mcount});",
+        "      }",
+        "    }",
+        "  }",
+        "}",
+        // Check webpackChunk (webpack 5)
+        "var wpc = typeof self !== 'undefined' && self.webpackChunk;",
+        "if (!wpc && typeof window !== 'undefined') wpc = window.webpackChunk;",
+        "if (wpc && Array.isArray(wpc)) {",
+        "  for (var ci = 0; ci < wpc.length; ci++) {",
+        "    var entry = wpc[ci];",
+        "    if (entry && Array.isArray(entry)) {",
+        "      var cid = typeof entry[0] === 'string' ? entry[0] : (entry[0] != null ? String(entry[0]) : 'main');",
+        "      if (!seen[cid]) {",
+        "        seen[cid] = true;",
+        "        var mcount = entry[1] ? Object.keys(entry[1]).length : 0;",
+        "        result.push({chunk_id: cid, state: 'loaded', modules_added: mcount});",
+        "      }",
+        "    }",
+        "  }",
+        "}",
+        "return result;",
+        "})()"
+    );
+    match kernel.eval_to_rust_value(js) {
+        RustValue::Array(items) => {
+            let mut chunks = Vec::new();
+            for item in items {
+                if let RustValue::Object(map) = item {
+                    let chunk_id = map.get("chunk_id").and_then(|v| {
+                        if let RustValue::String(s) = v { Some(s.clone()) } else { None }
+                    }).unwrap_or_default();
+                    let state = map.get("state").and_then(|v| {
+                        if let RustValue::String(s) = v { Some(s.clone()) } else { None }
+                    }).unwrap_or_default();
+                    let modules_added = map.get("modules_added").and_then(|v| {
+                        if let RustValue::Int(n) = v { Some(*n as u64) } else { None }
+                    }).unwrap_or(0);
+                    chunks.push(serde_json::json!({
+                        "chunk_id": chunk_id,
+                        "state": state,
+                        "modules_added": modules_added,
+                    }));
+                }
+            }
+            chunks
+        }
+        _ => Vec::new(),
+    }
+}
+
+/// Check if the require was captured via the late global fallback path
+/// (meaning prelude timing is uncertain).
+fn check_capture_late(kernel: &mut EmbeddedV8Kernel) -> bool {
+    let js = concat!(
+        "(function(){",
+        "var log = typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : [];",
+        "var hasPre = false, hasLate = false;",
+        "for (var i = 0; i < log.length; i++) {",
+        "  if (log[i] === 'wp_require_captured') hasPre = true;",
+        "  if (log[i] === 'wp_require_global') hasLate = true;",
+        "}",
+        "return hasLate && !hasPre;",
+        "})()"
+    );
+    matches!(kernel.eval_to_rust_value(js), RustValue::Bool(true))
+}
+
 /// Collect module graph evidence produced by the WebpackBridge prelude.
+///
+/// Returns a JSON value conforming to the `module-graph.v0.1` schema:
+/// - schema_version, runtime_family, runtime_flavor
+/// - module_ids, module_count, entry_module_id
+/// - nodes[], edges[], chunks[]
+/// - evidence[], diagnostics[]
 pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json::Value> {
     let log_val = kernel
         .eval_to_rust_value("typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : []");
@@ -167,11 +304,15 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     };
 
     let mut module_ids = Vec::new();
-    let mut require_captured = false;
+    let mut require_captured_via_prelude = false;
+    let mut require_captured_via_global = false;
     for item in items {
         if let RustValue::String(s) = item {
-            if s == "wp_require_captured" || s == "wp_require_global" {
-                require_captured = true;
+            if s == "wp_require_captured" {
+                require_captured_via_prelude = true;
+            }
+            if s == "wp_require_global" {
+                require_captured_via_global = true;
             }
             if let Some(module_id) = s.strip_prefix("module_registered,") {
                 module_ids.push(module_id.to_string());
@@ -179,17 +320,19 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
         }
     }
 
-    if matches!(
+    // Double-check require is still callable
+    let require_callable = matches!(
         kernel.eval_to_rust_value(
             "typeof __iv8_wp_require === 'function' || typeof __webpack_require__ === 'function'"
         ),
         RustValue::Bool(true)
-    ) {
-        require_captured = true;
-    }
+    );
+    let require_captured = require_captured_via_prelude || require_captured_via_global || require_callable;
 
+    // Collect module IDs from require.m
     collect_require_module_ids(kernel, &mut module_ids);
 
+    // Fallback: extract from webpackJsonp chunks
     if module_ids.is_empty() {
         let js = concat!(
             "(typeof window!=='undefined' && window.webpackJsonp)",
@@ -214,23 +357,80 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     module_ids.sort();
     module_ids.dedup();
 
+    // Runtime evidence collection
+    let runtime_flavor = detect_runtime_flavor(kernel);
+    let cache_executed = collect_cache_executed(kernel);
+    let chunks = detect_chunks(kernel);
+    let capture_late = check_capture_late(kernel);
+
+    // Build nodes with execution metadata from cache
     let nodes: Vec<serde_json::Value> = module_ids
         .iter()
         .map(|module_id| {
+            let executed = cache_executed.contains(module_id);
+            let mut node_evidence = vec!["module_table_captured"];
+            if executed {
+                node_evidence.push("module_cache_captured");
+            }
             serde_json::json!({
                 "module_id": module_id,
                 "kind": "factory",
-                "executed": false,
+                "executed": executed,
                 "exports_seen": false,
                 "source_available": false,
                 "chunk_id": null,
-                "evidence": ["module_table_captured"],
+                "evidence": node_evidence,
             })
         })
         .collect();
 
+    // Find the entry module: module id "0" or the numerically smallest id
+    let mut entry_module_id: Option<String> = None;
+    if module_ids.contains(&"0".to_string()) {
+        entry_module_id = Some("0".to_string());
+    } else if cache_executed.contains(&"0".to_string()) {
+        entry_module_id = Some("0".to_string());
+    } else if !module_ids.is_empty() {
+        // Use smallest id as heuristic
+        let ids_sorted = {
+            let mut v = module_ids.clone();
+            v.sort_by(|a, b| {
+                let an: u64 = a.parse().unwrap_or(u64::MAX);
+                let bn: u64 = b.parse().unwrap_or(u64::MAX);
+                an.cmp(&bn)
+            });
+            v
+        };
+        if let Some(first) = ids_sorted.into_iter().next() {
+            entry_module_id = Some(first);
+        }
+    }
+
+    // Build evidence array
     let mut evidence = Vec::new();
     let mut diagnostics = Vec::new();
+
+    // Flavor diagnostics
+    if runtime_flavor == "unknown_webpack_like" {
+        diagnostics.push(serde_json::json!({
+            "code": "WEBPACK_RUNTIME_FLAVOR_UNKNOWN",
+            "severity": "warn",
+            "stage": "webpack.probe",
+            "message": "runtime flavor could not be determined from runtime signatures",
+        }));
+    }
+
+    // Capture diagnostics
+    if capture_late {
+        diagnostics.push(serde_json::json!({
+            "code": "WEBPACK_REQUIRE_CAPTURE_LATE",
+            "severity": "warn",
+            "stage": "webpack.capture",
+            "message": "require reference was captured via global fallback after runtime init",
+        }));
+    }
+
+    // Module table evidence
     if !module_ids.is_empty() {
         evidence.push(serde_json::json!({
             "kind": "module_table_captured",
@@ -238,16 +438,37 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
             "source": "webpack_bridge",
             "stage": "webpack.capture",
             "summary": "captured non-empty webpack module table",
-            "payload": {"module_count": module_ids.len()},
+            "payload": {"module_count": module_ids.len(), "module_ids": module_ids},
         }));
     } else {
         diagnostics.push(serde_json::json!({
             "code": "WEBPACK_MODULE_TABLE_EMPTY",
             "severity": "error",
             "stage": "webpack.capture",
-            "message": "webpack runtime marker present but module table was not captured",
+            "message": "webpack runtime present but module table was not captured",
         }));
     }
+
+    // Module cache evidence
+    if !cache_executed.is_empty() {
+        evidence.push(serde_json::json!({
+            "kind": "module_cache_captured",
+            "strength": "strong",
+            "source": "webpack_bridge",
+            "stage": "webpack.execute",
+            "summary": "captured executed module cache entries",
+            "payload": {"executed_count": cache_executed.len()},
+        }));
+    } else {
+        diagnostics.push(serde_json::json!({
+            "code": "WEBPACK_MODULE_CACHE_EMPTY",
+            "severity": "warn",
+            "stage": "webpack.execute",
+            "message": "module cache is empty or inaccessible; no executed modules observed",
+        }));
+    }
+
+    // Require captured evidence
     if require_captured {
         evidence.push(serde_json::json!({
             "kind": "require_captured",
@@ -265,22 +486,63 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
         }));
     }
 
+    // Entry module evidence
+    if let Some(ref entry_id) = entry_module_id {
+        let entry_executed = cache_executed.contains(entry_id);
+        evidence.push(serde_json::json!({
+            "kind": "entry_module_executed",
+            "strength": if entry_executed { "strong" } else { "weak" },
+            "source": "webpack_bridge",
+            "stage": "webpack.execute",
+            "summary": if entry_executed { "entry module found in execution cache" } else { "entry module identified but not yet executed" },
+            "payload": {"entry_module_id": entry_id, "executed": entry_executed},
+        }));
+    }
+
+    // Chunk evidence
+    for chunk in &chunks {
+        if let Some(chunk_id) = chunk.get("chunk_id").and_then(|v| v.as_str()) {
+            evidence.push(serde_json::json!({
+                "kind": "chunk_event_observed",
+                "strength": "weak",
+                "source": "webpack_bridge",
+                "stage": "webpack.chunk",
+                "summary": format!("chunk '{}' observed with {} modules", chunk_id, chunk.get("modules_added").and_then(|v| v.as_u64()).unwrap_or(0)),
+                "payload": chunk,
+            }));
+        }
+    }
+    if chunks.is_empty() && !module_ids.is_empty() {
+        diagnostics.push(serde_json::json!({
+            "code": "WEBPACK_CHUNK_UNSUPPORTED",
+            "severity": "warn",
+            "stage": "webpack.chunk",
+            "message": "no chunk events detected; runtime may use unsupported chunk path",
+        }));
+    }
+
+    // Weak evidence guard
+    let has_strong = evidence.iter().any(|e| e.get("strength").and_then(|v| v.as_str()) == Some("strong"));
+    if !has_strong && !diagnostics.is_empty() {
+        diagnostics.push(serde_json::json!({
+            "code": "WEBPACK_EVIDENCE_WEAK",
+            "severity": "warn",
+            "stage": "webpack.validate",
+            "message": "only weak or marker evidence produced; strong module/runtime evidence required for PASS",
+        }));
+    }
+
+    // Assemble graph
     let mut graph = serde_json::Map::new();
-    graph.insert(
-        "schema_version".into(),
-        serde_json::json!("module-graph.v0.1"),
-    );
+    graph.insert("schema_version".into(), serde_json::json!("module-graph.v0.1"));
     graph.insert("runtime_family".into(), serde_json::json!("webpack_like"));
-    graph.insert(
-        "runtime_flavor".into(),
-        serde_json::json!("unknown_webpack_like"),
-    );
+    graph.insert("runtime_flavor".into(), serde_json::json!(runtime_flavor));
     graph.insert("module_ids".into(), serde_json::json!(module_ids));
     graph.insert("module_count".into(), serde_json::json!(nodes.len()));
-    graph.insert("entry_module_id".into(), serde_json::Value::Null);
+    graph.insert("entry_module_id".into(), serde_json::json!(entry_module_id));
     graph.insert("nodes".into(), serde_json::Value::Array(nodes));
     graph.insert("edges".into(), serde_json::json!([]));
-    graph.insert("chunks".into(), serde_json::json!([]));
+    graph.insert("chunks".into(), serde_json::Value::Array(chunks));
     graph.insert("evidence".into(), serde_json::Value::Array(evidence));
     graph.insert("diagnostics".into(), serde_json::Value::Array(diagnostics));
     Some(serde_json::Value::Object(graph))
@@ -512,20 +774,34 @@ __webpack_require__.c = {};
             .unwrap();
 
         let graph = collect_module_graph(&mut kernel).expect("module graph");
+        let evidence = graph["evidence"].as_array().unwrap();
+        let diagnostics = graph["diagnostics"].as_array().unwrap();
+
         assert_eq!(graph["schema_version"], "module-graph.v0.1");
         assert_eq!(graph["runtime_family"], "webpack_like");
+        assert_eq!(graph["runtime_flavor"], "webpack4");
         assert_eq!(graph["module_count"], 2);
         assert_eq!(graph["nodes"].as_array().unwrap().len(), 2);
-        assert!(graph["evidence"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .any(|item| item["kind"] == "module_table_captured"));
-        assert!(graph["evidence"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .any(|item| item["kind"] == "require_captured"));
+
+        // Strong evidence
+        assert!(evidence.iter().any(|e| e["kind"] == "module_table_captured"
+            && e["strength"] == "strong"));
+        assert!(evidence.iter().any(|e| e["kind"] == "require_captured"
+            && e["strength"] == "strong"));
+
+        // entry_module_executed present with weak confidence (no cache entries)
+        assert!(evidence.iter().any(|e| e["kind"] == "entry_module_executed"));
+
+        // Diagnostics for empty cache and unsupported chunk
+        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_MODULE_CACHE_EMPTY"));
+        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_CHUNK_UNSUPPORTED"));
+
+        // Node execution metadata reflects empty cache
+        let nodes = graph["nodes"].as_array().unwrap();
+        for node in nodes {
+            assert_eq!(node["executed"], false);
+            assert_eq!(node["exports_seen"], false);
+        }
     }
 
     #[test]
@@ -536,17 +812,107 @@ __webpack_require__.c = {};
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
         kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
         let graph = collect_module_graph(&mut kernel).expect("module graph");
+        let diagnostics = graph["diagnostics"].as_array().unwrap();
+
         assert_eq!(graph["module_count"], 0);
         assert!(graph["evidence"].as_array().unwrap().is_empty());
-        assert!(graph["diagnostics"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .any(|item| item["code"] == "WEBPACK_MODULE_TABLE_EMPTY"));
-        assert!(graph["diagnostics"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .any(|item| item["code"] == "WEBPACK_REQUIRE_CAPTURE_FAILED"));
+
+        // Core diagnostics for empty table and failed capture
+        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_MODULE_TABLE_EMPTY"));
+        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_REQUIRE_CAPTURE_FAILED"));
+
+        // Additional diagnostics from flavor detection and weak evidence guard
+        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_RUNTIME_FLAVOR_UNKNOWN"));
+        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_EVIDENCE_WEAK"));
+    }
+
+    #[test]
+    fn test_collect_module_graph_with_executed_cache() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(
+                r#"
+function __webpack_require__(id) { return __webpack_require__.m[id](); }
+__webpack_require__.m = {
+  0: function(){ return "entry"; },
+  7: function(){ return "sign"; },
+  42: function(){ return "util"; }
+};
+// Simulate cache execution by adding entries to module cache
+__webpack_require__.c = {
+  0: { exports: {} },
+  7: { exports: {} }
+};
+"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .unwrap();
+
+        let graph = collect_module_graph(&mut kernel).expect("module graph");
+        let evidence = graph["evidence"].as_array().unwrap();
+        let diagnostics = graph["diagnostics"].as_array().unwrap();
+        let nodes = graph["nodes"].as_array().unwrap();
+
+        // module_cache_captured with cache entries
+        assert!(evidence.iter().any(|e| e["kind"] == "module_cache_captured"
+            && e["strength"] == "strong"));
+        assert!(!diagnostics.iter().any(|d| d["code"] == "WEBPACK_MODULE_CACHE_EMPTY"));
+
+        // entry_module_executed with strong evidence (id 0 is in cache)
+        assert!(evidence.iter().any(|e| e["kind"] == "entry_module_executed"
+            && e["strength"] == "strong"
+            && e["payload"]["executed"] == true));
+
+        // Node 0 and 7 have executed=true, 42 has executed=false
+        let node_0: &serde_json::Value = nodes.iter().find(|n| n["module_id"] == "0").unwrap();
+        let node_7: &serde_json::Value = nodes.iter().find(|n| n["module_id"] == "7").unwrap();
+        let node_42: &serde_json::Value = nodes.iter().find(|n| n["module_id"] == "42").unwrap();
+        assert_eq!(node_0["executed"], true);
+        assert_eq!(node_7["executed"], true);
+        assert_eq!(node_42["executed"], false);
+    }
+
+    #[test]
+    fn test_collect_module_graph_webpack5_flavor_with_chunks() {
+        use crate::kernel::embedded_v8::EmbeddedV8Kernel;
+        use crate::kernel::KernelConfig;
+
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+        kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(
+                r#"
+var __webpack_require__ = function(id) {};
+__webpack_require__.m = { 0: function(){} };
+__webpack_require__.c = {};
+__webpack_require__.e = function() {};
+__webpack_require__.d = function() {};
+window.webpackChunk = [
+  ["vendors", { 1: function(){}, 2: function(){} }],
+  ["main", { 3: function(){} }]
+];
+"#,
+                crate::kernel::EvalOpts::default(),
+            )
+            .unwrap();
+
+        let graph = collect_module_graph(&mut kernel).expect("module graph");
+        let evidence = graph["evidence"].as_array().unwrap();
+        let chunks = graph["chunks"].as_array().unwrap();
+
+        assert_eq!(graph["runtime_flavor"], "webpack5");
+        assert_eq!(graph["module_count"], 1);
+        assert_eq!(graph["entry_module_id"], "0");
+
+        // chunk_event_observed evidence
+        assert!(evidence.iter().any(|e| e["kind"] == "chunk_event_observed"));
+
+        // Chunk entries
+        assert!(chunks.iter().any(|c| c["chunk_id"] == "vendors"));
+        assert!(chunks.iter().any(|c| c["chunk_id"] == "main"));
     }
 }
