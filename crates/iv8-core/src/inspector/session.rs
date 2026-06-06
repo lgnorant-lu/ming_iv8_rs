@@ -32,15 +32,15 @@ pub struct InspectorSession {
 }
 
 impl InspectorSession {
-    pub fn new(config: InspectorConfig) -> Self {
-        let (channel_state, devtools_url) = crate::inspector::server::start_server(config.port);
-        Self {
+    pub fn new(config: InspectorConfig) -> std::io::Result<Self> {
+        let (channel_state, devtools_url) = crate::inspector::server::start_server(config.port)?;
+        Ok(Self {
             channel_state,
             devtools_url,
             config,
             inspector: None,
             session: None,
-        }
+        })
     }
 
     /// Set the inspector and session after external creation.

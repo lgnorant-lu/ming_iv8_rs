@@ -449,7 +449,7 @@ impl JSContext {
                 port,
                 watch_apis.unwrap_or_default(),
                 enable_console,
-            );
+            ).map_err(pyo3::exceptions::PyRuntimeError::new_err)?;
             println!("DevTools URL: {}", devtools_url);
             if wait {
                 // Wait for external DevTools client to connect (up to 30s)

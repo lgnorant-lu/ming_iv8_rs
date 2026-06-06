@@ -10,6 +10,8 @@ resolved first (tracked as a known limitation)."""
 
 from __future__ import annotations
 
+import socket
+
 
 def test_get_devtools_url_before_start():
     """Verify get_devtools_url returns None before with_devtools."""
@@ -56,3 +58,24 @@ def test_cdp_get_call_frames_not_started():
         assert frames is None
     finally:
         ctx.close()
+
+
+def test_with_devtools_reports_bind_failure():
+    """with_devtools should fail synchronously if the port is occupied."""
+    from iv8_rs import JSContext
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind(("127.0.0.1", 0))
+    sock.listen(1)
+    port = sock.getsockname()[1]
+
+    ctx = JSContext()
+    try:
+        try:
+            ctx.with_devtools(port=port, wait=False)
+            raise AssertionError("expected bind failure")
+        except RuntimeError as e:
+            assert "failed to start DevTools server" in str(e)
+    finally:
+        ctx.close()
+        sock.close()

@@ -12,7 +12,7 @@ use crate::inspector::channel::{ChannelState, SharedChannelState, lock_channel_s
 
 /// Start the CDP WebSocket server on the given port.
 /// Returns the shared channel state and the server URL.
-pub fn start_server(port: u16) -> (SharedChannelState, String) {
+pub fn start_server(port: u16) -> std::io::Result<(SharedChannelState, String)> {
     let state = Arc::new(Mutex::new(ChannelState::new()));
     let state_clone = state.clone();
 
@@ -22,28 +22,20 @@ pub fn start_server(port: u16) -> (SharedChannelState, String) {
         port
     );
 
+    let listener = TcpListener::bind(format!("127.0.0.1:{}", port))?;
+
     thread::spawn(move || {
-        run_server(port, state_clone);
+        run_server(listener, state_clone);
     });
 
     tracing::info!("V8 Inspector listening on {}", url);
     tracing::info!("Open in Chrome: {}", devtools_url);
     println!("V8 Inspector: {}", devtools_url);
 
-    (state, devtools_url)
+    Ok((state, devtools_url))
 }
 
-fn run_server(port: u16, state: SharedChannelState) {
-    let listener = match TcpListener::bind(format!("127.0.0.1:{}", port)) {
-        Ok(l) => l,
-        Err(e) => {
-            tracing::error!("Failed to bind inspector port {}: {}", port, e);
-            return;
-        }
-    };
-
-    tracing::info!("Inspector server bound to port {}", port);
-
+fn run_server(listener: TcpListener, state: SharedChannelState) {
     // Accept one connection at a time
     for stream in listener.incoming() {
         match stream {

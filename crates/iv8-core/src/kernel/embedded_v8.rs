@@ -851,14 +851,15 @@ impl EmbeddedV8Kernel {
         port: u16,
         watch_apis: Vec<String>,
         enable_console: bool,
-    ) -> String {
+    ) -> Result<String, String> {
         let config = crate::inspector::session::InspectorConfig {
             port,
             watch_apis,
             enable_console,
         };
 
-        let mut session = crate::inspector::session::InspectorSession::new(config);
+        let mut session = crate::inspector::session::InspectorSession::new(config)
+            .map_err(|e| format!("failed to start DevTools server on port {}: {}", port, e))?;
 
         // Initialize inspector: create V8Inspector + session
         // Must be done with isolate entered but without an active scope
@@ -918,7 +919,7 @@ impl EmbeddedV8Kernel {
         // Initialize CDP programmatic client
         *state.cdp_client.borrow_mut() = Some(crate::inspector::CdpClient::new(channel_state));
 
-        devtools_url
+        Ok(devtools_url)
     }
 
     /// Process pending CDP messages (call periodically when inspector is active).
