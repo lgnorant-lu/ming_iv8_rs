@@ -17,6 +17,9 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - **SourceAst dynamic source points**: `eval(...)` and `Function(...)` calls are
   captured by AST strategy traps and recorded as `eval,` / `fn_ctor,` trace
   entries.
+- **v0.6 real sample manifest**: `docs/acceptance/v0.6-real-sample-manifest.md`
+  records current corpus candidates, path status, automation status, and
+  validation status without treating missing or historical samples as verified.
 
 ### Changed
 
