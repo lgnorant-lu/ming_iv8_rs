@@ -1,4 +1,6 @@
 """M0 smoke test — verifies all core features work end-to-end."""
+import threading
+
 import iv8_rs
 
 
@@ -53,6 +55,26 @@ def test_close_and_disposed():
     assert not ctx.is_disposed()
     ctx.close()
     assert ctx.is_disposed()
+    ctx.close()
+
+    try:
+        ctx.eval("1 + 1")
+        assert False, "closed context should reject eval"
+    except RuntimeError as e:
+        assert "closed" in str(e)
+
+
+def test_cross_thread_drop_does_not_crash():
+    holder = [iv8_rs.JSContext()]
+    assert holder[0].eval("1 + 1") == 2
+
+    def worker():
+        holder.pop()
+
+    t = threading.Thread(target=worker)
+    t.start()
+    t.join()
+    assert holder == []
 
 
 def test_typed_array_to_bytes():

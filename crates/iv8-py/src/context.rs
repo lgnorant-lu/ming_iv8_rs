@@ -3,10 +3,12 @@
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 use std::collections::HashMap;
+use std::mem::ManuallyDrop;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, IV8Error, KernelConfig, RustValue};
-use parking_lot::Mutex;
+use parking_lot::{MappedMutexGuard, Mutex, MutexGuard};
 
 use crate::error;
 use crate::expose;
@@ -33,17 +35,56 @@ pub struct JSContext {
 }
 
 struct JSContextInner {
-    kernel: Mutex<EmbeddedV8Kernel>,
+    kernel: ManuallyDrop<KernelCell>,
     creator_thread: std::thread::ThreadId,
+    disposed: AtomicBool,
+}
+
+struct KernelCell {
+    inner: Mutex<Option<EmbeddedV8Kernel>>,
+}
+
+impl KernelCell {
+    fn new(kernel: EmbeddedV8Kernel) -> Self {
+        Self { inner: Mutex::new(Some(kernel)) }
+    }
+
+    fn lock(&self) -> MappedMutexGuard<'_, EmbeddedV8Kernel> {
+        MutexGuard::map(self.inner.lock(), |kernel| {
+            kernel.as_mut().expect("JSContext kernel already closed")
+        })
+    }
+
+    fn close(&self) {
+        if let Some(mut kernel) = self.inner.lock().take() {
+            kernel.dispose();
+        }
+    }
 }
 
 // SAFETY: EmbeddedV8Kernel contains V8 Isolate which is !Send + !Sync.
 // We enforce single-thread access via creator_thread check in every public method.
 // The Mutex is only for satisfying PyO3's #[pyclass(frozen)] requirement
 // (which needs the containing type to be Send+Sync), not for actual cross-thread access.
-// No V8 API is ever called from a thread other than the creator thread.
+// Public methods check creator_thread before touching V8. Drop is handled
+// explicitly below so the V8 isolate is never destroyed on a foreign thread.
 unsafe impl Send for JSContextInner {}
 unsafe impl Sync for JSContextInner {}
+
+impl Drop for JSContextInner {
+    fn drop(&mut self) {
+        if std::thread::current().id() == self.creator_thread {
+            // SAFETY: the last Python reference is being dropped on the owner
+            // thread, so it is safe to destroy the V8 isolate here.
+            unsafe { ManuallyDrop::drop(&mut self.kernel); }
+        } else {
+            // Dropping V8 from a non-owner thread is not safe. Leaking the
+            // context is preferable to process UB/crash; public cross-thread use
+            // is already rejected by assert_thread().
+            tracing::error!("JSContext dropped from non-creator thread; leaking V8 isolate");
+        }
+    }
+}
 
 #[pymethods]
 impl JSContext {
@@ -121,8 +162,9 @@ impl JSContext {
 
         Ok(Self {
             inner: Arc::new(JSContextInner {
-                kernel: Mutex::new(kernel),
+                kernel: ManuallyDrop::new(KernelCell::new(kernel)),
                 creator_thread: std::thread::current().id(),
+                disposed: AtomicBool::new(false),
             }),
         })
     }
@@ -180,9 +222,11 @@ impl JSContext {
 
     /// Close the context and release V8 resources.
     fn close(&self) -> PyResult<()> {
-        self.assert_thread()?;
-        let mut kernel = self.inner.kernel.lock();
-        kernel.dispose();
+        self.assert_creator_thread()?;
+        if self.inner.disposed.swap(true, Ordering::SeqCst) {
+            return Ok(());
+        }
+        self.inner.kernel.close();
         Ok(())
     }
 
@@ -316,9 +360,7 @@ impl JSContext {
 
     /// Check if the context has been disposed.
     fn is_disposed(&self) -> bool {
-        let kernel = self.inner.kernel.lock();
-        let state = iv8_core::state::RuntimeState::get(kernel.isolate_ref());
-        state.is_disposed()
+        self.inner.disposed.load(Ordering::SeqCst)
     }
 
     /// Expose all callable members of a Python module to JS global scope.
@@ -1403,10 +1445,20 @@ impl JSContext {
 }
 
 impl JSContext {
-    fn assert_thread(&self) -> PyResult<()> {
+    fn assert_creator_thread(&self) -> PyResult<()> {
         if std::thread::current().id() != self.inner.creator_thread {
             return Err(pyo3::exceptions::PyRuntimeError::new_err(
                 "JSContext must be used from the thread that created it",
+            ));
+        }
+        Ok(())
+    }
+
+    fn assert_thread(&self) -> PyResult<()> {
+        self.assert_creator_thread()?;
+        if self.inner.disposed.load(Ordering::SeqCst) {
+            return Err(pyo3::exceptions::PyRuntimeError::new_err(
+                "JSContext is closed",
             ));
         }
         Ok(())
