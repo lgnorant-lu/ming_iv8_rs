@@ -118,8 +118,9 @@ impl VisitMut for TrapTransform {
 
         if let Callee::Expr(callee_expr) = &call.callee {
             match &**callee_expr {
-                // Computed member call: X[Y](...) → __iv8_trap(X, Y, ...)
-                Expr::Member(member) if matches!(&member.prop, MemberProp::Computed(_)) => {
+                // Dispatch join point: A[Q[U++]](...) -> __iv8_trap(A, Q[U++], ...).
+                // Ordinary computed calls like obj[key]() are intentionally left alone.
+                Expr::Member(member) if is_dispatch_join_point(member) => {
                     // Prepend (obj, prop) to existing args
                     let obj_expr = member.obj.clone();
                     let prop_expr = match &member.prop {
@@ -127,8 +128,14 @@ impl VisitMut for TrapTransform {
                         _ => unreachable!(),
                     };
                     let mut new_args = vec![
-                        ExprOrSpread { spread: None, expr: obj_expr },
-                        ExprOrSpread { spread: None, expr: prop_expr },
+                        ExprOrSpread {
+                            spread: None,
+                            expr: obj_expr,
+                        },
+                        ExprOrSpread {
+                            spread: None,
+                            expr: prop_expr,
+                        },
                     ];
                     new_args.extend(std::mem::take(&mut call.args));
 
@@ -140,9 +147,7 @@ impl VisitMut for TrapTransform {
                     call.args = new_args;
                 }
                 // Eval/Function: dynamic code execution
-                Expr::Ident(ident)
-                    if &*ident.sym == "eval" || &*ident.sym == "Function" =>
-                {
+                Expr::Ident(ident) if &*ident.sym == "eval" || &*ident.sym == "Function" => {
                     let trap_name = if &*ident.sym == "eval" {
                         "__iv8_eval_trap"
                     } else {
@@ -178,6 +183,25 @@ fn emit_js(cm: &Lrc<SourceMap>, module: &Module) -> String {
     String::from_utf8(buf).unwrap_or_default()
 }
 
+fn is_dispatch_join_point(member: &MemberExpr) -> bool {
+    let MemberProp::Computed(prop) = &member.prop else {
+        return false;
+    };
+    let Expr::Member(index_member) = &*prop.expr else {
+        return false;
+    };
+    let MemberProp::Computed(index_prop) = &index_member.prop else {
+        return false;
+    };
+    matches!(
+        &*index_prop.expr,
+        Expr::Update(UpdateExpr {
+            op: UpdateOp::PlusPlus,
+            ..
+        })
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -186,8 +210,11 @@ mod tests {
     fn test_dispatch_expression() {
         let (output, diag) = instrument("var r = A[Q[U++]]();");
         assert!(diag.is_none(), "unexpected diagnostic: {:?}", diag);
-        assert!(output.contains("__iv8_trap"),
-            "expected __iv8_trap wrapper in output, got: {}", output);
+        assert!(
+            output.contains("__iv8_trap"),
+            "expected __iv8_trap wrapper in output, got: {}",
+            output
+        );
     }
 
     #[test]
@@ -220,22 +247,29 @@ globalThis.__iv8_function_value = f();
         use crate::kernel::embedded_v8::EmbeddedV8Kernel;
         use crate::kernel::KernelConfig;
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.eval(&transformed, crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(&transformed, crate::kernel::EvalOpts::default())
+            .unwrap();
 
         let eval_value = kernel.eval_to_rust_value("globalThis.__iv8_eval_value");
         let function_value = kernel.eval_to_rust_value("globalThis.__iv8_function_value");
         assert_eq!(eval_value, crate::convert::RustValue::Int(2));
         assert_eq!(function_value, crate::convert::RustValue::Int(3));
 
-        let trace = kernel.eval_to_rust_value(
-            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
-        );
+        let trace =
+            kernel.eval_to_rust_value("typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []");
         if let crate::convert::RustValue::Array(items) = trace {
             let entries: Vec<&str> = items.iter().map(entry_str).collect();
-            assert!(entries.iter().any(|e| e.starts_with("eval,")),
-                "expected eval source-point entry, got: {:?}", entries);
-            assert!(entries.iter().any(|e| e.starts_with("fn_ctor,")),
-                "expected Function source-point entry, got: {:?}", entries);
+            assert!(
+                entries.iter().any(|e| e.starts_with("eval,")),
+                "expected eval source-point entry, got: {:?}",
+                entries
+            );
+            assert!(
+                entries.iter().any(|e| e.starts_with("fn_ctor,")),
+                "expected Function source-point entry, got: {:?}",
+                entries
+            );
         } else {
             panic!("expected array, got {:?}", trace);
         }
@@ -245,8 +279,11 @@ globalThis.__iv8_function_value = f();
     fn test_plain_script_passthrough() {
         let (output, diag) = instrument("var x = 1 + 1;");
         assert!(diag.is_none());
-        assert!(!output.contains("__iv8_trap(var"),
-            "no dispatch calls, so no wrapping should occur: {}", output);
+        assert!(
+            !output.contains("__iv8_trap(var"),
+            "no dispatch calls, so no wrapping should occur: {}",
+            output
+        );
         assert!(output.contains("var x = 1 + 1;"));
     }
 
@@ -269,16 +306,32 @@ globalThis.__iv8_function_value = f();
     fn test_single_computed_dispatch() {
         let (output, diag) = instrument("var r = handlers[opcode]();");
         assert!(diag.is_none());
-        assert!(output.contains("__iv8_trap"),
-            "single computed dispatch not instrumented: {}", output);
+        assert!(
+            output.contains("handlers[opcode]();"),
+            "ordinary computed call should remain intact: {}",
+            output
+        );
+        assert!(
+            !output.contains("__iv8_trap(handlers"),
+            "ordinary computed call should not be trapped: {}",
+            output
+        );
     }
 
     #[test]
     fn test_dot_then_computed() {
         let (output, diag) = instrument("var r = vm.handlers[opcode]();");
         assert!(diag.is_none());
-        assert!(output.contains("__iv8_trap"),
-            "dot-then-computed dispatch not instrumented: {}", output);
+        assert!(
+            output.contains("vm.handlers[opcode]();"),
+            "ordinary dot-then-computed call should remain intact: {}",
+            output
+        );
+        assert!(
+            !output.contains("__iv8_trap(vm.handlers"),
+            "ordinary dot-then-computed call should not be trapped: {}",
+            output
+        );
     }
 
     /// Helper: extract the inner string from a RustValue::String or panic.
@@ -291,22 +344,27 @@ globalThis.__iv8_function_value = f();
 
     #[test]
     fn test_trap_produces_trace_on_execution() {
-        let src = "var handlers = [function a() {}, function b() {}]; var pc = 0; handlers[pc]();";
+        let src = "var A = [function a() {}, function b() {}]; var Q = [0]; var U = 0; A[Q[U++]]();";
         let (transformed, diag) = instrument(src);
         assert!(diag.is_none(), "transform should succeed: {:?}", diag);
-        assert!(transformed.contains("__iv8_trap"));
+        assert!(transformed.contains("__iv8_trap(A"));
 
         use crate::kernel::embedded_v8::EmbeddedV8Kernel;
         use crate::kernel::KernelConfig;
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.eval(&transformed, crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(&transformed, crate::kernel::EvalOpts::default())
+            .unwrap();
 
-        let trace = kernel.eval_to_rust_value(
-            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
-        );
+        let trace =
+            kernel.eval_to_rust_value("typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []");
         if let crate::convert::RustValue::Array(items) = trace {
             assert!(!items.is_empty(), "expected at least one D entry");
-            assert!(entry_str(&items[0]).starts_with("D,"), "expected D entry, got: {:?}", items[0]);
+            assert!(
+                entry_str(&items[0]).starts_with("D,"),
+                "expected D entry, got: {:?}",
+                items[0]
+            );
         } else {
             panic!("expected array, got {:?}", trace);
         }
@@ -314,21 +372,25 @@ globalThis.__iv8_function_value = f();
 
     #[test]
     fn test_trap_multi_arg() {
-        let src = "var handlers = [function(x,y){}]; var op=0; handlers[op](1,2);";
+        let src = "var A = [function(x,y){}]; var Q = [0]; var U = 0; A[Q[U++]](1,2);";
         let (transformed, diag) = instrument(src);
         assert!(diag.is_none());
-        assert!(transformed.contains("__iv8_trap"));
+        assert!(transformed.contains("__iv8_trap(A"));
 
         use crate::kernel::embedded_v8::EmbeddedV8Kernel;
         use crate::kernel::KernelConfig;
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.eval(&transformed, crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(&transformed, crate::kernel::EvalOpts::default())
+            .unwrap();
 
-        let trace = kernel.eval_to_rust_value(
-            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
-        );
+        let trace =
+            kernel.eval_to_rust_value("typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []");
         if let crate::convert::RustValue::Array(items) = trace {
-            assert!(!items.is_empty(), "expected D entries for multi-arg dispatch");
+            assert!(
+                !items.is_empty(),
+                "expected D entries for multi-arg dispatch"
+            );
             assert!(entry_str(&items[0]).starts_with("D,"));
         } else {
             panic!("expected array, got {:?}", trace);
@@ -347,21 +409,23 @@ obj[key]();
 "#;
         let (transformed, diag) = instrument(src);
         assert!(diag.is_none());
-        assert!(transformed.contains("__iv8_trap"));
+        assert!(!transformed.contains("__iv8_trap(obj"));
 
         use crate::kernel::embedded_v8::EmbeddedV8Kernel;
         use crate::kernel::KernelConfig;
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.eval(&transformed, crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(&transformed, crate::kernel::EvalOpts::default())
+            .unwrap();
 
-        let trace = kernel.eval_to_rust_value(
-            "typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []",
-        );
+        let trace =
+            kernel.eval_to_rust_value("typeof __iv8i_log__ !== 'undefined' ? __iv8i_log__ : []");
         if let crate::convert::RustValue::Array(items) = trace {
-            assert!(!items.is_empty(), "expected D entry for method dispatch");
-            let first = entry_str(&items[0]);
-            assert!(first.starts_with("D,"), "expected D entry, got: {}", first);
-            assert!(first.contains("method"), "expected 'method' name, got: {}", first);
+            assert!(
+                items.is_empty(),
+                "ordinary computed member call should not emit D trace: {:?}",
+                items
+            );
         } else {
             panic!("expected array, got {:?}", trace);
         }
