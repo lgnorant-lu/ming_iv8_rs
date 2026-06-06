@@ -7,6 +7,7 @@ profiles, baselines, or samples.
 
 from __future__ import annotations
 
+import sys
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -86,7 +87,7 @@ class CorpusRunOptions:
     dry_run: bool = False
     strict: bool = False
     policy: str = "runtime_safe"
-    runner_version: str = "0.6.2-draft"
+    runner_version: str = "0.7.0-dev"
 
 
 def load_manifest(path: str | Path) -> List[CorpusManifestItem]:
@@ -124,7 +125,7 @@ def load_manifest(path: str | Path) -> List[CorpusManifestItem]:
             runtime_family=row["runtime_family"],
             persona=row["persona"],
             automation_status=row["automation_status"],
-            validation_status=row["validation_status"],
+            validation_status=row.get("validation_status", "not_validated"),
         ))
 
     if not records:
@@ -181,6 +182,8 @@ def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
             "missing_evidence": list(item.expected_evidence),
             "fallback_attempts": [],
             "trace_meta": None,
+            "module_graph": None,
+            "environment_report": None,
             "diagnostics": [{
                 "code": "CORPUS_SAMPLE_PATH_MISSING",
                 "severity": "error",
@@ -188,7 +191,6 @@ def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
                 "message": f"sample source not found: {item.source_path}",
                 "sample_id": item.sample_id,
             }],
-            "errors": [f"source not found: {item.source_path}"],
         }
     source = source_path.read_text(encoding="utf-8")
     plan = iv8_rs.prepare_entry(source, persona=item.persona)
@@ -197,14 +199,18 @@ def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
 
     executed_strategies = result.get("executed_strategies", [])
     trace_meta = result.get("trace_meta")
+    module_graph = result.get("module_graph")
+    environment_report = result.get("environment_report")
     result_state = result.get("final_state", "unknown")
 
-    observed_evidence = []
+    # Use structured diagnostic_records and observed_evidence from Phase 1 EntryResult
+    diagnostic_records = result.get("diagnostic_records", [])
+    observed_evidence = result.get("observed_evidence", [])
     fallback_attempts = result.get("diagnostics", {}).get("fallback_attempts", [])
     missing_evidence = list(item.expected_evidence)
 
     # Determine outcome
-    if result_state in {"collected", "completed"}:
+    if result_state in {"collected", "completed", "finalized"}:
         result_class = "PASS"
     elif result_state in {"partial", "degraded"}:
         result_class = "WARN"
@@ -220,8 +226,9 @@ def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
         "missing_evidence": missing_evidence,
         "fallback_attempts": fallback_attempts,
         "trace_meta": trace_meta,
-        "diagnostics": result.get("errors", []),
-        "errors": result.get("errors", []),
+        "module_graph": module_graph,
+        "environment_report": environment_report,
+        "diagnostics": diagnostic_records,
     }
 
 
@@ -285,7 +292,7 @@ def _build_sample_report(
     if execution:
         diagnostics.extend(execution.get("diagnostics", []))
 
-    return {
+    sample = {
         "sample_id": item.sample_id,
         "source_path": item.source_path,
         "path_status": item.path_status,
@@ -307,6 +314,16 @@ def _build_sample_report(
         "artifacts": artifacts,
         "notes": item.notes,
     }
+
+    # Embed module_graph fragment
+    if execution and execution.get("module_graph"):
+        sample["module_graph"] = execution["module_graph"]
+
+    # Embed environment_report fragment
+    if execution and execution.get("environment_report"):
+        sample["environment_report"] = execution["environment_report"]
+
+    return sample
 
 
 def _decide_eligibility(
@@ -415,3 +432,106 @@ def _clean_markdown_cell(value: str) -> str:
     if value.startswith("`") and value.endswith("`") and len(value) >= 2:
         return value[1:-1]
     return value
+
+
+# ───
+# CLI entry point with exit codes
+# ───
+
+EXIT_CODE_OK = 0
+EXIT_CODE_FAIL = 1
+EXIT_CODE_CONFIG_ERROR = 2
+EXIT_CODE_WRITE_FAILURE = 3
+EXIT_CODE_STRICT_WARN = 4
+
+
+def _resolve_exit_code(summary: Dict[str, int], *, strict: bool) -> int:
+    """Resolve exit code per corpus-runner-contract.md section 17.
+
+    | Code | Meaning |
+    |------|---------|
+    | 0 | No FAIL or ERROR; WARN allowed unless strict |
+    | 1 | One or more FAIL |
+    | 2 | Not used from here (config errors are callerside) |
+    | 3 | Not used from here (write failures are callerside) |
+    | 4 | WARN present under strict mode |
+    """
+    if summary.get("fail", 0) > 0 or summary.get("error", 0) > 0:
+        return EXIT_CODE_FAIL
+    if strict and summary.get("warn", 0) > 0:
+        return EXIT_CODE_STRICT_WARN
+    return EXIT_CODE_OK
+
+
+def main(argv: Optional[List[str]] = None) -> int:
+    """Run corpus CLI.
+    
+    Returns exit code 0-4 per corpus-runner-contract.md.
+    """
+    if argv is None:
+        argv = sys.argv[1:]
+
+    manifest_path: Optional[str] = None
+    output_path: Optional[str] = None
+    sample_filter: Optional[Set[str]] = None
+    include_external = False
+    dry_run = False
+    strict = False
+
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        if arg == "--manifest" and i + 1 < len(argv):
+            manifest_path = argv[i + 1]
+            i += 2
+        elif arg == "--out" and i + 1 < len(argv):
+            output_path = argv[i + 1]
+            i += 2
+        elif arg == "--sample" and i + 1 < len(argv):
+            if sample_filter is None:
+                sample_filter = set()
+            sample_filter.add(argv[i + 1])
+            i += 2
+        elif arg == "--include-external":
+            include_external = True
+            i += 1
+        elif arg == "--dry-run":
+            dry_run = True
+            i += 1
+        elif arg == "--strict":
+            strict = True
+            i += 1
+        else:
+            print(f"error: unknown argument: {arg}", file=sys.stderr)
+            return EXIT_CODE_CONFIG_ERROR
+
+    if not manifest_path:
+        print("error: --manifest is required", file=sys.stderr)
+        return EXIT_CODE_CONFIG_ERROR
+
+    try:
+        items = load_manifest(manifest_path)
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"error: manifest load failed: {exc}", file=sys.stderr)
+        return EXIT_CODE_CONFIG_ERROR
+
+    opts = CorpusRunOptions(
+        sample_filter=sample_filter,
+        include_external=include_external,
+        dry_run=dry_run,
+        strict=strict,
+    )
+    report = build_corpus_report(items, manifest_path=manifest_path, options=opts)
+    summary = report.get("summary", {})
+
+    if output_path:
+        import json
+        try:
+            out = Path(output_path)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+        except (OSError, IOError) as exc:
+            print(f"error: report write failed: {exc}", file=sys.stderr)
+            return EXIT_CODE_WRITE_FAILURE
+
+    return _resolve_exit_code(summary, strict=strict)

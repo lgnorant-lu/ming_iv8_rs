@@ -47,6 +47,7 @@ from iv8_rs.corpus import (
     build_corpus_report,
     default_executor,
     load_manifest,
+    main as corpus_main,
     run_corpus_manifest,
 )
 from iv8_rs.cfg import CFG
