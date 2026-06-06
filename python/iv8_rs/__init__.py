@@ -10,6 +10,16 @@ from iv8_rs._iv8 import instrument_source, trace_diff, prepare_entry, run_with_e
 from iv8_rs._iv8 import JSError, JSCompileError, JSTimeoutError, JSMemoryError, JSPanic
 from iv8_rs.analysis import diff_analysis
 from iv8_rs.trace import parse_trace, StructuredTrace, parse_trace_stream, compress_trace, CompressedTrace
+from iv8_rs.diagnostics import (
+    TRACE_PREFIX_REGISTRY,
+    DiagnosticRecord,
+    EvidenceRecord,
+    FallbackAttempt,
+    build_trace_diagnostics,
+    classify_trace_prefix,
+    confidence_from_evidence,
+    evidence_satisfies,
+)
 from iv8_rs.probe import probe_environment
 from iv8_rs.environment import (
     EnvironmentPatch,
@@ -126,6 +136,14 @@ __all__ = [
     "compress_trace",
     "StructuredTrace",
     "CompressedTrace",
+    "TRACE_PREFIX_REGISTRY",
+    "DiagnosticRecord",
+    "EvidenceRecord",
+    "FallbackAttempt",
+    "build_trace_diagnostics",
+    "classify_trace_prefix",
+    "confidence_from_evidence",
+    "evidence_satisfies",
     "CFG",
     "probe_environment",
     "EnvironmentPatch",
