@@ -6,6 +6,85 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-06-07
+
+### Added
+
+- **Shared Trace / Evidence / Diagnostics contracts**: `python/iv8_rs/diagnostics.py`
+  provides `EvidenceRecord`, `DiagnosticRecord`, `FallbackAttempt` dataclasses
+  with validation, dict roundtrip, and shared prefix registry
+  `TRACE_PREFIX_REGISTRY`. `evidence_satisfies()` / `confidence_from_evidence()`
+  implement marker-only guard and confidence calculation.
+- **Structured trace event envelope**: `TraceEvent` dataclass with `from_raw()`
+  converts raw trace lines to normalized `version/kind/prefix/stage/strategy_id/
+  sample_kind/payload/source/confidence` shape per spec.
+- **Evidence gate evaluator**: `EvidenceGateResult` and `evaluate_evidence_gate()`
+  unify PASS/WARN/FAIL decision: policy blocked → FAIL, marker-only → WARN,
+  strong evidence → PASS. Covers missing expected evidence, diagnostic output,
+  and confidence calculation.
+- **DIAGNOSTIC_CATALOG**: 14 initial diagnostic codes from the shared spec,
+  each with severity and stage classification.
+- **Trace diagnostics enhancement**: `build_trace_diagnostics()` now detects
+  known-prefix malformed payloads and emits `TRACE_PARSE_PARTIAL` in addition
+  to existing empty/unknown detection.
+- **API Contract gate**: `tests/test_api_contract.py` covers constructor/profile,
+  eval/Promise, page_load/resource bundle, network handler, inspector safe APIs,
+  Entry/Environment wrapper dataclass shape, context manager lifecycle,
+  post-close rejection for all stable public methods, expose callback
+  success/error/non-callable, and specialized stable API existence checks.
+- **Corpus Runner contract**: `python/iv8_rs/corpus.py` with Markdown manifest
+  parsing (`load_manifest` / `CorpusManifestItem` / `CorpusRunOptions`),
+  eligibility classification, `build_corpus_report()` with `corpus-report.v0.1`
+  envelope. Default behavior: skip undeployed/external/manual/blocking samples,
+  no automatic file mutation.
+- **Environment Patch Policy contract**: `python/iv8_rs/environment_policy.py`
+  with `runtime_safe` / `analysis_only` / `unsafe_hook` policy levels,
+  `PatchPolicyDecision`, conflict detection, kind risk reclassification,
+  mutation guard (`block_mutation()`).
+- **Environment Plane Automation report extended**: `EnvironmentPlaneReport`
+  gains `schema_version`, `patch_candidates`, `applied_patches`,
+  `rejected_patches`, `coverage`, `evidence`, `diagnostics`.
+- **Dispatch detection evidence levels**: `DispatchEvidenceLevel` enum
+  (`StrongStatic` / `MarkerOnly` / `DiagnosticOnly`) in `dispatch.rs`.
+  Multi-argument handler-array classification supported. SwitchVM marked as
+  marker-only. Ordinary `obj[key]()` flagged as diagnostic-only.
+- **Webpack module graph schema**: `collect_module_graph()` now returns
+  `module-graph.v0.1` with `schema_version`, `runtime_family`,
+  `runtime_flavor`, `nodes`, `edges`, `chunks`, `evidence`, `diagnostics`.
+  Fallback to global `__webpack_require__` for require reference retention.
+- **SourceAst dispatch join point narrowing**: Only nested computed member
+  with `UpdateOp::PlusPlus` (`A[Q[U++]]()`) triggers `__iv8_trap` instrumentation.
+  Ordinary computed calls (`handlers[op]()`, `obj[key]()`) remain intact.
+
+### Changed
+
+- `tests/test_api_contract.py` strengthened: context manager lifecycle,
+  post-close rejection for page_load / add_resource / set_network_handler /
+  expose, expose callback error propagation, specialized API existence checks.
+- `tests/test_trace_evidence_diagnostics.py` strengthened: diagnostic catalog
+  coverage, missing expected evidence / marker-only / policy-blocked diagnostics,
+  fallback `skip` outcome roundtrip, TraceEvent roundtrip, malformed prefix
+  detection, evidence gate evaluator tests.
+
+### Performance
+
+- SourceAst transform no longer wraps all computed member calls, reducing
+  false-positive `D,` trace entries and runtime overhead from overbroad trapping.
+
+### Documentation
+
+- `docs/roadmap/post-v0.6/trace-evidence-diagnostics.md` — Status: In Review,
+  review checklist complete
+- `docs/roadmap/post-v0.6/api-contract.md` — Status: In Review,
+  review checklist complete
+- `docs/roadmap/post-v0.6/CAPABILITY_INDEX.md` — Two v0.6.1 capabilities
+  marked `in_review`
+
+### Fixed
+
+- Fallback attempt outcome now accepts both `skip` (spec) and `skipped`
+  (runner) via `FALLBACK_OUTCOMES`.
+
 ## [0.6.0] - 2026-06-06
 
 ### Added
