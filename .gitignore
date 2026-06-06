@@ -134,3 +134,7 @@ tests/probe_results.json
 tests/_*.py
 scripts/_*.py
 scripts/diag*.py
+
+# -- 前端产物 -------------------------
+node_modules/*
+node_modules/.package-lock.json
