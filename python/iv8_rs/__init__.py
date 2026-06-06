@@ -27,6 +27,13 @@ from iv8_rs.environment import (
     build_environment_patch,
     run_environment_plane,
 )
+from iv8_rs.corpus import (
+    CorpusManifestItem,
+    CorpusRunOptions,
+    build_corpus_report,
+    load_manifest,
+    run_corpus_manifest,
+)
 from iv8_rs.cfg import CFG
 from iv8_rs.taint import TaintEngine, TaintReport
 from iv8_rs.patterns import (
@@ -150,6 +157,11 @@ __all__ = [
     "EnvironmentPlaneReport",
     "build_environment_patch",
     "run_environment_plane",
+    "CorpusManifestItem",
+    "CorpusRunOptions",
+    "build_corpus_report",
+    "load_manifest",
+    "run_corpus_manifest",
     "load_profile",
     "TaintEngine",
     "TaintReport",
