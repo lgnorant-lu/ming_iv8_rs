@@ -6,6 +6,30 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+### Added
+
+- **v0.6-dev baseline**: `docs/baseline/v0.6-dev-baseline.md` records
+  the current targeted validation commands, verified outputs, partial
+  strategy status, and known stabilization blockers.
+
+### Changed
+
+- Clarified release-facing documentation so historical test counts are not
+  presented as the current unverified `0.6.0-dev` baseline.
+- Annotated the research index and legacy acceptance criteria as historical
+  records with known placeholder corruption, preserving their original content
+  while preventing damaged status data from being treated as current truth.
+
+### Known limitations
+
+- `0.6.0-dev` EntryPlane is a working skeleton, not a completed expansion:
+  `SourceRegex` is pass-through, `eval`/`Function` AST capture is still TODO,
+  SwitchVM dispatch only records a detection marker, and Environment Plane
+  formalization has not started.
+- Current network runtime remains `ResourceBundle -> Python callback ->
+  NetworkError`; real HTTP via `reqwest`, async network callbacks, and typed
+  `NetworkRequest` / `NetworkResponse` are deferred design items.
+
 ## [0.5.0] - 2026-06-03
 
 ### Added

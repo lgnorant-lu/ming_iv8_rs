@@ -1,7 +1,7 @@
 //! Network subsystem: ResourceBundle for offline resource serving.
 //!
-//! v0.1: Only ResourceBundle (pre-registered responses).
-//! v0.2+: Python callback handler + reqwest real HTTP.
+//! Current runtime: ResourceBundle -> optional Python callback -> NetworkError.
+//! Real HTTP backends such as reqwest remain deferred design items.
 
 pub mod bundle;
 pub mod fetch;

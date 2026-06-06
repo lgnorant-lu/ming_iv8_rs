@@ -5,7 +5,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 
 ## Features
 
-- **Full browser surface**: navigator / screen / window / document / location / history / performance
+- **Broad browser-like surface**: navigator / screen / window / document / location / history / performance
 - **DOM**: html5ever parsing + ego-tree + selectors CSS Level 4 + EventTarget 3-phase dispatch
 - **SubtleCrypto**: AES-GCM/CBC, RSA-OAEP/PSS, ECDSA/ECDH(P-256/P-384), HMAC, HKDF, PBKDF2
 - **Canvas 2D**: tiny-skia real rendering + deterministic noise + fixed fingerprint fallback
@@ -17,6 +17,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Analysis (v0.5)**: StructuredTrace / CFG reconstruction / Taint Tracking / 4-layer Crypto Detection / VM handler diff / Module Isolation / CDP Scope API / Environment Probe / Quality Harness
 - **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
 - **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
+
+Current `0.6.0-dev` status is tracked in `docs/baseline/v0.6-dev-baseline.md`.
+Some v0.6 EntryPlane strategies are intentionally partial while the baseline is
+being stabilized.
 
 ## Install
 
@@ -93,8 +97,9 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 
 ## Documentation
 
-- **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive, 31 sections)
+- **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive guide)
 - **Progress**: [docs/PROGRESS.md](docs/PROGRESS.md)
+- **v0.6 Baseline**: [docs/baseline/v0.6-dev-baseline.md](docs/baseline/v0.6-dev-baseline.md)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 - **TDC Testing Guide**: [docs/tdc-testing-guide.md](docs/tdc-testing-guide.md)
 - **Quality Harness**: [docs/quality-harness/HARNESS-CHARTER.md](docs/quality-harness/HARNESS-CHARTER.md)
@@ -103,7 +108,8 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 ## Tests
 
 ```bash
-# Python tests (775 passed, 1 skipped)
+# Historical full Python baseline (v0.5 tree): 775 passed, 1 skipped.
+# Current v0.6-dev baseline commands are recorded in docs/baseline/.
 uv run --with pytest pytest tests -q
 
 # Rust tests
@@ -122,7 +128,7 @@ iv8-rs/
 │   ├── iv8-undetect/ # Anti-detection (wrapNative / hookNative / window.chrome)
 │   └── iv8-py/       # PyO3 Python binding
 ├── python/iv8_rs/    # Python package (analysis/cfg/taint/patterns/probe/trace/vm_diff/isolation + type stubs)
-├── tests/            # Python integration tests (775 passed, 1 skipped)
+├── tests/            # Python integration tests and v0.6 acceptance tests
 └── docs/             # Design docs + research + quality-harness
 ```
 
