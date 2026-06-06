@@ -137,4 +137,4 @@ scripts/diag*.py
 
 # -- 前端产物 -------------------------
 node_modules/*
-node_modules/.package-lock.json
+temp/
