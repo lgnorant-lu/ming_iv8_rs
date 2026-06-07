@@ -10,17 +10,103 @@ from dataclasses import asdict, dataclass, field
 from typing import Any
 
 __all__ = [
+    "EnvironmentGap",
     "ProbeDefinition",
+    "ProbeObservation",
     "ProbePack",
+    "ProbeRun",
     "available_probe_packs",
     "load_probe_pack",
     "probe_pack_from_dict",
     "probe_pack_to_dict",
+    "run_probe_pack",
 ]
 
 
 _ALLOWED_EVIDENCE_CEILINGS = {"diagnostic_only", "weak"}
 _ALLOWED_PROBE_CATEGORIES = {"presence", "descriptor", "behavior", "value"}
+
+
+@dataclass(frozen=True, slots=True)
+class EnvironmentGap:
+    probe_id: str
+    target: str
+    gap_class: str
+    category: str
+    expected: Any
+    actual: Any
+    error: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class ProbeObservation:
+    probe_id: str
+    target: str
+    category: str
+    expected: Any
+    actual: Any
+    passed: bool
+    gap_class: str
+    evidence_ceiling: str = "diagnostic_only"
+    error: str | None = None
+
+    @classmethod
+    def from_probe(
+        cls,
+        probe: ProbeDefinition,
+        *,
+        actual: Any,
+        passed: bool,
+        error: str | None = None,
+    ) -> ProbeObservation:
+        return cls(
+            probe_id=probe.probe_id,
+            target=probe.target,
+            category=probe.category,
+            expected=probe.expected,
+            actual=actual,
+            passed=passed,
+            gap_class=probe.gap_class,
+            evidence_ceiling=probe.evidence_ceiling,
+            error=error,
+        )
+
+    def to_gap(self) -> EnvironmentGap | None:
+        if self.passed:
+            return None
+        return EnvironmentGap(
+            probe_id=self.probe_id,
+            target=self.target,
+            gap_class=self.gap_class,
+            category=self.category,
+            expected=self.expected,
+            actual=self.actual,
+            error=self.error,
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class ProbeRun:
+    probe_pack: str
+    observations: list[ProbeObservation]
+    gaps: list[EnvironmentGap]
+    coverage: dict[str, int]
+    diagnostics: list[dict[str, Any]] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "probe_pack": self.probe_pack,
+            "observations": [observation.to_dict() for observation in self.observations],
+            "gaps": [gap.to_dict() for gap in self.gaps],
+            "coverage": dict(self.coverage),
+            "diagnostics": [dict(diagnostic) for diagnostic in self.diagnostics],
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -199,3 +285,135 @@ def probe_pack_from_dict(data: dict[str, Any]) -> ProbePack:
 
 def probe_pack_to_dict(probe_pack: ProbePack) -> dict[str, Any]:
     return probe_pack.to_dict()
+
+
+def run_probe_pack(
+    js_source: str,
+    probe_pack: str | ProbePack = "fingerprint.m1",
+    *,
+    profile: str | None = "default",
+    environment: dict[str, Any] | None = None,
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
+    time_mode: str = "logical",
+    entry_expr: str | None = None,
+) -> ProbeRun:
+    """Run a bounded probe pack in a fresh JSContext and classify generic gaps."""
+    from iv8_rs import JSContext
+
+    pack = load_probe_pack(probe_pack) if isinstance(probe_pack, str) else probe_pack
+    observations: list[ProbeObservation] = []
+    diagnostics: list[dict[str, Any]] = [
+        {
+            "code": "ENV_TOOLCHAIN_PROBE_PACK_RUN",
+            "severity": "info",
+            "stage": "environment.probe",
+            "message": f"probe pack executed: {pack.probe_pack}",
+        }
+    ]
+
+    ctx = JSContext(
+        profile=profile,
+        environment=environment,
+        random_seed=random_seed,
+        time_freeze=time_freeze,
+        time_mode=time_mode,
+    )
+    try:
+        if js_source:
+            ctx.eval(js_source)
+        if entry_expr:
+            try:
+                ctx.eval(entry_expr)
+            except Exception as exc:  # noqa: BLE001 - diagnostics must preserve probe continuity.
+                diagnostics.append(_diagnostic(
+                    "ENV_TOOLCHAIN_ENTRY_EXPR_FAILED",
+                    "warn",
+                    "environment.probe",
+                    f"entry_expr failed: {exc}",
+                ))
+
+        for probe in pack.probes:
+            observations.append(_run_single_probe(ctx, probe))
+    finally:
+        ctx.close()
+
+    gaps = [gap for observation in observations if (gap := observation.to_gap()) is not None]
+    diagnostics.extend(_gap_diagnostics(gaps))
+    return ProbeRun(
+        probe_pack=pack.probe_pack,
+        observations=observations,
+        gaps=gaps,
+        coverage=_coverage_from_observations(observations),
+        diagnostics=diagnostics,
+    )
+
+
+def _run_single_probe(ctx: Any, probe: ProbeDefinition) -> ProbeObservation:
+    try:
+        actual = ctx.eval(_probe_eval_source(probe.js))
+        passed = actual == probe.expected
+        return ProbeObservation.from_probe(probe, actual=actual, passed=passed)
+    except Exception as exc:  # noqa: BLE001 - probe failures are diagnostic inputs.
+        return ProbeObservation.from_probe(
+            probe,
+            actual=None,
+            passed=False,
+            error=str(exc),
+        )
+
+
+def _probe_eval_source(js: str) -> str:
+    return f"(function(){{\n{js}\n}})()"
+
+
+def _coverage_from_observations(observations: list[ProbeObservation]) -> dict[str, int]:
+    present = sum(1 for observation in observations if observation.passed)
+    missing = sum(
+        1
+        for observation in observations
+        if not observation.passed and observation.gap_class == "missing_api"
+    )
+    mismatch = len(observations) - present - missing
+    return {"present": present, "missing": missing, "mismatch": mismatch}
+
+
+def _gap_diagnostics(gaps: list[EnvironmentGap]) -> list[dict[str, Any]]:
+    diagnostics = []
+    for gap in gaps:
+        code = "ENV_TOOLCHAIN_GAP_OBSERVED"
+        severity = "info"
+        if gap.gap_class == "descriptor_mismatch":
+            code = "ENV_TOOLCHAIN_DESCRIPTOR_MISMATCH"
+            severity = "warn"
+        diagnostics.append(_diagnostic(
+            code,
+            severity,
+            "environment.probe",
+            f"{gap.gap_class} observed for {gap.target}",
+            {
+                "probe_id": gap.probe_id,
+                "target": gap.target,
+                "gap_class": gap.gap_class,
+                "error": gap.error,
+            },
+        ))
+    return diagnostics
+
+
+def _diagnostic(
+    code: str,
+    severity: str,
+    stage: str,
+    message: str,
+    details: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    diagnostic: dict[str, Any] = {
+        "code": code,
+        "severity": severity,
+        "stage": stage,
+        "message": message,
+    }
+    if details is not None:
+        diagnostic["details"] = details
+    return diagnostic
