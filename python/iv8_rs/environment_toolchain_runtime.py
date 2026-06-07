@@ -15,8 +15,11 @@ __all__ = [
     "ProbeObservation",
     "ProbePack",
     "ProbeRun",
+    "ToolchainCandidate",
+    "available_candidate_targets",
     "available_probe_packs",
     "load_probe_pack",
+    "map_gaps_to_candidates",
     "probe_pack_from_dict",
     "probe_pack_to_dict",
     "run_probe_pack",
@@ -107,6 +110,46 @@ class ProbeRun:
             "coverage": dict(self.coverage),
             "diagnostics": [dict(diagnostic) for diagnostic in self.diagnostics],
         }
+
+
+@dataclass(frozen=True, slots=True)
+class ToolchainCandidate:
+    patch_id: str
+    target: str
+    target_family: str
+    kind: str
+    policy: str
+    source: str
+    value_preview: Any
+    requires: list[str] = field(default_factory=list)
+    risk_reasons: list[str] = field(default_factory=list)
+    reversible: bool = True
+    validation: dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if self.policy != "runtime_safe":
+            raise ValueError("slice 3 registry only exposes runtime_safe candidates")
+        if not self.reversible:
+            raise ValueError("runtime_safe candidates must be reversible")
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> ToolchainCandidate:
+        return cls(
+            patch_id=data["patch_id"],
+            target=data["target"],
+            target_family=data["target_family"],
+            kind=data["kind"],
+            policy=data["policy"],
+            source=data.get("source", "builtin_registry"),
+            value_preview=data.get("value_preview"),
+            requires=list(data.get("requires", [])),
+            risk_reasons=list(data.get("risk_reasons", [])),
+            reversible=bool(data.get("reversible", True)),
+            validation=dict(data.get("validation", {})),
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass(frozen=True, slots=True)
@@ -265,9 +308,96 @@ _FINGERPRINT_M1: dict[str, Any] = {
 
 _BUILTIN_PROBE_PACKS = {"fingerprint.m1": _FINGERPRINT_M1}
 
+_BUILTIN_CANDIDATE_REGISTRY: dict[str, list[dict[str, Any]]] = {
+    "navigator.languages": [
+        {
+            "patch_id": "navigator.languages.default.v0",
+            "target": "navigator.languages",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": ["en-US", "en"],
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["navigator.languages"],
+                "gap_classes": ["missing_api", "value_mismatch"],
+            },
+        }
+    ],
+    "navigator.webdriver": [
+        {
+            "patch_id": "navigator.webdriver.default.v0",
+            "target": "navigator.webdriver",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": False,
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["navigator.webdriver"],
+                "gap_classes": ["value_mismatch"],
+            },
+        }
+    ],
+    "screen.width": [
+        {
+            "patch_id": "screen.width.default.v0",
+            "target": "screen.width",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": 1920,
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["screen.width"],
+                "gap_classes": ["missing_api", "value_mismatch"],
+            },
+        }
+    ],
+}
+
 
 def available_probe_packs() -> list[str]:
     return sorted(_BUILTIN_PROBE_PACKS)
+
+
+def available_candidate_targets() -> list[str]:
+    return sorted(_BUILTIN_CANDIDATE_REGISTRY)
+
+
+def map_gaps_to_candidates(
+    gaps: list[EnvironmentGap],
+    *,
+    environment: dict[str, Any] | None = None,
+) -> list[ToolchainCandidate]:
+    """Map generic gaps to reviewed runtime-safe candidates without applying them."""
+    explicit_environment = environment or {}
+    candidates: list[ToolchainCandidate] = []
+    seen_patch_ids: set[str] = set()
+    for gap in gaps:
+        if gap.target in explicit_environment:
+            continue
+        for candidate_data in _BUILTIN_CANDIDATE_REGISTRY.get(gap.target, []):
+            gap_classes = set(candidate_data.get("validation", {}).get("gap_classes", []))
+            if gap_classes and gap.gap_class not in gap_classes:
+                continue
+            candidate = ToolchainCandidate.from_dict(candidate_data)
+            if candidate.patch_id not in seen_patch_ids:
+                candidates.append(candidate)
+                seen_patch_ids.add(candidate.patch_id)
+    return candidates
 
 
 def load_probe_pack(probe_pack: str) -> ProbePack:
