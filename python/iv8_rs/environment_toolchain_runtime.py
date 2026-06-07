@@ -307,12 +307,126 @@ _FINGERPRINT_M1: dict[str, Any] = {
             "evidence_ceiling": "diagnostic_only",
         },
         {
+            "probe_id": "navigator.language.present",
+            "target": "navigator.language",
+            "category": "presence",
+            "js": "return typeof navigator.language === 'string' && navigator.language.length > 0;",
+            "expected": True,
+            "gap_class": "missing_api",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
+            "probe_id": "navigator.platform.present",
+            "target": "navigator.platform",
+            "category": "presence",
+            "js": "return typeof navigator.platform === 'string' && navigator.platform.length > 0;",
+            "expected": True,
+            "gap_class": "missing_api",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
+            "probe_id": "navigator.hardwareConcurrency.present",
+            "target": "navigator.hardwareConcurrency",
+            "category": "presence",
+            "js": (
+                "return typeof navigator.hardwareConcurrency === 'number' && "
+                "navigator.hardwareConcurrency > 0;"
+            ),
+            "expected": True,
+            "gap_class": "missing_api",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
+            "probe_id": "navigator.deviceMemory.present",
+            "target": "navigator.deviceMemory",
+            "category": "presence",
+            "js": (
+                "return typeof navigator.deviceMemory === 'number' && "
+                "navigator.deviceMemory > 0;"
+            ),
+            "expected": True,
+            "gap_class": "missing_api",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
             "probe_id": "screen.width.present",
             "target": "screen.width",
             "category": "presence",
             "js": "return typeof screen.width === 'number' && screen.width > 0;",
             "expected": True,
             "gap_class": "missing_api",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
+            "probe_id": "screen.height.present",
+            "target": "screen.height",
+            "category": "presence",
+            "js": "return typeof screen.height === 'number' && screen.height > 0;",
+            "expected": True,
+            "gap_class": "missing_api",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
+            "probe_id": "document.readyState.present",
+            "target": "document.readyState",
+            "category": "presence",
+            "js": (
+                "return typeof document.readyState === 'string' && "
+                "document.readyState.length > 0;"
+            ),
+            "expected": True,
+            "gap_class": "missing_api",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
+            "probe_id": "localStorage.shape",
+            "target": "localStorage",
+            "category": "behavior",
+            "js": (
+                "return typeof localStorage === 'object' && "
+                "typeof localStorage.getItem === 'function';"
+            ),
+            "expected": True,
+            "gap_class": "behavior_mismatch",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
+            "probe_id": "sessionStorage.shape",
+            "target": "sessionStorage",
+            "category": "behavior",
+            "js": (
+                "return typeof sessionStorage === 'object' && "
+                "typeof sessionStorage.getItem === 'function';"
+            ),
+            "expected": True,
+            "gap_class": "behavior_mismatch",
+            "side_effects": [],
+            "cleanup": "none",
+            "evidence_ceiling": "diagnostic_only",
+        },
+        {
+            "probe_id": "window.chrome.shape",
+            "target": "window.chrome",
+            "category": "behavior",
+            "js": "return typeof window.chrome === 'object';",
+            "expected": True,
+            "gap_class": "behavior_mismatch",
             "side_effects": [],
             "cleanup": "none",
             "evidence_ceiling": "diagnostic_only",
@@ -390,6 +504,82 @@ _BUILTIN_CANDIDATE_REGISTRY: dict[str, list[dict[str, Any]]] = {
             },
         }
     ],
+    "navigator.language": [
+        {
+            "patch_id": "navigator.language.default.v0",
+            "target": "navigator.language",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": "en-US",
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["navigator.language"],
+                "gap_classes": ["missing_api", "value_mismatch"],
+            },
+        }
+    ],
+    "navigator.platform": [
+        {
+            "patch_id": "navigator.platform.default.v0",
+            "target": "navigator.platform",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": "Win32",
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["navigator.platform"],
+                "gap_classes": ["missing_api", "value_mismatch"],
+            },
+        }
+    ],
+    "navigator.hardwareConcurrency": [
+        {
+            "patch_id": "navigator.hardwareConcurrency.default.v0",
+            "target": "navigator.hardwareConcurrency",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": 8,
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["navigator.hardwareConcurrency"],
+                "gap_classes": ["missing_api", "value_mismatch"],
+            },
+        }
+    ],
+    "navigator.deviceMemory": [
+        {
+            "patch_id": "navigator.deviceMemory.default.v0",
+            "target": "navigator.deviceMemory",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": 8,
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["navigator.deviceMemory"],
+                "gap_classes": ["missing_api", "value_mismatch"],
+            },
+        }
+    ],
     "screen.width": [
         {
             "patch_id": "screen.width.default.v0",
@@ -405,6 +595,44 @@ _BUILTIN_CANDIDATE_REGISTRY: dict[str, list[dict[str, Any]]] = {
             "validation": {
                 "probe_pack": "fingerprint.m1",
                 "expected_delta": ["screen.width"],
+                "gap_classes": ["missing_api", "value_mismatch"],
+            },
+        }
+    ],
+    "screen.height": [
+        {
+            "patch_id": "screen.height.default.v0",
+            "target": "screen.height",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": 1080,
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["screen.height"],
+                "gap_classes": ["missing_api", "value_mismatch"],
+            },
+        }
+    ],
+    "document.readyState": [
+        {
+            "patch_id": "document.readyState.default.v0",
+            "target": "document.readyState",
+            "target_family": "environment_value",
+            "kind": "value",
+            "policy": "runtime_safe",
+            "source": "builtin_registry",
+            "value_preview": "complete",
+            "requires": [],
+            "risk_reasons": [],
+            "reversible": True,
+            "validation": {
+                "probe_pack": "fingerprint.m1",
+                "expected_delta": ["document.readyState"],
                 "gap_classes": ["missing_api", "value_mismatch"],
             },
         }
