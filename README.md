@@ -17,10 +17,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Analysis (v0.5)**: StructuredTrace / CFG reconstruction / Taint Tracking / 4-layer Crypto Detection / VM handler diff / Module Isolation / CDP Scope API / Environment Probe / Quality Harness
 - **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
 - **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
+- **Entry Plane Solidification (v0.7)**: WebpackBridge (flavor detection, require/module table capture), Dispatch Generalization (zero-arg, multi-arg, switch loop, indirect handler map), SourceAst Pipeline (transform join points, transform report), and Corpus Runner CLI
 
-Current `0.6.0` status is tracked in `docs/baseline/v0.6-dev-baseline.md`.
-v0.6.0 is a stabilized Entry / Environment / Evidence baseline, not the final
-deobfuscation expansion. Some strategies remain intentionally partial.
+Current `0.7.0` status is tracked in `docs/roadmap/post-v0.6/V0.7_ENTRY_SOLIDIFICATION.md`.
+v0.7.0 is an entry-solidified and corpus-driven release. Webpack runtime structure, VM dispatch variant trace, and Source AST pipelines are fully validated via Corpus Runner.
 
 ## Install
 
@@ -112,7 +112,7 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 ## Tests
 
 ```bash
-# Current v0.6.0 release gate is recorded in docs/baseline/.
+# Current v0.7.0 release gate is verified via Corpus Runner:
 uv run python -m pytest tests -q
 
 # Rust tests
