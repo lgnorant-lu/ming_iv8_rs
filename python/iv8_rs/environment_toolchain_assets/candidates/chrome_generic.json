@@ -1,0 +1,160 @@
+{
+  "candidate_pack": "chrome_generic",
+  "version": 1,
+  "description": "generic runtime-safe browser value candidates",
+  "candidates": [
+    {
+      "patch_id": "navigator.languages.default.v0",
+      "target": "navigator.languages",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": ["en-US", "en"],
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["navigator.languages"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    },
+    {
+      "patch_id": "navigator.webdriver.default.v0",
+      "target": "navigator.webdriver",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": false,
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["navigator.webdriver"],
+        "gap_classes": ["value_mismatch"]
+      }
+    },
+    {
+      "patch_id": "navigator.language.default.v0",
+      "target": "navigator.language",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": "en-US",
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["navigator.language"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    },
+    {
+      "patch_id": "navigator.platform.default.v0",
+      "target": "navigator.platform",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": "Win32",
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["navigator.platform"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    },
+    {
+      "patch_id": "navigator.hardwareConcurrency.default.v0",
+      "target": "navigator.hardwareConcurrency",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": 8,
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["navigator.hardwareConcurrency"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    },
+    {
+      "patch_id": "navigator.deviceMemory.default.v0",
+      "target": "navigator.deviceMemory",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": 8,
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["navigator.deviceMemory"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    },
+    {
+      "patch_id": "screen.width.default.v0",
+      "target": "screen.width",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": 1920,
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["screen.width"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    },
+    {
+      "patch_id": "screen.height.default.v0",
+      "target": "screen.height",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": 1080,
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["screen.height"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    },
+    {
+      "patch_id": "document.readyState.default.v0",
+      "target": "document.readyState",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "builtin_registry",
+      "value_preview": "complete",
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "fingerprint.m1",
+        "expected_delta": ["document.readyState"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "probe_pack": "fingerprint.m1",
+  "version": 1,
+  "description": "baseline navigator, screen, webdriver, and descriptor probes",
+  "evidence_ceiling": "diagnostic_only",
+  "probes": [
+    {
+      "probe_id": "navigator.languages.present",
+      "target": "navigator.languages",
+      "category": "presence",
+      "js": "return Array.isArray(navigator.languages) && navigator.languages.length > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.webdriver.value",
+      "target": "navigator.webdriver",
+      "category": "value",
+      "js": "return navigator.webdriver === false || typeof navigator.webdriver === 'undefined';",
+      "expected": true,
+      "gap_class": "value_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.language.present",
+      "target": "navigator.language",
+      "category": "presence",
+      "js": "return typeof navigator.language === 'string' && navigator.language.length > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.platform.present",
+      "target": "navigator.platform",
+      "category": "presence",
+      "js": "return typeof navigator.platform === 'string' && navigator.platform.length > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.hardwareConcurrency.present",
+      "target": "navigator.hardwareConcurrency",
+      "category": "presence",
+      "js": "return typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.deviceMemory.present",
+      "target": "navigator.deviceMemory",
+      "category": "presence",
+      "js": "return typeof navigator.deviceMemory === 'number' && navigator.deviceMemory > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "screen.width.present",
+      "target": "screen.width",
+      "category": "presence",
+      "js": "return typeof screen.width === 'number' && screen.width > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "screen.height.present",
+      "target": "screen.height",
+      "category": "presence",
+      "js": "return typeof screen.height === 'number' && screen.height > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "document.readyState.present",
+      "target": "document.readyState",
+      "category": "presence",
+      "js": "return typeof document.readyState === 'string' && document.readyState.length > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "localStorage.shape",
+      "target": "localStorage",
+      "category": "behavior",
+      "js": "return typeof localStorage === 'object' && typeof localStorage.getItem === 'function';",
+      "expected": true,
+      "gap_class": "behavior_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "sessionStorage.shape",
+      "target": "sessionStorage",
+      "category": "behavior",
+      "js": "return typeof sessionStorage === 'object' && typeof sessionStorage.getItem === 'function';",
+      "expected": true,
+      "gap_class": "behavior_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "window.chrome.shape",
+      "target": "window.chrome",
+      "category": "behavior",
+      "js": "return typeof window.chrome === 'object';",
+      "expected": true,
+      "gap_class": "behavior_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.userAgent.descriptor",
+      "target": "navigator.userAgent",
+      "category": "descriptor",
+      "js": "var d = Object.getOwnPropertyDescriptor(navigator, 'userAgent') || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(navigator), 'userAgent'); return !!d && typeof d.get === 'function';",
+      "expected": true,
+      "gap_class": "descriptor_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.userAgentData.shape",
+      "target": "navigator.userAgentData",
+      "category": "behavior",
+      "js": "return typeof navigator.userAgentData === 'object' && Array.isArray(navigator.userAgentData.brands);",
+      "expected": true,
+      "gap_class": "behavior_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    }
+  ]
+}

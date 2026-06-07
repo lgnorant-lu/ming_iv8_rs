@@ -6,8 +6,10 @@ not run JavaScript, apply patches, or write profiles/manifests/baselines.
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import asdict, dataclass, field
+from importlib import resources
 from typing import Any
 
 __all__ = [
@@ -56,6 +58,8 @@ _BLOCKED_BOUNDARY_TERMS = (
     "secret",
 )
 _ORDERED_RECIPE_RE = re.compile(r"apply\s+.+request\s+.+(?:copy|rerun)", re.IGNORECASE)
+_PROBE_PACK_FILES = {"fingerprint.m1": "fingerprint.m1.json"}
+_CANDIDATE_PACK_FILES = {"chrome_generic": "chrome_generic.json"}
 
 
 @dataclass(frozen=True, slots=True)
@@ -275,377 +279,12 @@ class ProbePack:
         return data
 
 
-_FINGERPRINT_M1: dict[str, Any] = {
-    "probe_pack": "fingerprint.m1",
-    "version": 1,
-    "description": "baseline navigator, screen, webdriver, and descriptor probes",
-    "evidence_ceiling": "diagnostic_only",
-    "probes": [
-        {
-            "probe_id": "navigator.languages.present",
-            "target": "navigator.languages",
-            "category": "presence",
-            "js": "return Array.isArray(navigator.languages) && navigator.languages.length > 0;",
-            "expected": True,
-            "gap_class": "missing_api",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "navigator.webdriver.value",
-            "target": "navigator.webdriver",
-            "category": "value",
-            "js": (
-                "return navigator.webdriver === false || "
-                "typeof navigator.webdriver === 'undefined';"
-            ),
-            "expected": True,
-            "gap_class": "value_mismatch",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "navigator.language.present",
-            "target": "navigator.language",
-            "category": "presence",
-            "js": "return typeof navigator.language === 'string' && navigator.language.length > 0;",
-            "expected": True,
-            "gap_class": "missing_api",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "navigator.platform.present",
-            "target": "navigator.platform",
-            "category": "presence",
-            "js": "return typeof navigator.platform === 'string' && navigator.platform.length > 0;",
-            "expected": True,
-            "gap_class": "missing_api",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "navigator.hardwareConcurrency.present",
-            "target": "navigator.hardwareConcurrency",
-            "category": "presence",
-            "js": (
-                "return typeof navigator.hardwareConcurrency === 'number' && "
-                "navigator.hardwareConcurrency > 0;"
-            ),
-            "expected": True,
-            "gap_class": "missing_api",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "navigator.deviceMemory.present",
-            "target": "navigator.deviceMemory",
-            "category": "presence",
-            "js": (
-                "return typeof navigator.deviceMemory === 'number' && "
-                "navigator.deviceMemory > 0;"
-            ),
-            "expected": True,
-            "gap_class": "missing_api",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "screen.width.present",
-            "target": "screen.width",
-            "category": "presence",
-            "js": "return typeof screen.width === 'number' && screen.width > 0;",
-            "expected": True,
-            "gap_class": "missing_api",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "screen.height.present",
-            "target": "screen.height",
-            "category": "presence",
-            "js": "return typeof screen.height === 'number' && screen.height > 0;",
-            "expected": True,
-            "gap_class": "missing_api",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "document.readyState.present",
-            "target": "document.readyState",
-            "category": "presence",
-            "js": (
-                "return typeof document.readyState === 'string' && "
-                "document.readyState.length > 0;"
-            ),
-            "expected": True,
-            "gap_class": "missing_api",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "localStorage.shape",
-            "target": "localStorage",
-            "category": "behavior",
-            "js": (
-                "return typeof localStorage === 'object' && "
-                "typeof localStorage.getItem === 'function';"
-            ),
-            "expected": True,
-            "gap_class": "behavior_mismatch",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "sessionStorage.shape",
-            "target": "sessionStorage",
-            "category": "behavior",
-            "js": (
-                "return typeof sessionStorage === 'object' && "
-                "typeof sessionStorage.getItem === 'function';"
-            ),
-            "expected": True,
-            "gap_class": "behavior_mismatch",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "window.chrome.shape",
-            "target": "window.chrome",
-            "category": "behavior",
-            "js": "return typeof window.chrome === 'object';",
-            "expected": True,
-            "gap_class": "behavior_mismatch",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "navigator.userAgent.descriptor",
-            "target": "navigator.userAgent",
-            "category": "descriptor",
-            "js": (
-                "var d = Object.getOwnPropertyDescriptor(navigator, 'userAgent') || "
-                "Object.getOwnPropertyDescriptor(Object.getPrototypeOf(navigator), 'userAgent'); "
-                "return !!d && typeof d.get === 'function';"
-            ),
-            "expected": True,
-            "gap_class": "descriptor_mismatch",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-        {
-            "probe_id": "navigator.userAgentData.shape",
-            "target": "navigator.userAgentData",
-            "category": "behavior",
-            "js": (
-                "return typeof navigator.userAgentData === 'object' && "
-                "Array.isArray(navigator.userAgentData.brands);"
-            ),
-            "expected": True,
-            "gap_class": "behavior_mismatch",
-            "side_effects": [],
-            "cleanup": "none",
-            "evidence_ceiling": "diagnostic_only",
-        },
-    ],
-}
-
-_BUILTIN_PROBE_PACKS = {"fingerprint.m1": _FINGERPRINT_M1}
-
-_BUILTIN_CANDIDATE_REGISTRY: dict[str, list[dict[str, Any]]] = {
-    "navigator.languages": [
-        {
-            "patch_id": "navigator.languages.default.v0",
-            "target": "navigator.languages",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": ["en-US", "en"],
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["navigator.languages"],
-                "gap_classes": ["missing_api", "value_mismatch"],
-            },
-        }
-    ],
-    "navigator.webdriver": [
-        {
-            "patch_id": "navigator.webdriver.default.v0",
-            "target": "navigator.webdriver",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": False,
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["navigator.webdriver"],
-                "gap_classes": ["value_mismatch"],
-            },
-        }
-    ],
-    "navigator.language": [
-        {
-            "patch_id": "navigator.language.default.v0",
-            "target": "navigator.language",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": "en-US",
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["navigator.language"],
-                "gap_classes": ["missing_api", "value_mismatch"],
-            },
-        }
-    ],
-    "navigator.platform": [
-        {
-            "patch_id": "navigator.platform.default.v0",
-            "target": "navigator.platform",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": "Win32",
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["navigator.platform"],
-                "gap_classes": ["missing_api", "value_mismatch"],
-            },
-        }
-    ],
-    "navigator.hardwareConcurrency": [
-        {
-            "patch_id": "navigator.hardwareConcurrency.default.v0",
-            "target": "navigator.hardwareConcurrency",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": 8,
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["navigator.hardwareConcurrency"],
-                "gap_classes": ["missing_api", "value_mismatch"],
-            },
-        }
-    ],
-    "navigator.deviceMemory": [
-        {
-            "patch_id": "navigator.deviceMemory.default.v0",
-            "target": "navigator.deviceMemory",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": 8,
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["navigator.deviceMemory"],
-                "gap_classes": ["missing_api", "value_mismatch"],
-            },
-        }
-    ],
-    "screen.width": [
-        {
-            "patch_id": "screen.width.default.v0",
-            "target": "screen.width",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": 1920,
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["screen.width"],
-                "gap_classes": ["missing_api", "value_mismatch"],
-            },
-        }
-    ],
-    "screen.height": [
-        {
-            "patch_id": "screen.height.default.v0",
-            "target": "screen.height",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": 1080,
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["screen.height"],
-                "gap_classes": ["missing_api", "value_mismatch"],
-            },
-        }
-    ],
-    "document.readyState": [
-        {
-            "patch_id": "document.readyState.default.v0",
-            "target": "document.readyState",
-            "target_family": "environment_value",
-            "kind": "value",
-            "policy": "runtime_safe",
-            "source": "builtin_registry",
-            "value_preview": "complete",
-            "requires": [],
-            "risk_reasons": [],
-            "reversible": True,
-            "validation": {
-                "probe_pack": "fingerprint.m1",
-                "expected_delta": ["document.readyState"],
-                "gap_classes": ["missing_api", "value_mismatch"],
-            },
-        }
-    ],
-}
-
-
 def available_probe_packs() -> list[str]:
-    return sorted(_BUILTIN_PROBE_PACKS)
+    return sorted(_PROBE_PACK_FILES)
 
 
 def available_candidate_targets() -> list[str]:
-    return sorted(_BUILTIN_CANDIDATE_REGISTRY)
+    return sorted(_candidate_registry())
 
 
 def map_gaps_to_candidates(
@@ -660,7 +299,7 @@ def map_gaps_to_candidates(
     for gap in gaps:
         if gap.target in explicit_environment:
             continue
-        for candidate_data in _BUILTIN_CANDIDATE_REGISTRY.get(gap.target, []):
+        for candidate_data in _candidate_registry().get(gap.target, []):
             gap_classes = set(candidate_data.get("validation", {}).get("gap_classes", []))
             if gap_classes and gap.gap_class not in gap_classes:
                 continue
@@ -720,11 +359,27 @@ def _is_generic_target(value: str) -> bool:
 
 def load_probe_pack(probe_pack: str) -> ProbePack:
     try:
-        data = _BUILTIN_PROBE_PACKS[probe_pack]
+        asset_name = _PROBE_PACK_FILES[probe_pack]
     except KeyError as exc:
         available = ", ".join(available_probe_packs())
         raise ValueError(f"unknown probe pack: {probe_pack}; available: {available}") from exc
+    data = _load_json_asset("probe_packs", asset_name)
     return ProbePack.from_dict(data)
+
+
+def _candidate_registry() -> dict[str, list[dict[str, Any]]]:
+    registry: dict[str, list[dict[str, Any]]] = {}
+    for asset_name in _CANDIDATE_PACK_FILES.values():
+        data = _load_json_asset("candidates", asset_name)
+        for candidate in data.get("candidates", []):
+            registry.setdefault(candidate["target"], []).append(candidate)
+    return registry
+
+
+def _load_json_asset(asset_group: str, asset_name: str) -> dict[str, Any]:
+    package = f"iv8_rs.environment_toolchain_assets.{asset_group}"
+    text = resources.files(package).joinpath(asset_name).read_text(encoding="utf-8")
+    return json.loads(text)
 
 
 def probe_pack_from_dict(data: dict[str, Any]) -> ProbePack:
