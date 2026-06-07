@@ -78,6 +78,7 @@ from iv8_rs.environment_toolchain import (
     toolchain_report_from_dict,
     toolchain_report_to_dict,
 )
+from iv8_rs.environment_toolchain_runtime import run_environment_toolchain
 from iv8_rs.deobf_reports import (
     RegistryEntry,
     SelectionReport,
@@ -283,6 +284,7 @@ __all__ = [
     "EnvironmentToolchainReport",
     "toolchain_report_from_dict",
     "toolchain_report_to_dict",
+    "run_environment_toolchain",
     "RegistryEntry",
     "SelectionReport",
     "DeobfRegistryReport",

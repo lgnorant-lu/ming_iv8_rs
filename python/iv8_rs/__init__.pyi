@@ -36,6 +36,7 @@ from iv8_rs.environment_toolchain import (
     toolchain_report_from_dict,
     toolchain_report_to_dict,
 )
+from iv8_rs.environment_toolchain_runtime import run_environment_toolchain
 from iv8_rs.ir_reports import (
     ConfidenceSummary,
     IRNode,
@@ -153,6 +154,20 @@ def run_environment_plane(
 ) -> EnvironmentPlaneReport:
     ...
 
+def run_environment_toolchain(
+    js_source: str,
+    *,
+    probe_pack: str = "fingerprint.m1",
+    profile: Optional[str] = "default",
+    environment: Optional[Dict[str, Any]] = None,
+    apply_runtime_safe: bool = False,
+    random_seed: Optional[int] = 42,
+    time_freeze: Optional[float] = None,
+    time_mode: str = "logical",
+    entry_expr: Optional[str] = None,
+) -> EnvironmentToolchainReport:
+    ...
+
 __all__ = [
     "__version__",
     "JSContext",
@@ -180,6 +195,7 @@ __all__ = [
     "EnvironmentToolchainReport",
     "toolchain_report_from_dict",
     "toolchain_report_to_dict",
+    "run_environment_toolchain",
     "RegistryEntry",
     "SelectionReport",
     "DeobfRegistryReport",
