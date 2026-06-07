@@ -109,7 +109,7 @@ pub fn bridge_prelude() -> &'static str {
                 if (typeof candidate === 'function' && candidate !== __iv8_wp_require) {
                     globalThis.__iv8_wp_require = candidate;
                     if (__iv8_log.indexOf('wp_require_captured') === -1) {
-                        __iv8_log.push('wp_require_captured');
+                        __iv8_log.push('wp_require_proto_c');
                     }
                 }
             }
@@ -346,7 +346,7 @@ fn check_capture_late(kernel: &mut EmbeddedV8Kernel) -> bool {
         "var log = typeof __iv8_webpack_log !== 'undefined' ? __iv8_webpack_log : [];",
         "var hasPre = false, hasLate = false;",
         "for (var i = 0; i < log.length; i++) {",
-        "  if (log[i] === 'wp_require_captured') hasPre = true;",
+        "  if (log[i] === 'wp_require_captured' || log[i] === 'wp_require_proto_c') hasPre = true;",
         "  if (log[i] === 'wp_require_global') hasLate = true;",
         "}",
         "return hasLate && !hasPre;",
@@ -391,11 +391,15 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
 
     let mut module_ids = Vec::new();
     let mut require_captured_via_prelude = false;
+    let mut require_captured_via_proto = false;
     let mut require_captured_via_global = false;
     for item in items {
         if let RustValue::String(s) = item {
             if s == "wp_require_captured" {
                 require_captured_via_prelude = true;
+            }
+            if s == "wp_require_proto_c" {
+                require_captured_via_proto = true;
             }
             if s == "wp_require_global" {
                 require_captured_via_global = true;
@@ -406,7 +410,7 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
         }
     }
 
-    let require_captured = require_captured_via_prelude || require_captured_via_global || require_callable;
+    let require_captured = require_captured_via_prelude || require_captured_via_proto || require_captured_via_global || require_callable;
 
     // Collect module IDs from require.m
     collect_require_module_ids(kernel, &mut module_ids);

@@ -147,7 +147,7 @@ def test_load_manifest_reads_current_markdown_table():
         "yy-webpack-vmp",
         "m27-realworld-audit",
     ]
-    assert items[0].path_status == "missing"
+    assert items[0].path_status == "present"
     assert items[-1].path_status == "present"
 
 

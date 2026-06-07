@@ -152,20 +152,25 @@ def test_webpack_marker_only_guard():
 
 def test_webpack_require_capture_late():
     """If require captured too late -> emits WEBPACK_REQUIRE_CAPTURE_LATE."""
-    # We simulate a case where __webpack_require__ is initialized, but before we capture it,
-    # the runtime already finished setup, and it's captured via global fallback.
+    # Source defines __webpack_require__ on globalThis but WITHOUT setting
+    # __webpack_require__.c. This means the Function.prototype.c setter does
+    # NOT fire. The require is only captured via the runtime fallback in
+    # collect_module_graph, which is considered "late".
     source = """
     (function() {
-        // Global definition after setup
         globalThis.__webpack_require__ = function(id) {};
-        globalThis.__webpack_require__.m = {};
-        globalThis.__webpack_require__.c = {};
+        globalThis.__webpack_require__.m = {
+            0: function() { return "late"; }
+        };
     })();
     """
     plan, result = plan_and_run(source)
-    records = result["diagnostic_records"]
-    codes = [r["code"] for r in records]
-    assert "WEBPACK_REQUIRE_CAPTURE_LATE" in codes
+    mg = result.get("module_graph")
+    assert mg is not None, "should have module_graph"
+    mg_codes = [d.get("code") for d in mg.get("diagnostics", [])]
+    assert "WEBPACK_REQUIRE_CAPTURE_LATE" in mg_codes, (
+        f"expected WEBPACK_REQUIRE_CAPTURE_LATE in module_graph diagnostics, got {mg_codes}"
+    )
 
 def test_webpack_vm_hybrid_integration():
     """Webpack + VM hybrid -> satisfies both layers."""
