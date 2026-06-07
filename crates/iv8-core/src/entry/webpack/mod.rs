@@ -223,7 +223,6 @@ pub fn safe_bridge_prelude() -> &'static str {
     SAFE
 }
 
-
 /// Detect webpack runtime flavor at runtime inside the V8 isolate.
 fn detect_runtime_flavor(kernel: &mut EmbeddedV8Kernel) -> String {
     let js = concat!(
@@ -316,15 +315,36 @@ fn detect_chunks(kernel: &mut EmbeddedV8Kernel) -> Vec<serde_json::Value> {
             let mut chunks = Vec::new();
             for item in items {
                 if let RustValue::Object(map) = item {
-                    let chunk_id = map.get("chunk_id").and_then(|v| {
-                        if let RustValue::String(s) = v { Some(s.clone()) } else { None }
-                    }).unwrap_or_default();
-                    let state = map.get("state").and_then(|v| {
-                        if let RustValue::String(s) = v { Some(s.clone()) } else { None }
-                    }).unwrap_or_default();
-                    let modules_added = map.get("modules_added").and_then(|v| {
-                        if let RustValue::Int(n) = v { Some(*n as u64) } else { None }
-                    }).unwrap_or(0);
+                    let chunk_id = map
+                        .get("chunk_id")
+                        .and_then(|v| {
+                            if let RustValue::String(s) = v {
+                                Some(s.clone())
+                            } else {
+                                None
+                            }
+                        })
+                        .unwrap_or_default();
+                    let state = map
+                        .get("state")
+                        .and_then(|v| {
+                            if let RustValue::String(s) = v {
+                                Some(s.clone())
+                            } else {
+                                None
+                            }
+                        })
+                        .unwrap_or_default();
+                    let modules_added = map
+                        .get("modules_added")
+                        .and_then(|v| {
+                            if let RustValue::Int(n) = v {
+                                Some(*n as u64)
+                            } else {
+                                None
+                            }
+                        })
+                        .unwrap_or(0);
                     chunks.push(serde_json::json!({
                         "chunk_id": chunk_id,
                         "state": state,
@@ -410,7 +430,10 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
         }
     }
 
-    let require_captured = require_captured_via_prelude || require_captured_via_proto || require_captured_via_global || require_callable;
+    let require_captured = require_captured_via_prelude
+        || require_captured_via_proto
+        || require_captured_via_global
+        || require_callable;
 
     // Collect module IDs from require.m
     collect_require_module_ids(kernel, &mut module_ids);
@@ -469,9 +492,7 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
 
     // Find the entry module: module id "0" or the numerically smallest id
     let mut entry_module_id: Option<String> = None;
-    if module_ids.contains(&"0".to_string()) {
-        entry_module_id = Some("0".to_string());
-    } else if cache_executed.contains(&"0".to_string()) {
+    if module_ids.contains(&"0".to_string()) || cache_executed.contains(&"0".to_string()) {
         entry_module_id = Some("0".to_string());
     } else if !module_ids.is_empty() {
         // Use smallest id as heuristic
@@ -608,7 +629,9 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
     }
 
     // Weak evidence guard
-    let has_strong = evidence.iter().any(|e| e.get("strength").and_then(|v| v.as_str()) == Some("strong"));
+    let has_strong = evidence
+        .iter()
+        .any(|e| e.get("strength").and_then(|v| v.as_str()) == Some("strong"));
     if !has_strong && !diagnostics.is_empty() {
         diagnostics.push(serde_json::json!({
             "code": "WEBPACK_EVIDENCE_WEAK",
@@ -620,7 +643,10 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
 
     // Assemble graph
     let mut graph = serde_json::Map::new();
-    graph.insert("schema_version".into(), serde_json::json!("module-graph.v0.1"));
+    graph.insert(
+        "schema_version".into(),
+        serde_json::json!("module-graph.v0.1"),
+    );
     graph.insert("runtime_family".into(), serde_json::json!("webpack_like"));
     graph.insert("runtime_flavor".into(), serde_json::json!(runtime_flavor));
     graph.insert("module_ids".into(), serde_json::json!(module_ids));
@@ -846,7 +872,9 @@ globalThis.webpackChunk = [];
         use crate::kernel::KernelConfig;
 
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
         kernel
             .eval(
                 r#"
@@ -872,17 +900,25 @@ __webpack_require__.c = {};
         assert_eq!(graph["nodes"].as_array().unwrap().len(), 2);
 
         // Strong evidence
-        assert!(evidence.iter().any(|e| e["kind"] == "module_table_captured"
-            && e["strength"] == "strong"));
-        assert!(evidence.iter().any(|e| e["kind"] == "require_captured"
-            && e["strength"] == "strong"));
+        assert!(evidence
+            .iter()
+            .any(|e| e["kind"] == "module_table_captured" && e["strength"] == "strong"));
+        assert!(evidence
+            .iter()
+            .any(|e| e["kind"] == "require_captured" && e["strength"] == "strong"));
 
         // entry_module_executed present with weak confidence (no cache entries)
-        assert!(evidence.iter().any(|e| e["kind"] == "entry_module_executed"));
+        assert!(evidence
+            .iter()
+            .any(|e| e["kind"] == "entry_module_executed"));
 
         // Diagnostics for empty cache and unsupported chunk
-        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_MODULE_CACHE_EMPTY"));
-        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_CHUNK_UNSUPPORTED"));
+        assert!(diagnostics
+            .iter()
+            .any(|d| d["code"] == "WEBPACK_MODULE_CACHE_EMPTY"));
+        assert!(diagnostics
+            .iter()
+            .any(|d| d["code"] == "WEBPACK_CHUNK_UNSUPPORTED"));
 
         // Node execution metadata reflects empty cache
         let nodes = graph["nodes"].as_array().unwrap();
@@ -898,7 +934,9 @@ __webpack_require__.c = {};
         use crate::kernel::KernelConfig;
 
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
         let graph = collect_module_graph(&mut kernel).expect("module graph");
         let diagnostics = graph["diagnostics"].as_array().unwrap();
 
@@ -906,12 +944,20 @@ __webpack_require__.c = {};
         assert!(graph["evidence"].as_array().unwrap().is_empty());
 
         // Core diagnostics for empty table and failed capture
-        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_MODULE_TABLE_EMPTY"));
-        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_REQUIRE_CAPTURE_FAILED"));
+        assert!(diagnostics
+            .iter()
+            .any(|d| d["code"] == "WEBPACK_MODULE_TABLE_EMPTY"));
+        assert!(diagnostics
+            .iter()
+            .any(|d| d["code"] == "WEBPACK_REQUIRE_CAPTURE_FAILED"));
 
         // Additional diagnostics from flavor detection and weak evidence guard
-        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_RUNTIME_FLAVOR_UNKNOWN"));
-        assert!(diagnostics.iter().any(|d| d["code"] == "WEBPACK_EVIDENCE_WEAK"));
+        assert!(diagnostics
+            .iter()
+            .any(|d| d["code"] == "WEBPACK_RUNTIME_FLAVOR_UNKNOWN"));
+        assert!(diagnostics
+            .iter()
+            .any(|d| d["code"] == "WEBPACK_EVIDENCE_WEAK"));
     }
 
     #[test]
@@ -920,7 +966,9 @@ __webpack_require__.c = {};
         use crate::kernel::KernelConfig;
 
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
         kernel
             .eval(
                 r#"
@@ -946,9 +994,12 @@ __webpack_require__.c = {
         let nodes = graph["nodes"].as_array().unwrap();
 
         // module_cache_captured with cache entries
-        assert!(evidence.iter().any(|e| e["kind"] == "module_cache_captured"
-            && e["strength"] == "strong"));
-        assert!(!diagnostics.iter().any(|d| d["code"] == "WEBPACK_MODULE_CACHE_EMPTY"));
+        assert!(evidence
+            .iter()
+            .any(|e| e["kind"] == "module_cache_captured" && e["strength"] == "strong"));
+        assert!(!diagnostics
+            .iter()
+            .any(|d| d["code"] == "WEBPACK_MODULE_CACHE_EMPTY"));
 
         // entry_module_executed with strong evidence (id 0 is in cache)
         assert!(evidence.iter().any(|e| e["kind"] == "entry_module_executed"
@@ -970,7 +1021,9 @@ __webpack_require__.c = {
         use crate::kernel::KernelConfig;
 
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-        kernel.eval(bridge_prelude(), crate::kernel::EvalOpts::default()).unwrap();
+        kernel
+            .eval(bridge_prelude(), crate::kernel::EvalOpts::default())
+            .unwrap();
         kernel
             .eval(
                 r#"

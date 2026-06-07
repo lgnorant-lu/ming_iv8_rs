@@ -149,11 +149,11 @@ impl DispatchDetection {
         }
 
         // Multi-arg evidence
-        if self.argc_hint.unwrap_or(0) > 0 {
+        if let Some(argc) = self.argc_hint.filter(|argc| *argc > 0) {
             records.push(diagnostics::info_diag(
                 diagnostics::codes::dispatch::MULTI_ARG_OBSERVED,
                 "dispatch.execute",
-                &format!("multi-arg dispatch observed with {} argument(s)", self.argc_hint.unwrap()),
+                &format!("multi-arg dispatch observed with {} argument(s)", argc),
             ));
         }
 
@@ -184,22 +184,27 @@ impl DispatchDetection {
                 diagnostics::EvidenceStrength::Weak,
                 "dispatch",
                 "dispatch.probe",
-                &format!("dispatch pattern '{}' detected statically", self.flavor.as_str()),
+                &format!(
+                    "dispatch pattern '{}' detected statically",
+                    self.flavor.as_str()
+                ),
             )
             .with_producer("dispatch.main"),
         );
 
         // handler_array_captured (strong) -- only for HandlerArray with known handlers
-        if matches!(self.flavor, DispatchFlavor::HandlerArray)
-            && self.handler_count_hint.unwrap_or(0) > 0
-        {
+        if let (DispatchFlavor::HandlerArray, Some(handler_count)) = (
+            &self.flavor,
+            self.handler_count_hint
+                .filter(|handler_count| *handler_count > 0),
+        ) {
             records.push(
                 diagnostics::EvidenceRecord::new(
                     "handler_array_captured",
                     diagnostics::EvidenceStrength::Strong,
                     "dispatch",
                     "dispatch.capture",
-                    &format!("handler array captured with {} handler(s)", self.handler_count_hint.unwrap()),
+                    &format!("handler array captured with {} handler(s)", handler_count),
                 )
                 .with_producer("dispatch.main")
                 .with_payload(serde_json::json!({"handler_count": self.handler_count_hint})),
@@ -207,14 +212,14 @@ impl DispatchDetection {
         }
 
         // multi_arg_dispatch_observed (strong) -- if argc > 0
-        if self.argc_hint.unwrap_or(0) > 0 {
+        if let Some(argc) = self.argc_hint.filter(|argc| *argc > 0) {
             records.push(
                 diagnostics::EvidenceRecord::new(
                     "multi_arg_dispatch_observed",
                     diagnostics::EvidenceStrength::Strong,
                     "dispatch",
                     "dispatch.execute",
-                    &format!("multi-arg dispatch observed with {} argument(s)", self.argc_hint.unwrap()),
+                    &format!("multi-arg dispatch observed with {} argument(s)", argc),
                 )
                 .with_producer("dispatch.main")
                 .with_payload(serde_json::json!({"argc": self.argc_hint})),
@@ -669,21 +674,27 @@ mod tests {
     fn test_diagnostic_records_from_detection() {
         let det = detect("A[Q[U++]]();");
         let records = det.to_diagnostic_records();
-        assert!(records.iter().any(|d| d.code == "DISPATCH_CANDIDATE_DETECTED"));
+        assert!(records
+            .iter()
+            .any(|d| d.code == "DISPATCH_CANDIDATE_DETECTED"));
     }
 
     #[test]
     fn test_evidence_records_from_detection() {
         let det = detect("A[Q[U++]]();");
         let records = det.to_evidence_records();
-        assert!(records.iter().any(|e| e.kind == "dispatch_pattern_detected"));
+        assert!(records
+            .iter()
+            .any(|e| e.kind == "dispatch_pattern_detected"));
     }
 
     #[test]
     fn test_evidence_records_from_multi_arg_detection() {
         let det = detect("A[Q[U++]](a, b);");
         let records = det.to_evidence_records();
-        assert!(records.iter().any(|e| e.kind == "multi_arg_dispatch_observed"));
+        assert!(records
+            .iter()
+            .any(|e| e.kind == "multi_arg_dispatch_observed"));
     }
 
     #[test]
@@ -702,7 +713,9 @@ mod tests {
     fn test_diagnostic_records_from_switch_vm() {
         let det = detect("switch(B[P++]) { case 0: break; }");
         let records = det.to_diagnostic_records();
-        assert!(records.iter().any(|d| d.code == "DISPATCH_CANDIDATE_DETECTED"));
+        assert!(records
+            .iter()
+            .any(|d| d.code == "DISPATCH_CANDIDATE_DETECTED"));
         assert!(records.iter().any(|d| d.code == "SWITCHVM_MARKER_ONLY"));
     }
 
@@ -718,6 +731,8 @@ mod tests {
         let det = detect("var x = 1;");
         let records = det.to_diagnostic_records();
         assert!(!records.is_empty());
-        assert!(records.iter().any(|d| d.code == "DISPATCH_CANDIDATE_REJECTED"));
+        assert!(records
+            .iter()
+            .any(|d| d.code == "DISPATCH_CANDIDATE_REJECTED"));
     }
 }

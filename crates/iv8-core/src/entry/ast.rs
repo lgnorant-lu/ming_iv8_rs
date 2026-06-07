@@ -108,10 +108,13 @@ pub fn can_parse(source: &str) -> bool {
 /// Apply AST-level instrumentation, returning structured report alongside
 /// the transformed source.
 pub fn instrument_with_report(source: &str) -> (String, SourceAstReport) {
-    let request_id = format!("source_ast.transform.{}", std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_nanos());
+    let request_id = format!(
+        "source_ast.transform.{}",
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_nanos()
+    );
     let cm: Lrc<SourceMap> = Default::default();
     let fm = cm.new_source_file(
         FileName::Custom("input.js".into()).into(),
@@ -322,12 +325,10 @@ fn collect_candidates_from_stmt(stmt: &Stmt, result: &mut Vec<(String, u32, u32,
                 }
             }
         }
-        Stmt::Decl(d) => {
-            if let Decl::Var(v) = d {
-                for decl in &v.decls {
-                    if let Some(init) = &decl.init {
-                        collect_expr_candidate(init, result);
-                    }
+        Stmt::Decl(Decl::Var(v)) => {
+            for decl in &v.decls {
+                if let Some(init) = &decl.init {
+                    collect_expr_candidate(init, result);
                 }
             }
         }
@@ -362,7 +363,11 @@ fn collect_call_candidate(callee: &Expr, result: &mut Vec<(String, u32, u32, f64
         let name = &*ident.sym;
         if name == "eval" || name == "Function" {
             use swc_common::Spanned;
-            let kind = if name == "eval" { "eval_source_point" } else { "function_ctor_source_point" };
+            let kind = if name == "eval" {
+                "eval_source_point"
+            } else {
+                "function_ctor_source_point"
+            };
             result.push((kind.to_string(), ident.span().lo.0, ident.span().hi.0, 0.6));
         }
     }
@@ -437,8 +442,14 @@ impl VisitMut for TrapTransform {
                         _ => unreachable!(),
                     };
                     let mut new_args = vec![
-                        ExprOrSpread { spread: None, expr: obj_expr },
-                        ExprOrSpread { spread: None, expr: prop_expr },
+                        ExprOrSpread {
+                            spread: None,
+                            expr: obj_expr,
+                        },
+                        ExprOrSpread {
+                            spread: None,
+                            expr: prop_expr,
+                        },
                     ];
                     new_args.extend(std::mem::take(&mut call.args));
                     call.callee = Callee::Expr(Box::new(Expr::Ident(Ident::new(
@@ -644,7 +655,8 @@ globalThis.__iv8_function_value = f();
 
     #[test]
     fn test_trap_produces_trace_on_execution() {
-        let src = "var A = [function a() {}, function b() {}]; var Q = [0]; var U = 0; A[Q[U++]]();";
+        let src =
+            "var A = [function a() {}, function b() {}]; var Q = [0]; var U = 0; A[Q[U++]]();";
         let (transformed, diag) = instrument(src);
         assert!(diag.is_none(), "transform should succeed: {:?}", diag);
         assert!(transformed.contains("__iv8_trap(A"));
@@ -749,7 +761,10 @@ obj[key]();
     fn test_instrument_with_report_parse_failure() {
         let (_, report) = instrument_with_report("var x = ;;;;");
         assert!(!report.parse_ok);
-        assert!(report.diagnostics.iter().any(|d| d.code == "SOURCE_AST_PARSE_FAILED"));
+        assert!(report
+            .diagnostics
+            .iter()
+            .any(|d| d.code == "SOURCE_AST_PARSE_FAILED"));
     }
 
     #[test]
@@ -757,14 +772,23 @@ obj[key]();
         let (_, report) = instrument_with_report("var x = 1 + 1;");
         assert!(report.parse_ok);
         assert!(report.candidates.is_empty());
-        assert!(report.diagnostics.iter().any(|d| d.code == "SOURCE_AST_CANDIDATE_EMPTY"));
+        assert!(report
+            .diagnostics
+            .iter()
+            .any(|d| d.code == "SOURCE_AST_CANDIDATE_EMPTY"));
     }
 
     #[test]
     fn test_instrument_with_report_evidence() {
         let (_, report) = instrument_with_report("A[Q[U++]]();");
-        assert!(report.evidence.iter().any(|e| e.kind == "source_ast_candidate_detected"));
-        assert!(report.evidence.iter().any(|e| e.kind == "source_ast_transform_applied"));
+        assert!(report
+            .evidence
+            .iter()
+            .any(|e| e.kind == "source_ast_candidate_detected"));
+        assert!(report
+            .evidence
+            .iter()
+            .any(|e| e.kind == "source_ast_transform_applied"));
     }
 
     #[test]

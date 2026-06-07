@@ -52,7 +52,13 @@ pub struct EvidenceRecord {
 }
 
 impl EvidenceRecord {
-    pub fn new(kind: &str, strength: EvidenceStrength, source: &str, stage: &str, summary: &str) -> Self {
+    pub fn new(
+        kind: &str,
+        strength: EvidenceStrength,
+        source: &str,
+        stage: &str,
+        summary: &str,
+    ) -> Self {
         Self {
             kind: kind.to_string(),
             strength,
@@ -259,7 +265,12 @@ pub mod codes {
 }
 
 /// Helper to build a common DiagnosticRecord with severity, stage & message.
-pub fn diag(code: &str, severity: DiagnosticSeverity, stage: &str, message: &str) -> DiagnosticRecord {
+pub fn diag(
+    code: &str,
+    severity: DiagnosticSeverity,
+    stage: &str,
+    message: &str,
+) -> DiagnosticRecord {
     DiagnosticRecord::new(code, severity, stage, message)
 }
 
