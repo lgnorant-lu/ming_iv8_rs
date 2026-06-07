@@ -581,23 +581,16 @@ def run_environment_toolchain(
     time_mode: str = "logical",
     entry_expr: str | None = None,
 ):
-    """Run the report-only Environment Toolchain flow.
-
-    Slice 5 intentionally does not apply patches. Explicit runtime-safe apply is
-    added in Slice 6 so callers cannot confuse candidate reporting with mutation.
-    """
-    if apply_runtime_safe:
-        raise NotImplementedError("apply_runtime_safe is implemented in the next runtime slice")
+    """Run the Environment Toolchain flow with optional runtime-safe rerun."""
 
     from iv8_rs.environment_toolchain import (
         CoverageDelta,
-        CoverageSnapshot,
         EnvironmentToolchainReport,
         ToolchainPatchEntry,
     )
     from iv8_rs.experimental_report import ExperimentalDiagnosticRecord, ExperimentalEvidenceRecord
 
-    run = run_probe_pack(
+    before_run = run_probe_pack(
         js_source,
         probe_pack=probe_pack,
         profile=profile,
@@ -607,7 +600,19 @@ def run_environment_toolchain(
         time_mode=time_mode,
         entry_expr=entry_expr,
     )
-    candidates = map_gaps_to_candidates(run.gaps, environment=environment)
+    candidates = map_gaps_to_candidates(before_run.gaps, environment=environment)
+    applied_candidates = candidates if apply_runtime_safe else []
+    rejected_candidates = [] if apply_runtime_safe else candidates
+    applied = [
+        ToolchainPatchEntry(
+            patch_id=candidate.patch_id,
+            target=candidate.target,
+            kind=candidate.kind,
+            policy=candidate.policy,
+            reason="explicit runtime_safe apply",
+        )
+        for candidate in applied_candidates
+    ]
     rejected = [
         ToolchainPatchEntry(
             patch_id=candidate.patch_id,
@@ -616,47 +621,109 @@ def run_environment_toolchain(
             policy=candidate.policy,
             reason="report-only default; explicit apply_runtime_safe required",
         )
-        for candidate in candidates
+        for candidate in rejected_candidates
     ]
+
+    if apply_runtime_safe and applied_candidates:
+        after_environment = dict(environment or {})
+        for candidate in applied_candidates:
+            after_environment[candidate.target] = candidate.value_preview
+        after_run = run_probe_pack(
+            js_source,
+            probe_pack=probe_pack,
+            profile=profile,
+            environment=after_environment,
+            random_seed=random_seed,
+            time_freeze=time_freeze,
+            time_mode=time_mode,
+            entry_expr=entry_expr,
+        )
+    else:
+        after_run = before_run
+
+    delta = _coverage_delta(before_run, after_run)
 
     evidence = [
         ExperimentalEvidenceRecord("environment_probe_pack_run", "diagnostic_only"),
         *[
             ExperimentalEvidenceRecord("environment_gap_observed", "diagnostic_only")
-            for _gap in run.gaps
+            for _gap in before_run.gaps
         ],
         *[
             ExperimentalEvidenceRecord("environment_patch_registry_candidate", "diagnostic_only")
             for _candidate in candidates
         ],
+        *[
+            ExperimentalEvidenceRecord("environment_patch_applied", "weak")
+            for _candidate in applied_candidates
+        ],
     ]
+    if delta["improved"]:
+        evidence.append(ExperimentalEvidenceRecord("environment_coverage_improved", "weak"))
     diagnostics = [
         ExperimentalDiagnosticRecord(item["code"], item["severity"])
-        for item in run.diagnostics
+        for item in before_run.diagnostics
     ]
     if candidates:
         diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_PATCH_CANDIDATE", "info"))
-        diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_PATCH_REJECTED", "warn"))
+        if apply_runtime_safe:
+            diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_PATCH_APPLIED", "info"))
+        else:
+            diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_PATCH_REJECTED", "warn"))
+    if delta["improved"]:
+        diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_COVERAGE_IMPROVED", "info"))
+    if delta["regressed"]:
+        diagnostics.append(ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_COVERAGE_REGRESSED",
+            "error",
+        ))
     diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_NO_WRITES", "info"))
 
-    snapshot = CoverageSnapshot(
-        present=run.coverage["present"],
-        missing=run.coverage["missing"],
-        mismatch=run.coverage["mismatch"],
-    )
+    before_snapshot = _coverage_snapshot(before_run.coverage)
+    after_snapshot = _coverage_snapshot(after_run.coverage)
     return EnvironmentToolchainReport(
         schema_version="environment-toolchain.v0.1",
-        probe_pack=run.probe_pack,
-        before=snapshot,
-        after=snapshot,
-        coverage_delta=CoverageDelta(improved=0, regressed=0, unresolved=len(run.gaps)),
-        applied_patches=[],
+        probe_pack=before_run.probe_pack,
+        before=before_snapshot,
+        after=after_snapshot,
+        coverage_delta=CoverageDelta(
+            improved=delta["improved"],
+            regressed=delta["regressed"],
+            unresolved=delta["unresolved"],
+        ),
+        applied_patches=applied,
         rejected_patches=rejected,
         profile_suggestions=[],
         evidence=evidence,
         diagnostics=diagnostics,
         writes=[],
     )
+
+
+def _coverage_snapshot(coverage: dict[str, int]):
+    from iv8_rs.environment_toolchain import CoverageSnapshot
+
+    return CoverageSnapshot(
+        present=coverage["present"],
+        missing=coverage["missing"],
+        mismatch=coverage["mismatch"],
+    )
+
+
+def _coverage_delta(before_run: ProbeRun, after_run: ProbeRun) -> dict[str, int]:
+    before_by_id = {observation.probe_id: observation for observation in before_run.observations}
+    after_by_id = {observation.probe_id: observation for observation in after_run.observations}
+    improved = 0
+    regressed = 0
+    for probe_id, before in before_by_id.items():
+        after = after_by_id.get(probe_id)
+        if after is None:
+            continue
+        if not before.passed and after.passed:
+            improved += 1
+        elif before.passed and not after.passed:
+            regressed += 1
+    return {"improved": improved, "regressed": regressed, "unresolved": len(after_run.gaps)}
 
 
 def _run_single_probe(ctx: Any, probe: ProbeDefinition) -> ProbeObservation:
