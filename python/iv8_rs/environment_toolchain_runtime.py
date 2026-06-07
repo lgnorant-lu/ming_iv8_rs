@@ -6,10 +6,12 @@ not run JavaScript, apply patches, or write profiles/manifests/baselines.
 
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
 __all__ = [
+    "BoundaryDecision",
     "EnvironmentGap",
     "ProbeDefinition",
     "ProbeObservation",
@@ -23,11 +25,51 @@ __all__ = [
     "probe_pack_from_dict",
     "probe_pack_to_dict",
     "run_probe_pack",
+    "validate_bypass_boundary",
 ]
 
 
 _ALLOWED_EVIDENCE_CEILINGS = {"diagnostic_only", "weak"}
 _ALLOWED_PROBE_CATEGORIES = {"presence", "descriptor", "behavior", "value"}
+_GENERIC_TARGET_PREFIXES = (
+    "navigator.",
+    "screen.",
+    "document.",
+    "window.",
+    "location.",
+    "performance.",
+    "Math.",
+    "Date.",
+    "crypto.",
+)
+_BLOCKED_BOUNDARY_TERMS = (
+    "domain",
+    "endpoint",
+    "cookie",
+    "token",
+    "signature",
+    "nonce",
+    "request_body",
+    "request body",
+    "authorization",
+    "secret",
+)
+_ORDERED_RECIPE_RE = re.compile(r"apply\s+.+request\s+.+(?:copy|rerun)", re.IGNORECASE)
+
+
+@dataclass(frozen=True, slots=True)
+class BoundaryDecision:
+    decision: str
+    reason: str
+    redactions: list[str] = field(default_factory=list)
+    blocked_terms: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if self.decision not in {"allowed", "blocked"}:
+            raise ValueError(f"invalid boundary decision: {self.decision}")
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass(frozen=True, slots=True)
@@ -394,10 +436,57 @@ def map_gaps_to_candidates(
             if gap_classes and gap.gap_class not in gap_classes:
                 continue
             candidate = ToolchainCandidate.from_dict(candidate_data)
+            if validate_bypass_boundary(candidate).decision == "blocked":
+                continue
             if candidate.patch_id not in seen_patch_ids:
                 candidates.append(candidate)
                 seen_patch_ids.add(candidate.patch_id)
     return candidates
+
+
+def validate_bypass_boundary(payload: ToolchainCandidate | dict[str, Any]) -> BoundaryDecision:
+    """Block target-specific bypass vocabulary in candidates or suggestion payloads."""
+    data = payload.to_dict() if isinstance(payload, ToolchainCandidate) else dict(payload)
+    blocked: list[str] = []
+    for path, value in _walk_payload(data):
+        if not isinstance(value, str):
+            continue
+        if path.endswith(".target") or path == "target" or path == "patch_id":
+            if _is_generic_target(value):
+                continue
+        lowered = value.lower()
+        blocked.extend(term for term in _BLOCKED_BOUNDARY_TERMS if term in lowered)
+        if _ORDERED_RECIPE_RE.search(value):
+            blocked.append("ordered_recipe")
+
+    blocked = sorted(set(blocked))
+    if blocked:
+        return BoundaryDecision(
+            decision="blocked",
+            reason="payload contains target-specific bypass vocabulary",
+            blocked_terms=blocked,
+        )
+    return BoundaryDecision(decision="allowed", reason="generic environment payload")
+
+
+def _walk_payload(value: Any, prefix: str = "") -> list[tuple[str, Any]]:
+    if isinstance(value, dict):
+        items: list[tuple[str, Any]] = []
+        for key, child in value.items():
+            child_prefix = f"{prefix}.{key}" if prefix else str(key)
+            items.extend(_walk_payload(child, child_prefix))
+        return items
+    if isinstance(value, list):
+        items = []
+        for idx, child in enumerate(value):
+            child_prefix = f"{prefix}[{idx}]"
+            items.extend(_walk_payload(child, child_prefix))
+        return items
+    return [(prefix, value)]
+
+
+def _is_generic_target(value: str) -> bool:
+    return value.startswith(_GENERIC_TARGET_PREFIXES) or value in {"Date", "Math", "crypto"}
 
 
 def load_probe_pack(probe_pack: str) -> ProbePack:
