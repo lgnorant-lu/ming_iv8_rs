@@ -1,4 +1,15 @@
 //! iv8-core: V8 embedded browser host engine
+#![cfg_attr(
+    test,
+    allow(
+        clippy::expect_used,
+        clippy::panic,
+        clippy::unwrap_used,
+        unused_imports,
+        unused_mut,
+        unused_variables
+    )
+)]
 //!
 //! This crate provides the core Rust API for creating and managing
 //! JavaScript contexts with full browser surface emulation.

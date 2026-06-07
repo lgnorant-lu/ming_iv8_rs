@@ -136,7 +136,7 @@ mod tests {
         kernel.expose_fn(
             "add",
             Box::new(|args| {
-                let a: f64 = args.get(0).and_then(|s| s.parse().ok()).unwrap_or(0.0);
+                let a: f64 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0.0);
                 let b: f64 = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0.0);
                 Ok((a + b).to_string())
             }),

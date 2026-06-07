@@ -18,10 +18,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
 - **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
 - **Entry Plane Solidification (v0.7)**: WebpackBridge (flavor detection, require/module table capture), Dispatch Generalization (zero-arg, multi-arg, switch loop, indirect handler map), SourceAst Pipeline (transform join points, transform report), and Corpus Runner CLI
-- **Runtime Report Models (v0.8.0-dev)**: schema-backed experimental report carriers for Environment Toolchain, Deobf Registry / Validation, String Array, VM Analysis / Handler, and IR Node reports
+- **Runtime Report Models (v0.8.0)**: schema-backed experimental report carriers for Environment Toolchain, Deobf Registry / Validation, String Array, VM Analysis / Handler, and IR Node reports
 
-Current `0.8.0-dev` work is tracked in `docs/roadmap/post-v0.6/v0.8.0-implementation-task-plan.md`.
-v0.8.0-dev adds typed report model APIs for future Environment, Deobf, VM, and IR analyzers. These APIs are schema-backed carriers, not automatic JS analyzers; v0.7 entry/runtime remains the current real-sample execution surface.
+Current `0.8.0` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.0-implementation-task-plan.md`.
+v0.8.0 adds typed report model APIs for future Environment, Deobf, VM, and IR analyzers. These APIs are schema-backed carriers, not automatic JS analyzers; v0.7 entry/runtime remains the current real-sample execution surface.
 
 ## Install
 
@@ -121,8 +121,8 @@ uv run python -m pytest tests -q
 # Rust tests
 cargo test --workspace
 
-# Release warning gate
-cargo clippy --workspace -- -D warnings
+# Rust release lint gate
+cargo clippy --workspace --all-targets -- -D warnings
 
 # Benchmark
 cargo bench --bench iv8_bench

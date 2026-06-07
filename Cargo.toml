@@ -7,7 +7,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.8.0-dev"
+version = "0.8.0"
 edition = "2021"
 rust-version = "1.80"
 license = "MIT"
@@ -69,8 +69,8 @@ png = "0.17"
 
 [workspace.lints.clippy]
 # REQ-ENG-007: unwrap/expect/panic should be avoided in production code.
-# Currently set to "warn" (not "deny") to allow gradual cleanup.
-# TODO: upgrade to "deny" before v0.1 release after fixing all occurrences.
+# Release gates run clippy with `-D warnings`; test targets document their
+# assertion-specific lint policy locally where unwrap/expect/panic are expected.
 unwrap_used = "warn"
 expect_used = "warn"
 panic = "warn"

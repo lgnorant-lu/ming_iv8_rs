@@ -6,6 +6,49 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-06-07
+
+### Added
+
+- **Experimental report model APIs**: Python report carriers for Environment
+  Toolchain, Deobf Registry / Validation, String Array, VM Analysis / Handler,
+  and IR Node reports.
+- **Shared report envelope**: `ExperimentalReport`,
+  `ExperimentalEvidenceRecord`, `ExperimentalDiagnosticRecord`, schema version
+  registry helpers, and typed `from_dict()` / `to_dict()` round-trips.
+- **Runtime report model gates**: fixture-backed tests validate v0.8 schema
+  compatibility, root exports, type stubs, and typed model conversions.
+- **Naming conventions**: public Python APIs use capability-first names instead
+  of roadmap labels such as `v08` / `V08`.
+
+### Changed
+
+- v0.8 contract helper naming was promoted from roadmap-specific helpers to
+  `experimental_contract_helpers.py`.
+- Root README and roadmap workspace now describe v0.8.0 as a schema-backed
+  report carrier layer, while v0.7 entry/runtime remains the real-sample
+  execution surface.
+- Rust release lint gate now uses `cargo clippy --workspace --all-targets -- -D warnings`.
+
+### Documentation
+
+- `docs/roadmap/post-v0.6/runtime-report-api-guide.md` documents public imports,
+  conversion helpers, examples, and non-capabilities.
+- `docs/acceptance/v0.8.0-runtime-api-acceptance.md` records demonstrated API
+  behavior, verification commands, and real-sample regression scope.
+- `docs/roadmap/post-v0.6/v0.8.0-implementation-task-plan.md` records the
+  release scope, non-scope, acceptance gates, and runtime review boundary.
+- `docs/roadmap/post-v0.6/naming-conventions.md` records roadmap label and
+  public API naming rules.
+
+### Quality Gates
+
+- Python: 947 passed, 1 skipped.
+- Rust: `cargo test --workspace` passed.
+- Rust lint: `cargo clippy --workspace --all-targets -- -D warnings` is the
+  release lint gate.
+- Scoped Python lint: v0.8 report model APIs and tests pass `ruff check`.
+
 ## [0.7.0] - 2026-06-07
 
 ### Added

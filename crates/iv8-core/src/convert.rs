@@ -608,7 +608,7 @@ mod tests {
 
     #[test]
     fn convert_float() {
-        assert_eq!(eval_to_rust("3.14"), RustValue::Float(3.14));
+        assert_eq!(eval_to_rust("3.125"), RustValue::Float(3.125));
         match eval_to_rust("NaN") {
             RustValue::Float(n) => assert!(n.is_nan()),
             other => panic!("expected Float(NaN), got {:?}", other),

@@ -1,3 +1,13 @@
+#![allow(
+    clippy::expect_used,
+    clippy::panic,
+    clippy::unwrap_used,
+    dead_code,
+    unused_imports,
+    unused_mut,
+    unused_variables
+)]
+
 //! iv8-rs performance benchmarks
 //!
 //! Measures key performance metrics against iv8 0.1.2 baseline:

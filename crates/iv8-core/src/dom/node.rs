@@ -724,7 +724,7 @@ mod tests {
         );
 
         assert_eq!(doc.document_element(), Some(html_id));
-        assert_eq!(doc.head().is_some(), true);
+        assert!(doc.head().is_some());
         assert_eq!(doc.body(), Some(body_id));
     }
 
