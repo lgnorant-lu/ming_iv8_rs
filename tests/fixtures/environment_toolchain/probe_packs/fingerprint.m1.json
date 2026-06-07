@@ -1,0 +1,63 @@
+{
+  "probe_pack": "fingerprint.m1",
+  "version": 1,
+  "description": "baseline navigator, screen, webdriver, and descriptor probes",
+  "evidence_ceiling": "diagnostic_only",
+  "probes": [
+    {
+      "probe_id": "navigator.languages.present",
+      "target": "navigator.languages",
+      "category": "presence",
+      "js": "return Array.isArray(navigator.languages) && navigator.languages.length > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.webdriver.value",
+      "target": "navigator.webdriver",
+      "category": "value",
+      "js": "return navigator.webdriver === false || typeof navigator.webdriver === 'undefined';",
+      "expected": true,
+      "gap_class": "value_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "screen.width.present",
+      "target": "screen.width",
+      "category": "presence",
+      "js": "return typeof screen.width === 'number' && screen.width > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.userAgent.descriptor",
+      "target": "navigator.userAgent",
+      "category": "descriptor",
+      "js": "var d = Object.getOwnPropertyDescriptor(navigator, 'userAgent') || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(navigator), 'userAgent'); return !!d && typeof d.get === 'function';",
+      "expected": true,
+      "gap_class": "descriptor_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.userAgentData.shape",
+      "target": "navigator.userAgentData",
+      "category": "behavior",
+      "js": "return typeof navigator.userAgentData === 'object' && Array.isArray(navigator.userAgentData.brands);",
+      "expected": true,
+      "gap_class": "behavior_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    }
+  ]
+}
