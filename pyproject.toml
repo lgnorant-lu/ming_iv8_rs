@@ -17,6 +17,7 @@ dev = [
     "hypothesis>=6.0",
     "pytest-cov>=5.0",
     "pytest-timeout>=2.0",
+    "ruff>=0.15.16",
 ]
 
 [tool.maturin]
