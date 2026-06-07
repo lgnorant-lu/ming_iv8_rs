@@ -660,6 +660,7 @@ def run_environment_toolchain(
     ]
     if delta["improved"]:
         evidence.append(ExperimentalEvidenceRecord("environment_coverage_improved", "weak"))
+    profile_suggestions = _profile_suggestions_from_candidates(candidates)
     diagnostics = [
         ExperimentalDiagnosticRecord(item["code"], item["severity"])
         for item in before_run.diagnostics
@@ -677,6 +678,11 @@ def run_environment_toolchain(
             "ENV_TOOLCHAIN_COVERAGE_REGRESSED",
             "error",
         ))
+    if profile_suggestions:
+        diagnostics.append(ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_PROFILE_SUGGESTION_REVIEW",
+            "info",
+        ))
     diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_NO_WRITES", "info"))
 
     before_snapshot = _coverage_snapshot(before_run.coverage)
@@ -693,11 +699,40 @@ def run_environment_toolchain(
         ),
         applied_patches=applied,
         rejected_patches=rejected,
-        profile_suggestions=[],
+        profile_suggestions=profile_suggestions,
         evidence=evidence,
         diagnostics=diagnostics,
         writes=[],
     )
+
+
+def _profile_suggestions_from_candidates(candidates: list[ToolchainCandidate]):
+    from iv8_rs.environment_toolchain import ProfileSuggestion
+
+    suggestions: list[ProfileSuggestion] = []
+    seen_targets: set[str] = set()
+    for candidate in candidates:
+        if candidate.target in seen_targets:
+            continue
+        payload = {
+            "target": candidate.target,
+            "value_preview": candidate.value_preview,
+            "policy": candidate.policy,
+        }
+        if validate_bypass_boundary(payload).decision == "blocked":
+            continue
+        suggestions.append(ProfileSuggestion(
+            target=candidate.target,
+            value_preview=_string_list_preview(candidate.value_preview),
+        ))
+        seen_targets.add(candidate.target)
+    return suggestions
+
+
+def _string_list_preview(value: Any) -> list[str]:
+    if isinstance(value, list):
+        return [str(item) for item in value]
+    return [str(value)]
 
 
 def _coverage_snapshot(coverage: dict[str, int]):
