@@ -18,9 +18,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Network**: ResourceBundle -> Python callback -> NetworkError (3-layer fallback)
 - **Event loop**: logical / system dual time mode, advance / sleep / tick / drain
 - **Entry Plane Solidification (v0.7)**: WebpackBridge (flavor detection, require/module table capture), Dispatch Generalization (zero-arg, multi-arg, switch loop, indirect handler map), SourceAst Pipeline (transform join points, transform report), and Corpus Runner CLI
+- **Runtime Report Models (v0.8.0-dev)**: schema-backed experimental report carriers for Environment Toolchain, Deobf Registry / Validation, String Array, VM Analysis / Handler, and IR Node reports
 
-Current `0.7.0` status is tracked in `docs/roadmap/post-v0.6/V0.7_ENTRY_SOLIDIFICATION.md`.
-v0.7.0 is an entry-solidified and corpus-driven release. Webpack runtime structure, VM dispatch variant trace, and Source AST pipelines are fully validated via Corpus Runner.
+Current `0.8.0-dev` work is tracked in `docs/roadmap/post-v0.6/v0.8.0-implementation-task-plan.md`.
+v0.8.0-dev adds typed report model APIs for future Environment, Deobf, VM, and IR analyzers. These APIs are schema-backed carriers, not automatic JS analyzers; v0.7 entry/runtime remains the current real-sample execution surface.
 
 ## Install
 
@@ -114,7 +115,7 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 ## Tests
 
 ```bash
-# Current v0.7.0 release gate is verified via Corpus Runner:
+# Current Python release gate:
 uv run python -m pytest tests -q
 
 # Rust tests
@@ -135,7 +136,7 @@ iv8-rs/
 │   ├── iv8-core/     # Rust core (V8 + DOM + Crypto + Canvas + Network + Inspector)
 │   ├── iv8-undetect/ # Anti-detection (wrapNative / hookNative / window.chrome)
 │   └── iv8-py/       # PyO3 Python binding
-├── python/iv8_rs/    # Python package (analysis/cfg/taint/patterns/probe/trace/vm_diff/isolation + type stubs)
+├── python/iv8_rs/    # Python package (runtime APIs, analysis helpers, report models + type stubs)
 ├── tests/            # Python integration tests and v0.6 acceptance tests
 └── docs/             # Design docs + research + quality-harness
 ```
