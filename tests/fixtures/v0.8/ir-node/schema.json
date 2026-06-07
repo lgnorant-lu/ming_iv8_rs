@@ -1,0 +1,20 @@
+{
+  "schema_version": "iv8-ir-node.v0.1",
+  "ir_kind": "structured_ast_ir",
+  "node_count": 5,
+  "edge_count": 2,
+  "confidence_summary": {"diagnostic_only": 2, "weak": 3, "strong": 0},
+  "unsupported_features": ["eval"],
+  "nodes": [
+    {"id": 1, "kind": "Const", "source": "fixture", "confidence": "weak"},
+    {"id": 2, "kind": "MbaCandidate", "source": "fixture", "confidence": "diagnostic_only"}
+  ],
+  "evidence": [
+    {"kind": "ir_nodes_emitted", "strength": "diagnostic_only"},
+    {"kind": "ir_confidence_preserved", "strength": "diagnostic_only"}
+  ],
+  "diagnostics": [
+    {"code": "IR_UNSUPPORTED_JS_FEATURE", "severity": "warn"},
+    {"code": "IR_MBA_CANDIDATE_MARKED", "severity": "info"}
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "vm-analysis.v0.1",
+  "sample_id": "fixture-switch-vm",
+  "vm_family": "unknown_js_vm",
+  "dispatch_variant": "switch_vm_numeric_pc",
+  "handler_table": {
+    "kind": "switch",
+    "handler_count": 16,
+    "ids": ["0", "1"],
+    "source_available": true,
+    "runtime_validated": false,
+    "handlers": []
+  },
+  "bytecode": null,
+  "trace_summary": {"opcode_sequence_observed": false},
+  "state_model": {"hints": ["pc_like", "stack_like"]},
+  "opcode_map": {
+    "0": {"label": "push_const_hint", "confidence": "weak", "evidence": ["stack_depth_increased"]}
+  },
+  "evidence": [
+    {"kind": "vm_shape_detected", "strength": "weak"},
+    {"kind": "handler_table_extracted", "strength": "weak"},
+    {"kind": "state_model_inferred", "strength": "weak"}
+  ],
+  "diagnostics": [
+    {"code": "VM_BYTECODE_CANDIDATE_UNVALIDATED", "severity": "warn"}
+  ]
+}

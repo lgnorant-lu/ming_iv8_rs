@@ -1,0 +1,24 @@
+{
+  "schema_version": "vm-handler-table.v0.1",
+  "kind": "array",
+  "handler_count": 32,
+  "ids": ["0", "1"],
+  "source_available": true,
+  "runtime_validated": false,
+  "extraction_quality": "strong",
+  "shape_score": 7,
+  "handlers": [
+    {"handler_id": "0", "source_hash": "sha256:h0", "observed_opcodes": [], "effects": [], "confidence": "weak"}
+  ],
+  "bytecode_candidates": [
+    {"kind": "number_array", "length": 24, "numeric_ratio": 0.91, "runtime_validated": false}
+  ],
+  "evidence": [
+    {"kind": "vm_shape_detected", "strength": "weak"},
+    {"kind": "handler_table_extracted", "strength": "weak"},
+    {"kind": "bytecode_candidate_extracted", "strength": "weak"}
+  ],
+  "diagnostics": [
+    {"code": "VM_BYTECODE_CANDIDATE_UNVALIDATED", "severity": "warn"}
+  ]
+}

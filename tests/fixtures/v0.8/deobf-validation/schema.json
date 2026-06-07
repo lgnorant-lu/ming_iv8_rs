@@ -1,0 +1,33 @@
+{
+  "schema_version": "deobf-validation.v0.1",
+  "source_id": "fixtures/string-array.js",
+  "pass_id": "string_array.locator.v0",
+  "input_hash": "sha256:input",
+  "output_hash": "sha256:output",
+  "level": "shape_validated",
+  "policy_status": "accepted",
+  "checks": [
+    {"kind": "schema check", "result": "pass"},
+    {"kind": "span mapping", "result": "pass"},
+    {"kind": "policy check", "result": "pass"}
+  ],
+  "evidence": [
+    {"kind": "deobf_validation_shape_validated", "strength": "diagnostic_only"}
+  ],
+  "diagnostics": [
+    {"code": "DEOBF_VALIDATION_MARKER_ONLY", "severity": "warn"}
+  ],
+  "negative_cases": [
+    {
+      "pass_id": "anti_debug.removal.v0",
+      "level": "regressed",
+      "policy_status": "failed",
+      "diagnostics": [
+        {"code": "DEOBF_VALIDATION_POLICY_FAILED", "severity": "error"}
+      ],
+      "evidence": [
+        {"kind": "deobf_validation_regressed", "strength": "diagnostic_only"}
+      ]
+    }
+  ]
+}

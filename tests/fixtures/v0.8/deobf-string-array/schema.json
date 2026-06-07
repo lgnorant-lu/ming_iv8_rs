@@ -1,0 +1,31 @@
+{
+  "schema_version": "deobf-string-array.v0.1",
+  "arrays": [
+    {
+      "kind": "string_array_candidate",
+      "binding_id": "scope:12:_0xabc",
+      "element_count": 128,
+      "string_ratio": 0.96,
+      "confidence": "medium"
+    }
+  ],
+  "rotation_iifes": [
+    {"binding_id": "scope:12:_0xabc", "confidence": "weak"}
+  ],
+  "decoders": [
+    {"binding_id": "scope:13:_0xdec", "param_count": 1, "confidence": "medium"}
+  ],
+  "replacement_sites": [
+    {"callee_binding_id": "scope:13:_0xdec", "argument_kind": "literal"}
+  ],
+  "status": "located_only",
+  "source_rewritten": false,
+  "evidence": [
+    {"kind": "string_array_candidate_located", "strength": "diagnostic_only"},
+    {"kind": "string_decoder_candidate_located", "strength": "diagnostic_only"},
+    {"kind": "string_array_replacement_sites_located", "strength": "diagnostic_only"}
+  ],
+  "diagnostics": [
+    {"code": "DEOBF_ROTATION_IIFE_NOT_FOUND", "severity": "info"}
+  ]
+}

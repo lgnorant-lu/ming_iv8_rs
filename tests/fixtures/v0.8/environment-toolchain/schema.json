@@ -1,0 +1,44 @@
+{
+  "schema_version": "environment-toolchain.v0.1",
+  "probe_pack": "fingerprint.m1",
+  "before": {"present": 42, "missing": 6, "mismatch": 2},
+  "after": {"present": 47, "missing": 2, "mismatch": 1},
+  "coverage_delta": {"improved": 5, "regressed": 0, "unresolved": 3},
+  "applied_patches": [
+    {
+      "patch_id": "navigator.languages.chrome_win11.v0",
+      "target": "navigator.languages",
+      "kind": "value",
+      "policy": "runtime_safe"
+    }
+  ],
+  "rejected_patches": [
+    {
+      "patch_id": "eval.capture.v0",
+      "target": "eval",
+      "kind": "capture",
+      "policy": "analysis_only",
+      "reason": "explicit opt-in required"
+    },
+    {
+      "patch_id": "anti_debug.override.v0",
+      "target": "Function.prototype.toString",
+      "kind": "hook",
+      "policy": "unsafe_hook",
+      "reason": "blocked by default"
+    }
+  ],
+  "profile_suggestions": [
+    {"target": "navigator.languages", "value_preview": ["en-US", "en"]}
+  ],
+  "evidence": [
+    {"kind": "environment_probe_pack_run", "strength": "diagnostic_only"},
+    {"kind": "environment_coverage_improved", "strength": "weak"}
+  ],
+  "diagnostics": [
+    {"code": "ENV_TOOLCHAIN_PROBE_PACK_RUN", "severity": "info"},
+    {"code": "ENV_TOOLCHAIN_UNSAFE_HOOK_REQUIRED", "severity": "error"},
+    {"code": "ENV_TOOLCHAIN_PROFILE_SUGGESTION_REVIEW", "severity": "info"}
+  ],
+  "writes": []
+}

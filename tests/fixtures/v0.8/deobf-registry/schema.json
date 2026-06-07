@@ -1,0 +1,46 @@
+{
+  "schema_version": "deobf-pass-registry.v0.1",
+  "entries": [
+    {
+      "pass_id": "string_array.locator.v0",
+      "name": "string array locator",
+      "family": "string_array",
+      "level": "static_safe",
+      "enabled_by_default": true,
+      "inputs": ["source", "swc_ast"],
+      "outputs": ["candidate_report"],
+      "requires": [],
+      "policy_required": "runtime_safe",
+      "evidence_ceiling": "diagnostic_only",
+      "validation_required": false,
+      "quality_gate": "tests/test_deobf_pass_registry_contract.py"
+    },
+    {
+      "pass_id": "dead_code.cleanup.v0",
+      "name": "dead code cleanup",
+      "family": "dead_code",
+      "level": "unsafe_rewrite",
+      "enabled_by_default": false,
+      "inputs": ["source", "swc_ast"],
+      "outputs": ["transformed_source"],
+      "requires": ["explicit_unsafe_rewrite_opt_in"],
+      "policy_required": "unsafe_hook",
+      "evidence_ceiling": "diagnostic_only",
+      "validation_required": true,
+      "quality_gate": "tests/test_deobf_pass_registry_contract.py"
+    }
+  ],
+  "selection_report": {
+    "selected": ["string_array.locator.v0"],
+    "rejected": [
+      {"pass_id": "dead_code.cleanup.v0", "reason": "disabled by default"}
+    ]
+  },
+  "evidence": [
+    {"kind": "deobf_pass_registered", "strength": "diagnostic_only"},
+    {"kind": "deobf_pass_rejected", "strength": "diagnostic_only"}
+  ],
+  "diagnostics": [
+    {"code": "DEOBF_REGISTRY_POLICY_REJECTED", "severity": "warn"}
+  ]
+}
