@@ -1,0 +1,26 @@
+{
+  "schema_version": "cff-detection.v0.1",
+  "detected": true,
+  "variant": "order_string_switch",
+  "confidence": "strong",
+  "state_candidates": [],
+  "dispatcher_candidates": ["dispatch.0"],
+  "case_order_candidates": ["3|0|1"],
+  "vm_distinction": "cff_likely",
+  "markers": [
+    {
+      "marker_id": "cff.0",
+      "family": "order_string_switch",
+      "confidence": "weak",
+      "action": "marker_only",
+      "policy_if_rewrite": "unsafe_rewrite"
+    }
+  ],
+  "evidence": [
+    {"kind": "cff_marker_detected", "strength": "diagnostic_only"},
+    {"kind": "cff_dispatcher_detected", "strength": "weak"}
+  ],
+  "diagnostics": [
+    {"code": "CFF_MARKER_ONLY", "severity": "warn"}
+  ]
+}

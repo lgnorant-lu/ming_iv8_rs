@@ -1,0 +1,17 @@
+{
+  "schema_version": "wasm-vmp-boundary.v0.1",
+  "detected": true,
+  "bridge_kind": "wasm_bindgen_like",
+  "signals": ["wasm_api_use", "wasm_bindgen_glue", "memory_view_bridge"],
+  "imports_observed": ["wbg"],
+  "exports_observed": ["__wbindgen_malloc"],
+  "memory_bridge": {"kind": "memory_buffer_view", "confidence": "weak"},
+  "parser_status": "not_attempted",
+  "evidence": [
+    {"kind": "wasm_boundary_detected", "strength": "diagnostic_only"},
+    {"kind": "wasm_bindgen_glue_detected", "strength": "weak"}
+  ],
+  "diagnostics": [
+    {"code": "WASM_PARSER_DEFERRED", "severity": "warn"}
+  ]
+}

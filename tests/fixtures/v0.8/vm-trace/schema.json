@@ -1,0 +1,25 @@
+{
+  "schema_version": "vm-trace-extended.v0.1",
+  "trace_id": "fixture-vm:run-1",
+  "events": [
+    {
+      "event": "handler_enter",
+      "step": 42,
+      "timestamp_kind": "monotonic_order",
+      "dispatch_id": "dispatch.0",
+      "handler_id": "82",
+      "opcode": 82,
+      "bytecode_cursor": 120,
+      "confidence": "medium"
+    }
+  ],
+  "completeness": "case_level",
+  "evidence": [
+    {"kind": "vm_trace_extended_emitted", "strength": "diagnostic_only"},
+    {"kind": "vm_case_level_trace_observed", "strength": "strong"}
+  ],
+  "diagnostics": [
+    {"code": "VM_TRACE_STATE_SNAPSHOT_WEAK", "severity": "warn"}
+  ],
+  "semantic_labels": ["push_const_hint"]
+}

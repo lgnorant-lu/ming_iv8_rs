@@ -1,0 +1,16 @@
+{
+  "schema_version": "framework-source-boundary.v0.1",
+  "markers": [
+    {"family": "react_automatic_runtime", "marker": "jsx", "confidence": "weak"}
+  ],
+  "source_map_status": "reference_missing",
+  "framework_hint": "react",
+  "recovery_attempted": false,
+  "evidence": [
+    {"kind": "framework_marker_detected", "strength": "diagnostic_only"},
+    {"kind": "framework_boundary_recorded", "strength": "diagnostic_only"}
+  ],
+  "diagnostics": [
+    {"code": "FRAMEWORK_RECOVERY_DEFERRED", "severity": "warn"}
+  ]
+}

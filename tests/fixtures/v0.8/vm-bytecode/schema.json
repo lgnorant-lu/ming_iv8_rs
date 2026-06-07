@@ -1,0 +1,24 @@
+{
+  "schema_version": "vm-bytecode-extraction.v0.1",
+  "candidates": [
+    {
+      "candidate_id": "bytecode.static.0",
+      "source_kind": "number_array_literal",
+      "length": 512,
+      "encoding_hint": "u8",
+      "artifact_policy": "hash_preview_only",
+      "hash": "sha256:bytecode",
+      "preview": [1, 2, 3, 4],
+      "validation": "candidate_unvalidated",
+      "confidence": "weak"
+    }
+  ],
+  "cursor_linkage": "shape_only",
+  "raw_export_allowed": false,
+  "evidence": [
+    {"kind": "vm_bytecode_candidate_detected", "strength": "weak"}
+  ],
+  "diagnostics": [
+    {"code": "VM_BYTECODE_CURSOR_NOT_LINKED", "severity": "warn"}
+  ]
+}

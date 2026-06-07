@@ -1,0 +1,28 @@
+{
+  "schema_version": "multi-bundler.v0.1",
+  "bundle_family": "browserify",
+  "confidence": "strong",
+  "signals": ["browserify_prelude_table"],
+  "module_table": {
+    "family": "browserify",
+    "module_count": 2,
+    "entry_ids": ["1"],
+    "modules": [
+      {
+        "id": "1",
+        "wrapper": "function_require_module_exports",
+        "static_deps": {"./dep": "2"},
+        "dynamic_require_expressions": []
+      }
+    ],
+    "runtime_validated": false
+  },
+  "dependency_summary": {"static": 1, "dynamic_unresolved": 0},
+  "evidence": [
+    {"kind": "browserify_module_table_detected", "strength": "strong"},
+    {"kind": "non_webpack_bundle_detected", "strength": "diagnostic_only"}
+  ],
+  "diagnostics": [
+    {"code": "BUNDLER_NON_WEBPACK_DETECTED", "severity": "info"}
+  ]
+}

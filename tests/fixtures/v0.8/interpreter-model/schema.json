@@ -1,0 +1,26 @@
+{
+  "schema_version": "interpreter-model.v0.1",
+  "transitions": [
+    {
+      "transition_id": "t42",
+      "trace_range": [40, 45],
+      "handler_id": "82",
+      "opcode": 82,
+      "pc_before": 120,
+      "pc_after": 125,
+      "effects": [
+        {"kind": "stack_push", "value": "const_hint", "confidence": "weak"}
+      ],
+      "confidence": "weak",
+      "evidence_refs": []
+    }
+  ],
+  "model_scope": "observed_trace_only",
+  "evidence": [
+    {"kind": "interpreter_transition_modeled", "strength": "diagnostic_only"},
+    {"kind": "interpreter_effect_observed", "strength": "weak"}
+  ],
+  "diagnostics": [
+    {"code": "INTERPRETER_MODEL_SEMANTIC_HINT_ONLY", "severity": "warn"}
+  ]
+}

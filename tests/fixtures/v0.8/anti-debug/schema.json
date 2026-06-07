@@ -1,0 +1,21 @@
+{
+  "schema_version": "anti-debug-marker.v0.1",
+  "markers": [
+    {
+      "marker_id": "anti_debug.0",
+      "family": "native_to_string_probe",
+      "source_span": {"start": 10, "end": 80},
+      "confidence": "medium",
+      "action": "marker_only",
+      "policy_if_rewrite": "unsafe_hook",
+      "evidence_refs": []
+    }
+  ],
+  "evidence": [
+    {"kind": "anti_debug_marker_detected", "strength": "diagnostic_only"},
+    {"kind": "anti_debug_rewrite_blocked", "strength": "diagnostic_only"}
+  ],
+  "diagnostics": [
+    {"code": "ANTI_DEBUG_REWRITE_BLOCKED", "severity": "error"}
+  ]
+}

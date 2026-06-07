@@ -1,0 +1,20 @@
+{
+  "schema_version": "deobf-sandbox.v0.1",
+  "status": "planned",
+  "opt_in_level": "sandbox_plan",
+  "input_hash": "sha256:prelude",
+  "runtime_ms": null,
+  "memory_limit_bytes": 33554432,
+  "source_mutated": false,
+  "decoded_values": [],
+  "evidence": [
+    {"kind": "deobf_sandbox_executed", "strength": "diagnostic_only"}
+  ],
+  "diagnostics": [
+    {"code": "DEOBF_SANDBOX_VALIDATION_MISSING", "severity": "warn"}
+  ],
+  "negative_cases": [
+    {"case": "host_api_access", "expected": "blocked"},
+    {"case": "full_sample_body", "expected": "reject_extraction"}
+  ]
+}

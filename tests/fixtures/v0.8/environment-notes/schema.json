@@ -1,0 +1,17 @@
+{
+  "schema_version": "environment-sample-note.v0.1",
+  "sample_family": "sign_like",
+  "sample_id": "sha256:sample-hash",
+  "note_kind": "environment_dependency",
+  "observed_surfaces": ["navigator.userAgent", "window.chrome"],
+  "probe_packs": ["fingerprint.m1", "sample.sign"],
+  "diagnostic_codes": ["ENVIRONMENT_GAP_OBSERVED"],
+  "patch_candidates": ["navigator.userAgent.profile_suggestion"],
+  "policy_summary": {"max_policy": "runtime_safe"},
+  "redactions": ["site_specific_url", "secret_value"],
+  "review_status": "redacted",
+  "evidence": [
+    {"kind": "environment_sample_note_recorded", "strength": "diagnostic_only"}
+  ],
+  "writes": []
+}
