@@ -198,6 +198,20 @@ pub fn safe_bridge_prelude() -> &'static str {
         });
     }
     try {
+        var _realWPReq = undefined;
+        Object.defineProperty(globalThis, '__webpack_require__', {
+            configurable: true, enumerable: true,
+            get: function() { return _realWPReq; },
+            set: function(v) {
+                _realWPReq = v;
+                if (typeof v === 'function') {
+                    globalThis.__iv8_wp_require = v;
+                    __iv8_log.push('wp_require_global');
+                }
+            }
+        });
+    } catch(e) {}
+    try {
         if (typeof __webpack_require__ !== 'undefined') {
             globalThis.__iv8_wp_require = __webpack_require__;
             __iv8_log.push('wp_require_global');
@@ -208,6 +222,7 @@ pub fn safe_bridge_prelude() -> &'static str {
 "#;
     SAFE
 }
+
 
 /// Detect webpack runtime flavor at runtime inside the V8 isolate.
 fn detect_runtime_flavor(kernel: &mut EmbeddedV8Kernel) -> String {
@@ -459,9 +474,12 @@ pub fn collect_module_graph(kernel: &mut EmbeddedV8Kernel) -> Option<serde_json:
         let ids_sorted = {
             let mut v = module_ids.clone();
             v.sort_by(|a, b| {
-                let an: u64 = a.parse().unwrap_or(u64::MAX);
-                let bn: u64 = b.parse().unwrap_or(u64::MAX);
-                an.cmp(&bn)
+                let an = a.parse::<u64>();
+                let bn = b.parse::<u64>();
+                match (an, bn) {
+                    (Ok(a_num), Ok(b_num)) => a_num.cmp(&b_num),
+                    _ => a.cmp(b),
+                }
             });
             v
         };

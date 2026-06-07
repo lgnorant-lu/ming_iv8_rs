@@ -177,8 +177,10 @@ def _classify_result(result_state: str, expected_evidence: List[str], observed_e
 
     PASS requires:
     - result_state is collected/completed/finalized
-    - all expected evidence kinds are present in observed_evidence with strong strength
+    - all expected evidence kinds are present in observed_evidence
     """
+    if result_state in {"partial", "degraded"}:
+        return "WARN"
     if result_state not in {"collected", "completed", "finalized"}:
         return "FAIL"
     observed_kinds = {e.get("kind") for e in observed_evidence if isinstance(e, dict)}
@@ -186,6 +188,7 @@ def _classify_result(result_state: str, expected_evidence: List[str], observed_e
         if expected not in observed_kinds:
             return "WARN"
     return "PASS"
+
 
 
 def default_executor(item: CorpusManifestItem) -> Dict[str, Any]:
@@ -340,6 +343,33 @@ def _build_sample_report(
     # Embed environment_report fragment
     if execution and execution.get("environment_report"):
         sample["environment_report"] = execution["environment_report"]
+
+    # Embed source_ast_report fragment
+    if execution:
+        observed_kinds = {e.get("kind") for e in execution.get("observed_evidence", []) if isinstance(e, dict)}
+        has_ast = any(e.get("source") == "source_ast" for e in execution.get("observed_evidence", []) if isinstance(e, dict))
+        if has_ast or "source_ast_transform_applied" in observed_kinds or "source_ast_runtime_validated" in observed_kinds:
+            selected_jps = []
+            if "source_ast_runtime_validated" in observed_kinds:
+                selected_jps.append("dispatch_expression")
+            if "eval_source_captured" in observed_kinds:
+                selected_jps.append("eval_source_point")
+            if "function_constructor_source_captured" in observed_kinds:
+                selected_jps.append("function_ctor_source_point")
+            if not selected_jps and "source_ast_transform_applied" in observed_kinds:
+                selected_jps.append("dispatch_expression")
+            
+            runtime_validated = "source_ast_runtime_validated" in observed_kinds or "eval_source_captured" in observed_kinds or "function_constructor_source_captured" in observed_kinds
+            source_ast_ev = [e.get("kind") for e in execution.get("observed_evidence", []) if isinstance(e, dict) and e.get("source") == "source_ast"]
+            source_ast_diags = [d.get("code") for d in execution.get("diagnostics", []) if isinstance(d, dict) and d.get("stage", "").startswith("source_ast")]
+            
+            sample["source_ast_report"] = {
+                "source_id": "input.js",
+                "selected_join_points": selected_jps,
+                "runtime_validated": runtime_validated,
+                "evidence": source_ast_ev,
+                "diagnostic_codes": source_ast_diags
+            }
 
     return sample
 
