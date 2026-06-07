@@ -25,6 +25,7 @@ __all__ = [
     "probe_pack_from_dict",
     "probe_pack_to_dict",
     "run_probe_pack",
+    "run_environment_toolchain",
     "validate_bypass_boundary",
 ]
 
@@ -565,6 +566,96 @@ def run_probe_pack(
         gaps=gaps,
         coverage=_coverage_from_observations(observations),
         diagnostics=diagnostics,
+    )
+
+
+def run_environment_toolchain(
+    js_source: str,
+    *,
+    probe_pack: str | ProbePack = "fingerprint.m1",
+    profile: str | None = "default",
+    environment: dict[str, Any] | None = None,
+    apply_runtime_safe: bool = False,
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
+    time_mode: str = "logical",
+    entry_expr: str | None = None,
+):
+    """Run the report-only Environment Toolchain flow.
+
+    Slice 5 intentionally does not apply patches. Explicit runtime-safe apply is
+    added in Slice 6 so callers cannot confuse candidate reporting with mutation.
+    """
+    if apply_runtime_safe:
+        raise NotImplementedError("apply_runtime_safe is implemented in the next runtime slice")
+
+    from iv8_rs.environment_toolchain import (
+        CoverageDelta,
+        CoverageSnapshot,
+        EnvironmentToolchainReport,
+        ToolchainPatchEntry,
+    )
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord, ExperimentalEvidenceRecord
+
+    run = run_probe_pack(
+        js_source,
+        probe_pack=probe_pack,
+        profile=profile,
+        environment=environment,
+        random_seed=random_seed,
+        time_freeze=time_freeze,
+        time_mode=time_mode,
+        entry_expr=entry_expr,
+    )
+    candidates = map_gaps_to_candidates(run.gaps, environment=environment)
+    rejected = [
+        ToolchainPatchEntry(
+            patch_id=candidate.patch_id,
+            target=candidate.target,
+            kind=candidate.kind,
+            policy=candidate.policy,
+            reason="report-only default; explicit apply_runtime_safe required",
+        )
+        for candidate in candidates
+    ]
+
+    evidence = [
+        ExperimentalEvidenceRecord("environment_probe_pack_run", "diagnostic_only"),
+        *[
+            ExperimentalEvidenceRecord("environment_gap_observed", "diagnostic_only")
+            for _gap in run.gaps
+        ],
+        *[
+            ExperimentalEvidenceRecord("environment_patch_registry_candidate", "diagnostic_only")
+            for _candidate in candidates
+        ],
+    ]
+    diagnostics = [
+        ExperimentalDiagnosticRecord(item["code"], item["severity"])
+        for item in run.diagnostics
+    ]
+    if candidates:
+        diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_PATCH_CANDIDATE", "info"))
+        diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_PATCH_REJECTED", "warn"))
+    diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_NO_WRITES", "info"))
+
+    snapshot = CoverageSnapshot(
+        present=run.coverage["present"],
+        missing=run.coverage["missing"],
+        mismatch=run.coverage["mismatch"],
+    )
+    return EnvironmentToolchainReport(
+        schema_version="environment-toolchain.v0.1",
+        probe_pack=run.probe_pack,
+        before=snapshot,
+        after=snapshot,
+        coverage_delta=CoverageDelta(improved=0, regressed=0, unresolved=len(run.gaps)),
+        applied_patches=[],
+        rejected_patches=rejected,
+        profile_suggestions=[],
+        evidence=evidence,
+        diagnostics=diagnostics,
+        writes=[],
     )
 
 
