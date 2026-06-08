@@ -6,6 +6,47 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-06-08
+
+### Added
+
+- **Environment Toolchain runtime foundation**: `run_environment_toolchain()` now
+  runs bounded Environment probe packs and returns an `EnvironmentToolchainReport`.
+- **Probe pack runtime model**: added `fingerprint.m1` probe execution, gap
+  classification, coverage snapshots, diagnostics, and root API smoke coverage.
+- **Runtime-safe candidate mapping**: generic gaps can map to reviewed
+  `runtime_safe` browser-like value candidates.
+- **Explicit safe rerun**: `apply_runtime_safe=True` applies only reviewed
+  `runtime_safe` candidates in a fresh rerun context.
+- **Profile suggestions**: the runner emits review-only profile suggestions while
+  keeping `writes=[]`.
+- **Package data assets**: built-in probe and candidate definitions moved into
+  package JSON assets under `environment_toolchain_assets/`.
+
+### Changed
+
+- v0.8.1 scope is now recorded as Environment Toolchain Runtime Foundation, not
+  multi-branch runtime promotion.
+- Environment policy style was modernized for the scoped release lint gate without
+  changing policy behavior.
+
+### Documentation
+
+- `docs/acceptance/v0.8.1-environment-runtime-acceptance.md` records accepted
+  behavior, non-capabilities, real-sample pressure boundaries, and gates.
+- `docs/roadmap/post-v0.6/v0.8.2-environment-hybrid-runtime-strategy.md` records
+  the next hybrid strategy: native substrate plus data assets plus adaptation
+  scaffold plus IV8 policy/report governance.
+- Roadmap indexes and the v0.8 decision register now reference the v0.8.1
+  acceptance closure and v0.8.2+ hybrid strategy decisions.
+
+### Quality Gates
+
+- Targeted Environment tests: 63 passed.
+- Scoped Environment lint: `ruff check` passed.
+- Root API smoke: `run_environment_toolchain('', probe_pack='fingerprint.m1', profile=None)` reports `present=14`, `missing=0`, `mismatch=0`, `writes=[]`.
+- `git diff --check` passed.
+
 ## [0.8.0] - 2026-06-07
 
 ### Added

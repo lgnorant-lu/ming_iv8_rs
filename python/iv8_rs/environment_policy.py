@@ -8,8 +8,7 @@ side-effect free and never writes profiles, manifests, baselines, or samples.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, Iterable, List, Optional
-
+from typing import Any
 
 POLICY_LEVELS = {"runtime_safe", "analysis_only", "unsafe_hook"}
 PATCH_KINDS = {"value", "object", "getter", "method", "capture", "wrapper", "hook", "rewrite"}
@@ -37,8 +36,8 @@ class EnvironmentPatchCandidate:
     policy: str
     source: str = "builtin_registry"
     value_preview: Any = None
-    requires: List[str] = field(default_factory=list)
-    risk_reasons: List[str] = field(default_factory=list)
+    requires: list[str] = field(default_factory=list)
+    risk_reasons: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if self.kind not in PATCH_KINDS:
@@ -47,7 +46,7 @@ class EnvironmentPatchCandidate:
             raise ValueError(f"invalid patch policy: {self.policy}")
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "EnvironmentPatchCandidate":
+    def from_dict(cls, data: dict[str, Any]) -> EnvironmentPatchCandidate:
         return cls(
             patch_id=data["patch_id"],
             target=data["target"],
@@ -59,7 +58,7 @@ class EnvironmentPatchCandidate:
             risk_reasons=list(data.get("risk_reasons", [])),
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
@@ -69,8 +68,8 @@ class PatchPolicyOptions:
     allow_analysis_only: bool = False
     allow_unsafe_hook: bool = False
     allow_explicit_override: bool = False
-    explicit_environment: Dict[str, Any] = field(default_factory=dict)
-    profile_values: Dict[str, Any] = field(default_factory=dict)
+    explicit_environment: dict[str, Any] = field(default_factory=dict)
+    profile_values: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(slots=True)
@@ -82,27 +81,31 @@ class PatchPolicyDecision:
     persona: str
     decision: str
     reason: str
-    risk_reasons: List[str] = field(default_factory=list)
+    risk_reasons: list[str] = field(default_factory=list)
     requires_opt_in: bool = False
     opt_in_present: bool = False
-    conflicts: List[str] = field(default_factory=list)
+    conflicts: list[str] = field(default_factory=list)
     diagnostic_code: str = "PATCH_POLICY_APPLIED"
 
     def __post_init__(self) -> None:
         if self.decision not in POLICY_DECISIONS:
             raise ValueError(f"invalid policy decision: {self.decision}")
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
 def decide_patch_policy(
-    candidate: EnvironmentPatchCandidate | Dict[str, Any],
+    candidate: EnvironmentPatchCandidate | dict[str, Any],
     *,
-    options: Optional[PatchPolicyOptions] = None,
+    options: PatchPolicyOptions | None = None,
 ) -> PatchPolicyDecision:
     """Decide whether a candidate may be applied under current policy."""
-    cand = candidate if isinstance(candidate, EnvironmentPatchCandidate) else EnvironmentPatchCandidate.from_dict(candidate)
+    cand = (
+        candidate
+        if isinstance(candidate, EnvironmentPatchCandidate)
+        else EnvironmentPatchCandidate.from_dict(candidate)
+    )
     opts = options or PatchPolicyOptions()
     effective_policy, reclassified = _effective_policy(cand)
     conflicts = _conflicts(cand, opts)
@@ -130,25 +133,52 @@ def decide_patch_policy(
         if not opts.allow_unsafe_hook:
             return _blocked(cand, opts, effective_policy, "unsafe hook requires explicit opt-in")
         if opts.persona != "analysis":
-            return _rejected(cand, opts, effective_policy, "unsafe hook requires analysis persona",
-                             diagnostic_code="PATCH_POLICY_PERSONA_MISMATCH")
-        return _applied(cand, opts, effective_policy, requires_opt_in=True, opt_in_present=True,
-                        diagnostic_code=diagnostic_code)
+            return _rejected(
+                cand,
+                opts,
+                effective_policy,
+                "unsafe hook requires analysis persona",
+                diagnostic_code="PATCH_POLICY_PERSONA_MISMATCH",
+            )
+        return _applied(
+            cand,
+            opts,
+            effective_policy,
+            requires_opt_in=True,
+            opt_in_present=True,
+            diagnostic_code=diagnostic_code,
+        )
 
     if effective_policy == "analysis_only":
         if not opts.allow_analysis_only:
-            return _rejected(cand, opts, effective_policy, "analysis-only patch requires explicit opt-in",
-                             diagnostic_code="PATCH_POLICY_OPT_IN_MISSING")
+            return _rejected(
+                cand,
+                opts,
+                effective_policy,
+                "analysis-only patch requires explicit opt-in",
+                diagnostic_code="PATCH_POLICY_OPT_IN_MISSING",
+            )
         if opts.persona == "runtime" and not opts.allow_explicit_override:
-            return _rejected(cand, opts, effective_policy, "runtime persona rejects analysis-only patch",
-                             diagnostic_code="PATCH_POLICY_PERSONA_MISMATCH")
-        return _applied(cand, opts, effective_policy, requires_opt_in=True, opt_in_present=True,
-                        diagnostic_code=diagnostic_code)
+            return _rejected(
+                cand,
+                opts,
+                effective_policy,
+                "runtime persona rejects analysis-only patch",
+                diagnostic_code="PATCH_POLICY_PERSONA_MISMATCH",
+            )
+        return _applied(
+            cand,
+            opts,
+            effective_policy,
+            requires_opt_in=True,
+            opt_in_present=True,
+            diagnostic_code=diagnostic_code,
+        )
 
     return _applied(cand, opts, effective_policy, diagnostic_code=diagnostic_code)
 
 
-def block_mutation(target: str, *, reason: Optional[str] = None) -> PatchPolicyDecision:
+def block_mutation(target: str, *, reason: str | None = None) -> PatchPolicyDecision:
     """Return a blocking decision for prohibited persistent mutations."""
     if target not in MUTATION_TARGETS:
         raise ValueError(f"unknown mutation target: {target}")
@@ -167,7 +197,13 @@ def block_mutation(target: str, *, reason: Optional[str] = None) -> PatchPolicyD
     )
 
 
-def runtime_safe_candidate(patch_id: str, target: str, value: Any, *, source: str = "builtin_registry") -> EnvironmentPatchCandidate:
+def runtime_safe_candidate(
+    patch_id: str,
+    target: str,
+    value: Any,
+    *,
+    source: str = "builtin_registry",
+) -> EnvironmentPatchCandidate:
     return EnvironmentPatchCandidate(
         patch_id=patch_id,
         target=target,
@@ -185,8 +221,8 @@ def _effective_policy(cand: EnvironmentPatchCandidate) -> tuple[str, bool]:
     return cand.policy, False
 
 
-def _conflicts(cand: EnvironmentPatchCandidate, opts: PatchPolicyOptions) -> List[str]:
-    conflicts: List[str] = []
+def _conflicts(cand: EnvironmentPatchCandidate, opts: PatchPolicyOptions) -> list[str]:
+    conflicts: list[str] = []
     if cand.target in opts.explicit_environment:
         conflicts.append("explicit_environment")
     if cand.target in opts.profile_values and cand.source == "builtin_registry":
@@ -201,7 +237,7 @@ def _applied(
     *,
     requires_opt_in: bool = False,
     opt_in_present: bool = False,
-    diagnostic_code: Optional[str] = None,
+    diagnostic_code: str | None = None,
 ) -> PatchPolicyDecision:
     return PatchPolicyDecision(
         patch_id=cand.patch_id,
