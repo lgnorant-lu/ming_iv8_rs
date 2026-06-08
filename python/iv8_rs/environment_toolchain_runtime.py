@@ -10,10 +10,42 @@ from __future__ import annotations
 
 import json
 import os
-import re
 from dataclasses import asdict, dataclass, field
 from importlib import resources
 from typing import Any
+
+from iv8_rs.environment_toolchain_models import (
+    AdaptationIteration,
+    AssetProvenance,
+    BoundaryDecision,
+    EnvironmentGap,
+    FamilyPressure,
+    ProbeObservation,
+    ProbeRun,
+    ProfileCoherenceGroup,
+)
+from iv8_rs.environment_toolchain_static import (
+    _ADAPTATION_STOP_REASONS,
+    _ALLOWED_EVIDENCE_CEILINGS,
+    _ALLOWED_PRESSURE_CATEGORIES,
+    _ALLOWED_PROBE_CATEGORIES,
+    _ALLOWED_TARGET_FAMILIES,
+    _BLOCKED_BOUNDARY_TERMS,
+    _CANDIDATE_DEPENDENCY_KINDS,
+    _CANDIDATE_METADATA_FIELDS,
+    _CANDIDATE_PACK_FILES,
+    _CANDIDATE_PLANNING_STATUSES,
+    _DRY_RUN_ALLOWED_STATUSES,
+    _GAP_CLASS_TO_PRESSURE_CATEGORY,
+    _GENERIC_TARGET_PREFIXES,
+    _ORDERED_RECIPE_RE,
+    _PROBE_PACK_FILES,
+    _RAW_LOCAL_PATH_RE,
+    _ROLLBACK_ALLOWED_SCOPES,
+    _ROLLBACK_BLOCKED_SCOPES,
+    _SCAFFOLD_GAP_ITEMS,
+    _SUBSTRATE_COVERAGE_ITEMS,
+)
 
 __all__ = [
     "BoundaryDecision",
@@ -35,469 +67,6 @@ __all__ = [
     "run_environment_toolchain",
     "validate_bypass_boundary",
 ]
-
-
-_ALLOWED_EVIDENCE_CEILINGS = {"diagnostic_only", "weak"}
-_ALLOWED_PROBE_CATEGORIES = {"presence", "descriptor", "behavior", "value"}
-_GENERIC_TARGET_PREFIXES = (
-    "navigator.",
-    "screen.",
-    "document.",
-    "window.",
-    "location.",
-    "performance.",
-    "Math.",
-    "Date.",
-    "crypto.",
-)
-_BLOCKED_BOUNDARY_TERMS = (
-    "domain",
-    "endpoint",
-    "cookie",
-    "token",
-    "signature",
-    "nonce",
-    "request_body",
-    "request body",
-    "authorization",
-    "secret",
-)
-_ALLOWED_PRESSURE_CATEGORIES = frozenset({
-    "descriptor_mismatch",
-    "prototype_mismatch",
-    "value_mismatch",
-    "missing_api",
-    "behavior_mismatch",
-})
-_ALLOWED_TARGET_FAMILIES = frozenset({
-    "navigator",
-    "screen",
-    "window",
-    "document",
-    "timing",
-    "network_info",
-})
-_GAP_CLASS_TO_PRESSURE_CATEGORY = {
-    "missing_api": "missing_api",
-    "value_mismatch": "value_mismatch",
-    "descriptor_mismatch": "descriptor_mismatch",
-    "behavior_mismatch": "behavior_mismatch",
-    "prototype_chain_mismatch": "prototype_mismatch",
-}
-_ORDERED_RECIPE_RE = re.compile(r"apply\s+.+request\s+.+(?:copy|rerun)", re.IGNORECASE)
-_RAW_LOCAL_PATH_RE = re.compile(r"(?:^[a-zA-Z]:[\\/]|^[/\\]{1,2}(?!/)|\s[a-zA-Z]:[\\/])")
-_PROBE_PACK_FILES = {
-    "descriptor.m1": "descriptor.m1.json",
-    "fingerprint.m1": "fingerprint.m1.json",
-}
-_CANDIDATE_PACK_FILES = {"chrome_generic": "chrome_generic.json"}
-_ADAPTATION_STOP_REASONS = {
-    "disabled",
-    "completed",
-    "budget_exhausted",
-    "no_candidate",
-    "policy_blocked",
-    "boundary_blocked",
-    "regression_detected",
-    "no_progress",
-    "entry_failure",
-    "asset_error",
-}
-_DRY_RUN_ALLOWED_STATUSES = frozenset({
-    "eligible_for_review",
-    "blocked_by_boundary",
-    "blocked_by_policy",
-    "blocked_by_conflict",
-    "requires_rollback_design",
-    "requires_native_review",
-    "review_only_signal",
-})
-_CANDIDATE_METADATA_FIELDS = frozenset({
-    "coherence_group",
-    "substrate_family",
-    "dependency_kind",
-    "expected_probe_delta",
-    "evidence_ceiling",
-    "planning_status",
-    "rollback_scope",
-    "rollback_hint",
-    "boundary_checked",
-    "blocked_reasons",
-})
-_CANDIDATE_PLANNING_STATUSES = frozenset({"not_planned"}) | _DRY_RUN_ALLOWED_STATUSES
-_CANDIDATE_DEPENDENCY_KINDS = frozenset({
-    "probe_pass",
-    "probe_gap",
-    "coherence_group_status",
-    "explicit_environment_absent",
-    "candidate_pack_enabled",
-    "rollback_metadata_present",
-    "native_review_completed",
-})
-_ROLLBACK_ALLOWED_SCOPES = frozenset({"context_only", "ephemeral_report"})
-_ROLLBACK_BLOCKED_SCOPES = frozenset({
-    "profile_file",
-    "manifest",
-    "baseline",
-    "sample",
-    "source_tree",
-    "native_substrate",
-    "blocked",
-})
-_SUBSTRATE_COVERAGE_ITEMS = (
-    {
-        "surface_id": "probe_pack_loading",
-        "surface_family": "python_orchestration",
-        "owner": "environment_toolchain_runtime.py",
-        "coverage": "built-in/custom tests and provenance diagnostics",
-        "boundary": "report_only",
-        "review_status": "accepted",
-        "gap_class": "substrate_gap",
-        "gap": "no first-class substrate coverage index before v0.8.6 diagnostics",
-    },
-    {
-        "surface_id": "candidate_pack_loading",
-        "surface_family": "python_orchestration",
-        "owner": "environment_toolchain_runtime.py",
-        "coverage": "candidate tests, metadata validation, boundary tests",
-        "boundary": "runtime_safe_only_explicit",
-        "review_status": "accepted",
-        "gap_class": "candidate_gap",
-        "gap": "metadata is review-only and cannot authorize apply",
-    },
-    {
-        "surface_id": "profile_coherence",
-        "surface_family": "diagnostics",
-        "owner": "ProfileCoherenceGroup",
-        "coverage": "language, screen_window, ua_platform, network_info, timezone_locale",
-        "boundary": "diagnostic_only",
-        "review_status": "accepted",
-        "gap_class": "evidence_gap",
-        "gap": "coherence groups remain input signals, not candidate generators",
-    },
-    {
-        "surface_id": "navigator_connection",
-        "surface_family": "rust_substrate",
-        "owner": "navigator_extras.rs",
-        "coverage": "network_info coherence diagnostics",
-        "boundary": "js_shim_stub_no_apply",
-        "review_status": "requires_review",
-        "gap_class": "substrate_gap",
-        "gap": "hardcoded connection values are not linked to EnvironmentMap defaults",
-    },
-    {
-        "surface_id": "navigator_ua_data",
-        "surface_family": "rust_substrate",
-        "owner": "user_agent_data.rs",
-        "coverage": "shape probe and ua_platform coherence diagnostics",
-        "boundary": "native_review_gated",
-        "review_status": "accepted_with_review_gate",
-        "gap_class": "probe_gap",
-        "gap": "high-entropy behavior needs generic probe coverage before hardening",
-    },
-    {
-        "surface_id": "plugins_mime_types",
-        "surface_family": "rust_substrate",
-        "owner": "navigator_extras.rs",
-        "coverage": "basic runtime surface only",
-        "boundary": "js_shim_stub_no_apply",
-        "review_status": "requires_review",
-        "gap_class": "probe_gap",
-        "gap": "empty array-like descriptors need generic review coverage",
-    },
-    {
-        "surface_id": "timezone_intl",
-        "surface_family": "rust_substrate",
-        "owner": "embedded_v8.rs",
-        "coverage": "timezone_locale coherence diagnostics",
-        "boundary": "native_review_gated",
-        "review_status": "requires_review",
-        "gap_class": "substrate_gap",
-        "gap": "config.timezone vs timezone key contract remains unresolved",
-    },
-    {
-        "surface_id": "rollback_diagnostics",
-        "surface_family": "planning_scaffold",
-        "owner": "run_environment_toolchain",
-        "coverage": "rollback summary/record diagnostics and negative tests",
-        "boundary": "diagnostic_only_no_write",
-        "review_status": "accepted",
-        "gap_class": "rollback_gap",
-        "gap": "persistent rollback scopes remain blocked without write contract",
-    },
-)
-_SCAFFOLD_GAP_ITEMS = (
-    {
-        "gap_id": "G-086-SUB-001",
-        "gap_class": "substrate_gap",
-        "surface_family": "timezone_intl",
-        "priority": "high",
-        "current_evidence": "config.timezone default and timezone runtime key diverge",
-        "next_artifact": "timezone key contract review",
-        "review_gate": "native_substrate_review",
-        "negative_gate": "no_rust_edit_without_review",
-    },
-    {
-        "gap_id": "G-086-SUB-002",
-        "gap_class": "substrate_gap",
-        "surface_family": "network_info",
-        "priority": "high",
-        "current_evidence": "navigator.connection defaults and hardcoded shim diverge",
-        "next_artifact": "network info substrate review",
-        "review_gate": "native_substrate_review",
-        "negative_gate": "no_runtime_apply_from_coherence",
-    },
-    {
-        "gap_id": "G-086-PROBE-001",
-        "gap_class": "probe_gap",
-        "surface_family": "navigator_ua_data",
-        "priority": "high",
-        "current_evidence": "UAData has shape probe but limited high-entropy coverage",
-        "next_artifact": "UAData probe coverage map",
-        "review_gate": "probe_pack_review",
-        "negative_gate": "no_browser_version_equivalence",
-    },
-    {
-        "gap_id": "G-086-CAND-001",
-        "gap_class": "candidate_gap",
-        "surface_family": "environment_value",
-        "priority": "high",
-        "current_evidence": "chrome_generic values need bounded planning metadata",
-        "next_artifact": "candidate metadata validation",
-        "review_gate": "candidate_schema_review",
-        "negative_gate": "no_default_apply_from_metadata",
-    },
-    {
-        "gap_id": "G-086-POL-001",
-        "gap_class": "policy_gap",
-        "surface_family": "planner",
-        "priority": "medium",
-        "current_evidence": "apply policy cannot represent review-only planning states",
-        "next_artifact": "planner policy state design",
-        "review_gate": "policy_review",
-        "negative_gate": "no_hidden_authorization",
-    },
-    {
-        "gap_id": "G-086-EVD-001",
-        "gap_class": "evidence_gap",
-        "surface_family": "diagnostics",
-        "priority": "medium",
-        "current_evidence": "planning and rollback evidence must stay diagnostic-only",
-        "next_artifact": "evidence wording and negative gates",
-        "review_gate": "evidence_review",
-        "negative_gate": "no_pass_from_plan_or_readiness",
-    },
-    {
-        "gap_id": "G-086-ROLL-001",
-        "gap_class": "rollback_gap",
-        "surface_family": "runtime_safe",
-        "priority": "high",
-        "current_evidence": "explicit fresh-context rerun needs rollback prerequisite record",
-        "next_artifact": "rollback diagnostics",
-        "review_gate": "rollback_review",
-        "negative_gate": "no_writes_by_default",
-    },
-    {
-        "gap_id": "G-086-NEG-001",
-        "gap_class": "negative_gate_gap",
-        "surface_family": "planner_artifact",
-        "priority": "high",
-        "current_evidence": "planner-like artifacts need boundary validation",
-        "next_artifact": "planner boundary negative tests",
-        "review_gate": "boundary_review",
-        "negative_gate": "reject_target_flow_vocabulary",
-    },
-)
-
-
-@dataclass(frozen=True, slots=True)
-class BoundaryDecision:
-    decision: str
-    reason: str
-    redactions: list[str] = field(default_factory=list)
-    blocked_terms: list[str] = field(default_factory=list)
-
-    def __post_init__(self) -> None:
-        if self.decision not in {"allowed", "blocked"}:
-            raise ValueError(f"invalid boundary decision: {self.decision}")
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass(frozen=True, slots=True)
-class EnvironmentGap:
-    probe_id: str
-    target: str
-    gap_class: str
-    category: str
-    expected: Any
-    actual: Any
-    error: str | None = None
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass(frozen=True, slots=True)
-class ProbeObservation:
-    probe_id: str
-    target: str
-    category: str
-    expected: Any
-    actual: Any
-    passed: bool
-    gap_class: str
-    evidence_ceiling: str = "diagnostic_only"
-    error: str | None = None
-
-    @classmethod
-    def from_probe(
-        cls,
-        probe: ProbeDefinition,
-        *,
-        actual: Any,
-        passed: bool,
-        error: str | None = None,
-    ) -> ProbeObservation:
-        return cls(
-            probe_id=probe.probe_id,
-            target=probe.target,
-            category=probe.category,
-            expected=probe.expected,
-            actual=actual,
-            passed=passed,
-            gap_class=probe.gap_class,
-            evidence_ceiling=probe.evidence_ceiling,
-            error=error,
-        )
-
-    def to_gap(self) -> EnvironmentGap | None:
-        if self.passed:
-            return None
-        return EnvironmentGap(
-            probe_id=self.probe_id,
-            target=self.target,
-            gap_class=self.gap_class,
-            category=self.category,
-            expected=self.expected,
-            actual=self.actual,
-            error=self.error,
-        )
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass(frozen=True, slots=True)
-class ProbeRun:
-    probe_pack: str
-    observations: list[ProbeObservation]
-    gaps: list[EnvironmentGap]
-    coverage: dict[str, int]
-    diagnostics: list[dict[str, Any]] = field(default_factory=list)
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "probe_pack": self.probe_pack,
-            "observations": [observation.to_dict() for observation in self.observations],
-            "gaps": [gap.to_dict() for gap in self.gaps],
-            "coverage": dict(self.coverage),
-            "diagnostics": [dict(diagnostic) for diagnostic in self.diagnostics],
-        }
-
-
-@dataclass(frozen=True, slots=True)
-class AdaptationIteration:
-    index: int
-    before: dict[str, int]
-    after: dict[str, int]
-    delta: dict[str, int]
-    matched_patch_ids: list[str]
-    applied_patch_ids: list[str]
-    rejected: list[dict[str, Any]] = field(default_factory=list)
-    stop_reason: str | None = None
-
-    def to_details(self) -> dict[str, Any]:
-        details: dict[str, Any] = {
-            "index": self.index,
-            "before": dict(self.before),
-            "after": dict(self.after),
-            "delta": dict(self.delta),
-            "matched_patch_ids": list(self.matched_patch_ids),
-            "applied_patch_ids": list(self.applied_patch_ids),
-            "rejected": [dict(item) for item in self.rejected],
-        }
-        if self.stop_reason is not None:
-            details["stop_reason"] = self.stop_reason
-        return details
-
-
-@dataclass(frozen=True, slots=True)
-class ProfileCoherenceGroup:
-    group_id: str
-    status: str
-    fields: dict[str, Any]
-    sources: dict[str, str]
-    reason: str
-    review_status: str = "review_only"
-    evidence_ceiling: str = "diagnostic_only"
-
-    def __post_init__(self) -> None:
-        if self.status not in {"consistent", "inconsistent", "unknown"}:
-            raise ValueError(f"invalid profile coherence status: {self.status}")
-
-    def to_details(self) -> dict[str, Any]:
-        return {
-            "group_id": self.group_id,
-            "status": self.status,
-            "fields": dict(self.fields),
-            "sources": dict(self.sources),
-            "reason": self.reason,
-            "review_status": self.review_status,
-            "evidence_ceiling": self.evidence_ceiling,
-        }
-
-
-@dataclass(frozen=True, slots=True)
-class FamilyPressure:
-    pressure_id: str
-    category: str
-    target_family: str
-    gap_classes: list[str]
-    review_status: str = "review_only"
-    evidence_ceiling: str = "diagnostic_only"
-
-    def __post_init__(self) -> None:
-        if self.category not in _ALLOWED_PRESSURE_CATEGORIES:
-            raise ValueError(f"invalid pressure category: {self.category}")
-        if self.target_family not in _ALLOWED_TARGET_FAMILIES:
-            raise ValueError(f"invalid target family: {self.target_family}")
-
-    def to_details(self) -> dict[str, Any]:
-        return {
-            "pressure_id": self.pressure_id,
-            "category": self.category,
-            "target_family": self.target_family,
-            "gap_classes": list(self.gap_classes),
-            "review_status": self.review_status,
-            "evidence_ceiling": self.evidence_ceiling,
-        }
-
-
-@dataclass(frozen=True, slots=True)
-class AssetProvenance:
-    asset_type: str
-    pack_id: str
-    origin: str
-    version: int | None = None
-    redacted_ref: str | None = None
-
-    @property
-    def diagnostic_code(self) -> str:
-        asset = self.asset_type.upper().replace(" ", "_")
-        origin = self.origin.upper()
-        return f"ENV_TOOLCHAIN_{asset}_{origin}"
 
 
 @dataclass(frozen=True, slots=True)
@@ -1074,6 +643,7 @@ def run_environment_toolchain(
     rollback_diagnostics: bool = False,
     substrate_coverage: bool = False,
     scaffold_gaps: bool = False,
+    pressure_harness: bool = False,
 ):
     """Run the Environment Toolchain flow with optional runtime-safe rerun."""
     if max_iterations < 0:
@@ -1086,6 +656,8 @@ def run_environment_toolchain(
         raise ValueError("substrate_coverage cannot be combined with runtime-safe apply")
     if scaffold_gaps and (apply_runtime_safe or adapt_runtime_safe):
         raise ValueError("scaffold_gaps cannot be combined with runtime-safe apply")
+    if pressure_harness and adapt_runtime_safe:
+        raise ValueError("pressure_harness cannot be combined with iterative adaptation yet")
 
     from iv8_rs.environment_toolchain import (
         CoverageDelta,
@@ -1112,16 +684,32 @@ def run_environment_toolchain(
             local_overlay=local_overlay,
         )
 
-    before_run = run_probe_pack(
-        js_source,
-        probe_pack=probe_pack,
-        profile=profile,
-        environment=environment,
-        random_seed=random_seed,
-        time_freeze=time_freeze,
-        time_mode=time_mode,
-        entry_expr=entry_expr,
-    )
+    pressure_report = None
+    try:
+        before_run = run_probe_pack(
+            js_source,
+            probe_pack=probe_pack,
+            profile=profile,
+            environment=environment,
+            random_seed=random_seed,
+            time_freeze=time_freeze,
+            time_mode=time_mode,
+            entry_expr=entry_expr,
+        )
+    except Exception as exc:  # noqa: BLE001 - explicit pressure harness entry diagnostic.
+        if not pressure_harness:
+            raise
+        pressure_report = _build_toolchain_pressure_report(js_source, message=exc)
+        before_run = run_probe_pack(
+            "",
+            probe_pack=probe_pack,
+            profile=profile,
+            environment=environment,
+            random_seed=random_seed,
+            time_freeze=time_freeze,
+            time_mode=time_mode,
+            entry_expr=None,
+        )
     candidates = map_gaps_to_candidates(
         before_run.gaps,
         environment=environment,
@@ -1187,6 +775,10 @@ def run_environment_toolchain(
     ]
     if delta["improved"]:
         evidence.append(ExperimentalEvidenceRecord("environment_coverage_improved", "weak"))
+    if pressure_harness:
+        if pressure_report is None:
+            pressure_report = _build_toolchain_pressure_report(js_source)
+        evidence.extend(pressure_report.evidence)
     evidence.append(ExperimentalEvidenceRecord(
         "environment_profile_coherence_analyzed",
         "diagnostic_only",
@@ -1240,6 +832,8 @@ def run_environment_toolchain(
         diagnostics.extend(_substrate_coverage_records())
     if scaffold_gaps:
         diagnostics.extend(_scaffold_gap_records())
+    if pressure_harness:
+        diagnostics.extend(_pressure_harness_records(pressure_report))
     diagnostics.extend(_profile_coherence_records(coherence_groups))
     diagnostics.extend(_family_pressure_summary_records(family_pressures))
     diagnostics.extend(_native_substrate_review_records(coherence_groups, family_pressures))
@@ -2595,6 +2189,42 @@ def _family_pressure_summary_records(
         )
     ]
     return records
+
+
+def _build_toolchain_pressure_report(js_source: str, *, message: Any = None):
+    from iv8_rs.environment_pressure import build_pressure_report
+
+    return build_pressure_report("toolchain.inline", js_source, message=message)
+
+
+def _pressure_harness_records(pressure_report: Any):
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    data = pressure_report.to_dict()
+    summary = {
+        "schema_version": data["schema_version"],
+        "sample_id": data["sample_id"],
+        "input_kind": data["input_kind"],
+        "execution_mode": data["execution_mode"],
+        "status": data["status"],
+        "failure_kind": data["failure_kind"],
+        "pressure": data["pressure"],
+        "promotion": data["promotion"],
+        "writes": data["writes"],
+    }
+    return [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_PRESSURE_HARNESS_SUMMARY",
+            "info",
+            {
+                "enabled": True,
+                "report": summary,
+                "review_status": "review_only",
+                "evidence_ceiling": "diagnostic_only",
+            },
+        ),
+        *pressure_report.diagnostics,
+    ]
 
 
 def _native_substrate_review_records(

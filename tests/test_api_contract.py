@@ -210,6 +210,7 @@ def test_environment_toolchain_public_typing_contract_is_current():
         "rollback_diagnostics",
         "substrate_coverage",
         "scaffold_gaps",
+        "pressure_harness",
     ]:
         assert parameter in stub_text
 

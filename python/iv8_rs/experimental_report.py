@@ -22,6 +22,7 @@ __all__ = [
 
 EXPERIMENTAL_SCHEMA_VERSIONS: frozenset[str] = frozenset({
     "environment-toolchain.v0.1",
+    "environment-pressure.v0.1",
     "deobf-pass-registry.v0.1",
     "deobf-validation.v0.1",
     "deobf-string-array.v0.1",
