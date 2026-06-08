@@ -770,6 +770,7 @@ def run_environment_toolchain(
     ),
     apply_runtime_safe: bool = False,
     adapt_runtime_safe: bool = False,
+    local_overlay: dict[str, Any] | os.PathLike[str] | None = None,
     max_iterations: int = 1,
     stop_on_regression: bool = True,
     random_seed: int | None = 42,
@@ -803,6 +804,7 @@ def run_environment_toolchain(
             time_freeze=time_freeze,
             time_mode=time_mode,
             entry_expr=entry_expr,
+            local_overlay=local_overlay,
         )
 
     before_run = run_probe_pack(
@@ -884,8 +886,12 @@ def run_environment_toolchain(
         "environment_profile_coherence_analyzed",
         "diagnostic_only",
     ))
+    overlay_values, overlay_prov, overlay_rej = _resolve_local_overlay(local_overlay)
+    coherence_env = dict(after_environment or {})
+    if overlay_values:
+        coherence_env.update(overlay_values)
     profile_suggestions = _profile_suggestions_from_candidates(candidates)
-    coherence_groups = _profile_coherence_groups(after_environment)
+    coherence_groups = _profile_coherence_groups(coherence_env)
     diagnostics = [
         ExperimentalDiagnosticRecord(item["code"], item["severity"], item.get("details"))
         for item in before_run.diagnostics
@@ -910,6 +916,10 @@ def run_environment_toolchain(
             "info",
         ))
     diagnostics.extend(_profile_coherence_records(coherence_groups))
+    if overlay_prov:
+        diagnostics.append(overlay_prov)
+    if overlay_rej:
+        diagnostics.append(overlay_rej)
     diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_NO_WRITES", "info"))
 
     before_snapshot = _coverage_snapshot(before_run.coverage)
@@ -947,6 +957,7 @@ def _run_iterative_environment_toolchain(
     time_freeze: float | None,
     time_mode: str,
     entry_expr: str | None,
+    local_overlay: dict[str, Any] | os.PathLike[str] | None = None,
 ):
     from iv8_rs.environment_toolchain import (
         CoverageDelta,
@@ -1090,7 +1101,15 @@ def _run_iterative_environment_toolchain(
             "ENV_TOOLCHAIN_COVERAGE_REGRESSED",
             "error",
         ))
-    diagnostics.extend(_profile_coherence_records(_profile_coherence_groups(accumulated_environment)))
+    overlay_values, overlay_prov, overlay_rej = _resolve_local_overlay(local_overlay)
+    coherence_env = dict(accumulated_environment)
+    if overlay_values:
+        coherence_env.update(overlay_values)
+    diagnostics.extend(_profile_coherence_records(_profile_coherence_groups(coherence_env)))
+    if overlay_prov:
+        diagnostics.append(overlay_prov)
+    if overlay_rej:
+        diagnostics.append(overlay_rej)
     diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_NO_WRITES", "info"))
 
     before_snapshot = _coverage_snapshot(first_run.coverage)
@@ -1212,6 +1231,108 @@ def _adaptation_records(
         for iteration in iterations
     )
     return records
+
+
+def _resolve_local_overlay(
+    overlay: dict[str, Any] | os.PathLike[str] | None,
+) -> tuple[dict[str, Any] | None, Any | None, Any | None]:
+    """Resolve local overlay input for diagnostic coherence analysis.
+
+    Returns (values_dict_or_None, provenance_record_or_None, rejected_record_or_None).
+    The overlay is used only for coherence diagnostics; it never applies runtime
+    values, creates patches, or writes persistent state.
+    """
+    if overlay is None:
+        return None, None, None
+
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    if isinstance(overlay, dict):
+        if not _is_all_overlay_key_generic(overlay):
+            return None, None, ExperimentalDiagnosticRecord(
+                "ENV_TOOLCHAIN_LOCAL_OVERLAY_REJECTED",
+                "warn",
+                {
+                    "reason": "local overlay contains non-generic keys",
+                    "non_generic_keys": [
+                        key for key in overlay if not _is_generic_target(key)
+                    ],
+                },
+            )
+        decision = validate_bypass_boundary(overlay)
+        if decision.decision == "blocked":
+            return None, None, ExperimentalDiagnosticRecord(
+                "ENV_TOOLCHAIN_LOCAL_OVERLAY_REJECTED",
+                "warn",
+                {
+                    "reason": "local overlay blocked by boundary validation",
+                    "blocked_terms": list(decision.blocked_terms),
+                },
+            )
+        return overlay, ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_LOCAL_OVERLAY_PROVENANCE",
+            "info",
+            {
+                "asset_type": "local_overlay",
+                "origin": "custom_dict",
+                "key_count": len(overlay),
+            },
+        ), None
+
+    if isinstance(overlay, os.PathLike):
+        try:
+            with open(overlay, encoding="utf-8") as fh:
+                data = json.load(fh)
+        except (json.JSONDecodeError, OSError) as exc:
+            return None, None, ExperimentalDiagnosticRecord(
+                "ENV_TOOLCHAIN_LOCAL_OVERLAY_REJECTED",
+                "warn",
+                {"reason": f"cannot load local overlay path: {exc}"},
+            )
+        if not isinstance(data, dict):
+            return None, None, ExperimentalDiagnosticRecord(
+                "ENV_TOOLCHAIN_LOCAL_OVERLAY_REJECTED",
+                "warn",
+                {"reason": "local overlay JSON must contain an object"},
+            )
+        if not _is_all_overlay_key_generic(data):
+            return None, None, ExperimentalDiagnosticRecord(
+                "ENV_TOOLCHAIN_LOCAL_OVERLAY_REJECTED",
+                "warn",
+                {
+                    "reason": "local overlay contains non-generic keys",
+                    "non_generic_keys": [
+                        key for key in data if not _is_generic_target(key)
+                    ],
+                },
+            )
+        decision = validate_bypass_boundary(data)
+        if decision.decision == "blocked":
+            return None, None, ExperimentalDiagnosticRecord(
+                "ENV_TOOLCHAIN_LOCAL_OVERLAY_REJECTED",
+                "warn",
+                {
+                    "reason": "local overlay blocked by boundary validation",
+                    "blocked_terms": list(decision.blocked_terms),
+                },
+            )
+        return data, ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_LOCAL_OVERLAY_PROVENANCE",
+            "info",
+            {
+                "asset_type": "local_overlay",
+                "origin": "custom_path",
+                "key_count": len(data),
+                "redacted_ref": os.path.basename(os.fspath(overlay)),
+            },
+        ), None
+
+    raise ValueError("local_overlay must be a dict or a PathLike path to a JSON file")
+
+
+def _is_all_overlay_key_generic(data: dict[str, Any]) -> bool:
+    """Reject overlay keys that are not generic browser environment targets."""
+    return all(_is_generic_target(key) for key in data)
 
 
 def _profile_coherence_groups(environment: dict[str, Any] | None) -> list[ProfileCoherenceGroup]:
