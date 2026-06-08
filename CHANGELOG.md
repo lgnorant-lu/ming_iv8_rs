@@ -6,6 +6,51 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.5] - 2026-06-08
+
+### Added
+
+- **Environment coherence expansion diagnostics**: `run_environment_toolchain()` now
+  includes conservative diagnostic-only coherence groups for `ua_platform`,
+  `network_info`, and `timezone_locale`.
+- **UA/platform coherence checks**: bounded checks compare generic
+  `navigator.userAgent`, `navigator.platform`, `navigator.userAgentData.platform`,
+  and `navigator.userAgentData.mobile` shapes without full UA parsing or device
+  inference.
+- **Network information coherence checks**: bounded checks classify
+  `navigator.connection.effectiveType`, `downlink`, `rtt`, `saveData`, and `type`
+  value-shape inconsistencies without modeling real network, IP, TLS, HTTP, or
+  request flows.
+- **Timezone/locale coherence checks**: bounded checks classify `config.timezone`,
+  runtime `timezone`, `navigator.language`, and `navigator.languages` shape
+  inconsistencies without country-to-timezone mapping, DST modeling, or locale
+  database equivalence.
+- **Native substrate review diagnostics**: reports include
+  `ENV_TOOLCHAIN_NATIVE_SUBSTRATE_REVIEW` to summarize review-gated candidate
+  areas and explicitly blocked actions without authorizing runtime or Rust/native
+  hardening.
+
+### Changed
+
+- v0.8.5 keeps Environment automation diagnostic-only by default: no profile
+  writes, no manifest writes, no corpus/source mutation, no local overlay runtime
+  apply, no profile-group auto-apply, no family-pressure apply, and no native
+  substrate hardening.
+- v0.8.5 records coherence/family/native review signals through diagnostics and
+  `diagnostic_only` evidence while preserving `environment-toolchain.v0.1`.
+- v0.8.5 keeps target-specific bypass material outside core facts: no domain,
+  endpoint, cookie, token, signature, nonce, request body, authorization header,
+  request sequence, site-specific hook, or ordered protected-flow recipe is
+  generated or applied.
+
+### Quality Gates
+
+- Focused Environment coherence/family/native/adaptation tests: 37 passed.
+- Focused Environment compatibility tests: 77 passed.
+- Scoped Environment lint: `ruff check` passed.
+- Full Python tests: 1061 passed, 1 skipped.
+- `git diff --check` passed.
+
 ## [0.8.4] - 2026-06-08
 
 ### Added
