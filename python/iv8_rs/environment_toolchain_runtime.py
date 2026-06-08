@@ -144,6 +144,88 @@ _ROLLBACK_BLOCKED_SCOPES = frozenset({
     "native_substrate",
     "blocked",
 })
+_SUBSTRATE_COVERAGE_ITEMS = (
+    {
+        "surface_id": "probe_pack_loading",
+        "surface_family": "python_orchestration",
+        "owner": "environment_toolchain_runtime.py",
+        "coverage": "built-in/custom tests and provenance diagnostics",
+        "boundary": "report_only",
+        "review_status": "accepted",
+        "gap_class": "substrate_gap",
+        "gap": "no first-class substrate coverage index before v0.8.6 diagnostics",
+    },
+    {
+        "surface_id": "candidate_pack_loading",
+        "surface_family": "python_orchestration",
+        "owner": "environment_toolchain_runtime.py",
+        "coverage": "candidate tests, metadata validation, boundary tests",
+        "boundary": "runtime_safe_only_explicit",
+        "review_status": "accepted",
+        "gap_class": "candidate_gap",
+        "gap": "metadata is review-only and cannot authorize apply",
+    },
+    {
+        "surface_id": "profile_coherence",
+        "surface_family": "diagnostics",
+        "owner": "ProfileCoherenceGroup",
+        "coverage": "language, screen_window, ua_platform, network_info, timezone_locale",
+        "boundary": "diagnostic_only",
+        "review_status": "accepted",
+        "gap_class": "evidence_gap",
+        "gap": "coherence groups remain input signals, not candidate generators",
+    },
+    {
+        "surface_id": "navigator_connection",
+        "surface_family": "rust_substrate",
+        "owner": "navigator_extras.rs",
+        "coverage": "network_info coherence diagnostics",
+        "boundary": "js_shim_stub_no_apply",
+        "review_status": "requires_review",
+        "gap_class": "substrate_gap",
+        "gap": "hardcoded connection values are not linked to EnvironmentMap defaults",
+    },
+    {
+        "surface_id": "navigator_ua_data",
+        "surface_family": "rust_substrate",
+        "owner": "user_agent_data.rs",
+        "coverage": "shape probe and ua_platform coherence diagnostics",
+        "boundary": "native_review_gated",
+        "review_status": "accepted_with_review_gate",
+        "gap_class": "probe_gap",
+        "gap": "high-entropy behavior needs generic probe coverage before hardening",
+    },
+    {
+        "surface_id": "plugins_mime_types",
+        "surface_family": "rust_substrate",
+        "owner": "navigator_extras.rs",
+        "coverage": "basic runtime surface only",
+        "boundary": "js_shim_stub_no_apply",
+        "review_status": "requires_review",
+        "gap_class": "probe_gap",
+        "gap": "empty array-like descriptors need generic review coverage",
+    },
+    {
+        "surface_id": "timezone_intl",
+        "surface_family": "rust_substrate",
+        "owner": "embedded_v8.rs",
+        "coverage": "timezone_locale coherence diagnostics",
+        "boundary": "native_review_gated",
+        "review_status": "requires_review",
+        "gap_class": "substrate_gap",
+        "gap": "config.timezone vs timezone key contract remains unresolved",
+    },
+    {
+        "surface_id": "rollback_diagnostics",
+        "surface_family": "planning_scaffold",
+        "owner": "run_environment_toolchain",
+        "coverage": "rollback summary/record diagnostics and negative tests",
+        "boundary": "diagnostic_only_no_write",
+        "review_status": "accepted",
+        "gap_class": "rollback_gap",
+        "gap": "persistent rollback scopes remain blocked without write contract",
+    },
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -908,6 +990,7 @@ def run_environment_toolchain(
     entry_expr: str | None = None,
     dry_run_planning: bool = False,
     rollback_diagnostics: bool = False,
+    substrate_coverage: bool = False,
 ):
     """Run the Environment Toolchain flow with optional runtime-safe rerun."""
     if max_iterations < 0:
@@ -916,6 +999,8 @@ def run_environment_toolchain(
         raise ValueError("dry_run_planning cannot be combined with runtime-safe apply")
     if rollback_diagnostics and (apply_runtime_safe or adapt_runtime_safe):
         raise ValueError("rollback_diagnostics cannot be combined with runtime-safe apply")
+    if substrate_coverage and (apply_runtime_safe or adapt_runtime_safe):
+        raise ValueError("substrate_coverage cannot be combined with runtime-safe apply")
 
     from iv8_rs.environment_toolchain import (
         CoverageDelta,
@@ -1070,6 +1155,8 @@ def run_environment_toolchain(
             before_run.gaps,
             candidate_pack_object=candidate_pack_object,
         ))
+    if substrate_coverage:
+        diagnostics.extend(_substrate_coverage_records())
     diagnostics.extend(_profile_coherence_records(coherence_groups))
     diagnostics.extend(_family_pressure_summary_records(family_pressures))
     diagnostics.extend(_native_substrate_review_records(coherence_groups, family_pressures))
@@ -1632,6 +1719,77 @@ def _rollback_record_details(
             *details["blocked_reasons"],
             *decision.blocked_terms,
         })
+    return details
+
+
+def _substrate_coverage_records():
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    items = [_substrate_coverage_item_details(item) for item in _SUBSTRATE_COVERAGE_ITEMS]
+    review_required_count = sum(
+        1 for item in items if item["review_status"] in {"requires_review", "blocked"}
+    )
+    family_counts: dict[str, int] = {}
+    for item in items:
+        family_counts[item["surface_family"]] = family_counts.get(item["surface_family"], 0) + 1
+    summary = {
+        "enabled": True,
+        "apply_authorized": False,
+        "writes": [],
+        "review_status": "requires_review" if review_required_count else "review_only",
+        "evidence_ceiling": "diagnostic_only",
+        "item_count": len(items),
+        "review_required_count": review_required_count,
+        "family_counts": family_counts,
+        "blocked_actions": [
+            "runtime_apply",
+            "profile_write",
+            "manifest_write",
+            "baseline_write",
+            "sample_write",
+            "source_write",
+            "native_hardening_without_review",
+            "pass_promotion",
+        ],
+    }
+    records = [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_SUBSTRATE_COVERAGE_SUMMARY",
+            "warn" if review_required_count else "info",
+            summary,
+        )
+    ]
+    records.extend(
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_SUBSTRATE_COVERAGE_ITEM",
+            "warn" if item["review_status"] in {"requires_review", "blocked"} else "info",
+            item,
+        )
+        for item in items
+    )
+    return records
+
+
+def _substrate_coverage_item_details(item: dict[str, str]) -> dict[str, Any]:
+    details: dict[str, Any] = {
+        "surface_id": item["surface_id"],
+        "surface_family": item["surface_family"],
+        "owner": item["owner"],
+        "coverage": item["coverage"],
+        "boundary": item["boundary"],
+        "review_status": item["review_status"],
+        "gap_class": item["gap_class"],
+        "gap": item["gap"],
+        "apply_authorized": False,
+        "writes": [],
+        "evidence_ceiling": "diagnostic_only",
+        "blocked_actions": [
+            "runtime_apply",
+            "profile_write",
+            "native_hardening_without_review",
+            "pass_promotion",
+        ],
+    }
     return details
 
 
