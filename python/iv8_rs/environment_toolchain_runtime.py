@@ -111,6 +111,28 @@ _DRY_RUN_ALLOWED_STATUSES = frozenset({
     "requires_native_review",
     "review_only_signal",
 })
+_CANDIDATE_METADATA_FIELDS = frozenset({
+    "coherence_group",
+    "substrate_family",
+    "dependency_kind",
+    "expected_probe_delta",
+    "evidence_ceiling",
+    "planning_status",
+    "rollback_scope",
+    "rollback_hint",
+    "boundary_checked",
+    "blocked_reasons",
+})
+_CANDIDATE_PLANNING_STATUSES = frozenset({"not_planned"}) | _DRY_RUN_ALLOWED_STATUSES
+_CANDIDATE_DEPENDENCY_KINDS = frozenset({
+    "probe_pass",
+    "probe_gap",
+    "coherence_group_status",
+    "explicit_environment_absent",
+    "candidate_pack_enabled",
+    "rollback_metadata_present",
+    "native_review_completed",
+})
 _ROLLBACK_ALLOWED_SCOPES = frozenset({"context_only", "ephemeral_report"})
 _ROLLBACK_BLOCKED_SCOPES = frozenset({
     "profile_file",
@@ -326,15 +348,21 @@ class ToolchainCandidate:
     risk_reasons: list[str] = field(default_factory=list)
     reversible: bool = True
     validation: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.policy != "runtime_safe":
             raise ValueError("slice 3 registry only exposes runtime_safe candidates")
         if not self.reversible:
             raise ValueError("runtime_safe candidates must be reversible")
+        _validate_candidate_metadata(self.metadata)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> ToolchainCandidate:
+        metadata = dict(data.get("metadata", {}))
+        for field_name in _CANDIDATE_METADATA_FIELDS:
+            if field_name in data:
+                metadata[field_name] = data[field_name]
         return cls(
             patch_id=data["patch_id"],
             target=data["target"],
@@ -347,6 +375,7 @@ class ToolchainCandidate:
             risk_reasons=list(data.get("risk_reasons", [])),
             reversible=bool(data.get("reversible", True)),
             validation=dict(data.get("validation", {})),
+            metadata=metadata,
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -478,6 +507,33 @@ def available_probe_packs() -> list[str]:
 
 def available_candidate_targets() -> list[str]:
     return sorted(_candidate_registry(load_candidate_pack("chrome_generic")))
+
+
+def _validate_candidate_metadata(metadata: dict[str, Any]) -> None:
+    if not metadata:
+        return
+    decision = validate_bypass_boundary(metadata)
+    if decision.decision == "blocked":
+        raise ValueError("candidate metadata failed boundary validation")
+    evidence_ceiling = metadata.get("evidence_ceiling")
+    if evidence_ceiling is not None and evidence_ceiling not in _ALLOWED_EVIDENCE_CEILINGS:
+        raise ValueError(f"invalid candidate metadata evidence ceiling: {evidence_ceiling}")
+    planning_status = metadata.get("planning_status")
+    if planning_status is not None and planning_status not in _CANDIDATE_PLANNING_STATUSES:
+        raise ValueError(f"invalid candidate metadata planning status: {planning_status}")
+    dependency_kinds = metadata.get("dependency_kind", [])
+    if isinstance(dependency_kinds, str):
+        dependency_kinds = [dependency_kinds]
+    invalid_dependency_kinds = sorted(
+        kind for kind in dependency_kinds if kind not in _CANDIDATE_DEPENDENCY_KINDS
+    )
+    if invalid_dependency_kinds:
+        raise ValueError(f"invalid candidate metadata dependency kind: {invalid_dependency_kinds}")
+    rollback_scope = metadata.get("rollback_scope")
+    if rollback_scope is not None and rollback_scope not in (
+        _ROLLBACK_ALLOWED_SCOPES | _ROLLBACK_BLOCKED_SCOPES
+    ):
+        raise ValueError(f"invalid candidate metadata rollback scope: {rollback_scope}")
 
 
 def map_gaps_to_candidates(
@@ -1434,10 +1490,15 @@ def _dry_run_plan_item(
         "blocked_reasons": blocked_reasons,
         "required_reviews": ["environment_toolchain_review"],
         "rollback_required": False,
-        "rollback_scope": "context_only",
+        "rollback_scope": candidate.metadata.get("rollback_scope", "context_only"),
         "evidence_ceiling": "diagnostic_only",
         "apply_authorized": False,
-        "expected_probe_delta": list(candidate.validation.get("expected_delta", [])),
+        "expected_probe_delta": list(
+            candidate.metadata.get(
+                "expected_probe_delta",
+                candidate.validation.get("expected_delta", []),
+            )
+        ),
         "source_gap": {
             "probe_id": gap.probe_id,
             "gap_class": gap.gap_class,
@@ -1516,7 +1577,10 @@ def _rollback_record_details(
     candidate: ToolchainCandidate,
     gap: EnvironmentGap,
 ) -> dict[str, Any]:
-    scope = str(candidate.validation.get("rollback_scope", "context_only"))
+    scope = str(candidate.metadata.get(
+        "rollback_scope",
+        candidate.validation.get("rollback_scope", "context_only"),
+    ))
     blocked_reasons: list[str] = []
     if scope in _ROLLBACK_BLOCKED_SCOPES:
         review_status = "blocked"
@@ -1538,7 +1602,10 @@ def _rollback_record_details(
         "target": candidate.target,
         "target_family": target_family,
         "scope": scope,
-        "capture_before": list(candidate.validation.get("expected_delta", [candidate.target])),
+        "capture_before": list(candidate.metadata.get(
+            "expected_probe_delta",
+            candidate.validation.get("expected_delta", [candidate.target]),
+        )),
         "restore_strategy": restore_strategy,
         "writes": [],
         "redactions": [],
