@@ -226,6 +226,88 @@ _SUBSTRATE_COVERAGE_ITEMS = (
         "gap": "persistent rollback scopes remain blocked without write contract",
     },
 )
+_SCAFFOLD_GAP_ITEMS = (
+    {
+        "gap_id": "G-086-SUB-001",
+        "gap_class": "substrate_gap",
+        "surface_family": "timezone_intl",
+        "priority": "high",
+        "current_evidence": "config.timezone default and timezone runtime key diverge",
+        "next_artifact": "timezone key contract review",
+        "review_gate": "native_substrate_review",
+        "negative_gate": "no_rust_edit_without_review",
+    },
+    {
+        "gap_id": "G-086-SUB-002",
+        "gap_class": "substrate_gap",
+        "surface_family": "network_info",
+        "priority": "high",
+        "current_evidence": "navigator.connection defaults and hardcoded shim diverge",
+        "next_artifact": "network info substrate review",
+        "review_gate": "native_substrate_review",
+        "negative_gate": "no_runtime_apply_from_coherence",
+    },
+    {
+        "gap_id": "G-086-PROBE-001",
+        "gap_class": "probe_gap",
+        "surface_family": "navigator_ua_data",
+        "priority": "high",
+        "current_evidence": "UAData has shape probe but limited high-entropy coverage",
+        "next_artifact": "UAData probe coverage map",
+        "review_gate": "probe_pack_review",
+        "negative_gate": "no_browser_version_equivalence",
+    },
+    {
+        "gap_id": "G-086-CAND-001",
+        "gap_class": "candidate_gap",
+        "surface_family": "environment_value",
+        "priority": "high",
+        "current_evidence": "chrome_generic values need bounded planning metadata",
+        "next_artifact": "candidate metadata validation",
+        "review_gate": "candidate_schema_review",
+        "negative_gate": "no_default_apply_from_metadata",
+    },
+    {
+        "gap_id": "G-086-POL-001",
+        "gap_class": "policy_gap",
+        "surface_family": "planner",
+        "priority": "medium",
+        "current_evidence": "apply policy cannot represent review-only planning states",
+        "next_artifact": "planner policy state design",
+        "review_gate": "policy_review",
+        "negative_gate": "no_hidden_authorization",
+    },
+    {
+        "gap_id": "G-086-EVD-001",
+        "gap_class": "evidence_gap",
+        "surface_family": "diagnostics",
+        "priority": "medium",
+        "current_evidence": "planning and rollback evidence must stay diagnostic-only",
+        "next_artifact": "evidence wording and negative gates",
+        "review_gate": "evidence_review",
+        "negative_gate": "no_pass_from_plan_or_readiness",
+    },
+    {
+        "gap_id": "G-086-ROLL-001",
+        "gap_class": "rollback_gap",
+        "surface_family": "runtime_safe",
+        "priority": "high",
+        "current_evidence": "explicit fresh-context rerun needs rollback prerequisite record",
+        "next_artifact": "rollback diagnostics",
+        "review_gate": "rollback_review",
+        "negative_gate": "no_writes_by_default",
+    },
+    {
+        "gap_id": "G-086-NEG-001",
+        "gap_class": "negative_gate_gap",
+        "surface_family": "planner_artifact",
+        "priority": "high",
+        "current_evidence": "planner-like artifacts need boundary validation",
+        "next_artifact": "planner boundary negative tests",
+        "review_gate": "boundary_review",
+        "negative_gate": "reject_target_flow_vocabulary",
+    },
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -991,6 +1073,7 @@ def run_environment_toolchain(
     dry_run_planning: bool = False,
     rollback_diagnostics: bool = False,
     substrate_coverage: bool = False,
+    scaffold_gaps: bool = False,
 ):
     """Run the Environment Toolchain flow with optional runtime-safe rerun."""
     if max_iterations < 0:
@@ -1001,6 +1084,8 @@ def run_environment_toolchain(
         raise ValueError("rollback_diagnostics cannot be combined with runtime-safe apply")
     if substrate_coverage and (apply_runtime_safe or adapt_runtime_safe):
         raise ValueError("substrate_coverage cannot be combined with runtime-safe apply")
+    if scaffold_gaps and (apply_runtime_safe or adapt_runtime_safe):
+        raise ValueError("scaffold_gaps cannot be combined with runtime-safe apply")
 
     from iv8_rs.environment_toolchain import (
         CoverageDelta,
@@ -1157,6 +1242,8 @@ def run_environment_toolchain(
         ))
     if substrate_coverage:
         diagnostics.extend(_substrate_coverage_records())
+    if scaffold_gaps:
+        diagnostics.extend(_scaffold_gap_records())
     diagnostics.extend(_profile_coherence_records(coherence_groups))
     diagnostics.extend(_family_pressure_summary_records(family_pressures))
     diagnostics.extend(_native_substrate_review_records(coherence_groups, family_pressures))
@@ -1791,6 +1878,76 @@ def _substrate_coverage_item_details(item: dict[str, str]) -> dict[str, Any]:
         ],
     }
     return details
+
+
+def _scaffold_gap_records():
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    items = [_scaffold_gap_item_details(item) for item in _SCAFFOLD_GAP_ITEMS]
+    gap_class_counts: dict[str, int] = {}
+    for item in items:
+        gap_class_counts[item["gap_class"]] = gap_class_counts.get(item["gap_class"], 0) + 1
+    high_priority_count = sum(1 for item in items if item["priority"] == "high")
+    summary = {
+        "enabled": True,
+        "apply_authorized": False,
+        "writes": [],
+        "review_status": "review_only",
+        "evidence_ceiling": "diagnostic_only",
+        "gap_count": len(items),
+        "high_priority_count": high_priority_count,
+        "gap_class_counts": gap_class_counts,
+        "blocked_actions": [
+            "candidate_generation",
+            "runtime_apply",
+            "profile_write",
+            "manifest_write",
+            "baseline_write",
+            "sample_write",
+            "source_write",
+            "native_hardening_without_review",
+            "pass_promotion",
+        ],
+    }
+    records = [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_SCAFFOLD_GAP_SUMMARY",
+            "info",
+            summary,
+        )
+    ]
+    records.extend(
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_SCAFFOLD_GAP_ITEM",
+            "warn" if item["priority"] == "high" else "info",
+            item,
+        )
+        for item in items
+    )
+    return records
+
+
+def _scaffold_gap_item_details(item: dict[str, str]) -> dict[str, Any]:
+    return {
+        "gap_id": item["gap_id"],
+        "gap_class": item["gap_class"],
+        "surface_family": item["surface_family"],
+        "priority": item["priority"],
+        "current_evidence": item["current_evidence"],
+        "next_artifact": item["next_artifact"],
+        "review_gate": item["review_gate"],
+        "negative_gate": item["negative_gate"],
+        "apply_authorized": False,
+        "writes": [],
+        "review_status": "review_only",
+        "evidence_ceiling": "diagnostic_only",
+        "blocked_actions": [
+            "candidate_generation",
+            "runtime_apply",
+            "native_hardening_without_review",
+            "pass_promotion",
+        ],
+    }
 
 
 def _resolve_local_overlay(
