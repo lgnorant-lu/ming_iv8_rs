@@ -206,6 +206,32 @@ class AdaptationIteration:
 
 
 @dataclass(frozen=True, slots=True)
+class ProfileCoherenceGroup:
+    group_id: str
+    status: str
+    fields: dict[str, Any]
+    sources: dict[str, str]
+    reason: str
+    review_status: str = "review_only"
+    evidence_ceiling: str = "diagnostic_only"
+
+    def __post_init__(self) -> None:
+        if self.status not in {"consistent", "inconsistent", "unknown"}:
+            raise ValueError(f"invalid profile coherence status: {self.status}")
+
+    def to_details(self) -> dict[str, Any]:
+        return {
+            "group_id": self.group_id,
+            "status": self.status,
+            "fields": dict(self.fields),
+            "sources": dict(self.sources),
+            "reason": self.reason,
+            "review_status": self.review_status,
+            "evidence_ceiling": self.evidence_ceiling,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class AssetProvenance:
     asset_type: str
     pack_id: str
@@ -832,6 +858,7 @@ def run_environment_toolchain(
             entry_expr=entry_expr,
         )
     else:
+        after_environment = environment
         after_run = before_run
 
     delta = _coverage_delta(before_run, after_run)
@@ -853,7 +880,12 @@ def run_environment_toolchain(
     ]
     if delta["improved"]:
         evidence.append(ExperimentalEvidenceRecord("environment_coverage_improved", "weak"))
+    evidence.append(ExperimentalEvidenceRecord(
+        "environment_profile_coherence_analyzed",
+        "diagnostic_only",
+    ))
     profile_suggestions = _profile_suggestions_from_candidates(candidates)
+    coherence_groups = _profile_coherence_groups(after_environment)
     diagnostics = [
         ExperimentalDiagnosticRecord(item["code"], item["severity"], item.get("details"))
         for item in before_run.diagnostics
@@ -877,6 +909,7 @@ def run_environment_toolchain(
             "ENV_TOOLCHAIN_PROFILE_SUGGESTION_REVIEW",
             "info",
         ))
+    diagnostics.extend(_profile_coherence_records(coherence_groups))
     diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_NO_WRITES", "info"))
 
     before_snapshot = _coverage_snapshot(before_run.coverage)
@@ -1031,6 +1064,10 @@ def _run_iterative_environment_toolchain(
     ]
     if final_delta["improved"]:
         evidence.append(ExperimentalEvidenceRecord("environment_coverage_improved", "weak"))
+    evidence.append(ExperimentalEvidenceRecord(
+        "environment_profile_coherence_analyzed",
+        "diagnostic_only",
+    ))
 
     diagnostics = [
         ExperimentalDiagnosticRecord(item["code"], item["severity"], item.get("details"))
@@ -1053,6 +1090,7 @@ def _run_iterative_environment_toolchain(
             "ENV_TOOLCHAIN_COVERAGE_REGRESSED",
             "error",
         ))
+    diagnostics.extend(_profile_coherence_records(_profile_coherence_groups(accumulated_environment)))
     diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_NO_WRITES", "info"))
 
     before_snapshot = _coverage_snapshot(first_run.coverage)
@@ -1172,6 +1210,162 @@ def _adaptation_records(
             iteration.to_details(),
         )
         for iteration in iterations
+    )
+    return records
+
+
+def _profile_coherence_groups(environment: dict[str, Any] | None) -> list[ProfileCoherenceGroup]:
+    values, sources = _coherence_value_source(environment)
+    return [
+        _language_coherence_group(values, sources),
+        _screen_window_coherence_group(values, sources),
+    ]
+
+
+def _coherence_value_source(
+    environment: dict[str, Any] | None,
+) -> tuple[dict[str, Any], dict[str, str]]:
+    values: dict[str, Any] = {}
+    sources: dict[str, str] = {}
+    try:
+        from iv8_rs import JSContext
+
+        defaults = JSContext.get_defaults()
+    except Exception:  # noqa: BLE001 - coherence diagnostics must never break reports.
+        defaults = {}
+    for key, value in defaults.items():
+        values[key] = value
+        sources[key] = "profile_default"
+    for key, value in (environment or {}).items():
+        values[key] = value
+        sources[key] = "environment"
+    return values, sources
+
+
+def _language_coherence_group(
+    values: dict[str, Any],
+    sources: dict[str, str],
+) -> ProfileCoherenceGroup:
+    fields = _coherence_fields(values, "navigator.language", "navigator.languages")
+    field_sources = _coherence_fields(sources, "navigator.language", "navigator.languages")
+    language = fields.get("navigator.language")
+    languages = fields.get("navigator.languages")
+    if not isinstance(language, str) or not isinstance(languages, list) or not languages:
+        return ProfileCoherenceGroup(
+            group_id="language",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="language or languages value is unavailable or malformed",
+        )
+    first_language = languages[0]
+    if isinstance(first_language, str) and first_language == language:
+        return ProfileCoherenceGroup(
+            group_id="language",
+            status="consistent",
+            fields=fields,
+            sources=field_sources,
+            reason="primary language matches first languages entry",
+        )
+    return ProfileCoherenceGroup(
+        group_id="language",
+        status="inconsistent",
+        fields=fields,
+        sources=field_sources,
+        reason="primary language does not match first languages entry",
+    )
+
+
+def _screen_window_coherence_group(
+    values: dict[str, Any],
+    sources: dict[str, str],
+) -> ProfileCoherenceGroup:
+    keys = (
+        "screen.width",
+        "screen.height",
+        "screen.availWidth",
+        "screen.availHeight",
+        "window.innerWidth",
+        "window.innerHeight",
+        "window.devicePixelRatio",
+    )
+    fields = _coherence_fields(values, *keys)
+    field_sources = _coherence_fields(sources, *keys)
+    if any(not _is_positive_number(fields.get(key)) for key in keys):
+        return ProfileCoherenceGroup(
+            group_id="screen_window",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="one or more screen/window values are unavailable or malformed",
+        )
+    width = float(fields["screen.width"])
+    height = float(fields["screen.height"])
+    avail_width = float(fields["screen.availWidth"])
+    avail_height = float(fields["screen.availHeight"])
+    inner_width = float(fields["window.innerWidth"])
+    inner_height = float(fields["window.innerHeight"])
+    if avail_width > width or avail_height > height:
+        return ProfileCoherenceGroup(
+            group_id="screen_window",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="available screen dimensions exceed screen dimensions",
+        )
+    if inner_width > width or inner_height > height:
+        return ProfileCoherenceGroup(
+            group_id="screen_window",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="window dimensions exceed screen dimensions",
+        )
+    return ProfileCoherenceGroup(
+        group_id="screen_window",
+        status="consistent",
+        fields=fields,
+        sources=field_sources,
+        reason="screen, available screen, and window dimensions are bounded",
+    )
+
+
+def _coherence_fields(source: dict[str, Any], *keys: str) -> dict[str, Any]:
+    return {key: source[key] for key in keys if key in source}
+
+
+def _is_positive_number(value: Any) -> bool:
+    return isinstance(value, int | float) and not isinstance(value, bool) and value > 0
+
+
+def _profile_coherence_records(groups: list[ProfileCoherenceGroup]):
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    counts = {"consistent": 0, "inconsistent": 0, "unknown": 0}
+    for group in groups:
+        counts[group.status] += 1
+    records = [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_PROFILE_COHERENCE_SUMMARY",
+            "info",
+            {
+                "enabled": True,
+                "groups": len(groups),
+                "consistent": counts["consistent"],
+                "inconsistent": counts["inconsistent"],
+                "unknown": counts["unknown"],
+                "review_status": "review_only",
+                "evidence_ceiling": "diagnostic_only",
+            },
+        )
+    ]
+    records.extend(
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_PROFILE_COHERENCE_GROUP",
+            "warn" if group.status == "inconsistent" else "info",
+            group.to_details(),
+        )
+        for group in groups
     )
     return records
 
