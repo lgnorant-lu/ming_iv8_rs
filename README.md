@@ -24,9 +24,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Environment Iterative Adaptation (v0.8.3)**: explicit bounded `runtime_safe` adaptation with fresh-context reruns, stop reasons, regression/no-progress handling, and adaptation diagnostics
 - **Environment Profile Coherence (v0.8.4)**: diagnostic-only profile coherence groups, local overlay boundary diagnostics, and generic family pressure taxonomy summaries
 - **Environment Coherence Expansion (v0.8.5)**: diagnostic-only `ua_platform`, `network_info`, `timezone_locale`, and native-substrate review diagnostics
+- **Environment Substrate Scaffolding (v0.8.6)**: report-only substrate coverage, scaffold gap, dry-run planning, rollback, and candidate metadata diagnostics with expanded negative gates
 
-Current `0.8.5` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.5-implementation-task-plan.md` and `docs/acceptance/v0.8.5-environment-runtime-acceptance.md`.
-v0.8.5 expands diagnostic-only Environment coherence analysis with `ua_platform`, `network_info`, `timezone_locale`, and native-substrate review diagnostics. It does not infer business entry points, generate cookies/tokens/signatures, replay protected request flows, apply unsafe hooks by default, mutate profiles/manifests/baselines/corpus files, apply local overlays to runtime state, apply family pressure fixes, auto-apply profile groups, or change Rust/native substrate behavior without separate review. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
+Current `0.8.6` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.6-implementation-task-plan.md` and `docs/acceptance/v0.8.6-environment-runtime-acceptance.md`.
+v0.8.6 deepens Environment substrate/scaffold visibility with explicit report-only diagnostics for substrate coverage, scaffold gaps, dry-run planning, rollback prerequisites, and candidate metadata validation. It does not infer business entry points, generate cookies/tokens/signatures, replay protected request flows, apply unsafe hooks by default, mutate profiles/manifests/baselines/corpus files, apply local overlays to runtime state, apply family pressure fixes, auto-apply profile groups, or change Rust/native substrate behavior without separate review. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
 
 ## Install
 
@@ -116,6 +117,7 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 - **v0.8.3 Environment Runtime Acceptance**: [docs/acceptance/v0.8.3-environment-runtime-acceptance.md](docs/acceptance/v0.8.3-environment-runtime-acceptance.md)
 - **v0.8.4 Environment Runtime Acceptance**: [docs/acceptance/v0.8.4-environment-runtime-acceptance.md](docs/acceptance/v0.8.4-environment-runtime-acceptance.md)
 - **v0.8.5 Environment Runtime Acceptance**: [docs/acceptance/v0.8.5-environment-runtime-acceptance.md](docs/acceptance/v0.8.5-environment-runtime-acceptance.md)
+- **v0.8.6 Environment Runtime Acceptance**: [docs/acceptance/v0.8.6-environment-runtime-acceptance.md](docs/acceptance/v0.8.6-environment-runtime-acceptance.md)
 - **v0.6 Stabilization Plan**: [docs/design/V0.6_STABILIZATION_PLAN.md](docs/design/V0.6_STABILIZATION_PLAN.md)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 - **TDC Testing Guide**: [docs/tdc-testing-guide.md](docs/tdc-testing-guide.md)

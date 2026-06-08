@@ -6,6 +6,56 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.6] - 2026-06-08
+
+### Added
+
+- **Environment substrate coverage diagnostics**: `run_environment_toolchain()`
+  can now emit explicit report-only substrate inventory diagnostics through
+  `substrate_coverage=True`.
+- **Environment scaffold gap diagnostics**: added `scaffold_gaps=True` to expose
+  a selected core projection of scaffold gaps across substrate, probe,
+  candidate, policy, evidence, rollback, and negative-gate classes.
+- **Dry-run planning diagnostics**: added `dry_run_planning=True` with
+  `ENV_TOOLCHAIN_DRY_RUN_PLAN_SUMMARY` and `ENV_TOOLCHAIN_DRY_RUN_PLAN_ITEM`
+  diagnostics that preserve `apply_authorized=false`, `writes=[]`, and
+  `diagnostic_only` evidence ceilings.
+- **Rollback diagnostics**: added `rollback_diagnostics=True` with rollback
+  summary/record diagnostics for context-only and ephemeral-report review scopes.
+
+### Changed
+
+- Candidate packs now accept bounded optional metadata for coherence groups,
+  substrate family, dependency kind, expected probe delta, evidence ceiling,
+  planning status, rollback scope/hint, boundary status, and blocked reasons.
+- v0.8.6 keeps Environment automation report-only by default: no default
+  AutoFly, no default apply, no profile/manifest/baseline/corpus/sample/source
+  writes, no local-overlay runtime apply, no family-pressure apply, and no
+  Rust/native substrate hardening.
+- Scaffold gap diagnostics intentionally expose a selected core projection while
+  the larger documentation matrix remains review backlog for explicit future
+  promotions.
+- The public typing stub now mirrors the current `run_environment_toolchain()`
+  call shape, including candidate packs, bounded adaptation, local overlays, and
+  v0.8.6 report-only diagnostic switches.
+
+### Fixed
+
+- Removed a duplicate `environment_family_pressure_analyzed` diagnostic-only
+  evidence record from the single-pass Environment Toolchain path.
+
+### Quality Gates
+
+- Full Python tests: 1100 passed, 1 skipped.
+- Targeted v0.8.6/API audit tests: 84 passed.
+- Rust workspace tests: passed.
+- Rust clippy with `-D warnings`: passed.
+- `uv lock --check` passed.
+- v0.8.6 audit-scoped `ruff check` passed.
+- `git diff --check` passed.
+- Full `uv run ruff check python tests` still reports pre-existing legacy test
+  lint debt outside the v0.8.6 Environment slice.
+
 ## [0.8.5] - 2026-06-08
 
 ### Added
