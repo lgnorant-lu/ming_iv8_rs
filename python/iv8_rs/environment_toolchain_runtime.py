@@ -111,6 +111,16 @@ _DRY_RUN_ALLOWED_STATUSES = frozenset({
     "requires_native_review",
     "review_only_signal",
 })
+_ROLLBACK_ALLOWED_SCOPES = frozenset({"context_only", "ephemeral_report"})
+_ROLLBACK_BLOCKED_SCOPES = frozenset({
+    "profile_file",
+    "manifest",
+    "baseline",
+    "sample",
+    "source_tree",
+    "native_substrate",
+    "blocked",
+})
 
 
 @dataclass(frozen=True, slots=True)
@@ -835,12 +845,15 @@ def run_environment_toolchain(
     time_mode: str = "logical",
     entry_expr: str | None = None,
     dry_run_planning: bool = False,
+    rollback_diagnostics: bool = False,
 ):
     """Run the Environment Toolchain flow with optional runtime-safe rerun."""
     if max_iterations < 0:
         raise ValueError("max_iterations must be non-negative")
     if dry_run_planning and (apply_runtime_safe or adapt_runtime_safe):
         raise ValueError("dry_run_planning cannot be combined with runtime-safe apply")
+    if rollback_diagnostics and (apply_runtime_safe or adapt_runtime_safe):
+        raise ValueError("rollback_diagnostics cannot be combined with runtime-safe apply")
 
     from iv8_rs.environment_toolchain import (
         CoverageDelta,
@@ -989,6 +1002,11 @@ def run_environment_toolchain(
             before_run.gaps,
             candidate_pack_object=candidate_pack_object,
             environment=environment,
+        ))
+    if rollback_diagnostics:
+        diagnostics.extend(_rollback_diagnostic_records(
+            before_run.gaps,
+            candidate_pack_object=candidate_pack_object,
         ))
     diagnostics.extend(_profile_coherence_records(coherence_groups))
     diagnostics.extend(_family_pressure_summary_records(family_pressures))
@@ -1426,6 +1444,122 @@ def _dry_run_plan_item(
             "category": gap.category,
         },
     }
+
+
+def _rollback_diagnostic_records(
+    gaps: list[EnvironmentGap],
+    *,
+    candidate_pack_object: CandidatePack | None,
+):
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    records_data: list[dict[str, Any]] = []
+    if candidate_pack_object is not None:
+        registry = _candidate_registry(candidate_pack_object)
+        seen_patch_ids: set[str] = set()
+        for gap in gaps:
+            for candidate in registry.get(gap.target, []):
+                if candidate.patch_id in seen_patch_ids:
+                    continue
+                gap_classes = set(candidate.validation.get("gap_classes", []))
+                if gap_classes and gap.gap_class not in gap_classes:
+                    continue
+                seen_patch_ids.add(candidate.patch_id)
+                records_data.append(_rollback_record_details(candidate, gap))
+
+    blocked_count = sum(1 for item in records_data if item["review_status"] == "blocked")
+    summary = {
+        "enabled": True,
+        "writes": [],
+        "review_status": "blocked" if blocked_count else "review_only",
+        "evidence_ceiling": "diagnostic_only",
+        "record_count": len(records_data),
+        "blocked_record_count": blocked_count,
+        "allowed_record_count": len(records_data) - blocked_count,
+        "input_signal_counts": {
+            "probe_gap_count": len(gaps),
+            "candidate_pack_enabled": candidate_pack_object is not None,
+        },
+        "blocked_scopes": sorted(_ROLLBACK_BLOCKED_SCOPES),
+        "allowed_scopes": sorted(_ROLLBACK_ALLOWED_SCOPES),
+        "blocked_actions": [
+            "rollback_file_write",
+            "profile_write",
+            "manifest_write",
+            "baseline_write",
+            "sample_write",
+            "source_write",
+            "native_substrate_change",
+            "apply_authorization",
+            "pass_promotion",
+        ],
+    }
+    records = [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_ROLLBACK_SUMMARY",
+            "info" if blocked_count == 0 else "warn",
+            summary,
+        )
+    ]
+    records.extend(
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_ROLLBACK_RECORD",
+            "info" if item["review_status"] != "blocked" else "warn",
+            item,
+        )
+        for item in records_data
+    )
+    return records
+
+
+def _rollback_record_details(
+    candidate: ToolchainCandidate,
+    gap: EnvironmentGap,
+) -> dict[str, Any]:
+    scope = str(candidate.validation.get("rollback_scope", "context_only"))
+    blocked_reasons: list[str] = []
+    if scope in _ROLLBACK_BLOCKED_SCOPES:
+        review_status = "blocked"
+        blocked_reasons.append("persistent_scope_blocked")
+        restore_strategy = "blocked"
+    elif scope in _ROLLBACK_ALLOWED_SCOPES:
+        review_status = "review_only"
+        restore_strategy = "context_discard" if scope == "context_only" else "remove_value"
+    else:
+        review_status = "blocked"
+        blocked_reasons.append("invalid_rollback_scope")
+        restore_strategy = "blocked"
+
+    target_family = _classify_target_family(candidate.target) or candidate.target_family
+    details = {
+        "record_id": f"rollback.{candidate.patch_id}",
+        "candidate_id": candidate.patch_id,
+        "plan_item_id": candidate.patch_id,
+        "target": candidate.target,
+        "target_family": target_family,
+        "scope": scope,
+        "capture_before": list(candidate.validation.get("expected_delta", [candidate.target])),
+        "restore_strategy": restore_strategy,
+        "writes": [],
+        "redactions": [],
+        "review_status": review_status,
+        "evidence_ceiling": "diagnostic_only",
+        "blocked_reasons": blocked_reasons,
+        "source_gap": {
+            "probe_id": gap.probe_id,
+            "gap_class": gap.gap_class,
+            "category": gap.category,
+        },
+    }
+    decision = validate_bypass_boundary(details)
+    if decision.decision == "blocked":
+        details["review_status"] = "blocked"
+        details["restore_strategy"] = "blocked"
+        details["blocked_reasons"] = sorted({
+            *details["blocked_reasons"],
+            *decision.blocked_terms,
+        })
+    return details
 
 
 def _resolve_local_overlay(
