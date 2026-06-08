@@ -1,7 +1,9 @@
-"""Runtime helpers for Environment Toolchain probe packs.
+"""Runtime helpers for Environment Toolchain assets.
 
-This module starts with the v0.8.1 probe-pack model only. It intentionally does
-not run JavaScript, apply patches, or write profiles/manifests/baselines.
+This module hosts the bounded Environment Toolchain runtime: probe packs,
+candidate packs, validation, provenance, report-only execution, and explicit
+runtime-safe reruns. It never writes profiles, manifests, baselines, or corpus
+state.
 """
 
 from __future__ import annotations
@@ -61,7 +63,10 @@ _BLOCKED_BOUNDARY_TERMS = (
     "secret",
 )
 _ORDERED_RECIPE_RE = re.compile(r"apply\s+.+request\s+.+(?:copy|rerun)", re.IGNORECASE)
-_PROBE_PACK_FILES = {"descriptor.m1": "descriptor.m1.json", "fingerprint.m1": "fingerprint.m1.json"}
+_PROBE_PACK_FILES = {
+    "descriptor.m1": "descriptor.m1.json",
+    "fingerprint.m1": "fingerprint.m1.json",
+}
 _CANDIDATE_PACK_FILES = {"chrome_generic": "chrome_generic.json"}
 
 
