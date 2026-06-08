@@ -1195,10 +1195,6 @@ def run_environment_toolchain(
         "environment_family_pressure_analyzed",
         "diagnostic_only",
     ))
-    evidence.append(ExperimentalEvidenceRecord(
-        "environment_family_pressure_analyzed",
-        "diagnostic_only",
-    ))
     overlay_values, overlay_prov, overlay_rej = _resolve_local_overlay(local_overlay)
     coherence_env = dict(after_environment or {})
     if overlay_values:

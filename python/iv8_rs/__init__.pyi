@@ -1,21 +1,21 @@
 """iv8-rs: High-fidelity browser runtime for Python, powered by V8."""
 
-from typing import Any, Dict, List, Optional
+from os import PathLike
+from typing import Any
 
 from iv8_rs._iv8 import (
-    __version__,
     Debugger,
+    JSCompileError,
+    JSError,
+    JSMemoryError,
+    JSPanic,
+    JSTimeoutError,
+    __version__,
     enable_logging,
     instrument_source,
     trace_diff,
-    JSError,
-    JSCompileError,
-    JSTimeoutError,
-    JSMemoryError,
-    JSPanic,
 )
 from iv8_rs._iv8 import JSContext as _RustJSContext
-from iv8_rs.environment import EnvironmentPatch, EnvironmentPlaneReport
 from iv8_rs.deobf_reports import (
     DeobfRegistryReport,
     RegistryEntry,
@@ -27,6 +27,7 @@ from iv8_rs.deobf_reports import (
     validation_report_from_dict,
     validation_report_to_dict,
 )
+from iv8_rs.environment import EnvironmentPatch, EnvironmentPlaneReport
 from iv8_rs.environment_toolchain import (
     CoverageDelta,
     CoverageSnapshot,
@@ -36,14 +37,7 @@ from iv8_rs.environment_toolchain import (
     toolchain_report_from_dict,
     toolchain_report_to_dict,
 )
-from iv8_rs.environment_toolchain_runtime import run_environment_toolchain
-from iv8_rs.ir_reports import (
-    ConfidenceSummary,
-    IRNode,
-    IRNodeReport,
-    ir_node_report_from_dict,
-    ir_node_report_to_dict,
-)
+from iv8_rs.environment_toolchain_runtime import CandidatePack, ProbePack
 from iv8_rs.experimental_report import (
     EXPERIMENTAL_SCHEMA_VERSIONS,
     ExperimentalDiagnosticRecord,
@@ -52,6 +46,13 @@ from iv8_rs.experimental_report import (
     experimental_report_from_dict,
     experimental_report_roundtrip,
     experimental_report_to_dict,
+)
+from iv8_rs.ir_reports import (
+    ConfidenceSummary,
+    IRNode,
+    IRNodeReport,
+    ir_node_report_from_dict,
+    ir_node_report_to_dict,
 )
 from iv8_rs.string_array_reports import (
     ReplacementSite,
@@ -79,7 +80,7 @@ from iv8_rs.vm_reports import (
 
 # --- v0.4: Profile System ---
 
-def load_profile(path: str) -> Dict[str, Any]:
+def load_profile(path: str) -> dict[str, Any]:
     """Load a browser fingerprint profile from a JSON file.
 
     Args:
@@ -90,17 +91,17 @@ def load_profile(path: str) -> Dict[str, Any]:
     """
     ...
 
-def JSContext(
+def JSContext(  # noqa: N802 - public factory mirrors the exported JSContext API.
     *,
-    environment: Optional[Dict[str, Any]] = None,
-    config: Optional[Dict[str, Any]] = None,
+    environment: dict[str, Any] | None = None,
+    config: dict[str, Any] | None = None,
     time_mode: str = "logical",
     js_api: str = "__iv8__",
     strict_compat: bool = True,
-    random_seed: Optional[int] = None,
-    crypto_seed: Optional[int] = None,
-    time_freeze: Optional[float] = None,
-    profile: Optional[str] = None,
+    random_seed: int | None = None,
+    crypto_seed: int | None = None,
+    time_freeze: float | None = None,
+    profile: str | None = None,
 ) -> _RustJSContext:
     """Create a JSContext, optionally loading a browser fingerprint profile.
 
@@ -118,14 +119,14 @@ def JSContext(
 def diff_analysis(
     js_source: str,
     eval_expr: str,
-    base_env: Dict[str, Any],
-    test_variables: Dict[str, List[Any]],
-    random_seed: Optional[int] = 42,
-    time_freeze: Optional[float] = None,
+    base_env: dict[str, Any],
+    test_variables: dict[str, list[Any]],
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
     time_mode: str = "logical",
     max_workers: int = 4,
     progress_callback: Any = None,
-) -> Dict[str, Dict[str, Any]]:
+) -> dict[str, dict[str, Any]]:
     """Analyze which environment variables affect the JS output.
 
     Returns dict mapping variable names to impact reports.
@@ -133,23 +134,23 @@ def diff_analysis(
     ...
 
 def build_environment_patch(
-    probe_report: Dict[str, Any],
+    probe_report: dict[str, Any],
     *,
     policy: str = "runtime_safe",
-    defaults: Optional[Dict[str, Any]] = None,
+    defaults: dict[str, Any] | None = None,
 ) -> EnvironmentPatch:
     ...
 
 def run_environment_plane(
     js_source: str,
     *,
-    profile: Optional[str] = "default",
-    environment: Optional[Dict[str, Any]] = None,
-    random_seed: Optional[int] = 42,
-    time_freeze: Optional[float] = None,
+    profile: str | None = "default",
+    environment: dict[str, Any] | None = None,
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
     time_mode: str = "logical",
-    entry_expr: Optional[str] = None,
-    patch_defaults: Optional[Dict[str, Any]] = None,
+    entry_expr: str | None = None,
+    patch_defaults: dict[str, Any] | None = None,
     policy: str = "runtime_safe",
 ) -> EnvironmentPlaneReport:
     ...
@@ -157,14 +158,23 @@ def run_environment_plane(
 def run_environment_toolchain(
     js_source: str,
     *,
-    probe_pack: str = "fingerprint.m1",
-    profile: Optional[str] = "default",
-    environment: Optional[Dict[str, Any]] = None,
+    probe_pack: str | ProbePack | dict[str, Any] | PathLike[str] = "fingerprint.m1",
+    profile: str | None = "default",
+    environment: dict[str, Any] | None = None,
+    candidate_pack: str | CandidatePack | dict[str, Any] | PathLike[str] | None = "chrome_generic",
     apply_runtime_safe: bool = False,
-    random_seed: Optional[int] = 42,
-    time_freeze: Optional[float] = None,
+    adapt_runtime_safe: bool = False,
+    local_overlay: dict[str, Any] | PathLike[str] | None = None,
+    max_iterations: int = 1,
+    stop_on_regression: bool = True,
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
     time_mode: str = "logical",
-    entry_expr: Optional[str] = None,
+    entry_expr: str | None = None,
+    dry_run_planning: bool = False,
+    rollback_diagnostics: bool = False,
+    substrate_coverage: bool = False,
+    scaffold_gaps: bool = False,
 ) -> EnvironmentToolchainReport:
     ...
 

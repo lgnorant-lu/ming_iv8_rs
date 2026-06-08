@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import json
-
-import pytest
+from pathlib import Path
 
 import iv8_rs
+import pytest
 
 
 def test_constructor_profile_merge_and_profile_errors(tmp_path):
@@ -122,7 +122,10 @@ def test_network_handler_contract():
     ctx = iv8_rs.JSContext()
     try:
         ctx.set_network_handler(handler)
-        assert ctx.eval_promise("fetch('https://api.test/fetched').then(r => r.text())") == '{"ok": true}'
+        assert (
+            ctx.eval_promise("fetch('https://api.test/fetched').then(r => r.text())")
+            == '{"ok": true}'
+        )
         assert captured == [("GET", "https://api.test/fetched")]
 
         ctx.set_network_handler(lambda url, method: {"status": 200, "body": "bad shape"})
@@ -192,6 +195,23 @@ def test_entry_environment_wrapper_contracts():
     assert "before" in as_dict
     assert "patch" in as_dict
     assert "after" in as_dict
+
+
+def test_environment_toolchain_public_typing_contract_is_current():
+    stub_text = Path(iv8_rs.__file__).with_name("__init__.pyi").read_text(encoding="utf-8")
+
+    for parameter in [
+        "candidate_pack",
+        "adapt_runtime_safe",
+        "local_overlay",
+        "max_iterations",
+        "stop_on_regression",
+        "dry_run_planning",
+        "rollback_diagnostics",
+        "substrate_coverage",
+        "scaffold_gaps",
+    ]:
+        assert parameter in stub_text
 
 
 def test_specialized_stable_apis_exist():
