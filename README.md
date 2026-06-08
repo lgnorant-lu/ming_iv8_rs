@@ -25,9 +25,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Environment Profile Coherence (v0.8.4)**: diagnostic-only profile coherence groups, local overlay boundary diagnostics, and generic family pressure taxonomy summaries
 - **Environment Coherence Expansion (v0.8.5)**: diagnostic-only `ua_platform`, `network_info`, `timezone_locale`, and native-substrate review diagnostics
 - **Environment Substrate Scaffolding (v0.8.6)**: report-only substrate coverage, scaffold gap, dry-run planning, rollback, and candidate metadata diagnostics with expanded negative gates
+- **Environment Pressure Harness (v0.8.7)**: diagnostic-only pressure taxonomy, in-memory pressure manifest summaries, default-off toolchain pressure capture, and staged Environment Toolchain decomposition
 
-Current `0.8.6` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.6-implementation-task-plan.md` and `docs/acceptance/v0.8.6-environment-runtime-acceptance.md`.
-v0.8.6 deepens Environment substrate/scaffold visibility with explicit report-only diagnostics for substrate coverage, scaffold gaps, dry-run planning, rollback prerequisites, and candidate metadata validation. It does not infer business entry points, generate cookies/tokens/signatures, replay protected request flows, apply unsafe hooks by default, mutate profiles/manifests/baselines/corpus files, apply local overlays to runtime state, apply family pressure fixes, auto-apply profile groups, or change Rust/native substrate behavior without separate review. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
+Current `0.8.7` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.7-environment-pressure-harness-route-plan.md` and `docs/acceptance/v0.8.7-environment-pressure-harness-acceptance.md`.
+v0.8.7 establishes an Environment Pressure Observation Harness for classifying environment pressure without reading sample references, applying fixes, promoting profiles, or treating real samples as compatibility targets. It keeps `pressure_harness` default-off, limits emitted evidence to diagnostic-only records, and begins low-risk Environment Toolchain decomposition. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
 
 ## Install
 
