@@ -6,6 +6,40 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.3] - 2026-06-08
+
+### Added
+
+- **Environment iterative adaptation scaffold**: `run_environment_toolchain()` now
+  supports explicit `adapt_runtime_safe=True` bounded runtime-safe iteration.
+- **Adaptation controls**: added `max_iterations` and `stop_on_regression` to
+  control safe iteration budget and regression stopping.
+- **Machine-readable stop reasons**: reports expose adaptation termination through
+  `ENV_TOOLCHAIN_ADAPTATION_SUMMARY` diagnostics.
+- **Per-iteration diagnostics**: reports expose before/after coverage, delta,
+  matched/applied patch IDs, and stop reason through
+  `ENV_TOOLCHAIN_ADAPTATION_ITERATION` diagnostics.
+- **Iterative adaptation tests**: added focused synthetic tests for completed,
+  budget exhausted, no candidate, no progress, regression, evidence ceiling, and
+  invalid iteration budget behavior.
+
+### Changed
+
+- v0.8.3 preserves `environment-toolchain.v0.1` report schema and projects
+  adaptation graph data through `ExperimentalDiagnosticRecord.details`.
+- v0.8.3 records the Python/Rust implementation boundary: Python owns
+  orchestration, assets, policy, iteration, stop reasons, and reports; Rust owns
+  `JSContext`, `EnvironmentMap`, `env_inject`, `native_env`, deterministic runtime,
+  and DOM/network/timing/browser substrate.
+
+### Quality Gates
+
+- Focused iterative tests: 7 passed.
+- Focused Environment compatibility tests: 77 passed.
+- Scoped Environment lint: `ruff check` passed.
+- Full Python tests: 1031 passed, 1 skipped.
+- `git diff --check` passed.
+
 ## [0.8.2] - 2026-06-08
 
 ### Added

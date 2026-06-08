@@ -21,9 +21,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Runtime Report Models (v0.8.0)**: schema-backed experimental report carriers for Environment Toolchain, Deobf Registry / Validation, String Array, VM Analysis / Handler, and IR Node reports
 - **Environment Toolchain Runtime Foundation (v0.8.1)**: bounded `fingerprint.m1` probe runner, generic gap classification, reviewed `runtime_safe` candidate mapping, explicit safe rerun, profile suggestions, and no-write typed reports
 - **Environment Custom Asset Foundation (v0.8.2)**: custom probe/candidate packs, schema and bypass-boundary validation, provenance diagnostics, and diagnostic-only `descriptor.m1` probes
+- **Environment Iterative Adaptation (v0.8.3)**: explicit bounded `runtime_safe` adaptation with fresh-context reruns, stop reasons, regression/no-progress handling, and adaptation diagnostics
 
-Current `0.8.2` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.2-implementation-task-plan.md` and `docs/acceptance/v0.8.2-environment-runtime-acceptance.md`.
-v0.8.2 adds validated custom Environment assets for generic diagnosis and explicit `runtime_safe` rerun reports. It does not infer business entry points, generate cookies/tokens/signatures, replay protected request flows, apply unsafe hooks by default, or write profiles/manifests/baselines/corpus files. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
+Current `0.8.3` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.3-implementation-task-plan.md` and `docs/acceptance/v0.8.3-environment-runtime-acceptance.md`.
+v0.8.3 adds explicit bounded Environment iterative adaptation for generic `runtime_safe` candidates. It does not infer business entry points, generate cookies/tokens/signatures, replay protected request flows, apply unsafe hooks by default, mutate profiles/manifests/baselines/corpus files, or change Rust/native substrate behavior without separate review. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
 
 ## Install
 
@@ -110,6 +111,7 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 - **v0.8 Runtime API Acceptance**: [docs/acceptance/v0.8.0-runtime-api-acceptance.md](docs/acceptance/v0.8.0-runtime-api-acceptance.md)
 - **v0.8.1 Environment Runtime Acceptance**: [docs/acceptance/v0.8.1-environment-runtime-acceptance.md](docs/acceptance/v0.8.1-environment-runtime-acceptance.md)
 - **v0.8.2 Environment Runtime Acceptance**: [docs/acceptance/v0.8.2-environment-runtime-acceptance.md](docs/acceptance/v0.8.2-environment-runtime-acceptance.md)
+- **v0.8.3 Environment Runtime Acceptance**: [docs/acceptance/v0.8.3-environment-runtime-acceptance.md](docs/acceptance/v0.8.3-environment-runtime-acceptance.md)
 - **v0.6 Stabilization Plan**: [docs/design/V0.6_STABILIZATION_PLAN.md](docs/design/V0.6_STABILIZATION_PLAN.md)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 - **TDC Testing Guide**: [docs/tdc-testing-guide.md](docs/tdc-testing-guide.md)
