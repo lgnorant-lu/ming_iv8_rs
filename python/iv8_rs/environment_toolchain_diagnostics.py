@@ -14,6 +14,10 @@ from iv8_rs.environment_toolchain_models import (
     FamilyPressure,
     ProfileCoherenceGroup,
 )
+from iv8_rs.environment_toolchain_pressure_planning import (
+    pressure_plan_summary,
+    pressure_report_to_plan_item,
+)
 from iv8_rs.environment_toolchain_static import (
     _ADAPTATION_STOP_REASONS,
     _ALLOWED_PRESSURE_CATEGORIES,
@@ -540,6 +544,23 @@ def _pressure_harness_records(pressure_report: Any):
             },
         ),
         *pressure_report.diagnostics,
+    ]
+
+
+def _pressure_plan_records(pressure_report: Any):
+    item = pressure_report_to_plan_item(pressure_report)
+    summary = pressure_plan_summary([item])
+    return [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_PRESSURE_PLAN_SUMMARY",
+            "warn" if summary["review_status"] == "blocked" else "info",
+            summary,
+        ),
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_PRESSURE_PLAN_ITEM",
+            "warn" if item["review_status"] == "blocked" else "info",
+            item,
+        ),
     ]
 
 

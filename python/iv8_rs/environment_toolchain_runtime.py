@@ -37,6 +37,7 @@ from iv8_rs.environment_toolchain_diagnostics import (
     _family_pressure_summary_records,
     _native_substrate_review_records,
     _pressure_harness_records,
+    _pressure_plan_records,
     _profile_coherence_records,
     _rollback_diagnostic_records,
     _scaffold_gap_records,
@@ -361,6 +362,8 @@ def run_environment_toolchain(
         diagnostics.extend(_scaffold_gap_records())
     if pressure_harness:
         diagnostics.extend(_pressure_harness_records(pressure_report))
+        if dry_run_planning:
+            diagnostics.extend(_pressure_plan_records(pressure_report))
     diagnostics.extend(_profile_coherence_records(coherence_groups))
     diagnostics.extend(_family_pressure_summary_records(family_pressures))
     diagnostics.extend(_native_substrate_review_records(coherence_groups, family_pressures))
