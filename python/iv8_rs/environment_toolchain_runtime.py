@@ -30,6 +30,7 @@ from iv8_rs.environment_toolchain_asset_models import (
     ToolchainCandidate,
 )
 from iv8_rs.environment_toolchain_boundary import _is_generic_target, validate_bypass_boundary
+from iv8_rs.environment_toolchain_candidate_mapping import map_gaps_to_candidates
 from iv8_rs.environment_toolchain_diagnostics import (
     _adaptation_records,
     _dry_run_planning_records,
@@ -77,40 +78,6 @@ __all__ = [
     "run_environment_toolchain",
     "validate_bypass_boundary",
 ]
-
-def map_gaps_to_candidates(
-    gaps: list[EnvironmentGap],
-    *,
-    environment: dict[str, Any] | None = None,
-    candidate_pack: str | CandidatePack | dict[str, Any] | os.PathLike[str] | None = (
-        "chrome_generic"
-    ),
-) -> list[ToolchainCandidate]:
-    """Map generic gaps to reviewed runtime-safe candidates without applying them."""
-    if candidate_pack is None:
-        return []
-    pack = (
-        candidate_pack
-        if isinstance(candidate_pack, CandidatePack)
-        else load_candidate_pack(candidate_pack)
-    )
-    explicit_environment = environment or {}
-    candidates: list[ToolchainCandidate] = []
-    seen_patch_ids: set[str] = set()
-    for gap in gaps:
-        if gap.target in explicit_environment:
-            continue
-        for candidate in _candidate_registry(pack).get(gap.target, []):
-            gap_classes = set(candidate.validation.get("gap_classes", []))
-            if gap_classes and gap.gap_class not in gap_classes:
-                continue
-            if validate_bypass_boundary(candidate).decision == "blocked":
-                continue
-            if candidate.patch_id not in seen_patch_ids:
-                candidates.append(candidate)
-                seen_patch_ids.add(candidate.patch_id)
-    return candidates
-
 
 def run_probe_pack(
     js_source: str,
