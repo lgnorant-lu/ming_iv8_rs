@@ -68,6 +68,18 @@ _PROBE_PACK_FILES = {
     "fingerprint.m1": "fingerprint.m1.json",
 }
 _CANDIDATE_PACK_FILES = {"chrome_generic": "chrome_generic.json"}
+_ADAPTATION_STOP_REASONS = {
+    "disabled",
+    "completed",
+    "budget_exhausted",
+    "no_candidate",
+    "policy_blocked",
+    "boundary_blocked",
+    "regression_detected",
+    "no_progress",
+    "entry_failure",
+    "asset_error",
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -165,6 +177,32 @@ class ProbeRun:
             "coverage": dict(self.coverage),
             "diagnostics": [dict(diagnostic) for diagnostic in self.diagnostics],
         }
+
+
+@dataclass(frozen=True, slots=True)
+class AdaptationIteration:
+    index: int
+    before: dict[str, int]
+    after: dict[str, int]
+    delta: dict[str, int]
+    matched_patch_ids: list[str]
+    applied_patch_ids: list[str]
+    rejected: list[dict[str, Any]] = field(default_factory=list)
+    stop_reason: str | None = None
+
+    def to_details(self) -> dict[str, Any]:
+        details: dict[str, Any] = {
+            "index": self.index,
+            "before": dict(self.before),
+            "after": dict(self.after),
+            "delta": dict(self.delta),
+            "matched_patch_ids": list(self.matched_patch_ids),
+            "applied_patch_ids": list(self.applied_patch_ids),
+            "rejected": [dict(item) for item in self.rejected],
+        }
+        if self.stop_reason is not None:
+            details["stop_reason"] = self.stop_reason
+        return details
 
 
 @dataclass(frozen=True, slots=True)
@@ -705,12 +743,17 @@ def run_environment_toolchain(
         "chrome_generic"
     ),
     apply_runtime_safe: bool = False,
+    adapt_runtime_safe: bool = False,
+    max_iterations: int = 1,
+    stop_on_regression: bool = True,
     random_seed: int | None = 42,
     time_freeze: float | None = None,
     time_mode: str = "logical",
     entry_expr: str | None = None,
 ):
     """Run the Environment Toolchain flow with optional runtime-safe rerun."""
+    if max_iterations < 0:
+        raise ValueError("max_iterations must be non-negative")
 
     from iv8_rs.environment_toolchain import (
         CoverageDelta,
@@ -720,6 +763,22 @@ def run_environment_toolchain(
     from iv8_rs.experimental_report import ExperimentalDiagnosticRecord, ExperimentalEvidenceRecord
 
     candidate_pack_object, candidate_provenance = _resolve_candidate_pack(candidate_pack)
+    if adapt_runtime_safe:
+        return _run_iterative_environment_toolchain(
+            js_source,
+            probe_pack=probe_pack,
+            profile=profile,
+            environment=environment,
+            candidate_pack_object=candidate_pack_object,
+            candidate_provenance=candidate_provenance,
+            max_iterations=max_iterations,
+            stop_on_regression=stop_on_regression,
+            random_seed=random_seed,
+            time_freeze=time_freeze,
+            time_mode=time_mode,
+            entry_expr=entry_expr,
+        )
+
     before_run = run_probe_pack(
         js_source,
         probe_pack=probe_pack,
@@ -841,6 +900,182 @@ def run_environment_toolchain(
     )
 
 
+def _run_iterative_environment_toolchain(
+    js_source: str,
+    *,
+    probe_pack: str | ProbePack | dict[str, Any] | os.PathLike[str],
+    profile: str | None,
+    environment: dict[str, Any] | None,
+    candidate_pack_object: CandidatePack | None,
+    candidate_provenance: AssetProvenance,
+    max_iterations: int,
+    stop_on_regression: bool,
+    random_seed: int | None,
+    time_freeze: float | None,
+    time_mode: str,
+    entry_expr: str | None,
+):
+    from iv8_rs.environment_toolchain import (
+        CoverageDelta,
+        EnvironmentToolchainReport,
+        ToolchainPatchEntry,
+    )
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord, ExperimentalEvidenceRecord
+
+    before_run = run_probe_pack(
+        js_source,
+        probe_pack=probe_pack,
+        profile=profile,
+        environment=environment,
+        random_seed=random_seed,
+        time_freeze=time_freeze,
+        time_mode=time_mode,
+        entry_expr=entry_expr,
+    )
+    first_run = before_run
+    current_run = before_run
+    accumulated_environment = dict(environment or {})
+    applied_candidates: list[ToolchainCandidate] = []
+    rejected_entries: list[dict[str, Any]] = []
+    iterations: list[AdaptationIteration] = []
+    stop_reason = "disabled" if max_iterations == 0 else "completed"
+
+    for index in range(max_iterations):
+        if not current_run.gaps:
+            stop_reason = "completed"
+            break
+
+        candidates = map_gaps_to_candidates(
+            current_run.gaps,
+            environment=accumulated_environment,
+            candidate_pack=candidate_pack_object,
+        )
+        if not candidates:
+            stop_reason = "no_candidate"
+            break
+
+        candidate = candidates[0]
+        next_environment = dict(accumulated_environment)
+        next_environment[candidate.target] = candidate.value_preview
+        after_run = run_probe_pack(
+            js_source,
+            probe_pack=probe_pack,
+            profile=profile,
+            environment=next_environment,
+            random_seed=random_seed,
+            time_freeze=time_freeze,
+            time_mode=time_mode,
+            entry_expr=entry_expr,
+        )
+        delta = _coverage_delta(current_run, after_run)
+        iteration_stop_reason = _iteration_stop_reason(
+            delta,
+            before_run=current_run,
+            after_run=after_run,
+            stop_on_regression=stop_on_regression,
+        )
+        iterations.append(AdaptationIteration(
+            index=index,
+            before=_coverage_snapshot_dict(current_run.coverage),
+            after=_coverage_snapshot_dict(after_run.coverage),
+            delta=delta,
+            matched_patch_ids=[candidate.patch_id for candidate in candidates],
+            applied_patch_ids=[candidate.patch_id],
+            stop_reason=iteration_stop_reason,
+        ))
+        applied_candidates.append(candidate)
+        accumulated_environment = next_environment
+        current_run = after_run
+
+        if iteration_stop_reason == "completed":
+            stop_reason = "completed"
+            break
+        if iteration_stop_reason in {"regression_detected", "no_progress"}:
+            stop_reason = iteration_stop_reason
+            break
+    else:
+        stop_reason = "completed" if not current_run.gaps else "budget_exhausted"
+
+    final_delta = _coverage_delta(first_run, current_run)
+    applied = [
+        ToolchainPatchEntry(
+            patch_id=candidate.patch_id,
+            target=candidate.target,
+            kind=candidate.kind,
+            policy=candidate.policy,
+            reason="explicit iterative runtime_safe apply",
+        )
+        for candidate in applied_candidates
+    ]
+    rejected = [
+        ToolchainPatchEntry(
+            patch_id=entry["patch_id"],
+            target=entry["target"],
+            kind=entry["kind"],
+            policy=entry["policy"],
+            reason=entry["reason"],
+        )
+        for entry in rejected_entries
+    ]
+
+    evidence = [
+        ExperimentalEvidenceRecord("environment_probe_pack_run", "diagnostic_only"),
+        *[
+            ExperimentalEvidenceRecord("environment_gap_observed", "diagnostic_only")
+            for _gap in first_run.gaps
+        ],
+        *[
+            ExperimentalEvidenceRecord("environment_patch_applied", "weak")
+            for _candidate in applied_candidates
+        ],
+    ]
+    if final_delta["improved"]:
+        evidence.append(ExperimentalEvidenceRecord("environment_coverage_improved", "weak"))
+
+    diagnostics = [
+        ExperimentalDiagnosticRecord(item["code"], item["severity"], item.get("details"))
+        for item in first_run.diagnostics
+    ]
+    diagnostics.append(_provenance_record(candidate_provenance))
+    diagnostics.extend(_adaptation_records(
+        enabled=True,
+        max_iterations=max_iterations,
+        iterations=iterations,
+        stop_reason=stop_reason,
+        applied_candidates=applied_candidates,
+    ))
+    if applied_candidates:
+        diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_PATCH_APPLIED", "info"))
+    if final_delta["improved"]:
+        diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_COVERAGE_IMPROVED", "info"))
+    if final_delta["regressed"]:
+        diagnostics.append(ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_COVERAGE_REGRESSED",
+            "error",
+        ))
+    diagnostics.append(ExperimentalDiagnosticRecord("ENV_TOOLCHAIN_NO_WRITES", "info"))
+
+    before_snapshot = _coverage_snapshot(first_run.coverage)
+    after_snapshot = _coverage_snapshot(current_run.coverage)
+    return EnvironmentToolchainReport(
+        schema_version="environment-toolchain.v0.1",
+        probe_pack=first_run.probe_pack,
+        before=before_snapshot,
+        after=after_snapshot,
+        coverage_delta=CoverageDelta(
+            improved=final_delta["improved"],
+            regressed=final_delta["regressed"],
+            unresolved=final_delta["unresolved"],
+        ),
+        applied_patches=applied,
+        rejected_patches=rejected,
+        profile_suggestions=_profile_suggestions_from_candidates(applied_candidates),
+        evidence=evidence,
+        diagnostics=diagnostics,
+        writes=[],
+    )
+
+
 def _profile_suggestions_from_candidates(candidates: list[ToolchainCandidate]):
     from iv8_rs.environment_toolchain import ProfileSuggestion
 
@@ -878,6 +1113,67 @@ def _coverage_snapshot(coverage: dict[str, int]):
         missing=coverage["missing"],
         mismatch=coverage["mismatch"],
     )
+
+
+def _coverage_snapshot_dict(coverage: dict[str, int]) -> dict[str, int]:
+    return {
+        "present": coverage["present"],
+        "missing": coverage["missing"],
+        "mismatch": coverage["mismatch"],
+    }
+
+
+def _iteration_stop_reason(
+    delta: dict[str, int],
+    *,
+    before_run: ProbeRun,
+    after_run: ProbeRun,
+    stop_on_regression: bool,
+) -> str:
+    if delta["regressed"] and stop_on_regression:
+        return "regression_detected"
+    if not after_run.gaps:
+        return "completed"
+    if delta["improved"] == 0 and len(after_run.gaps) >= len(before_run.gaps):
+        return "no_progress"
+    return "budget_exhausted"
+
+
+def _adaptation_records(
+    *,
+    enabled: bool,
+    max_iterations: int,
+    iterations: list[AdaptationIteration],
+    stop_reason: str,
+    applied_candidates: list[ToolchainCandidate],
+):
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    if stop_reason not in _ADAPTATION_STOP_REASONS:
+        raise ValueError(f"invalid adaptation stop reason: {stop_reason}")
+    records = [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_ADAPTATION_SUMMARY",
+            "info",
+            {
+                "enabled": enabled,
+                "mode": "iterative_runtime_safe" if enabled else "report_only",
+                "max_iterations": max_iterations,
+                "iterations": len(iterations),
+                "stop_reason": stop_reason,
+                "applied_patch_ids": [candidate.patch_id for candidate in applied_candidates],
+            },
+        )
+    ]
+    records.extend(
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_ADAPTATION_ITERATION",
+            "info",
+            iteration.to_details(),
+        )
+        for iteration in iterations
+    )
+    return records
 
 
 def _coverage_delta(before_run: ProbeRun, after_run: ProbeRun) -> dict[str, int]:
