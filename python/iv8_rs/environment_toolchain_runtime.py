@@ -102,6 +102,15 @@ _ADAPTATION_STOP_REASONS = {
     "entry_failure",
     "asset_error",
 }
+_DRY_RUN_ALLOWED_STATUSES = frozenset({
+    "eligible_for_review",
+    "blocked_by_boundary",
+    "blocked_by_policy",
+    "blocked_by_conflict",
+    "requires_rollback_design",
+    "requires_native_review",
+    "review_only_signal",
+})
 
 
 @dataclass(frozen=True, slots=True)
@@ -825,10 +834,13 @@ def run_environment_toolchain(
     time_freeze: float | None = None,
     time_mode: str = "logical",
     entry_expr: str | None = None,
+    dry_run_planning: bool = False,
 ):
     """Run the Environment Toolchain flow with optional runtime-safe rerun."""
     if max_iterations < 0:
         raise ValueError("max_iterations must be non-negative")
+    if dry_run_planning and (apply_runtime_safe or adapt_runtime_safe):
+        raise ValueError("dry_run_planning cannot be combined with runtime-safe apply")
 
     from iv8_rs.environment_toolchain import (
         CoverageDelta,
@@ -971,6 +983,12 @@ def run_environment_toolchain(
         diagnostics.append(ExperimentalDiagnosticRecord(
             "ENV_TOOLCHAIN_PROFILE_SUGGESTION_REVIEW",
             "info",
+        ))
+    if dry_run_planning:
+        diagnostics.extend(_dry_run_planning_records(
+            before_run.gaps,
+            candidate_pack_object=candidate_pack_object,
+            environment=environment,
         ))
     diagnostics.extend(_profile_coherence_records(coherence_groups))
     diagnostics.extend(_family_pressure_summary_records(family_pressures))
@@ -1294,6 +1312,120 @@ def _adaptation_records(
         for iteration in iterations
     )
     return records
+
+
+def _dry_run_planning_records(
+    gaps: list[EnvironmentGap],
+    *,
+    candidate_pack_object: CandidatePack | None,
+    environment: dict[str, Any] | None,
+):
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    explicit_environment = environment or {}
+    items: list[dict[str, Any]] = []
+    if candidate_pack_object is not None:
+        registry = _candidate_registry(candidate_pack_object)
+        seen_patch_ids: set[str] = set()
+        for gap in gaps:
+            for candidate in registry.get(gap.target, []):
+                if candidate.patch_id in seen_patch_ids:
+                    continue
+                gap_classes = set(candidate.validation.get("gap_classes", []))
+                if gap_classes and gap.gap_class not in gap_classes:
+                    continue
+                seen_patch_ids.add(candidate.patch_id)
+                items.append(_dry_run_plan_item(candidate, gap, explicit_environment))
+
+    blocked_count = sum(1 for item in items if item["planning_status"] != "eligible_for_review")
+    eligible_count = len(items) - blocked_count
+    summary = {
+        "enabled": True,
+        "apply_authorized": False,
+        "writes": [],
+        "review_status": "blocked" if blocked_count else "review_only",
+        "evidence_ceiling": "diagnostic_only",
+        "candidate_count": len(items),
+        "eligible_for_review_count": eligible_count,
+        "blocked_candidate_count": blocked_count,
+        "required_review_count": len(items),
+        "rollback_required_count": 0,
+        "input_signal_counts": {
+            "probe_gap_count": len(gaps),
+            "candidate_pack_enabled": candidate_pack_object is not None,
+            "explicit_environment_count": len(explicit_environment),
+        },
+        "blocked_actions": [
+            "runtime_apply",
+            "profile_write",
+            "manifest_write",
+            "baseline_write",
+            "sample_write",
+            "source_write",
+            "pass_promotion",
+        ],
+    }
+    records = [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_DRY_RUN_PLAN_SUMMARY",
+            "info" if blocked_count == 0 else "warn",
+            summary,
+        )
+    ]
+    records.extend(
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_DRY_RUN_PLAN_ITEM",
+            "info" if item["planning_status"] == "eligible_for_review" else "warn",
+            item,
+        )
+        for item in items
+    )
+    return records
+
+
+def _dry_run_plan_item(
+    candidate: ToolchainCandidate,
+    gap: EnvironmentGap,
+    explicit_environment: dict[str, Any],
+) -> dict[str, Any]:
+    blocked_reasons: list[str] = []
+    planning_status = "eligible_for_review"
+    if candidate.target in explicit_environment:
+        planning_status = "blocked_by_conflict"
+        blocked_reasons.append("explicit_environment_precedence")
+    elif candidate.policy != "runtime_safe":
+        planning_status = "blocked_by_policy"
+        blocked_reasons.append("non_runtime_safe_policy")
+    else:
+        decision = validate_bypass_boundary(candidate)
+        if decision.decision == "blocked":
+            planning_status = "blocked_by_boundary"
+            blocked_reasons.extend(decision.blocked_terms)
+
+    if planning_status not in _DRY_RUN_ALLOWED_STATUSES:
+        raise ValueError(f"invalid dry-run planning status: {planning_status}")
+    target_family = _classify_target_family(candidate.target) or candidate.target_family
+    return {
+        "plan_item_id": candidate.patch_id,
+        "candidate_id": candidate.patch_id,
+        "target": candidate.target,
+        "target_family": target_family,
+        "coherence_group": target_family,
+        "policy": candidate.policy,
+        "planning_status": planning_status,
+        "blocked_reasons": blocked_reasons,
+        "required_reviews": ["environment_toolchain_review"],
+        "rollback_required": False,
+        "rollback_scope": "context_only",
+        "evidence_ceiling": "diagnostic_only",
+        "apply_authorized": False,
+        "expected_probe_delta": list(candidate.validation.get("expected_delta", [])),
+        "source_gap": {
+            "probe_id": gap.probe_id,
+            "gap_class": gap.gap_class,
+            "category": gap.category,
+        },
+    }
 
 
 def _resolve_local_overlay(
