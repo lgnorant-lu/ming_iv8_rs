@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.2] - 2026-06-08
+
 ### Added
 
 - **Environment custom probe packs**: `run_environment_toolchain()` can now accept
