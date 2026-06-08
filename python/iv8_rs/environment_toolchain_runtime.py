@@ -948,6 +948,7 @@ def run_environment_toolchain(
         coherence_env.update(overlay_values)
     profile_suggestions = _profile_suggestions_from_candidates(candidates)
     coherence_groups = _profile_coherence_groups(coherence_env)
+    family_pressures = _map_gaps_to_family_pressures(before_run.gaps)
     diagnostics = [
         ExperimentalDiagnosticRecord(item["code"], item["severity"], item.get("details"))
         for item in before_run.diagnostics
@@ -972,8 +973,8 @@ def run_environment_toolchain(
             "info",
         ))
     diagnostics.extend(_profile_coherence_records(coherence_groups))
-    family_pressures = _map_gaps_to_family_pressures(before_run.gaps)
     diagnostics.extend(_family_pressure_summary_records(family_pressures))
+    diagnostics.extend(_native_substrate_review_records(coherence_groups, family_pressures))
     if overlay_prov:
         diagnostics.append(overlay_prov)
     if overlay_rej:
@@ -1163,9 +1164,11 @@ def _run_iterative_environment_toolchain(
     coherence_env = dict(accumulated_environment)
     if overlay_values:
         coherence_env.update(overlay_values)
-    diagnostics.extend(_profile_coherence_records(_profile_coherence_groups(coherence_env)))
+    coherence_groups = _profile_coherence_groups(coherence_env)
     family_pressures = _map_gaps_to_family_pressures(first_run.gaps)
+    diagnostics.extend(_profile_coherence_records(coherence_groups))
     diagnostics.extend(_family_pressure_summary_records(family_pressures))
+    diagnostics.extend(_native_substrate_review_records(coherence_groups, family_pressures))
     if overlay_prov:
         diagnostics.append(overlay_prov)
     if overlay_rej:
@@ -1863,6 +1866,55 @@ def _family_pressure_summary_records(
         )
     ]
     return records
+
+
+def _native_substrate_review_records(
+    groups: list[ProfileCoherenceGroup],
+    pressures: list[FamilyPressure],
+):
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    candidate_areas = _native_substrate_candidate_areas(groups, pressures)
+    return [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_NATIVE_SUBSTRATE_REVIEW",
+            "info" if not candidate_areas else "warn",
+            {
+                "enabled": True,
+                "candidate_areas": candidate_areas,
+                "blocked_actions": [
+                    "profile_auto_apply",
+                    "local_overlay_runtime_apply",
+                    "family_pressure_runtime_apply",
+                    "unsafe_hook_default_apply",
+                    "target_flow_replay",
+                    "rust_native_hardening_without_review",
+                ],
+                "review_status": "requires_review" if candidate_areas else "review_only",
+                "evidence_ceiling": "diagnostic_only",
+            },
+        )
+    ]
+
+
+def _native_substrate_candidate_areas(
+    groups: list[ProfileCoherenceGroup],
+    pressures: list[FamilyPressure],
+) -> list[str]:
+    areas: set[str] = set()
+    if any(
+        pressure.category in {"descriptor_mismatch", "prototype_mismatch"}
+        for pressure in pressures
+    ):
+        areas.add("descriptor_prototype")
+    status_by_group = {group.group_id: group.status for group in groups}
+    if status_by_group.get("ua_platform") == "inconsistent":
+        areas.add("navigator_ua_data")
+    if status_by_group.get("network_info") == "inconsistent":
+        areas.add("navigator_connection")
+    if status_by_group.get("timezone_locale") == "inconsistent":
+        areas.add("timezone_intl")
+    return sorted(areas)
 
 
 def _coverage_delta(before_run: ProbeRun, after_run: ProbeRun) -> dict[str, int]:
