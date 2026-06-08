@@ -52,13 +52,17 @@ class ExperimentalDiagnosticRecord:
 
     code: str
     severity: str
+    details: dict[str, Any] | None = None
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> ExperimentalDiagnosticRecord:
-        return cls(code=data["code"], severity=data["severity"])
+        return cls(code=data["code"], severity=data["severity"], details=data.get("details"))
 
     def to_dict(self) -> dict[str, Any]:
-        return {"code": self.code, "severity": self.severity}
+        data = {"code": self.code, "severity": self.severity}
+        if self.details is not None:
+            data["details"] = self.details
+        return data
 
 
 @dataclass

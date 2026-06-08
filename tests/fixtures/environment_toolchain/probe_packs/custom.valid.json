@@ -1,0 +1,19 @@
+{
+  "probe_pack": "custom.fixture.probe",
+  "version": 1,
+  "description": "valid custom probe fixture",
+  "evidence_ceiling": "diagnostic_only",
+  "probes": [
+    {
+      "probe_id": "navigator.language.fixture.present",
+      "target": "navigator.language",
+      "category": "presence",
+      "js": "return typeof navigator.language === 'string' && navigator.language.length > 0;",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "candidate_pack": "custom.fixture.candidate",
+  "version": 1,
+  "description": "valid custom candidate fixture",
+  "candidates": [
+    {
+      "patch_id": "navigator.language.fixture.v0",
+      "target": "navigator.language",
+      "target_family": "environment_value",
+      "kind": "value",
+      "policy": "runtime_safe",
+      "source": "custom_fixture",
+      "value_preview": "en-US",
+      "requires": [],
+      "risk_reasons": [],
+      "reversible": true,
+      "validation": {
+        "probe_pack": "custom.fixture.probe",
+        "expected_delta": ["navigator.language"],
+        "gap_classes": ["missing_api", "value_mismatch"]
+      }
+    }
+  ]
+}

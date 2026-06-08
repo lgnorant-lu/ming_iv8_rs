@@ -6,6 +6,34 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+### Added
+
+- **Environment custom probe packs**: `run_environment_toolchain()` can now accept
+  built-in IDs, `ProbePack` objects, dicts, and JSON paths for probe packs.
+- **Environment custom candidate packs**: candidate mapping can now use built-in
+  IDs, `CandidatePack` objects, dicts, JSON paths, or `None` to disable mapping.
+- **Asset validation**: custom probe/candidate packs are schema-validated and
+  bypass-boundary checked before JavaScript execution or candidate mapping.
+- **Asset provenance diagnostics**: reports expose built-in, object, custom dict,
+  custom path, and disabled asset origins through diagnostics with redacted path
+  references.
+- **Descriptor probe pack**: added built-in `descriptor.m1` with diagnostic-only
+  navigator/screen descriptor and prototype probes.
+- **Custom asset fixtures**: added valid, blocked, and malformed custom
+  probe/candidate fixtures for boundary and validation gates.
+
+### Changed
+
+- `ExperimentalDiagnosticRecord` now preserves optional `details` fields while
+  keeping existing code/severity-only diagnostics compatible.
+- `available_probe_packs()` now lists `descriptor.m1` and `fingerprint.m1`.
+
+### Quality Gates
+
+- Targeted Environment tests: 77 passed.
+- Scoped Environment lint: `ruff check` passed.
+- `git diff --check` passed.
+
 ## [0.8.1] - 2026-06-08
 
 ### Added

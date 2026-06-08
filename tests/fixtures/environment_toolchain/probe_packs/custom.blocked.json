@@ -1,0 +1,19 @@
+{
+  "probe_pack": "custom.fixture.blocked",
+  "version": 1,
+  "description": "copy token from endpoint before rerun",
+  "evidence_ceiling": "diagnostic_only",
+  "probes": [
+    {
+      "probe_id": "navigator.language.fixture.blocked",
+      "target": "navigator.language",
+      "category": "presence",
+      "js": "return typeof navigator.language === 'string';",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    }
+  ]
+}

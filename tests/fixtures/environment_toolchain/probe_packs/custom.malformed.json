@@ -1,0 +1,19 @@
+{
+  "probe_pack": "custom.fixture.malformed",
+  "version": 1,
+  "description": "malformed custom probe fixture",
+  "evidence_ceiling": "diagnostic_only",
+  "probes": [
+    {
+      "probe_id": "navigator.language.fixture.malformed",
+      "target": "navigator.language",
+      "category": "presence",
+      "js": "return typeof navigator.language === 'string';",
+      "expected": true,
+      "gap_class": "missing_api",
+      "side_effects": ["writes_global"],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    }
+  ]
+}
