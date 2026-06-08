@@ -1401,6 +1401,7 @@ def _profile_coherence_groups(environment: dict[str, Any] | None) -> list[Profil
         _language_coherence_group(values, sources),
         _screen_window_coherence_group(values, sources),
         _ua_platform_coherence_group(values, sources),
+        _network_info_coherence_group(values, sources),
     ]
 
 
@@ -1613,12 +1614,95 @@ def _ua_platform_coherence_group(
     )
 
 
+def _network_info_coherence_group(
+    values: dict[str, Any],
+    sources: dict[str, str],
+) -> ProfileCoherenceGroup:
+    keys = (
+        "navigator.connection.effectiveType",
+        "navigator.connection.downlink",
+        "navigator.connection.rtt",
+        "navigator.connection.saveData",
+        "navigator.connection.type",
+    )
+    fields = _coherence_fields(values, *keys)
+    field_sources = _coherence_fields(sources, *keys)
+    if not fields:
+        return ProfileCoherenceGroup(
+            group_id="network_info",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="network information values are unavailable",
+        )
+    effective_type = fields.get("navigator.connection.effectiveType")
+    connection_type = fields.get("navigator.connection.type")
+    downlink = fields.get("navigator.connection.downlink")
+    rtt = fields.get("navigator.connection.rtt")
+    save_data = fields.get("navigator.connection.saveData")
+    if effective_type is not None and not _is_non_empty_string(effective_type):
+        return ProfileCoherenceGroup(
+            group_id="network_info",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="network effectiveType value is unavailable or malformed",
+        )
+    if connection_type is not None and not _is_non_empty_string(connection_type):
+        return ProfileCoherenceGroup(
+            group_id="network_info",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="network type value is unavailable or malformed",
+        )
+    if downlink is not None and not _is_non_negative_number(downlink):
+        return ProfileCoherenceGroup(
+            group_id="network_info",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="network downlink value is negative or malformed",
+        )
+    if rtt is not None and not _is_non_negative_number(rtt):
+        return ProfileCoherenceGroup(
+            group_id="network_info",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="network rtt value is negative or malformed",
+        )
+    if save_data is not None and not isinstance(save_data, bool):
+        return ProfileCoherenceGroup(
+            group_id="network_info",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="network saveData value is unavailable or malformed",
+        )
+    return ProfileCoherenceGroup(
+        group_id="network_info",
+        status="consistent",
+        fields=fields,
+        sources=field_sources,
+        reason="network information values have bounded shape",
+    )
+
+
 def _coherence_fields(source: dict[str, Any], *keys: str) -> dict[str, Any]:
     return {key: source[key] for key in keys if key in source}
 
 
 def _is_positive_number(value: Any) -> bool:
     return isinstance(value, int | float) and not isinstance(value, bool) and value > 0
+
+
+def _is_non_negative_number(value: Any) -> bool:
+    return isinstance(value, int | float) and not isinstance(value, bool) and value >= 0
+
+
+def _is_non_empty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value)
 
 
 def _platform_family_from_user_agent(value: str) -> str | None:
