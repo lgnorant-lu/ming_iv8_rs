@@ -15,10 +15,13 @@ from importlib import resources
 from typing import Any
 
 from iv8_rs.environment_toolchain_diagnostics import (
+    _adaptation_records,
+    _dry_run_planning_records,
     _family_pressure_summary_records,
     _native_substrate_review_records,
     _pressure_harness_records,
     _profile_coherence_records,
+    _rollback_diagnostic_records,
     _scaffold_gap_records,
     _substrate_coverage_records,
 )
@@ -33,7 +36,6 @@ from iv8_rs.environment_toolchain_models import (
     ProfileCoherenceGroup,
 )
 from iv8_rs.environment_toolchain_static import (
-    _ADAPTATION_STOP_REASONS,
     _ALLOWED_EVIDENCE_CEILINGS,
     _ALLOWED_PROBE_CATEGORIES,
     _ALLOWED_TARGET_FAMILIES,
@@ -42,7 +44,6 @@ from iv8_rs.environment_toolchain_static import (
     _CANDIDATE_METADATA_FIELDS,
     _CANDIDATE_PACK_FILES,
     _CANDIDATE_PLANNING_STATUSES,
-    _DRY_RUN_ALLOWED_STATUSES,
     _GAP_CLASS_TO_PRESSURE_CATEGORY,
     _GENERIC_TARGET_PREFIXES,
     _ORDERED_RECIPE_RE,
@@ -827,11 +828,17 @@ def run_environment_toolchain(
             before_run.gaps,
             candidate_pack_object=candidate_pack_object,
             environment=environment,
+            candidate_registry=_candidate_registry,
+            classify_target_family=_classify_target_family,
+            validate_boundary=validate_bypass_boundary,
         ))
     if rollback_diagnostics:
         diagnostics.extend(_rollback_diagnostic_records(
             before_run.gaps,
             candidate_pack_object=candidate_pack_object,
+            candidate_registry=_candidate_registry,
+            classify_target_family=_classify_target_family,
+            validate_boundary=validate_bypass_boundary,
         ))
     if substrate_coverage:
         diagnostics.extend(_substrate_coverage_records())
@@ -1124,284 +1131,6 @@ def _iteration_stop_reason(
     if delta["improved"] == 0 and len(after_run.gaps) >= len(before_run.gaps):
         return "no_progress"
     return "budget_exhausted"
-
-
-def _adaptation_records(
-    *,
-    enabled: bool,
-    max_iterations: int,
-    iterations: list[AdaptationIteration],
-    stop_reason: str,
-    applied_candidates: list[ToolchainCandidate],
-):
-    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
-
-    if stop_reason not in _ADAPTATION_STOP_REASONS:
-        raise ValueError(f"invalid adaptation stop reason: {stop_reason}")
-    records = [
-        ExperimentalDiagnosticRecord(
-            "ENV_TOOLCHAIN_ADAPTATION_SUMMARY",
-            "info",
-            {
-                "enabled": enabled,
-                "mode": "iterative_runtime_safe" if enabled else "report_only",
-                "max_iterations": max_iterations,
-                "iterations": len(iterations),
-                "stop_reason": stop_reason,
-                "applied_patch_ids": [candidate.patch_id for candidate in applied_candidates],
-            },
-        )
-    ]
-    records.extend(
-        ExperimentalDiagnosticRecord(
-            "ENV_TOOLCHAIN_ADAPTATION_ITERATION",
-            "info",
-            iteration.to_details(),
-        )
-        for iteration in iterations
-    )
-    return records
-
-
-def _dry_run_planning_records(
-    gaps: list[EnvironmentGap],
-    *,
-    candidate_pack_object: CandidatePack | None,
-    environment: dict[str, Any] | None,
-):
-    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
-
-    explicit_environment = environment or {}
-    items: list[dict[str, Any]] = []
-    if candidate_pack_object is not None:
-        registry = _candidate_registry(candidate_pack_object)
-        seen_patch_ids: set[str] = set()
-        for gap in gaps:
-            for candidate in registry.get(gap.target, []):
-                if candidate.patch_id in seen_patch_ids:
-                    continue
-                gap_classes = set(candidate.validation.get("gap_classes", []))
-                if gap_classes and gap.gap_class not in gap_classes:
-                    continue
-                seen_patch_ids.add(candidate.patch_id)
-                items.append(_dry_run_plan_item(candidate, gap, explicit_environment))
-
-    blocked_count = sum(1 for item in items if item["planning_status"] != "eligible_for_review")
-    eligible_count = len(items) - blocked_count
-    summary = {
-        "enabled": True,
-        "apply_authorized": False,
-        "writes": [],
-        "review_status": "blocked" if blocked_count else "review_only",
-        "evidence_ceiling": "diagnostic_only",
-        "candidate_count": len(items),
-        "eligible_for_review_count": eligible_count,
-        "blocked_candidate_count": blocked_count,
-        "required_review_count": len(items),
-        "rollback_required_count": 0,
-        "input_signal_counts": {
-            "probe_gap_count": len(gaps),
-            "candidate_pack_enabled": candidate_pack_object is not None,
-            "explicit_environment_count": len(explicit_environment),
-        },
-        "blocked_actions": [
-            "runtime_apply",
-            "profile_write",
-            "manifest_write",
-            "baseline_write",
-            "sample_write",
-            "source_write",
-            "pass_promotion",
-        ],
-    }
-    records = [
-        ExperimentalDiagnosticRecord(
-            "ENV_TOOLCHAIN_DRY_RUN_PLAN_SUMMARY",
-            "info" if blocked_count == 0 else "warn",
-            summary,
-        )
-    ]
-    records.extend(
-        ExperimentalDiagnosticRecord(
-            "ENV_TOOLCHAIN_DRY_RUN_PLAN_ITEM",
-            "info" if item["planning_status"] == "eligible_for_review" else "warn",
-            item,
-        )
-        for item in items
-    )
-    return records
-
-
-def _dry_run_plan_item(
-    candidate: ToolchainCandidate,
-    gap: EnvironmentGap,
-    explicit_environment: dict[str, Any],
-) -> dict[str, Any]:
-    blocked_reasons: list[str] = []
-    planning_status = "eligible_for_review"
-    if candidate.target in explicit_environment:
-        planning_status = "blocked_by_conflict"
-        blocked_reasons.append("explicit_environment_precedence")
-    elif candidate.policy != "runtime_safe":
-        planning_status = "blocked_by_policy"
-        blocked_reasons.append("non_runtime_safe_policy")
-    else:
-        decision = validate_bypass_boundary(candidate)
-        if decision.decision == "blocked":
-            planning_status = "blocked_by_boundary"
-            blocked_reasons.extend(decision.blocked_terms)
-
-    if planning_status not in _DRY_RUN_ALLOWED_STATUSES:
-        raise ValueError(f"invalid dry-run planning status: {planning_status}")
-    target_family = _classify_target_family(candidate.target) or candidate.target_family
-    return {
-        "plan_item_id": candidate.patch_id,
-        "candidate_id": candidate.patch_id,
-        "target": candidate.target,
-        "target_family": target_family,
-        "coherence_group": target_family,
-        "policy": candidate.policy,
-        "planning_status": planning_status,
-        "blocked_reasons": blocked_reasons,
-        "required_reviews": ["environment_toolchain_review"],
-        "rollback_required": False,
-        "rollback_scope": candidate.metadata.get("rollback_scope", "context_only"),
-        "evidence_ceiling": "diagnostic_only",
-        "apply_authorized": False,
-        "expected_probe_delta": list(
-            candidate.metadata.get(
-                "expected_probe_delta",
-                candidate.validation.get("expected_delta", []),
-            )
-        ),
-        "source_gap": {
-            "probe_id": gap.probe_id,
-            "gap_class": gap.gap_class,
-            "category": gap.category,
-        },
-    }
-
-
-def _rollback_diagnostic_records(
-    gaps: list[EnvironmentGap],
-    *,
-    candidate_pack_object: CandidatePack | None,
-):
-    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
-
-    records_data: list[dict[str, Any]] = []
-    if candidate_pack_object is not None:
-        registry = _candidate_registry(candidate_pack_object)
-        seen_patch_ids: set[str] = set()
-        for gap in gaps:
-            for candidate in registry.get(gap.target, []):
-                if candidate.patch_id in seen_patch_ids:
-                    continue
-                gap_classes = set(candidate.validation.get("gap_classes", []))
-                if gap_classes and gap.gap_class not in gap_classes:
-                    continue
-                seen_patch_ids.add(candidate.patch_id)
-                records_data.append(_rollback_record_details(candidate, gap))
-
-    blocked_count = sum(1 for item in records_data if item["review_status"] == "blocked")
-    summary = {
-        "enabled": True,
-        "writes": [],
-        "review_status": "blocked" if blocked_count else "review_only",
-        "evidence_ceiling": "diagnostic_only",
-        "record_count": len(records_data),
-        "blocked_record_count": blocked_count,
-        "allowed_record_count": len(records_data) - blocked_count,
-        "input_signal_counts": {
-            "probe_gap_count": len(gaps),
-            "candidate_pack_enabled": candidate_pack_object is not None,
-        },
-        "blocked_scopes": sorted(_ROLLBACK_BLOCKED_SCOPES),
-        "allowed_scopes": sorted(_ROLLBACK_ALLOWED_SCOPES),
-        "blocked_actions": [
-            "rollback_file_write",
-            "profile_write",
-            "manifest_write",
-            "baseline_write",
-            "sample_write",
-            "source_write",
-            "native_substrate_change",
-            "apply_authorization",
-            "pass_promotion",
-        ],
-    }
-    records = [
-        ExperimentalDiagnosticRecord(
-            "ENV_TOOLCHAIN_ROLLBACK_SUMMARY",
-            "info" if blocked_count == 0 else "warn",
-            summary,
-        )
-    ]
-    records.extend(
-        ExperimentalDiagnosticRecord(
-            "ENV_TOOLCHAIN_ROLLBACK_RECORD",
-            "info" if item["review_status"] != "blocked" else "warn",
-            item,
-        )
-        for item in records_data
-    )
-    return records
-
-
-def _rollback_record_details(
-    candidate: ToolchainCandidate,
-    gap: EnvironmentGap,
-) -> dict[str, Any]:
-    scope = str(candidate.metadata.get(
-        "rollback_scope",
-        candidate.validation.get("rollback_scope", "context_only"),
-    ))
-    blocked_reasons: list[str] = []
-    if scope in _ROLLBACK_BLOCKED_SCOPES:
-        review_status = "blocked"
-        blocked_reasons.append("persistent_scope_blocked")
-        restore_strategy = "blocked"
-    elif scope in _ROLLBACK_ALLOWED_SCOPES:
-        review_status = "review_only"
-        restore_strategy = "context_discard" if scope == "context_only" else "remove_value"
-    else:
-        review_status = "blocked"
-        blocked_reasons.append("invalid_rollback_scope")
-        restore_strategy = "blocked"
-
-    target_family = _classify_target_family(candidate.target) or candidate.target_family
-    details = {
-        "record_id": f"rollback.{candidate.patch_id}",
-        "candidate_id": candidate.patch_id,
-        "plan_item_id": candidate.patch_id,
-        "target": candidate.target,
-        "target_family": target_family,
-        "scope": scope,
-        "capture_before": list(candidate.metadata.get(
-            "expected_probe_delta",
-            candidate.validation.get("expected_delta", [candidate.target]),
-        )),
-        "restore_strategy": restore_strategy,
-        "writes": [],
-        "redactions": [],
-        "review_status": review_status,
-        "evidence_ceiling": "diagnostic_only",
-        "blocked_reasons": blocked_reasons,
-        "source_gap": {
-            "probe_id": gap.probe_id,
-            "gap_class": gap.gap_class,
-            "category": gap.category,
-        },
-    }
-    decision = validate_bypass_boundary(details)
-    if decision.decision == "blocked":
-        details["review_status"] = "blocked"
-        details["restore_strategy"] = "blocked"
-        details["blocked_reasons"] = sorted({
-            *details["blocked_reasons"],
-            *decision.blocked_terms,
-        })
-    return details
 
 
 def _resolve_local_overlay(
