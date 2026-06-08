@@ -1400,6 +1400,7 @@ def _profile_coherence_groups(environment: dict[str, Any] | None) -> list[Profil
     return [
         _language_coherence_group(values, sources),
         _screen_window_coherence_group(values, sources),
+        _ua_platform_coherence_group(values, sources),
     ]
 
 
@@ -1511,12 +1512,163 @@ def _screen_window_coherence_group(
     )
 
 
+def _ua_platform_coherence_group(
+    values: dict[str, Any],
+    sources: dict[str, str],
+) -> ProfileCoherenceGroup:
+    keys = (
+        "navigator.userAgent",
+        "navigator.platform",
+        "navigator.userAgentData.platform",
+        "navigator.userAgentData.mobile",
+    )
+    fields = _coherence_fields(values, *keys)
+    field_sources = _coherence_fields(sources, *keys)
+    user_agent = fields.get("navigator.userAgent")
+    platform = fields.get("navigator.platform")
+    ua_data_platform = fields.get("navigator.userAgentData.platform")
+    ua_data_mobile = fields.get("navigator.userAgentData.mobile")
+    if not isinstance(user_agent, str) or not isinstance(platform, str):
+        return ProfileCoherenceGroup(
+            group_id="ua_platform",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="userAgent or platform value is unavailable or malformed",
+        )
+    if ua_data_platform is not None and not isinstance(ua_data_platform, str):
+        return ProfileCoherenceGroup(
+            group_id="ua_platform",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="userAgentData platform value is malformed",
+        )
+    if ua_data_mobile is not None and not isinstance(ua_data_mobile, bool):
+        return ProfileCoherenceGroup(
+            group_id="ua_platform",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="userAgentData mobile value is malformed",
+        )
+    ua_family = _platform_family_from_user_agent(user_agent)
+    platform_family = _platform_family_from_platform(platform)
+    ua_data_family = (
+        _platform_family_from_ua_data_platform(ua_data_platform)
+        if isinstance(ua_data_platform, str)
+        else None
+    )
+    if (
+        ua_family is not None
+        and platform_family is not None
+        and ua_family != platform_family
+    ):
+        return ProfileCoherenceGroup(
+            group_id="ua_platform",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="userAgent platform token contradicts navigator.platform",
+        )
+    if (
+        ua_data_family is not None
+        and platform_family is not None
+        and ua_data_family != platform_family
+    ):
+        return ProfileCoherenceGroup(
+            group_id="ua_platform",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="userAgentData platform contradicts navigator.platform",
+        )
+    ua_is_mobile = _user_agent_has_mobile_token(user_agent)
+    if (
+        ua_data_mobile is True
+        and not ua_is_mobile
+        and platform_family in {"windows", "macos", "linux"}
+    ):
+        return ProfileCoherenceGroup(
+            group_id="ua_platform",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="userAgentData mobile flag contradicts desktop platform tokens",
+        )
+    if ua_data_mobile is False and ua_is_mobile:
+        return ProfileCoherenceGroup(
+            group_id="ua_platform",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="userAgentData mobile flag contradicts mobile userAgent token",
+        )
+    return ProfileCoherenceGroup(
+        group_id="ua_platform",
+        status="consistent",
+        fields=fields,
+        sources=field_sources,
+        reason="userAgent, platform, and userAgentData platform fields are bounded",
+    )
+
+
 def _coherence_fields(source: dict[str, Any], *keys: str) -> dict[str, Any]:
     return {key: source[key] for key in keys if key in source}
 
 
 def _is_positive_number(value: Any) -> bool:
     return isinstance(value, int | float) and not isinstance(value, bool) and value > 0
+
+
+def _platform_family_from_user_agent(value: str) -> str | None:
+    lower = value.lower()
+    if "android" in lower:
+        return "android"
+    if any(token in lower for token in ("iphone", "ipad", "ipod")):
+        return "ios"
+    if "windows" in lower:
+        return "windows"
+    if "mac os x" in lower or "macintosh" in lower:
+        return "macos"
+    if "linux" in lower or "x11" in lower:
+        return "linux"
+    return None
+
+
+def _platform_family_from_platform(value: str) -> str | None:
+    lower = value.lower()
+    if lower.startswith("win"):
+        return "windows"
+    if lower.startswith(("mac", "darwin")):
+        return "macos"
+    if lower.startswith(("linux", "x11")):
+        return "linux"
+    if "android" in lower:
+        return "android"
+    if lower in {"iphone", "ipad", "ipod"}:
+        return "ios"
+    return None
+
+
+def _platform_family_from_ua_data_platform(value: str) -> str | None:
+    lower = value.lower()
+    if lower == "windows":
+        return "windows"
+    if lower in {"macos", "mac os", "mac"}:
+        return "macos"
+    if lower == "linux":
+        return "linux"
+    if lower == "android":
+        return "android"
+    if lower in {"ios", "iphone", "ipad"}:
+        return "ios"
+    return None
+
+
+def _user_agent_has_mobile_token(value: str) -> bool:
+    lower = value.lower()
+    return any(token in lower for token in ("mobile", "android", "iphone", "ipad", "ipod"))
 
 
 def _profile_coherence_records(groups: list[ProfileCoherenceGroup]):
