@@ -85,6 +85,7 @@ _GAP_CLASS_TO_PRESSURE_CATEGORY = {
     "prototype_chain_mismatch": "prototype_mismatch",
 }
 _ORDERED_RECIPE_RE = re.compile(r"apply\s+.+request\s+.+(?:copy|rerun)", re.IGNORECASE)
+_RAW_LOCAL_PATH_RE = re.compile(r"(?:^[a-zA-Z]:[\\/]|^[/\\]{1,2}(?!/)|\s[a-zA-Z]:[\\/])")
 _PROBE_PACK_FILES = {
     "descriptor.m1": "descriptor.m1.json",
     "fingerprint.m1": "fingerprint.m1.json",
@@ -512,6 +513,9 @@ def available_candidate_targets() -> list[str]:
 def _validate_candidate_metadata(metadata: dict[str, Any]) -> None:
     if not metadata:
         return
+    unknown_fields = sorted(set(metadata) - _CANDIDATE_METADATA_FIELDS)
+    if unknown_fields:
+        raise ValueError(f"unknown candidate metadata field: {unknown_fields}")
     decision = validate_bypass_boundary(metadata)
     if decision.decision == "blocked":
         raise ValueError("candidate metadata failed boundary validation")
@@ -582,6 +586,8 @@ def validate_bypass_boundary(payload: ToolchainCandidate | dict[str, Any]) -> Bo
                 continue
         lowered = value.lower()
         blocked.extend(term for term in _BLOCKED_BOUNDARY_TERMS if term in lowered)
+        if _RAW_LOCAL_PATH_RE.search(value):
+            blocked.append("raw_path")
         if _ORDERED_RECIPE_RE.search(value):
             blocked.append("ordered_recipe")
 
