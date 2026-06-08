@@ -1405,6 +1405,7 @@ def _profile_coherence_groups(environment: dict[str, Any] | None) -> list[Profil
         _screen_window_coherence_group(values, sources),
         _ua_platform_coherence_group(values, sources),
         _network_info_coherence_group(values, sources),
+        _timezone_locale_coherence_group(values, sources),
     ]
 
 
@@ -1689,6 +1690,84 @@ def _network_info_coherence_group(
         fields=fields,
         sources=field_sources,
         reason="network information values have bounded shape",
+    )
+
+
+def _timezone_locale_coherence_group(
+    values: dict[str, Any],
+    sources: dict[str, str],
+) -> ProfileCoherenceGroup:
+    keys = (
+        "config.timezone",
+        "timezone",
+        "navigator.language",
+        "navigator.languages",
+    )
+    fields = _coherence_fields(values, *keys)
+    field_sources = _coherence_fields(sources, *keys)
+    config_timezone = fields.get("config.timezone")
+    runtime_timezone = fields.get("timezone")
+    language = fields.get("navigator.language")
+    languages = fields.get("navigator.languages")
+    if config_timezone is not None and not _is_non_empty_string(config_timezone):
+        return ProfileCoherenceGroup(
+            group_id="timezone_locale",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="configured timezone value is unavailable or malformed",
+        )
+    if runtime_timezone is not None and not _is_non_empty_string(runtime_timezone):
+        return ProfileCoherenceGroup(
+            group_id="timezone_locale",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="runtime timezone value is unavailable or malformed",
+        )
+    if not isinstance(language, str) or not isinstance(languages, list) or not languages:
+        return ProfileCoherenceGroup(
+            group_id="timezone_locale",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="language or languages value is unavailable or malformed",
+        )
+    first_language = languages[0]
+    if not isinstance(first_language, str) or first_language != language:
+        return ProfileCoherenceGroup(
+            group_id="timezone_locale",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="primary language does not match first languages entry",
+        )
+    if (
+        isinstance(config_timezone, str)
+        and isinstance(runtime_timezone, str)
+        and config_timezone != runtime_timezone
+    ):
+        return ProfileCoherenceGroup(
+            group_id="timezone_locale",
+            status="inconsistent",
+            fields=fields,
+            sources=field_sources,
+            reason="configured timezone contradicts runtime timezone override",
+        )
+    if config_timezone is None and runtime_timezone is None:
+        return ProfileCoherenceGroup(
+            group_id="timezone_locale",
+            status="unknown",
+            fields=fields,
+            sources=field_sources,
+            reason="timezone value is unavailable",
+        )
+    return ProfileCoherenceGroup(
+        group_id="timezone_locale",
+        status="consistent",
+        fields=fields,
+        sources=field_sources,
+        reason="timezone and locale values have bounded shape",
     )
 
 
