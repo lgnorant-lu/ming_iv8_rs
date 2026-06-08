@@ -6,6 +6,47 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.4] - 2026-06-08
+
+### Added
+
+- **Environment profile coherence diagnostics**: `run_environment_toolchain()` now
+  emits diagnostic-only coherence groups for `language` and `screen_window`.
+- **Coherence diagnostics projection**: reports include
+  `ENV_TOOLCHAIN_PROFILE_COHERENCE_SUMMARY` and
+  `ENV_TOOLCHAIN_PROFILE_COHERENCE_GROUP` while preserving
+  `environment-toolchain.v0.1`.
+- **Local overlay boundary**: added explicit `local_overlay` report-only input for
+  coherence analysis with dict/path support, basename `redacted_ref` path
+  provenance, non-generic key rejection, and blocked vocabulary validation.
+- **Local overlay diagnostics**: reports include
+  `ENV_TOOLCHAIN_LOCAL_OVERLAY_PROVENANCE` or
+  `ENV_TOOLCHAIN_LOCAL_OVERLAY_REJECTED` without applying overlay values to
+  runtime state.
+- **Family pressure taxonomy diagnostics**: existing probe gaps are projected into
+  generic `FamilyPressure` categories and target families through
+  `ENV_TOOLCHAIN_FAMILY_PRESSURE_SUMMARY`.
+
+### Changed
+
+- v0.8.4 keeps Environment automation diagnostic-only by default: no profile
+  writes, no manifest writes, no corpus/source mutation, no local overlay runtime
+  apply, and no family pressure apply.
+- v0.8.4 records `environment_profile_coherence_analyzed` and
+  `environment_family_pressure_analyzed` as `diagnostic_only` evidence.
+- v0.8.4 preserves the Python/Rust boundary; Rust/native substrate hardening
+  remains review-gated and was not changed in this release.
+
+### Quality Gates
+
+- Focused profile coherence tests: 12 passed.
+- Focused family pressure tests: 4 passed.
+- Focused iterative adaptation tests: 7 passed.
+- Focused Environment compatibility tests: 77 passed.
+- Scoped Environment lint: `ruff check` passed.
+- Full Python tests: 1047 passed, 1 skipped.
+- `git diff --check` passed.
+
 ## [0.8.3] - 2026-06-08
 
 ### Added
