@@ -62,6 +62,28 @@ _BLOCKED_BOUNDARY_TERMS = (
     "authorization",
     "secret",
 )
+_ALLOWED_PRESSURE_CATEGORIES = frozenset({
+    "descriptor_mismatch",
+    "prototype_mismatch",
+    "value_mismatch",
+    "missing_api",
+    "behavior_mismatch",
+})
+_ALLOWED_TARGET_FAMILIES = frozenset({
+    "navigator",
+    "screen",
+    "window",
+    "document",
+    "timing",
+    "network_info",
+})
+_GAP_CLASS_TO_PRESSURE_CATEGORY = {
+    "missing_api": "missing_api",
+    "value_mismatch": "value_mismatch",
+    "descriptor_mismatch": "descriptor_mismatch",
+    "behavior_mismatch": "behavior_mismatch",
+    "prototype_chain_mismatch": "prototype_mismatch",
+}
 _ORDERED_RECIPE_RE = re.compile(r"apply\s+.+request\s+.+(?:copy|rerun)", re.IGNORECASE)
 _PROBE_PACK_FILES = {
     "descriptor.m1": "descriptor.m1.json",
@@ -226,6 +248,32 @@ class ProfileCoherenceGroup:
             "fields": dict(self.fields),
             "sources": dict(self.sources),
             "reason": self.reason,
+            "review_status": self.review_status,
+            "evidence_ceiling": self.evidence_ceiling,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class FamilyPressure:
+    pressure_id: str
+    category: str
+    target_family: str
+    gap_classes: list[str]
+    review_status: str = "review_only"
+    evidence_ceiling: str = "diagnostic_only"
+
+    def __post_init__(self) -> None:
+        if self.category not in _ALLOWED_PRESSURE_CATEGORIES:
+            raise ValueError(f"invalid pressure category: {self.category}")
+        if self.target_family not in _ALLOWED_TARGET_FAMILIES:
+            raise ValueError(f"invalid target family: {self.target_family}")
+
+    def to_details(self) -> dict[str, Any]:
+        return {
+            "pressure_id": self.pressure_id,
+            "category": self.category,
+            "target_family": self.target_family,
+            "gap_classes": list(self.gap_classes),
             "review_status": self.review_status,
             "evidence_ceiling": self.evidence_ceiling,
         }
@@ -886,6 +934,14 @@ def run_environment_toolchain(
         "environment_profile_coherence_analyzed",
         "diagnostic_only",
     ))
+    evidence.append(ExperimentalEvidenceRecord(
+        "environment_family_pressure_analyzed",
+        "diagnostic_only",
+    ))
+    evidence.append(ExperimentalEvidenceRecord(
+        "environment_family_pressure_analyzed",
+        "diagnostic_only",
+    ))
     overlay_values, overlay_prov, overlay_rej = _resolve_local_overlay(local_overlay)
     coherence_env = dict(after_environment or {})
     if overlay_values:
@@ -916,6 +972,8 @@ def run_environment_toolchain(
             "info",
         ))
     diagnostics.extend(_profile_coherence_records(coherence_groups))
+    family_pressures = _map_gaps_to_family_pressures(before_run.gaps)
+    diagnostics.extend(_family_pressure_summary_records(family_pressures))
     if overlay_prov:
         diagnostics.append(overlay_prov)
     if overlay_rej:
@@ -1106,6 +1164,8 @@ def _run_iterative_environment_toolchain(
     if overlay_values:
         coherence_env.update(overlay_values)
     diagnostics.extend(_profile_coherence_records(_profile_coherence_groups(coherence_env)))
+    family_pressures = _map_gaps_to_family_pressures(first_run.gaps)
+    diagnostics.extend(_family_pressure_summary_records(family_pressures))
     if overlay_prov:
         diagnostics.append(overlay_prov)
     if overlay_rej:
@@ -1488,6 +1548,84 @@ def _profile_coherence_records(groups: list[ProfileCoherenceGroup]):
         )
         for group in groups
     )
+    return records
+
+
+def _classify_pressure_category(gap: EnvironmentGap) -> str | None:
+    return _GAP_CLASS_TO_PRESSURE_CATEGORY.get(gap.gap_class)
+
+
+def _classify_target_family(target: str) -> str | None:
+    if target in _ALLOWED_TARGET_FAMILIES:
+        return target
+    if target.startswith(("performance.", "Date.", "timing.")):
+        return "timing"
+    if target.startswith(("navigator.connection", "networkInformation.")):
+        return "network_info"
+    for prefix in _GENERIC_TARGET_PREFIXES:
+        family = prefix.rstrip(".")
+        if target.startswith(prefix) and family in _ALLOWED_TARGET_FAMILIES:
+            return family
+    for family in _ALLOWED_TARGET_FAMILIES:
+        if target.startswith(family + "."):
+            return family
+    if target in ("localStorage", "sessionStorage"):
+        return "window"
+    return None
+
+
+def _map_gaps_to_family_pressures(
+    gaps: list[EnvironmentGap],
+) -> list[FamilyPressure]:
+    buckets: dict[tuple[str, str], list[str]] = {}
+    for gap in gaps:
+        category = _classify_pressure_category(gap)
+        if category is None:
+            continue
+        family = _classify_target_family(gap.target)
+        if family is None:
+            continue
+        key = (category, family)
+        if key not in buckets:
+            buckets[key] = []
+        if gap.gap_class not in buckets[key]:
+            buckets[key].append(gap.gap_class)
+    return [
+        FamilyPressure(
+            pressure_id=f"{category}__{family}",
+            category=category,
+            target_family=family,
+            gap_classes=sorted(gap_classes),
+        )
+        for (category, family), gap_classes in sorted(buckets.items())
+    ]
+
+
+def _family_pressure_summary_records(
+    pressures: list[FamilyPressure],
+):
+    from iv8_rs.experimental_report import ExperimentalDiagnosticRecord
+
+    category_counts: dict[str, int] = dict.fromkeys(sorted(_ALLOWED_PRESSURE_CATEGORIES), 0)
+    family_counts: dict[str, int] = dict.fromkeys(sorted(_ALLOWED_TARGET_FAMILIES), 0)
+    for pressure in pressures:
+        category_counts[pressure.category] += 1
+        family_counts[pressure.target_family] += 1
+    records = [
+        ExperimentalDiagnosticRecord(
+            "ENV_TOOLCHAIN_FAMILY_PRESSURE_SUMMARY",
+            "info",
+            {
+                "enabled": True,
+                "pressures": len(pressures),
+                "category_counts": category_counts,
+                "family_counts": family_counts,
+                "entries": [pressure.to_details() for pressure in pressures],
+                "review_status": "review_only",
+                "evidence_ceiling": "diagnostic_only",
+            },
+        )
+    ]
     return records
 
 
