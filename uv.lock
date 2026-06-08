@@ -103,7 +103,7 @@ wheels = [
 
 [[package]]
 name = "iv8-rs"
-version = "0.8.6"
+version = "0.8.7"
 source = { editable = "." }
 
 [package.dev-dependencies]
