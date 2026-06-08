@@ -6,6 +6,151 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.11] - 2026-06-09
+
+### Added
+
+- **Environment pressure-to-plan bridge diagnostics**: `run_environment_toolchain()`
+  now emits `ENV_TOOLCHAIN_PRESSURE_PLAN_SUMMARY` and
+  `ENV_TOOLCHAIN_PRESSURE_PLAN_ITEM` when both `dry_run_planning=True` and
+  `pressure_harness=True` are explicitly enabled.
+- **Pressure planning helper module**: added
+  `environment_toolchain_pressure_planning.py` for package-agnostic, review-only
+  pressure report to plan item mapping.
+- **Bridge-not-absorb governance**: added a durable principle that IV8 bridges
+  external JS environment ecosystems through capability boundaries instead of
+  absorbing or rewriting them by default.
+- **Continuous execution protocol**: added v0.8.x execution rules for when
+  accepted plans can proceed continuously and when explicit confirmation is still
+  required.
+
+### Changed
+
+- v0.8.11 keeps pressure-to-plan diagnostic-only: plan items carry
+  `apply_authorized=false`, `writes=[]`, and `diagnostic_only` evidence ceilings.
+- v0.8.11 reuses existing explicit flags instead of adding a public API flag for
+  pressure planning.
+- Package-specific bridge adapters remain blocked; route recommendations use
+  capability names such as `dom_fixture_runtime`, `network_shape_stub`, and
+  `native_substrate_candidate`.
+
+### Quality Gates
+
+- Full Python tests: 1182 passed, 1 skipped.
+- Rust workspace tests: passed.
+- Rust clippy with `-D warnings`: passed.
+- Focused pressure-to-plan gate: 87 passed.
+- Pressure-to-plan focused tests: 12 passed.
+- Scoped Environment lint: `ruff check` passed.
+
+## [0.8.10] - 2026-06-09
+
+### Added
+
+- **Environment candidate mapping boundary**: extracted `map_gaps_to_candidates()`
+  into `environment_toolchain_candidate_mapping.py` while preserving runtime
+  re-export compatibility.
+
+### Changed
+
+- Candidate mapping remains behavior-preserving: disabled candidate packs,
+  explicit environment precedence, gap-class filtering, boundary validation,
+  patch id deduplication, and first-match order are unchanged.
+- v0.8.10 does not change report-only behavior, runtime-safe apply behavior,
+  iterative adaptation, pressure harness behavior, writes, or report schema.
+
+### Quality Gates
+
+- Full Python tests: 1170 passed, 1 skipped.
+- Rust workspace tests: passed.
+- Rust clippy with `-D warnings`: passed.
+- Focused v0.8.10 gate: 94 passed.
+- Scoped Environment lint: `ruff check` passed.
+
+## [0.8.9] - 2026-06-09
+
+### Added
+
+- **Environment boundary helper module**: extracted boundary validation helpers to
+  `environment_toolchain_boundary.py`.
+- **Environment asset model module**: extracted asset dataclasses to
+  `environment_toolchain_asset_models.py`.
+- **Environment asset loading module**: extracted asset loading and provenance to
+  `environment_toolchain_asset_loading.py`.
+
+### Changed
+
+- Runtime public re-exports remain stable.
+- The JSON asset package `iv8_rs.environment_toolchain_assets` remains unchanged
+  and is not shadowed by a Python module.
+- v0.8.9 does not extract candidate mapping, local overlay, runner,
+  orchestration, or iterative adaptation.
+
+### Quality Gates
+
+- Full Python tests: 1168 passed, 1 skipped.
+- Rust workspace tests: passed.
+- Rust clippy with `-D warnings`: passed.
+- Focused asset/boundary gate: 31 passed.
+
+## [0.8.8] - 2026-06-09
+
+### Added
+
+- **Environment diagnostic builder decomposition**: extracted diagnostic record
+  builders to `environment_toolchain_diagnostics.py` with a one-way import
+  boundary from runtime to diagnostics.
+- **Synthetic pressure manifest smoke fixture**: added non-target-specific
+  coverage for pressure manifest summaries, `source_ref` basename redaction, and
+  diagnostic-only bridge output.
+- **v0.8 Environment governance ledger**: recorded durable planning, naming, and
+  commit discipline rules for Environment readiness work.
+
+### Changed
+
+- Diagnostic output shape, codes, severities, ordering, evidence, writes, runner
+  behavior, and pressure harness semantics are preserved.
+- v0.8.8 remains decomposition-first and does not expand pressure harness or
+  automatic adaptation behavior.
+
+### Quality Gates
+
+- Full Python tests: 1159 passed, 1 skipped.
+- Rust workspace tests: passed.
+- Rust clippy with `-D warnings`: passed.
+- Combined v0.8.8 focused gate: 146 passed.
+
+## [0.8.7] - 2026-06-09
+
+### Added
+
+- **Environment Pressure Observation Harness**: added `environment-pressure.v0.1`
+  report schema, pressure signal and promotion decision models, and no-write
+  typed report helpers.
+- **Pressure taxonomy**: added input kind, execution mode, failure kind, pressure
+  kind, and promotion level classifiers.
+- **Default-off toolchain pressure bridge**: added `pressure_harness=True` to
+  capture entry failures as diagnostic-only pressure reports.
+- **In-memory pressure batch and manifest helpers**: added batch summaries,
+  source-ref basename redaction, and toolchain-compatible diagnostics without
+  reading `source_ref` files.
+- **Initial Environment Toolchain decomposition**: extracted static data and
+  low-risk models to `environment_toolchain_static.py` and
+  `environment_toolchain_models.py`.
+
+### Changed
+
+- v0.8.7 treats real samples as pressure seeds, not compatibility targets.
+- `pressure_harness=True` with `adapt_runtime_safe=True` remains blocked.
+- Pressure output does not authorize apply, writes, profile promotion, substrate
+  promotion, or pass-rate claims.
+
+### Quality Gates
+
+- Full Python tests: 1157 passed, 1 skipped.
+- Rust workspace tests: passed.
+- Rust clippy with `-D warnings`: passed.
+
 ## [0.8.6] - 2026-06-08
 
 ### Added

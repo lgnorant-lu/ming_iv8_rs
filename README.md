@@ -26,9 +26,11 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Environment Coherence Expansion (v0.8.5)**: diagnostic-only `ua_platform`, `network_info`, `timezone_locale`, and native-substrate review diagnostics
 - **Environment Substrate Scaffolding (v0.8.6)**: report-only substrate coverage, scaffold gap, dry-run planning, rollback, and candidate metadata diagnostics with expanded negative gates
 - **Environment Pressure Harness (v0.8.7)**: diagnostic-only pressure taxonomy, in-memory pressure manifest summaries, default-off toolchain pressure capture, and staged Environment Toolchain decomposition
+- **Environment Toolchain Decomposition (v0.8.8-v0.8.10)**: diagnostic builder, boundary, asset model/loading, and candidate mapping modules split from the runtime while preserving public behavior
+- **Environment Pressure-To-Plan Bridge (v0.8.11)**: diagnostic-only pressure plan summaries/items that connect explicit pressure harness output to review-only dry-run planning routes
 
-Current `0.8.7` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.7-environment-pressure-harness-route-plan.md` and `docs/acceptance/v0.8.7-environment-pressure-harness-acceptance.md`.
-v0.8.7 establishes an Environment Pressure Observation Harness for classifying environment pressure without reading sample references, applying fixes, promoting profiles, or treating real samples as compatibility targets. It keeps `pressure_harness` default-off, limits emitted evidence to diagnostic-only records, and begins low-risk Environment Toolchain decomposition. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
+Current `0.8.11` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.11-environment-pressure-to-plan-bridge-plan.md` and `docs/acceptance/v0.8.11-environment-pressure-to-plan-bridge-acceptance.md`.
+v0.8.11 connects explicit pressure harness output to review-only pressure-to-plan diagnostics without enabling pressure-driven apply, profile writes, native hardening, package-specific external environment adapters, or pass-rate targets. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
 
 ## Install
 
@@ -119,6 +121,11 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 - **v0.8.4 Environment Runtime Acceptance**: [docs/acceptance/v0.8.4-environment-runtime-acceptance.md](docs/acceptance/v0.8.4-environment-runtime-acceptance.md)
 - **v0.8.5 Environment Runtime Acceptance**: [docs/acceptance/v0.8.5-environment-runtime-acceptance.md](docs/acceptance/v0.8.5-environment-runtime-acceptance.md)
 - **v0.8.6 Environment Runtime Acceptance**: [docs/acceptance/v0.8.6-environment-runtime-acceptance.md](docs/acceptance/v0.8.6-environment-runtime-acceptance.md)
+- **v0.8.7 Environment Pressure Harness Acceptance**: [docs/acceptance/v0.8.7-environment-pressure-harness-acceptance.md](docs/acceptance/v0.8.7-environment-pressure-harness-acceptance.md)
+- **v0.8.8 Environment Decomposition Acceptance**: [docs/acceptance/v0.8.8-environment-toolchain-decomposition-acceptance.md](docs/acceptance/v0.8.8-environment-toolchain-decomposition-acceptance.md)
+- **v0.8.9 Environment Asset Boundary Acceptance**: [docs/acceptance/v0.8.9-environment-toolchain-asset-boundary-acceptance.md](docs/acceptance/v0.8.9-environment-toolchain-asset-boundary-acceptance.md)
+- **v0.8.10 Environment Candidate Mapping Acceptance**: [docs/acceptance/v0.8.10-environment-toolchain-candidate-mapping-acceptance.md](docs/acceptance/v0.8.10-environment-toolchain-candidate-mapping-acceptance.md)
+- **v0.8.11 Environment Pressure-To-Plan Acceptance**: [docs/acceptance/v0.8.11-environment-pressure-to-plan-bridge-acceptance.md](docs/acceptance/v0.8.11-environment-pressure-to-plan-bridge-acceptance.md)
 - **v0.6 Stabilization Plan**: [docs/design/V0.6_STABILIZATION_PLAN.md](docs/design/V0.6_STABILIZATION_PLAN.md)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 - **TDC Testing Guide**: [docs/tdc-testing-guide.md](docs/tdc-testing-guide.md)
