@@ -8,22 +8,29 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [0.8.16] - 2026-06-09
 
-> Local planning milestone. Package metadata and lock metadata remain `0.8.11`.
+> Local milestone. Focused final audit complete. Package metadata and lock
+> metadata remain `0.8.11`.
 
-### Added (Planning)
+### Added
 
-- **Pressure-aware controlled adaptation integration planning**: scope,
-  boundary matrix, negative gate plan, and implementation slices for bridging
-  pressure-to-plan diagnostics into controlled adaptation attempts.
-- **Integration readiness review**: mapped existing runtime-safe adaptation
-  (v0.8.3), dry-run planning and rollback diagnostics (v0.8.6), and
-  pressure-to-plan with bridge context (v0.8.11-v0.8.14) as Stage
-  2-preintegration components.
+- **Environment pressure adaptation attempt model**: added
+  `environment_toolchain_pressure_adaptation.py` with attempt status vocabulary
+  (8 statuses), evaluator status vocabulary (7 statuses), eligibility checks,
+  and candidate query helpers.
+- **Pressure plan item candidate query**: maps eligible `candidate_pack_review`
+  pressure plan items to synthetic `EnvironmentGap` objects for delegate to
+  existing `map_gaps_to_candidates()`.
+- **Attempt execution harness**: fresh-context before/after probe pack delta,
+  with stop_reason and evaluator_status projection.
+- **Evidence ceiling unification**: `bridge_contract.ALLOWED_EVIDENCE_CEILINGS`
+  expanded to `{"diagnostic_only", "weak"}`.
 
 ### Quality Gates
 
-- Planning and review documentation only; no implementation or release metadata
-  changes.
+- Focused v0.8.16 gate: 45 passed.
+- Combined focused gate: 106 passed.
+- Full Python tests: 1284 passed, 1 skipped.
+- Scoped v0.8.16 ruff: passed.
 
 ## [0.8.15] - 2026-06-09
 

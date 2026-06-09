@@ -28,9 +28,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Environment Pressure Harness (v0.8.7)**: diagnostic-only pressure taxonomy, in-memory pressure manifest summaries, default-off toolchain pressure capture, and staged Environment Toolchain decomposition
 - **Environment Toolchain Decomposition (v0.8.8-v0.8.10)**: diagnostic builder, boundary, asset model/loading, and candidate mapping modules split from the runtime while preserving public behavior
 - **Environment Pressure-To-Plan Bridge (v0.8.11)**: diagnostic-only pressure plan summaries/items that connect explicit pressure harness output to review-only dry-run planning routes
+- **Environment Mainline Audits And Governance (v0.8.12-v0.8.15)**: continuity audit, debt taxonomy, probe/bridge boundaries, external ecosystem reference, evidence boundary, bridge contract helpers, pressure route bridge context, stage map, governance closeout, and bridge vocabulary cleanup (deferred)
+- **Environment Pressure-Aware Adaptation (v0.8.16)**: diagnostic-only pressure adaptation attempt model, candidate query bridge, and fresh-context attempt execution harness; single reusable module; no apply / no writes / no adapters
 
-Current `0.8.11` release scope is tracked in `docs/roadmap/post-v0.6/v0.8.11-environment-pressure-to-plan-bridge-plan.md` and `docs/acceptance/v0.8.11-environment-pressure-to-plan-bridge-acceptance.md`.
-v0.8.11 connects explicit pressure harness output to review-only pressure-to-plan diagnostics without enabling pressure-driven apply, profile writes, native hardening, package-specific external environment adapters, or pass-rate targets. v0.8.0 remains the schema-backed report carrier baseline for future Deobf, VM, and IR analyzers.
+Current `0.8.11` package release scope is tracked in `docs/roadmap/post-v0.6/v0.8.11-environment-pressure-to-plan-bridge-plan.md`. v0.8.12-v0.8.16 are local milestones with focused final audits; package metadata remains `0.8.11`.
 
 ## Install
 
