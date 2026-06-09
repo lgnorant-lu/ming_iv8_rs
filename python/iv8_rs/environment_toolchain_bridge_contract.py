@@ -66,6 +66,7 @@ _TARGET_FLOW_TERMS = frozenset({
 
 ALLOWED_EVIDENCE_CEILINGS = frozenset({
     "diagnostic_only",
+    "weak",
 })
 
 
@@ -84,7 +85,7 @@ def validate_observation_status(status: str) -> str:
 def validate_evidence_ceiling(ceiling: str) -> str:
     if ceiling not in ALLOWED_EVIDENCE_CEILINGS:
         raise ValueError(
-            f"bridge contract evidence ceiling must be diagnostic_only, got: {ceiling}"
+            f"bridge contract evidence ceiling must be diagnostic_only or weak, got: {ceiling}"
         )
     return ceiling
 
