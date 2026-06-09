@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from iv8_rs.environment_toolchain_boundary import validate_bypass_boundary
+from iv8_rs.environment_toolchain_probe_taxonomy import pressure_kind_probe_route
 
 BRIDGE_CAPABILITIES = frozenset({
     "dom_fixture_runtime",
@@ -78,10 +79,13 @@ def pressure_report_to_plan_item(pressure_report: Any) -> dict[str, Any]:
         ("observe_only", None, "pressure_observation_review"),
     )
     pressure_kind = str(pressure.get("pressure_kind", "analysis_observability"))
+    taxonomy_route = _taxonomy_route_for_pressure(pressure_kind)
     bridge_capability = _bridge_capability_for_pressure(pressure_kind, bridge_capability)
     blocked_reasons = _blocked_reasons(data, route, bridge_capability)
+    route_owner = taxonomy_route["route_owner"]
     if blocked_reasons:
         route = "blocked_target_flow"
+        route_owner = "blocked_target_flow"
         required_review = "boundary_review"
     review_status = (
         "blocked"
@@ -102,8 +106,10 @@ def pressure_report_to_plan_item(pressure_report: Any) -> dict[str, Any]:
         "execution_mode": data.get("execution_mode"),
         "failure_kind": data.get("failure_kind"),
         "pressure_kind": pressure_kind,
+        "probe_role": taxonomy_route["probe_role"],
         "promotion_level": promotion_level,
         "route": route,
+        "route_owner": route_owner,
         "bridge_capability": bridge_capability,
         "required_review": required_review,
         "review_status": review_status,
@@ -112,6 +118,13 @@ def pressure_report_to_plan_item(pressure_report: Any) -> dict[str, Any]:
         "apply_authorized": False,
         "writes": [],
     }
+
+
+def _taxonomy_route_for_pressure(pressure_kind: str) -> dict[str, str]:
+    try:
+        return pressure_kind_probe_route(pressure_kind)
+    except ValueError:
+        return pressure_kind_probe_route("analysis_observability")
 
 
 def pressure_plan_summary(items: list[dict[str, Any]]) -> dict[str, Any]:
