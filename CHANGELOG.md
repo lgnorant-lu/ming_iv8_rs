@@ -6,6 +6,43 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.16] - 2026-06-09
+
+> Local planning milestone. Package metadata and lock metadata remain `0.8.11`.
+
+### Added (Planning)
+
+- **Pressure-aware controlled adaptation integration planning**: scope,
+  boundary matrix, negative gate plan, and implementation slices for bridging
+  pressure-to-plan diagnostics into controlled adaptation attempts.
+- **Integration readiness review**: mapped existing runtime-safe adaptation
+  (v0.8.3), dry-run planning and rollback diagnostics (v0.8.6), and
+  pressure-to-plan with bridge context (v0.8.11-v0.8.14) as Stage
+  2-preintegration components.
+
+### Quality Gates
+
+- Planning and review documentation only; no implementation or release metadata
+  changes.
+
+## [0.8.15] - 2026-06-09
+
+> Local milestone tag for planning work only. Package metadata and lock metadata
+> remain `0.8.11`.
+
+### Closed / Deferred
+
+- Bridge vocabulary cleanup (BRIDGE_CAPABILITIES single-owner consolidation)
+  deferred to later hygiene pass. Low-risk; existing tests prevent silent
+  divergence.
+- Implementation paused. v0.8.16 pressure-aware controlled adaptation
+  integration planning supersedes this cleanup.
+
+### Quality Gates
+
+- Documentation review and indexing only; no implementation or release metadata
+  changes.
+
 ## [0.8.14] - 2026-06-09
 
 > Local milestone tag. Package metadata and lock metadata remain `0.8.11`.
