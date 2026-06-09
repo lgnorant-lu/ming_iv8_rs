@@ -237,12 +237,16 @@ def execute_pressure_adaptation_attempt(
 
     if delta["regressed"]:
         attempt_status = "regressed"
+        stop_reason = "regression_detected"
     elif delta["improved"]:
         attempt_status = "improved"
+        stop_reason = "completed"
     elif delta["unresolved"] == 0:
-        attempt_status = "improved"
+        attempt_status = "unchanged"
+        stop_reason = "no_progress"
     else:
         attempt_status = "unchanged"
+        stop_reason = "no_progress"
 
     evaluator_status = {
         "regressed": "regression_observed",
@@ -254,6 +258,7 @@ def execute_pressure_adaptation_attempt(
         "plan_item_id": plan_item["plan_item_id"],
         "pressure_kind": plan_item["pressure_kind"],
         "attempt_status": attempt_status,
+        "stop_reason": stop_reason,
         "evaluator_status": evaluator_status,
         "candidate_target": target,
         "candidate_patch_id": candidate.get("patch_id", "unknown"),
