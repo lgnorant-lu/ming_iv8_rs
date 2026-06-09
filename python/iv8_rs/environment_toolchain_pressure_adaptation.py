@@ -2,17 +2,20 @@
 
 Constants and validators for pressure-aware controlled adaptation
 attempts.  This module is model-first and diagnostic-only: it defines
-status vocabularies and eligibility checks, but does not execute
-candidates, create JS contexts, or apply values.
+status vocabularies, eligibility checks, and candidate query helpers,
+but does not execute candidates, create JS contexts, or apply values.
 """
 
 from __future__ import annotations
+
+from typing import Any
 
 from iv8_rs.environment_toolchain_bridge_contract import (
     _PACKAGE_SPECIFIC_NAMES,
     _TARGET_FLOW_TERMS,
     ALLOWED_EVIDENCE_CEILINGS,
 )
+from iv8_rs.environment_toolchain_models import EnvironmentGap
 
 ATTEMPT_STATUSES = frozenset({
     "not_requested",
@@ -99,3 +102,84 @@ def reject_non_eligible(status: str) -> str:
             f"attempt is not eligible to run: status is {status}"
         )
     return status
+
+
+_PRESSURE_KIND_TARGETS: dict[str, list[str]] = {
+    "web_api_surface": [
+        "Request",
+        "Response",
+        "Headers",
+        "fetch",
+        "XMLHttpRequest",
+        "navigator",
+    ],
+    "network_surface": [
+        "Request",
+        "Response",
+        "Headers",
+        "fetch",
+        "XMLHttpRequest",
+    ],
+    "dom_surface": [
+        "document",
+        "document.body",
+    ],
+}
+
+ELIGIBLE_PRESSURE_KINDS: frozenset[str] = frozenset(_PRESSURE_KIND_TARGETS)
+
+
+def pressure_plan_item_candidate_query(
+    plan_item: dict[str, Any],
+    *,
+    candidate_pack: Any | None = "chrome_generic",
+) -> dict[str, Any]:
+    """Query candidates for an eligible pressure plan item without applying them."""
+    from iv8_rs.environment_toolchain_candidate_mapping import map_gaps_to_candidates
+
+    status = pressure_plan_item_attempt_eligibility(plan_item)
+    reject_non_eligible(status)
+
+    gaps = _pressure_plan_item_to_gaps(plan_item)
+    candidates = map_gaps_to_candidates(gaps, candidate_pack=candidate_pack)
+
+    candidate_dicts: list[dict[str, Any]] = []
+    for candidate in candidates:
+        try:
+            candidate_dicts.append(
+                candidate.to_dict() if hasattr(candidate, "to_dict") else dict(candidate)
+            )
+        except Exception:
+            candidate_dicts.append({"patch_id": str(getattr(candidate, "patch_id", "unknown"))})
+
+    return {
+        "plan_item_id": plan_item["plan_item_id"],
+        "pressure_kind": plan_item["pressure_kind"],
+        "attempt_status": status,
+        "synthetic_gap_count": len(gaps),
+        "candidates": candidate_dicts,
+        "candidate_count": len(candidate_dicts),
+        "apply_authorized": False,
+        "writes": [],
+    }
+
+
+def _pressure_plan_item_to_gaps(plan_item: dict[str, Any]) -> list[EnvironmentGap]:
+    pressure_kind = str(plan_item.get("pressure_kind", ""))
+    if pressure_kind not in ELIGIBLE_PRESSURE_KINDS:
+        return []
+
+    targets = _PRESSURE_KIND_TARGETS.get(pressure_kind, [])
+    gaps: list[EnvironmentGap] = []
+    for i, target in enumerate(targets):
+        gaps.append(
+            EnvironmentGap(
+                probe_id=f"pressure.{plan_item.get('plan_item_id', 'unknown')}.{i}",
+                target=target,
+                gap_class="value_mismatch",
+                category="value",
+                expected=None,
+                actual=None,
+            )
+        )
+    return gaps
