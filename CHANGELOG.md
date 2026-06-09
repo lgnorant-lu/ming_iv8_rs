@@ -6,6 +6,90 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.14] - 2026-06-09
+
+> Local milestone tag. Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Environment bridge contract helpers**: added
+  `environment_toolchain_bridge_contract.py` with bridge levels, observation
+  statuses, evidence-ceiling validation, package-neutral validation, no-write
+  contract validation, and target-flow term detection.
+- **Pressure route bridge context**: pressure-to-plan diagnostics now include
+  diagnostic-only `bridge_level`, `observation_status`, `bridge_level_counts`,
+  and `observation_status_counts`.
+- **Bridge boundary regressions**: added tests proving bridge planning does not
+  weaken no-apply, no-write, no-source_ref-read, no-adapter, and no-strong/PASS
+  boundaries.
+
+### Changed
+
+- Pressure planning now reuses bridge contract target-flow detection through
+  `check_target_flow_terms`, replacing the local `_blocked_payload_keys` scan.
+- Pressure planning now reuses bridge contract package-specific vocabulary,
+  adding detection coverage for `playwright` and `cdp` without authorizing
+  adapters.
+
+### Quality Gates
+
+- Focused v0.8.14 gate: 152 passed.
+- Full Python tests: 1239 passed, 1 skipped.
+- Scoped v0.8.14 ruff: passed.
+
+## [0.8.13] - 2026-06-09
+
+> Local milestone tag. Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Environment probe taxonomy helper**: added
+  `environment_toolchain_probe_taxonomy.py` with probe roles, route owners,
+  bridge capabilities, future placeholder probe-pack names, and pressure-kind
+  route alignment helpers.
+- **Pressure planning taxonomy fields**: pressure-to-plan item details now carry
+  review-only `probe_role` and `route_owner` fields.
+- **Boundary regression tests**: added coverage proving future placeholder probe
+  packs are not loadable built-ins, custom probe provenance remains redacted,
+  and pressure `source_ref` metadata cannot invoke corpus reads.
+
+### Changed
+
+- `fingerprint.m1` remains classified as `baseline_surface` and `descriptor.m1`
+  remains classified as `descriptor_surface`; neither was expanded into a full
+  browser or fingerprint model.
+
+### Quality Gates
+
+- Focused final v0.8.13 gate: 115 passed.
+- Slice 3 focused gate: 43 passed.
+- Slice 4 focused gate: 83 passed.
+- Scoped v0.8.13 ruff: passed.
+
+## [0.8.12] - 2026-06-09
+
+> Local milestone tag for documentation/audit work only. Package metadata and
+> lock metadata remain `0.8.11`.
+
+### Added
+
+- **Environment mainline continuity audit**: recorded how v0.8.12 continues the
+  long-running Environment runtime-readiness mainline.
+- **Early-lineage debt audit**: classified v0.1-v0.6 residual debt as absorbed,
+  active Environment work, downstream research, or blocked evidence risk.
+- **Environment debt taxonomy**: grouped debt into abstraction, keep-small,
+  bridge, orchestration, promotion, and blocked-artifact categories.
+- **Probe and bridge boundary plan**: clarified `fingerprint.m1` limits,
+  bridge levels, and v0.8.13+ handoff candidates.
+- **External ecosystem reference notes** and **real-sample evidence boundary**:
+  kept external JS environment ecosystems as method references and real samples
+  as pressure seeds rather than compatibility targets.
+
+### Quality Gates
+
+- Documentation review and roadmap indexing only; no implementation or release
+  metadata changes.
+
 ## [0.8.11] - 2026-06-09
 
 ### Added
