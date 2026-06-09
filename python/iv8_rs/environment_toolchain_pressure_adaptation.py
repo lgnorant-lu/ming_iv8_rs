@@ -183,3 +183,96 @@ def _pressure_plan_item_to_gaps(plan_item: dict[str, Any]) -> list[EnvironmentGa
             )
         )
     return gaps
+
+
+def execute_pressure_adaptation_attempt(
+    plan_item: dict[str, Any],
+    candidate: dict[str, Any],
+    *,
+    js_source: str = "",
+    probe_pack: Any | str = "fingerprint.m1",
+    profile: str | None = "default",
+    environment: dict[str, Any] | None = None,
+    random_seed: int | None = 42,
+    time_freeze: float | None = None,
+    time_mode: str = "logical",
+) -> dict[str, Any]:
+    """Execute a single adaptation attempt in a fresh context.
+
+    Returns an attempt result dict with before/after coverage, delta,
+    attempt_status, and evaluator_status.
+    """
+    from iv8_rs.environment_toolchain_runtime import _coverage_delta, run_probe_pack
+
+    status = pressure_plan_item_attempt_eligibility(plan_item)
+    reject_non_eligible(status)
+
+    before_run = run_probe_pack(
+        js_source,
+        probe_pack=probe_pack,
+        profile=profile,
+        environment=environment,
+        random_seed=random_seed,
+        time_freeze=time_freeze,
+        time_mode=time_mode,
+    )
+
+    target = str(candidate.get("target", ""))
+    value = candidate.get("value_preview", candidate.get("value"))
+    modified_env = dict(environment or {})
+    if target:
+        modified_env[target] = value
+
+    after_run = run_probe_pack(
+        js_source,
+        probe_pack=probe_pack,
+        profile=profile,
+        environment=modified_env,
+        random_seed=random_seed,
+        time_freeze=time_freeze,
+        time_mode=time_mode,
+    )
+
+    delta = _coverage_delta(before_run, after_run)
+
+    if delta["regressed"]:
+        attempt_status = "regressed"
+    elif delta["improved"]:
+        attempt_status = "improved"
+    elif delta["unresolved"] == 0:
+        attempt_status = "improved"
+    else:
+        attempt_status = "unchanged"
+
+    evaluator_status = {
+        "regressed": "regression_observed",
+        "improved": "improvement_observed",
+        "unchanged": "no_change_observed",
+    }.get(attempt_status, "diagnostic_only")
+
+    return {
+        "plan_item_id": plan_item["plan_item_id"],
+        "pressure_kind": plan_item["pressure_kind"],
+        "attempt_status": attempt_status,
+        "evaluator_status": evaluator_status,
+        "candidate_target": target,
+        "candidate_patch_id": candidate.get("patch_id", "unknown"),
+        "before": {
+            "present": before_run.coverage["present"],
+            "missing": before_run.coverage["missing"],
+            "mismatch": before_run.coverage["mismatch"],
+        },
+        "after": {
+            "present": after_run.coverage["present"],
+            "missing": after_run.coverage["missing"],
+            "mismatch": after_run.coverage["mismatch"],
+        },
+        "delta": {
+            "improved": delta["improved"],
+            "regressed": delta["regressed"],
+            "unresolved": delta["unresolved"],
+        },
+        "apply_authorized": False,
+        "writes": [],
+        "evidence_ceiling": "diagnostic_only",
+    }
