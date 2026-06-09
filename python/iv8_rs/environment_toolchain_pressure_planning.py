@@ -5,6 +5,12 @@ from __future__ import annotations
 from typing import Any
 
 from iv8_rs.environment_toolchain_boundary import validate_bypass_boundary
+from iv8_rs.environment_toolchain_bridge_contract import (
+    _PACKAGE_SPECIFIC_NAMES,
+    _TARGET_FLOW_TERMS,
+    BRIDGE_LEVELS,
+    check_target_flow_terms,
+)
 from iv8_rs.environment_toolchain_probe_taxonomy import pressure_kind_probe_route
 
 BRIDGE_CAPABILITIES = frozenset({
@@ -29,8 +35,6 @@ ROUTES = frozenset({
     "blocked_target_flow",
     "observe_only",
 })
-
-_PACKAGE_SPECIFIC_TERMS = frozenset({"jsdom", "sdenv", "happy-dom", "linkedom"})
 
 _PROMOTION_ROUTES = {
     "observe_only": ("observe_only", None, "pressure_observation_review"),
@@ -98,6 +102,14 @@ def pressure_report_to_plan_item(pressure_report: Any) -> dict[str, Any]:
     ):
         blocked_reasons.append("separate_promotion_review_required")
         review_status = "blocked"
+    target_flow_in_blocked = bool(set(blocked_reasons) & _TARGET_FLOW_TERMS)
+    if review_status == "blocked" and target_flow_in_blocked:
+        observation_status = "redaction_blocked"
+    elif review_status == "blocked":
+        observation_status = "boundary_blocked"
+    else:
+        observation_status = "method_reference_only"
+    bridge_level = "B0"
     return {
         "plan_item_id": f"pressure.{data.get('sample_id', 'unknown')}",
         "source_kind": "pressure_signal",
@@ -107,10 +119,12 @@ def pressure_report_to_plan_item(pressure_report: Any) -> dict[str, Any]:
         "failure_kind": data.get("failure_kind"),
         "pressure_kind": pressure_kind,
         "probe_role": taxonomy_route["probe_role"],
+        "bridge_level": bridge_level,
         "promotion_level": promotion_level,
         "route": route,
         "route_owner": route_owner,
         "bridge_capability": bridge_capability,
+        "observation_status": observation_status,
         "required_review": required_review,
         "review_status": review_status,
         "blocked_reasons": blocked_reasons,
@@ -132,11 +146,17 @@ def pressure_plan_summary(items: list[dict[str, Any]]) -> dict[str, Any]:
     blocked_count = sum(1 for item in items if item["review_status"] == "blocked")
     route_counts: dict[str, int] = dict.fromkeys(sorted(ROUTES), 0)
     capability_counts: dict[str, int] = dict.fromkeys(sorted(BRIDGE_CAPABILITIES), 0)
+    bridge_level_counts: dict[str, int] = dict.fromkeys(sorted(BRIDGE_LEVELS), 0)
+    observation_status_counts: dict[str, int] = {}
     for item in items:
-        route_counts[item["route"]] += 1
+        route_counts[item["route"]] = route_counts.get(item["route"], 0) + 1
         capability = item.get("bridge_capability")
         if capability in capability_counts:
-            capability_counts[capability] += 1
+            capability_counts[capability] = capability_counts.get(capability, 0) + 1
+        level = item.get("bridge_level", "B0")
+        bridge_level_counts[level] = bridge_level_counts.get(level, 0) + 1
+        status = item.get("observation_status", "not_configured")
+        observation_status_counts[status] = observation_status_counts.get(status, 0) + 1
     return {
         "enabled": True,
         "review_status": "blocked" if blocked_count else "review_only",
@@ -148,6 +168,8 @@ def pressure_plan_summary(items: list[dict[str, Any]]) -> dict[str, Any]:
         "review_only_item_count": len(items) - blocked_count,
         "route_counts": route_counts,
         "bridge_capability_counts": capability_counts,
+        "bridge_level_counts": bridge_level_counts,
+        "observation_status_counts": observation_status_counts,
         "blocked_actions": [
             "runtime_apply",
             "profile_write",
@@ -185,33 +207,7 @@ def _blocked_reasons(
     }
     decision = validate_bypass_boundary(payload)
     blocked = list(decision.blocked_terms) if decision.decision == "blocked" else []
-    blocked.extend(_blocked_payload_keys(payload))
+    blocked.extend(check_target_flow_terms(payload))
     serialized = repr(payload).lower()
-    blocked.extend(term for term in _PACKAGE_SPECIFIC_TERMS if term in serialized)
+    blocked.extend(name for name in _PACKAGE_SPECIFIC_NAMES if name in serialized)
     return sorted(set(blocked))
-
-
-def _blocked_payload_keys(value: Any) -> list[str]:
-    blocked_keys = {
-        "domain",
-        "endpoint",
-        "cookie",
-        "token",
-        "signature",
-        "nonce",
-        "request_body",
-        "authorization_header",
-    }
-    if isinstance(value, dict):
-        found: list[str] = []
-        for key, child in value.items():
-            key_text = str(key).lower()
-            found.extend(term for term in blocked_keys if term in key_text)
-            found.extend(_blocked_payload_keys(child))
-        return found
-    if isinstance(value, list):
-        found = []
-        for child in value:
-            found.extend(_blocked_payload_keys(child))
-        return found
-    return []
