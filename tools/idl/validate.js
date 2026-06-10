@@ -248,6 +248,10 @@ function main() {
     }
     gates.push({ name: "type coverage >= 90%", pass: coverage >= 90, value: coverage });
 
+    // Chrome runtime
+    const crCheck = checkChromeRuntime(defs);
+    gates.push({ name: "chrome.runtime complete", pass: crCheck.pass, value: crCheck.pass ? "complete" : `missing: ${crCheck.missing.join(",")}` });
+
     // Inheritance
     const inheritance = checkInheritance(defs);
     gates.push({ name: "inheritance targets exist", pass: inheritance.pass, value: inheritance.dangling.length });
