@@ -1,0 +1,13 @@
+{
+  "name": "iv8-idl-toolchain",
+  "private": true,
+  "description": "IV8 IDL preprocessing toolchain — produces unified_ir.json from W3C Webref and Chromium IDL sources",
+  "scripts": {
+    "all": "node generate-ir.js",
+    "validate": "node validate.js --go-gate"
+  },
+  "devDependencies": {
+    "webidl2": "^24.4.0",
+    "@webref/idl": "^3.56.0"
+  }
+}
