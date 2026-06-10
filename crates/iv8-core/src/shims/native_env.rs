@@ -11,8 +11,8 @@
 //! - native_env.rs: set_accessor_property → getter descriptor (matches real browser)
 //!
 //! Strategy:
-//! - navigator: FunctionTemplate with Navigator.prototype (v0.8.17)
-//! - screen: ObjectTemplate (pending v0.8.17 Slice 2 migration)
+//! - navigator: FunctionTemplate with Navigator.prototype (v0.8.17 Slice 1)
+//! - screen: FunctionTemplate with Screen.prototype (v0.8.17 Slice 2)
 //! - High-value properties (most commonly fingerprint-checked) → native getter
 //! - All values still come from RuntimeState.environment (fully configurable)
 //! - env_inject.rs still runs first for the full 393-entry set; we then
@@ -362,14 +362,17 @@ unsafe extern "C" fn nav_do_not_track(info: *const v8::FunctionCallbackInfo) {
 // ─── screen ───────────────────────────────────────────────────────────────────
 
 fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    let screen_tmpl = v8::ObjectTemplate::new(scope);
+    // Create a FunctionTemplate for Screen (replaces flat ObjectTemplate)
+    let screen_tmpl =
+        v8::FunctionTemplate::builder_raw(nav_empty_constructor).build(scope);
+    screen_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Screen"));
 
     macro_rules! screen_getter {
         ($name:literal, $cb:ident) => {
             let getter = v8::FunctionTemplate::builder_raw($cb).build(scope);
             let name = crate::v8_utils::v8_string(scope, $name);
             getter.set_class_name(name);
-            screen_tmpl.set_accessor_property(
+            screen_tmpl.prototype_template(scope).set_accessor_property(
                 name.into(),
                 Some(getter),
                 None,
@@ -387,14 +390,26 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     screen_getter!("availLeft", screen_avail_left);
     screen_getter!("availTop", screen_avail_top);
 
-    if let Some(screen_obj) = screen_tmpl.new_instance(scope) {
-        let key = crate::v8_utils::v8_string(scope, "screen");
-        global.define_own_property(
-            scope,
-            key.into(),
-            screen_obj.into(),
-            v8::PropertyAttribute::DONT_DELETE,
-        );
+    // Instantiate via FunctionTemplate (full prototype chain)
+    if let Some(func) = screen_tmpl.get_function(scope) {
+        if let Some(screen_obj) = func.new_instance(scope, &[]) {
+            let key = crate::v8_utils::v8_string(scope, "screen");
+            global.define_own_property(
+                scope,
+                key.into(),
+                screen_obj.into(),
+                v8::PropertyAttribute::DONT_DELETE,
+            );
+
+            // Install Screen constructor on global (non-enumerable, like DOM)
+            let ctor_key = crate::v8_utils::v8_string(scope, "Screen");
+            global.define_own_property(
+                scope,
+                ctor_key.into(),
+                func.into(),
+                v8::PropertyAttribute::DONT_ENUM,
+            );
+        }
     }
 }
 
