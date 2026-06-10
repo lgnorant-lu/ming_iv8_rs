@@ -30,17 +30,21 @@ pub fn install_native_env(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Ob
 
 // ─── navigator ────────────────────────────────────────────────────────────────
 
-/// No-op constructor — Navigator is not constructable from JS.
-/// Replaced by illegal_constructor in a later slice.
-unsafe extern "C" fn nav_empty_constructor(_info: *const v8::FunctionCallbackInfo) {
-    // No-op: Navigator instances are created by Rust, not by `new Navigator()`.
+/// Illegal constructor — Navigator and Screen are not constructable from JS.
+/// Throws TypeError: Illegal constructor, matching real browser behavior.
+unsafe extern "C" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let msg = crate::v8_utils::v8_string(scope, "Illegal constructor");
+    let exc = v8::Exception::type_error(scope, msg);
+    scope.throw_exception(exc);
 }
 
 /// Build a native navigator object with accessor properties.
 fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Create a FunctionTemplate for Navigator (replaces flat ObjectTemplate)
     let nav_tmpl =
-        v8::FunctionTemplate::builder_raw(nav_empty_constructor).build(scope);
+        v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     nav_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Navigator"));
 
     // Install native getters on Navigator.prototype (not on the instance template).
@@ -83,29 +87,32 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("serviceWorker", nav_service_worker);
     nav_getter!("pdfViewerEnabled", nav_pdf_viewer_enabled);
 
-    // Instantiate via FunctionTemplate (full prototype chain)
+    // Instantiate via instance_template (bypasses constructor — we don't want
+    // illegal_constructor to block Rust-side instance creation).
+    // When JS does `new Navigator()`, the constructor throws TypeError.
+    let inst_tmpl = nav_tmpl.instance_template(scope);
+    if let Some(nav_obj) = inst_tmpl.new_instance(scope) {
+        // Install userAgentData sub-object on navigator instance
+        crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
+
+        let key = crate::v8_utils::v8_string(scope, "navigator");
+        global.define_own_property(
+            scope,
+            key.into(),
+            nav_obj.into(),
+            v8::PropertyAttribute::DONT_DELETE,
+        );
+    }
+
+    // Install Navigator constructor on global (non-enumerable, like DOM)
     if let Some(func) = nav_tmpl.get_function(scope) {
-        if let Some(nav_obj) = func.new_instance(scope, &[]) {
-            // Install userAgentData sub-object on navigator instance
-            crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
-
-            let key = crate::v8_utils::v8_string(scope, "navigator");
-            global.define_own_property(
-                scope,
-                key.into(),
-                nav_obj.into(),
-                v8::PropertyAttribute::DONT_DELETE,
-            );
-
-            // Install Navigator constructor on global (non-enumerable, like DOM)
-            let ctor_key = crate::v8_utils::v8_string(scope, "Navigator");
-            global.define_own_property(
-                scope,
-                ctor_key.into(),
-                func.into(),
-                v8::PropertyAttribute::DONT_ENUM,
-            );
-        }
+        let ctor_key = crate::v8_utils::v8_string(scope, "Navigator");
+        global.define_own_property(
+            scope,
+            ctor_key.into(),
+            func.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
     }
 }
 
@@ -364,7 +371,7 @@ unsafe extern "C" fn nav_do_not_track(info: *const v8::FunctionCallbackInfo) {
 fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Create a FunctionTemplate for Screen (replaces flat ObjectTemplate)
     let screen_tmpl =
-        v8::FunctionTemplate::builder_raw(nav_empty_constructor).build(scope);
+        v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     screen_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Screen"));
 
     macro_rules! screen_getter {
@@ -390,26 +397,28 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     screen_getter!("availLeft", screen_avail_left);
     screen_getter!("availTop", screen_avail_top);
 
-    // Instantiate via FunctionTemplate (full prototype chain)
-    if let Some(func) = screen_tmpl.get_function(scope) {
-        if let Some(screen_obj) = func.new_instance(scope, &[]) {
-            let key = crate::v8_utils::v8_string(scope, "screen");
-            global.define_own_property(
-                scope,
-                key.into(),
-                screen_obj.into(),
-                v8::PropertyAttribute::DONT_DELETE,
-            );
+    // Instantiate via instance_template (bypasses constructor).
+    // When JS does `new Screen()`, the constructor throws TypeError.
+    let inst_tmpl = screen_tmpl.instance_template(scope);
+    if let Some(screen_obj) = inst_tmpl.new_instance(scope) {
+        let key = crate::v8_utils::v8_string(scope, "screen");
+        global.define_own_property(
+            scope,
+            key.into(),
+            screen_obj.into(),
+            v8::PropertyAttribute::DONT_DELETE,
+        );
+    }
 
-            // Install Screen constructor on global (non-enumerable, like DOM)
-            let ctor_key = crate::v8_utils::v8_string(scope, "Screen");
-            global.define_own_property(
-                scope,
-                ctor_key.into(),
-                func.into(),
-                v8::PropertyAttribute::DONT_ENUM,
-            );
-        }
+    // Install Screen constructor on global (non-enumerable, like DOM)
+    if let Some(func) = screen_tmpl.get_function(scope) {
+        let ctor_key = crate::v8_utils::v8_string(scope, "Screen");
+        global.define_own_property(
+            scope,
+            ctor_key.into(),
+            func.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
     }
 }
 
