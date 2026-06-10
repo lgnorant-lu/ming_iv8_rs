@@ -54,8 +54,23 @@ function main() {
   const normResult = run("node normalize-ast.js", "Step 2: Normalize W3C AST");
   console.error(`  => ${normResult.interface} interfaces, ${normResult.total_members} members`);
 
-  // Step 3: Merge
-  const mergeResult = run("node merge-tool.js", "Step 3: Merge partials/mixins/includes");
+  // Step 3: Merge W3C + Chrome manual
+  const mergeFiles = [
+    path.join(__dirname, "tmp", "normalized-w3c.json"),
+  ];
+  // Include chrome-manual IR if it exists
+  const chromeManualDir = path.join(__dirname, "chrome-manual");
+  if (fs.existsSync(chromeManualDir)) {
+    const irFiles = fs.readdirSync(chromeManualDir).filter(f => f.endsWith(".ir.json"));
+    for (const f of irFiles) {
+      mergeFiles.push(path.join(chromeManualDir, f));
+    }
+    console.error(`  Found ${irFiles.length} chrome-manual IR files`);
+  }
+  const mergeResult = run(
+    `node merge-tool.js --input ${mergeFiles.map(f => `"${f}"`).join(" ")}`,
+    "Step 3: Merge W3C + Chrome manual"
+  );
   console.error(`  => ${mergeResult.definitions} merged definitions, ${mergeResult.cycles} cycles`);
 
   // Step 4: Type map

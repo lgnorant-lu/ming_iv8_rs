@@ -1,0 +1,905 @@
+[
+  {
+    "kind": "interface",
+    "name": "ChromeTabs",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeExtension",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeManagement",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWindows",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeBookmarks",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeBrowsingData",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeCommands",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeContextMenus",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeCookies",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDebugger",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDeclarativeContent",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDeclarativeNetRequest",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDevtoolsNamespace",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDownloads",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeEvents",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeFontSettings",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeHistory",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeIdentity",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeIdle",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeNotifications",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePageCapture",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePermissions",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePower",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePrivacy",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeProcesses",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeProxy",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeScripting",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSearch",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSessions",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSidePanel",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSystemNS",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeTopSites",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeTts",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeTtsEngine",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeTypes",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebNavigation",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebRequest",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeAction",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeAlarms",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeOffscreen",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeReadingList",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeTabGroups",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeUserScripts",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeOmnibox",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeEnterpriseNS",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDOM",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeAccessibilityFeatures",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeAutofillPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeBrailleDisplayPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeCertificateProvider",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeCommandLinePrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeContentSettings",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDesktopCapture",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDocumentScan",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeEnterprisePlatformKeys",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeFileBrowserHandler",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeFileSystemProvider",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeGcm",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeIdentityPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeInputIme",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeInstanceID",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeLoginState",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeMediaPerceptionPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeNetworkingConfig",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePasswordsPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePlatformKeys",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePrintingAPI",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePrintingMetrics",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeQuickUnlockPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeRuntimeOnInstalled",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSafeBrowsingPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSettingsPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSignedInDevices",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSpeechRecognitionPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeTabCapture",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeVpnProvider",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWallpaper",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebAuthenticationProxy",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDeskCapture",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeEnterpriseHardwarePlatform",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeInputMethodPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeLanguageSettingsPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeNetworkingPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeRuntimePrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeVirtualKeyboardPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebView",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeAppRuntime",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeAppWindow",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeAudio",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeBluetooth",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeBluetoothLowEnergy",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeBluetoothSocket",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeCast",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeCastStreaming",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeClipboard",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDiagnostics",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDisplaySource",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeDns",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeEchoPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeExperienceSamplingPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeFeedbackPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeFirstRunPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeHid",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeHotwordPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeIdentityPrivateAPI",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeIdlePrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeLocation",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeLogPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeMdns",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeMediaGalleries",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeMidi",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeMusicManagerPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeNetworkingOnc",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePrinterProvider",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeResourcePrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSerial",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSocket",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeStorageManaged",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSyncFileSystem",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSystemCpu",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSystemDisplay",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSystemMemory",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSystemNetwork",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeSystemStorage",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeUsb",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebrtcAudioPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebrtcDesktopCapturePrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebrtcLoggingPrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebstorePrivate",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  }
+]
