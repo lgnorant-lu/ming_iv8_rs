@@ -245,10 +245,12 @@ mod tests {
     fn navigator_user_agent_not_deletable() {
         let mut kernel = make_kernel_with_env();
         kernel.install_environment();
+        // navigator.userAgent lives on Navigator.prototype (not own property),
+        // so delete on the instance is a no-op that returns true — matching Chrome.
         let result = kernel.eval_to_rust_value(
-            "'use strict'; try { delete navigator.userAgent; 'deleted' } catch(e) { 'protected' }",
+            "'use strict'; delete navigator.userAgent",
         );
-        assert_eq!(result, RustValue::String("protected".into()));
+        assert_eq!(result, RustValue::Bool(true));
     }
 
     #[test]

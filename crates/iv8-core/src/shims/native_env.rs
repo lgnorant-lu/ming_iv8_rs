@@ -1,7 +1,7 @@
 //! Native environment object installation.
 //!
 //! Creates `navigator`, `screen`, and other browser environment objects using
-//! V8 ObjectTemplate + FunctionTemplate accessors, so that:
+//! V8 FunctionTemplate accessors, so that:
 //!
 //!   Object.getOwnPropertyDescriptor(navigator, 'userAgent')
 //!   // → { get: function userAgent() { [native code] }, set: undefined, ... }
@@ -11,6 +11,8 @@
 //! - native_env.rs: set_accessor_property → getter descriptor (matches real browser)
 //!
 //! Strategy:
+//! - navigator: FunctionTemplate with Navigator.prototype (v0.8.17)
+//! - screen: ObjectTemplate (pending v0.8.17 Slice 2 migration)
 //! - High-value properties (most commonly fingerprint-checked) → native getter
 //! - All values still come from RuntimeState.environment (fully configurable)
 //! - env_inject.rs still runs first for the full 393-entry set; we then
@@ -28,12 +30,20 @@ pub fn install_native_env(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Ob
 
 // ─── navigator ────────────────────────────────────────────────────────────────
 
+/// No-op constructor — Navigator is not constructable from JS.
+/// Replaced by illegal_constructor in a later slice.
+unsafe extern "C" fn nav_empty_constructor(_info: *const v8::FunctionCallbackInfo) {
+    // No-op: Navigator instances are created by Rust, not by `new Navigator()`.
+}
+
 /// Build a native navigator object with accessor properties.
 fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    // Create an ObjectTemplate for navigator
-    let nav_tmpl = v8::ObjectTemplate::new(scope);
+    // Create a FunctionTemplate for Navigator (replaces flat ObjectTemplate)
+    let nav_tmpl =
+        v8::FunctionTemplate::builder_raw(nav_empty_constructor).build(scope);
+    nav_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Navigator"));
 
-    // Install native getters for the most commonly fingerprint-checked properties.
+    // Install native getters on Navigator.prototype (not on the instance template).
     // Each getter reads from RuntimeState.environment at call time.
     macro_rules! nav_getter {
         ($name:literal, $cb:ident) => {
@@ -41,7 +51,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
             let name = crate::v8_utils::v8_string(scope, $name);
             // Set the getter's name so toString() returns "function <name>() { [native code] }"
             getter.set_class_name(name);
-            nav_tmpl.set_accessor_property(
+            nav_tmpl.prototype_template(scope).set_accessor_property(
                 name.into(),
                 Some(getter),
                 None,
@@ -72,18 +82,30 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("mediaDevices", nav_media_devices);
     nav_getter!("serviceWorker", nav_service_worker);
     nav_getter!("pdfViewerEnabled", nav_pdf_viewer_enabled);
-    // Instantiate and install on global
-    if let Some(nav_obj) = nav_tmpl.new_instance(scope) {
-        // Install userAgentData sub-object on navigator
-        crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
 
-        let key = crate::v8_utils::v8_string(scope, "navigator");
-        global.define_own_property(
-            scope,
-            key.into(),
-            nav_obj.into(),
-            v8::PropertyAttribute::DONT_DELETE,
-        );
+    // Instantiate via FunctionTemplate (full prototype chain)
+    if let Some(func) = nav_tmpl.get_function(scope) {
+        if let Some(nav_obj) = func.new_instance(scope, &[]) {
+            // Install userAgentData sub-object on navigator instance
+            crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
+
+            let key = crate::v8_utils::v8_string(scope, "navigator");
+            global.define_own_property(
+                scope,
+                key.into(),
+                nav_obj.into(),
+                v8::PropertyAttribute::DONT_DELETE,
+            );
+
+            // Install Navigator constructor on global (non-enumerable, like DOM)
+            let ctor_key = crate::v8_utils::v8_string(scope, "Navigator");
+            global.define_own_property(
+                scope,
+                ctor_key.into(),
+                func.into(),
+                v8::PropertyAttribute::DONT_ENUM,
+            );
+        }
     }
 }
 
