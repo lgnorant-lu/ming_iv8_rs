@@ -1,0 +1,473 @@
+[
+  {
+    "kind": "namespace",
+    "name": "chrome",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "attribute", "name": "runtime", "type": { "kind": "name", "name": "ChromeRuntime", "nullable": false } },
+      { "kind": "attribute", "name": "app", "type": { "kind": "name", "name": "ChromeApp", "nullable": false } },
+      { "kind": "attribute", "name": "csi", "type": { "kind": "name", "name": "ChromeCSI", "nullable": false } },
+      { "kind": "attribute", "name": "loadTimes", "type": { "kind": "name", "name": "ChromeLoadTimes", "nullable": false } },
+      { "kind": "attribute", "name": "webstore", "type": { "kind": "name", "name": "ChromeWebstore", "nullable": false } },
+      { "kind": "attribute", "name": "i18n", "type": { "kind": "name", "name": "ChromeI18n", "nullable": false } },
+      { "kind": "attribute", "name": "storage", "type": { "kind": "name", "name": "ChromeStorage", "nullable": false } },
+      { "kind": "attribute", "name": "tabs", "type": { "kind": "name", "name": "ChromeTabs", "nullable": false } },
+      { "kind": "attribute", "name": "extension", "type": { "kind": "name", "name": "ChromeExtension", "nullable": false } },
+      { "kind": "attribute", "name": "management", "type": { "kind": "name", "name": "ChromeManagement", "nullable": false } },
+      { "kind": "attribute", "name": "windows", "type": { "kind": "name", "name": "ChromeWindows", "nullable": false } },
+      { "kind": "attribute", "name": "bookmarks", "type": { "kind": "name", "name": "ChromeBookmarks", "nullable": false } },
+      { "kind": "attribute", "name": "browsingData", "type": { "kind": "name", "name": "ChromeBrowsingData", "nullable": false } },
+      { "kind": "attribute", "name": "commands", "type": { "kind": "name", "name": "ChromeCommands", "nullable": false } },
+      { "kind": "attribute", "name": "contextMenus", "type": { "kind": "name", "name": "ChromeContextMenus", "nullable": false } },
+      { "kind": "attribute", "name": "cookies", "type": { "kind": "name", "name": "ChromeCookies", "nullable": false } },
+      { "kind": "attribute", "name": "debugger", "type": { "kind": "name", "name": "ChromeDebugger", "nullable": false } },
+      { "kind": "attribute", "name": "declarativeContent", "type": { "kind": "name", "name": "ChromeDeclarativeContent", "nullable": false } },
+      { "kind": "attribute", "name": "declarativeNetRequest", "type": { "kind": "name", "name": "ChromeDeclarativeNetRequest", "nullable": false } },
+      { "kind": "attribute", "name": "devtools", "type": { "kind": "name", "name": "ChromeDevtoolsNamespace", "nullable": false } },
+      { "kind": "attribute", "name": "downloads", "type": { "kind": "name", "name": "ChromeDownloads", "nullable": false } },
+      { "kind": "attribute", "name": "events", "type": { "kind": "name", "name": "ChromeEvents", "nullable": false } },
+      { "kind": "attribute", "name": "fontSettings", "type": { "kind": "name", "name": "ChromeFontSettings", "nullable": false } },
+      { "kind": "attribute", "name": "history", "type": { "kind": "name", "name": "ChromeHistory", "nullable": false } },
+      { "kind": "attribute", "name": "identity", "type": { "kind": "name", "name": "ChromeIdentity", "nullable": false } },
+      { "kind": "attribute", "name": "idle", "type": { "kind": "name", "name": "ChromeIdle", "nullable": false } },
+      { "kind": "attribute", "name": "notifications", "type": { "kind": "name", "name": "ChromeNotifications", "nullable": false } },
+      { "kind": "attribute", "name": "pageCapture", "type": { "kind": "name", "name": "ChromePageCapture", "nullable": false } },
+      { "kind": "attribute", "name": "permissions", "type": { "kind": "name", "name": "ChromePermissions", "nullable": false } },
+      { "kind": "attribute", "name": "power", "type": { "kind": "name", "name": "ChromePower", "nullable": false } },
+      { "kind": "attribute", "name": "privacy", "type": { "kind": "name", "name": "ChromePrivacy", "nullable": false } },
+      { "kind": "attribute", "name": "processes", "type": { "kind": "name", "name": "ChromeProcesses", "nullable": false } },
+      { "kind": "attribute", "name": "proxy", "type": { "kind": "name", "name": "ChromeProxy", "nullable": false } },
+      { "kind": "attribute", "name": "scripting", "type": { "kind": "name", "name": "ChromeScripting", "nullable": false } },
+      { "kind": "attribute", "name": "search", "type": { "kind": "name", "name": "ChromeSearch", "nullable": false } },
+      { "kind": "attribute", "name": "sessions", "type": { "kind": "name", "name": "ChromeSessions", "nullable": false } },
+      { "kind": "attribute", "name": "sidePanel", "type": { "kind": "name", "name": "ChromeSidePanel", "nullable": false } },
+      { "kind": "attribute", "name": "system", "type": { "kind": "name", "name": "ChromeSystemNS", "nullable": false } },
+      { "kind": "attribute", "name": "topSites", "type": { "kind": "name", "name": "ChromeTopSites", "nullable": false } },
+      { "kind": "attribute", "name": "tts", "type": { "kind": "name", "name": "ChromeTts", "nullable": false } },
+      { "kind": "attribute", "name": "ttsEngine", "type": { "kind": "name", "name": "ChromeTtsEngine", "nullable": false } },
+      { "kind": "attribute", "name": "types", "type": { "kind": "name", "name": "ChromeTypes", "nullable": false } },
+      { "kind": "attribute", "name": "webNavigation", "type": { "kind": "name", "name": "ChromeWebNavigation", "nullable": false } },
+      { "kind": "attribute", "name": "webRequest", "type": { "kind": "name", "name": "ChromeWebRequest", "nullable": false } },
+      { "kind": "attribute", "name": "action", "type": { "kind": "name", "name": "ChromeAction", "nullable": false } },
+      { "kind": "attribute", "name": "alarms", "type": { "kind": "name", "name": "ChromeAlarms", "nullable": false } },
+      { "kind": "attribute", "name": "offscreen", "type": { "kind": "name", "name": "ChromeOffscreen", "nullable": false } },
+      { "kind": "attribute", "name": "readingList", "type": { "kind": "name", "name": "ChromeReadingList", "nullable": false } },
+      { "kind": "attribute", "name": "tabGroups", "type": { "kind": "name", "name": "ChromeTabGroups", "nullable": false } },
+      { "kind": "attribute", "name": "userScripts", "type": { "kind": "name", "name": "ChromeUserScripts", "nullable": false } },
+      { "kind": "attribute", "name": "omnibox", "type": { "kind": "name", "name": "ChromeOmnibox", "nullable": false } },
+      { "kind": "attribute", "name": "enterprise", "type": { "kind": "name", "name": "ChromeEnterpriseNS", "nullable": false } },
+      { "kind": "attribute", "name": "dom", "type": { "kind": "name", "name": "ChromeDOM", "nullable": false } },
+      { "kind": "attribute", "name": "accessibilityFeatures", "type": { "kind": "name", "name": "ChromeAccessibilityFeatures", "nullable": false } },
+      { "kind": "attribute", "name": "autofillPrivate", "type": { "kind": "name", "name": "ChromeAutofillPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "brailleDisplayPrivate", "type": { "kind": "name", "name": "ChromeBrailleDisplayPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "certificateProvider", "type": { "kind": "name", "name": "ChromeCertificateProvider", "nullable": false } },
+      { "kind": "attribute", "name": "commandLinePrivate", "type": { "kind": "name", "name": "ChromeCommandLinePrivate", "nullable": false } },
+      { "kind": "attribute", "name": "contentSettings", "type": { "kind": "name", "name": "ChromeContentSettings", "nullable": false } },
+      { "kind": "attribute", "name": "desktopCapture", "type": { "kind": "name", "name": "ChromeDesktopCapture", "nullable": false } },
+      { "kind": "attribute", "name": "documentScan", "type": { "kind": "name", "name": "ChromeDocumentScan", "nullable": false } },
+      { "kind": "attribute", "name": "enterprise_platformKeys", "type": { "kind": "name", "name": "ChromeEnterprisePlatformKeys", "nullable": false } },
+      { "kind": "attribute", "name": "fileBrowserHandler", "type": { "kind": "name", "name": "ChromeFileBrowserHandler", "nullable": false } },
+      { "kind": "attribute", "name": "fileSystemProvider", "type": { "kind": "name", "name": "ChromeFileSystemProvider", "nullable": false } },
+      { "kind": "attribute", "name": "gcm", "type": { "kind": "name", "name": "ChromeGcm", "nullable": false } },
+      { "kind": "attribute", "name": "identityPrivate", "type": { "kind": "name", "name": "ChromeIdentityPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "input_ime", "type": { "kind": "name", "name": "ChromeInputIme", "nullable": false } },
+      { "kind": "attribute", "name": "instanceID", "type": { "kind": "name", "name": "ChromeInstanceID", "nullable": false } },
+      { "kind": "attribute", "name": "loginState", "type": { "kind": "name", "name": "ChromeLoginState", "nullable": false } },
+      { "kind": "attribute", "name": "mediaPerceptionPrivate", "type": { "kind": "name", "name": "ChromeMediaPerceptionPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "networking", "type": { "kind": "name", "name": "ChromeNetworkingConfig", "nullable": false } },
+      { "kind": "attribute", "name": "passwordsPrivate", "type": { "kind": "name", "name": "ChromePasswordsPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "platformKeys", "type": { "kind": "name", "name": "ChromePlatformKeys", "nullable": false } },
+      { "kind": "attribute", "name": "printing", "type": { "kind": "name", "name": "ChromePrintingAPI", "nullable": false } },
+      { "kind": "attribute", "name": "printingMetrics", "type": { "kind": "name", "name": "ChromePrintingMetrics", "nullable": false } },
+      { "kind": "attribute", "name": "quickUnlockPrivate", "type": { "kind": "name", "name": "ChromeQuickUnlockPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "runtimeOnInstalled", "type": { "kind": "name", "name": "ChromeRuntimeOnInstalled", "nullable": false } },
+      { "kind": "attribute", "name": "safeBrowsingPrivate", "type": { "kind": "name", "name": "ChromeSafeBrowsingPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "settingsPrivate", "type": { "kind": "name", "name": "ChromeSettingsPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "signedInDevices", "type": { "kind": "name", "name": "ChromeSignedInDevices", "nullable": false } },
+      { "kind": "attribute", "name": "speechRecognitionPrivate", "type": { "kind": "name", "name": "ChromeSpeechRecognitionPrivate", "nullable": false } },
+      { "kind": "attribute", "name": "tabCapture", "type": { "kind": "name", "name": "ChromeTabCapture", "nullable": false } },
+      { "kind": "attribute", "name": "vpnProvider", "type": { "kind": "name", "name": "ChromeVpnProvider", "nullable": false } },
+      { "kind": "attribute", "name": "wallpaper", "type": { "kind": "name", "name": "ChromeWallpaper", "nullable": false } },
+      { "kind": "attribute", "name": "webAuthenticationProxy", "type": { "kind": "name", "name": "ChromeWebAuthenticationProxy", "nullable": false } }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeRuntime",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "attribute", "name": "onMessage", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onConnect", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onInstalled", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onStartup", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onSuspend", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onSuspendCanceled", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onUpdateAvailable", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onRestartRequired", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onBrowserUpdateAvailable", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "id", "type": { "kind": "name", "name": "DOMString", "nullable": true }, "ext_attrs": [] },
+      { "kind": "operation", "name": "sendMessage", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [
+        { "name": "message", "type": { "kind": "name", "name": "object", "nullable": false }, "optional": false, "variadic": false, "default": null },
+        { "name": "responseCallback", "type": { "kind": "name", "name": "Function", "nullable": false }, "optional": true, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "getManifest", "return_type": { "kind": "name", "name": "object", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "getURL", "return_type": { "kind": "name", "name": "DOMString", "nullable": false }, "arguments": [
+        { "name": "path", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "connect", "return_type": { "kind": "name", "name": "ChromePort", "nullable": false }, "arguments": [
+        { "name": "connectInfo", "type": { "kind": "name", "name": "object", "nullable": false }, "optional": true, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "connectNative", "return_type": { "kind": "name", "name": "ChromePort", "nullable": false }, "arguments": [
+        { "name": "application", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "getPlatformInfo", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "getBackgroundPage", "return_type": { "kind": "name", "name": "WindowProxy", "nullable": true }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "openOptionsPage", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "setUninstallURL", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [
+        { "name": "url", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "reload", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "requestUpdateCheck", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "restart", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "restartAfterDelay", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [
+        { "name": "seconds", "type": { "kind": "name", "name": "long", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeApp",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "operation", "name": "isInstalled", "return_type": { "kind": "name", "name": "boolean", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "getDetails", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "getIsInstalled", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "installState", "return_type": { "kind": "name", "name": "DOMString", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "runningState", "return_type": { "kind": "name", "name": "DOMString", "nullable": false }, "arguments": [], "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeCSI",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "attribute", "name": "startE", "type": { "kind": "name", "name": "DOMString", "nullable": true }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onReadable", "type": { "kind": "name", "name": "DOMString", "nullable": true }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onWindowCreated", "type": { "kind": "name", "name": "DOMString", "nullable": true }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onTabsOnUpdated", "type": { "kind": "name", "name": "DOMString", "nullable": true }, "ext_attrs": [] },
+      { "kind": "operation", "name": "onIdle", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "attribute", "name": "windowId", "type": { "kind": "name", "name": "long", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "tabId", "type": { "kind": "name", "name": "long", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "openerTabId", "type": { "kind": "name", "name": "long", "nullable": false }, "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeLoadTimes",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "attribute", "name": "requestTime", "type": { "kind": "name", "name": "double", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "startLoadTime", "type": { "kind": "name", "name": "double", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "commitLoadTime", "type": { "kind": "name", "name": "double", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "finishDocumentLoadTime", "type": { "kind": "name", "name": "double", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "finishLoadTime", "type": { "kind": "name", "name": "double", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "firstPaintTime", "type": { "kind": "name", "name": "double", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "firstPaintAfterLoadTime", "type": { "kind": "name", "name": "double", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "navigationType", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "wasFetchedViaSpdy", "type": { "kind": "name", "name": "boolean", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "wasNpnNegotiated", "type": { "kind": "name", "name": "boolean", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "npnNegotiatedProtocol", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "wasAlternateProtocolAvailable", "type": { "kind": "name", "name": "boolean", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "connectionInfo", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeWebstore",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "operation", "name": "install", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [
+        { "name": "url", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "optional": true, "variadic": false, "default": null },
+        { "name": "successCallback", "type": { "kind": "name", "name": "Function", "nullable": false }, "optional": true, "variadic": false, "default": null },
+        { "name": "failureCallback", "type": { "kind": "name", "name": "Function", "nullable": false }, "optional": true, "variadic": false, "default": null }
+      ], "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeI18n",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "operation", "name": "getMessage", "return_type": { "kind": "name", "name": "DOMString", "nullable": false }, "arguments": [
+        { "name": "messageName", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "optional": false, "variadic": false, "default": null },
+        { "name": "substitutions", "type": { "kind": "name", "name": "any", "nullable": false }, "optional": true, "variadic": true, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "getUILanguage", "return_type": { "kind": "name", "name": "DOMString", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "getAcceptLanguages", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "detectLanguage", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [
+        { "name": "text", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeEvent",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "operation", "name": "addListener", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [
+        { "name": "callback", "type": { "kind": "name", "name": "Function", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "removeListener", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [
+        { "name": "callback", "type": { "kind": "name", "name": "Function", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "hasListener", "return_type": { "kind": "name", "name": "boolean", "nullable": false }, "arguments": [
+        { "name": "callback", "type": { "kind": "name", "name": "Function", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "hasListeners", "return_type": { "kind": "name", "name": "boolean", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "addRules", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [
+        { "name": "rules", "type": { "kind": "name", "name": "sequence", "nullable": false, "generic": "sequence", "inner": { "kind": "name", "name": "object", "nullable": false } }, "optional": false, "variadic": false, "default": null },
+        { "name": "callback", "type": { "kind": "name", "name": "Function", "nullable": false }, "optional": true, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "removeRules", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [
+        { "name": "ruleIdentifiers", "type": { "kind": "name", "name": "sequence", "nullable": false, "generic": "sequence", "inner": { "kind": "name", "name": "DOMString", "nullable": false } }, "optional": true, "variadic": false, "default": null },
+        { "name": "callback", "type": { "kind": "name", "name": "Function", "nullable": false }, "optional": true, "variadic": false, "default": null }
+      ], "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromePort",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "attribute", "name": "name", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onMessage", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "onDisconnect", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] },
+      { "kind": "operation", "name": "postMessage", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [
+        { "name": "message", "type": { "kind": "name", "name": "object", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "disconnect", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [], "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "External",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "operation", "name": "IsSearchProviderInstalled", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "AddSearchProvider", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [], "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeStorage",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "attribute", "name": "sync", "type": { "kind": "name", "name": "ChromeStorageArea", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "local", "type": { "kind": "name", "name": "ChromeStorageArea", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "managed", "type": { "kind": "name", "name": "ChromeStorageArea", "nullable": false }, "ext_attrs": [] },
+      { "kind": "attribute", "name": "session", "type": { "kind": "name", "name": "ChromeStorageArea", "nullable": false }, "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "ChromeStorageArea",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "operation", "name": "get", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [
+        { "name": "keys", "type": { "kind": "generic", "generic": "sequence", "inner": { "kind": "name", "name": "DOMString", "nullable": false }, "nullable": true }, "optional": true, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "set", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [
+        { "name": "items", "type": { "kind": "name", "name": "object", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "remove", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [
+        { "name": "keys", "type": { "kind": "generic", "generic": "sequence", "inner": { "kind": "name", "name": "DOMString", "nullable": false }, "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "clear", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [], "ext_attrs": [] },
+      { "kind": "operation", "name": "getBytesInUse", "return_type": { "kind": "name", "name": "Promise", "nullable": false }, "arguments": [
+        { "name": "keys", "type": { "kind": "generic", "generic": "sequence", "inner": { "kind": "name", "name": "DOMString", "nullable": false }, "nullable": true }, "optional": true, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "attribute", "name": "onChanged", "type": { "kind": "name", "name": "ChromeEvent", "nullable": false }, "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "webkitAudioContext",
+    "source": "manual",
+    "inheritance": "AudioContext",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitURL",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": [
+      { "kind": "operation", "name": "createObjectURL", "return_type": { "kind": "name", "name": "DOMString", "nullable": false }, "arguments": [
+        { "name": "obj", "type": { "kind": "name", "name": "object", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] },
+      { "kind": "operation", "name": "revokeObjectURL", "return_type": { "kind": "name", "name": "undefined", "nullable": false }, "arguments": [
+        { "name": "url", "type": { "kind": "name", "name": "DOMString", "nullable": false }, "optional": false, "variadic": false, "default": null }
+      ], "ext_attrs": [] }
+    ]
+  },
+  {
+    "kind": "interface",
+    "name": "webkitSpeechRecognition",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitSpeechGrammarList",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitSpeechRecognitionEvent",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitSpeechRecognitionError",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitRTCPeerConnection",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitMediaStream",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitGetUserMedia",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitRequestFileSystem",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitResolveLocalFileSystemURL",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitStorageInfo",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitIndexedDB",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitIDBKeyRange",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitCancelAnimationFrame",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitRequestAnimationFrame",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitMatchMedia",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitConvertPointFromPageToNode",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitConvertPointFromNodeToPage",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitPerformance",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitGetGamepads",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitGetUserMedia",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  },
+  {
+    "kind": "interface",
+    "name": "webkitNotifications",
+    "source": "manual",
+    "ext_attrs": [],
+    "members": []
+  }
+]
