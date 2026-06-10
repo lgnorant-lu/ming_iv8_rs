@@ -1,0 +1,9 @@
+[package]
+name = "iv8-surface"
+version = "0.1.0"
+edition = "2021"
+description = "IV8 browser surface — generated FunctionTemplate stubs for W3C + Chrome extension interfaces"
+
+[dependencies]
+v8 = { workspace = true }
+tracing = "0.1"

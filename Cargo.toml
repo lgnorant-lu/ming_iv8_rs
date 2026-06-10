@@ -3,6 +3,8 @@ members = [
     "crates/iv8-core",
     "crates/iv8-undetect",
     "crates/iv8-py",
+    "crates/iv8-surface",
+    "tools/iv8-surface-codegen",
 ]
 resolver = "2"
 
