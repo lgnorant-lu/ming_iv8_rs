@@ -172,21 +172,21 @@ class TestNavigatorFingerprint:
         assert ctx.eval("navigator.pdfViewerEnabled") == True
 
     def test_user_agent_native_getter(self, ctx):
-        """navigator.userAgent must have a native getter descriptor."""
+        """navigator.userAgent must have a native getter descriptor on Navigator.prototype."""
         desc_type = ctx.eval(
-            "typeof Object.getOwnPropertyDescriptor(navigator, 'userAgent').get"
+            "typeof Object.getOwnPropertyDescriptor(Navigator.prototype, 'userAgent').get"
         )
         assert desc_type == "function", f"Expected getter, got {desc_type}"
 
     def test_user_agent_getter_native_code(self, ctx):
         getter_str = ctx.eval(
-            "Object.getOwnPropertyDescriptor(navigator, 'userAgent').get.toString()"
+            "Object.getOwnPropertyDescriptor(Navigator.prototype, 'userAgent').get.toString()"
         )
         assert "[native code]" in getter_str, f"Getter not native: {getter_str}"
 
     def test_platform_native_getter(self, ctx):
         desc_type = ctx.eval(
-            "typeof Object.getOwnPropertyDescriptor(navigator, 'platform').get"
+            "typeof Object.getOwnPropertyDescriptor(Navigator.prototype, 'platform').get"
         )
         assert desc_type == "function"
 
@@ -224,7 +224,7 @@ class TestScreenFingerprint:
 
     def test_screen_width_native_getter(self, ctx):
         desc_type = ctx.eval(
-            "typeof Object.getOwnPropertyDescriptor(screen, 'width').get"
+            "typeof Object.getOwnPropertyDescriptor(Screen.prototype, 'width').get"
         )
         assert desc_type == "function"
 

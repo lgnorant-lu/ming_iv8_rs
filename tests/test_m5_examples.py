@@ -407,8 +407,8 @@ class TestM5Acceptance:
             "window.chrome !== null",
             "Object.keys(window).indexOf('__iv8__') === -1",
             "!Object.getOwnPropertyDescriptor(window, '__iv8__').enumerable",
-            "typeof Object.getOwnPropertyDescriptor(navigator, 'userAgent').get === 'function'",
-            "Object.getOwnPropertyDescriptor(navigator, 'userAgent').get.toString().indexOf('[native code]') !== -1",
+            "typeof Object.getOwnPropertyDescriptor(Navigator.prototype, 'userAgent').get === 'function'",
+            "Object.getOwnPropertyDescriptor(Navigator.prototype, 'userAgent').get.toString().indexOf('[native code]') !== -1",
         ]
         for check in checks:
             result = ctx.eval(check)
