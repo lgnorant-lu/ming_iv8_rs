@@ -1,1 +1,1 @@
-typeof Object.getOwnPropertyDescriptor(navigator,'userAgent').get
+typeof Object.getOwnPropertyDescriptor(Navigator.prototype,'userAgent').get

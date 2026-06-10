@@ -1,1 +1,1 @@
-typeof Object.getOwnPropertyDescriptor(screen,'width').get
+typeof Object.getOwnPropertyDescriptor(Screen.prototype,'width').get

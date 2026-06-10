@@ -1,1 +1,1 @@
-Object.getOwnPropertyDescriptor(navigator,'userAgent').get.toString().indexOf('[native code]') !== -1
+Object.getOwnPropertyDescriptor(Navigator.prototype,'userAgent').get.toString().indexOf('[native code]') !== -1
