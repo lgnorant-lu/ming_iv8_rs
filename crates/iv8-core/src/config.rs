@@ -11,7 +11,7 @@ use serde_json::Value as JsonValue;
 use std::collections::HashMap;
 
 /// The 393 default entries embedded at compile time from iv8-defaults.json.
-const DEFAULTS_JSON: &str = include_str!("../../../docs/research/iv8-defaults.json");
+const DEFAULTS_JSON: &str = include_str!("../../../docs/_legacy/early-research/iv8-defaults.json");
 
 /// Browser environment configuration (357 environment + 36 config entries).
 /// Immutable after construction.
