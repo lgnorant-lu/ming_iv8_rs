@@ -791,13 +791,17 @@ impl EmbeddedV8Kernel {
             let global = context.global(scope);
 
             let callbacks = iv8_surface::BehaviorCallbackRegistry::new();
-            let registry = iv8_surface::install_browser_surface(scope, global, &callbacks);
-            {
-                let state = RuntimeState::get(&*scope);
-                *state.surface_registry.borrow_mut() = Some(registry);
-                *state.behavior_callbacks.borrow_mut() = Some(callbacks);
-                tracing::info!(interfaces = state.surface_registry.borrow().as_ref().map(|r| r.interface_count()).unwrap_or(0),
-                    "BrowserSurface installation complete");
+            match iv8_surface::install_browser_surface(scope, global, &callbacks) {
+                Ok(registry) => {
+                    let state = RuntimeState::get(&*scope);
+                    let count = registry.interface_count();
+                    *state.surface_registry.borrow_mut() = Some(registry);
+                    *state.behavior_callbacks.borrow_mut() = Some(callbacks);
+                    tracing::info!(interfaces = count, "BrowserSurface installation complete");
+                }
+                Err(e) => {
+                    tracing::error!("BrowserSurface installation failed: {}", e);
+                }
             }
         }
         unsafe { self.isolate.exit(); }

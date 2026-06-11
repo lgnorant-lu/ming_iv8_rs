@@ -3,6 +3,8 @@ name = "iv8-surface"
 version = "0.1.0"
 edition = "2021"
 description = "IV8 browser surface — generated FunctionTemplate stubs for W3C + Chrome extension interfaces"
+# build.rs deferred to v0.8.21: C++ wrapper (iv8_v8_extra.cc) requires
+# V8 header paths from rusty_v8 build output which need cross-crate coordination.
 
 [dependencies]
 v8 = { workspace = true }
