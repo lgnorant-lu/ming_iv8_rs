@@ -836,6 +836,7 @@ unsafe extern "C" fn create_element(info: *const v8::FunctionCallbackInfo) {
 
         let tag_arg = args.get(0);
         let tag_str = tag_arg.to_rust_string_lossy(scope);
+        let tag_str = tag_str.to_ascii_lowercase();
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);

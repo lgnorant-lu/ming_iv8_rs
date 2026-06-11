@@ -81,6 +81,8 @@ pub struct DomTemplates {
     pub html_link_element: v8::Global<v8::FunctionTemplate>,
     /// HTMLMetaElement — inherits HTMLElement.
     pub html_meta_element: v8::Global<v8::FunctionTemplate>,
+    /// HTMLUnknownElement — inherits HTMLElement, fallback for unknown tag names.
+    pub html_unknown_element: v8::Global<v8::FunctionTemplate>,
     /// Text node — inherits Node.
     pub text_node: v8::Global<v8::FunctionTemplate>,
     /// Comment node — inherits Node.
@@ -683,15 +685,19 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         );
     }
 
-    // ── 6. Text node (inherits Node) ────────────────────────────────────────
+    // ── 6. HTMLUnknownElement (inherits HTMLElement) ─────────────────────────
+    let html_unknown_element = make_template(scope, "HTMLUnknownElement");
+    html_unknown_element.inherit(html_element);
+
+    // ── 7. Text node (inherits Node) ────────────────────────────────────────
     let text_node = make_template(scope, "Text");
     text_node.inherit(node);
 
-    // ── 7. Comment node (inherits Node) ─────────────────────────────────────
+    // ── 8. Comment node (inherits Node) ─────────────────────────────────────
     let comment_node = make_template(scope, "Comment");
     comment_node.inherit(node);
 
-    // ── 8. Document node (inherits Node) ────────────────────────────────────
+    // ── 9. Document node (inherits Node) ────────────────────────────────────
     let document_node = make_template(scope, "Document");
     document_node.inherit(node);
 
@@ -726,6 +732,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         html_style_element: v8::Global::new(scope, html_style_element),
         html_link_element: v8::Global::new(scope, html_link_element),
         html_meta_element: v8::Global::new(scope, html_meta_element),
+        html_unknown_element: v8::Global::new(scope, html_unknown_element),
         text_node: v8::Global::new(scope, text_node),
         comment_node: v8::Global::new(scope, comment_node),
         document_node: v8::Global::new(scope, document_node),
@@ -769,6 +776,7 @@ pub fn install_dom_constructors(
         ("HTMLStyleElement", &templates.html_style_element),
         ("HTMLLinkElement", &templates.html_link_element),
         ("HTMLMetaElement", &templates.html_meta_element),
+        ("HTMLUnknownElement", &templates.html_unknown_element),
         ("Text", &templates.text_node),
         ("Comment", &templates.comment_node),
     ];
@@ -820,7 +828,7 @@ pub fn template_for_tag<'s>(
         "style" => &templates.html_style_element,
         "link" => &templates.html_link_element,
         "meta" => &templates.html_meta_element,
-        _ => &templates.html_element,
+        _ => &templates.html_unknown_element,
     };
     v8::Local::new(scope, global)
 }

@@ -790,10 +790,19 @@ impl EmbeddedV8Kernel {
             v8::scope_with_context!(scope, handle_scope, context);
             let global = context.global(scope);
 
+            // Build DomTemplates first (required by create_node_object/createElement)
+            let dom_templates = crate::dom::template::build_dom_templates(scope);
+
             let callbacks = iv8_surface::BehaviorCallbackRegistry::new();
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
                     let state = RuntimeState::get(&*scope);
+
+                    // Overwrite HTML element constructors with DomTemplate versions
+                    // so createElement objects and global constructors share the same templates
+                    crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
+
+                    *state.dom_templates.borrow_mut() = Some(dom_templates);
                     let count = registry.interface_count();
                     *state.surface_registry.borrow_mut() = Some(registry);
                     *state.behavior_callbacks.borrow_mut() = Some(callbacks);
