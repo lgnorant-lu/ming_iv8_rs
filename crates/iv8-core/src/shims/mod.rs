@@ -6,8 +6,6 @@ pub mod atob_btoa;
 pub mod browser_apis;
 pub mod console;
 pub mod document_props;
-pub mod dom_prototypes;
-pub mod element_prototypes;
 pub mod event_constructors;
 pub mod geometry;
 pub mod location;
