@@ -17,3 +17,4 @@ pub mod storage;
 pub mod tier1_stubs;
 pub mod url;
 pub mod user_agent_data;
+pub mod window_extras;

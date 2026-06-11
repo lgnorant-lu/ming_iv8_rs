@@ -721,6 +721,13 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
+        // 19c. Install window properties, global constructors, structuredClone, Blob
+        self.eval(
+            crate::shims::window_extras::WINDOW_EXTRAS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
         // 20. Install Canvas2D shim (after document.createElement is available)
         self.eval(
             crate::canvas::binding::CANVAS2D_SHIM_JS,
@@ -918,6 +925,13 @@ impl EmbeddedV8Kernel {
         // 4d2. Re-install AudioContext subsystem
         self.eval(
             crate::shims::audio_context::AUDIO_CONTEXT_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
+        // 4d3. Re-install window properties, global constructors, structuredClone, Blob
+        self.eval(
+            crate::shims::window_extras::WINDOW_EXTRAS_JS,
             crate::kernel::EvalOpts::default(),
         )
         .ok();
