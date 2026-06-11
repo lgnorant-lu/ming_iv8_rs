@@ -95,22 +95,27 @@ fn is_buffer_source(name: &str) -> bool {
 /// Convert an IDL type name to a Rust-safe identifier.
 /// Applies standard Rust camelCase/snake_case conventions.
 pub fn idl_name_to_rust(name: &str) -> String {
-    // Simple conversion: keep CamelCase for types, convert to snake_case for functions
     let mut result = String::with_capacity(name.len());
-    let mut prev_upper = true;
-    for (i, ch) in name.chars().enumerate() {
+    let chars: Vec<char> = name.chars().collect();
+    for i in 0..chars.len() {
+        let ch = chars[i];
         if ch.is_uppercase() {
-            if i > 0 && !prev_upper {
-                result.push('_');
+            // Insert _ before uppercase letter if:
+            // - it's not the first char, AND
+            // - previous char was lowercase OR
+            // - previous char was uppercase AND next char is lowercase
+            if i > 0 {
+                let prev = chars[i - 1];
+                let next_lower = i + 1 < chars.len() && chars[i + 1].is_lowercase();
+                if prev.is_lowercase() || (prev.is_uppercase() && next_lower) {
+                    result.push('_');
+                }
             }
             result.push(ch.to_ascii_lowercase());
-            prev_upper = true;
         } else if ch == '-' {
             result.push('_');
-            prev_upper = true;
         } else {
             result.push(ch);
-            prev_upper = false;
         }
     }
     result
@@ -139,13 +144,32 @@ mod tests {
     fn test_boolean_mapping() {
         let m = map_idl_type("boolean");
         assert_eq!(m.rust_type, "bool");
-        assert_eq!(m.default_value, "false");
+        assert_eq!(m.default_value, "v8::Boolean::new(scope, false).into()");
     }
 
     #[test]
     fn test_string_mapping() {
         let m = map_idl_type("DOMString");
         assert_eq!(m.rust_type, "v8::Local<'s, v8::String>");
+        assert_eq!(m.default_value, "crate::type_conv::v8_str(scope, \"\")");
+    }
+
+    #[test]
+    fn test_long_mapping() {
+        let m = map_idl_type("long");
+        assert_eq!(m.default_value, "v8::Integer::new(scope, 0).into()");
+    }
+
+    #[test]
+    fn test_double_mapping() {
+        let m = map_idl_type("double");
+        assert_eq!(m.default_value, "v8::Number::new(scope, 0.0).into()");
+    }
+
+    #[test]
+    fn test_void_mapping() {
+        let m = map_idl_type("void");
+        assert_eq!(m.default_value, "v8::undefined(scope).into()");
     }
 
     #[test]

@@ -197,16 +197,44 @@ pub fn classify_domain(name: &str) -> &'static str {
     // Observers
     if name.ends_with("Observer") || name.starts_with("Intersection") || name.starts_with("Resize")
     { return "observers"; }
+    // IndexedDB
+    if name.starts_with("IDB") || name.starts_with("DOMStringList") { return "idb"; }
+    // WebRTC
+    if name.starts_with("RTC") || name == "RTCError" || name.starts_with("RTCPeer")
+        || name.starts_with("RTCRtp") || name.starts_with("RTCData")
+        || name.starts_with("RTCDtls") || name.starts_with("RTCIce")
+        || name.starts_with("RTCSctp") || name == "RTCStatsReport"
+    { return "webrtc"; }
+    // Gamepad
+    if name.starts_with("Gamepad") { return "gamepad"; }
+    // GPU (WebGPU)
+    if name.starts_with("GPU") || name == "GPUSupportedFeatures" { return "gpu"; }
+    // USB
+    if name.starts_with("USB") || name == "USBPermissionDescriptor" { return "usb"; }
+    // HID
+    if name.starts_with("HID") { return "hid"; }
+    // MIDI
+    if name.starts_with("MIDI") { return "midi"; }
+    // Encoding
+    if name.starts_with("TextEncoder") || name.starts_with("TextDecoder") { return "encoding"; }
+    // URL
+    if name == "URL" || name == "URLSearchParams" { return "url"; }
+    // Payment
+    if name.starts_with("Payment") || name.starts_with("Merchant")
+        || name.starts_with("SecurePayment") || name == "PaymentAddress"
+    { return "payment"; }
+    // Presentation
+    if name.starts_with("Presentation") { return "presentation"; }
+    // Credential Management / WebAuthn
+    if name.starts_with("Credential") || name.starts_with("PublicKeyCredential")
+        || name.starts_with("Authenticator") || name == "CredentialsContainer"
+    { return "credentials"; }
+    // Cache
+    if name.starts_with("Cache") || name == "CacheStorage" { return "cache_api"; }
     // Remaining web APIs
     if name.starts_with("Web") || name.starts_with("Navigator") || name == "Window"
         || name == "Location" || name == "History" || name == "Storage"
-        || name.starts_with("IDB") || name.starts_with("XML")
-        || name == "TextEncoder" || name == "TextDecoder"
-        || name == "URL" || name == "URLSearchParams"
-        || name.starts_with("USB") || name.starts_with("HID")
-        || name.starts_with("MIDI") || name.starts_with("GPU")
-        || name.starts_with("Gamepad") || name == "Geolocation"
-        || name.starts_with("RTCPeer") || name.starts_with("RTC")
+        || name.starts_with("XML") || name == "URL" || name == "URLSearchParams"
         || name.starts_with("WebTransport") || name.starts_with("WebSocket")
         || name.starts_with("Cache") || name == "CacheStorage"
         || name.starts_with("BackgroundFetch") || name.starts_with("Payment")

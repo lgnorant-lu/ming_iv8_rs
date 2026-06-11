@@ -4,9 +4,6 @@ use v8::Local;
 use v8::Object;
 use v8::FunctionTemplate;
 
-/// Empty constructor (cannot be inlined — referenced by each template).
-unsafe extern "C" fn empty_constructor(_info: *const v8::FunctionCallbackInfo) {}
-
 pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     let mut templates: std::collections::HashMap<&str, v8::Local<FunctionTemplate>> = std::collections::HashMap::new();
 
@@ -46,7 +43,7 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("AudioTrack", tmpl_audio_track);
     let tmpl_audio_worklet_processor = super::web_audio::create_audio_worklet_processor_template(scope, None);
     templates.insert("AudioWorkletProcessor", tmpl_audio_worklet_processor);
-    let tmpl_authenticator_response = super::web_apis::create_authenticator_response_template(scope, None);
+    let tmpl_authenticator_response = super::credentials::create_authenticator_response_template(scope, None);
     templates.insert("AuthenticatorResponse", tmpl_authenticator_response);
     let tmpl_background_fetch_manager = super::web_apis::create_background_fetch_manager_template(scope, None);
     templates.insert("BackgroundFetchManager", tmpl_background_fetch_manager);
@@ -64,18 +61,18 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("BluetoothCharacteristicProperties", tmpl_bluetooth_characteristic_properties);
     let tmpl_bluetooth_data_filter = super::bluetooth::create_bluetooth_data_filter_template(scope, None);
     templates.insert("BluetoothDataFilter", tmpl_bluetooth_data_filter);
-    let tmpl_bluetooth_lescan = super::bluetooth::create_bluetooth_lescan_template(scope, None);
-    templates.insert("BluetoothLEScan", tmpl_bluetooth_lescan);
-    let tmpl_bluetooth_lescan_filter = super::bluetooth::create_bluetooth_lescan_filter_template(scope, None);
-    templates.insert("BluetoothLEScanFilter", tmpl_bluetooth_lescan_filter);
+    let tmpl_bluetooth_le_scan = super::bluetooth::create_bluetooth_le_scan_template(scope, None);
+    templates.insert("BluetoothLEScan", tmpl_bluetooth_le_scan);
+    let tmpl_bluetooth_le_scan_filter = super::bluetooth::create_bluetooth_le_scan_filter_template(scope, None);
+    templates.insert("BluetoothLEScanFilter", tmpl_bluetooth_le_scan_filter);
     let tmpl_bluetooth_manufacturer_data_filter = super::bluetooth::create_bluetooth_manufacturer_data_filter_template(scope, None);
     templates.insert("BluetoothManufacturerDataFilter", tmpl_bluetooth_manufacturer_data_filter);
     let tmpl_bluetooth_manufacturer_data_map = super::bluetooth::create_bluetooth_manufacturer_data_map_template(scope, None);
     templates.insert("BluetoothManufacturerDataMap", tmpl_bluetooth_manufacturer_data_map);
-    let tmpl_bluetooth_remote_gattdescriptor = super::bluetooth::create_bluetooth_remote_gattdescriptor_template(scope, None);
-    templates.insert("BluetoothRemoteGATTDescriptor", tmpl_bluetooth_remote_gattdescriptor);
-    let tmpl_bluetooth_remote_gattserver = super::bluetooth::create_bluetooth_remote_gattserver_template(scope, None);
-    templates.insert("BluetoothRemoteGATTServer", tmpl_bluetooth_remote_gattserver);
+    let tmpl_bluetooth_remote_gatt_descriptor = super::bluetooth::create_bluetooth_remote_gatt_descriptor_template(scope, None);
+    templates.insert("BluetoothRemoteGATTDescriptor", tmpl_bluetooth_remote_gatt_descriptor);
+    let tmpl_bluetooth_remote_gatt_server = super::bluetooth::create_bluetooth_remote_gatt_server_template(scope, None);
+    templates.insert("BluetoothRemoteGATTServer", tmpl_bluetooth_remote_gatt_server);
     let tmpl_bluetooth_service_data_filter = super::bluetooth::create_bluetooth_service_data_filter_template(scope, None);
     templates.insert("BluetoothServiceDataFilter", tmpl_bluetooth_service_data_filter);
     let tmpl_bluetooth_service_data_map = super::bluetooth::create_bluetooth_service_data_map_template(scope, None);
@@ -86,38 +83,38 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("BreakToken", tmpl_break_token);
     let tmpl_byte_length_queuing_strategy = super::streams::create_byte_length_queuing_strategy_template(scope, None);
     templates.insert("ByteLengthQueuingStrategy", tmpl_byte_length_queuing_strategy);
-    let tmpl_cssfont_feature_values_map = super::css_om::create_cssfont_feature_values_map_template(scope, None);
-    templates.insert("CSSFontFeatureValuesMap", tmpl_cssfont_feature_values_map);
-    let tmpl_cssnumeric_array = super::css_om::create_cssnumeric_array_template(scope, None);
-    templates.insert("CSSNumericArray", tmpl_cssnumeric_array);
-    let tmpl_cssparser_rule = super::css_om::create_cssparser_rule_template(scope, None);
-    templates.insert("CSSParserRule", tmpl_cssparser_rule);
-    let tmpl_cssparser_value = super::css_om::create_cssparser_value_template(scope, None);
-    templates.insert("CSSParserValue", tmpl_cssparser_value);
-    let tmpl_csspseudo_element = super::css_om::create_csspseudo_element_template(scope, None);
-    templates.insert("CSSPseudoElement", tmpl_csspseudo_element);
-    let tmpl_cssrule = super::css_om::create_cssrule_template(scope, None);
-    templates.insert("CSSRule", tmpl_cssrule);
-    let tmpl_cssrule_list = super::css_om::create_cssrule_list_template(scope, None);
-    templates.insert("CSSRuleList", tmpl_cssrule_list);
-    let tmpl_cssstyle_declaration = super::css_om::create_cssstyle_declaration_template(scope, None);
-    templates.insert("CSSStyleDeclaration", tmpl_cssstyle_declaration);
-    let tmpl_cssstyle_value = super::css_om::create_cssstyle_value_template(scope, None);
-    templates.insert("CSSStyleValue", tmpl_cssstyle_value);
-    let tmpl_csstransform_component = super::css_om::create_csstransform_component_template(scope, None);
-    templates.insert("CSSTransformComponent", tmpl_csstransform_component);
-    let tmpl_cssvariable_reference_value = super::css_om::create_cssvariable_reference_value_template(scope, None);
-    templates.insert("CSSVariableReferenceValue", tmpl_cssvariable_reference_value);
-    let tmpl_cache = super::web_apis::create_cache_template(scope, None);
+    let tmpl_css_font_feature_values_map = super::css_om::create_css_font_feature_values_map_template(scope, None);
+    templates.insert("CSSFontFeatureValuesMap", tmpl_css_font_feature_values_map);
+    let tmpl_css_numeric_array = super::css_om::create_css_numeric_array_template(scope, None);
+    templates.insert("CSSNumericArray", tmpl_css_numeric_array);
+    let tmpl_css_parser_rule = super::css_om::create_css_parser_rule_template(scope, None);
+    templates.insert("CSSParserRule", tmpl_css_parser_rule);
+    let tmpl_css_parser_value = super::css_om::create_css_parser_value_template(scope, None);
+    templates.insert("CSSParserValue", tmpl_css_parser_value);
+    let tmpl_css_pseudo_element = super::css_om::create_css_pseudo_element_template(scope, None);
+    templates.insert("CSSPseudoElement", tmpl_css_pseudo_element);
+    let tmpl_css_rule = super::css_om::create_css_rule_template(scope, None);
+    templates.insert("CSSRule", tmpl_css_rule);
+    let tmpl_css_rule_list = super::css_om::create_css_rule_list_template(scope, None);
+    templates.insert("CSSRuleList", tmpl_css_rule_list);
+    let tmpl_css_style_declaration = super::css_om::create_css_style_declaration_template(scope, None);
+    templates.insert("CSSStyleDeclaration", tmpl_css_style_declaration);
+    let tmpl_css_style_value = super::css_om::create_css_style_value_template(scope, None);
+    templates.insert("CSSStyleValue", tmpl_css_style_value);
+    let tmpl_css_transform_component = super::css_om::create_css_transform_component_template(scope, None);
+    templates.insert("CSSTransformComponent", tmpl_css_transform_component);
+    let tmpl_css_variable_reference_value = super::css_om::create_css_variable_reference_value_template(scope, None);
+    templates.insert("CSSVariableReferenceValue", tmpl_css_variable_reference_value);
+    let tmpl_cache = super::cache_api::create_cache_template(scope, None);
     templates.insert("Cache", tmpl_cache);
-    let tmpl_cache_storage = super::web_apis::create_cache_storage_template(scope, None);
+    let tmpl_cache_storage = super::cache_api::create_cache_storage_template(scope, None);
     templates.insert("CacheStorage", tmpl_cache_storage);
     let tmpl_canvas_gradient = super::web_apis::create_canvas_gradient_template(scope, None);
     templates.insert("CanvasGradient", tmpl_canvas_gradient);
     let tmpl_canvas_pattern = super::web_apis::create_canvas_pattern_template(scope, None);
     templates.insert("CanvasPattern", tmpl_canvas_pattern);
-    let tmpl_canvas_rendering_context2_d = super::web_apis::create_canvas_rendering_context2_d_template(scope, None);
-    templates.insert("CanvasRenderingContext2D", tmpl_canvas_rendering_context2_d);
+    let tmpl_canvas_rendering_context2d = super::web_apis::create_canvas_rendering_context2d_template(scope, None);
+    templates.insert("CanvasRenderingContext2D", tmpl_canvas_rendering_context2d);
     let tmpl_caret_position = super::web_apis::create_caret_position_template(scope, None);
     templates.insert("CaretPosition", tmpl_caret_position);
     let tmpl_chapter_information = super::web_apis::create_chapter_information_template(scope, None);
@@ -422,9 +419,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("CountQueuingStrategy", tmpl_count_queuing_strategy);
     let tmpl_crash_report_context = super::web_apis::create_crash_report_context_template(scope, None);
     templates.insert("CrashReportContext", tmpl_crash_report_context);
-    let tmpl_credential = super::web_apis::create_credential_template(scope, None);
+    let tmpl_credential = super::credentials::create_credential_template(scope, None);
     templates.insert("Credential", tmpl_credential);
-    let tmpl_credentials_container = super::web_apis::create_credentials_container_template(scope, None);
+    let tmpl_credentials_container = super::credentials::create_credentials_container_template(scope, None);
     templates.insert("CredentialsContainer", tmpl_credentials_container);
     let tmpl_crop_target = super::web_apis::create_crop_target_template(scope, None);
     templates.insert("CropTarget", tmpl_crop_target);
@@ -436,28 +433,28 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("CustomElementRegistry", tmpl_custom_element_registry);
     let tmpl_custom_state_set = super::web_apis::create_custom_state_set_template(scope, None);
     templates.insert("CustomStateSet", tmpl_custom_state_set);
-    let tmpl_domexception = super::web_apis::create_domexception_template(scope, None);
-    templates.insert("DOMException", tmpl_domexception);
-    let tmpl_domimplementation = super::dom_core::create_domimplementation_template(scope, None);
-    templates.insert("DOMImplementation", tmpl_domimplementation);
-    let tmpl_dommatrix_read_only = super::dom_core::create_dommatrix_read_only_template(scope, None);
-    templates.insert("DOMMatrixReadOnly", tmpl_dommatrix_read_only);
-    let tmpl_domparser = super::web_apis::create_domparser_template(scope, None);
-    templates.insert("DOMParser", tmpl_domparser);
-    let tmpl_dompoint_read_only = super::dom_core::create_dompoint_read_only_template(scope, None);
-    templates.insert("DOMPointReadOnly", tmpl_dompoint_read_only);
-    let tmpl_domquad = super::dom_core::create_domquad_template(scope, None);
-    templates.insert("DOMQuad", tmpl_domquad);
-    let tmpl_domrect_list = super::web_apis::create_domrect_list_template(scope, None);
-    templates.insert("DOMRectList", tmpl_domrect_list);
-    let tmpl_domrect_read_only = super::dom_core::create_domrect_read_only_template(scope, None);
-    templates.insert("DOMRectReadOnly", tmpl_domrect_read_only);
-    let tmpl_domstring_list = super::web_apis::create_domstring_list_template(scope, None);
-    templates.insert("DOMStringList", tmpl_domstring_list);
-    let tmpl_domstring_map = super::web_apis::create_domstring_map_template(scope, None);
-    templates.insert("DOMStringMap", tmpl_domstring_map);
-    let tmpl_domtoken_list = super::dom_core::create_domtoken_list_template(scope, None);
-    templates.insert("DOMTokenList", tmpl_domtoken_list);
+    let tmpl_dom_exception = super::web_apis::create_dom_exception_template(scope, None);
+    templates.insert("DOMException", tmpl_dom_exception);
+    let tmpl_dom_implementation = super::dom_core::create_dom_implementation_template(scope, None);
+    templates.insert("DOMImplementation", tmpl_dom_implementation);
+    let tmpl_dom_matrix_read_only = super::dom_core::create_dom_matrix_read_only_template(scope, None);
+    templates.insert("DOMMatrixReadOnly", tmpl_dom_matrix_read_only);
+    let tmpl_dom_parser = super::web_apis::create_dom_parser_template(scope, None);
+    templates.insert("DOMParser", tmpl_dom_parser);
+    let tmpl_dom_point_read_only = super::dom_core::create_dom_point_read_only_template(scope, None);
+    templates.insert("DOMPointReadOnly", tmpl_dom_point_read_only);
+    let tmpl_dom_quad = super::dom_core::create_dom_quad_template(scope, None);
+    templates.insert("DOMQuad", tmpl_dom_quad);
+    let tmpl_dom_rect_list = super::web_apis::create_dom_rect_list_template(scope, None);
+    templates.insert("DOMRectList", tmpl_dom_rect_list);
+    let tmpl_dom_rect_read_only = super::dom_core::create_dom_rect_read_only_template(scope, None);
+    templates.insert("DOMRectReadOnly", tmpl_dom_rect_read_only);
+    let tmpl_dom_string_list = super::idb::create_dom_string_list_template(scope, None);
+    templates.insert("DOMStringList", tmpl_dom_string_list);
+    let tmpl_dom_string_map = super::web_apis::create_dom_string_map_template(scope, None);
+    templates.insert("DOMStringMap", tmpl_dom_string_map);
+    let tmpl_dom_token_list = super::dom_core::create_dom_token_list_template(scope, None);
+    templates.insert("DOMTokenList", tmpl_dom_token_list);
     let tmpl_data_transfer = super::web_apis::create_data_transfer_template(scope, None);
     templates.insert("DataTransfer", tmpl_data_transfer);
     let tmpl_data_transfer_item = super::web_apis::create_data_transfer_item_template(scope, None);
@@ -564,71 +561,71 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("FragmentDirective", tmpl_fragment_directive);
     let tmpl_fragment_result = super::web_apis::create_fragment_result_template(scope, None);
     templates.insert("FragmentResult", tmpl_fragment_result);
-    let tmpl_gpu = super::web_apis::create_gpu_template(scope, None);
+    let tmpl_gpu = super::gpu::create_gpu_template(scope, None);
     templates.insert("GPU", tmpl_gpu);
-    let tmpl_gpuadapter = super::web_apis::create_gpuadapter_template(scope, None);
-    templates.insert("GPUAdapter", tmpl_gpuadapter);
-    let tmpl_gpuadapter_info = super::web_apis::create_gpuadapter_info_template(scope, None);
-    templates.insert("GPUAdapterInfo", tmpl_gpuadapter_info);
-    let tmpl_gpubind_group = super::web_apis::create_gpubind_group_template(scope, None);
-    templates.insert("GPUBindGroup", tmpl_gpubind_group);
-    let tmpl_gpubind_group_layout = super::web_apis::create_gpubind_group_layout_template(scope, None);
-    templates.insert("GPUBindGroupLayout", tmpl_gpubind_group_layout);
-    let tmpl_gpubuffer = super::web_apis::create_gpubuffer_template(scope, None);
-    templates.insert("GPUBuffer", tmpl_gpubuffer);
-    let tmpl_gpucanvas_context = super::web_apis::create_gpucanvas_context_template(scope, None);
-    templates.insert("GPUCanvasContext", tmpl_gpucanvas_context);
-    let tmpl_gpucommand_buffer = super::web_apis::create_gpucommand_buffer_template(scope, None);
-    templates.insert("GPUCommandBuffer", tmpl_gpucommand_buffer);
-    let tmpl_gpucommand_encoder = super::web_apis::create_gpucommand_encoder_template(scope, None);
-    templates.insert("GPUCommandEncoder", tmpl_gpucommand_encoder);
-    let tmpl_gpucompilation_info = super::web_apis::create_gpucompilation_info_template(scope, None);
-    templates.insert("GPUCompilationInfo", tmpl_gpucompilation_info);
-    let tmpl_gpucompilation_message = super::web_apis::create_gpucompilation_message_template(scope, None);
-    templates.insert("GPUCompilationMessage", tmpl_gpucompilation_message);
-    let tmpl_gpucompute_pass_encoder = super::web_apis::create_gpucompute_pass_encoder_template(scope, None);
-    templates.insert("GPUComputePassEncoder", tmpl_gpucompute_pass_encoder);
-    let tmpl_gpucompute_pipeline = super::web_apis::create_gpucompute_pipeline_template(scope, None);
-    templates.insert("GPUComputePipeline", tmpl_gpucompute_pipeline);
-    let tmpl_gpudevice_lost_info = super::web_apis::create_gpudevice_lost_info_template(scope, None);
-    templates.insert("GPUDeviceLostInfo", tmpl_gpudevice_lost_info);
-    let tmpl_gpuerror = super::web_apis::create_gpuerror_template(scope, None);
-    templates.insert("GPUError", tmpl_gpuerror);
-    let tmpl_gpuexternal_texture = super::web_apis::create_gpuexternal_texture_template(scope, None);
-    templates.insert("GPUExternalTexture", tmpl_gpuexternal_texture);
-    let tmpl_gpupipeline_layout = super::web_apis::create_gpupipeline_layout_template(scope, None);
-    templates.insert("GPUPipelineLayout", tmpl_gpupipeline_layout);
-    let tmpl_gpuquery_set = super::web_apis::create_gpuquery_set_template(scope, None);
-    templates.insert("GPUQuerySet", tmpl_gpuquery_set);
-    let tmpl_gpuqueue = super::web_apis::create_gpuqueue_template(scope, None);
-    templates.insert("GPUQueue", tmpl_gpuqueue);
-    let tmpl_gpurender_bundle = super::web_apis::create_gpurender_bundle_template(scope, None);
-    templates.insert("GPURenderBundle", tmpl_gpurender_bundle);
-    let tmpl_gpurender_bundle_encoder = super::web_apis::create_gpurender_bundle_encoder_template(scope, None);
-    templates.insert("GPURenderBundleEncoder", tmpl_gpurender_bundle_encoder);
-    let tmpl_gpurender_pass_encoder = super::web_apis::create_gpurender_pass_encoder_template(scope, None);
-    templates.insert("GPURenderPassEncoder", tmpl_gpurender_pass_encoder);
-    let tmpl_gpurender_pipeline = super::web_apis::create_gpurender_pipeline_template(scope, None);
-    templates.insert("GPURenderPipeline", tmpl_gpurender_pipeline);
-    let tmpl_gpusampler = super::web_apis::create_gpusampler_template(scope, None);
-    templates.insert("GPUSampler", tmpl_gpusampler);
-    let tmpl_gpushader_module = super::web_apis::create_gpushader_module_template(scope, None);
-    templates.insert("GPUShaderModule", tmpl_gpushader_module);
-    let tmpl_gpusupported_features = super::web_apis::create_gpusupported_features_template(scope, None);
-    templates.insert("GPUSupportedFeatures", tmpl_gpusupported_features);
-    let tmpl_gpusupported_limits = super::web_apis::create_gpusupported_limits_template(scope, None);
-    templates.insert("GPUSupportedLimits", tmpl_gpusupported_limits);
-    let tmpl_gputexture = super::web_apis::create_gputexture_template(scope, None);
-    templates.insert("GPUTexture", tmpl_gputexture);
-    let tmpl_gputexture_view = super::web_apis::create_gputexture_view_template(scope, None);
-    templates.insert("GPUTextureView", tmpl_gputexture_view);
-    let tmpl_gamepad = super::web_apis::create_gamepad_template(scope, None);
+    let tmpl_gpu_adapter = super::gpu::create_gpu_adapter_template(scope, None);
+    templates.insert("GPUAdapter", tmpl_gpu_adapter);
+    let tmpl_gpu_adapter_info = super::gpu::create_gpu_adapter_info_template(scope, None);
+    templates.insert("GPUAdapterInfo", tmpl_gpu_adapter_info);
+    let tmpl_gpu_bind_group = super::gpu::create_gpu_bind_group_template(scope, None);
+    templates.insert("GPUBindGroup", tmpl_gpu_bind_group);
+    let tmpl_gpu_bind_group_layout = super::gpu::create_gpu_bind_group_layout_template(scope, None);
+    templates.insert("GPUBindGroupLayout", tmpl_gpu_bind_group_layout);
+    let tmpl_gpu_buffer = super::gpu::create_gpu_buffer_template(scope, None);
+    templates.insert("GPUBuffer", tmpl_gpu_buffer);
+    let tmpl_gpu_canvas_context = super::gpu::create_gpu_canvas_context_template(scope, None);
+    templates.insert("GPUCanvasContext", tmpl_gpu_canvas_context);
+    let tmpl_gpu_command_buffer = super::gpu::create_gpu_command_buffer_template(scope, None);
+    templates.insert("GPUCommandBuffer", tmpl_gpu_command_buffer);
+    let tmpl_gpu_command_encoder = super::gpu::create_gpu_command_encoder_template(scope, None);
+    templates.insert("GPUCommandEncoder", tmpl_gpu_command_encoder);
+    let tmpl_gpu_compilation_info = super::gpu::create_gpu_compilation_info_template(scope, None);
+    templates.insert("GPUCompilationInfo", tmpl_gpu_compilation_info);
+    let tmpl_gpu_compilation_message = super::gpu::create_gpu_compilation_message_template(scope, None);
+    templates.insert("GPUCompilationMessage", tmpl_gpu_compilation_message);
+    let tmpl_gpu_compute_pass_encoder = super::gpu::create_gpu_compute_pass_encoder_template(scope, None);
+    templates.insert("GPUComputePassEncoder", tmpl_gpu_compute_pass_encoder);
+    let tmpl_gpu_compute_pipeline = super::gpu::create_gpu_compute_pipeline_template(scope, None);
+    templates.insert("GPUComputePipeline", tmpl_gpu_compute_pipeline);
+    let tmpl_gpu_device_lost_info = super::gpu::create_gpu_device_lost_info_template(scope, None);
+    templates.insert("GPUDeviceLostInfo", tmpl_gpu_device_lost_info);
+    let tmpl_gpu_error = super::gpu::create_gpu_error_template(scope, None);
+    templates.insert("GPUError", tmpl_gpu_error);
+    let tmpl_gpu_external_texture = super::gpu::create_gpu_external_texture_template(scope, None);
+    templates.insert("GPUExternalTexture", tmpl_gpu_external_texture);
+    let tmpl_gpu_pipeline_layout = super::gpu::create_gpu_pipeline_layout_template(scope, None);
+    templates.insert("GPUPipelineLayout", tmpl_gpu_pipeline_layout);
+    let tmpl_gpu_query_set = super::gpu::create_gpu_query_set_template(scope, None);
+    templates.insert("GPUQuerySet", tmpl_gpu_query_set);
+    let tmpl_gpu_queue = super::gpu::create_gpu_queue_template(scope, None);
+    templates.insert("GPUQueue", tmpl_gpu_queue);
+    let tmpl_gpu_render_bundle = super::gpu::create_gpu_render_bundle_template(scope, None);
+    templates.insert("GPURenderBundle", tmpl_gpu_render_bundle);
+    let tmpl_gpu_render_bundle_encoder = super::gpu::create_gpu_render_bundle_encoder_template(scope, None);
+    templates.insert("GPURenderBundleEncoder", tmpl_gpu_render_bundle_encoder);
+    let tmpl_gpu_render_pass_encoder = super::gpu::create_gpu_render_pass_encoder_template(scope, None);
+    templates.insert("GPURenderPassEncoder", tmpl_gpu_render_pass_encoder);
+    let tmpl_gpu_render_pipeline = super::gpu::create_gpu_render_pipeline_template(scope, None);
+    templates.insert("GPURenderPipeline", tmpl_gpu_render_pipeline);
+    let tmpl_gpu_sampler = super::gpu::create_gpu_sampler_template(scope, None);
+    templates.insert("GPUSampler", tmpl_gpu_sampler);
+    let tmpl_gpu_shader_module = super::gpu::create_gpu_shader_module_template(scope, None);
+    templates.insert("GPUShaderModule", tmpl_gpu_shader_module);
+    let tmpl_gpu_supported_features = super::gpu::create_gpu_supported_features_template(scope, None);
+    templates.insert("GPUSupportedFeatures", tmpl_gpu_supported_features);
+    let tmpl_gpu_supported_limits = super::gpu::create_gpu_supported_limits_template(scope, None);
+    templates.insert("GPUSupportedLimits", tmpl_gpu_supported_limits);
+    let tmpl_gpu_texture = super::gpu::create_gpu_texture_template(scope, None);
+    templates.insert("GPUTexture", tmpl_gpu_texture);
+    let tmpl_gpu_texture_view = super::gpu::create_gpu_texture_view_template(scope, None);
+    templates.insert("GPUTextureView", tmpl_gpu_texture_view);
+    let tmpl_gamepad = super::gamepad::create_gamepad_template(scope, None);
     templates.insert("Gamepad", tmpl_gamepad);
-    let tmpl_gamepad_button = super::web_apis::create_gamepad_button_template(scope, None);
+    let tmpl_gamepad_button = super::gamepad::create_gamepad_button_template(scope, None);
     templates.insert("GamepadButton", tmpl_gamepad_button);
-    let tmpl_gamepad_haptic_actuator = super::web_apis::create_gamepad_haptic_actuator_template(scope, None);
+    let tmpl_gamepad_haptic_actuator = super::gamepad::create_gamepad_haptic_actuator_template(scope, None);
     templates.insert("GamepadHapticActuator", tmpl_gamepad_haptic_actuator);
-    let tmpl_gamepad_pose = super::web_apis::create_gamepad_pose_template(scope, None);
+    let tmpl_gamepad_pose = super::gamepad::create_gamepad_pose_template(scope, None);
     templates.insert("GamepadPose", tmpl_gamepad_pose);
     let tmpl_geolocation = super::web_apis::create_geolocation_template(scope, None);
     templates.insert("Geolocation", tmpl_geolocation);
@@ -642,10 +639,10 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Global", tmpl_global);
     let tmpl_group_effect = super::web_apis::create_group_effect_template(scope, None);
     templates.insert("GroupEffect", tmpl_group_effect);
-    let tmpl_htmlall_collection = super::html_elements::create_htmlall_collection_template(scope, None);
-    templates.insert("HTMLAllCollection", tmpl_htmlall_collection);
-    let tmpl_htmlcollection = super::html_elements::create_htmlcollection_template(scope, None);
-    templates.insert("HTMLCollection", tmpl_htmlcollection);
+    let tmpl_html_all_collection = super::html_elements::create_html_all_collection_template(scope, None);
+    templates.insert("HTMLAllCollection", tmpl_html_all_collection);
+    let tmpl_html_collection = super::html_elements::create_html_collection_template(scope, None);
+    templates.insert("HTMLCollection", tmpl_html_collection);
     let tmpl_handwriting_drawing = super::web_apis::create_handwriting_drawing_template(scope, None);
     templates.insert("HandwritingDrawing", tmpl_handwriting_drawing);
     let tmpl_handwriting_recognizer = super::web_apis::create_handwriting_recognizer_template(scope, None);
@@ -660,18 +657,18 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("HighlightRegistry", tmpl_highlight_registry);
     let tmpl_history = super::web_apis::create_history_template(scope, None);
     templates.insert("History", tmpl_history);
-    let tmpl_idbcursor = super::web_apis::create_idbcursor_template(scope, None);
-    templates.insert("IDBCursor", tmpl_idbcursor);
-    let tmpl_idbfactory = super::web_apis::create_idbfactory_template(scope, None);
-    templates.insert("IDBFactory", tmpl_idbfactory);
-    let tmpl_idbindex = super::web_apis::create_idbindex_template(scope, None);
-    templates.insert("IDBIndex", tmpl_idbindex);
-    let tmpl_idbkey_range = super::web_apis::create_idbkey_range_template(scope, None);
-    templates.insert("IDBKeyRange", tmpl_idbkey_range);
-    let tmpl_idbobject_store = super::web_apis::create_idbobject_store_template(scope, None);
-    templates.insert("IDBObjectStore", tmpl_idbobject_store);
-    let tmpl_idbrecord = super::web_apis::create_idbrecord_template(scope, None);
-    templates.insert("IDBRecord", tmpl_idbrecord);
+    let tmpl_idb_cursor = super::idb::create_idb_cursor_template(scope, None);
+    templates.insert("IDBCursor", tmpl_idb_cursor);
+    let tmpl_idb_factory = super::idb::create_idb_factory_template(scope, None);
+    templates.insert("IDBFactory", tmpl_idb_factory);
+    let tmpl_idb_index = super::idb::create_idb_index_template(scope, None);
+    templates.insert("IDBIndex", tmpl_idb_index);
+    let tmpl_idb_key_range = super::idb::create_idb_key_range_template(scope, None);
+    templates.insert("IDBKeyRange", tmpl_idb_key_range);
+    let tmpl_idb_object_store = super::idb::create_idb_object_store_template(scope, None);
+    templates.insert("IDBObjectStore", tmpl_idb_object_store);
+    let tmpl_idb_record = super::idb::create_idb_record_template(scope, None);
+    templates.insert("IDBRecord", tmpl_idb_record);
     let tmpl_identity_provider = super::web_apis::create_identity_provider_template(scope, None);
     templates.insert("IdentityProvider", tmpl_identity_provider);
     let tmpl_idle_deadline = super::web_apis::create_idle_deadline_template(scope, None);
@@ -730,22 +727,22 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Lock", tmpl_lock);
     let tmpl_lock_manager = super::web_apis::create_lock_manager_template(scope, None);
     templates.insert("LockManager", tmpl_lock_manager);
-    let tmpl_midiinput_map = super::web_apis::create_midiinput_map_template(scope, None);
-    templates.insert("MIDIInputMap", tmpl_midiinput_map);
-    let tmpl_midioutput_map = super::web_apis::create_midioutput_map_template(scope, None);
-    templates.insert("MIDIOutputMap", tmpl_midioutput_map);
+    let tmpl_midi_input_map = super::midi::create_midi_input_map_template(scope, None);
+    templates.insert("MIDIInputMap", tmpl_midi_input_map);
+    let tmpl_midi_output_map = super::midi::create_midi_output_map_template(scope, None);
+    templates.insert("MIDIOutputMap", tmpl_midi_output_map);
     let tmpl_ml = super::web_apis::create_ml_template(scope, None);
     templates.insert("ML", tmpl_ml);
-    let tmpl_mlcontext = super::web_apis::create_mlcontext_template(scope, None);
-    templates.insert("MLContext", tmpl_mlcontext);
-    let tmpl_mlgraph = super::web_apis::create_mlgraph_template(scope, None);
-    templates.insert("MLGraph", tmpl_mlgraph);
-    let tmpl_mlgraph_builder = super::web_apis::create_mlgraph_builder_template(scope, None);
-    templates.insert("MLGraphBuilder", tmpl_mlgraph_builder);
-    let tmpl_mloperand = super::web_apis::create_mloperand_template(scope, None);
-    templates.insert("MLOperand", tmpl_mloperand);
-    let tmpl_mltensor = super::web_apis::create_mltensor_template(scope, None);
-    templates.insert("MLTensor", tmpl_mltensor);
+    let tmpl_ml_context = super::web_apis::create_ml_context_template(scope, None);
+    templates.insert("MLContext", tmpl_ml_context);
+    let tmpl_ml_graph = super::web_apis::create_ml_graph_template(scope, None);
+    templates.insert("MLGraph", tmpl_ml_graph);
+    let tmpl_ml_graph_builder = super::web_apis::create_ml_graph_builder_template(scope, None);
+    templates.insert("MLGraphBuilder", tmpl_ml_graph_builder);
+    let tmpl_ml_operand = super::web_apis::create_ml_operand_template(scope, None);
+    templates.insert("MLOperand", tmpl_ml_operand);
+    let tmpl_ml_tensor = super::web_apis::create_ml_tensor_template(scope, None);
+    templates.insert("MLTensor", tmpl_ml_tensor);
     let tmpl_media_capabilities = super::media_apis::create_media_capabilities_template(scope, None);
     templates.insert("MediaCapabilities", tmpl_media_capabilities);
     let tmpl_media_device_info = super::media_apis::create_media_device_info_template(scope, None);
@@ -786,10 +783,10 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("MutationObserver", tmpl_mutation_observer);
     let tmpl_mutation_record = super::dom_core::create_mutation_record_template(scope, None);
     templates.insert("MutationRecord", tmpl_mutation_record);
-    let tmpl_ndefmessage = super::web_apis::create_ndefmessage_template(scope, None);
-    templates.insert("NDEFMessage", tmpl_ndefmessage);
-    let tmpl_ndefrecord = super::web_apis::create_ndefrecord_template(scope, None);
-    templates.insert("NDEFRecord", tmpl_ndefrecord);
+    let tmpl_ndef_message = super::web_apis::create_ndef_message_template(scope, None);
+    templates.insert("NDEFMessage", tmpl_ndef_message);
+    let tmpl_ndef_record = super::web_apis::create_ndef_record_template(scope, None);
+    templates.insert("NDEFRecord", tmpl_ndef_record);
     let tmpl_named_flow_map = super::web_apis::create_named_flow_map_template(scope, None);
     templates.insert("NamedFlowMap", tmpl_named_flow_map);
     let tmpl_named_node_map = super::dom_core::create_named_node_map_template(scope, None);
@@ -808,8 +805,8 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Navigator", tmpl_navigator);
     let tmpl_navigator_login = super::web_apis::create_navigator_login_template(scope, None);
     templates.insert("NavigatorLogin", tmpl_navigator_login);
-    let tmpl_navigator_uadata = super::web_apis::create_navigator_uadata_template(scope, None);
-    templates.insert("NavigatorUAData", tmpl_navigator_uadata);
+    let tmpl_navigator_ua_data = super::web_apis::create_navigator_ua_data_template(scope, None);
+    templates.insert("NavigatorUAData", tmpl_navigator_ua_data);
     let tmpl_node_iterator = super::dom_core::create_node_iterator_template(scope, None);
     templates.insert("NodeIterator", tmpl_node_iterator);
     let tmpl_node_list = super::dom_core::create_node_list_template(scope, None);
@@ -840,17 +837,17 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("OVR_multiview2", tmpl_ovr_multiview2);
     let tmpl_observable = super::web_apis::create_observable_template(scope, None);
     templates.insert("Observable", tmpl_observable);
-    let tmpl_offscreen_canvas_rendering_context2_d = super::web_apis::create_offscreen_canvas_rendering_context2_d_template(scope, None);
-    templates.insert("OffscreenCanvasRenderingContext2D", tmpl_offscreen_canvas_rendering_context2_d);
+    let tmpl_offscreen_canvas_rendering_context2d = super::web_apis::create_offscreen_canvas_rendering_context2d_template(scope, None);
+    templates.insert("OffscreenCanvasRenderingContext2D", tmpl_offscreen_canvas_rendering_context2d);
     let tmpl_origin = super::web_apis::create_origin_template(scope, None);
     templates.insert("Origin", tmpl_origin);
-    let tmpl_paint_rendering_context2_d = super::web_apis::create_paint_rendering_context2_d_template(scope, None);
-    templates.insert("PaintRenderingContext2D", tmpl_paint_rendering_context2_d);
+    let tmpl_paint_rendering_context2d = super::web_apis::create_paint_rendering_context2d_template(scope, None);
+    templates.insert("PaintRenderingContext2D", tmpl_paint_rendering_context2d);
     let tmpl_paint_size = super::web_apis::create_paint_size_template(scope, None);
     templates.insert("PaintSize", tmpl_paint_size);
-    let tmpl_path2_d = super::web_apis::create_path2_d_template(scope, None);
-    templates.insert("Path2D", tmpl_path2_d);
-    let tmpl_payment_manager = super::web_apis::create_payment_manager_template(scope, None);
+    let tmpl_path2d = super::web_apis::create_path2d_template(scope, None);
+    templates.insert("Path2D", tmpl_path2d);
+    let tmpl_payment_manager = super::payment::create_payment_manager_template(scope, None);
     templates.insert("PaymentManager", tmpl_payment_manager);
     let tmpl_performance_entry = super::web_apis::create_performance_entry_template(scope, None);
     templates.insert("PerformanceEntry", tmpl_performance_entry);
@@ -880,9 +877,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("PluginArray", tmpl_plugin_array);
     let tmpl_preference_manager = super::web_apis::create_preference_manager_template(scope, None);
     templates.insert("PreferenceManager", tmpl_preference_manager);
-    let tmpl_presentation = super::web_apis::create_presentation_template(scope, None);
+    let tmpl_presentation = super::presentation::create_presentation_template(scope, None);
     templates.insert("Presentation", tmpl_presentation);
-    let tmpl_presentation_receiver = super::web_apis::create_presentation_receiver_template(scope, None);
+    let tmpl_presentation_receiver = super::presentation::create_presentation_receiver_template(scope, None);
     templates.insert("PresentationReceiver", tmpl_presentation_receiver);
     let tmpl_pressure_observer = super::observers::create_pressure_observer_template(scope, None);
     templates.insert("PressureObserver", tmpl_pressure_observer);
@@ -896,42 +893,42 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("PushSubscription", tmpl_push_subscription);
     let tmpl_push_subscription_options = super::web_apis::create_push_subscription_options_template(scope, None);
     templates.insert("PushSubscriptionOptions", tmpl_push_subscription_options);
-    let tmpl_rtccertificate = super::web_apis::create_rtccertificate_template(scope, None);
-    templates.insert("RTCCertificate", tmpl_rtccertificate);
-    let tmpl_rtcencoded_audio_frame = super::web_apis::create_rtcencoded_audio_frame_template(scope, None);
-    templates.insert("RTCEncodedAudioFrame", tmpl_rtcencoded_audio_frame);
-    let tmpl_rtcencoded_video_frame = super::web_apis::create_rtcencoded_video_frame_template(scope, None);
-    templates.insert("RTCEncodedVideoFrame", tmpl_rtcencoded_video_frame);
-    let tmpl_rtcice_candidate = super::web_apis::create_rtcice_candidate_template(scope, None);
-    templates.insert("RTCIceCandidate", tmpl_rtcice_candidate);
-    let tmpl_rtcice_candidate_pair = super::web_apis::create_rtcice_candidate_pair_template(scope, None);
-    templates.insert("RTCIceCandidatePair", tmpl_rtcice_candidate_pair);
-    let tmpl_rtcidentity_assertion = super::web_apis::create_rtcidentity_assertion_template(scope, None);
-    templates.insert("RTCIdentityAssertion", tmpl_rtcidentity_assertion);
-    let tmpl_rtcidentity_provider_registrar = super::web_apis::create_rtcidentity_provider_registrar_template(scope, None);
-    templates.insert("RTCIdentityProviderRegistrar", tmpl_rtcidentity_provider_registrar);
-    let tmpl_rtcrtp_receiver = super::web_apis::create_rtcrtp_receiver_template(scope, None);
-    templates.insert("RTCRtpReceiver", tmpl_rtcrtp_receiver);
-    let tmpl_rtcrtp_sframe_encrypter = super::web_apis::create_rtcrtp_sframe_encrypter_template(scope, None);
-    templates.insert("RTCRtpSFrameEncrypter", tmpl_rtcrtp_sframe_encrypter);
-    let tmpl_rtcrtp_script_transform = super::web_apis::create_rtcrtp_script_transform_template(scope, None);
-    templates.insert("RTCRtpScriptTransform", tmpl_rtcrtp_script_transform);
-    let tmpl_rtcrtp_sender = super::web_apis::create_rtcrtp_sender_template(scope, None);
-    templates.insert("RTCRtpSender", tmpl_rtcrtp_sender);
-    let tmpl_rtcrtp_transceiver = super::web_apis::create_rtcrtp_transceiver_template(scope, None);
-    templates.insert("RTCRtpTransceiver", tmpl_rtcrtp_transceiver);
-    let tmpl_rtcsession_description = super::web_apis::create_rtcsession_description_template(scope, None);
-    templates.insert("RTCSessionDescription", tmpl_rtcsession_description);
-    let tmpl_rtcstats_report = super::web_apis::create_rtcstats_report_template(scope, None);
-    templates.insert("RTCStatsReport", tmpl_rtcstats_report);
+    let tmpl_rtc_certificate = super::webrtc::create_rtc_certificate_template(scope, None);
+    templates.insert("RTCCertificate", tmpl_rtc_certificate);
+    let tmpl_rtc_encoded_audio_frame = super::webrtc::create_rtc_encoded_audio_frame_template(scope, None);
+    templates.insert("RTCEncodedAudioFrame", tmpl_rtc_encoded_audio_frame);
+    let tmpl_rtc_encoded_video_frame = super::webrtc::create_rtc_encoded_video_frame_template(scope, None);
+    templates.insert("RTCEncodedVideoFrame", tmpl_rtc_encoded_video_frame);
+    let tmpl_rtc_ice_candidate = super::webrtc::create_rtc_ice_candidate_template(scope, None);
+    templates.insert("RTCIceCandidate", tmpl_rtc_ice_candidate);
+    let tmpl_rtc_ice_candidate_pair = super::webrtc::create_rtc_ice_candidate_pair_template(scope, None);
+    templates.insert("RTCIceCandidatePair", tmpl_rtc_ice_candidate_pair);
+    let tmpl_rtc_identity_assertion = super::webrtc::create_rtc_identity_assertion_template(scope, None);
+    templates.insert("RTCIdentityAssertion", tmpl_rtc_identity_assertion);
+    let tmpl_rtc_identity_provider_registrar = super::webrtc::create_rtc_identity_provider_registrar_template(scope, None);
+    templates.insert("RTCIdentityProviderRegistrar", tmpl_rtc_identity_provider_registrar);
+    let tmpl_rtc_rtp_receiver = super::webrtc::create_rtc_rtp_receiver_template(scope, None);
+    templates.insert("RTCRtpReceiver", tmpl_rtc_rtp_receiver);
+    let tmpl_rtc_rtp_s_frame_encrypter = super::webrtc::create_rtc_rtp_s_frame_encrypter_template(scope, None);
+    templates.insert("RTCRtpSFrameEncrypter", tmpl_rtc_rtp_s_frame_encrypter);
+    let tmpl_rtc_rtp_script_transform = super::webrtc::create_rtc_rtp_script_transform_template(scope, None);
+    templates.insert("RTCRtpScriptTransform", tmpl_rtc_rtp_script_transform);
+    let tmpl_rtc_rtp_sender = super::webrtc::create_rtc_rtp_sender_template(scope, None);
+    templates.insert("RTCRtpSender", tmpl_rtc_rtp_sender);
+    let tmpl_rtc_rtp_transceiver = super::webrtc::create_rtc_rtp_transceiver_template(scope, None);
+    templates.insert("RTCRtpTransceiver", tmpl_rtc_rtp_transceiver);
+    let tmpl_rtc_session_description = super::webrtc::create_rtc_session_description_template(scope, None);
+    templates.insert("RTCSessionDescription", tmpl_rtc_session_description);
+    let tmpl_rtc_stats_report = super::webrtc::create_rtc_stats_report_template(scope, None);
+    templates.insert("RTCStatsReport", tmpl_rtc_stats_report);
     let tmpl_readable_byte_stream_controller = super::streams::create_readable_byte_stream_controller_template(scope, None);
     templates.insert("ReadableByteStreamController", tmpl_readable_byte_stream_controller);
     let tmpl_readable_stream = super::streams::create_readable_stream_template(scope, None);
     templates.insert("ReadableStream", tmpl_readable_stream);
-    let tmpl_readable_stream_byobreader = super::streams::create_readable_stream_byobreader_template(scope, None);
-    templates.insert("ReadableStreamBYOBReader", tmpl_readable_stream_byobreader);
-    let tmpl_readable_stream_byobrequest = super::streams::create_readable_stream_byobrequest_template(scope, None);
-    templates.insert("ReadableStreamBYOBRequest", tmpl_readable_stream_byobrequest);
+    let tmpl_readable_stream_byob_reader = super::streams::create_readable_stream_byob_reader_template(scope, None);
+    templates.insert("ReadableStreamBYOBReader", tmpl_readable_stream_byob_reader);
+    let tmpl_readable_stream_byob_request = super::streams::create_readable_stream_byob_request_template(scope, None);
+    templates.insert("ReadableStreamBYOBRequest", tmpl_readable_stream_byob_request);
     let tmpl_readable_stream_default_controller = super::streams::create_readable_stream_default_controller_template(scope, None);
     templates.insert("ReadableStreamDefaultController", tmpl_readable_stream_default_controller);
     let tmpl_readable_stream_default_reader = super::streams::create_readable_stream_default_reader_template(scope, None);
@@ -952,56 +949,56 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("RestrictionTarget", tmpl_restriction_target);
     let tmpl_rewriter = super::web_apis::create_rewriter_template(scope, None);
     templates.insert("Rewriter", tmpl_rewriter);
-    let tmpl_sframe_encrypter_stream = super::web_apis::create_sframe_encrypter_stream_template(scope, None);
-    templates.insert("SFrameEncrypterStream", tmpl_sframe_encrypter_stream);
-    let tmpl_svgangle = super::svg::create_svgangle_template(scope, None);
-    templates.insert("SVGAngle", tmpl_svgangle);
-    let tmpl_svganimated_angle = super::svg::create_svganimated_angle_template(scope, None);
-    templates.insert("SVGAnimatedAngle", tmpl_svganimated_angle);
-    let tmpl_svganimated_boolean = super::svg::create_svganimated_boolean_template(scope, None);
-    templates.insert("SVGAnimatedBoolean", tmpl_svganimated_boolean);
-    let tmpl_svganimated_enumeration = super::svg::create_svganimated_enumeration_template(scope, None);
-    templates.insert("SVGAnimatedEnumeration", tmpl_svganimated_enumeration);
-    let tmpl_svganimated_integer = super::svg::create_svganimated_integer_template(scope, None);
-    templates.insert("SVGAnimatedInteger", tmpl_svganimated_integer);
-    let tmpl_svganimated_length = super::svg::create_svganimated_length_template(scope, None);
-    templates.insert("SVGAnimatedLength", tmpl_svganimated_length);
-    let tmpl_svganimated_length_list = super::svg::create_svganimated_length_list_template(scope, None);
-    templates.insert("SVGAnimatedLengthList", tmpl_svganimated_length_list);
-    let tmpl_svganimated_number = super::svg::create_svganimated_number_template(scope, None);
-    templates.insert("SVGAnimatedNumber", tmpl_svganimated_number);
-    let tmpl_svganimated_number_list = super::svg::create_svganimated_number_list_template(scope, None);
-    templates.insert("SVGAnimatedNumberList", tmpl_svganimated_number_list);
-    let tmpl_svganimated_preserve_aspect_ratio = super::svg::create_svganimated_preserve_aspect_ratio_template(scope, None);
-    templates.insert("SVGAnimatedPreserveAspectRatio", tmpl_svganimated_preserve_aspect_ratio);
-    let tmpl_svganimated_rect = super::svg::create_svganimated_rect_template(scope, None);
-    templates.insert("SVGAnimatedRect", tmpl_svganimated_rect);
-    let tmpl_svganimated_string = super::svg::create_svganimated_string_template(scope, None);
-    templates.insert("SVGAnimatedString", tmpl_svganimated_string);
-    let tmpl_svganimated_transform_list = super::svg::create_svganimated_transform_list_template(scope, None);
-    templates.insert("SVGAnimatedTransformList", tmpl_svganimated_transform_list);
-    let tmpl_svglength = super::svg::create_svglength_template(scope, None);
-    templates.insert("SVGLength", tmpl_svglength);
-    let tmpl_svglength_list = super::svg::create_svglength_list_template(scope, None);
-    templates.insert("SVGLengthList", tmpl_svglength_list);
-    let tmpl_svgnumber = super::svg::create_svgnumber_template(scope, None);
-    templates.insert("SVGNumber", tmpl_svgnumber);
-    let tmpl_svgnumber_list = super::svg::create_svgnumber_list_template(scope, None);
-    templates.insert("SVGNumberList", tmpl_svgnumber_list);
-    let tmpl_svgpath_segment = super::svg::create_svgpath_segment_template(scope, None);
-    templates.insert("SVGPathSegment", tmpl_svgpath_segment);
-    let tmpl_svgpoint_list = super::svg::create_svgpoint_list_template(scope, None);
-    templates.insert("SVGPointList", tmpl_svgpoint_list);
-    let tmpl_svgpreserve_aspect_ratio = super::svg::create_svgpreserve_aspect_ratio_template(scope, None);
-    templates.insert("SVGPreserveAspectRatio", tmpl_svgpreserve_aspect_ratio);
-    let tmpl_svgstring_list = super::svg::create_svgstring_list_template(scope, None);
-    templates.insert("SVGStringList", tmpl_svgstring_list);
-    let tmpl_svgtransform = super::svg::create_svgtransform_template(scope, None);
-    templates.insert("SVGTransform", tmpl_svgtransform);
-    let tmpl_svgtransform_list = super::svg::create_svgtransform_list_template(scope, None);
-    templates.insert("SVGTransformList", tmpl_svgtransform_list);
-    let tmpl_svgunit_types = super::svg::create_svgunit_types_template(scope, None);
-    templates.insert("SVGUnitTypes", tmpl_svgunit_types);
+    let tmpl_s_frame_encrypter_stream = super::web_apis::create_s_frame_encrypter_stream_template(scope, None);
+    templates.insert("SFrameEncrypterStream", tmpl_s_frame_encrypter_stream);
+    let tmpl_svg_angle = super::svg::create_svg_angle_template(scope, None);
+    templates.insert("SVGAngle", tmpl_svg_angle);
+    let tmpl_svg_animated_angle = super::svg::create_svg_animated_angle_template(scope, None);
+    templates.insert("SVGAnimatedAngle", tmpl_svg_animated_angle);
+    let tmpl_svg_animated_boolean = super::svg::create_svg_animated_boolean_template(scope, None);
+    templates.insert("SVGAnimatedBoolean", tmpl_svg_animated_boolean);
+    let tmpl_svg_animated_enumeration = super::svg::create_svg_animated_enumeration_template(scope, None);
+    templates.insert("SVGAnimatedEnumeration", tmpl_svg_animated_enumeration);
+    let tmpl_svg_animated_integer = super::svg::create_svg_animated_integer_template(scope, None);
+    templates.insert("SVGAnimatedInteger", tmpl_svg_animated_integer);
+    let tmpl_svg_animated_length = super::svg::create_svg_animated_length_template(scope, None);
+    templates.insert("SVGAnimatedLength", tmpl_svg_animated_length);
+    let tmpl_svg_animated_length_list = super::svg::create_svg_animated_length_list_template(scope, None);
+    templates.insert("SVGAnimatedLengthList", tmpl_svg_animated_length_list);
+    let tmpl_svg_animated_number = super::svg::create_svg_animated_number_template(scope, None);
+    templates.insert("SVGAnimatedNumber", tmpl_svg_animated_number);
+    let tmpl_svg_animated_number_list = super::svg::create_svg_animated_number_list_template(scope, None);
+    templates.insert("SVGAnimatedNumberList", tmpl_svg_animated_number_list);
+    let tmpl_svg_animated_preserve_aspect_ratio = super::svg::create_svg_animated_preserve_aspect_ratio_template(scope, None);
+    templates.insert("SVGAnimatedPreserveAspectRatio", tmpl_svg_animated_preserve_aspect_ratio);
+    let tmpl_svg_animated_rect = super::svg::create_svg_animated_rect_template(scope, None);
+    templates.insert("SVGAnimatedRect", tmpl_svg_animated_rect);
+    let tmpl_svg_animated_string = super::svg::create_svg_animated_string_template(scope, None);
+    templates.insert("SVGAnimatedString", tmpl_svg_animated_string);
+    let tmpl_svg_animated_transform_list = super::svg::create_svg_animated_transform_list_template(scope, None);
+    templates.insert("SVGAnimatedTransformList", tmpl_svg_animated_transform_list);
+    let tmpl_svg_length = super::svg::create_svg_length_template(scope, None);
+    templates.insert("SVGLength", tmpl_svg_length);
+    let tmpl_svg_length_list = super::svg::create_svg_length_list_template(scope, None);
+    templates.insert("SVGLengthList", tmpl_svg_length_list);
+    let tmpl_svg_number = super::svg::create_svg_number_template(scope, None);
+    templates.insert("SVGNumber", tmpl_svg_number);
+    let tmpl_svg_number_list = super::svg::create_svg_number_list_template(scope, None);
+    templates.insert("SVGNumberList", tmpl_svg_number_list);
+    let tmpl_svg_path_segment = super::svg::create_svg_path_segment_template(scope, None);
+    templates.insert("SVGPathSegment", tmpl_svg_path_segment);
+    let tmpl_svg_point_list = super::svg::create_svg_point_list_template(scope, None);
+    templates.insert("SVGPointList", tmpl_svg_point_list);
+    let tmpl_svg_preserve_aspect_ratio = super::svg::create_svg_preserve_aspect_ratio_template(scope, None);
+    templates.insert("SVGPreserveAspectRatio", tmpl_svg_preserve_aspect_ratio);
+    let tmpl_svg_string_list = super::svg::create_svg_string_list_template(scope, None);
+    templates.insert("SVGStringList", tmpl_svg_string_list);
+    let tmpl_svg_transform = super::svg::create_svg_transform_template(scope, None);
+    templates.insert("SVGTransform", tmpl_svg_transform);
+    let tmpl_svg_transform_list = super::svg::create_svg_transform_list_template(scope, None);
+    templates.insert("SVGTransformList", tmpl_svg_transform_list);
+    let tmpl_svg_unit_types = super::svg::create_svg_unit_types_template(scope, None);
+    templates.insert("SVGUnitTypes", tmpl_svg_unit_types);
     let tmpl_sanitizer = super::web_apis::create_sanitizer_template(scope, None);
     templates.insert("Sanitizer", tmpl_sanitizer);
     let tmpl_scheduler = super::web_apis::create_scheduler_template(scope, None);
@@ -1054,15 +1051,15 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Table", tmpl_table);
     let tmpl_tag = super::web_apis::create_tag_template(scope, None);
     templates.insert("Tag", tmpl_tag);
-    let tmpl_text_decoder = super::web_apis::create_text_decoder_template(scope, None);
+    let tmpl_text_decoder = super::encoding::create_text_decoder_template(scope, None);
     templates.insert("TextDecoder", tmpl_text_decoder);
-    let tmpl_text_decoder_stream = super::web_apis::create_text_decoder_stream_template(scope, None);
+    let tmpl_text_decoder_stream = super::encoding::create_text_decoder_stream_template(scope, None);
     templates.insert("TextDecoderStream", tmpl_text_decoder_stream);
     let tmpl_text_detector = super::web_apis::create_text_detector_template(scope, None);
     templates.insert("TextDetector", tmpl_text_detector);
-    let tmpl_text_encoder = super::web_apis::create_text_encoder_template(scope, None);
+    let tmpl_text_encoder = super::encoding::create_text_encoder_template(scope, None);
     templates.insert("TextEncoder", tmpl_text_encoder);
-    let tmpl_text_encoder_stream = super::web_apis::create_text_encoder_stream_template(scope, None);
+    let tmpl_text_encoder_stream = super::encoding::create_text_encoder_stream_template(scope, None);
     templates.insert("TextEncoderStream", tmpl_text_encoder_stream);
     let tmpl_text_format = super::web_apis::create_text_format_template(scope, None);
     templates.insert("TextFormat", tmpl_text_format);
@@ -1094,38 +1091,38 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("TrustedTypePolicy", tmpl_trusted_type_policy);
     let tmpl_trusted_type_policy_factory = super::web_apis::create_trusted_type_policy_factory_template(scope, None);
     templates.insert("TrustedTypePolicyFactory", tmpl_trusted_type_policy_factory);
-    let tmpl_url = super::web_apis::create_url_template(scope, None);
+    let tmpl_url = super::url::create_url_template(scope, None);
     templates.insert("URL", tmpl_url);
-    let tmpl_urlpattern = super::web_apis::create_urlpattern_template(scope, None);
-    templates.insert("URLPattern", tmpl_urlpattern);
-    let tmpl_urlsearch_params = super::web_apis::create_urlsearch_params_template(scope, None);
-    templates.insert("URLSearchParams", tmpl_urlsearch_params);
-    let tmpl_usbalternate_interface = super::web_apis::create_usbalternate_interface_template(scope, None);
-    templates.insert("USBAlternateInterface", tmpl_usbalternate_interface);
-    let tmpl_usbconfiguration = super::web_apis::create_usbconfiguration_template(scope, None);
-    templates.insert("USBConfiguration", tmpl_usbconfiguration);
-    let tmpl_usbdevice = super::web_apis::create_usbdevice_template(scope, None);
-    templates.insert("USBDevice", tmpl_usbdevice);
-    let tmpl_usbendpoint = super::web_apis::create_usbendpoint_template(scope, None);
-    templates.insert("USBEndpoint", tmpl_usbendpoint);
-    let tmpl_usbin_transfer_result = super::web_apis::create_usbin_transfer_result_template(scope, None);
-    templates.insert("USBInTransferResult", tmpl_usbin_transfer_result);
-    let tmpl_usbinterface = super::web_apis::create_usbinterface_template(scope, None);
-    templates.insert("USBInterface", tmpl_usbinterface);
-    let tmpl_usbisochronous_in_transfer_packet = super::web_apis::create_usbisochronous_in_transfer_packet_template(scope, None);
-    templates.insert("USBIsochronousInTransferPacket", tmpl_usbisochronous_in_transfer_packet);
-    let tmpl_usbisochronous_in_transfer_result = super::web_apis::create_usbisochronous_in_transfer_result_template(scope, None);
-    templates.insert("USBIsochronousInTransferResult", tmpl_usbisochronous_in_transfer_result);
-    let tmpl_usbisochronous_out_transfer_packet = super::web_apis::create_usbisochronous_out_transfer_packet_template(scope, None);
-    templates.insert("USBIsochronousOutTransferPacket", tmpl_usbisochronous_out_transfer_packet);
-    let tmpl_usbisochronous_out_transfer_result = super::web_apis::create_usbisochronous_out_transfer_result_template(scope, None);
-    templates.insert("USBIsochronousOutTransferResult", tmpl_usbisochronous_out_transfer_result);
-    let tmpl_usbout_transfer_result = super::web_apis::create_usbout_transfer_result_template(scope, None);
-    templates.insert("USBOutTransferResult", tmpl_usbout_transfer_result);
+    let tmpl_url_pattern = super::web_apis::create_url_pattern_template(scope, None);
+    templates.insert("URLPattern", tmpl_url_pattern);
+    let tmpl_url_search_params = super::url::create_url_search_params_template(scope, None);
+    templates.insert("URLSearchParams", tmpl_url_search_params);
+    let tmpl_usb_alternate_interface = super::usb::create_usb_alternate_interface_template(scope, None);
+    templates.insert("USBAlternateInterface", tmpl_usb_alternate_interface);
+    let tmpl_usb_configuration = super::usb::create_usb_configuration_template(scope, None);
+    templates.insert("USBConfiguration", tmpl_usb_configuration);
+    let tmpl_usb_device = super::usb::create_usb_device_template(scope, None);
+    templates.insert("USBDevice", tmpl_usb_device);
+    let tmpl_usb_endpoint = super::usb::create_usb_endpoint_template(scope, None);
+    templates.insert("USBEndpoint", tmpl_usb_endpoint);
+    let tmpl_usb_in_transfer_result = super::usb::create_usb_in_transfer_result_template(scope, None);
+    templates.insert("USBInTransferResult", tmpl_usb_in_transfer_result);
+    let tmpl_usb_interface = super::usb::create_usb_interface_template(scope, None);
+    templates.insert("USBInterface", tmpl_usb_interface);
+    let tmpl_usb_isochronous_in_transfer_packet = super::usb::create_usb_isochronous_in_transfer_packet_template(scope, None);
+    templates.insert("USBIsochronousInTransferPacket", tmpl_usb_isochronous_in_transfer_packet);
+    let tmpl_usb_isochronous_in_transfer_result = super::usb::create_usb_isochronous_in_transfer_result_template(scope, None);
+    templates.insert("USBIsochronousInTransferResult", tmpl_usb_isochronous_in_transfer_result);
+    let tmpl_usb_isochronous_out_transfer_packet = super::usb::create_usb_isochronous_out_transfer_packet_template(scope, None);
+    templates.insert("USBIsochronousOutTransferPacket", tmpl_usb_isochronous_out_transfer_packet);
+    let tmpl_usb_isochronous_out_transfer_result = super::usb::create_usb_isochronous_out_transfer_result_template(scope, None);
+    templates.insert("USBIsochronousOutTransferResult", tmpl_usb_isochronous_out_transfer_result);
+    let tmpl_usb_out_transfer_result = super::usb::create_usb_out_transfer_result_template(scope, None);
+    templates.insert("USBOutTransferResult", tmpl_usb_out_transfer_result);
     let tmpl_user_activation = super::web_apis::create_user_activation_template(scope, None);
     templates.insert("UserActivation", tmpl_user_activation);
-    let tmpl_vttregion = super::web_apis::create_vttregion_template(scope, None);
-    templates.insert("VTTRegion", tmpl_vttregion);
+    let tmpl_vtt_region = super::web_apis::create_vtt_region_template(scope, None);
+    templates.insert("VTTRegion", tmpl_vtt_region);
     let tmpl_validity_state = super::web_apis::create_validity_state_template(scope, None);
     templates.insert("ValidityState", tmpl_validity_state);
     let tmpl_video_color_space = super::web_apis::create_video_color_space_template(scope, None);
@@ -1180,22 +1177,22 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("WEBGL_multi_draw_instanced_base_vertex_base_instance", tmpl_webgl_multi_draw_instanced_base_vertex_base_instance);
     let tmpl_webgl_provoking_vertex = super::web_apis::create_webgl_provoking_vertex_template(scope, None);
     templates.insert("WEBGL_provoking_vertex", tmpl_webgl_provoking_vertex);
-    let tmpl_wgsllanguage_features = super::web_apis::create_wgsllanguage_features_template(scope, None);
-    templates.insert("WGSLLanguageFeatures", tmpl_wgsllanguage_features);
+    let tmpl_wgsl_language_features = super::web_apis::create_wgsl_language_features_template(scope, None);
+    templates.insert("WGSLLanguageFeatures", tmpl_wgsl_language_features);
     let tmpl_wake_lock = super::web_apis::create_wake_lock_template(scope, None);
     templates.insert("WakeLock", tmpl_wake_lock);
-    let tmpl_web_gl2_rendering_context = super::webgl::create_web_gl2_rendering_context_template(scope, None);
-    templates.insert("WebGL2RenderingContext", tmpl_web_gl2_rendering_context);
-    let tmpl_web_glactive_info = super::webgl::create_web_glactive_info_template(scope, None);
-    templates.insert("WebGLActiveInfo", tmpl_web_glactive_info);
-    let tmpl_web_globject = super::webgl::create_web_globject_template(scope, None);
-    templates.insert("WebGLObject", tmpl_web_globject);
-    let tmpl_web_glrendering_context = super::webgl::create_web_glrendering_context_template(scope, None);
-    templates.insert("WebGLRenderingContext", tmpl_web_glrendering_context);
-    let tmpl_web_glshader_precision_format = super::webgl::create_web_glshader_precision_format_template(scope, None);
-    templates.insert("WebGLShaderPrecisionFormat", tmpl_web_glshader_precision_format);
-    let tmpl_web_gluniform_location = super::webgl::create_web_gluniform_location_template(scope, None);
-    templates.insert("WebGLUniformLocation", tmpl_web_gluniform_location);
+    let tmpl_web_gl2rendering_context = super::webgl::create_web_gl2rendering_context_template(scope, None);
+    templates.insert("WebGL2RenderingContext", tmpl_web_gl2rendering_context);
+    let tmpl_web_gl_active_info = super::webgl::create_web_gl_active_info_template(scope, None);
+    templates.insert("WebGLActiveInfo", tmpl_web_gl_active_info);
+    let tmpl_web_gl_object = super::webgl::create_web_gl_object_template(scope, None);
+    templates.insert("WebGLObject", tmpl_web_gl_object);
+    let tmpl_web_gl_rendering_context = super::webgl::create_web_gl_rendering_context_template(scope, None);
+    templates.insert("WebGLRenderingContext", tmpl_web_gl_rendering_context);
+    let tmpl_web_gl_shader_precision_format = super::webgl::create_web_gl_shader_precision_format_template(scope, None);
+    templates.insert("WebGLShaderPrecisionFormat", tmpl_web_gl_shader_precision_format);
+    let tmpl_web_gl_uniform_location = super::webgl::create_web_gl_uniform_location_template(scope, None);
+    templates.insert("WebGLUniformLocation", tmpl_web_gl_uniform_location);
     let tmpl_web_transport = super::web_apis::create_web_transport_template(scope, None);
     templates.insert("WebTransport", tmpl_web_transport);
     let tmpl_web_transport_bidirectional_stream = super::web_apis::create_web_transport_bidirectional_stream_template(scope, None);
@@ -1224,70 +1221,70 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("WritableStreamDefaultWriter", tmpl_writable_stream_default_writer);
     let tmpl_writer = super::web_apis::create_writer_template(scope, None);
     templates.insert("Writer", tmpl_writer);
-    let tmpl_xmlserializer = super::web_apis::create_xmlserializer_template(scope, None);
-    templates.insert("XMLSerializer", tmpl_xmlserializer);
-    let tmpl_xpath_evaluator = super::web_apis::create_xpath_evaluator_template(scope, None);
-    templates.insert("XPathEvaluator", tmpl_xpath_evaluator);
-    let tmpl_xpath_expression = super::web_apis::create_xpath_expression_template(scope, None);
-    templates.insert("XPathExpression", tmpl_xpath_expression);
-    let tmpl_xpath_result = super::web_apis::create_xpath_result_template(scope, None);
-    templates.insert("XPathResult", tmpl_xpath_result);
-    let tmpl_xranchor = super::webxr::create_xranchor_template(scope, None);
-    templates.insert("XRAnchor", tmpl_xranchor);
-    let tmpl_xranchor_set = super::webxr::create_xranchor_set_template(scope, None);
-    templates.insert("XRAnchorSet", tmpl_xranchor_set);
-    let tmpl_xrbody = super::webxr::create_xrbody_template(scope, None);
-    templates.insert("XRBody", tmpl_xrbody);
-    let tmpl_xrcamera = super::webxr::create_xrcamera_template(scope, None);
-    templates.insert("XRCamera", tmpl_xrcamera);
-    let tmpl_xrdepth_information = super::webxr::create_xrdepth_information_template(scope, None);
-    templates.insert("XRDepthInformation", tmpl_xrdepth_information);
-    let tmpl_xrframe = super::webxr::create_xrframe_template(scope, None);
-    templates.insert("XRFrame", tmpl_xrframe);
-    let tmpl_xrhand = super::webxr::create_xrhand_template(scope, None);
-    templates.insert("XRHand", tmpl_xrhand);
-    let tmpl_xrhit_test_result = super::webxr::create_xrhit_test_result_template(scope, None);
-    templates.insert("XRHitTestResult", tmpl_xrhit_test_result);
-    let tmpl_xrhit_test_source = super::webxr::create_xrhit_test_source_template(scope, None);
-    templates.insert("XRHitTestSource", tmpl_xrhit_test_source);
-    let tmpl_xrinput_source = super::webxr::create_xrinput_source_template(scope, None);
-    templates.insert("XRInputSource", tmpl_xrinput_source);
-    let tmpl_xrinput_source_array = super::webxr::create_xrinput_source_array_template(scope, None);
-    templates.insert("XRInputSourceArray", tmpl_xrinput_source_array);
-    let tmpl_xrlight_estimate = super::webxr::create_xrlight_estimate_template(scope, None);
-    templates.insert("XRLightEstimate", tmpl_xrlight_estimate);
-    let tmpl_xrmedia_binding = super::webxr::create_xrmedia_binding_template(scope, None);
-    templates.insert("XRMediaBinding", tmpl_xrmedia_binding);
-    let tmpl_xrmesh = super::webxr::create_xrmesh_template(scope, None);
-    templates.insert("XRMesh", tmpl_xrmesh);
-    let tmpl_xrmesh_set = super::webxr::create_xrmesh_set_template(scope, None);
-    templates.insert("XRMeshSet", tmpl_xrmesh_set);
-    let tmpl_xrplane = super::webxr::create_xrplane_template(scope, None);
-    templates.insert("XRPlane", tmpl_xrplane);
-    let tmpl_xrplane_set = super::webxr::create_xrplane_set_template(scope, None);
-    templates.insert("XRPlaneSet", tmpl_xrplane_set);
-    let tmpl_xrpose = super::webxr::create_xrpose_template(scope, None);
-    templates.insert("XRPose", tmpl_xrpose);
-    let tmpl_xrray = super::webxr::create_xrray_template(scope, None);
-    templates.insert("XRRay", tmpl_xrray);
-    let tmpl_xrrender_state = super::webxr::create_xrrender_state_template(scope, None);
-    templates.insert("XRRenderState", tmpl_xrrender_state);
-    let tmpl_xrrigid_transform = super::webxr::create_xrrigid_transform_template(scope, None);
-    templates.insert("XRRigidTransform", tmpl_xrrigid_transform);
-    let tmpl_xrsub_image = super::webxr::create_xrsub_image_template(scope, None);
-    templates.insert("XRSubImage", tmpl_xrsub_image);
-    let tmpl_xrtransient_input_hit_test_result = super::webxr::create_xrtransient_input_hit_test_result_template(scope, None);
-    templates.insert("XRTransientInputHitTestResult", tmpl_xrtransient_input_hit_test_result);
-    let tmpl_xrtransient_input_hit_test_source = super::webxr::create_xrtransient_input_hit_test_source_template(scope, None);
-    templates.insert("XRTransientInputHitTestSource", tmpl_xrtransient_input_hit_test_source);
-    let tmpl_xrview = super::webxr::create_xrview_template(scope, None);
-    templates.insert("XRView", tmpl_xrview);
-    let tmpl_xrviewport = super::webxr::create_xrviewport_template(scope, None);
-    templates.insert("XRViewport", tmpl_xrviewport);
-    let tmpl_xrweb_glbinding = super::webxr::create_xrweb_glbinding_template(scope, None);
-    templates.insert("XRWebGLBinding", tmpl_xrweb_glbinding);
-    let tmpl_xsltprocessor = super::web_apis::create_xsltprocessor_template(scope, None);
-    templates.insert("XSLTProcessor", tmpl_xsltprocessor);
+    let tmpl_xml_serializer = super::web_apis::create_xml_serializer_template(scope, None);
+    templates.insert("XMLSerializer", tmpl_xml_serializer);
+    let tmpl_x_path_evaluator = super::web_apis::create_x_path_evaluator_template(scope, None);
+    templates.insert("XPathEvaluator", tmpl_x_path_evaluator);
+    let tmpl_x_path_expression = super::web_apis::create_x_path_expression_template(scope, None);
+    templates.insert("XPathExpression", tmpl_x_path_expression);
+    let tmpl_x_path_result = super::web_apis::create_x_path_result_template(scope, None);
+    templates.insert("XPathResult", tmpl_x_path_result);
+    let tmpl_xr_anchor = super::webxr::create_xr_anchor_template(scope, None);
+    templates.insert("XRAnchor", tmpl_xr_anchor);
+    let tmpl_xr_anchor_set = super::webxr::create_xr_anchor_set_template(scope, None);
+    templates.insert("XRAnchorSet", tmpl_xr_anchor_set);
+    let tmpl_xr_body = super::webxr::create_xr_body_template(scope, None);
+    templates.insert("XRBody", tmpl_xr_body);
+    let tmpl_xr_camera = super::webxr::create_xr_camera_template(scope, None);
+    templates.insert("XRCamera", tmpl_xr_camera);
+    let tmpl_xr_depth_information = super::webxr::create_xr_depth_information_template(scope, None);
+    templates.insert("XRDepthInformation", tmpl_xr_depth_information);
+    let tmpl_xr_frame = super::webxr::create_xr_frame_template(scope, None);
+    templates.insert("XRFrame", tmpl_xr_frame);
+    let tmpl_xr_hand = super::webxr::create_xr_hand_template(scope, None);
+    templates.insert("XRHand", tmpl_xr_hand);
+    let tmpl_xr_hit_test_result = super::webxr::create_xr_hit_test_result_template(scope, None);
+    templates.insert("XRHitTestResult", tmpl_xr_hit_test_result);
+    let tmpl_xr_hit_test_source = super::webxr::create_xr_hit_test_source_template(scope, None);
+    templates.insert("XRHitTestSource", tmpl_xr_hit_test_source);
+    let tmpl_xr_input_source = super::webxr::create_xr_input_source_template(scope, None);
+    templates.insert("XRInputSource", tmpl_xr_input_source);
+    let tmpl_xr_input_source_array = super::webxr::create_xr_input_source_array_template(scope, None);
+    templates.insert("XRInputSourceArray", tmpl_xr_input_source_array);
+    let tmpl_xr_light_estimate = super::webxr::create_xr_light_estimate_template(scope, None);
+    templates.insert("XRLightEstimate", tmpl_xr_light_estimate);
+    let tmpl_xr_media_binding = super::webxr::create_xr_media_binding_template(scope, None);
+    templates.insert("XRMediaBinding", tmpl_xr_media_binding);
+    let tmpl_xr_mesh = super::webxr::create_xr_mesh_template(scope, None);
+    templates.insert("XRMesh", tmpl_xr_mesh);
+    let tmpl_xr_mesh_set = super::webxr::create_xr_mesh_set_template(scope, None);
+    templates.insert("XRMeshSet", tmpl_xr_mesh_set);
+    let tmpl_xr_plane = super::webxr::create_xr_plane_template(scope, None);
+    templates.insert("XRPlane", tmpl_xr_plane);
+    let tmpl_xr_plane_set = super::webxr::create_xr_plane_set_template(scope, None);
+    templates.insert("XRPlaneSet", tmpl_xr_plane_set);
+    let tmpl_xr_pose = super::webxr::create_xr_pose_template(scope, None);
+    templates.insert("XRPose", tmpl_xr_pose);
+    let tmpl_xr_ray = super::webxr::create_xr_ray_template(scope, None);
+    templates.insert("XRRay", tmpl_xr_ray);
+    let tmpl_xr_render_state = super::webxr::create_xr_render_state_template(scope, None);
+    templates.insert("XRRenderState", tmpl_xr_render_state);
+    let tmpl_xr_rigid_transform = super::webxr::create_xr_rigid_transform_template(scope, None);
+    templates.insert("XRRigidTransform", tmpl_xr_rigid_transform);
+    let tmpl_xr_sub_image = super::webxr::create_xr_sub_image_template(scope, None);
+    templates.insert("XRSubImage", tmpl_xr_sub_image);
+    let tmpl_xr_transient_input_hit_test_result = super::webxr::create_xr_transient_input_hit_test_result_template(scope, None);
+    templates.insert("XRTransientInputHitTestResult", tmpl_xr_transient_input_hit_test_result);
+    let tmpl_xr_transient_input_hit_test_source = super::webxr::create_xr_transient_input_hit_test_source_template(scope, None);
+    templates.insert("XRTransientInputHitTestSource", tmpl_xr_transient_input_hit_test_source);
+    let tmpl_xr_view = super::webxr::create_xr_view_template(scope, None);
+    templates.insert("XRView", tmpl_xr_view);
+    let tmpl_xr_viewport = super::webxr::create_xr_viewport_template(scope, None);
+    templates.insert("XRViewport", tmpl_xr_viewport);
+    let tmpl_xr_web_gl_binding = super::webxr::create_xr_web_gl_binding_template(scope, None);
+    templates.insert("XRWebGLBinding", tmpl_xr_web_gl_binding);
+    let tmpl_xslt_processor = super::web_apis::create_xslt_processor_template(scope, None);
+    templates.insert("XSLTProcessor", tmpl_xslt_processor);
     let tmpl_webkit_cancel_animation_frame = super::chrome_extensions::create_webkit_cancel_animation_frame_template(scope, None);
     templates.insert("webkitCancelAnimationFrame", tmpl_webkit_cancel_animation_frame);
     let tmpl_webkit_convert_point_from_node_to_page = super::chrome_extensions::create_webkit_convert_point_from_node_to_page_template(scope, None);
@@ -1298,8 +1295,8 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("webkitGetGamepads", tmpl_webkit_get_gamepads);
     let tmpl_webkit_get_user_media = super::chrome_extensions::create_webkit_get_user_media_template(scope, None);
     templates.insert("webkitGetUserMedia", tmpl_webkit_get_user_media);
-    let tmpl_webkit_idbkey_range = super::chrome_extensions::create_webkit_idbkey_range_template(scope, None);
-    templates.insert("webkitIDBKeyRange", tmpl_webkit_idbkey_range);
+    let tmpl_webkit_idb_key_range = super::chrome_extensions::create_webkit_idb_key_range_template(scope, None);
+    templates.insert("webkitIDBKeyRange", tmpl_webkit_idb_key_range);
     let tmpl_webkit_indexed_db = super::chrome_extensions::create_webkit_indexed_db_template(scope, None);
     templates.insert("webkitIndexedDB", tmpl_webkit_indexed_db);
     let tmpl_webkit_match_media = super::chrome_extensions::create_webkit_match_media_template(scope, None);
@@ -1310,8 +1307,8 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("webkitNotifications", tmpl_webkit_notifications);
     let tmpl_webkit_performance = super::chrome_extensions::create_webkit_performance_template(scope, None);
     templates.insert("webkitPerformance", tmpl_webkit_performance);
-    let tmpl_webkit_rtcpeer_connection = super::chrome_extensions::create_webkit_rtcpeer_connection_template(scope, None);
-    templates.insert("webkitRTCPeerConnection", tmpl_webkit_rtcpeer_connection);
+    let tmpl_webkit_rtc_peer_connection = super::chrome_extensions::create_webkit_rtc_peer_connection_template(scope, None);
+    templates.insert("webkitRTCPeerConnection", tmpl_webkit_rtc_peer_connection);
     let tmpl_webkit_request_animation_frame = super::chrome_extensions::create_webkit_request_animation_frame_template(scope, None);
     templates.insert("webkitRequestAnimationFrame", tmpl_webkit_request_animation_frame);
     let tmpl_webkit_request_file_system = super::chrome_extensions::create_webkit_request_file_system_template(scope, None);
@@ -1344,100 +1341,100 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("PointerTimeline", tmpl_pointer_timeline);
     let tmpl_scroll_timeline = super::web_apis::create_scroll_timeline_template(scope, templates.get("AnimationTimeline").copied());
     templates.insert("ScrollTimeline", tmpl_scroll_timeline);
-    let tmpl_authenticator_assertion_response = super::web_apis::create_authenticator_assertion_response_template(scope, templates.get("AuthenticatorResponse").copied());
+    let tmpl_authenticator_assertion_response = super::credentials::create_authenticator_assertion_response_template(scope, templates.get("AuthenticatorResponse").copied());
     templates.insert("AuthenticatorAssertionResponse", tmpl_authenticator_assertion_response);
-    let tmpl_authenticator_attestation_response = super::web_apis::create_authenticator_attestation_response_template(scope, templates.get("AuthenticatorResponse").copied());
+    let tmpl_authenticator_attestation_response = super::credentials::create_authenticator_attestation_response_template(scope, templates.get("AuthenticatorResponse").copied());
     templates.insert("AuthenticatorAttestationResponse", tmpl_authenticator_attestation_response);
     let tmpl_file = super::web_apis::create_file_template(scope, templates.get("Blob").copied());
     templates.insert("File", tmpl_file);
-    let tmpl_cssparser_at_rule = super::css_om::create_cssparser_at_rule_template(scope, templates.get("CSSParserRule").copied());
-    templates.insert("CSSParserAtRule", tmpl_cssparser_at_rule);
-    let tmpl_cssparser_declaration = super::css_om::create_cssparser_declaration_template(scope, templates.get("CSSParserRule").copied());
-    templates.insert("CSSParserDeclaration", tmpl_cssparser_declaration);
-    let tmpl_cssparser_qualified_rule = super::css_om::create_cssparser_qualified_rule_template(scope, templates.get("CSSParserRule").copied());
-    templates.insert("CSSParserQualifiedRule", tmpl_cssparser_qualified_rule);
-    let tmpl_cssparser_block = super::css_om::create_cssparser_block_template(scope, templates.get("CSSParserValue").copied());
-    templates.insert("CSSParserBlock", tmpl_cssparser_block);
-    let tmpl_cssparser_function = super::css_om::create_cssparser_function_template(scope, templates.get("CSSParserValue").copied());
-    templates.insert("CSSParserFunction", tmpl_cssparser_function);
-    let tmpl_cssapply_statement_rule = super::css_om::create_cssapply_statement_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSApplyStatementRule", tmpl_cssapply_statement_rule);
-    let tmpl_csscolor_profile_rule = super::css_om::create_csscolor_profile_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSColorProfileRule", tmpl_csscolor_profile_rule);
-    let tmpl_csscontents_statement_rule = super::css_om::create_csscontents_statement_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSContentsStatementRule", tmpl_csscontents_statement_rule);
-    let tmpl_csscounter_style_rule = super::css_om::create_csscounter_style_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSCounterStyleRule", tmpl_csscounter_style_rule);
-    let tmpl_csscustom_media_rule = super::css_om::create_csscustom_media_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSCustomMediaRule", tmpl_csscustom_media_rule);
-    let tmpl_cssfont_face_rule = super::css_om::create_cssfont_face_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSFontFaceRule", tmpl_cssfont_face_rule);
-    let tmpl_cssfont_feature_values_rule = super::css_om::create_cssfont_feature_values_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSFontFeatureValuesRule", tmpl_cssfont_feature_values_rule);
-    let tmpl_cssfont_palette_values_rule = super::css_om::create_cssfont_palette_values_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSFontPaletteValuesRule", tmpl_cssfont_palette_values_rule);
-    let tmpl_cssfunction_declarations = super::css_om::create_cssfunction_declarations_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSFunctionDeclarations", tmpl_cssfunction_declarations);
-    let tmpl_cssgrouping_rule = super::css_om::create_cssgrouping_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSGroupingRule", tmpl_cssgrouping_rule);
-    let tmpl_cssimport_rule = super::css_om::create_cssimport_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSImportRule", tmpl_cssimport_rule);
-    let tmpl_csskeyframe_rule = super::css_om::create_csskeyframe_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSKeyframeRule", tmpl_csskeyframe_rule);
-    let tmpl_csskeyframes_rule = super::css_om::create_csskeyframes_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSKeyframesRule", tmpl_csskeyframes_rule);
-    let tmpl_csslayer_statement_rule = super::css_om::create_csslayer_statement_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSLayerStatementRule", tmpl_csslayer_statement_rule);
-    let tmpl_cssmargin_rule = super::css_om::create_cssmargin_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSMarginRule", tmpl_cssmargin_rule);
-    let tmpl_cssnamespace_rule = super::css_om::create_cssnamespace_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSNamespaceRule", tmpl_cssnamespace_rule);
-    let tmpl_cssnested_declarations = super::css_om::create_cssnested_declarations_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSNestedDeclarations", tmpl_cssnested_declarations);
-    let tmpl_cssposition_try_rule = super::css_om::create_cssposition_try_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSPositionTryRule", tmpl_cssposition_try_rule);
-    let tmpl_cssproperty_rule = super::css_om::create_cssproperty_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSPropertyRule", tmpl_cssproperty_rule);
-    let tmpl_cssview_transition_rule = super::css_om::create_cssview_transition_rule_template(scope, templates.get("CSSRule").copied());
-    templates.insert("CSSViewTransitionRule", tmpl_cssview_transition_rule);
-    let tmpl_cssfont_face_descriptors = super::css_om::create_cssfont_face_descriptors_template(scope, templates.get("CSSStyleDeclaration").copied());
-    templates.insert("CSSFontFaceDescriptors", tmpl_cssfont_face_descriptors);
-    let tmpl_cssfunction_descriptors = super::css_om::create_cssfunction_descriptors_template(scope, templates.get("CSSStyleDeclaration").copied());
-    templates.insert("CSSFunctionDescriptors", tmpl_cssfunction_descriptors);
-    let tmpl_csspage_descriptors = super::css_om::create_csspage_descriptors_template(scope, templates.get("CSSStyleDeclaration").copied());
-    templates.insert("CSSPageDescriptors", tmpl_csspage_descriptors);
-    let tmpl_cssposition_try_descriptors = super::css_om::create_cssposition_try_descriptors_template(scope, templates.get("CSSStyleDeclaration").copied());
-    templates.insert("CSSPositionTryDescriptors", tmpl_cssposition_try_descriptors);
-    let tmpl_cssstyle_properties = super::css_om::create_cssstyle_properties_template(scope, templates.get("CSSStyleDeclaration").copied());
-    templates.insert("CSSStyleProperties", tmpl_cssstyle_properties);
-    let tmpl_csscolor_value = super::css_om::create_csscolor_value_template(scope, templates.get("CSSStyleValue").copied());
-    templates.insert("CSSColorValue", tmpl_csscolor_value);
-    let tmpl_cssimage_value = super::css_om::create_cssimage_value_template(scope, templates.get("CSSStyleValue").copied());
-    templates.insert("CSSImageValue", tmpl_cssimage_value);
-    let tmpl_csskeyword_value = super::css_om::create_csskeyword_value_template(scope, templates.get("CSSStyleValue").copied());
-    templates.insert("CSSKeywordValue", tmpl_csskeyword_value);
-    let tmpl_cssnumeric_value = super::css_om::create_cssnumeric_value_template(scope, templates.get("CSSStyleValue").copied());
-    templates.insert("CSSNumericValue", tmpl_cssnumeric_value);
-    let tmpl_csstransform_value = super::css_om::create_csstransform_value_template(scope, templates.get("CSSStyleValue").copied());
-    templates.insert("CSSTransformValue", tmpl_csstransform_value);
-    let tmpl_cssunparsed_value = super::css_om::create_cssunparsed_value_template(scope, templates.get("CSSStyleValue").copied());
-    templates.insert("CSSUnparsedValue", tmpl_cssunparsed_value);
-    let tmpl_cssmatrix_component = super::css_om::create_cssmatrix_component_template(scope, templates.get("CSSTransformComponent").copied());
-    templates.insert("CSSMatrixComponent", tmpl_cssmatrix_component);
-    let tmpl_cssperspective = super::css_om::create_cssperspective_template(scope, templates.get("CSSTransformComponent").copied());
-    templates.insert("CSSPerspective", tmpl_cssperspective);
-    let tmpl_cssrotate = super::css_om::create_cssrotate_template(scope, templates.get("CSSTransformComponent").copied());
-    templates.insert("CSSRotate", tmpl_cssrotate);
-    let tmpl_cssscale = super::css_om::create_cssscale_template(scope, templates.get("CSSTransformComponent").copied());
-    templates.insert("CSSScale", tmpl_cssscale);
-    let tmpl_cssskew = super::css_om::create_cssskew_template(scope, templates.get("CSSTransformComponent").copied());
-    templates.insert("CSSSkew", tmpl_cssskew);
-    let tmpl_cssskew_x = super::css_om::create_cssskew_x_template(scope, templates.get("CSSTransformComponent").copied());
-    templates.insert("CSSSkewX", tmpl_cssskew_x);
-    let tmpl_cssskew_y = super::css_om::create_cssskew_y_template(scope, templates.get("CSSTransformComponent").copied());
-    templates.insert("CSSSkewY", tmpl_cssskew_y);
-    let tmpl_csstranslate = super::css_om::create_csstranslate_template(scope, templates.get("CSSTransformComponent").copied());
-    templates.insert("CSSTranslate", tmpl_csstranslate);
+    let tmpl_css_parser_at_rule = super::css_om::create_css_parser_at_rule_template(scope, templates.get("CSSParserRule").copied());
+    templates.insert("CSSParserAtRule", tmpl_css_parser_at_rule);
+    let tmpl_css_parser_declaration = super::css_om::create_css_parser_declaration_template(scope, templates.get("CSSParserRule").copied());
+    templates.insert("CSSParserDeclaration", tmpl_css_parser_declaration);
+    let tmpl_css_parser_qualified_rule = super::css_om::create_css_parser_qualified_rule_template(scope, templates.get("CSSParserRule").copied());
+    templates.insert("CSSParserQualifiedRule", tmpl_css_parser_qualified_rule);
+    let tmpl_css_parser_block = super::css_om::create_css_parser_block_template(scope, templates.get("CSSParserValue").copied());
+    templates.insert("CSSParserBlock", tmpl_css_parser_block);
+    let tmpl_css_parser_function = super::css_om::create_css_parser_function_template(scope, templates.get("CSSParserValue").copied());
+    templates.insert("CSSParserFunction", tmpl_css_parser_function);
+    let tmpl_css_apply_statement_rule = super::css_om::create_css_apply_statement_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSApplyStatementRule", tmpl_css_apply_statement_rule);
+    let tmpl_css_color_profile_rule = super::css_om::create_css_color_profile_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSColorProfileRule", tmpl_css_color_profile_rule);
+    let tmpl_css_contents_statement_rule = super::css_om::create_css_contents_statement_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSContentsStatementRule", tmpl_css_contents_statement_rule);
+    let tmpl_css_counter_style_rule = super::css_om::create_css_counter_style_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSCounterStyleRule", tmpl_css_counter_style_rule);
+    let tmpl_css_custom_media_rule = super::css_om::create_css_custom_media_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSCustomMediaRule", tmpl_css_custom_media_rule);
+    let tmpl_css_font_face_rule = super::css_om::create_css_font_face_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSFontFaceRule", tmpl_css_font_face_rule);
+    let tmpl_css_font_feature_values_rule = super::css_om::create_css_font_feature_values_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSFontFeatureValuesRule", tmpl_css_font_feature_values_rule);
+    let tmpl_css_font_palette_values_rule = super::css_om::create_css_font_palette_values_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSFontPaletteValuesRule", tmpl_css_font_palette_values_rule);
+    let tmpl_css_function_declarations = super::css_om::create_css_function_declarations_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSFunctionDeclarations", tmpl_css_function_declarations);
+    let tmpl_css_grouping_rule = super::css_om::create_css_grouping_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSGroupingRule", tmpl_css_grouping_rule);
+    let tmpl_css_import_rule = super::css_om::create_css_import_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSImportRule", tmpl_css_import_rule);
+    let tmpl_css_keyframe_rule = super::css_om::create_css_keyframe_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSKeyframeRule", tmpl_css_keyframe_rule);
+    let tmpl_css_keyframes_rule = super::css_om::create_css_keyframes_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSKeyframesRule", tmpl_css_keyframes_rule);
+    let tmpl_css_layer_statement_rule = super::css_om::create_css_layer_statement_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSLayerStatementRule", tmpl_css_layer_statement_rule);
+    let tmpl_css_margin_rule = super::css_om::create_css_margin_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSMarginRule", tmpl_css_margin_rule);
+    let tmpl_css_namespace_rule = super::css_om::create_css_namespace_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSNamespaceRule", tmpl_css_namespace_rule);
+    let tmpl_css_nested_declarations = super::css_om::create_css_nested_declarations_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSNestedDeclarations", tmpl_css_nested_declarations);
+    let tmpl_css_position_try_rule = super::css_om::create_css_position_try_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSPositionTryRule", tmpl_css_position_try_rule);
+    let tmpl_css_property_rule = super::css_om::create_css_property_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSPropertyRule", tmpl_css_property_rule);
+    let tmpl_css_view_transition_rule = super::css_om::create_css_view_transition_rule_template(scope, templates.get("CSSRule").copied());
+    templates.insert("CSSViewTransitionRule", tmpl_css_view_transition_rule);
+    let tmpl_css_font_face_descriptors = super::css_om::create_css_font_face_descriptors_template(scope, templates.get("CSSStyleDeclaration").copied());
+    templates.insert("CSSFontFaceDescriptors", tmpl_css_font_face_descriptors);
+    let tmpl_css_function_descriptors = super::css_om::create_css_function_descriptors_template(scope, templates.get("CSSStyleDeclaration").copied());
+    templates.insert("CSSFunctionDescriptors", tmpl_css_function_descriptors);
+    let tmpl_css_page_descriptors = super::css_om::create_css_page_descriptors_template(scope, templates.get("CSSStyleDeclaration").copied());
+    templates.insert("CSSPageDescriptors", tmpl_css_page_descriptors);
+    let tmpl_css_position_try_descriptors = super::css_om::create_css_position_try_descriptors_template(scope, templates.get("CSSStyleDeclaration").copied());
+    templates.insert("CSSPositionTryDescriptors", tmpl_css_position_try_descriptors);
+    let tmpl_css_style_properties = super::css_om::create_css_style_properties_template(scope, templates.get("CSSStyleDeclaration").copied());
+    templates.insert("CSSStyleProperties", tmpl_css_style_properties);
+    let tmpl_css_color_value = super::css_om::create_css_color_value_template(scope, templates.get("CSSStyleValue").copied());
+    templates.insert("CSSColorValue", tmpl_css_color_value);
+    let tmpl_css_image_value = super::css_om::create_css_image_value_template(scope, templates.get("CSSStyleValue").copied());
+    templates.insert("CSSImageValue", tmpl_css_image_value);
+    let tmpl_css_keyword_value = super::css_om::create_css_keyword_value_template(scope, templates.get("CSSStyleValue").copied());
+    templates.insert("CSSKeywordValue", tmpl_css_keyword_value);
+    let tmpl_css_numeric_value = super::css_om::create_css_numeric_value_template(scope, templates.get("CSSStyleValue").copied());
+    templates.insert("CSSNumericValue", tmpl_css_numeric_value);
+    let tmpl_css_transform_value = super::css_om::create_css_transform_value_template(scope, templates.get("CSSStyleValue").copied());
+    templates.insert("CSSTransformValue", tmpl_css_transform_value);
+    let tmpl_css_unparsed_value = super::css_om::create_css_unparsed_value_template(scope, templates.get("CSSStyleValue").copied());
+    templates.insert("CSSUnparsedValue", tmpl_css_unparsed_value);
+    let tmpl_css_matrix_component = super::css_om::create_css_matrix_component_template(scope, templates.get("CSSTransformComponent").copied());
+    templates.insert("CSSMatrixComponent", tmpl_css_matrix_component);
+    let tmpl_css_perspective = super::css_om::create_css_perspective_template(scope, templates.get("CSSTransformComponent").copied());
+    templates.insert("CSSPerspective", tmpl_css_perspective);
+    let tmpl_css_rotate = super::css_om::create_css_rotate_template(scope, templates.get("CSSTransformComponent").copied());
+    templates.insert("CSSRotate", tmpl_css_rotate);
+    let tmpl_css_scale = super::css_om::create_css_scale_template(scope, templates.get("CSSTransformComponent").copied());
+    templates.insert("CSSScale", tmpl_css_scale);
+    let tmpl_css_skew = super::css_om::create_css_skew_template(scope, templates.get("CSSTransformComponent").copied());
+    templates.insert("CSSSkew", tmpl_css_skew);
+    let tmpl_css_skew_x = super::css_om::create_css_skew_x_template(scope, templates.get("CSSTransformComponent").copied());
+    templates.insert("CSSSkewX", tmpl_css_skew_x);
+    let tmpl_css_skew_y = super::css_om::create_css_skew_y_template(scope, templates.get("CSSTransformComponent").copied());
+    templates.insert("CSSSkewY", tmpl_css_skew_y);
+    let tmpl_css_translate = super::css_om::create_css_translate_template(scope, templates.get("CSSTransformComponent").copied());
+    templates.insert("CSSTranslate", tmpl_css_translate);
     let tmpl_window_client = super::web_apis::create_window_client_template(scope, templates.get("Client").copied());
     templates.insert("WindowClient", tmpl_window_client);
     let tmpl_digital_credential = super::web_apis::create_digital_credential_template(scope, templates.get("Credential").copied());
@@ -1446,30 +1443,30 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("FederatedCredential", tmpl_federated_credential);
     let tmpl_identity_credential = super::web_apis::create_identity_credential_template(scope, templates.get("Credential").copied());
     templates.insert("IdentityCredential", tmpl_identity_credential);
-    let tmpl_otpcredential = super::web_apis::create_otpcredential_template(scope, templates.get("Credential").copied());
-    templates.insert("OTPCredential", tmpl_otpcredential);
+    let tmpl_otp_credential = super::web_apis::create_otp_credential_template(scope, templates.get("Credential").copied());
+    templates.insert("OTPCredential", tmpl_otp_credential);
     let tmpl_password_credential = super::web_apis::create_password_credential_template(scope, templates.get("Credential").copied());
     templates.insert("PasswordCredential", tmpl_password_credential);
-    let tmpl_public_key_credential = super::web_apis::create_public_key_credential_template(scope, templates.get("Credential").copied());
+    let tmpl_public_key_credential = super::credentials::create_public_key_credential_template(scope, templates.get("Credential").copied());
     templates.insert("PublicKeyCredential", tmpl_public_key_credential);
-    let tmpl_gpupipeline_error = super::web_apis::create_gpupipeline_error_template(scope, templates.get("DOMException").copied());
-    templates.insert("GPUPipelineError", tmpl_gpupipeline_error);
+    let tmpl_gpu_pipeline_error = super::gpu::create_gpu_pipeline_error_template(scope, templates.get("DOMException").copied());
+    templates.insert("GPUPipelineError", tmpl_gpu_pipeline_error);
     let tmpl_identity_credential_error = super::web_apis::create_identity_credential_error_template(scope, templates.get("DOMException").copied());
     templates.insert("IdentityCredentialError", tmpl_identity_credential_error);
     let tmpl_overconstrained_error = super::web_apis::create_overconstrained_error_template(scope, templates.get("DOMException").copied());
     templates.insert("OverconstrainedError", tmpl_overconstrained_error);
     let tmpl_quota_exceeded_error = super::web_apis::create_quota_exceeded_error_template(scope, templates.get("DOMException").copied());
     templates.insert("QuotaExceededError", tmpl_quota_exceeded_error);
-    let tmpl_rtcerror = super::web_apis::create_rtcerror_template(scope, templates.get("DOMException").copied());
-    templates.insert("RTCError", tmpl_rtcerror);
+    let tmpl_rtc_error = super::webrtc::create_rtc_error_template(scope, templates.get("DOMException").copied());
+    templates.insert("RTCError", tmpl_rtc_error);
     let tmpl_web_transport_error = super::web_apis::create_web_transport_error_template(scope, templates.get("DOMException").copied());
     templates.insert("WebTransportError", tmpl_web_transport_error);
-    let tmpl_dommatrix = super::dom_core::create_dommatrix_template(scope, templates.get("DOMMatrixReadOnly").copied());
-    templates.insert("DOMMatrix", tmpl_dommatrix);
-    let tmpl_dompoint = super::dom_core::create_dompoint_template(scope, templates.get("DOMPointReadOnly").copied());
-    templates.insert("DOMPoint", tmpl_dompoint);
-    let tmpl_domrect = super::dom_core::create_domrect_template(scope, templates.get("DOMRectReadOnly").copied());
-    templates.insert("DOMRect", tmpl_domrect);
+    let tmpl_dom_matrix = super::dom_core::create_dom_matrix_template(scope, templates.get("DOMMatrixReadOnly").copied());
+    templates.insert("DOMMatrix", tmpl_dom_matrix);
+    let tmpl_dom_point = super::dom_core::create_dom_point_template(scope, templates.get("DOMPointReadOnly").copied());
+    templates.insert("DOMPoint", tmpl_dom_point);
+    let tmpl_dom_rect = super::dom_core::create_dom_rect_template(scope, templates.get("DOMRectReadOnly").copied());
+    templates.insert("DOMRect", tmpl_dom_rect);
     let tmpl_animation_event = super::events::create_animation_event_template(scope, templates.get("Event").copied());
     templates.insert("AnimationEvent", tmpl_animation_event);
     let tmpl_animation_playback_event = super::events::create_animation_playback_event_template(scope, templates.get("Event").copied());
@@ -1524,24 +1521,24 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("FontFaceSetLoadEvent", tmpl_font_face_set_load_event);
     let tmpl_form_data_event = super::events::create_form_data_event_template(scope, templates.get("Event").copied());
     templates.insert("FormDataEvent", tmpl_form_data_event);
-    let tmpl_gpuuncaptured_error_event = super::events::create_gpuuncaptured_error_event_template(scope, templates.get("Event").copied());
-    templates.insert("GPUUncapturedErrorEvent", tmpl_gpuuncaptured_error_event);
+    let tmpl_gpu_uncaptured_error_event = super::events::create_gpu_uncaptured_error_event_template(scope, templates.get("Event").copied());
+    templates.insert("GPUUncapturedErrorEvent", tmpl_gpu_uncaptured_error_event);
     let tmpl_gamepad_event = super::events::create_gamepad_event_template(scope, templates.get("Event").copied());
     templates.insert("GamepadEvent", tmpl_gamepad_event);
-    let tmpl_hidconnection_event = super::events::create_hidconnection_event_template(scope, templates.get("Event").copied());
-    templates.insert("HIDConnectionEvent", tmpl_hidconnection_event);
-    let tmpl_hidinput_report_event = super::events::create_hidinput_report_event_template(scope, templates.get("Event").copied());
-    templates.insert("HIDInputReportEvent", tmpl_hidinput_report_event);
+    let tmpl_hid_connection_event = super::events::create_hid_connection_event_template(scope, templates.get("Event").copied());
+    templates.insert("HIDConnectionEvent", tmpl_hid_connection_event);
+    let tmpl_hid_input_report_event = super::events::create_hid_input_report_event_template(scope, templates.get("Event").copied());
+    templates.insert("HIDInputReportEvent", tmpl_hid_input_report_event);
     let tmpl_hash_change_event = super::events::create_hash_change_event_template(scope, templates.get("Event").copied());
     templates.insert("HashChangeEvent", tmpl_hash_change_event);
-    let tmpl_idbversion_change_event = super::events::create_idbversion_change_event_template(scope, templates.get("Event").copied());
-    templates.insert("IDBVersionChangeEvent", tmpl_idbversion_change_event);
+    let tmpl_idb_version_change_event = super::events::create_idb_version_change_event_template(scope, templates.get("Event").copied());
+    templates.insert("IDBVersionChangeEvent", tmpl_idb_version_change_event);
     let tmpl_key_frame_request_event = super::events::create_key_frame_request_event_template(scope, templates.get("Event").copied());
     templates.insert("KeyFrameRequestEvent", tmpl_key_frame_request_event);
-    let tmpl_midiconnection_event = super::events::create_midiconnection_event_template(scope, templates.get("Event").copied());
-    templates.insert("MIDIConnectionEvent", tmpl_midiconnection_event);
-    let tmpl_midimessage_event = super::events::create_midimessage_event_template(scope, templates.get("Event").copied());
-    templates.insert("MIDIMessageEvent", tmpl_midimessage_event);
+    let tmpl_midi_connection_event = super::events::create_midi_connection_event_template(scope, templates.get("Event").copied());
+    templates.insert("MIDIConnectionEvent", tmpl_midi_connection_event);
+    let tmpl_midi_message_event = super::events::create_midi_message_event_template(scope, templates.get("Event").copied());
+    templates.insert("MIDIMessageEvent", tmpl_midi_message_event);
     let tmpl_media_encrypted_event = super::events::create_media_encrypted_event_template(scope, templates.get("Event").copied());
     templates.insert("MediaEncryptedEvent", tmpl_media_encrypted_event);
     let tmpl_media_key_message_event = super::events::create_media_key_message_event_template(scope, templates.get("Event").copied());
@@ -1552,8 +1549,8 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("MediaStreamTrackEvent", tmpl_media_stream_track_event);
     let tmpl_message_event = super::events::create_message_event_template(scope, templates.get("Event").copied());
     templates.insert("MessageEvent", tmpl_message_event);
-    let tmpl_ndefreading_event = super::events::create_ndefreading_event_template(scope, templates.get("Event").copied());
-    templates.insert("NDEFReadingEvent", tmpl_ndefreading_event);
+    let tmpl_ndef_reading_event = super::events::create_ndef_reading_event_template(scope, templates.get("Event").copied());
+    templates.insert("NDEFReadingEvent", tmpl_ndef_reading_event);
     let tmpl_navigate_event = super::events::create_navigate_event_template(scope, templates.get("Event").copied());
     templates.insert("NavigateEvent", tmpl_navigate_event);
     let tmpl_navigation_current_entry_change_event = super::events::create_navigation_current_entry_change_event_template(scope, templates.get("Event").copied());
@@ -1582,22 +1579,22 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("ProgressEvent", tmpl_progress_event);
     let tmpl_promise_rejection_event = super::events::create_promise_rejection_event_template(scope, templates.get("Event").copied());
     templates.insert("PromiseRejectionEvent", tmpl_promise_rejection_event);
-    let tmpl_rtcdtmftone_change_event = super::events::create_rtcdtmftone_change_event_template(scope, templates.get("Event").copied());
-    templates.insert("RTCDTMFToneChangeEvent", tmpl_rtcdtmftone_change_event);
-    let tmpl_rtcdata_channel_event = super::events::create_rtcdata_channel_event_template(scope, templates.get("Event").copied());
-    templates.insert("RTCDataChannelEvent", tmpl_rtcdata_channel_event);
-    let tmpl_rtcerror_event = super::events::create_rtcerror_event_template(scope, templates.get("Event").copied());
-    templates.insert("RTCErrorEvent", tmpl_rtcerror_event);
-    let tmpl_rtcpeer_connection_ice_error_event = super::events::create_rtcpeer_connection_ice_error_event_template(scope, templates.get("Event").copied());
-    templates.insert("RTCPeerConnectionIceErrorEvent", tmpl_rtcpeer_connection_ice_error_event);
-    let tmpl_rtcpeer_connection_ice_event = super::events::create_rtcpeer_connection_ice_event_template(scope, templates.get("Event").copied());
-    templates.insert("RTCPeerConnectionIceEvent", tmpl_rtcpeer_connection_ice_event);
-    let tmpl_rtctrack_event = super::events::create_rtctrack_event_template(scope, templates.get("Event").copied());
-    templates.insert("RTCTrackEvent", tmpl_rtctrack_event);
-    let tmpl_rtctransform_event = super::events::create_rtctransform_event_template(scope, templates.get("Event").copied());
-    templates.insert("RTCTransformEvent", tmpl_rtctransform_event);
-    let tmpl_sframe_transform_error_event = super::events::create_sframe_transform_error_event_template(scope, templates.get("Event").copied());
-    templates.insert("SFrameTransformErrorEvent", tmpl_sframe_transform_error_event);
+    let tmpl_rtcdtmf_tone_change_event = super::events::create_rtcdtmf_tone_change_event_template(scope, templates.get("Event").copied());
+    templates.insert("RTCDTMFToneChangeEvent", tmpl_rtcdtmf_tone_change_event);
+    let tmpl_rtc_data_channel_event = super::events::create_rtc_data_channel_event_template(scope, templates.get("Event").copied());
+    templates.insert("RTCDataChannelEvent", tmpl_rtc_data_channel_event);
+    let tmpl_rtc_error_event = super::events::create_rtc_error_event_template(scope, templates.get("Event").copied());
+    templates.insert("RTCErrorEvent", tmpl_rtc_error_event);
+    let tmpl_rtc_peer_connection_ice_error_event = super::events::create_rtc_peer_connection_ice_error_event_template(scope, templates.get("Event").copied());
+    templates.insert("RTCPeerConnectionIceErrorEvent", tmpl_rtc_peer_connection_ice_error_event);
+    let tmpl_rtc_peer_connection_ice_event = super::events::create_rtc_peer_connection_ice_event_template(scope, templates.get("Event").copied());
+    templates.insert("RTCPeerConnectionIceEvent", tmpl_rtc_peer_connection_ice_event);
+    let tmpl_rtc_track_event = super::events::create_rtc_track_event_template(scope, templates.get("Event").copied());
+    templates.insert("RTCTrackEvent", tmpl_rtc_track_event);
+    let tmpl_rtc_transform_event = super::events::create_rtc_transform_event_template(scope, templates.get("Event").copied());
+    templates.insert("RTCTransformEvent", tmpl_rtc_transform_event);
+    let tmpl_s_frame_transform_error_event = super::events::create_s_frame_transform_error_event_template(scope, templates.get("Event").copied());
+    templates.insert("SFrameTransformErrorEvent", tmpl_s_frame_transform_error_event);
     let tmpl_security_policy_violation_event = super::events::create_security_policy_violation_event_template(scope, templates.get("Event").copied());
     templates.insert("SecurityPolicyViolationEvent", tmpl_security_policy_violation_event);
     let tmpl_sensor_error_event = super::events::create_sensor_error_event_template(scope, templates.get("Event").copied());
@@ -1628,28 +1625,28 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("TrackEvent", tmpl_track_event);
     let tmpl_transition_event = super::events::create_transition_event_template(scope, templates.get("Event").copied());
     templates.insert("TransitionEvent", tmpl_transition_event);
-    let tmpl_uievent = super::events::create_uievent_template(scope, templates.get("Event").copied());
-    templates.insert("UIEvent", tmpl_uievent);
-    let tmpl_usbconnection_event = super::events::create_usbconnection_event_template(scope, templates.get("Event").copied());
-    templates.insert("USBConnectionEvent", tmpl_usbconnection_event);
+    let tmpl_ui_event = super::events::create_ui_event_template(scope, templates.get("Event").copied());
+    templates.insert("UIEvent", tmpl_ui_event);
+    let tmpl_usb_connection_event = super::events::create_usb_connection_event_template(scope, templates.get("Event").copied());
+    templates.insert("USBConnectionEvent", tmpl_usb_connection_event);
     let tmpl_value_event = super::events::create_value_event_template(scope, templates.get("Event").copied());
     templates.insert("ValueEvent", tmpl_value_event);
-    let tmpl_web_glcontext_event = super::events::create_web_glcontext_event_template(scope, templates.get("Event").copied());
-    templates.insert("WebGLContextEvent", tmpl_web_glcontext_event);
+    let tmpl_web_gl_context_event = super::events::create_web_gl_context_event_template(scope, templates.get("Event").copied());
+    templates.insert("WebGLContextEvent", tmpl_web_gl_context_event);
     let tmpl_window_controls_overlay_geometry_change_event = super::events::create_window_controls_overlay_geometry_change_event_template(scope, templates.get("Event").copied());
     templates.insert("WindowControlsOverlayGeometryChangeEvent", tmpl_window_controls_overlay_geometry_change_event);
-    let tmpl_xrinput_source_event = super::webxr::create_xrinput_source_event_template(scope, templates.get("Event").copied());
-    templates.insert("XRInputSourceEvent", tmpl_xrinput_source_event);
-    let tmpl_xrinput_sources_change_event = super::webxr::create_xrinput_sources_change_event_template(scope, templates.get("Event").copied());
-    templates.insert("XRInputSourcesChangeEvent", tmpl_xrinput_sources_change_event);
-    let tmpl_xrlayer_event = super::webxr::create_xrlayer_event_template(scope, templates.get("Event").copied());
-    templates.insert("XRLayerEvent", tmpl_xrlayer_event);
-    let tmpl_xrreference_space_event = super::webxr::create_xrreference_space_event_template(scope, templates.get("Event").copied());
-    templates.insert("XRReferenceSpaceEvent", tmpl_xrreference_space_event);
-    let tmpl_xrsession_event = super::webxr::create_xrsession_event_template(scope, templates.get("Event").copied());
-    templates.insert("XRSessionEvent", tmpl_xrsession_event);
-    let tmpl_xrvisibility_mask_change_event = super::webxr::create_xrvisibility_mask_change_event_template(scope, templates.get("Event").copied());
-    templates.insert("XRVisibilityMaskChangeEvent", tmpl_xrvisibility_mask_change_event);
+    let tmpl_xr_input_source_event = super::webxr::create_xr_input_source_event_template(scope, templates.get("Event").copied());
+    templates.insert("XRInputSourceEvent", tmpl_xr_input_source_event);
+    let tmpl_xr_input_sources_change_event = super::webxr::create_xr_input_sources_change_event_template(scope, templates.get("Event").copied());
+    templates.insert("XRInputSourcesChangeEvent", tmpl_xr_input_sources_change_event);
+    let tmpl_xr_layer_event = super::webxr::create_xr_layer_event_template(scope, templates.get("Event").copied());
+    templates.insert("XRLayerEvent", tmpl_xr_layer_event);
+    let tmpl_xr_reference_space_event = super::webxr::create_xr_reference_space_event_template(scope, templates.get("Event").copied());
+    templates.insert("XRReferenceSpaceEvent", tmpl_xr_reference_space_event);
+    let tmpl_xr_session_event = super::webxr::create_xr_session_event_template(scope, templates.get("Event").copied());
+    templates.insert("XRSessionEvent", tmpl_xr_session_event);
+    let tmpl_xr_visibility_mask_change_event = super::webxr::create_xr_visibility_mask_change_event_template(scope, templates.get("Event").copied());
+    templates.insert("XRVisibilityMaskChangeEvent", tmpl_xr_visibility_mask_change_event);
     let tmpl_abort_signal = super::dom_core::create_abort_signal_template(scope, templates.get("EventTarget").copied());
     templates.insert("AbortSignal", tmpl_abort_signal);
     let tmpl_animation = super::web_apis::create_animation_template(scope, templates.get("EventTarget").copied());
@@ -1674,10 +1671,10 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Bluetooth", tmpl_bluetooth);
     let tmpl_bluetooth_device = super::bluetooth::create_bluetooth_device_template(scope, templates.get("EventTarget").copied());
     templates.insert("BluetoothDevice", tmpl_bluetooth_device);
-    let tmpl_bluetooth_remote_gattcharacteristic = super::bluetooth::create_bluetooth_remote_gattcharacteristic_template(scope, templates.get("EventTarget").copied());
-    templates.insert("BluetoothRemoteGATTCharacteristic", tmpl_bluetooth_remote_gattcharacteristic);
-    let tmpl_bluetooth_remote_gattservice = super::bluetooth::create_bluetooth_remote_gattservice_template(scope, templates.get("EventTarget").copied());
-    templates.insert("BluetoothRemoteGATTService", tmpl_bluetooth_remote_gattservice);
+    let tmpl_bluetooth_remote_gatt_characteristic = super::bluetooth::create_bluetooth_remote_gatt_characteristic_template(scope, templates.get("EventTarget").copied());
+    templates.insert("BluetoothRemoteGATTCharacteristic", tmpl_bluetooth_remote_gatt_characteristic);
+    let tmpl_bluetooth_remote_gatt_service = super::bluetooth::create_bluetooth_remote_gatt_service_template(scope, templates.get("EventTarget").copied());
+    templates.insert("BluetoothRemoteGATTService", tmpl_bluetooth_remote_gatt_service);
     let tmpl_broadcast_channel = super::web_apis::create_broadcast_channel_template(scope, templates.get("EventTarget").copied());
     templates.insert("BroadcastChannel", tmpl_broadcast_channel);
     let tmpl_capture_controller = super::web_apis::create_capture_controller_template(scope, templates.get("EventTarget").copied());
@@ -1702,28 +1699,28 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("FileReader", tmpl_file_reader);
     let tmpl_font_face_set = super::web_apis::create_font_face_set_template(scope, templates.get("EventTarget").copied());
     templates.insert("FontFaceSet", tmpl_font_face_set);
-    let tmpl_gpudevice = super::web_apis::create_gpudevice_template(scope, templates.get("EventTarget").copied());
-    templates.insert("GPUDevice", tmpl_gpudevice);
-    let tmpl_hid = super::web_apis::create_hid_template(scope, templates.get("EventTarget").copied());
+    let tmpl_gpu_device = super::gpu::create_gpu_device_template(scope, templates.get("EventTarget").copied());
+    templates.insert("GPUDevice", tmpl_gpu_device);
+    let tmpl_hid = super::hid::create_hid_template(scope, templates.get("EventTarget").copied());
     templates.insert("HID", tmpl_hid);
-    let tmpl_hiddevice = super::web_apis::create_hiddevice_template(scope, templates.get("EventTarget").copied());
-    templates.insert("HIDDevice", tmpl_hiddevice);
-    let tmpl_idbdatabase = super::web_apis::create_idbdatabase_template(scope, templates.get("EventTarget").copied());
-    templates.insert("IDBDatabase", tmpl_idbdatabase);
-    let tmpl_idbrequest = super::web_apis::create_idbrequest_template(scope, templates.get("EventTarget").copied());
-    templates.insert("IDBRequest", tmpl_idbrequest);
-    let tmpl_idbtransaction = super::web_apis::create_idbtransaction_template(scope, templates.get("EventTarget").copied());
-    templates.insert("IDBTransaction", tmpl_idbtransaction);
+    let tmpl_hid_device = super::hid::create_hid_device_template(scope, templates.get("EventTarget").copied());
+    templates.insert("HIDDevice", tmpl_hid_device);
+    let tmpl_idb_database = super::idb::create_idb_database_template(scope, templates.get("EventTarget").copied());
+    templates.insert("IDBDatabase", tmpl_idb_database);
+    let tmpl_idb_request = super::idb::create_idb_request_template(scope, templates.get("EventTarget").copied());
+    templates.insert("IDBRequest", tmpl_idb_request);
+    let tmpl_idb_transaction = super::idb::create_idb_transaction_template(scope, templates.get("EventTarget").copied());
+    templates.insert("IDBTransaction", tmpl_idb_transaction);
     let tmpl_idle_detector = super::web_apis::create_idle_detector_template(scope, templates.get("EventTarget").copied());
     templates.insert("IdleDetector", tmpl_idle_detector);
     let tmpl_keyboard = super::web_apis::create_keyboard_template(scope, templates.get("EventTarget").copied());
     templates.insert("Keyboard", tmpl_keyboard);
     let tmpl_language_model = super::web_apis::create_language_model_template(scope, templates.get("EventTarget").copied());
     templates.insert("LanguageModel", tmpl_language_model);
-    let tmpl_midiaccess = super::web_apis::create_midiaccess_template(scope, templates.get("EventTarget").copied());
-    templates.insert("MIDIAccess", tmpl_midiaccess);
-    let tmpl_midiport = super::web_apis::create_midiport_template(scope, templates.get("EventTarget").copied());
-    templates.insert("MIDIPort", tmpl_midiport);
+    let tmpl_midi_access = super::midi::create_midi_access_template(scope, templates.get("EventTarget").copied());
+    templates.insert("MIDIAccess", tmpl_midi_access);
+    let tmpl_midi_port = super::midi::create_midi_port_template(scope, templates.get("EventTarget").copied());
+    templates.insert("MIDIPort", tmpl_midi_port);
     let tmpl_media_devices = super::media_apis::create_media_devices_template(scope, templates.get("EventTarget").copied());
     templates.insert("MediaDevices", tmpl_media_devices);
     let tmpl_media_key_session = super::media_apis::create_media_key_session_template(scope, templates.get("EventTarget").copied());
@@ -1742,8 +1739,8 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("MessagePort", tmpl_message_port);
     let tmpl_model_context = super::web_apis::create_model_context_template(scope, templates.get("EventTarget").copied());
     templates.insert("ModelContext", tmpl_model_context);
-    let tmpl_ndefreader = super::web_apis::create_ndefreader_template(scope, templates.get("EventTarget").copied());
-    templates.insert("NDEFReader", tmpl_ndefreader);
+    let tmpl_ndef_reader = super::web_apis::create_ndef_reader_template(scope, templates.get("EventTarget").copied());
+    templates.insert("NDEFReader", tmpl_ndef_reader);
     let tmpl_named_flow = super::web_apis::create_named_flow_template(scope, templates.get("EventTarget").copied());
     templates.insert("NamedFlow", tmpl_named_flow);
     let tmpl_navigation = super::web_apis::create_navigation_template(scope, templates.get("EventTarget").copied());
@@ -1760,9 +1757,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Notification", tmpl_notification);
     let tmpl_offscreen_canvas = super::web_apis::create_offscreen_canvas_template(scope, templates.get("EventTarget").copied());
     templates.insert("OffscreenCanvas", tmpl_offscreen_canvas);
-    let tmpl_payment_request = super::web_apis::create_payment_request_template(scope, templates.get("EventTarget").copied());
+    let tmpl_payment_request = super::payment::create_payment_request_template(scope, templates.get("EventTarget").copied());
     templates.insert("PaymentRequest", tmpl_payment_request);
-    let tmpl_payment_response = super::web_apis::create_payment_response_template(scope, templates.get("EventTarget").copied());
+    let tmpl_payment_response = super::payment::create_payment_response_template(scope, templates.get("EventTarget").copied());
     templates.insert("PaymentResponse", tmpl_payment_response);
     let tmpl_performance = super::web_apis::create_performance_template(scope, templates.get("EventTarget").copied());
     templates.insert("Performance", tmpl_performance);
@@ -1774,36 +1771,36 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("PortalHost", tmpl_portal_host);
     let tmpl_preference_object = super::web_apis::create_preference_object_template(scope, templates.get("EventTarget").copied());
     templates.insert("PreferenceObject", tmpl_preference_object);
-    let tmpl_presentation_availability = super::web_apis::create_presentation_availability_template(scope, templates.get("EventTarget").copied());
+    let tmpl_presentation_availability = super::presentation::create_presentation_availability_template(scope, templates.get("EventTarget").copied());
     templates.insert("PresentationAvailability", tmpl_presentation_availability);
-    let tmpl_presentation_connection = super::web_apis::create_presentation_connection_template(scope, templates.get("EventTarget").copied());
+    let tmpl_presentation_connection = super::presentation::create_presentation_connection_template(scope, templates.get("EventTarget").copied());
     templates.insert("PresentationConnection", tmpl_presentation_connection);
-    let tmpl_presentation_connection_list = super::web_apis::create_presentation_connection_list_template(scope, templates.get("EventTarget").copied());
+    let tmpl_presentation_connection_list = super::presentation::create_presentation_connection_list_template(scope, templates.get("EventTarget").copied());
     templates.insert("PresentationConnectionList", tmpl_presentation_connection_list);
-    let tmpl_presentation_request = super::web_apis::create_presentation_request_template(scope, templates.get("EventTarget").copied());
+    let tmpl_presentation_request = super::presentation::create_presentation_request_template(scope, templates.get("EventTarget").copied());
     templates.insert("PresentationRequest", tmpl_presentation_request);
     let tmpl_profiler = super::web_apis::create_profiler_template(scope, templates.get("EventTarget").copied());
     templates.insert("Profiler", tmpl_profiler);
-    let tmpl_rtcdtmfsender = super::web_apis::create_rtcdtmfsender_template(scope, templates.get("EventTarget").copied());
-    templates.insert("RTCDTMFSender", tmpl_rtcdtmfsender);
-    let tmpl_rtcdata_channel = super::web_apis::create_rtcdata_channel_template(scope, templates.get("EventTarget").copied());
-    templates.insert("RTCDataChannel", tmpl_rtcdata_channel);
-    let tmpl_rtcdtls_transport = super::web_apis::create_rtcdtls_transport_template(scope, templates.get("EventTarget").copied());
-    templates.insert("RTCDtlsTransport", tmpl_rtcdtls_transport);
-    let tmpl_rtcice_transport = super::web_apis::create_rtcice_transport_template(scope, templates.get("EventTarget").copied());
-    templates.insert("RTCIceTransport", tmpl_rtcice_transport);
-    let tmpl_rtcpeer_connection = super::web_apis::create_rtcpeer_connection_template(scope, templates.get("EventTarget").copied());
-    templates.insert("RTCPeerConnection", tmpl_rtcpeer_connection);
-    let tmpl_rtcrtp_sframe_decrypter = super::web_apis::create_rtcrtp_sframe_decrypter_template(scope, templates.get("EventTarget").copied());
-    templates.insert("RTCRtpSFrameDecrypter", tmpl_rtcrtp_sframe_decrypter);
-    let tmpl_rtcrtp_script_transformer = super::web_apis::create_rtcrtp_script_transformer_template(scope, templates.get("EventTarget").copied());
-    templates.insert("RTCRtpScriptTransformer", tmpl_rtcrtp_script_transformer);
-    let tmpl_rtcsctp_transport = super::web_apis::create_rtcsctp_transport_template(scope, templates.get("EventTarget").copied());
-    templates.insert("RTCSctpTransport", tmpl_rtcsctp_transport);
+    let tmpl_rtcdtmf_sender = super::webrtc::create_rtcdtmf_sender_template(scope, templates.get("EventTarget").copied());
+    templates.insert("RTCDTMFSender", tmpl_rtcdtmf_sender);
+    let tmpl_rtc_data_channel = super::webrtc::create_rtc_data_channel_template(scope, templates.get("EventTarget").copied());
+    templates.insert("RTCDataChannel", tmpl_rtc_data_channel);
+    let tmpl_rtc_dtls_transport = super::webrtc::create_rtc_dtls_transport_template(scope, templates.get("EventTarget").copied());
+    templates.insert("RTCDtlsTransport", tmpl_rtc_dtls_transport);
+    let tmpl_rtc_ice_transport = super::webrtc::create_rtc_ice_transport_template(scope, templates.get("EventTarget").copied());
+    templates.insert("RTCIceTransport", tmpl_rtc_ice_transport);
+    let tmpl_rtc_peer_connection = super::webrtc::create_rtc_peer_connection_template(scope, templates.get("EventTarget").copied());
+    templates.insert("RTCPeerConnection", tmpl_rtc_peer_connection);
+    let tmpl_rtc_rtp_s_frame_decrypter = super::webrtc::create_rtc_rtp_s_frame_decrypter_template(scope, templates.get("EventTarget").copied());
+    templates.insert("RTCRtpSFrameDecrypter", tmpl_rtc_rtp_s_frame_decrypter);
+    let tmpl_rtc_rtp_script_transformer = super::webrtc::create_rtc_rtp_script_transformer_template(scope, templates.get("EventTarget").copied());
+    templates.insert("RTCRtpScriptTransformer", tmpl_rtc_rtp_script_transformer);
+    let tmpl_rtc_sctp_transport = super::webrtc::create_rtc_sctp_transport_template(scope, templates.get("EventTarget").copied());
+    templates.insert("RTCSctpTransport", tmpl_rtc_sctp_transport);
     let tmpl_remote_playback = super::web_apis::create_remote_playback_template(scope, templates.get("EventTarget").copied());
     templates.insert("RemotePlayback", tmpl_remote_playback);
-    let tmpl_sframe_decrypter_stream = super::web_apis::create_sframe_decrypter_stream_template(scope, templates.get("EventTarget").copied());
-    templates.insert("SFrameDecrypterStream", tmpl_sframe_decrypter_stream);
+    let tmpl_s_frame_decrypter_stream = super::web_apis::create_s_frame_decrypter_stream_template(scope, templates.get("EventTarget").copied());
+    templates.insert("SFrameDecrypterStream", tmpl_s_frame_decrypter_stream);
     let tmpl_screen_details = super::web_apis::create_screen_details_template(scope, templates.get("EventTarget").copied());
     templates.insert("ScreenDetails", tmpl_screen_details);
     let tmpl_screen_orientation = super::web_apis::create_screen_orientation_template(scope, templates.get("EventTarget").copied());
@@ -1838,7 +1835,7 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("TextTrackCue", tmpl_text_track_cue);
     let tmpl_text_track_list = super::web_apis::create_text_track_list_template(scope, templates.get("EventTarget").copied());
     templates.insert("TextTrackList", tmpl_text_track_list);
-    let tmpl_usb = super::web_apis::create_usb_template(scope, templates.get("EventTarget").copied());
+    let tmpl_usb = super::usb::create_usb_template(scope, templates.get("EventTarget").copied());
     templates.insert("USB", tmpl_usb);
     let tmpl_video_decoder = super::web_apis::create_video_decoder_template(scope, templates.get("EventTarget").copied());
     templates.insert("VideoDecoder", tmpl_video_decoder);
@@ -1862,18 +1859,18 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Worker", tmpl_worker);
     let tmpl_worker_global_scope = super::workers::create_worker_global_scope_template(scope, templates.get("EventTarget").copied());
     templates.insert("WorkerGlobalScope", tmpl_worker_global_scope);
-    let tmpl_xmlhttp_request_event_target = super::web_apis::create_xmlhttp_request_event_target_template(scope, templates.get("EventTarget").copied());
-    templates.insert("XMLHttpRequestEventTarget", tmpl_xmlhttp_request_event_target);
-    let tmpl_xrlayer = super::webxr::create_xrlayer_template(scope, templates.get("EventTarget").copied());
-    templates.insert("XRLayer", tmpl_xrlayer);
-    let tmpl_xrlight_probe = super::webxr::create_xrlight_probe_template(scope, templates.get("EventTarget").copied());
-    templates.insert("XRLightProbe", tmpl_xrlight_probe);
-    let tmpl_xrsession = super::webxr::create_xrsession_template(scope, templates.get("EventTarget").copied());
-    templates.insert("XRSession", tmpl_xrsession);
-    let tmpl_xrspace = super::webxr::create_xrspace_template(scope, templates.get("EventTarget").copied());
-    templates.insert("XRSpace", tmpl_xrspace);
-    let tmpl_xrsystem = super::webxr::create_xrsystem_template(scope, templates.get("EventTarget").copied());
-    templates.insert("XRSystem", tmpl_xrsystem);
+    let tmpl_xml_http_request_event_target = super::web_apis::create_xml_http_request_event_target_template(scope, templates.get("EventTarget").copied());
+    templates.insert("XMLHttpRequestEventTarget", tmpl_xml_http_request_event_target);
+    let tmpl_xr_layer = super::webxr::create_xr_layer_template(scope, templates.get("EventTarget").copied());
+    templates.insert("XRLayer", tmpl_xr_layer);
+    let tmpl_xr_light_probe = super::webxr::create_xr_light_probe_template(scope, templates.get("EventTarget").copied());
+    templates.insert("XRLightProbe", tmpl_xr_light_probe);
+    let tmpl_xr_session = super::webxr::create_xr_session_template(scope, templates.get("EventTarget").copied());
+    templates.insert("XRSession", tmpl_xr_session);
+    let tmpl_xr_space = super::webxr::create_xr_space_template(scope, templates.get("EventTarget").copied());
+    templates.insert("XRSpace", tmpl_xr_space);
+    let tmpl_xr_system = super::webxr::create_xr_system_template(scope, templates.get("EventTarget").copied());
+    templates.insert("XRSystem", tmpl_xr_system);
     let tmpl_file_system_directory_entry = super::web_apis::create_file_system_directory_entry_template(scope, templates.get("FileSystemEntry").copied());
     templates.insert("FileSystemDirectoryEntry", tmpl_file_system_directory_entry);
     let tmpl_file_system_file_entry = super::web_apis::create_file_system_file_entry_template(scope, templates.get("FileSystemEntry").copied());
@@ -1882,20 +1879,20 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("FileSystemDirectoryHandle", tmpl_file_system_directory_handle);
     let tmpl_file_system_file_handle = super::web_apis::create_file_system_file_handle_template(scope, templates.get("FileSystemHandle").copied());
     templates.insert("FileSystemFileHandle", tmpl_file_system_file_handle);
-    let tmpl_gpuinternal_error = super::web_apis::create_gpuinternal_error_template(scope, templates.get("GPUError").copied());
-    templates.insert("GPUInternalError", tmpl_gpuinternal_error);
-    let tmpl_gpuout_of_memory_error = super::web_apis::create_gpuout_of_memory_error_template(scope, templates.get("GPUError").copied());
-    templates.insert("GPUOutOfMemoryError", tmpl_gpuout_of_memory_error);
-    let tmpl_gpuvalidation_error = super::web_apis::create_gpuvalidation_error_template(scope, templates.get("GPUError").copied());
-    templates.insert("GPUValidationError", tmpl_gpuvalidation_error);
+    let tmpl_gpu_internal_error = super::gpu::create_gpu_internal_error_template(scope, templates.get("GPUError").copied());
+    templates.insert("GPUInternalError", tmpl_gpu_internal_error);
+    let tmpl_gpu_out_of_memory_error = super::gpu::create_gpu_out_of_memory_error_template(scope, templates.get("GPUError").copied());
+    templates.insert("GPUOutOfMemoryError", tmpl_gpu_out_of_memory_error);
+    let tmpl_gpu_validation_error = super::gpu::create_gpu_validation_error_template(scope, templates.get("GPUError").copied());
+    templates.insert("GPUValidationError", tmpl_gpu_validation_error);
     let tmpl_sequence_effect = super::web_apis::create_sequence_effect_template(scope, templates.get("GroupEffect").copied());
     templates.insert("SequenceEffect", tmpl_sequence_effect);
-    let tmpl_htmlform_controls_collection = super::html_elements::create_htmlform_controls_collection_template(scope, templates.get("HTMLCollection").copied());
-    templates.insert("HTMLFormControlsCollection", tmpl_htmlform_controls_collection);
-    let tmpl_htmloptions_collection = super::html_elements::create_htmloptions_collection_template(scope, templates.get("HTMLCollection").copied());
-    templates.insert("HTMLOptionsCollection", tmpl_htmloptions_collection);
-    let tmpl_idbcursor_with_value = super::web_apis::create_idbcursor_with_value_template(scope, templates.get("IDBCursor").copied());
-    templates.insert("IDBCursorWithValue", tmpl_idbcursor_with_value);
+    let tmpl_html_form_controls_collection = super::html_elements::create_html_form_controls_collection_template(scope, templates.get("HTMLCollection").copied());
+    templates.insert("HTMLFormControlsCollection", tmpl_html_form_controls_collection);
+    let tmpl_html_options_collection = super::html_elements::create_html_options_collection_template(scope, templates.get("HTMLCollection").copied());
+    templates.insert("HTMLOptionsCollection", tmpl_html_options_collection);
+    let tmpl_idb_cursor_with_value = super::idb::create_idb_cursor_with_value_template(scope, templates.get("IDBCursor").copied());
+    templates.insert("IDBCursorWithValue", tmpl_idb_cursor_with_value);
     let tmpl_input_device_info = super::web_apis::create_input_device_info_template(scope, templates.get("MediaDeviceInfo").copied());
     templates.insert("InputDeviceInfo", tmpl_input_device_info);
     let tmpl_radio_node_list = super::web_apis::create_radio_node_list_template(scope, templates.get("NodeList").copied());
@@ -1934,34 +1931,34 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("ScreenDetailed", tmpl_screen_detailed);
     let tmpl_style_property_map = super::web_apis::create_style_property_map_template(scope, templates.get("StylePropertyMapReadOnly").copied());
     templates.insert("StylePropertyMap", tmpl_style_property_map);
-    let tmpl_cssstyle_sheet = super::css_om::create_cssstyle_sheet_template(scope, templates.get("StyleSheet").copied());
-    templates.insert("CSSStyleSheet", tmpl_cssstyle_sheet);
-    let tmpl_web_glbuffer = super::webgl::create_web_glbuffer_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLBuffer", tmpl_web_glbuffer);
-    let tmpl_web_glframebuffer = super::webgl::create_web_glframebuffer_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLFramebuffer", tmpl_web_glframebuffer);
-    let tmpl_web_glprogram = super::webgl::create_web_glprogram_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLProgram", tmpl_web_glprogram);
-    let tmpl_web_glquery = super::webgl::create_web_glquery_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLQuery", tmpl_web_glquery);
-    let tmpl_web_glrenderbuffer = super::webgl::create_web_glrenderbuffer_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLRenderbuffer", tmpl_web_glrenderbuffer);
-    let tmpl_web_glsampler = super::webgl::create_web_glsampler_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLSampler", tmpl_web_glsampler);
-    let tmpl_web_glshader = super::webgl::create_web_glshader_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLShader", tmpl_web_glshader);
-    let tmpl_web_glsync = super::webgl::create_web_glsync_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLSync", tmpl_web_glsync);
-    let tmpl_web_gltexture = super::webgl::create_web_gltexture_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLTexture", tmpl_web_gltexture);
-    let tmpl_web_gltimer_query_ext = super::webgl::create_web_gltimer_query_ext_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLTimerQueryEXT", tmpl_web_gltimer_query_ext);
-    let tmpl_web_gltransform_feedback = super::webgl::create_web_gltransform_feedback_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLTransformFeedback", tmpl_web_gltransform_feedback);
-    let tmpl_web_glvertex_array_object = super::webgl::create_web_glvertex_array_object_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLVertexArrayObject", tmpl_web_glvertex_array_object);
-    let tmpl_web_glvertex_array_object_oes = super::webgl::create_web_glvertex_array_object_oes_template(scope, templates.get("WebGLObject").copied());
-    templates.insert("WebGLVertexArrayObjectOES", tmpl_web_glvertex_array_object_oes);
+    let tmpl_css_style_sheet = super::css_om::create_css_style_sheet_template(scope, templates.get("StyleSheet").copied());
+    templates.insert("CSSStyleSheet", tmpl_css_style_sheet);
+    let tmpl_web_gl_buffer = super::webgl::create_web_gl_buffer_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLBuffer", tmpl_web_gl_buffer);
+    let tmpl_web_gl_framebuffer = super::webgl::create_web_gl_framebuffer_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLFramebuffer", tmpl_web_gl_framebuffer);
+    let tmpl_web_gl_program = super::webgl::create_web_gl_program_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLProgram", tmpl_web_gl_program);
+    let tmpl_web_gl_query = super::webgl::create_web_gl_query_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLQuery", tmpl_web_gl_query);
+    let tmpl_web_gl_renderbuffer = super::webgl::create_web_gl_renderbuffer_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLRenderbuffer", tmpl_web_gl_renderbuffer);
+    let tmpl_web_gl_sampler = super::webgl::create_web_gl_sampler_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLSampler", tmpl_web_gl_sampler);
+    let tmpl_web_gl_shader = super::webgl::create_web_gl_shader_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLShader", tmpl_web_gl_shader);
+    let tmpl_web_gl_sync = super::webgl::create_web_gl_sync_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLSync", tmpl_web_gl_sync);
+    let tmpl_web_gl_texture = super::webgl::create_web_gl_texture_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLTexture", tmpl_web_gl_texture);
+    let tmpl_web_gl_timer_query_ext = super::webgl::create_web_gl_timer_query_ext_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLTimerQueryEXT", tmpl_web_gl_timer_query_ext);
+    let tmpl_web_gl_transform_feedback = super::webgl::create_web_gl_transform_feedback_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLTransformFeedback", tmpl_web_gl_transform_feedback);
+    let tmpl_web_gl_vertex_array_object = super::webgl::create_web_gl_vertex_array_object_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLVertexArrayObject", tmpl_web_gl_vertex_array_object);
+    let tmpl_web_gl_vertex_array_object_oes = super::webgl::create_web_gl_vertex_array_object_oes_template(scope, templates.get("WebGLObject").copied());
+    templates.insert("WebGLVertexArrayObjectOES", tmpl_web_gl_vertex_array_object_oes);
     let tmpl_audio_worklet = super::web_audio::create_audio_worklet_template(scope, templates.get("Worklet").copied());
     templates.insert("AudioWorklet", tmpl_audio_worklet);
     let tmpl_animation_worklet_global_scope = super::web_apis::create_animation_worklet_global_scope_template(scope, templates.get("WorkletGlobalScope").copied());
@@ -1980,60 +1977,60 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("WebTransportSendStream", tmpl_web_transport_send_stream);
     let tmpl_web_transport_writer = super::web_apis::create_web_transport_writer_template(scope, templates.get("WritableStreamDefaultWriter").copied());
     templates.insert("WebTransportWriter", tmpl_web_transport_writer);
-    let tmpl_xrcpudepth_information = super::webxr::create_xrcpudepth_information_template(scope, templates.get("XRDepthInformation").copied());
-    templates.insert("XRCPUDepthInformation", tmpl_xrcpudepth_information);
-    let tmpl_xrweb_gldepth_information = super::webxr::create_xrweb_gldepth_information_template(scope, templates.get("XRDepthInformation").copied());
-    templates.insert("XRWebGLDepthInformation", tmpl_xrweb_gldepth_information);
-    let tmpl_xrjoint_pose = super::webxr::create_xrjoint_pose_template(scope, templates.get("XRPose").copied());
-    templates.insert("XRJointPose", tmpl_xrjoint_pose);
-    let tmpl_xrviewer_pose = super::webxr::create_xrviewer_pose_template(scope, templates.get("XRPose").copied());
-    templates.insert("XRViewerPose", tmpl_xrviewer_pose);
-    let tmpl_xrweb_glsub_image = super::webxr::create_xrweb_glsub_image_template(scope, templates.get("XRSubImage").copied());
-    templates.insert("XRWebGLSubImage", tmpl_xrweb_glsub_image);
+    let tmpl_xrcpu_depth_information = super::webxr::create_xrcpu_depth_information_template(scope, templates.get("XRDepthInformation").copied());
+    templates.insert("XRCPUDepthInformation", tmpl_xrcpu_depth_information);
+    let tmpl_xr_web_gl_depth_information = super::webxr::create_xr_web_gl_depth_information_template(scope, templates.get("XRDepthInformation").copied());
+    templates.insert("XRWebGLDepthInformation", tmpl_xr_web_gl_depth_information);
+    let tmpl_xr_joint_pose = super::webxr::create_xr_joint_pose_template(scope, templates.get("XRPose").copied());
+    templates.insert("XRJointPose", tmpl_xr_joint_pose);
+    let tmpl_xr_viewer_pose = super::webxr::create_xr_viewer_pose_template(scope, templates.get("XRPose").copied());
+    templates.insert("XRViewerPose", tmpl_xr_viewer_pose);
+    let tmpl_xr_web_gl_sub_image = super::webxr::create_xr_web_gl_sub_image_template(scope, templates.get("XRSubImage").copied());
+    templates.insert("XRWebGLSubImage", tmpl_xr_web_gl_sub_image);
     let tmpl_view_timeline = super::web_apis::create_view_timeline_template(scope, templates.get("ScrollTimeline").copied());
     templates.insert("ViewTimeline", tmpl_view_timeline);
-    let tmpl_cssapply_block_rule = super::css_om::create_cssapply_block_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSApplyBlockRule", tmpl_cssapply_block_rule);
-    let tmpl_csscondition_rule = super::css_om::create_csscondition_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSConditionRule", tmpl_csscondition_rule);
-    let tmpl_csscontents_block_rule = super::css_om::create_csscontents_block_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSContentsBlockRule", tmpl_csscontents_block_rule);
-    let tmpl_cssfunction_rule = super::css_om::create_cssfunction_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSFunctionRule", tmpl_cssfunction_rule);
-    let tmpl_csslayer_block_rule = super::css_om::create_csslayer_block_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSLayerBlockRule", tmpl_csslayer_block_rule);
-    let tmpl_cssmixin_rule = super::css_om::create_cssmixin_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSMixinRule", tmpl_cssmixin_rule);
-    let tmpl_csspage_rule = super::css_om::create_csspage_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSPageRule", tmpl_csspage_rule);
-    let tmpl_cssscope_rule = super::css_om::create_cssscope_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSScopeRule", tmpl_cssscope_rule);
-    let tmpl_cssstarting_style_rule = super::css_om::create_cssstarting_style_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSStartingStyleRule", tmpl_cssstarting_style_rule);
-    let tmpl_cssstyle_rule = super::css_om::create_cssstyle_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSStyleRule", tmpl_cssstyle_rule);
-    let tmpl_csssupports_condition_rule = super::css_om::create_csssupports_condition_rule_template(scope, templates.get("CSSGroupingRule").copied());
-    templates.insert("CSSSupportsConditionRule", tmpl_csssupports_condition_rule);
-    let tmpl_csscolor = super::css_om::create_csscolor_template(scope, templates.get("CSSColorValue").copied());
-    templates.insert("CSSColor", tmpl_csscolor);
+    let tmpl_css_apply_block_rule = super::css_om::create_css_apply_block_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSApplyBlockRule", tmpl_css_apply_block_rule);
+    let tmpl_css_condition_rule = super::css_om::create_css_condition_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSConditionRule", tmpl_css_condition_rule);
+    let tmpl_css_contents_block_rule = super::css_om::create_css_contents_block_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSContentsBlockRule", tmpl_css_contents_block_rule);
+    let tmpl_css_function_rule = super::css_om::create_css_function_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSFunctionRule", tmpl_css_function_rule);
+    let tmpl_css_layer_block_rule = super::css_om::create_css_layer_block_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSLayerBlockRule", tmpl_css_layer_block_rule);
+    let tmpl_css_mixin_rule = super::css_om::create_css_mixin_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSMixinRule", tmpl_css_mixin_rule);
+    let tmpl_css_page_rule = super::css_om::create_css_page_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSPageRule", tmpl_css_page_rule);
+    let tmpl_css_scope_rule = super::css_om::create_css_scope_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSScopeRule", tmpl_css_scope_rule);
+    let tmpl_css_starting_style_rule = super::css_om::create_css_starting_style_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSStartingStyleRule", tmpl_css_starting_style_rule);
+    let tmpl_css_style_rule = super::css_om::create_css_style_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSStyleRule", tmpl_css_style_rule);
+    let tmpl_css_supports_condition_rule = super::css_om::create_css_supports_condition_rule_template(scope, templates.get("CSSGroupingRule").copied());
+    templates.insert("CSSSupportsConditionRule", tmpl_css_supports_condition_rule);
+    let tmpl_css_color = super::css_om::create_css_color_template(scope, templates.get("CSSColorValue").copied());
+    templates.insert("CSSColor", tmpl_css_color);
     let tmpl_csshsl = super::css_om::create_csshsl_template(scope, templates.get("CSSColorValue").copied());
     templates.insert("CSSHSL", tmpl_csshsl);
     let tmpl_csshwb = super::css_om::create_csshwb_template(scope, templates.get("CSSColorValue").copied());
     templates.insert("CSSHWB", tmpl_csshwb);
     let tmpl_csslch = super::css_om::create_csslch_template(scope, templates.get("CSSColorValue").copied());
     templates.insert("CSSLCH", tmpl_csslch);
-    let tmpl_csslab = super::css_om::create_csslab_template(scope, templates.get("CSSColorValue").copied());
-    templates.insert("CSSLab", tmpl_csslab);
+    let tmpl_css_lab = super::css_om::create_css_lab_template(scope, templates.get("CSSColorValue").copied());
+    templates.insert("CSSLab", tmpl_css_lab);
     let tmpl_cssoklch = super::css_om::create_cssoklch_template(scope, templates.get("CSSColorValue").copied());
     templates.insert("CSSOKLCH", tmpl_cssoklch);
-    let tmpl_cssoklab = super::css_om::create_cssoklab_template(scope, templates.get("CSSColorValue").copied());
-    templates.insert("CSSOKLab", tmpl_cssoklab);
+    let tmpl_cssok_lab = super::css_om::create_cssok_lab_template(scope, templates.get("CSSColorValue").copied());
+    templates.insert("CSSOKLab", tmpl_cssok_lab);
     let tmpl_cssrgb = super::css_om::create_cssrgb_template(scope, templates.get("CSSColorValue").copied());
     templates.insert("CSSRGB", tmpl_cssrgb);
-    let tmpl_cssmath_value = super::css_om::create_cssmath_value_template(scope, templates.get("CSSNumericValue").copied());
-    templates.insert("CSSMathValue", tmpl_cssmath_value);
-    let tmpl_cssunit_value = super::css_om::create_cssunit_value_template(scope, templates.get("CSSNumericValue").copied());
-    templates.insert("CSSUnitValue", tmpl_cssunit_value);
+    let tmpl_css_math_value = super::css_om::create_css_math_value_template(scope, templates.get("CSSNumericValue").copied());
+    templates.insert("CSSMathValue", tmpl_css_math_value);
+    let tmpl_css_unit_value = super::css_om::create_css_unit_value_template(scope, templates.get("CSSNumericValue").copied());
+    templates.insert("CSSUnitValue", tmpl_css_unit_value);
     let tmpl_background_fetch_event = super::events::create_background_fetch_event_template(scope, templates.get("ExtendableEvent").copied());
     templates.insert("BackgroundFetchEvent", tmpl_background_fetch_event);
     let tmpl_can_make_payment_event = super::events::create_can_make_payment_event_template(scope, templates.get("ExtendableEvent").copied());
@@ -2082,10 +2079,10 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("TouchEvent", tmpl_touch_event);
     let tmpl_task_signal = super::web_apis::create_task_signal_template(scope, templates.get("AbortSignal").copied());
     templates.insert("TaskSignal", tmpl_task_signal);
-    let tmpl_cssanimation = super::css_om::create_cssanimation_template(scope, templates.get("Animation").copied());
-    templates.insert("CSSAnimation", tmpl_cssanimation);
-    let tmpl_csstransition = super::css_om::create_csstransition_template(scope, templates.get("Animation").copied());
-    templates.insert("CSSTransition", tmpl_csstransition);
+    let tmpl_css_animation = super::css_om::create_css_animation_template(scope, templates.get("Animation").copied());
+    templates.insert("CSSAnimation", tmpl_css_animation);
+    let tmpl_css_transition = super::css_om::create_css_transition_template(scope, templates.get("Animation").copied());
+    templates.insert("CSSTransition", tmpl_css_transition);
     let tmpl_shadow_animation = super::web_apis::create_shadow_animation_template(scope, templates.get("Animation").copied());
     templates.insert("ShadowAnimation", tmpl_shadow_animation);
     let tmpl_worklet_animation = super::web_apis::create_worklet_animation_template(scope, templates.get("Animation").copied());
@@ -2112,8 +2109,8 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("DynamicsCompressorNode", tmpl_dynamics_compressor_node);
     let tmpl_gain_node = super::web_audio::create_gain_node_template(scope, templates.get("AudioNode").copied());
     templates.insert("GainNode", tmpl_gain_node);
-    let tmpl_iirfilter_node = super::web_apis::create_iirfilter_node_template(scope, templates.get("AudioNode").copied());
-    templates.insert("IIRFilterNode", tmpl_iirfilter_node);
+    let tmpl_iir_filter_node = super::web_apis::create_iir_filter_node_template(scope, templates.get("AudioNode").copied());
+    templates.insert("IIRFilterNode", tmpl_iir_filter_node);
     let tmpl_media_element_audio_source_node = super::media_apis::create_media_element_audio_source_node_template(scope, templates.get("AudioNode").copied());
     templates.insert("MediaElementAudioSourceNode", tmpl_media_element_audio_source_node);
     let tmpl_media_stream_audio_destination_node = super::media_apis::create_media_stream_audio_destination_node_template(scope, templates.get("AudioNode").copied());
@@ -2134,12 +2131,12 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("AudioContext", tmpl_audio_context);
     let tmpl_offline_audio_context = super::web_audio::create_offline_audio_context_template(scope, templates.get("BaseAudioContext").copied());
     templates.insert("OfflineAudioContext", tmpl_offline_audio_context);
-    let tmpl_idbopen_dbrequest = super::web_apis::create_idbopen_dbrequest_template(scope, templates.get("IDBRequest").copied());
-    templates.insert("IDBOpenDBRequest", tmpl_idbopen_dbrequest);
-    let tmpl_midiinput = super::web_apis::create_midiinput_template(scope, templates.get("MIDIPort").copied());
-    templates.insert("MIDIInput", tmpl_midiinput);
-    let tmpl_midioutput = super::web_apis::create_midioutput_template(scope, templates.get("MIDIPort").copied());
-    templates.insert("MIDIOutput", tmpl_midioutput);
+    let tmpl_idb_open_db_request = super::idb::create_idb_open_db_request_template(scope, templates.get("IDBRequest").copied());
+    templates.insert("IDBOpenDBRequest", tmpl_idb_open_db_request);
+    let tmpl_midi_input = super::midi::create_midi_input_template(scope, templates.get("MIDIPort").copied());
+    templates.insert("MIDIInput", tmpl_midi_input);
+    let tmpl_midi_output = super::midi::create_midi_output_template(scope, templates.get("MIDIPort").copied());
+    templates.insert("MIDIOutput", tmpl_midi_output);
     let tmpl_managed_media_source = super::web_apis::create_managed_media_source_template(scope, templates.get("MediaSource").copied());
     templates.insert("ManagedMediaSource", tmpl_managed_media_source);
     let tmpl_browser_capture_media_stream_track = super::media_apis::create_browser_capture_media_stream_track_template(scope, templates.get("MediaStreamTrack").copied());
@@ -2158,14 +2155,14 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("DocumentType", tmpl_document_type);
     let tmpl_element = super::dom_core::create_element_template(scope, templates.get("Node").copied());
     templates.insert("Element", tmpl_element);
-    let tmpl_bluetooth_lescan_permission_result = super::bluetooth::create_bluetooth_lescan_permission_result_template(scope, templates.get("PermissionStatus").copied());
-    templates.insert("BluetoothLEScanPermissionResult", tmpl_bluetooth_lescan_permission_result);
+    let tmpl_bluetooth_le_scan_permission_result = super::bluetooth::create_bluetooth_le_scan_permission_result_template(scope, templates.get("PermissionStatus").copied());
+    templates.insert("BluetoothLEScanPermissionResult", tmpl_bluetooth_le_scan_permission_result);
     let tmpl_bluetooth_permission_result = super::bluetooth::create_bluetooth_permission_result_template(scope, templates.get("PermissionStatus").copied());
     templates.insert("BluetoothPermissionResult", tmpl_bluetooth_permission_result);
-    let tmpl_usbpermission_result = super::web_apis::create_usbpermission_result_template(scope, templates.get("PermissionStatus").copied());
-    templates.insert("USBPermissionResult", tmpl_usbpermission_result);
-    let tmpl_xrpermission_status = super::webxr::create_xrpermission_status_template(scope, templates.get("PermissionStatus").copied());
-    templates.insert("XRPermissionStatus", tmpl_xrpermission_status);
+    let tmpl_usb_permission_result = super::usb::create_usb_permission_result_template(scope, templates.get("PermissionStatus").copied());
+    templates.insert("USBPermissionResult", tmpl_usb_permission_result);
+    let tmpl_xr_permission_status = super::webxr::create_xr_permission_status_template(scope, templates.get("PermissionStatus").copied());
+    templates.insert("XRPermissionStatus", tmpl_xr_permission_status);
     let tmpl_accelerometer = super::sensors::create_accelerometer_template(scope, templates.get("Sensor").copied());
     templates.insert("Accelerometer", tmpl_accelerometer);
     let tmpl_ambient_light_sensor = super::sensors::create_ambient_light_sensor_template(scope, templates.get("Sensor").copied());
@@ -2184,54 +2181,54 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("ManagedSourceBuffer", tmpl_managed_source_buffer);
     let tmpl_data_cue = super::web_apis::create_data_cue_template(scope, templates.get("TextTrackCue").copied());
     templates.insert("DataCue", tmpl_data_cue);
-    let tmpl_vttcue = super::web_apis::create_vttcue_template(scope, templates.get("TextTrackCue").copied());
-    templates.insert("VTTCue", tmpl_vttcue);
+    let tmpl_vtt_cue = super::web_apis::create_vtt_cue_template(scope, templates.get("TextTrackCue").copied());
+    templates.insert("VTTCue", tmpl_vtt_cue);
     let tmpl_dedicated_worker_global_scope = super::web_apis::create_dedicated_worker_global_scope_template(scope, templates.get("WorkerGlobalScope").copied());
     templates.insert("DedicatedWorkerGlobalScope", tmpl_dedicated_worker_global_scope);
-    let tmpl_rtcidentity_provider_global_scope = super::web_apis::create_rtcidentity_provider_global_scope_template(scope, templates.get("WorkerGlobalScope").copied());
-    templates.insert("RTCIdentityProviderGlobalScope", tmpl_rtcidentity_provider_global_scope);
+    let tmpl_rtc_identity_provider_global_scope = super::webrtc::create_rtc_identity_provider_global_scope_template(scope, templates.get("WorkerGlobalScope").copied());
+    templates.insert("RTCIdentityProviderGlobalScope", tmpl_rtc_identity_provider_global_scope);
     let tmpl_service_worker_global_scope = super::workers::create_service_worker_global_scope_template(scope, templates.get("WorkerGlobalScope").copied());
     templates.insert("ServiceWorkerGlobalScope", tmpl_service_worker_global_scope);
     let tmpl_shared_worker_global_scope = super::web_apis::create_shared_worker_global_scope_template(scope, templates.get("WorkerGlobalScope").copied());
     templates.insert("SharedWorkerGlobalScope", tmpl_shared_worker_global_scope);
-    let tmpl_xmlhttp_request = super::web_apis::create_xmlhttp_request_template(scope, templates.get("XMLHttpRequestEventTarget").copied());
-    templates.insert("XMLHttpRequest", tmpl_xmlhttp_request);
-    let tmpl_xmlhttp_request_upload = super::web_apis::create_xmlhttp_request_upload_template(scope, templates.get("XMLHttpRequestEventTarget").copied());
-    templates.insert("XMLHttpRequestUpload", tmpl_xmlhttp_request_upload);
-    let tmpl_xrcomposition_layer = super::webxr::create_xrcomposition_layer_template(scope, templates.get("XRLayer").copied());
-    templates.insert("XRCompositionLayer", tmpl_xrcomposition_layer);
-    let tmpl_xrweb_gllayer = super::webxr::create_xrweb_gllayer_template(scope, templates.get("XRLayer").copied());
-    templates.insert("XRWebGLLayer", tmpl_xrweb_gllayer);
-    let tmpl_xrbody_space = super::webxr::create_xrbody_space_template(scope, templates.get("XRSpace").copied());
-    templates.insert("XRBodySpace", tmpl_xrbody_space);
-    let tmpl_xrjoint_space = super::webxr::create_xrjoint_space_template(scope, templates.get("XRSpace").copied());
-    templates.insert("XRJointSpace", tmpl_xrjoint_space);
-    let tmpl_xrreference_space = super::webxr::create_xrreference_space_template(scope, templates.get("XRSpace").copied());
-    templates.insert("XRReferenceSpace", tmpl_xrreference_space);
+    let tmpl_xml_http_request = super::web_apis::create_xml_http_request_template(scope, templates.get("XMLHttpRequestEventTarget").copied());
+    templates.insert("XMLHttpRequest", tmpl_xml_http_request);
+    let tmpl_xml_http_request_upload = super::web_apis::create_xml_http_request_upload_template(scope, templates.get("XMLHttpRequestEventTarget").copied());
+    templates.insert("XMLHttpRequestUpload", tmpl_xml_http_request_upload);
+    let tmpl_xr_composition_layer = super::webxr::create_xr_composition_layer_template(scope, templates.get("XRLayer").copied());
+    templates.insert("XRCompositionLayer", tmpl_xr_composition_layer);
+    let tmpl_xr_web_gl_layer = super::webxr::create_xr_web_gl_layer_template(scope, templates.get("XRLayer").copied());
+    templates.insert("XRWebGLLayer", tmpl_xr_web_gl_layer);
+    let tmpl_xr_body_space = super::webxr::create_xr_body_space_template(scope, templates.get("XRSpace").copied());
+    templates.insert("XRBodySpace", tmpl_xr_body_space);
+    let tmpl_xr_joint_space = super::webxr::create_xr_joint_space_template(scope, templates.get("XRSpace").copied());
+    templates.insert("XRJointSpace", tmpl_xr_joint_space);
+    let tmpl_xr_reference_space = super::webxr::create_xr_reference_space_template(scope, templates.get("XRSpace").copied());
+    templates.insert("XRReferenceSpace", tmpl_xr_reference_space);
     let tmpl_performance_navigation_timing = super::web_apis::create_performance_navigation_timing_template(scope, templates.get("PerformanceResourceTiming").copied());
     templates.insert("PerformanceNavigationTiming", tmpl_performance_navigation_timing);
-    let tmpl_csscontainer_rule = super::css_om::create_csscontainer_rule_template(scope, templates.get("CSSConditionRule").copied());
-    templates.insert("CSSContainerRule", tmpl_csscontainer_rule);
-    let tmpl_cssmedia_rule = super::css_om::create_cssmedia_rule_template(scope, templates.get("CSSConditionRule").copied());
-    templates.insert("CSSMediaRule", tmpl_cssmedia_rule);
-    let tmpl_csssupports_rule = super::css_om::create_csssupports_rule_template(scope, templates.get("CSSConditionRule").copied());
-    templates.insert("CSSSupportsRule", tmpl_csssupports_rule);
-    let tmpl_cssmath_clamp = super::css_om::create_cssmath_clamp_template(scope, templates.get("CSSMathValue").copied());
-    templates.insert("CSSMathClamp", tmpl_cssmath_clamp);
-    let tmpl_cssmath_invert = super::css_om::create_cssmath_invert_template(scope, templates.get("CSSMathValue").copied());
-    templates.insert("CSSMathInvert", tmpl_cssmath_invert);
-    let tmpl_cssmath_max = super::css_om::create_cssmath_max_template(scope, templates.get("CSSMathValue").copied());
-    templates.insert("CSSMathMax", tmpl_cssmath_max);
-    let tmpl_cssmath_min = super::css_om::create_cssmath_min_template(scope, templates.get("CSSMathValue").copied());
-    templates.insert("CSSMathMin", tmpl_cssmath_min);
-    let tmpl_cssmath_negate = super::css_om::create_cssmath_negate_template(scope, templates.get("CSSMathValue").copied());
-    templates.insert("CSSMathNegate", tmpl_cssmath_negate);
-    let tmpl_cssmath_product = super::css_om::create_cssmath_product_template(scope, templates.get("CSSMathValue").copied());
-    templates.insert("CSSMathProduct", tmpl_cssmath_product);
-    let tmpl_cssmath_sum = super::css_om::create_cssmath_sum_template(scope, templates.get("CSSMathValue").copied());
-    templates.insert("CSSMathSum", tmpl_cssmath_sum);
-    let tmpl_background_fetch_update_uievent = super::events::create_background_fetch_update_uievent_template(scope, templates.get("BackgroundFetchEvent").copied());
-    templates.insert("BackgroundFetchUpdateUIEvent", tmpl_background_fetch_update_uievent);
+    let tmpl_css_container_rule = super::css_om::create_css_container_rule_template(scope, templates.get("CSSConditionRule").copied());
+    templates.insert("CSSContainerRule", tmpl_css_container_rule);
+    let tmpl_css_media_rule = super::css_om::create_css_media_rule_template(scope, templates.get("CSSConditionRule").copied());
+    templates.insert("CSSMediaRule", tmpl_css_media_rule);
+    let tmpl_css_supports_rule = super::css_om::create_css_supports_rule_template(scope, templates.get("CSSConditionRule").copied());
+    templates.insert("CSSSupportsRule", tmpl_css_supports_rule);
+    let tmpl_css_math_clamp = super::css_om::create_css_math_clamp_template(scope, templates.get("CSSMathValue").copied());
+    templates.insert("CSSMathClamp", tmpl_css_math_clamp);
+    let tmpl_css_math_invert = super::css_om::create_css_math_invert_template(scope, templates.get("CSSMathValue").copied());
+    templates.insert("CSSMathInvert", tmpl_css_math_invert);
+    let tmpl_css_math_max = super::css_om::create_css_math_max_template(scope, templates.get("CSSMathValue").copied());
+    templates.insert("CSSMathMax", tmpl_css_math_max);
+    let tmpl_css_math_min = super::css_om::create_css_math_min_template(scope, templates.get("CSSMathValue").copied());
+    templates.insert("CSSMathMin", tmpl_css_math_min);
+    let tmpl_css_math_negate = super::css_om::create_css_math_negate_template(scope, templates.get("CSSMathValue").copied());
+    templates.insert("CSSMathNegate", tmpl_css_math_negate);
+    let tmpl_css_math_product = super::css_om::create_css_math_product_template(scope, templates.get("CSSMathValue").copied());
+    templates.insert("CSSMathProduct", tmpl_css_math_product);
+    let tmpl_css_math_sum = super::css_om::create_css_math_sum_template(scope, templates.get("CSSMathValue").copied());
+    templates.insert("CSSMathSum", tmpl_css_math_sum);
+    let tmpl_background_fetch_update_ui_event = super::events::create_background_fetch_update_ui_event_template(scope, templates.get("BackgroundFetchEvent").copied());
+    templates.insert("BackgroundFetchUpdateUIEvent", tmpl_background_fetch_update_ui_event);
     let tmpl_drag_event = super::events::create_drag_event_template(scope, templates.get("MouseEvent").copied());
     templates.insert("DragEvent", tmpl_drag_event);
     let tmpl_pointer_event = super::events::create_pointer_event_template(scope, templates.get("MouseEvent").copied());
@@ -2252,16 +2249,16 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("ProcessingInstruction", tmpl_processing_instruction);
     let tmpl_text = super::dom_core::create_text_template(scope, templates.get("CharacterData").copied());
     templates.insert("Text", tmpl_text);
-    let tmpl_xmldocument = super::web_apis::create_xmldocument_template(scope, templates.get("Document").copied());
-    templates.insert("XMLDocument", tmpl_xmldocument);
+    let tmpl_xml_document = super::web_apis::create_xml_document_template(scope, templates.get("Document").copied());
+    templates.insert("XMLDocument", tmpl_xml_document);
     let tmpl_shadow_root = super::dom_core::create_shadow_root_template(scope, templates.get("DocumentFragment").copied());
     templates.insert("ShadowRoot", tmpl_shadow_root);
-    let tmpl_htmlelement = super::html_elements::create_htmlelement_template(scope, templates.get("Element").copied());
-    templates.insert("HTMLElement", tmpl_htmlelement);
-    let tmpl_math_mlelement = super::web_apis::create_math_mlelement_template(scope, templates.get("Element").copied());
-    templates.insert("MathMLElement", tmpl_math_mlelement);
-    let tmpl_svgelement = super::svg::create_svgelement_template(scope, templates.get("Element").copied());
-    templates.insert("SVGElement", tmpl_svgelement);
+    let tmpl_html_element = super::html_elements::create_html_element_template(scope, templates.get("Element").copied());
+    templates.insert("HTMLElement", tmpl_html_element);
+    let tmpl_math_ml_element = super::web_apis::create_math_ml_element_template(scope, templates.get("Element").copied());
+    templates.insert("MathMLElement", tmpl_math_ml_element);
+    let tmpl_svg_element = super::svg::create_svg_element_template(scope, templates.get("Element").copied());
+    templates.insert("SVGElement", tmpl_svg_element);
     let tmpl_gravity_sensor = super::sensors::create_gravity_sensor_template(scope, templates.get("Accelerometer").copied());
     templates.insert("GravitySensor", tmpl_gravity_sensor);
     let tmpl_linear_acceleration_sensor = super::sensors::create_linear_acceleration_sensor_template(scope, templates.get("Accelerometer").copied());
@@ -2270,314 +2267,314 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("AbsoluteOrientationSensor", tmpl_absolute_orientation_sensor);
     let tmpl_relative_orientation_sensor = super::sensors::create_relative_orientation_sensor_template(scope, templates.get("OrientationSensor").copied());
     templates.insert("RelativeOrientationSensor", tmpl_relative_orientation_sensor);
-    let tmpl_xrcube_layer = super::webxr::create_xrcube_layer_template(scope, templates.get("XRCompositionLayer").copied());
-    templates.insert("XRCubeLayer", tmpl_xrcube_layer);
-    let tmpl_xrcylinder_layer = super::webxr::create_xrcylinder_layer_template(scope, templates.get("XRCompositionLayer").copied());
-    templates.insert("XRCylinderLayer", tmpl_xrcylinder_layer);
-    let tmpl_xrequirect_layer = super::webxr::create_xrequirect_layer_template(scope, templates.get("XRCompositionLayer").copied());
-    templates.insert("XREquirectLayer", tmpl_xrequirect_layer);
-    let tmpl_xrprojection_layer = super::webxr::create_xrprojection_layer_template(scope, templates.get("XRCompositionLayer").copied());
-    templates.insert("XRProjectionLayer", tmpl_xrprojection_layer);
-    let tmpl_xrquad_layer = super::webxr::create_xrquad_layer_template(scope, templates.get("XRCompositionLayer").copied());
-    templates.insert("XRQuadLayer", tmpl_xrquad_layer);
-    let tmpl_xrbounded_reference_space = super::webxr::create_xrbounded_reference_space_template(scope, templates.get("XRReferenceSpace").copied());
-    templates.insert("XRBoundedReferenceSpace", tmpl_xrbounded_reference_space);
-    let tmpl_cdatasection = super::web_apis::create_cdatasection_template(scope, templates.get("Text").copied());
-    templates.insert("CDATASection", tmpl_cdatasection);
-    let tmpl_svguse_element_shadow_root = super::svg::create_svguse_element_shadow_root_template(scope, templates.get("ShadowRoot").copied());
-    templates.insert("SVGUseElementShadowRoot", tmpl_svguse_element_shadow_root);
-    let tmpl_htmlanchor_element = super::html_elements::create_htmlanchor_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLAnchorElement", tmpl_htmlanchor_element);
-    let tmpl_htmlarea_element = super::html_elements::create_htmlarea_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLAreaElement", tmpl_htmlarea_element);
-    let tmpl_htmlbrelement = super::html_elements::create_htmlbrelement_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLBRElement", tmpl_htmlbrelement);
-    let tmpl_htmlbase_element = super::html_elements::create_htmlbase_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLBaseElement", tmpl_htmlbase_element);
-    let tmpl_htmlbody_element = super::html_elements::create_htmlbody_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLBodyElement", tmpl_htmlbody_element);
-    let tmpl_htmlbutton_element = super::html_elements::create_htmlbutton_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLButtonElement", tmpl_htmlbutton_element);
-    let tmpl_htmlcanvas_element = super::html_elements::create_htmlcanvas_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLCanvasElement", tmpl_htmlcanvas_element);
-    let tmpl_htmldlist_element = super::html_elements::create_htmldlist_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLDListElement", tmpl_htmldlist_element);
-    let tmpl_htmldata_element = super::html_elements::create_htmldata_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLDataElement", tmpl_htmldata_element);
-    let tmpl_htmldata_list_element = super::html_elements::create_htmldata_list_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLDataListElement", tmpl_htmldata_list_element);
-    let tmpl_htmldetails_element = super::html_elements::create_htmldetails_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLDetailsElement", tmpl_htmldetails_element);
-    let tmpl_htmldialog_element = super::html_elements::create_htmldialog_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLDialogElement", tmpl_htmldialog_element);
-    let tmpl_htmldirectory_element = super::html_elements::create_htmldirectory_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLDirectoryElement", tmpl_htmldirectory_element);
-    let tmpl_htmldiv_element = super::html_elements::create_htmldiv_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLDivElement", tmpl_htmldiv_element);
-    let tmpl_htmlembed_element = super::html_elements::create_htmlembed_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLEmbedElement", tmpl_htmlembed_element);
-    let tmpl_htmlfenced_frame_element = super::html_elements::create_htmlfenced_frame_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLFencedFrameElement", tmpl_htmlfenced_frame_element);
-    let tmpl_htmlfield_set_element = super::html_elements::create_htmlfield_set_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLFieldSetElement", tmpl_htmlfield_set_element);
-    let tmpl_htmlfont_element = super::html_elements::create_htmlfont_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLFontElement", tmpl_htmlfont_element);
-    let tmpl_htmlform_element = super::html_elements::create_htmlform_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLFormElement", tmpl_htmlform_element);
-    let tmpl_htmlframe_element = super::html_elements::create_htmlframe_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLFrameElement", tmpl_htmlframe_element);
-    let tmpl_htmlframe_set_element = super::html_elements::create_htmlframe_set_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLFrameSetElement", tmpl_htmlframe_set_element);
-    let tmpl_htmlgeolocation_element = super::html_elements::create_htmlgeolocation_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLGeolocationElement", tmpl_htmlgeolocation_element);
-    let tmpl_htmlhrelement = super::html_elements::create_htmlhrelement_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLHRElement", tmpl_htmlhrelement);
-    let tmpl_htmlhead_element = super::html_elements::create_htmlhead_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLHeadElement", tmpl_htmlhead_element);
-    let tmpl_htmlheading_element = super::html_elements::create_htmlheading_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLHeadingElement", tmpl_htmlheading_element);
-    let tmpl_htmlhtml_element = super::html_elements::create_htmlhtml_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLHtmlElement", tmpl_htmlhtml_element);
-    let tmpl_htmliframe_element = super::html_elements::create_htmliframe_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLIFrameElement", tmpl_htmliframe_element);
-    let tmpl_htmlimage_element = super::html_elements::create_htmlimage_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLImageElement", tmpl_htmlimage_element);
-    let tmpl_htmlinput_element = super::html_elements::create_htmlinput_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLInputElement", tmpl_htmlinput_element);
-    let tmpl_htmllielement = super::html_elements::create_htmllielement_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLLIElement", tmpl_htmllielement);
-    let tmpl_htmllabel_element = super::html_elements::create_htmllabel_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLLabelElement", tmpl_htmllabel_element);
-    let tmpl_htmllegend_element = super::html_elements::create_htmllegend_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLLegendElement", tmpl_htmllegend_element);
-    let tmpl_htmllink_element = super::html_elements::create_htmllink_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLLinkElement", tmpl_htmllink_element);
-    let tmpl_htmlmap_element = super::html_elements::create_htmlmap_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLMapElement", tmpl_htmlmap_element);
-    let tmpl_htmlmarquee_element = super::html_elements::create_htmlmarquee_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLMarqueeElement", tmpl_htmlmarquee_element);
-    let tmpl_htmlmedia_element = super::html_elements::create_htmlmedia_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLMediaElement", tmpl_htmlmedia_element);
-    let tmpl_htmlmenu_element = super::html_elements::create_htmlmenu_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLMenuElement", tmpl_htmlmenu_element);
-    let tmpl_htmlmeta_element = super::html_elements::create_htmlmeta_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLMetaElement", tmpl_htmlmeta_element);
-    let tmpl_htmlmeter_element = super::html_elements::create_htmlmeter_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLMeterElement", tmpl_htmlmeter_element);
-    let tmpl_htmlmod_element = super::html_elements::create_htmlmod_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLModElement", tmpl_htmlmod_element);
-    let tmpl_htmlmodel_element = super::html_elements::create_htmlmodel_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLModelElement", tmpl_htmlmodel_element);
-    let tmpl_htmlolist_element = super::html_elements::create_htmlolist_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLOListElement", tmpl_htmlolist_element);
-    let tmpl_htmlobject_element = super::html_elements::create_htmlobject_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLObjectElement", tmpl_htmlobject_element);
-    let tmpl_htmlopt_group_element = super::html_elements::create_htmlopt_group_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLOptGroupElement", tmpl_htmlopt_group_element);
-    let tmpl_htmloption_element = super::html_elements::create_htmloption_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLOptionElement", tmpl_htmloption_element);
-    let tmpl_htmloutput_element = super::html_elements::create_htmloutput_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLOutputElement", tmpl_htmloutput_element);
-    let tmpl_htmlparagraph_element = super::html_elements::create_htmlparagraph_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLParagraphElement", tmpl_htmlparagraph_element);
-    let tmpl_htmlparam_element = super::html_elements::create_htmlparam_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLParamElement", tmpl_htmlparam_element);
-    let tmpl_htmlpicture_element = super::html_elements::create_htmlpicture_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLPictureElement", tmpl_htmlpicture_element);
-    let tmpl_htmlportal_element = super::html_elements::create_htmlportal_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLPortalElement", tmpl_htmlportal_element);
-    let tmpl_htmlpre_element = super::html_elements::create_htmlpre_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLPreElement", tmpl_htmlpre_element);
-    let tmpl_htmlprogress_element = super::html_elements::create_htmlprogress_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLProgressElement", tmpl_htmlprogress_element);
-    let tmpl_htmlquote_element = super::html_elements::create_htmlquote_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLQuoteElement", tmpl_htmlquote_element);
-    let tmpl_htmlscript_element = super::html_elements::create_htmlscript_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLScriptElement", tmpl_htmlscript_element);
-    let tmpl_htmlselect_element = super::html_elements::create_htmlselect_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLSelectElement", tmpl_htmlselect_element);
-    let tmpl_htmlselected_content_element = super::html_elements::create_htmlselected_content_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLSelectedContentElement", tmpl_htmlselected_content_element);
-    let tmpl_htmlslot_element = super::html_elements::create_htmlslot_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLSlotElement", tmpl_htmlslot_element);
-    let tmpl_htmlsource_element = super::html_elements::create_htmlsource_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLSourceElement", tmpl_htmlsource_element);
-    let tmpl_htmlspan_element = super::html_elements::create_htmlspan_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLSpanElement", tmpl_htmlspan_element);
-    let tmpl_htmlstyle_element = super::html_elements::create_htmlstyle_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLStyleElement", tmpl_htmlstyle_element);
-    let tmpl_htmltable_caption_element = super::html_elements::create_htmltable_caption_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTableCaptionElement", tmpl_htmltable_caption_element);
-    let tmpl_htmltable_cell_element = super::html_elements::create_htmltable_cell_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTableCellElement", tmpl_htmltable_cell_element);
-    let tmpl_htmltable_col_element = super::html_elements::create_htmltable_col_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTableColElement", tmpl_htmltable_col_element);
-    let tmpl_htmltable_element = super::html_elements::create_htmltable_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTableElement", tmpl_htmltable_element);
-    let tmpl_htmltable_row_element = super::html_elements::create_htmltable_row_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTableRowElement", tmpl_htmltable_row_element);
-    let tmpl_htmltable_section_element = super::html_elements::create_htmltable_section_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTableSectionElement", tmpl_htmltable_section_element);
-    let tmpl_htmltemplate_element = super::html_elements::create_htmltemplate_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTemplateElement", tmpl_htmltemplate_element);
-    let tmpl_htmltext_area_element = super::html_elements::create_htmltext_area_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTextAreaElement", tmpl_htmltext_area_element);
-    let tmpl_htmltime_element = super::html_elements::create_htmltime_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTimeElement", tmpl_htmltime_element);
-    let tmpl_htmltitle_element = super::html_elements::create_htmltitle_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTitleElement", tmpl_htmltitle_element);
-    let tmpl_htmltrack_element = super::html_elements::create_htmltrack_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLTrackElement", tmpl_htmltrack_element);
-    let tmpl_htmlulist_element = super::html_elements::create_htmlulist_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLUListElement", tmpl_htmlulist_element);
-    let tmpl_htmlunknown_element = super::html_elements::create_htmlunknown_element_template(scope, templates.get("HTMLElement").copied());
-    templates.insert("HTMLUnknownElement", tmpl_htmlunknown_element);
-    let tmpl_math_mlanchor_element = super::web_apis::create_math_mlanchor_element_template(scope, templates.get("MathMLElement").copied());
-    templates.insert("MathMLAnchorElement", tmpl_math_mlanchor_element);
-    let tmpl_svganimation_element = super::svg::create_svganimation_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGAnimationElement", tmpl_svganimation_element);
-    let tmpl_svgclip_path_element = super::svg::create_svgclip_path_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGClipPathElement", tmpl_svgclip_path_element);
-    let tmpl_svgcomponent_transfer_function_element = super::svg::create_svgcomponent_transfer_function_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGComponentTransferFunctionElement", tmpl_svgcomponent_transfer_function_element);
-    let tmpl_svgdesc_element = super::svg::create_svgdesc_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGDescElement", tmpl_svgdesc_element);
-    let tmpl_svgfeblend_element = super::svg::create_svgfeblend_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEBlendElement", tmpl_svgfeblend_element);
-    let tmpl_svgfecolor_matrix_element = super::svg::create_svgfecolor_matrix_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEColorMatrixElement", tmpl_svgfecolor_matrix_element);
-    let tmpl_svgfecomponent_transfer_element = super::svg::create_svgfecomponent_transfer_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEComponentTransferElement", tmpl_svgfecomponent_transfer_element);
-    let tmpl_svgfecomposite_element = super::svg::create_svgfecomposite_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFECompositeElement", tmpl_svgfecomposite_element);
-    let tmpl_svgfeconvolve_matrix_element = super::svg::create_svgfeconvolve_matrix_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEConvolveMatrixElement", tmpl_svgfeconvolve_matrix_element);
-    let tmpl_svgfediffuse_lighting_element = super::svg::create_svgfediffuse_lighting_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEDiffuseLightingElement", tmpl_svgfediffuse_lighting_element);
-    let tmpl_svgfedisplacement_map_element = super::svg::create_svgfedisplacement_map_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEDisplacementMapElement", tmpl_svgfedisplacement_map_element);
-    let tmpl_svgfedistant_light_element = super::svg::create_svgfedistant_light_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEDistantLightElement", tmpl_svgfedistant_light_element);
-    let tmpl_svgfedrop_shadow_element = super::svg::create_svgfedrop_shadow_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEDropShadowElement", tmpl_svgfedrop_shadow_element);
-    let tmpl_svgfeflood_element = super::svg::create_svgfeflood_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEFloodElement", tmpl_svgfeflood_element);
-    let tmpl_svgfegaussian_blur_element = super::svg::create_svgfegaussian_blur_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEGaussianBlurElement", tmpl_svgfegaussian_blur_element);
-    let tmpl_svgfeimage_element = super::svg::create_svgfeimage_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEImageElement", tmpl_svgfeimage_element);
-    let tmpl_svgfemerge_element = super::svg::create_svgfemerge_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEMergeElement", tmpl_svgfemerge_element);
-    let tmpl_svgfemerge_node_element = super::svg::create_svgfemerge_node_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEMergeNodeElement", tmpl_svgfemerge_node_element);
-    let tmpl_svgfemorphology_element = super::svg::create_svgfemorphology_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEMorphologyElement", tmpl_svgfemorphology_element);
-    let tmpl_svgfeoffset_element = super::svg::create_svgfeoffset_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEOffsetElement", tmpl_svgfeoffset_element);
-    let tmpl_svgfepoint_light_element = super::svg::create_svgfepoint_light_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFEPointLightElement", tmpl_svgfepoint_light_element);
-    let tmpl_svgfespecular_lighting_element = super::svg::create_svgfespecular_lighting_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFESpecularLightingElement", tmpl_svgfespecular_lighting_element);
-    let tmpl_svgfespot_light_element = super::svg::create_svgfespot_light_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFESpotLightElement", tmpl_svgfespot_light_element);
-    let tmpl_svgfetile_element = super::svg::create_svgfetile_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFETileElement", tmpl_svgfetile_element);
-    let tmpl_svgfeturbulence_element = super::svg::create_svgfeturbulence_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFETurbulenceElement", tmpl_svgfeturbulence_element);
-    let tmpl_svgfilter_element = super::svg::create_svgfilter_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGFilterElement", tmpl_svgfilter_element);
-    let tmpl_svggradient_element = super::svg::create_svggradient_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGGradientElement", tmpl_svggradient_element);
-    let tmpl_svggraphics_element = super::svg::create_svggraphics_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGGraphicsElement", tmpl_svggraphics_element);
-    let tmpl_svgmpath_element = super::svg::create_svgmpath_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGMPathElement", tmpl_svgmpath_element);
-    let tmpl_svgmarker_element = super::svg::create_svgmarker_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGMarkerElement", tmpl_svgmarker_element);
-    let tmpl_svgmask_element = super::svg::create_svgmask_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGMaskElement", tmpl_svgmask_element);
-    let tmpl_svgmetadata_element = super::svg::create_svgmetadata_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGMetadataElement", tmpl_svgmetadata_element);
-    let tmpl_svgpattern_element = super::svg::create_svgpattern_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGPatternElement", tmpl_svgpattern_element);
-    let tmpl_svgscript_element = super::svg::create_svgscript_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGScriptElement", tmpl_svgscript_element);
-    let tmpl_svgstop_element = super::svg::create_svgstop_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGStopElement", tmpl_svgstop_element);
-    let tmpl_svgstyle_element = super::svg::create_svgstyle_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGStyleElement", tmpl_svgstyle_element);
-    let tmpl_svgtitle_element = super::svg::create_svgtitle_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGTitleElement", tmpl_svgtitle_element);
-    let tmpl_svgview_element = super::svg::create_svgview_element_template(scope, templates.get("SVGElement").copied());
-    templates.insert("SVGViewElement", tmpl_svgview_element);
-    let tmpl_htmlaudio_element = super::html_elements::create_htmlaudio_element_template(scope, templates.get("HTMLMediaElement").copied());
-    templates.insert("HTMLAudioElement", tmpl_htmlaudio_element);
-    let tmpl_htmlvideo_element = super::html_elements::create_htmlvideo_element_template(scope, templates.get("HTMLMediaElement").copied());
-    templates.insert("HTMLVideoElement", tmpl_htmlvideo_element);
-    let tmpl_svganimate_element = super::svg::create_svganimate_element_template(scope, templates.get("SVGAnimationElement").copied());
-    templates.insert("SVGAnimateElement", tmpl_svganimate_element);
-    let tmpl_svganimate_motion_element = super::svg::create_svganimate_motion_element_template(scope, templates.get("SVGAnimationElement").copied());
-    templates.insert("SVGAnimateMotionElement", tmpl_svganimate_motion_element);
-    let tmpl_svganimate_transform_element = super::svg::create_svganimate_transform_element_template(scope, templates.get("SVGAnimationElement").copied());
-    templates.insert("SVGAnimateTransformElement", tmpl_svganimate_transform_element);
-    let tmpl_svgset_element = super::svg::create_svgset_element_template(scope, templates.get("SVGAnimationElement").copied());
-    templates.insert("SVGSetElement", tmpl_svgset_element);
-    let tmpl_svgfefunc_aelement = super::svg::create_svgfefunc_aelement_template(scope, templates.get("SVGComponentTransferFunctionElement").copied());
-    templates.insert("SVGFEFuncAElement", tmpl_svgfefunc_aelement);
-    let tmpl_svgfefunc_belement = super::svg::create_svgfefunc_belement_template(scope, templates.get("SVGComponentTransferFunctionElement").copied());
-    templates.insert("SVGFEFuncBElement", tmpl_svgfefunc_belement);
-    let tmpl_svgfefunc_gelement = super::svg::create_svgfefunc_gelement_template(scope, templates.get("SVGComponentTransferFunctionElement").copied());
-    templates.insert("SVGFEFuncGElement", tmpl_svgfefunc_gelement);
-    let tmpl_svgfefunc_relement = super::svg::create_svgfefunc_relement_template(scope, templates.get("SVGComponentTransferFunctionElement").copied());
-    templates.insert("SVGFEFuncRElement", tmpl_svgfefunc_relement);
-    let tmpl_svglinear_gradient_element = super::svg::create_svglinear_gradient_element_template(scope, templates.get("SVGGradientElement").copied());
-    templates.insert("SVGLinearGradientElement", tmpl_svglinear_gradient_element);
-    let tmpl_svgradial_gradient_element = super::svg::create_svgradial_gradient_element_template(scope, templates.get("SVGGradientElement").copied());
-    templates.insert("SVGRadialGradientElement", tmpl_svgradial_gradient_element);
-    let tmpl_svgaelement = super::svg::create_svgaelement_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGAElement", tmpl_svgaelement);
-    let tmpl_svgdefs_element = super::svg::create_svgdefs_element_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGDefsElement", tmpl_svgdefs_element);
-    let tmpl_svgforeign_object_element = super::svg::create_svgforeign_object_element_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGForeignObjectElement", tmpl_svgforeign_object_element);
-    let tmpl_svggelement = super::svg::create_svggelement_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGGElement", tmpl_svggelement);
-    let tmpl_svggeometry_element = super::svg::create_svggeometry_element_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGGeometryElement", tmpl_svggeometry_element);
-    let tmpl_svgimage_element = super::svg::create_svgimage_element_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGImageElement", tmpl_svgimage_element);
-    let tmpl_svgsvgelement = super::svg::create_svgsvgelement_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGSVGElement", tmpl_svgsvgelement);
-    let tmpl_svgswitch_element = super::svg::create_svgswitch_element_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGSwitchElement", tmpl_svgswitch_element);
-    let tmpl_svgsymbol_element = super::svg::create_svgsymbol_element_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGSymbolElement", tmpl_svgsymbol_element);
-    let tmpl_svgtext_content_element = super::svg::create_svgtext_content_element_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGTextContentElement", tmpl_svgtext_content_element);
-    let tmpl_svguse_element = super::svg::create_svguse_element_template(scope, templates.get("SVGGraphicsElement").copied());
-    templates.insert("SVGUseElement", tmpl_svguse_element);
-    let tmpl_svgcircle_element = super::svg::create_svgcircle_element_template(scope, templates.get("SVGGeometryElement").copied());
-    templates.insert("SVGCircleElement", tmpl_svgcircle_element);
-    let tmpl_svgellipse_element = super::svg::create_svgellipse_element_template(scope, templates.get("SVGGeometryElement").copied());
-    templates.insert("SVGEllipseElement", tmpl_svgellipse_element);
-    let tmpl_svgline_element = super::svg::create_svgline_element_template(scope, templates.get("SVGGeometryElement").copied());
-    templates.insert("SVGLineElement", tmpl_svgline_element);
-    let tmpl_svgpath_element = super::svg::create_svgpath_element_template(scope, templates.get("SVGGeometryElement").copied());
-    templates.insert("SVGPathElement", tmpl_svgpath_element);
-    let tmpl_svgpolygon_element = super::svg::create_svgpolygon_element_template(scope, templates.get("SVGGeometryElement").copied());
-    templates.insert("SVGPolygonElement", tmpl_svgpolygon_element);
-    let tmpl_svgpolyline_element = super::svg::create_svgpolyline_element_template(scope, templates.get("SVGGeometryElement").copied());
-    templates.insert("SVGPolylineElement", tmpl_svgpolyline_element);
-    let tmpl_svgrect_element = super::svg::create_svgrect_element_template(scope, templates.get("SVGGeometryElement").copied());
-    templates.insert("SVGRectElement", tmpl_svgrect_element);
-    let tmpl_svgtext_path_element = super::svg::create_svgtext_path_element_template(scope, templates.get("SVGTextContentElement").copied());
-    templates.insert("SVGTextPathElement", tmpl_svgtext_path_element);
-    let tmpl_svgtext_positioning_element = super::svg::create_svgtext_positioning_element_template(scope, templates.get("SVGTextContentElement").copied());
-    templates.insert("SVGTextPositioningElement", tmpl_svgtext_positioning_element);
-    let tmpl_svgtspan_element = super::svg::create_svgtspan_element_template(scope, templates.get("SVGTextPositioningElement").copied());
-    templates.insert("SVGTSpanElement", tmpl_svgtspan_element);
-    let tmpl_svgtext_element = super::svg::create_svgtext_element_template(scope, templates.get("SVGTextPositioningElement").copied());
-    templates.insert("SVGTextElement", tmpl_svgtext_element);
+    let tmpl_xr_cube_layer = super::webxr::create_xr_cube_layer_template(scope, templates.get("XRCompositionLayer").copied());
+    templates.insert("XRCubeLayer", tmpl_xr_cube_layer);
+    let tmpl_xr_cylinder_layer = super::webxr::create_xr_cylinder_layer_template(scope, templates.get("XRCompositionLayer").copied());
+    templates.insert("XRCylinderLayer", tmpl_xr_cylinder_layer);
+    let tmpl_xr_equirect_layer = super::webxr::create_xr_equirect_layer_template(scope, templates.get("XRCompositionLayer").copied());
+    templates.insert("XREquirectLayer", tmpl_xr_equirect_layer);
+    let tmpl_xr_projection_layer = super::webxr::create_xr_projection_layer_template(scope, templates.get("XRCompositionLayer").copied());
+    templates.insert("XRProjectionLayer", tmpl_xr_projection_layer);
+    let tmpl_xr_quad_layer = super::webxr::create_xr_quad_layer_template(scope, templates.get("XRCompositionLayer").copied());
+    templates.insert("XRQuadLayer", tmpl_xr_quad_layer);
+    let tmpl_xr_bounded_reference_space = super::webxr::create_xr_bounded_reference_space_template(scope, templates.get("XRReferenceSpace").copied());
+    templates.insert("XRBoundedReferenceSpace", tmpl_xr_bounded_reference_space);
+    let tmpl_cdata_section = super::web_apis::create_cdata_section_template(scope, templates.get("Text").copied());
+    templates.insert("CDATASection", tmpl_cdata_section);
+    let tmpl_svg_use_element_shadow_root = super::svg::create_svg_use_element_shadow_root_template(scope, templates.get("ShadowRoot").copied());
+    templates.insert("SVGUseElementShadowRoot", tmpl_svg_use_element_shadow_root);
+    let tmpl_html_anchor_element = super::html_elements::create_html_anchor_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLAnchorElement", tmpl_html_anchor_element);
+    let tmpl_html_area_element = super::html_elements::create_html_area_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLAreaElement", tmpl_html_area_element);
+    let tmpl_htmlbr_element = super::html_elements::create_htmlbr_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLBRElement", tmpl_htmlbr_element);
+    let tmpl_html_base_element = super::html_elements::create_html_base_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLBaseElement", tmpl_html_base_element);
+    let tmpl_html_body_element = super::html_elements::create_html_body_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLBodyElement", tmpl_html_body_element);
+    let tmpl_html_button_element = super::html_elements::create_html_button_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLButtonElement", tmpl_html_button_element);
+    let tmpl_html_canvas_element = super::html_elements::create_html_canvas_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLCanvasElement", tmpl_html_canvas_element);
+    let tmpl_htmld_list_element = super::html_elements::create_htmld_list_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLDListElement", tmpl_htmld_list_element);
+    let tmpl_html_data_element = super::html_elements::create_html_data_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLDataElement", tmpl_html_data_element);
+    let tmpl_html_data_list_element = super::html_elements::create_html_data_list_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLDataListElement", tmpl_html_data_list_element);
+    let tmpl_html_details_element = super::html_elements::create_html_details_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLDetailsElement", tmpl_html_details_element);
+    let tmpl_html_dialog_element = super::html_elements::create_html_dialog_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLDialogElement", tmpl_html_dialog_element);
+    let tmpl_html_directory_element = super::html_elements::create_html_directory_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLDirectoryElement", tmpl_html_directory_element);
+    let tmpl_html_div_element = super::html_elements::create_html_div_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLDivElement", tmpl_html_div_element);
+    let tmpl_html_embed_element = super::html_elements::create_html_embed_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLEmbedElement", tmpl_html_embed_element);
+    let tmpl_html_fenced_frame_element = super::html_elements::create_html_fenced_frame_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLFencedFrameElement", tmpl_html_fenced_frame_element);
+    let tmpl_html_field_set_element = super::html_elements::create_html_field_set_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLFieldSetElement", tmpl_html_field_set_element);
+    let tmpl_html_font_element = super::html_elements::create_html_font_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLFontElement", tmpl_html_font_element);
+    let tmpl_html_form_element = super::html_elements::create_html_form_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLFormElement", tmpl_html_form_element);
+    let tmpl_html_frame_element = super::html_elements::create_html_frame_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLFrameElement", tmpl_html_frame_element);
+    let tmpl_html_frame_set_element = super::html_elements::create_html_frame_set_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLFrameSetElement", tmpl_html_frame_set_element);
+    let tmpl_html_geolocation_element = super::html_elements::create_html_geolocation_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLGeolocationElement", tmpl_html_geolocation_element);
+    let tmpl_htmlhr_element = super::html_elements::create_htmlhr_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLHRElement", tmpl_htmlhr_element);
+    let tmpl_html_head_element = super::html_elements::create_html_head_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLHeadElement", tmpl_html_head_element);
+    let tmpl_html_heading_element = super::html_elements::create_html_heading_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLHeadingElement", tmpl_html_heading_element);
+    let tmpl_html_html_element = super::html_elements::create_html_html_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLHtmlElement", tmpl_html_html_element);
+    let tmpl_htmli_frame_element = super::html_elements::create_htmli_frame_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLIFrameElement", tmpl_htmli_frame_element);
+    let tmpl_html_image_element = super::html_elements::create_html_image_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLImageElement", tmpl_html_image_element);
+    let tmpl_html_input_element = super::html_elements::create_html_input_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLInputElement", tmpl_html_input_element);
+    let tmpl_htmlli_element = super::html_elements::create_htmlli_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLLIElement", tmpl_htmlli_element);
+    let tmpl_html_label_element = super::html_elements::create_html_label_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLLabelElement", tmpl_html_label_element);
+    let tmpl_html_legend_element = super::html_elements::create_html_legend_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLLegendElement", tmpl_html_legend_element);
+    let tmpl_html_link_element = super::html_elements::create_html_link_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLLinkElement", tmpl_html_link_element);
+    let tmpl_html_map_element = super::html_elements::create_html_map_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLMapElement", tmpl_html_map_element);
+    let tmpl_html_marquee_element = super::html_elements::create_html_marquee_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLMarqueeElement", tmpl_html_marquee_element);
+    let tmpl_html_media_element = super::html_elements::create_html_media_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLMediaElement", tmpl_html_media_element);
+    let tmpl_html_menu_element = super::html_elements::create_html_menu_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLMenuElement", tmpl_html_menu_element);
+    let tmpl_html_meta_element = super::html_elements::create_html_meta_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLMetaElement", tmpl_html_meta_element);
+    let tmpl_html_meter_element = super::html_elements::create_html_meter_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLMeterElement", tmpl_html_meter_element);
+    let tmpl_html_mod_element = super::html_elements::create_html_mod_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLModElement", tmpl_html_mod_element);
+    let tmpl_html_model_element = super::html_elements::create_html_model_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLModelElement", tmpl_html_model_element);
+    let tmpl_htmlo_list_element = super::html_elements::create_htmlo_list_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLOListElement", tmpl_htmlo_list_element);
+    let tmpl_html_object_element = super::html_elements::create_html_object_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLObjectElement", tmpl_html_object_element);
+    let tmpl_html_opt_group_element = super::html_elements::create_html_opt_group_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLOptGroupElement", tmpl_html_opt_group_element);
+    let tmpl_html_option_element = super::html_elements::create_html_option_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLOptionElement", tmpl_html_option_element);
+    let tmpl_html_output_element = super::html_elements::create_html_output_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLOutputElement", tmpl_html_output_element);
+    let tmpl_html_paragraph_element = super::html_elements::create_html_paragraph_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLParagraphElement", tmpl_html_paragraph_element);
+    let tmpl_html_param_element = super::html_elements::create_html_param_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLParamElement", tmpl_html_param_element);
+    let tmpl_html_picture_element = super::html_elements::create_html_picture_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLPictureElement", tmpl_html_picture_element);
+    let tmpl_html_portal_element = super::html_elements::create_html_portal_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLPortalElement", tmpl_html_portal_element);
+    let tmpl_html_pre_element = super::html_elements::create_html_pre_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLPreElement", tmpl_html_pre_element);
+    let tmpl_html_progress_element = super::html_elements::create_html_progress_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLProgressElement", tmpl_html_progress_element);
+    let tmpl_html_quote_element = super::html_elements::create_html_quote_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLQuoteElement", tmpl_html_quote_element);
+    let tmpl_html_script_element = super::html_elements::create_html_script_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLScriptElement", tmpl_html_script_element);
+    let tmpl_html_select_element = super::html_elements::create_html_select_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLSelectElement", tmpl_html_select_element);
+    let tmpl_html_selected_content_element = super::html_elements::create_html_selected_content_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLSelectedContentElement", tmpl_html_selected_content_element);
+    let tmpl_html_slot_element = super::html_elements::create_html_slot_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLSlotElement", tmpl_html_slot_element);
+    let tmpl_html_source_element = super::html_elements::create_html_source_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLSourceElement", tmpl_html_source_element);
+    let tmpl_html_span_element = super::html_elements::create_html_span_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLSpanElement", tmpl_html_span_element);
+    let tmpl_html_style_element = super::html_elements::create_html_style_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLStyleElement", tmpl_html_style_element);
+    let tmpl_html_table_caption_element = super::html_elements::create_html_table_caption_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTableCaptionElement", tmpl_html_table_caption_element);
+    let tmpl_html_table_cell_element = super::html_elements::create_html_table_cell_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTableCellElement", tmpl_html_table_cell_element);
+    let tmpl_html_table_col_element = super::html_elements::create_html_table_col_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTableColElement", tmpl_html_table_col_element);
+    let tmpl_html_table_element = super::html_elements::create_html_table_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTableElement", tmpl_html_table_element);
+    let tmpl_html_table_row_element = super::html_elements::create_html_table_row_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTableRowElement", tmpl_html_table_row_element);
+    let tmpl_html_table_section_element = super::html_elements::create_html_table_section_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTableSectionElement", tmpl_html_table_section_element);
+    let tmpl_html_template_element = super::html_elements::create_html_template_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTemplateElement", tmpl_html_template_element);
+    let tmpl_html_text_area_element = super::html_elements::create_html_text_area_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTextAreaElement", tmpl_html_text_area_element);
+    let tmpl_html_time_element = super::html_elements::create_html_time_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTimeElement", tmpl_html_time_element);
+    let tmpl_html_title_element = super::html_elements::create_html_title_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTitleElement", tmpl_html_title_element);
+    let tmpl_html_track_element = super::html_elements::create_html_track_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLTrackElement", tmpl_html_track_element);
+    let tmpl_htmlu_list_element = super::html_elements::create_htmlu_list_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLUListElement", tmpl_htmlu_list_element);
+    let tmpl_html_unknown_element = super::html_elements::create_html_unknown_element_template(scope, templates.get("HTMLElement").copied());
+    templates.insert("HTMLUnknownElement", tmpl_html_unknown_element);
+    let tmpl_math_ml_anchor_element = super::web_apis::create_math_ml_anchor_element_template(scope, templates.get("MathMLElement").copied());
+    templates.insert("MathMLAnchorElement", tmpl_math_ml_anchor_element);
+    let tmpl_svg_animation_element = super::svg::create_svg_animation_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGAnimationElement", tmpl_svg_animation_element);
+    let tmpl_svg_clip_path_element = super::svg::create_svg_clip_path_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGClipPathElement", tmpl_svg_clip_path_element);
+    let tmpl_svg_component_transfer_function_element = super::svg::create_svg_component_transfer_function_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGComponentTransferFunctionElement", tmpl_svg_component_transfer_function_element);
+    let tmpl_svg_desc_element = super::svg::create_svg_desc_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGDescElement", tmpl_svg_desc_element);
+    let tmpl_svgfe_blend_element = super::svg::create_svgfe_blend_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEBlendElement", tmpl_svgfe_blend_element);
+    let tmpl_svgfe_color_matrix_element = super::svg::create_svgfe_color_matrix_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEColorMatrixElement", tmpl_svgfe_color_matrix_element);
+    let tmpl_svgfe_component_transfer_element = super::svg::create_svgfe_component_transfer_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEComponentTransferElement", tmpl_svgfe_component_transfer_element);
+    let tmpl_svgfe_composite_element = super::svg::create_svgfe_composite_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFECompositeElement", tmpl_svgfe_composite_element);
+    let tmpl_svgfe_convolve_matrix_element = super::svg::create_svgfe_convolve_matrix_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEConvolveMatrixElement", tmpl_svgfe_convolve_matrix_element);
+    let tmpl_svgfe_diffuse_lighting_element = super::svg::create_svgfe_diffuse_lighting_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEDiffuseLightingElement", tmpl_svgfe_diffuse_lighting_element);
+    let tmpl_svgfe_displacement_map_element = super::svg::create_svgfe_displacement_map_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEDisplacementMapElement", tmpl_svgfe_displacement_map_element);
+    let tmpl_svgfe_distant_light_element = super::svg::create_svgfe_distant_light_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEDistantLightElement", tmpl_svgfe_distant_light_element);
+    let tmpl_svgfe_drop_shadow_element = super::svg::create_svgfe_drop_shadow_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEDropShadowElement", tmpl_svgfe_drop_shadow_element);
+    let tmpl_svgfe_flood_element = super::svg::create_svgfe_flood_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEFloodElement", tmpl_svgfe_flood_element);
+    let tmpl_svgfe_gaussian_blur_element = super::svg::create_svgfe_gaussian_blur_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEGaussianBlurElement", tmpl_svgfe_gaussian_blur_element);
+    let tmpl_svgfe_image_element = super::svg::create_svgfe_image_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEImageElement", tmpl_svgfe_image_element);
+    let tmpl_svgfe_merge_element = super::svg::create_svgfe_merge_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEMergeElement", tmpl_svgfe_merge_element);
+    let tmpl_svgfe_merge_node_element = super::svg::create_svgfe_merge_node_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEMergeNodeElement", tmpl_svgfe_merge_node_element);
+    let tmpl_svgfe_morphology_element = super::svg::create_svgfe_morphology_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEMorphologyElement", tmpl_svgfe_morphology_element);
+    let tmpl_svgfe_offset_element = super::svg::create_svgfe_offset_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEOffsetElement", tmpl_svgfe_offset_element);
+    let tmpl_svgfe_point_light_element = super::svg::create_svgfe_point_light_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFEPointLightElement", tmpl_svgfe_point_light_element);
+    let tmpl_svgfe_specular_lighting_element = super::svg::create_svgfe_specular_lighting_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFESpecularLightingElement", tmpl_svgfe_specular_lighting_element);
+    let tmpl_svgfe_spot_light_element = super::svg::create_svgfe_spot_light_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFESpotLightElement", tmpl_svgfe_spot_light_element);
+    let tmpl_svgfe_tile_element = super::svg::create_svgfe_tile_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFETileElement", tmpl_svgfe_tile_element);
+    let tmpl_svgfe_turbulence_element = super::svg::create_svgfe_turbulence_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFETurbulenceElement", tmpl_svgfe_turbulence_element);
+    let tmpl_svg_filter_element = super::svg::create_svg_filter_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGFilterElement", tmpl_svg_filter_element);
+    let tmpl_svg_gradient_element = super::svg::create_svg_gradient_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGGradientElement", tmpl_svg_gradient_element);
+    let tmpl_svg_graphics_element = super::svg::create_svg_graphics_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGGraphicsElement", tmpl_svg_graphics_element);
+    let tmpl_svgm_path_element = super::svg::create_svgm_path_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGMPathElement", tmpl_svgm_path_element);
+    let tmpl_svg_marker_element = super::svg::create_svg_marker_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGMarkerElement", tmpl_svg_marker_element);
+    let tmpl_svg_mask_element = super::svg::create_svg_mask_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGMaskElement", tmpl_svg_mask_element);
+    let tmpl_svg_metadata_element = super::svg::create_svg_metadata_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGMetadataElement", tmpl_svg_metadata_element);
+    let tmpl_svg_pattern_element = super::svg::create_svg_pattern_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGPatternElement", tmpl_svg_pattern_element);
+    let tmpl_svg_script_element = super::svg::create_svg_script_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGScriptElement", tmpl_svg_script_element);
+    let tmpl_svg_stop_element = super::svg::create_svg_stop_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGStopElement", tmpl_svg_stop_element);
+    let tmpl_svg_style_element = super::svg::create_svg_style_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGStyleElement", tmpl_svg_style_element);
+    let tmpl_svg_title_element = super::svg::create_svg_title_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGTitleElement", tmpl_svg_title_element);
+    let tmpl_svg_view_element = super::svg::create_svg_view_element_template(scope, templates.get("SVGElement").copied());
+    templates.insert("SVGViewElement", tmpl_svg_view_element);
+    let tmpl_html_audio_element = super::html_elements::create_html_audio_element_template(scope, templates.get("HTMLMediaElement").copied());
+    templates.insert("HTMLAudioElement", tmpl_html_audio_element);
+    let tmpl_html_video_element = super::html_elements::create_html_video_element_template(scope, templates.get("HTMLMediaElement").copied());
+    templates.insert("HTMLVideoElement", tmpl_html_video_element);
+    let tmpl_svg_animate_element = super::svg::create_svg_animate_element_template(scope, templates.get("SVGAnimationElement").copied());
+    templates.insert("SVGAnimateElement", tmpl_svg_animate_element);
+    let tmpl_svg_animate_motion_element = super::svg::create_svg_animate_motion_element_template(scope, templates.get("SVGAnimationElement").copied());
+    templates.insert("SVGAnimateMotionElement", tmpl_svg_animate_motion_element);
+    let tmpl_svg_animate_transform_element = super::svg::create_svg_animate_transform_element_template(scope, templates.get("SVGAnimationElement").copied());
+    templates.insert("SVGAnimateTransformElement", tmpl_svg_animate_transform_element);
+    let tmpl_svg_set_element = super::svg::create_svg_set_element_template(scope, templates.get("SVGAnimationElement").copied());
+    templates.insert("SVGSetElement", tmpl_svg_set_element);
+    let tmpl_svgfe_func_a_element = super::svg::create_svgfe_func_a_element_template(scope, templates.get("SVGComponentTransferFunctionElement").copied());
+    templates.insert("SVGFEFuncAElement", tmpl_svgfe_func_a_element);
+    let tmpl_svgfe_func_b_element = super::svg::create_svgfe_func_b_element_template(scope, templates.get("SVGComponentTransferFunctionElement").copied());
+    templates.insert("SVGFEFuncBElement", tmpl_svgfe_func_b_element);
+    let tmpl_svgfe_func_g_element = super::svg::create_svgfe_func_g_element_template(scope, templates.get("SVGComponentTransferFunctionElement").copied());
+    templates.insert("SVGFEFuncGElement", tmpl_svgfe_func_g_element);
+    let tmpl_svgfe_func_r_element = super::svg::create_svgfe_func_r_element_template(scope, templates.get("SVGComponentTransferFunctionElement").copied());
+    templates.insert("SVGFEFuncRElement", tmpl_svgfe_func_r_element);
+    let tmpl_svg_linear_gradient_element = super::svg::create_svg_linear_gradient_element_template(scope, templates.get("SVGGradientElement").copied());
+    templates.insert("SVGLinearGradientElement", tmpl_svg_linear_gradient_element);
+    let tmpl_svg_radial_gradient_element = super::svg::create_svg_radial_gradient_element_template(scope, templates.get("SVGGradientElement").copied());
+    templates.insert("SVGRadialGradientElement", tmpl_svg_radial_gradient_element);
+    let tmpl_svga_element = super::svg::create_svga_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGAElement", tmpl_svga_element);
+    let tmpl_svg_defs_element = super::svg::create_svg_defs_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGDefsElement", tmpl_svg_defs_element);
+    let tmpl_svg_foreign_object_element = super::svg::create_svg_foreign_object_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGForeignObjectElement", tmpl_svg_foreign_object_element);
+    let tmpl_svgg_element = super::svg::create_svgg_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGGElement", tmpl_svgg_element);
+    let tmpl_svg_geometry_element = super::svg::create_svg_geometry_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGGeometryElement", tmpl_svg_geometry_element);
+    let tmpl_svg_image_element = super::svg::create_svg_image_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGImageElement", tmpl_svg_image_element);
+    let tmpl_svgsvg_element = super::svg::create_svgsvg_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGSVGElement", tmpl_svgsvg_element);
+    let tmpl_svg_switch_element = super::svg::create_svg_switch_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGSwitchElement", tmpl_svg_switch_element);
+    let tmpl_svg_symbol_element = super::svg::create_svg_symbol_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGSymbolElement", tmpl_svg_symbol_element);
+    let tmpl_svg_text_content_element = super::svg::create_svg_text_content_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGTextContentElement", tmpl_svg_text_content_element);
+    let tmpl_svg_use_element = super::svg::create_svg_use_element_template(scope, templates.get("SVGGraphicsElement").copied());
+    templates.insert("SVGUseElement", tmpl_svg_use_element);
+    let tmpl_svg_circle_element = super::svg::create_svg_circle_element_template(scope, templates.get("SVGGeometryElement").copied());
+    templates.insert("SVGCircleElement", tmpl_svg_circle_element);
+    let tmpl_svg_ellipse_element = super::svg::create_svg_ellipse_element_template(scope, templates.get("SVGGeometryElement").copied());
+    templates.insert("SVGEllipseElement", tmpl_svg_ellipse_element);
+    let tmpl_svg_line_element = super::svg::create_svg_line_element_template(scope, templates.get("SVGGeometryElement").copied());
+    templates.insert("SVGLineElement", tmpl_svg_line_element);
+    let tmpl_svg_path_element = super::svg::create_svg_path_element_template(scope, templates.get("SVGGeometryElement").copied());
+    templates.insert("SVGPathElement", tmpl_svg_path_element);
+    let tmpl_svg_polygon_element = super::svg::create_svg_polygon_element_template(scope, templates.get("SVGGeometryElement").copied());
+    templates.insert("SVGPolygonElement", tmpl_svg_polygon_element);
+    let tmpl_svg_polyline_element = super::svg::create_svg_polyline_element_template(scope, templates.get("SVGGeometryElement").copied());
+    templates.insert("SVGPolylineElement", tmpl_svg_polyline_element);
+    let tmpl_svg_rect_element = super::svg::create_svg_rect_element_template(scope, templates.get("SVGGeometryElement").copied());
+    templates.insert("SVGRectElement", tmpl_svg_rect_element);
+    let tmpl_svg_text_path_element = super::svg::create_svg_text_path_element_template(scope, templates.get("SVGTextContentElement").copied());
+    templates.insert("SVGTextPathElement", tmpl_svg_text_path_element);
+    let tmpl_svg_text_positioning_element = super::svg::create_svg_text_positioning_element_template(scope, templates.get("SVGTextContentElement").copied());
+    templates.insert("SVGTextPositioningElement", tmpl_svg_text_positioning_element);
+    let tmpl_svgt_span_element = super::svg::create_svgt_span_element_template(scope, templates.get("SVGTextPositioningElement").copied());
+    templates.insert("SVGTSpanElement", tmpl_svgt_span_element);
+    let tmpl_svg_text_element = super::svg::create_svg_text_element_template(scope, templates.get("SVGTextPositioningElement").copied());
+    templates.insert("SVGTextElement", tmpl_svg_text_element);
 
     // Register constructors on global (non-enumerable)
     // ANGLE_instanced_arrays: NoInterfaceObject — skip global registration
@@ -2685,13 +2682,13 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_bluetooth_data_filter = v8::String::new(scope, "BluetoothDataFilter").unwrap();
         global.define_own_property(scope, name_bluetooth_data_filter.into(), ctor_bluetooth_data_filter.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_bluetooth_lescan) = tmpl_bluetooth_lescan.get_function(scope) {
-        let name_bluetooth_lescan = v8::String::new(scope, "BluetoothLEScan").unwrap();
-        global.define_own_property(scope, name_bluetooth_lescan.into(), ctor_bluetooth_lescan.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_bluetooth_le_scan) = tmpl_bluetooth_le_scan.get_function(scope) {
+        let name_bluetooth_le_scan = v8::String::new(scope, "BluetoothLEScan").unwrap();
+        global.define_own_property(scope, name_bluetooth_le_scan.into(), ctor_bluetooth_le_scan.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_bluetooth_lescan_filter) = tmpl_bluetooth_lescan_filter.get_function(scope) {
-        let name_bluetooth_lescan_filter = v8::String::new(scope, "BluetoothLEScanFilter").unwrap();
-        global.define_own_property(scope, name_bluetooth_lescan_filter.into(), ctor_bluetooth_lescan_filter.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_bluetooth_le_scan_filter) = tmpl_bluetooth_le_scan_filter.get_function(scope) {
+        let name_bluetooth_le_scan_filter = v8::String::new(scope, "BluetoothLEScanFilter").unwrap();
+        global.define_own_property(scope, name_bluetooth_le_scan_filter.into(), ctor_bluetooth_le_scan_filter.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_bluetooth_manufacturer_data_filter) = tmpl_bluetooth_manufacturer_data_filter.get_function(scope) {
         let name_bluetooth_manufacturer_data_filter = v8::String::new(scope, "BluetoothManufacturerDataFilter").unwrap();
@@ -2701,13 +2698,13 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_bluetooth_manufacturer_data_map = v8::String::new(scope, "BluetoothManufacturerDataMap").unwrap();
         global.define_own_property(scope, name_bluetooth_manufacturer_data_map.into(), ctor_bluetooth_manufacturer_data_map.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_bluetooth_remote_gattdescriptor) = tmpl_bluetooth_remote_gattdescriptor.get_function(scope) {
-        let name_bluetooth_remote_gattdescriptor = v8::String::new(scope, "BluetoothRemoteGATTDescriptor").unwrap();
-        global.define_own_property(scope, name_bluetooth_remote_gattdescriptor.into(), ctor_bluetooth_remote_gattdescriptor.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_bluetooth_remote_gatt_descriptor) = tmpl_bluetooth_remote_gatt_descriptor.get_function(scope) {
+        let name_bluetooth_remote_gatt_descriptor = v8::String::new(scope, "BluetoothRemoteGATTDescriptor").unwrap();
+        global.define_own_property(scope, name_bluetooth_remote_gatt_descriptor.into(), ctor_bluetooth_remote_gatt_descriptor.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_bluetooth_remote_gattserver) = tmpl_bluetooth_remote_gattserver.get_function(scope) {
-        let name_bluetooth_remote_gattserver = v8::String::new(scope, "BluetoothRemoteGATTServer").unwrap();
-        global.define_own_property(scope, name_bluetooth_remote_gattserver.into(), ctor_bluetooth_remote_gattserver.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_bluetooth_remote_gatt_server) = tmpl_bluetooth_remote_gatt_server.get_function(scope) {
+        let name_bluetooth_remote_gatt_server = v8::String::new(scope, "BluetoothRemoteGATTServer").unwrap();
+        global.define_own_property(scope, name_bluetooth_remote_gatt_server.into(), ctor_bluetooth_remote_gatt_server.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_bluetooth_service_data_filter) = tmpl_bluetooth_service_data_filter.get_function(scope) {
         let name_bluetooth_service_data_filter = v8::String::new(scope, "BluetoothServiceDataFilter").unwrap();
@@ -2729,49 +2726,49 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_byte_length_queuing_strategy = v8::String::new(scope, "ByteLengthQueuingStrategy").unwrap();
         global.define_own_property(scope, name_byte_length_queuing_strategy.into(), ctor_byte_length_queuing_strategy.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssfont_feature_values_map) = tmpl_cssfont_feature_values_map.get_function(scope) {
-        let name_cssfont_feature_values_map = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
-        global.define_own_property(scope, name_cssfont_feature_values_map.into(), ctor_cssfont_feature_values_map.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_font_feature_values_map) = tmpl_css_font_feature_values_map.get_function(scope) {
+        let name_css_font_feature_values_map = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
+        global.define_own_property(scope, name_css_font_feature_values_map.into(), ctor_css_font_feature_values_map.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssnumeric_array) = tmpl_cssnumeric_array.get_function(scope) {
-        let name_cssnumeric_array = v8::String::new(scope, "CSSNumericArray").unwrap();
-        global.define_own_property(scope, name_cssnumeric_array.into(), ctor_cssnumeric_array.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_numeric_array) = tmpl_css_numeric_array.get_function(scope) {
+        let name_css_numeric_array = v8::String::new(scope, "CSSNumericArray").unwrap();
+        global.define_own_property(scope, name_css_numeric_array.into(), ctor_css_numeric_array.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssparser_rule) = tmpl_cssparser_rule.get_function(scope) {
-        let name_cssparser_rule = v8::String::new(scope, "CSSParserRule").unwrap();
-        global.define_own_property(scope, name_cssparser_rule.into(), ctor_cssparser_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_parser_rule) = tmpl_css_parser_rule.get_function(scope) {
+        let name_css_parser_rule = v8::String::new(scope, "CSSParserRule").unwrap();
+        global.define_own_property(scope, name_css_parser_rule.into(), ctor_css_parser_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssparser_value) = tmpl_cssparser_value.get_function(scope) {
-        let name_cssparser_value = v8::String::new(scope, "CSSParserValue").unwrap();
-        global.define_own_property(scope, name_cssparser_value.into(), ctor_cssparser_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_parser_value) = tmpl_css_parser_value.get_function(scope) {
+        let name_css_parser_value = v8::String::new(scope, "CSSParserValue").unwrap();
+        global.define_own_property(scope, name_css_parser_value.into(), ctor_css_parser_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csspseudo_element) = tmpl_csspseudo_element.get_function(scope) {
-        let name_csspseudo_element = v8::String::new(scope, "CSSPseudoElement").unwrap();
-        global.define_own_property(scope, name_csspseudo_element.into(), ctor_csspseudo_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_pseudo_element) = tmpl_css_pseudo_element.get_function(scope) {
+        let name_css_pseudo_element = v8::String::new(scope, "CSSPseudoElement").unwrap();
+        global.define_own_property(scope, name_css_pseudo_element.into(), ctor_css_pseudo_element.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssrule) = tmpl_cssrule.get_function(scope) {
-        let name_cssrule = v8::String::new(scope, "CSSRule").unwrap();
-        global.define_own_property(scope, name_cssrule.into(), ctor_cssrule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_rule) = tmpl_css_rule.get_function(scope) {
+        let name_css_rule = v8::String::new(scope, "CSSRule").unwrap();
+        global.define_own_property(scope, name_css_rule.into(), ctor_css_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssrule_list) = tmpl_cssrule_list.get_function(scope) {
-        let name_cssrule_list = v8::String::new(scope, "CSSRuleList").unwrap();
-        global.define_own_property(scope, name_cssrule_list.into(), ctor_cssrule_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_rule_list) = tmpl_css_rule_list.get_function(scope) {
+        let name_css_rule_list = v8::String::new(scope, "CSSRuleList").unwrap();
+        global.define_own_property(scope, name_css_rule_list.into(), ctor_css_rule_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssstyle_declaration) = tmpl_cssstyle_declaration.get_function(scope) {
-        let name_cssstyle_declaration = v8::String::new(scope, "CSSStyleDeclaration").unwrap();
-        global.define_own_property(scope, name_cssstyle_declaration.into(), ctor_cssstyle_declaration.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_style_declaration) = tmpl_css_style_declaration.get_function(scope) {
+        let name_css_style_declaration = v8::String::new(scope, "CSSStyleDeclaration").unwrap();
+        global.define_own_property(scope, name_css_style_declaration.into(), ctor_css_style_declaration.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssstyle_value) = tmpl_cssstyle_value.get_function(scope) {
-        let name_cssstyle_value = v8::String::new(scope, "CSSStyleValue").unwrap();
-        global.define_own_property(scope, name_cssstyle_value.into(), ctor_cssstyle_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_style_value) = tmpl_css_style_value.get_function(scope) {
+        let name_css_style_value = v8::String::new(scope, "CSSStyleValue").unwrap();
+        global.define_own_property(scope, name_css_style_value.into(), ctor_css_style_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csstransform_component) = tmpl_csstransform_component.get_function(scope) {
-        let name_csstransform_component = v8::String::new(scope, "CSSTransformComponent").unwrap();
-        global.define_own_property(scope, name_csstransform_component.into(), ctor_csstransform_component.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_transform_component) = tmpl_css_transform_component.get_function(scope) {
+        let name_css_transform_component = v8::String::new(scope, "CSSTransformComponent").unwrap();
+        global.define_own_property(scope, name_css_transform_component.into(), ctor_css_transform_component.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssvariable_reference_value) = tmpl_cssvariable_reference_value.get_function(scope) {
-        let name_cssvariable_reference_value = v8::String::new(scope, "CSSVariableReferenceValue").unwrap();
-        global.define_own_property(scope, name_cssvariable_reference_value.into(), ctor_cssvariable_reference_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_variable_reference_value) = tmpl_css_variable_reference_value.get_function(scope) {
+        let name_css_variable_reference_value = v8::String::new(scope, "CSSVariableReferenceValue").unwrap();
+        global.define_own_property(scope, name_css_variable_reference_value.into(), ctor_css_variable_reference_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_cache) = tmpl_cache.get_function(scope) {
         let name_cache = v8::String::new(scope, "Cache").unwrap();
@@ -2789,9 +2786,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_canvas_pattern = v8::String::new(scope, "CanvasPattern").unwrap();
         global.define_own_property(scope, name_canvas_pattern.into(), ctor_canvas_pattern.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_canvas_rendering_context2_d) = tmpl_canvas_rendering_context2_d.get_function(scope) {
-        let name_canvas_rendering_context2_d = v8::String::new(scope, "CanvasRenderingContext2D").unwrap();
-        global.define_own_property(scope, name_canvas_rendering_context2_d.into(), ctor_canvas_rendering_context2_d.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_canvas_rendering_context2d) = tmpl_canvas_rendering_context2d.get_function(scope) {
+        let name_canvas_rendering_context2d = v8::String::new(scope, "CanvasRenderingContext2D").unwrap();
+        global.define_own_property(scope, name_canvas_rendering_context2d.into(), ctor_canvas_rendering_context2d.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_caret_position) = tmpl_caret_position.get_function(scope) {
         let name_caret_position = v8::String::new(scope, "CaretPosition").unwrap();
@@ -3429,49 +3426,49 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_custom_state_set = v8::String::new(scope, "CustomStateSet").unwrap();
         global.define_own_property(scope, name_custom_state_set.into(), ctor_custom_state_set.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domexception) = tmpl_domexception.get_function(scope) {
-        let name_domexception = v8::String::new(scope, "DOMException").unwrap();
-        global.define_own_property(scope, name_domexception.into(), ctor_domexception.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_exception) = tmpl_dom_exception.get_function(scope) {
+        let name_dom_exception = v8::String::new(scope, "DOMException").unwrap();
+        global.define_own_property(scope, name_dom_exception.into(), ctor_dom_exception.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domimplementation) = tmpl_domimplementation.get_function(scope) {
-        let name_domimplementation = v8::String::new(scope, "DOMImplementation").unwrap();
-        global.define_own_property(scope, name_domimplementation.into(), ctor_domimplementation.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_implementation) = tmpl_dom_implementation.get_function(scope) {
+        let name_dom_implementation = v8::String::new(scope, "DOMImplementation").unwrap();
+        global.define_own_property(scope, name_dom_implementation.into(), ctor_dom_implementation.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_dommatrix_read_only) = tmpl_dommatrix_read_only.get_function(scope) {
-        let name_dommatrix_read_only = v8::String::new(scope, "DOMMatrixReadOnly").unwrap();
-        global.define_own_property(scope, name_dommatrix_read_only.into(), ctor_dommatrix_read_only.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_matrix_read_only) = tmpl_dom_matrix_read_only.get_function(scope) {
+        let name_dom_matrix_read_only = v8::String::new(scope, "DOMMatrixReadOnly").unwrap();
+        global.define_own_property(scope, name_dom_matrix_read_only.into(), ctor_dom_matrix_read_only.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domparser) = tmpl_domparser.get_function(scope) {
-        let name_domparser = v8::String::new(scope, "DOMParser").unwrap();
-        global.define_own_property(scope, name_domparser.into(), ctor_domparser.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_parser) = tmpl_dom_parser.get_function(scope) {
+        let name_dom_parser = v8::String::new(scope, "DOMParser").unwrap();
+        global.define_own_property(scope, name_dom_parser.into(), ctor_dom_parser.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_dompoint_read_only) = tmpl_dompoint_read_only.get_function(scope) {
-        let name_dompoint_read_only = v8::String::new(scope, "DOMPointReadOnly").unwrap();
-        global.define_own_property(scope, name_dompoint_read_only.into(), ctor_dompoint_read_only.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_point_read_only) = tmpl_dom_point_read_only.get_function(scope) {
+        let name_dom_point_read_only = v8::String::new(scope, "DOMPointReadOnly").unwrap();
+        global.define_own_property(scope, name_dom_point_read_only.into(), ctor_dom_point_read_only.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domquad) = tmpl_domquad.get_function(scope) {
-        let name_domquad = v8::String::new(scope, "DOMQuad").unwrap();
-        global.define_own_property(scope, name_domquad.into(), ctor_domquad.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_quad) = tmpl_dom_quad.get_function(scope) {
+        let name_dom_quad = v8::String::new(scope, "DOMQuad").unwrap();
+        global.define_own_property(scope, name_dom_quad.into(), ctor_dom_quad.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domrect_list) = tmpl_domrect_list.get_function(scope) {
-        let name_domrect_list = v8::String::new(scope, "DOMRectList").unwrap();
-        global.define_own_property(scope, name_domrect_list.into(), ctor_domrect_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_rect_list) = tmpl_dom_rect_list.get_function(scope) {
+        let name_dom_rect_list = v8::String::new(scope, "DOMRectList").unwrap();
+        global.define_own_property(scope, name_dom_rect_list.into(), ctor_dom_rect_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domrect_read_only) = tmpl_domrect_read_only.get_function(scope) {
-        let name_domrect_read_only = v8::String::new(scope, "DOMRectReadOnly").unwrap();
-        global.define_own_property(scope, name_domrect_read_only.into(), ctor_domrect_read_only.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_rect_read_only) = tmpl_dom_rect_read_only.get_function(scope) {
+        let name_dom_rect_read_only = v8::String::new(scope, "DOMRectReadOnly").unwrap();
+        global.define_own_property(scope, name_dom_rect_read_only.into(), ctor_dom_rect_read_only.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domstring_list) = tmpl_domstring_list.get_function(scope) {
-        let name_domstring_list = v8::String::new(scope, "DOMStringList").unwrap();
-        global.define_own_property(scope, name_domstring_list.into(), ctor_domstring_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_string_list) = tmpl_dom_string_list.get_function(scope) {
+        let name_dom_string_list = v8::String::new(scope, "DOMStringList").unwrap();
+        global.define_own_property(scope, name_dom_string_list.into(), ctor_dom_string_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domstring_map) = tmpl_domstring_map.get_function(scope) {
-        let name_domstring_map = v8::String::new(scope, "DOMStringMap").unwrap();
-        global.define_own_property(scope, name_domstring_map.into(), ctor_domstring_map.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_string_map) = tmpl_dom_string_map.get_function(scope) {
+        let name_dom_string_map = v8::String::new(scope, "DOMStringMap").unwrap();
+        global.define_own_property(scope, name_dom_string_map.into(), ctor_dom_string_map.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domtoken_list) = tmpl_domtoken_list.get_function(scope) {
-        let name_domtoken_list = v8::String::new(scope, "DOMTokenList").unwrap();
-        global.define_own_property(scope, name_domtoken_list.into(), ctor_domtoken_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_token_list) = tmpl_dom_token_list.get_function(scope) {
+        let name_dom_token_list = v8::String::new(scope, "DOMTokenList").unwrap();
+        global.define_own_property(scope, name_dom_token_list.into(), ctor_dom_token_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_data_transfer) = tmpl_data_transfer.get_function(scope) {
         let name_data_transfer = v8::String::new(scope, "DataTransfer").unwrap();
@@ -3650,117 +3647,117 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_gpu = v8::String::new(scope, "GPU").unwrap();
         global.define_own_property(scope, name_gpu.into(), ctor_gpu.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuadapter) = tmpl_gpuadapter.get_function(scope) {
-        let name_gpuadapter = v8::String::new(scope, "GPUAdapter").unwrap();
-        global.define_own_property(scope, name_gpuadapter.into(), ctor_gpuadapter.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_adapter) = tmpl_gpu_adapter.get_function(scope) {
+        let name_gpu_adapter = v8::String::new(scope, "GPUAdapter").unwrap();
+        global.define_own_property(scope, name_gpu_adapter.into(), ctor_gpu_adapter.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuadapter_info) = tmpl_gpuadapter_info.get_function(scope) {
-        let name_gpuadapter_info = v8::String::new(scope, "GPUAdapterInfo").unwrap();
-        global.define_own_property(scope, name_gpuadapter_info.into(), ctor_gpuadapter_info.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_adapter_info) = tmpl_gpu_adapter_info.get_function(scope) {
+        let name_gpu_adapter_info = v8::String::new(scope, "GPUAdapterInfo").unwrap();
+        global.define_own_property(scope, name_gpu_adapter_info.into(), ctor_gpu_adapter_info.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpubind_group) = tmpl_gpubind_group.get_function(scope) {
-        let name_gpubind_group = v8::String::new(scope, "GPUBindGroup").unwrap();
-        global.define_own_property(scope, name_gpubind_group.into(), ctor_gpubind_group.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_bind_group) = tmpl_gpu_bind_group.get_function(scope) {
+        let name_gpu_bind_group = v8::String::new(scope, "GPUBindGroup").unwrap();
+        global.define_own_property(scope, name_gpu_bind_group.into(), ctor_gpu_bind_group.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpubind_group_layout) = tmpl_gpubind_group_layout.get_function(scope) {
-        let name_gpubind_group_layout = v8::String::new(scope, "GPUBindGroupLayout").unwrap();
-        global.define_own_property(scope, name_gpubind_group_layout.into(), ctor_gpubind_group_layout.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_bind_group_layout) = tmpl_gpu_bind_group_layout.get_function(scope) {
+        let name_gpu_bind_group_layout = v8::String::new(scope, "GPUBindGroupLayout").unwrap();
+        global.define_own_property(scope, name_gpu_bind_group_layout.into(), ctor_gpu_bind_group_layout.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpubuffer) = tmpl_gpubuffer.get_function(scope) {
-        let name_gpubuffer = v8::String::new(scope, "GPUBuffer").unwrap();
-        global.define_own_property(scope, name_gpubuffer.into(), ctor_gpubuffer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_buffer) = tmpl_gpu_buffer.get_function(scope) {
+        let name_gpu_buffer = v8::String::new(scope, "GPUBuffer").unwrap();
+        global.define_own_property(scope, name_gpu_buffer.into(), ctor_gpu_buffer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpucanvas_context) = tmpl_gpucanvas_context.get_function(scope) {
-        let name_gpucanvas_context = v8::String::new(scope, "GPUCanvasContext").unwrap();
-        global.define_own_property(scope, name_gpucanvas_context.into(), ctor_gpucanvas_context.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_canvas_context) = tmpl_gpu_canvas_context.get_function(scope) {
+        let name_gpu_canvas_context = v8::String::new(scope, "GPUCanvasContext").unwrap();
+        global.define_own_property(scope, name_gpu_canvas_context.into(), ctor_gpu_canvas_context.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpucommand_buffer) = tmpl_gpucommand_buffer.get_function(scope) {
-        let name_gpucommand_buffer = v8::String::new(scope, "GPUCommandBuffer").unwrap();
-        global.define_own_property(scope, name_gpucommand_buffer.into(), ctor_gpucommand_buffer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_command_buffer) = tmpl_gpu_command_buffer.get_function(scope) {
+        let name_gpu_command_buffer = v8::String::new(scope, "GPUCommandBuffer").unwrap();
+        global.define_own_property(scope, name_gpu_command_buffer.into(), ctor_gpu_command_buffer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpucommand_encoder) = tmpl_gpucommand_encoder.get_function(scope) {
-        let name_gpucommand_encoder = v8::String::new(scope, "GPUCommandEncoder").unwrap();
-        global.define_own_property(scope, name_gpucommand_encoder.into(), ctor_gpucommand_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_command_encoder) = tmpl_gpu_command_encoder.get_function(scope) {
+        let name_gpu_command_encoder = v8::String::new(scope, "GPUCommandEncoder").unwrap();
+        global.define_own_property(scope, name_gpu_command_encoder.into(), ctor_gpu_command_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpucompilation_info) = tmpl_gpucompilation_info.get_function(scope) {
-        let name_gpucompilation_info = v8::String::new(scope, "GPUCompilationInfo").unwrap();
-        global.define_own_property(scope, name_gpucompilation_info.into(), ctor_gpucompilation_info.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_compilation_info) = tmpl_gpu_compilation_info.get_function(scope) {
+        let name_gpu_compilation_info = v8::String::new(scope, "GPUCompilationInfo").unwrap();
+        global.define_own_property(scope, name_gpu_compilation_info.into(), ctor_gpu_compilation_info.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpucompilation_message) = tmpl_gpucompilation_message.get_function(scope) {
-        let name_gpucompilation_message = v8::String::new(scope, "GPUCompilationMessage").unwrap();
-        global.define_own_property(scope, name_gpucompilation_message.into(), ctor_gpucompilation_message.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_compilation_message) = tmpl_gpu_compilation_message.get_function(scope) {
+        let name_gpu_compilation_message = v8::String::new(scope, "GPUCompilationMessage").unwrap();
+        global.define_own_property(scope, name_gpu_compilation_message.into(), ctor_gpu_compilation_message.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpucompute_pass_encoder) = tmpl_gpucompute_pass_encoder.get_function(scope) {
-        let name_gpucompute_pass_encoder = v8::String::new(scope, "GPUComputePassEncoder").unwrap();
-        global.define_own_property(scope, name_gpucompute_pass_encoder.into(), ctor_gpucompute_pass_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_compute_pass_encoder) = tmpl_gpu_compute_pass_encoder.get_function(scope) {
+        let name_gpu_compute_pass_encoder = v8::String::new(scope, "GPUComputePassEncoder").unwrap();
+        global.define_own_property(scope, name_gpu_compute_pass_encoder.into(), ctor_gpu_compute_pass_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpucompute_pipeline) = tmpl_gpucompute_pipeline.get_function(scope) {
-        let name_gpucompute_pipeline = v8::String::new(scope, "GPUComputePipeline").unwrap();
-        global.define_own_property(scope, name_gpucompute_pipeline.into(), ctor_gpucompute_pipeline.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_compute_pipeline) = tmpl_gpu_compute_pipeline.get_function(scope) {
+        let name_gpu_compute_pipeline = v8::String::new(scope, "GPUComputePipeline").unwrap();
+        global.define_own_property(scope, name_gpu_compute_pipeline.into(), ctor_gpu_compute_pipeline.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpudevice_lost_info) = tmpl_gpudevice_lost_info.get_function(scope) {
-        let name_gpudevice_lost_info = v8::String::new(scope, "GPUDeviceLostInfo").unwrap();
-        global.define_own_property(scope, name_gpudevice_lost_info.into(), ctor_gpudevice_lost_info.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_device_lost_info) = tmpl_gpu_device_lost_info.get_function(scope) {
+        let name_gpu_device_lost_info = v8::String::new(scope, "GPUDeviceLostInfo").unwrap();
+        global.define_own_property(scope, name_gpu_device_lost_info.into(), ctor_gpu_device_lost_info.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuerror) = tmpl_gpuerror.get_function(scope) {
-        let name_gpuerror = v8::String::new(scope, "GPUError").unwrap();
-        global.define_own_property(scope, name_gpuerror.into(), ctor_gpuerror.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_error) = tmpl_gpu_error.get_function(scope) {
+        let name_gpu_error = v8::String::new(scope, "GPUError").unwrap();
+        global.define_own_property(scope, name_gpu_error.into(), ctor_gpu_error.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuexternal_texture) = tmpl_gpuexternal_texture.get_function(scope) {
-        let name_gpuexternal_texture = v8::String::new(scope, "GPUExternalTexture").unwrap();
-        global.define_own_property(scope, name_gpuexternal_texture.into(), ctor_gpuexternal_texture.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_external_texture) = tmpl_gpu_external_texture.get_function(scope) {
+        let name_gpu_external_texture = v8::String::new(scope, "GPUExternalTexture").unwrap();
+        global.define_own_property(scope, name_gpu_external_texture.into(), ctor_gpu_external_texture.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpupipeline_layout) = tmpl_gpupipeline_layout.get_function(scope) {
-        let name_gpupipeline_layout = v8::String::new(scope, "GPUPipelineLayout").unwrap();
-        global.define_own_property(scope, name_gpupipeline_layout.into(), ctor_gpupipeline_layout.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_pipeline_layout) = tmpl_gpu_pipeline_layout.get_function(scope) {
+        let name_gpu_pipeline_layout = v8::String::new(scope, "GPUPipelineLayout").unwrap();
+        global.define_own_property(scope, name_gpu_pipeline_layout.into(), ctor_gpu_pipeline_layout.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuquery_set) = tmpl_gpuquery_set.get_function(scope) {
-        let name_gpuquery_set = v8::String::new(scope, "GPUQuerySet").unwrap();
-        global.define_own_property(scope, name_gpuquery_set.into(), ctor_gpuquery_set.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_query_set) = tmpl_gpu_query_set.get_function(scope) {
+        let name_gpu_query_set = v8::String::new(scope, "GPUQuerySet").unwrap();
+        global.define_own_property(scope, name_gpu_query_set.into(), ctor_gpu_query_set.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuqueue) = tmpl_gpuqueue.get_function(scope) {
-        let name_gpuqueue = v8::String::new(scope, "GPUQueue").unwrap();
-        global.define_own_property(scope, name_gpuqueue.into(), ctor_gpuqueue.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_queue) = tmpl_gpu_queue.get_function(scope) {
+        let name_gpu_queue = v8::String::new(scope, "GPUQueue").unwrap();
+        global.define_own_property(scope, name_gpu_queue.into(), ctor_gpu_queue.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpurender_bundle) = tmpl_gpurender_bundle.get_function(scope) {
-        let name_gpurender_bundle = v8::String::new(scope, "GPURenderBundle").unwrap();
-        global.define_own_property(scope, name_gpurender_bundle.into(), ctor_gpurender_bundle.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_render_bundle) = tmpl_gpu_render_bundle.get_function(scope) {
+        let name_gpu_render_bundle = v8::String::new(scope, "GPURenderBundle").unwrap();
+        global.define_own_property(scope, name_gpu_render_bundle.into(), ctor_gpu_render_bundle.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpurender_bundle_encoder) = tmpl_gpurender_bundle_encoder.get_function(scope) {
-        let name_gpurender_bundle_encoder = v8::String::new(scope, "GPURenderBundleEncoder").unwrap();
-        global.define_own_property(scope, name_gpurender_bundle_encoder.into(), ctor_gpurender_bundle_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_render_bundle_encoder) = tmpl_gpu_render_bundle_encoder.get_function(scope) {
+        let name_gpu_render_bundle_encoder = v8::String::new(scope, "GPURenderBundleEncoder").unwrap();
+        global.define_own_property(scope, name_gpu_render_bundle_encoder.into(), ctor_gpu_render_bundle_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpurender_pass_encoder) = tmpl_gpurender_pass_encoder.get_function(scope) {
-        let name_gpurender_pass_encoder = v8::String::new(scope, "GPURenderPassEncoder").unwrap();
-        global.define_own_property(scope, name_gpurender_pass_encoder.into(), ctor_gpurender_pass_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_render_pass_encoder) = tmpl_gpu_render_pass_encoder.get_function(scope) {
+        let name_gpu_render_pass_encoder = v8::String::new(scope, "GPURenderPassEncoder").unwrap();
+        global.define_own_property(scope, name_gpu_render_pass_encoder.into(), ctor_gpu_render_pass_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpurender_pipeline) = tmpl_gpurender_pipeline.get_function(scope) {
-        let name_gpurender_pipeline = v8::String::new(scope, "GPURenderPipeline").unwrap();
-        global.define_own_property(scope, name_gpurender_pipeline.into(), ctor_gpurender_pipeline.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_render_pipeline) = tmpl_gpu_render_pipeline.get_function(scope) {
+        let name_gpu_render_pipeline = v8::String::new(scope, "GPURenderPipeline").unwrap();
+        global.define_own_property(scope, name_gpu_render_pipeline.into(), ctor_gpu_render_pipeline.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpusampler) = tmpl_gpusampler.get_function(scope) {
-        let name_gpusampler = v8::String::new(scope, "GPUSampler").unwrap();
-        global.define_own_property(scope, name_gpusampler.into(), ctor_gpusampler.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_sampler) = tmpl_gpu_sampler.get_function(scope) {
+        let name_gpu_sampler = v8::String::new(scope, "GPUSampler").unwrap();
+        global.define_own_property(scope, name_gpu_sampler.into(), ctor_gpu_sampler.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpushader_module) = tmpl_gpushader_module.get_function(scope) {
-        let name_gpushader_module = v8::String::new(scope, "GPUShaderModule").unwrap();
-        global.define_own_property(scope, name_gpushader_module.into(), ctor_gpushader_module.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_shader_module) = tmpl_gpu_shader_module.get_function(scope) {
+        let name_gpu_shader_module = v8::String::new(scope, "GPUShaderModule").unwrap();
+        global.define_own_property(scope, name_gpu_shader_module.into(), ctor_gpu_shader_module.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpusupported_features) = tmpl_gpusupported_features.get_function(scope) {
-        let name_gpusupported_features = v8::String::new(scope, "GPUSupportedFeatures").unwrap();
-        global.define_own_property(scope, name_gpusupported_features.into(), ctor_gpusupported_features.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_supported_features) = tmpl_gpu_supported_features.get_function(scope) {
+        let name_gpu_supported_features = v8::String::new(scope, "GPUSupportedFeatures").unwrap();
+        global.define_own_property(scope, name_gpu_supported_features.into(), ctor_gpu_supported_features.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpusupported_limits) = tmpl_gpusupported_limits.get_function(scope) {
-        let name_gpusupported_limits = v8::String::new(scope, "GPUSupportedLimits").unwrap();
-        global.define_own_property(scope, name_gpusupported_limits.into(), ctor_gpusupported_limits.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_supported_limits) = tmpl_gpu_supported_limits.get_function(scope) {
+        let name_gpu_supported_limits = v8::String::new(scope, "GPUSupportedLimits").unwrap();
+        global.define_own_property(scope, name_gpu_supported_limits.into(), ctor_gpu_supported_limits.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gputexture) = tmpl_gputexture.get_function(scope) {
-        let name_gputexture = v8::String::new(scope, "GPUTexture").unwrap();
-        global.define_own_property(scope, name_gputexture.into(), ctor_gputexture.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_texture) = tmpl_gpu_texture.get_function(scope) {
+        let name_gpu_texture = v8::String::new(scope, "GPUTexture").unwrap();
+        global.define_own_property(scope, name_gpu_texture.into(), ctor_gpu_texture.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gputexture_view) = tmpl_gputexture_view.get_function(scope) {
-        let name_gputexture_view = v8::String::new(scope, "GPUTextureView").unwrap();
-        global.define_own_property(scope, name_gputexture_view.into(), ctor_gputexture_view.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_texture_view) = tmpl_gpu_texture_view.get_function(scope) {
+        let name_gpu_texture_view = v8::String::new(scope, "GPUTextureView").unwrap();
+        global.define_own_property(scope, name_gpu_texture_view.into(), ctor_gpu_texture_view.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_gamepad) = tmpl_gamepad.get_function(scope) {
         let name_gamepad = v8::String::new(scope, "Gamepad").unwrap();
@@ -3802,13 +3799,13 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_group_effect = v8::String::new(scope, "GroupEffect").unwrap();
         global.define_own_property(scope, name_group_effect.into(), ctor_group_effect.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_htmlall_collection) = tmpl_htmlall_collection.get_function(scope) {
-        let name_htmlall_collection = v8::String::new(scope, "HTMLAllCollection").unwrap();
-        global.define_own_property(scope, name_htmlall_collection.into(), ctor_htmlall_collection.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_html_all_collection) = tmpl_html_all_collection.get_function(scope) {
+        let name_html_all_collection = v8::String::new(scope, "HTMLAllCollection").unwrap();
+        global.define_own_property(scope, name_html_all_collection.into(), ctor_html_all_collection.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_htmlcollection) = tmpl_htmlcollection.get_function(scope) {
-        let name_htmlcollection = v8::String::new(scope, "HTMLCollection").unwrap();
-        global.define_own_property(scope, name_htmlcollection.into(), ctor_htmlcollection.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_html_collection) = tmpl_html_collection.get_function(scope) {
+        let name_html_collection = v8::String::new(scope, "HTMLCollection").unwrap();
+        global.define_own_property(scope, name_html_collection.into(), ctor_html_collection.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_handwriting_drawing) = tmpl_handwriting_drawing.get_function(scope) {
         let name_handwriting_drawing = v8::String::new(scope, "HandwritingDrawing").unwrap();
@@ -3838,29 +3835,29 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_history = v8::String::new(scope, "History").unwrap();
         global.define_own_property(scope, name_history.into(), ctor_history.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbcursor) = tmpl_idbcursor.get_function(scope) {
-        let name_idbcursor = v8::String::new(scope, "IDBCursor").unwrap();
-        global.define_own_property(scope, name_idbcursor.into(), ctor_idbcursor.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_cursor) = tmpl_idb_cursor.get_function(scope) {
+        let name_idb_cursor = v8::String::new(scope, "IDBCursor").unwrap();
+        global.define_own_property(scope, name_idb_cursor.into(), ctor_idb_cursor.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbfactory) = tmpl_idbfactory.get_function(scope) {
-        let name_idbfactory = v8::String::new(scope, "IDBFactory").unwrap();
-        global.define_own_property(scope, name_idbfactory.into(), ctor_idbfactory.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_factory) = tmpl_idb_factory.get_function(scope) {
+        let name_idb_factory = v8::String::new(scope, "IDBFactory").unwrap();
+        global.define_own_property(scope, name_idb_factory.into(), ctor_idb_factory.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbindex) = tmpl_idbindex.get_function(scope) {
-        let name_idbindex = v8::String::new(scope, "IDBIndex").unwrap();
-        global.define_own_property(scope, name_idbindex.into(), ctor_idbindex.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_index) = tmpl_idb_index.get_function(scope) {
+        let name_idb_index = v8::String::new(scope, "IDBIndex").unwrap();
+        global.define_own_property(scope, name_idb_index.into(), ctor_idb_index.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbkey_range) = tmpl_idbkey_range.get_function(scope) {
-        let name_idbkey_range = v8::String::new(scope, "IDBKeyRange").unwrap();
-        global.define_own_property(scope, name_idbkey_range.into(), ctor_idbkey_range.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_key_range) = tmpl_idb_key_range.get_function(scope) {
+        let name_idb_key_range = v8::String::new(scope, "IDBKeyRange").unwrap();
+        global.define_own_property(scope, name_idb_key_range.into(), ctor_idb_key_range.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbobject_store) = tmpl_idbobject_store.get_function(scope) {
-        let name_idbobject_store = v8::String::new(scope, "IDBObjectStore").unwrap();
-        global.define_own_property(scope, name_idbobject_store.into(), ctor_idbobject_store.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_object_store) = tmpl_idb_object_store.get_function(scope) {
+        let name_idb_object_store = v8::String::new(scope, "IDBObjectStore").unwrap();
+        global.define_own_property(scope, name_idb_object_store.into(), ctor_idb_object_store.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbrecord) = tmpl_idbrecord.get_function(scope) {
-        let name_idbrecord = v8::String::new(scope, "IDBRecord").unwrap();
-        global.define_own_property(scope, name_idbrecord.into(), ctor_idbrecord.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_record) = tmpl_idb_record.get_function(scope) {
+        let name_idb_record = v8::String::new(scope, "IDBRecord").unwrap();
+        global.define_own_property(scope, name_idb_record.into(), ctor_idb_record.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_identity_provider) = tmpl_identity_provider.get_function(scope) {
         let name_identity_provider = v8::String::new(scope, "IdentityProvider").unwrap();
@@ -3975,37 +3972,37 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_lock_manager = v8::String::new(scope, "LockManager").unwrap();
         global.define_own_property(scope, name_lock_manager.into(), ctor_lock_manager.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_midiinput_map) = tmpl_midiinput_map.get_function(scope) {
-        let name_midiinput_map = v8::String::new(scope, "MIDIInputMap").unwrap();
-        global.define_own_property(scope, name_midiinput_map.into(), ctor_midiinput_map.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_midi_input_map) = tmpl_midi_input_map.get_function(scope) {
+        let name_midi_input_map = v8::String::new(scope, "MIDIInputMap").unwrap();
+        global.define_own_property(scope, name_midi_input_map.into(), ctor_midi_input_map.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_midioutput_map) = tmpl_midioutput_map.get_function(scope) {
-        let name_midioutput_map = v8::String::new(scope, "MIDIOutputMap").unwrap();
-        global.define_own_property(scope, name_midioutput_map.into(), ctor_midioutput_map.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_midi_output_map) = tmpl_midi_output_map.get_function(scope) {
+        let name_midi_output_map = v8::String::new(scope, "MIDIOutputMap").unwrap();
+        global.define_own_property(scope, name_midi_output_map.into(), ctor_midi_output_map.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_ml) = tmpl_ml.get_function(scope) {
         let name_ml = v8::String::new(scope, "ML").unwrap();
         global.define_own_property(scope, name_ml.into(), ctor_ml.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_mlcontext) = tmpl_mlcontext.get_function(scope) {
-        let name_mlcontext = v8::String::new(scope, "MLContext").unwrap();
-        global.define_own_property(scope, name_mlcontext.into(), ctor_mlcontext.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ml_context) = tmpl_ml_context.get_function(scope) {
+        let name_ml_context = v8::String::new(scope, "MLContext").unwrap();
+        global.define_own_property(scope, name_ml_context.into(), ctor_ml_context.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_mlgraph) = tmpl_mlgraph.get_function(scope) {
-        let name_mlgraph = v8::String::new(scope, "MLGraph").unwrap();
-        global.define_own_property(scope, name_mlgraph.into(), ctor_mlgraph.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ml_graph) = tmpl_ml_graph.get_function(scope) {
+        let name_ml_graph = v8::String::new(scope, "MLGraph").unwrap();
+        global.define_own_property(scope, name_ml_graph.into(), ctor_ml_graph.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_mlgraph_builder) = tmpl_mlgraph_builder.get_function(scope) {
-        let name_mlgraph_builder = v8::String::new(scope, "MLGraphBuilder").unwrap();
-        global.define_own_property(scope, name_mlgraph_builder.into(), ctor_mlgraph_builder.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ml_graph_builder) = tmpl_ml_graph_builder.get_function(scope) {
+        let name_ml_graph_builder = v8::String::new(scope, "MLGraphBuilder").unwrap();
+        global.define_own_property(scope, name_ml_graph_builder.into(), ctor_ml_graph_builder.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_mloperand) = tmpl_mloperand.get_function(scope) {
-        let name_mloperand = v8::String::new(scope, "MLOperand").unwrap();
-        global.define_own_property(scope, name_mloperand.into(), ctor_mloperand.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ml_operand) = tmpl_ml_operand.get_function(scope) {
+        let name_ml_operand = v8::String::new(scope, "MLOperand").unwrap();
+        global.define_own_property(scope, name_ml_operand.into(), ctor_ml_operand.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_mltensor) = tmpl_mltensor.get_function(scope) {
-        let name_mltensor = v8::String::new(scope, "MLTensor").unwrap();
-        global.define_own_property(scope, name_mltensor.into(), ctor_mltensor.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ml_tensor) = tmpl_ml_tensor.get_function(scope) {
+        let name_ml_tensor = v8::String::new(scope, "MLTensor").unwrap();
+        global.define_own_property(scope, name_ml_tensor.into(), ctor_ml_tensor.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_media_capabilities) = tmpl_media_capabilities.get_function(scope) {
         let name_media_capabilities = v8::String::new(scope, "MediaCapabilities").unwrap();
@@ -4087,13 +4084,13 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_mutation_record = v8::String::new(scope, "MutationRecord").unwrap();
         global.define_own_property(scope, name_mutation_record.into(), ctor_mutation_record.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_ndefmessage) = tmpl_ndefmessage.get_function(scope) {
-        let name_ndefmessage = v8::String::new(scope, "NDEFMessage").unwrap();
-        global.define_own_property(scope, name_ndefmessage.into(), ctor_ndefmessage.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ndef_message) = tmpl_ndef_message.get_function(scope) {
+        let name_ndef_message = v8::String::new(scope, "NDEFMessage").unwrap();
+        global.define_own_property(scope, name_ndef_message.into(), ctor_ndef_message.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_ndefrecord) = tmpl_ndefrecord.get_function(scope) {
-        let name_ndefrecord = v8::String::new(scope, "NDEFRecord").unwrap();
-        global.define_own_property(scope, name_ndefrecord.into(), ctor_ndefrecord.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ndef_record) = tmpl_ndef_record.get_function(scope) {
+        let name_ndef_record = v8::String::new(scope, "NDEFRecord").unwrap();
+        global.define_own_property(scope, name_ndef_record.into(), ctor_ndef_record.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_named_flow_map) = tmpl_named_flow_map.get_function(scope) {
         let name_named_flow_map = v8::String::new(scope, "NamedFlowMap").unwrap();
@@ -4131,9 +4128,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_navigator_login = v8::String::new(scope, "NavigatorLogin").unwrap();
         global.define_own_property(scope, name_navigator_login.into(), ctor_navigator_login.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_navigator_uadata) = tmpl_navigator_uadata.get_function(scope) {
-        let name_navigator_uadata = v8::String::new(scope, "NavigatorUAData").unwrap();
-        global.define_own_property(scope, name_navigator_uadata.into(), ctor_navigator_uadata.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_navigator_ua_data) = tmpl_navigator_ua_data.get_function(scope) {
+        let name_navigator_ua_data = v8::String::new(scope, "NavigatorUAData").unwrap();
+        global.define_own_property(scope, name_navigator_ua_data.into(), ctor_navigator_ua_data.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_node_iterator) = tmpl_node_iterator.get_function(scope) {
         let name_node_iterator = v8::String::new(scope, "NodeIterator").unwrap();
@@ -4165,25 +4162,25 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_observable = v8::String::new(scope, "Observable").unwrap();
         global.define_own_property(scope, name_observable.into(), ctor_observable.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_offscreen_canvas_rendering_context2_d) = tmpl_offscreen_canvas_rendering_context2_d.get_function(scope) {
-        let name_offscreen_canvas_rendering_context2_d = v8::String::new(scope, "OffscreenCanvasRenderingContext2D").unwrap();
-        global.define_own_property(scope, name_offscreen_canvas_rendering_context2_d.into(), ctor_offscreen_canvas_rendering_context2_d.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_offscreen_canvas_rendering_context2d) = tmpl_offscreen_canvas_rendering_context2d.get_function(scope) {
+        let name_offscreen_canvas_rendering_context2d = v8::String::new(scope, "OffscreenCanvasRenderingContext2D").unwrap();
+        global.define_own_property(scope, name_offscreen_canvas_rendering_context2d.into(), ctor_offscreen_canvas_rendering_context2d.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_origin) = tmpl_origin.get_function(scope) {
         let name_origin = v8::String::new(scope, "Origin").unwrap();
         global.define_own_property(scope, name_origin.into(), ctor_origin.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_paint_rendering_context2_d) = tmpl_paint_rendering_context2_d.get_function(scope) {
-        let name_paint_rendering_context2_d = v8::String::new(scope, "PaintRenderingContext2D").unwrap();
-        global.define_own_property(scope, name_paint_rendering_context2_d.into(), ctor_paint_rendering_context2_d.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_paint_rendering_context2d) = tmpl_paint_rendering_context2d.get_function(scope) {
+        let name_paint_rendering_context2d = v8::String::new(scope, "PaintRenderingContext2D").unwrap();
+        global.define_own_property(scope, name_paint_rendering_context2d.into(), ctor_paint_rendering_context2d.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_paint_size) = tmpl_paint_size.get_function(scope) {
         let name_paint_size = v8::String::new(scope, "PaintSize").unwrap();
         global.define_own_property(scope, name_paint_size.into(), ctor_paint_size.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_path2_d) = tmpl_path2_d.get_function(scope) {
-        let name_path2_d = v8::String::new(scope, "Path2D").unwrap();
-        global.define_own_property(scope, name_path2_d.into(), ctor_path2_d.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_path2d) = tmpl_path2d.get_function(scope) {
+        let name_path2d = v8::String::new(scope, "Path2D").unwrap();
+        global.define_own_property(scope, name_path2d.into(), ctor_path2d.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_payment_manager) = tmpl_payment_manager.get_function(scope) {
         let name_payment_manager = v8::String::new(scope, "PaymentManager").unwrap();
@@ -4277,61 +4274,61 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_push_subscription_options = v8::String::new(scope, "PushSubscriptionOptions").unwrap();
         global.define_own_property(scope, name_push_subscription_options.into(), ctor_push_subscription_options.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtccertificate) = tmpl_rtccertificate.get_function(scope) {
-        let name_rtccertificate = v8::String::new(scope, "RTCCertificate").unwrap();
-        global.define_own_property(scope, name_rtccertificate.into(), ctor_rtccertificate.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_certificate) = tmpl_rtc_certificate.get_function(scope) {
+        let name_rtc_certificate = v8::String::new(scope, "RTCCertificate").unwrap();
+        global.define_own_property(scope, name_rtc_certificate.into(), ctor_rtc_certificate.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcencoded_audio_frame) = tmpl_rtcencoded_audio_frame.get_function(scope) {
-        let name_rtcencoded_audio_frame = v8::String::new(scope, "RTCEncodedAudioFrame").unwrap();
-        global.define_own_property(scope, name_rtcencoded_audio_frame.into(), ctor_rtcencoded_audio_frame.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_encoded_audio_frame) = tmpl_rtc_encoded_audio_frame.get_function(scope) {
+        let name_rtc_encoded_audio_frame = v8::String::new(scope, "RTCEncodedAudioFrame").unwrap();
+        global.define_own_property(scope, name_rtc_encoded_audio_frame.into(), ctor_rtc_encoded_audio_frame.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcencoded_video_frame) = tmpl_rtcencoded_video_frame.get_function(scope) {
-        let name_rtcencoded_video_frame = v8::String::new(scope, "RTCEncodedVideoFrame").unwrap();
-        global.define_own_property(scope, name_rtcencoded_video_frame.into(), ctor_rtcencoded_video_frame.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_encoded_video_frame) = tmpl_rtc_encoded_video_frame.get_function(scope) {
+        let name_rtc_encoded_video_frame = v8::String::new(scope, "RTCEncodedVideoFrame").unwrap();
+        global.define_own_property(scope, name_rtc_encoded_video_frame.into(), ctor_rtc_encoded_video_frame.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcice_candidate) = tmpl_rtcice_candidate.get_function(scope) {
-        let name_rtcice_candidate = v8::String::new(scope, "RTCIceCandidate").unwrap();
-        global.define_own_property(scope, name_rtcice_candidate.into(), ctor_rtcice_candidate.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_ice_candidate) = tmpl_rtc_ice_candidate.get_function(scope) {
+        let name_rtc_ice_candidate = v8::String::new(scope, "RTCIceCandidate").unwrap();
+        global.define_own_property(scope, name_rtc_ice_candidate.into(), ctor_rtc_ice_candidate.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcice_candidate_pair) = tmpl_rtcice_candidate_pair.get_function(scope) {
-        let name_rtcice_candidate_pair = v8::String::new(scope, "RTCIceCandidatePair").unwrap();
-        global.define_own_property(scope, name_rtcice_candidate_pair.into(), ctor_rtcice_candidate_pair.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_ice_candidate_pair) = tmpl_rtc_ice_candidate_pair.get_function(scope) {
+        let name_rtc_ice_candidate_pair = v8::String::new(scope, "RTCIceCandidatePair").unwrap();
+        global.define_own_property(scope, name_rtc_ice_candidate_pair.into(), ctor_rtc_ice_candidate_pair.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcidentity_assertion) = tmpl_rtcidentity_assertion.get_function(scope) {
-        let name_rtcidentity_assertion = v8::String::new(scope, "RTCIdentityAssertion").unwrap();
-        global.define_own_property(scope, name_rtcidentity_assertion.into(), ctor_rtcidentity_assertion.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_identity_assertion) = tmpl_rtc_identity_assertion.get_function(scope) {
+        let name_rtc_identity_assertion = v8::String::new(scope, "RTCIdentityAssertion").unwrap();
+        global.define_own_property(scope, name_rtc_identity_assertion.into(), ctor_rtc_identity_assertion.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcidentity_provider_registrar) = tmpl_rtcidentity_provider_registrar.get_function(scope) {
-        let name_rtcidentity_provider_registrar = v8::String::new(scope, "RTCIdentityProviderRegistrar").unwrap();
-        global.define_own_property(scope, name_rtcidentity_provider_registrar.into(), ctor_rtcidentity_provider_registrar.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_identity_provider_registrar) = tmpl_rtc_identity_provider_registrar.get_function(scope) {
+        let name_rtc_identity_provider_registrar = v8::String::new(scope, "RTCIdentityProviderRegistrar").unwrap();
+        global.define_own_property(scope, name_rtc_identity_provider_registrar.into(), ctor_rtc_identity_provider_registrar.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcrtp_receiver) = tmpl_rtcrtp_receiver.get_function(scope) {
-        let name_rtcrtp_receiver = v8::String::new(scope, "RTCRtpReceiver").unwrap();
-        global.define_own_property(scope, name_rtcrtp_receiver.into(), ctor_rtcrtp_receiver.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_rtp_receiver) = tmpl_rtc_rtp_receiver.get_function(scope) {
+        let name_rtc_rtp_receiver = v8::String::new(scope, "RTCRtpReceiver").unwrap();
+        global.define_own_property(scope, name_rtc_rtp_receiver.into(), ctor_rtc_rtp_receiver.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcrtp_sframe_encrypter) = tmpl_rtcrtp_sframe_encrypter.get_function(scope) {
-        let name_rtcrtp_sframe_encrypter = v8::String::new(scope, "RTCRtpSFrameEncrypter").unwrap();
-        global.define_own_property(scope, name_rtcrtp_sframe_encrypter.into(), ctor_rtcrtp_sframe_encrypter.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_rtp_s_frame_encrypter) = tmpl_rtc_rtp_s_frame_encrypter.get_function(scope) {
+        let name_rtc_rtp_s_frame_encrypter = v8::String::new(scope, "RTCRtpSFrameEncrypter").unwrap();
+        global.define_own_property(scope, name_rtc_rtp_s_frame_encrypter.into(), ctor_rtc_rtp_s_frame_encrypter.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcrtp_script_transform) = tmpl_rtcrtp_script_transform.get_function(scope) {
-        let name_rtcrtp_script_transform = v8::String::new(scope, "RTCRtpScriptTransform").unwrap();
-        global.define_own_property(scope, name_rtcrtp_script_transform.into(), ctor_rtcrtp_script_transform.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_rtp_script_transform) = tmpl_rtc_rtp_script_transform.get_function(scope) {
+        let name_rtc_rtp_script_transform = v8::String::new(scope, "RTCRtpScriptTransform").unwrap();
+        global.define_own_property(scope, name_rtc_rtp_script_transform.into(), ctor_rtc_rtp_script_transform.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcrtp_sender) = tmpl_rtcrtp_sender.get_function(scope) {
-        let name_rtcrtp_sender = v8::String::new(scope, "RTCRtpSender").unwrap();
-        global.define_own_property(scope, name_rtcrtp_sender.into(), ctor_rtcrtp_sender.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_rtp_sender) = tmpl_rtc_rtp_sender.get_function(scope) {
+        let name_rtc_rtp_sender = v8::String::new(scope, "RTCRtpSender").unwrap();
+        global.define_own_property(scope, name_rtc_rtp_sender.into(), ctor_rtc_rtp_sender.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcrtp_transceiver) = tmpl_rtcrtp_transceiver.get_function(scope) {
-        let name_rtcrtp_transceiver = v8::String::new(scope, "RTCRtpTransceiver").unwrap();
-        global.define_own_property(scope, name_rtcrtp_transceiver.into(), ctor_rtcrtp_transceiver.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_rtp_transceiver) = tmpl_rtc_rtp_transceiver.get_function(scope) {
+        let name_rtc_rtp_transceiver = v8::String::new(scope, "RTCRtpTransceiver").unwrap();
+        global.define_own_property(scope, name_rtc_rtp_transceiver.into(), ctor_rtc_rtp_transceiver.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcsession_description) = tmpl_rtcsession_description.get_function(scope) {
-        let name_rtcsession_description = v8::String::new(scope, "RTCSessionDescription").unwrap();
-        global.define_own_property(scope, name_rtcsession_description.into(), ctor_rtcsession_description.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_session_description) = tmpl_rtc_session_description.get_function(scope) {
+        let name_rtc_session_description = v8::String::new(scope, "RTCSessionDescription").unwrap();
+        global.define_own_property(scope, name_rtc_session_description.into(), ctor_rtc_session_description.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcstats_report) = tmpl_rtcstats_report.get_function(scope) {
-        let name_rtcstats_report = v8::String::new(scope, "RTCStatsReport").unwrap();
-        global.define_own_property(scope, name_rtcstats_report.into(), ctor_rtcstats_report.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_stats_report) = tmpl_rtc_stats_report.get_function(scope) {
+        let name_rtc_stats_report = v8::String::new(scope, "RTCStatsReport").unwrap();
+        global.define_own_property(scope, name_rtc_stats_report.into(), ctor_rtc_stats_report.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_readable_byte_stream_controller) = tmpl_readable_byte_stream_controller.get_function(scope) {
         let name_readable_byte_stream_controller = v8::String::new(scope, "ReadableByteStreamController").unwrap();
@@ -4341,13 +4338,13 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_readable_stream = v8::String::new(scope, "ReadableStream").unwrap();
         global.define_own_property(scope, name_readable_stream.into(), ctor_readable_stream.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_readable_stream_byobreader) = tmpl_readable_stream_byobreader.get_function(scope) {
-        let name_readable_stream_byobreader = v8::String::new(scope, "ReadableStreamBYOBReader").unwrap();
-        global.define_own_property(scope, name_readable_stream_byobreader.into(), ctor_readable_stream_byobreader.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_readable_stream_byob_reader) = tmpl_readable_stream_byob_reader.get_function(scope) {
+        let name_readable_stream_byob_reader = v8::String::new(scope, "ReadableStreamBYOBReader").unwrap();
+        global.define_own_property(scope, name_readable_stream_byob_reader.into(), ctor_readable_stream_byob_reader.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_readable_stream_byobrequest) = tmpl_readable_stream_byobrequest.get_function(scope) {
-        let name_readable_stream_byobrequest = v8::String::new(scope, "ReadableStreamBYOBRequest").unwrap();
-        global.define_own_property(scope, name_readable_stream_byobrequest.into(), ctor_readable_stream_byobrequest.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_readable_stream_byob_request) = tmpl_readable_stream_byob_request.get_function(scope) {
+        let name_readable_stream_byob_request = v8::String::new(scope, "ReadableStreamBYOBRequest").unwrap();
+        global.define_own_property(scope, name_readable_stream_byob_request.into(), ctor_readable_stream_byob_request.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_readable_stream_default_controller) = tmpl_readable_stream_default_controller.get_function(scope) {
         let name_readable_stream_default_controller = v8::String::new(scope, "ReadableStreamDefaultController").unwrap();
@@ -4389,102 +4386,102 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_rewriter = v8::String::new(scope, "Rewriter").unwrap();
         global.define_own_property(scope, name_rewriter.into(), ctor_rewriter.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_sframe_encrypter_stream) = tmpl_sframe_encrypter_stream.get_function(scope) {
-        let name_sframe_encrypter_stream = v8::String::new(scope, "SFrameEncrypterStream").unwrap();
-        global.define_own_property(scope, name_sframe_encrypter_stream.into(), ctor_sframe_encrypter_stream.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_s_frame_encrypter_stream) = tmpl_s_frame_encrypter_stream.get_function(scope) {
+        let name_s_frame_encrypter_stream = v8::String::new(scope, "SFrameEncrypterStream").unwrap();
+        global.define_own_property(scope, name_s_frame_encrypter_stream.into(), ctor_s_frame_encrypter_stream.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgangle) = tmpl_svgangle.get_function(scope) {
-        let name_svgangle = v8::String::new(scope, "SVGAngle").unwrap();
-        global.define_own_property(scope, name_svgangle.into(), ctor_svgangle.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_angle) = tmpl_svg_angle.get_function(scope) {
+        let name_svg_angle = v8::String::new(scope, "SVGAngle").unwrap();
+        global.define_own_property(scope, name_svg_angle.into(), ctor_svg_angle.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_angle) = tmpl_svganimated_angle.get_function(scope) {
-        let name_svganimated_angle = v8::String::new(scope, "SVGAnimatedAngle").unwrap();
-        global.define_own_property(scope, name_svganimated_angle.into(), ctor_svganimated_angle.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_angle) = tmpl_svg_animated_angle.get_function(scope) {
+        let name_svg_animated_angle = v8::String::new(scope, "SVGAnimatedAngle").unwrap();
+        global.define_own_property(scope, name_svg_animated_angle.into(), ctor_svg_animated_angle.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_boolean) = tmpl_svganimated_boolean.get_function(scope) {
-        let name_svganimated_boolean = v8::String::new(scope, "SVGAnimatedBoolean").unwrap();
-        global.define_own_property(scope, name_svganimated_boolean.into(), ctor_svganimated_boolean.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_boolean) = tmpl_svg_animated_boolean.get_function(scope) {
+        let name_svg_animated_boolean = v8::String::new(scope, "SVGAnimatedBoolean").unwrap();
+        global.define_own_property(scope, name_svg_animated_boolean.into(), ctor_svg_animated_boolean.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_enumeration) = tmpl_svganimated_enumeration.get_function(scope) {
-        let name_svganimated_enumeration = v8::String::new(scope, "SVGAnimatedEnumeration").unwrap();
-        global.define_own_property(scope, name_svganimated_enumeration.into(), ctor_svganimated_enumeration.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_enumeration) = tmpl_svg_animated_enumeration.get_function(scope) {
+        let name_svg_animated_enumeration = v8::String::new(scope, "SVGAnimatedEnumeration").unwrap();
+        global.define_own_property(scope, name_svg_animated_enumeration.into(), ctor_svg_animated_enumeration.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_integer) = tmpl_svganimated_integer.get_function(scope) {
-        let name_svganimated_integer = v8::String::new(scope, "SVGAnimatedInteger").unwrap();
-        global.define_own_property(scope, name_svganimated_integer.into(), ctor_svganimated_integer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_integer) = tmpl_svg_animated_integer.get_function(scope) {
+        let name_svg_animated_integer = v8::String::new(scope, "SVGAnimatedInteger").unwrap();
+        global.define_own_property(scope, name_svg_animated_integer.into(), ctor_svg_animated_integer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_length) = tmpl_svganimated_length.get_function(scope) {
-        let name_svganimated_length = v8::String::new(scope, "SVGAnimatedLength").unwrap();
-        global.define_own_property(scope, name_svganimated_length.into(), ctor_svganimated_length.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_length) = tmpl_svg_animated_length.get_function(scope) {
+        let name_svg_animated_length = v8::String::new(scope, "SVGAnimatedLength").unwrap();
+        global.define_own_property(scope, name_svg_animated_length.into(), ctor_svg_animated_length.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_length_list) = tmpl_svganimated_length_list.get_function(scope) {
-        let name_svganimated_length_list = v8::String::new(scope, "SVGAnimatedLengthList").unwrap();
-        global.define_own_property(scope, name_svganimated_length_list.into(), ctor_svganimated_length_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_length_list) = tmpl_svg_animated_length_list.get_function(scope) {
+        let name_svg_animated_length_list = v8::String::new(scope, "SVGAnimatedLengthList").unwrap();
+        global.define_own_property(scope, name_svg_animated_length_list.into(), ctor_svg_animated_length_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_number) = tmpl_svganimated_number.get_function(scope) {
-        let name_svganimated_number = v8::String::new(scope, "SVGAnimatedNumber").unwrap();
-        global.define_own_property(scope, name_svganimated_number.into(), ctor_svganimated_number.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_number) = tmpl_svg_animated_number.get_function(scope) {
+        let name_svg_animated_number = v8::String::new(scope, "SVGAnimatedNumber").unwrap();
+        global.define_own_property(scope, name_svg_animated_number.into(), ctor_svg_animated_number.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_number_list) = tmpl_svganimated_number_list.get_function(scope) {
-        let name_svganimated_number_list = v8::String::new(scope, "SVGAnimatedNumberList").unwrap();
-        global.define_own_property(scope, name_svganimated_number_list.into(), ctor_svganimated_number_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_number_list) = tmpl_svg_animated_number_list.get_function(scope) {
+        let name_svg_animated_number_list = v8::String::new(scope, "SVGAnimatedNumberList").unwrap();
+        global.define_own_property(scope, name_svg_animated_number_list.into(), ctor_svg_animated_number_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_preserve_aspect_ratio) = tmpl_svganimated_preserve_aspect_ratio.get_function(scope) {
-        let name_svganimated_preserve_aspect_ratio = v8::String::new(scope, "SVGAnimatedPreserveAspectRatio").unwrap();
-        global.define_own_property(scope, name_svganimated_preserve_aspect_ratio.into(), ctor_svganimated_preserve_aspect_ratio.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_preserve_aspect_ratio) = tmpl_svg_animated_preserve_aspect_ratio.get_function(scope) {
+        let name_svg_animated_preserve_aspect_ratio = v8::String::new(scope, "SVGAnimatedPreserveAspectRatio").unwrap();
+        global.define_own_property(scope, name_svg_animated_preserve_aspect_ratio.into(), ctor_svg_animated_preserve_aspect_ratio.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_rect) = tmpl_svganimated_rect.get_function(scope) {
-        let name_svganimated_rect = v8::String::new(scope, "SVGAnimatedRect").unwrap();
-        global.define_own_property(scope, name_svganimated_rect.into(), ctor_svganimated_rect.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_rect) = tmpl_svg_animated_rect.get_function(scope) {
+        let name_svg_animated_rect = v8::String::new(scope, "SVGAnimatedRect").unwrap();
+        global.define_own_property(scope, name_svg_animated_rect.into(), ctor_svg_animated_rect.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_string) = tmpl_svganimated_string.get_function(scope) {
-        let name_svganimated_string = v8::String::new(scope, "SVGAnimatedString").unwrap();
-        global.define_own_property(scope, name_svganimated_string.into(), ctor_svganimated_string.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_string) = tmpl_svg_animated_string.get_function(scope) {
+        let name_svg_animated_string = v8::String::new(scope, "SVGAnimatedString").unwrap();
+        global.define_own_property(scope, name_svg_animated_string.into(), ctor_svg_animated_string.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svganimated_transform_list) = tmpl_svganimated_transform_list.get_function(scope) {
-        let name_svganimated_transform_list = v8::String::new(scope, "SVGAnimatedTransformList").unwrap();
-        global.define_own_property(scope, name_svganimated_transform_list.into(), ctor_svganimated_transform_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_animated_transform_list) = tmpl_svg_animated_transform_list.get_function(scope) {
+        let name_svg_animated_transform_list = v8::String::new(scope, "SVGAnimatedTransformList").unwrap();
+        global.define_own_property(scope, name_svg_animated_transform_list.into(), ctor_svg_animated_transform_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svglength) = tmpl_svglength.get_function(scope) {
-        let name_svglength = v8::String::new(scope, "SVGLength").unwrap();
-        global.define_own_property(scope, name_svglength.into(), ctor_svglength.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_length) = tmpl_svg_length.get_function(scope) {
+        let name_svg_length = v8::String::new(scope, "SVGLength").unwrap();
+        global.define_own_property(scope, name_svg_length.into(), ctor_svg_length.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svglength_list) = tmpl_svglength_list.get_function(scope) {
-        let name_svglength_list = v8::String::new(scope, "SVGLengthList").unwrap();
-        global.define_own_property(scope, name_svglength_list.into(), ctor_svglength_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_length_list) = tmpl_svg_length_list.get_function(scope) {
+        let name_svg_length_list = v8::String::new(scope, "SVGLengthList").unwrap();
+        global.define_own_property(scope, name_svg_length_list.into(), ctor_svg_length_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgnumber) = tmpl_svgnumber.get_function(scope) {
-        let name_svgnumber = v8::String::new(scope, "SVGNumber").unwrap();
-        global.define_own_property(scope, name_svgnumber.into(), ctor_svgnumber.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_number) = tmpl_svg_number.get_function(scope) {
+        let name_svg_number = v8::String::new(scope, "SVGNumber").unwrap();
+        global.define_own_property(scope, name_svg_number.into(), ctor_svg_number.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgnumber_list) = tmpl_svgnumber_list.get_function(scope) {
-        let name_svgnumber_list = v8::String::new(scope, "SVGNumberList").unwrap();
-        global.define_own_property(scope, name_svgnumber_list.into(), ctor_svgnumber_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_number_list) = tmpl_svg_number_list.get_function(scope) {
+        let name_svg_number_list = v8::String::new(scope, "SVGNumberList").unwrap();
+        global.define_own_property(scope, name_svg_number_list.into(), ctor_svg_number_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     // SVGPathSegment: NoInterfaceObject — skip global registration
-    if let Some(ctor_svgpoint_list) = tmpl_svgpoint_list.get_function(scope) {
-        let name_svgpoint_list = v8::String::new(scope, "SVGPointList").unwrap();
-        global.define_own_property(scope, name_svgpoint_list.into(), ctor_svgpoint_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_point_list) = tmpl_svg_point_list.get_function(scope) {
+        let name_svg_point_list = v8::String::new(scope, "SVGPointList").unwrap();
+        global.define_own_property(scope, name_svg_point_list.into(), ctor_svg_point_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgpreserve_aspect_ratio) = tmpl_svgpreserve_aspect_ratio.get_function(scope) {
-        let name_svgpreserve_aspect_ratio = v8::String::new(scope, "SVGPreserveAspectRatio").unwrap();
-        global.define_own_property(scope, name_svgpreserve_aspect_ratio.into(), ctor_svgpreserve_aspect_ratio.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_preserve_aspect_ratio) = tmpl_svg_preserve_aspect_ratio.get_function(scope) {
+        let name_svg_preserve_aspect_ratio = v8::String::new(scope, "SVGPreserveAspectRatio").unwrap();
+        global.define_own_property(scope, name_svg_preserve_aspect_ratio.into(), ctor_svg_preserve_aspect_ratio.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgstring_list) = tmpl_svgstring_list.get_function(scope) {
-        let name_svgstring_list = v8::String::new(scope, "SVGStringList").unwrap();
-        global.define_own_property(scope, name_svgstring_list.into(), ctor_svgstring_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_string_list) = tmpl_svg_string_list.get_function(scope) {
+        let name_svg_string_list = v8::String::new(scope, "SVGStringList").unwrap();
+        global.define_own_property(scope, name_svg_string_list.into(), ctor_svg_string_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgtransform) = tmpl_svgtransform.get_function(scope) {
-        let name_svgtransform = v8::String::new(scope, "SVGTransform").unwrap();
-        global.define_own_property(scope, name_svgtransform.into(), ctor_svgtransform.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_transform) = tmpl_svg_transform.get_function(scope) {
+        let name_svg_transform = v8::String::new(scope, "SVGTransform").unwrap();
+        global.define_own_property(scope, name_svg_transform.into(), ctor_svg_transform.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgtransform_list) = tmpl_svgtransform_list.get_function(scope) {
-        let name_svgtransform_list = v8::String::new(scope, "SVGTransformList").unwrap();
-        global.define_own_property(scope, name_svgtransform_list.into(), ctor_svgtransform_list.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_transform_list) = tmpl_svg_transform_list.get_function(scope) {
+        let name_svg_transform_list = v8::String::new(scope, "SVGTransformList").unwrap();
+        global.define_own_property(scope, name_svg_transform_list.into(), ctor_svg_transform_list.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgunit_types) = tmpl_svgunit_types.get_function(scope) {
-        let name_svgunit_types = v8::String::new(scope, "SVGUnitTypes").unwrap();
-        global.define_own_property(scope, name_svgunit_types.into(), ctor_svgunit_types.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_unit_types) = tmpl_svg_unit_types.get_function(scope) {
+        let name_svg_unit_types = v8::String::new(scope, "SVGUnitTypes").unwrap();
+        global.define_own_property(scope, name_svg_unit_types.into(), ctor_svg_unit_types.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_sanitizer) = tmpl_sanitizer.get_function(scope) {
         let name_sanitizer = v8::String::new(scope, "Sanitizer").unwrap();
@@ -4674,65 +4671,65 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_url = v8::String::new(scope, "URL").unwrap();
         global.define_own_property(scope, name_url.into(), ctor_url.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_urlpattern) = tmpl_urlpattern.get_function(scope) {
-        let name_urlpattern = v8::String::new(scope, "URLPattern").unwrap();
-        global.define_own_property(scope, name_urlpattern.into(), ctor_urlpattern.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_url_pattern) = tmpl_url_pattern.get_function(scope) {
+        let name_url_pattern = v8::String::new(scope, "URLPattern").unwrap();
+        global.define_own_property(scope, name_url_pattern.into(), ctor_url_pattern.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_urlsearch_params) = tmpl_urlsearch_params.get_function(scope) {
-        let name_urlsearch_params = v8::String::new(scope, "URLSearchParams").unwrap();
-        global.define_own_property(scope, name_urlsearch_params.into(), ctor_urlsearch_params.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_url_search_params) = tmpl_url_search_params.get_function(scope) {
+        let name_url_search_params = v8::String::new(scope, "URLSearchParams").unwrap();
+        global.define_own_property(scope, name_url_search_params.into(), ctor_url_search_params.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbalternate_interface) = tmpl_usbalternate_interface.get_function(scope) {
-        let name_usbalternate_interface = v8::String::new(scope, "USBAlternateInterface").unwrap();
-        global.define_own_property(scope, name_usbalternate_interface.into(), ctor_usbalternate_interface.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_alternate_interface) = tmpl_usb_alternate_interface.get_function(scope) {
+        let name_usb_alternate_interface = v8::String::new(scope, "USBAlternateInterface").unwrap();
+        global.define_own_property(scope, name_usb_alternate_interface.into(), ctor_usb_alternate_interface.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbconfiguration) = tmpl_usbconfiguration.get_function(scope) {
-        let name_usbconfiguration = v8::String::new(scope, "USBConfiguration").unwrap();
-        global.define_own_property(scope, name_usbconfiguration.into(), ctor_usbconfiguration.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_configuration) = tmpl_usb_configuration.get_function(scope) {
+        let name_usb_configuration = v8::String::new(scope, "USBConfiguration").unwrap();
+        global.define_own_property(scope, name_usb_configuration.into(), ctor_usb_configuration.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbdevice) = tmpl_usbdevice.get_function(scope) {
-        let name_usbdevice = v8::String::new(scope, "USBDevice").unwrap();
-        global.define_own_property(scope, name_usbdevice.into(), ctor_usbdevice.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_device) = tmpl_usb_device.get_function(scope) {
+        let name_usb_device = v8::String::new(scope, "USBDevice").unwrap();
+        global.define_own_property(scope, name_usb_device.into(), ctor_usb_device.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbendpoint) = tmpl_usbendpoint.get_function(scope) {
-        let name_usbendpoint = v8::String::new(scope, "USBEndpoint").unwrap();
-        global.define_own_property(scope, name_usbendpoint.into(), ctor_usbendpoint.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_endpoint) = tmpl_usb_endpoint.get_function(scope) {
+        let name_usb_endpoint = v8::String::new(scope, "USBEndpoint").unwrap();
+        global.define_own_property(scope, name_usb_endpoint.into(), ctor_usb_endpoint.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbin_transfer_result) = tmpl_usbin_transfer_result.get_function(scope) {
-        let name_usbin_transfer_result = v8::String::new(scope, "USBInTransferResult").unwrap();
-        global.define_own_property(scope, name_usbin_transfer_result.into(), ctor_usbin_transfer_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_in_transfer_result) = tmpl_usb_in_transfer_result.get_function(scope) {
+        let name_usb_in_transfer_result = v8::String::new(scope, "USBInTransferResult").unwrap();
+        global.define_own_property(scope, name_usb_in_transfer_result.into(), ctor_usb_in_transfer_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbinterface) = tmpl_usbinterface.get_function(scope) {
-        let name_usbinterface = v8::String::new(scope, "USBInterface").unwrap();
-        global.define_own_property(scope, name_usbinterface.into(), ctor_usbinterface.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_interface) = tmpl_usb_interface.get_function(scope) {
+        let name_usb_interface = v8::String::new(scope, "USBInterface").unwrap();
+        global.define_own_property(scope, name_usb_interface.into(), ctor_usb_interface.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbisochronous_in_transfer_packet) = tmpl_usbisochronous_in_transfer_packet.get_function(scope) {
-        let name_usbisochronous_in_transfer_packet = v8::String::new(scope, "USBIsochronousInTransferPacket").unwrap();
-        global.define_own_property(scope, name_usbisochronous_in_transfer_packet.into(), ctor_usbisochronous_in_transfer_packet.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_isochronous_in_transfer_packet) = tmpl_usb_isochronous_in_transfer_packet.get_function(scope) {
+        let name_usb_isochronous_in_transfer_packet = v8::String::new(scope, "USBIsochronousInTransferPacket").unwrap();
+        global.define_own_property(scope, name_usb_isochronous_in_transfer_packet.into(), ctor_usb_isochronous_in_transfer_packet.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbisochronous_in_transfer_result) = tmpl_usbisochronous_in_transfer_result.get_function(scope) {
-        let name_usbisochronous_in_transfer_result = v8::String::new(scope, "USBIsochronousInTransferResult").unwrap();
-        global.define_own_property(scope, name_usbisochronous_in_transfer_result.into(), ctor_usbisochronous_in_transfer_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_isochronous_in_transfer_result) = tmpl_usb_isochronous_in_transfer_result.get_function(scope) {
+        let name_usb_isochronous_in_transfer_result = v8::String::new(scope, "USBIsochronousInTransferResult").unwrap();
+        global.define_own_property(scope, name_usb_isochronous_in_transfer_result.into(), ctor_usb_isochronous_in_transfer_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbisochronous_out_transfer_packet) = tmpl_usbisochronous_out_transfer_packet.get_function(scope) {
-        let name_usbisochronous_out_transfer_packet = v8::String::new(scope, "USBIsochronousOutTransferPacket").unwrap();
-        global.define_own_property(scope, name_usbisochronous_out_transfer_packet.into(), ctor_usbisochronous_out_transfer_packet.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_isochronous_out_transfer_packet) = tmpl_usb_isochronous_out_transfer_packet.get_function(scope) {
+        let name_usb_isochronous_out_transfer_packet = v8::String::new(scope, "USBIsochronousOutTransferPacket").unwrap();
+        global.define_own_property(scope, name_usb_isochronous_out_transfer_packet.into(), ctor_usb_isochronous_out_transfer_packet.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbisochronous_out_transfer_result) = tmpl_usbisochronous_out_transfer_result.get_function(scope) {
-        let name_usbisochronous_out_transfer_result = v8::String::new(scope, "USBIsochronousOutTransferResult").unwrap();
-        global.define_own_property(scope, name_usbisochronous_out_transfer_result.into(), ctor_usbisochronous_out_transfer_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_isochronous_out_transfer_result) = tmpl_usb_isochronous_out_transfer_result.get_function(scope) {
+        let name_usb_isochronous_out_transfer_result = v8::String::new(scope, "USBIsochronousOutTransferResult").unwrap();
+        global.define_own_property(scope, name_usb_isochronous_out_transfer_result.into(), ctor_usb_isochronous_out_transfer_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbout_transfer_result) = tmpl_usbout_transfer_result.get_function(scope) {
-        let name_usbout_transfer_result = v8::String::new(scope, "USBOutTransferResult").unwrap();
-        global.define_own_property(scope, name_usbout_transfer_result.into(), ctor_usbout_transfer_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_out_transfer_result) = tmpl_usb_out_transfer_result.get_function(scope) {
+        let name_usb_out_transfer_result = v8::String::new(scope, "USBOutTransferResult").unwrap();
+        global.define_own_property(scope, name_usb_out_transfer_result.into(), ctor_usb_out_transfer_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_user_activation) = tmpl_user_activation.get_function(scope) {
         let name_user_activation = v8::String::new(scope, "UserActivation").unwrap();
         global.define_own_property(scope, name_user_activation.into(), ctor_user_activation.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_vttregion) = tmpl_vttregion.get_function(scope) {
-        let name_vttregion = v8::String::new(scope, "VTTRegion").unwrap();
-        global.define_own_property(scope, name_vttregion.into(), ctor_vttregion.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_vtt_region) = tmpl_vtt_region.get_function(scope) {
+        let name_vtt_region = v8::String::new(scope, "VTTRegion").unwrap();
+        global.define_own_property(scope, name_vtt_region.into(), ctor_vtt_region.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_validity_state) = tmpl_validity_state.get_function(scope) {
         let name_validity_state = v8::String::new(scope, "ValidityState").unwrap();
@@ -4788,37 +4785,37 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
     // WEBGL_multi_draw: NoInterfaceObject — skip global registration
     // WEBGL_multi_draw_instanced_base_vertex_base_instance: NoInterfaceObject — skip global registration
     // WEBGL_provoking_vertex: NoInterfaceObject — skip global registration
-    if let Some(ctor_wgsllanguage_features) = tmpl_wgsllanguage_features.get_function(scope) {
-        let name_wgsllanguage_features = v8::String::new(scope, "WGSLLanguageFeatures").unwrap();
-        global.define_own_property(scope, name_wgsllanguage_features.into(), ctor_wgsllanguage_features.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_wgsl_language_features) = tmpl_wgsl_language_features.get_function(scope) {
+        let name_wgsl_language_features = v8::String::new(scope, "WGSLLanguageFeatures").unwrap();
+        global.define_own_property(scope, name_wgsl_language_features.into(), ctor_wgsl_language_features.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_wake_lock) = tmpl_wake_lock.get_function(scope) {
         let name_wake_lock = v8::String::new(scope, "WakeLock").unwrap();
         global.define_own_property(scope, name_wake_lock.into(), ctor_wake_lock.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_gl2_rendering_context) = tmpl_web_gl2_rendering_context.get_function(scope) {
-        let name_web_gl2_rendering_context = v8::String::new(scope, "WebGL2RenderingContext").unwrap();
-        global.define_own_property(scope, name_web_gl2_rendering_context.into(), ctor_web_gl2_rendering_context.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl2rendering_context) = tmpl_web_gl2rendering_context.get_function(scope) {
+        let name_web_gl2rendering_context = v8::String::new(scope, "WebGL2RenderingContext").unwrap();
+        global.define_own_property(scope, name_web_gl2rendering_context.into(), ctor_web_gl2rendering_context.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glactive_info) = tmpl_web_glactive_info.get_function(scope) {
-        let name_web_glactive_info = v8::String::new(scope, "WebGLActiveInfo").unwrap();
-        global.define_own_property(scope, name_web_glactive_info.into(), ctor_web_glactive_info.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_active_info) = tmpl_web_gl_active_info.get_function(scope) {
+        let name_web_gl_active_info = v8::String::new(scope, "WebGLActiveInfo").unwrap();
+        global.define_own_property(scope, name_web_gl_active_info.into(), ctor_web_gl_active_info.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_globject) = tmpl_web_globject.get_function(scope) {
-        let name_web_globject = v8::String::new(scope, "WebGLObject").unwrap();
-        global.define_own_property(scope, name_web_globject.into(), ctor_web_globject.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_object) = tmpl_web_gl_object.get_function(scope) {
+        let name_web_gl_object = v8::String::new(scope, "WebGLObject").unwrap();
+        global.define_own_property(scope, name_web_gl_object.into(), ctor_web_gl_object.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glrendering_context) = tmpl_web_glrendering_context.get_function(scope) {
-        let name_web_glrendering_context = v8::String::new(scope, "WebGLRenderingContext").unwrap();
-        global.define_own_property(scope, name_web_glrendering_context.into(), ctor_web_glrendering_context.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_rendering_context) = tmpl_web_gl_rendering_context.get_function(scope) {
+        let name_web_gl_rendering_context = v8::String::new(scope, "WebGLRenderingContext").unwrap();
+        global.define_own_property(scope, name_web_gl_rendering_context.into(), ctor_web_gl_rendering_context.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glshader_precision_format) = tmpl_web_glshader_precision_format.get_function(scope) {
-        let name_web_glshader_precision_format = v8::String::new(scope, "WebGLShaderPrecisionFormat").unwrap();
-        global.define_own_property(scope, name_web_glshader_precision_format.into(), ctor_web_glshader_precision_format.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_shader_precision_format) = tmpl_web_gl_shader_precision_format.get_function(scope) {
+        let name_web_gl_shader_precision_format = v8::String::new(scope, "WebGLShaderPrecisionFormat").unwrap();
+        global.define_own_property(scope, name_web_gl_shader_precision_format.into(), ctor_web_gl_shader_precision_format.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_gluniform_location) = tmpl_web_gluniform_location.get_function(scope) {
-        let name_web_gluniform_location = v8::String::new(scope, "WebGLUniformLocation").unwrap();
-        global.define_own_property(scope, name_web_gluniform_location.into(), ctor_web_gluniform_location.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_uniform_location) = tmpl_web_gl_uniform_location.get_function(scope) {
+        let name_web_gl_uniform_location = v8::String::new(scope, "WebGLUniformLocation").unwrap();
+        global.define_own_property(scope, name_web_gl_uniform_location.into(), ctor_web_gl_uniform_location.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_web_transport) = tmpl_web_transport.get_function(scope) {
         let name_web_transport = v8::String::new(scope, "WebTransport").unwrap();
@@ -4876,133 +4873,133 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_writer = v8::String::new(scope, "Writer").unwrap();
         global.define_own_property(scope, name_writer.into(), ctor_writer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xmlserializer) = tmpl_xmlserializer.get_function(scope) {
-        let name_xmlserializer = v8::String::new(scope, "XMLSerializer").unwrap();
-        global.define_own_property(scope, name_xmlserializer.into(), ctor_xmlserializer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xml_serializer) = tmpl_xml_serializer.get_function(scope) {
+        let name_xml_serializer = v8::String::new(scope, "XMLSerializer").unwrap();
+        global.define_own_property(scope, name_xml_serializer.into(), ctor_xml_serializer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xpath_evaluator) = tmpl_xpath_evaluator.get_function(scope) {
-        let name_xpath_evaluator = v8::String::new(scope, "XPathEvaluator").unwrap();
-        global.define_own_property(scope, name_xpath_evaluator.into(), ctor_xpath_evaluator.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_x_path_evaluator) = tmpl_x_path_evaluator.get_function(scope) {
+        let name_x_path_evaluator = v8::String::new(scope, "XPathEvaluator").unwrap();
+        global.define_own_property(scope, name_x_path_evaluator.into(), ctor_x_path_evaluator.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xpath_expression) = tmpl_xpath_expression.get_function(scope) {
-        let name_xpath_expression = v8::String::new(scope, "XPathExpression").unwrap();
-        global.define_own_property(scope, name_xpath_expression.into(), ctor_xpath_expression.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_x_path_expression) = tmpl_x_path_expression.get_function(scope) {
+        let name_x_path_expression = v8::String::new(scope, "XPathExpression").unwrap();
+        global.define_own_property(scope, name_x_path_expression.into(), ctor_x_path_expression.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xpath_result) = tmpl_xpath_result.get_function(scope) {
-        let name_xpath_result = v8::String::new(scope, "XPathResult").unwrap();
-        global.define_own_property(scope, name_xpath_result.into(), ctor_xpath_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_x_path_result) = tmpl_x_path_result.get_function(scope) {
+        let name_x_path_result = v8::String::new(scope, "XPathResult").unwrap();
+        global.define_own_property(scope, name_x_path_result.into(), ctor_x_path_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xranchor) = tmpl_xranchor.get_function(scope) {
-        let name_xranchor = v8::String::new(scope, "XRAnchor").unwrap();
-        global.define_own_property(scope, name_xranchor.into(), ctor_xranchor.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_anchor) = tmpl_xr_anchor.get_function(scope) {
+        let name_xr_anchor = v8::String::new(scope, "XRAnchor").unwrap();
+        global.define_own_property(scope, name_xr_anchor.into(), ctor_xr_anchor.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xranchor_set) = tmpl_xranchor_set.get_function(scope) {
-        let name_xranchor_set = v8::String::new(scope, "XRAnchorSet").unwrap();
-        global.define_own_property(scope, name_xranchor_set.into(), ctor_xranchor_set.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_anchor_set) = tmpl_xr_anchor_set.get_function(scope) {
+        let name_xr_anchor_set = v8::String::new(scope, "XRAnchorSet").unwrap();
+        global.define_own_property(scope, name_xr_anchor_set.into(), ctor_xr_anchor_set.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrbody) = tmpl_xrbody.get_function(scope) {
-        let name_xrbody = v8::String::new(scope, "XRBody").unwrap();
-        global.define_own_property(scope, name_xrbody.into(), ctor_xrbody.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_body) = tmpl_xr_body.get_function(scope) {
+        let name_xr_body = v8::String::new(scope, "XRBody").unwrap();
+        global.define_own_property(scope, name_xr_body.into(), ctor_xr_body.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrcamera) = tmpl_xrcamera.get_function(scope) {
-        let name_xrcamera = v8::String::new(scope, "XRCamera").unwrap();
-        global.define_own_property(scope, name_xrcamera.into(), ctor_xrcamera.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_camera) = tmpl_xr_camera.get_function(scope) {
+        let name_xr_camera = v8::String::new(scope, "XRCamera").unwrap();
+        global.define_own_property(scope, name_xr_camera.into(), ctor_xr_camera.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrdepth_information) = tmpl_xrdepth_information.get_function(scope) {
-        let name_xrdepth_information = v8::String::new(scope, "XRDepthInformation").unwrap();
-        global.define_own_property(scope, name_xrdepth_information.into(), ctor_xrdepth_information.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_depth_information) = tmpl_xr_depth_information.get_function(scope) {
+        let name_xr_depth_information = v8::String::new(scope, "XRDepthInformation").unwrap();
+        global.define_own_property(scope, name_xr_depth_information.into(), ctor_xr_depth_information.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrframe) = tmpl_xrframe.get_function(scope) {
-        let name_xrframe = v8::String::new(scope, "XRFrame").unwrap();
-        global.define_own_property(scope, name_xrframe.into(), ctor_xrframe.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_frame) = tmpl_xr_frame.get_function(scope) {
+        let name_xr_frame = v8::String::new(scope, "XRFrame").unwrap();
+        global.define_own_property(scope, name_xr_frame.into(), ctor_xr_frame.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrhand) = tmpl_xrhand.get_function(scope) {
-        let name_xrhand = v8::String::new(scope, "XRHand").unwrap();
-        global.define_own_property(scope, name_xrhand.into(), ctor_xrhand.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_hand) = tmpl_xr_hand.get_function(scope) {
+        let name_xr_hand = v8::String::new(scope, "XRHand").unwrap();
+        global.define_own_property(scope, name_xr_hand.into(), ctor_xr_hand.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrhit_test_result) = tmpl_xrhit_test_result.get_function(scope) {
-        let name_xrhit_test_result = v8::String::new(scope, "XRHitTestResult").unwrap();
-        global.define_own_property(scope, name_xrhit_test_result.into(), ctor_xrhit_test_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_hit_test_result) = tmpl_xr_hit_test_result.get_function(scope) {
+        let name_xr_hit_test_result = v8::String::new(scope, "XRHitTestResult").unwrap();
+        global.define_own_property(scope, name_xr_hit_test_result.into(), ctor_xr_hit_test_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrhit_test_source) = tmpl_xrhit_test_source.get_function(scope) {
-        let name_xrhit_test_source = v8::String::new(scope, "XRHitTestSource").unwrap();
-        global.define_own_property(scope, name_xrhit_test_source.into(), ctor_xrhit_test_source.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_hit_test_source) = tmpl_xr_hit_test_source.get_function(scope) {
+        let name_xr_hit_test_source = v8::String::new(scope, "XRHitTestSource").unwrap();
+        global.define_own_property(scope, name_xr_hit_test_source.into(), ctor_xr_hit_test_source.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrinput_source) = tmpl_xrinput_source.get_function(scope) {
-        let name_xrinput_source = v8::String::new(scope, "XRInputSource").unwrap();
-        global.define_own_property(scope, name_xrinput_source.into(), ctor_xrinput_source.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_input_source) = tmpl_xr_input_source.get_function(scope) {
+        let name_xr_input_source = v8::String::new(scope, "XRInputSource").unwrap();
+        global.define_own_property(scope, name_xr_input_source.into(), ctor_xr_input_source.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrinput_source_array) = tmpl_xrinput_source_array.get_function(scope) {
-        let name_xrinput_source_array = v8::String::new(scope, "XRInputSourceArray").unwrap();
-        global.define_own_property(scope, name_xrinput_source_array.into(), ctor_xrinput_source_array.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_input_source_array) = tmpl_xr_input_source_array.get_function(scope) {
+        let name_xr_input_source_array = v8::String::new(scope, "XRInputSourceArray").unwrap();
+        global.define_own_property(scope, name_xr_input_source_array.into(), ctor_xr_input_source_array.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrlight_estimate) = tmpl_xrlight_estimate.get_function(scope) {
-        let name_xrlight_estimate = v8::String::new(scope, "XRLightEstimate").unwrap();
-        global.define_own_property(scope, name_xrlight_estimate.into(), ctor_xrlight_estimate.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_light_estimate) = tmpl_xr_light_estimate.get_function(scope) {
+        let name_xr_light_estimate = v8::String::new(scope, "XRLightEstimate").unwrap();
+        global.define_own_property(scope, name_xr_light_estimate.into(), ctor_xr_light_estimate.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrmedia_binding) = tmpl_xrmedia_binding.get_function(scope) {
-        let name_xrmedia_binding = v8::String::new(scope, "XRMediaBinding").unwrap();
-        global.define_own_property(scope, name_xrmedia_binding.into(), ctor_xrmedia_binding.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_media_binding) = tmpl_xr_media_binding.get_function(scope) {
+        let name_xr_media_binding = v8::String::new(scope, "XRMediaBinding").unwrap();
+        global.define_own_property(scope, name_xr_media_binding.into(), ctor_xr_media_binding.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrmesh) = tmpl_xrmesh.get_function(scope) {
-        let name_xrmesh = v8::String::new(scope, "XRMesh").unwrap();
-        global.define_own_property(scope, name_xrmesh.into(), ctor_xrmesh.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_mesh) = tmpl_xr_mesh.get_function(scope) {
+        let name_xr_mesh = v8::String::new(scope, "XRMesh").unwrap();
+        global.define_own_property(scope, name_xr_mesh.into(), ctor_xr_mesh.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrmesh_set) = tmpl_xrmesh_set.get_function(scope) {
-        let name_xrmesh_set = v8::String::new(scope, "XRMeshSet").unwrap();
-        global.define_own_property(scope, name_xrmesh_set.into(), ctor_xrmesh_set.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_mesh_set) = tmpl_xr_mesh_set.get_function(scope) {
+        let name_xr_mesh_set = v8::String::new(scope, "XRMeshSet").unwrap();
+        global.define_own_property(scope, name_xr_mesh_set.into(), ctor_xr_mesh_set.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrplane) = tmpl_xrplane.get_function(scope) {
-        let name_xrplane = v8::String::new(scope, "XRPlane").unwrap();
-        global.define_own_property(scope, name_xrplane.into(), ctor_xrplane.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_plane) = tmpl_xr_plane.get_function(scope) {
+        let name_xr_plane = v8::String::new(scope, "XRPlane").unwrap();
+        global.define_own_property(scope, name_xr_plane.into(), ctor_xr_plane.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrplane_set) = tmpl_xrplane_set.get_function(scope) {
-        let name_xrplane_set = v8::String::new(scope, "XRPlaneSet").unwrap();
-        global.define_own_property(scope, name_xrplane_set.into(), ctor_xrplane_set.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_plane_set) = tmpl_xr_plane_set.get_function(scope) {
+        let name_xr_plane_set = v8::String::new(scope, "XRPlaneSet").unwrap();
+        global.define_own_property(scope, name_xr_plane_set.into(), ctor_xr_plane_set.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrpose) = tmpl_xrpose.get_function(scope) {
-        let name_xrpose = v8::String::new(scope, "XRPose").unwrap();
-        global.define_own_property(scope, name_xrpose.into(), ctor_xrpose.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_pose) = tmpl_xr_pose.get_function(scope) {
+        let name_xr_pose = v8::String::new(scope, "XRPose").unwrap();
+        global.define_own_property(scope, name_xr_pose.into(), ctor_xr_pose.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrray) = tmpl_xrray.get_function(scope) {
-        let name_xrray = v8::String::new(scope, "XRRay").unwrap();
-        global.define_own_property(scope, name_xrray.into(), ctor_xrray.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_ray) = tmpl_xr_ray.get_function(scope) {
+        let name_xr_ray = v8::String::new(scope, "XRRay").unwrap();
+        global.define_own_property(scope, name_xr_ray.into(), ctor_xr_ray.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrrender_state) = tmpl_xrrender_state.get_function(scope) {
-        let name_xrrender_state = v8::String::new(scope, "XRRenderState").unwrap();
-        global.define_own_property(scope, name_xrrender_state.into(), ctor_xrrender_state.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_render_state) = tmpl_xr_render_state.get_function(scope) {
+        let name_xr_render_state = v8::String::new(scope, "XRRenderState").unwrap();
+        global.define_own_property(scope, name_xr_render_state.into(), ctor_xr_render_state.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrrigid_transform) = tmpl_xrrigid_transform.get_function(scope) {
-        let name_xrrigid_transform = v8::String::new(scope, "XRRigidTransform").unwrap();
-        global.define_own_property(scope, name_xrrigid_transform.into(), ctor_xrrigid_transform.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_rigid_transform) = tmpl_xr_rigid_transform.get_function(scope) {
+        let name_xr_rigid_transform = v8::String::new(scope, "XRRigidTransform").unwrap();
+        global.define_own_property(scope, name_xr_rigid_transform.into(), ctor_xr_rigid_transform.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrsub_image) = tmpl_xrsub_image.get_function(scope) {
-        let name_xrsub_image = v8::String::new(scope, "XRSubImage").unwrap();
-        global.define_own_property(scope, name_xrsub_image.into(), ctor_xrsub_image.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_sub_image) = tmpl_xr_sub_image.get_function(scope) {
+        let name_xr_sub_image = v8::String::new(scope, "XRSubImage").unwrap();
+        global.define_own_property(scope, name_xr_sub_image.into(), ctor_xr_sub_image.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrtransient_input_hit_test_result) = tmpl_xrtransient_input_hit_test_result.get_function(scope) {
-        let name_xrtransient_input_hit_test_result = v8::String::new(scope, "XRTransientInputHitTestResult").unwrap();
-        global.define_own_property(scope, name_xrtransient_input_hit_test_result.into(), ctor_xrtransient_input_hit_test_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_transient_input_hit_test_result) = tmpl_xr_transient_input_hit_test_result.get_function(scope) {
+        let name_xr_transient_input_hit_test_result = v8::String::new(scope, "XRTransientInputHitTestResult").unwrap();
+        global.define_own_property(scope, name_xr_transient_input_hit_test_result.into(), ctor_xr_transient_input_hit_test_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrtransient_input_hit_test_source) = tmpl_xrtransient_input_hit_test_source.get_function(scope) {
-        let name_xrtransient_input_hit_test_source = v8::String::new(scope, "XRTransientInputHitTestSource").unwrap();
-        global.define_own_property(scope, name_xrtransient_input_hit_test_source.into(), ctor_xrtransient_input_hit_test_source.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_transient_input_hit_test_source) = tmpl_xr_transient_input_hit_test_source.get_function(scope) {
+        let name_xr_transient_input_hit_test_source = v8::String::new(scope, "XRTransientInputHitTestSource").unwrap();
+        global.define_own_property(scope, name_xr_transient_input_hit_test_source.into(), ctor_xr_transient_input_hit_test_source.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrview) = tmpl_xrview.get_function(scope) {
-        let name_xrview = v8::String::new(scope, "XRView").unwrap();
-        global.define_own_property(scope, name_xrview.into(), ctor_xrview.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_view) = tmpl_xr_view.get_function(scope) {
+        let name_xr_view = v8::String::new(scope, "XRView").unwrap();
+        global.define_own_property(scope, name_xr_view.into(), ctor_xr_view.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrviewport) = tmpl_xrviewport.get_function(scope) {
-        let name_xrviewport = v8::String::new(scope, "XRViewport").unwrap();
-        global.define_own_property(scope, name_xrviewport.into(), ctor_xrviewport.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_viewport) = tmpl_xr_viewport.get_function(scope) {
+        let name_xr_viewport = v8::String::new(scope, "XRViewport").unwrap();
+        global.define_own_property(scope, name_xr_viewport.into(), ctor_xr_viewport.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrweb_glbinding) = tmpl_xrweb_glbinding.get_function(scope) {
-        let name_xrweb_glbinding = v8::String::new(scope, "XRWebGLBinding").unwrap();
-        global.define_own_property(scope, name_xrweb_glbinding.into(), ctor_xrweb_glbinding.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_web_gl_binding) = tmpl_xr_web_gl_binding.get_function(scope) {
+        let name_xr_web_gl_binding = v8::String::new(scope, "XRWebGLBinding").unwrap();
+        global.define_own_property(scope, name_xr_web_gl_binding.into(), ctor_xr_web_gl_binding.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xsltprocessor) = tmpl_xsltprocessor.get_function(scope) {
-        let name_xsltprocessor = v8::String::new(scope, "XSLTProcessor").unwrap();
-        global.define_own_property(scope, name_xsltprocessor.into(), ctor_xsltprocessor.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xslt_processor) = tmpl_xslt_processor.get_function(scope) {
+        let name_xslt_processor = v8::String::new(scope, "XSLTProcessor").unwrap();
+        global.define_own_property(scope, name_xslt_processor.into(), ctor_xslt_processor.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_webkit_cancel_animation_frame) = tmpl_webkit_cancel_animation_frame.get_function(scope) {
         let name_webkit_cancel_animation_frame = v8::String::new(scope, "webkitCancelAnimationFrame").unwrap();
@@ -5024,9 +5021,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_webkit_get_user_media = v8::String::new(scope, "webkitGetUserMedia").unwrap();
         global.define_own_property(scope, name_webkit_get_user_media.into(), ctor_webkit_get_user_media.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_webkit_idbkey_range) = tmpl_webkit_idbkey_range.get_function(scope) {
-        let name_webkit_idbkey_range = v8::String::new(scope, "webkitIDBKeyRange").unwrap();
-        global.define_own_property(scope, name_webkit_idbkey_range.into(), ctor_webkit_idbkey_range.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_webkit_idb_key_range) = tmpl_webkit_idb_key_range.get_function(scope) {
+        let name_webkit_idb_key_range = v8::String::new(scope, "webkitIDBKeyRange").unwrap();
+        global.define_own_property(scope, name_webkit_idb_key_range.into(), ctor_webkit_idb_key_range.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_webkit_indexed_db) = tmpl_webkit_indexed_db.get_function(scope) {
         let name_webkit_indexed_db = v8::String::new(scope, "webkitIndexedDB").unwrap();
@@ -5048,9 +5045,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_webkit_performance = v8::String::new(scope, "webkitPerformance").unwrap();
         global.define_own_property(scope, name_webkit_performance.into(), ctor_webkit_performance.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_webkit_rtcpeer_connection) = tmpl_webkit_rtcpeer_connection.get_function(scope) {
-        let name_webkit_rtcpeer_connection = v8::String::new(scope, "webkitRTCPeerConnection").unwrap();
-        global.define_own_property(scope, name_webkit_rtcpeer_connection.into(), ctor_webkit_rtcpeer_connection.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_webkit_rtc_peer_connection) = tmpl_webkit_rtc_peer_connection.get_function(scope) {
+        let name_webkit_rtc_peer_connection = v8::String::new(scope, "webkitRTCPeerConnection").unwrap();
+        global.define_own_property(scope, name_webkit_rtc_peer_connection.into(), ctor_webkit_rtc_peer_connection.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_webkit_request_animation_frame) = tmpl_webkit_request_animation_frame.get_function(scope) {
         let name_webkit_request_animation_frame = v8::String::new(scope, "webkitRequestAnimationFrame").unwrap();
@@ -5128,181 +5125,181 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_file = v8::String::new(scope, "File").unwrap();
         global.define_own_property(scope, name_file.into(), ctor_file.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssparser_at_rule) = tmpl_cssparser_at_rule.get_function(scope) {
-        let name_cssparser_at_rule = v8::String::new(scope, "CSSParserAtRule").unwrap();
-        global.define_own_property(scope, name_cssparser_at_rule.into(), ctor_cssparser_at_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_parser_at_rule) = tmpl_css_parser_at_rule.get_function(scope) {
+        let name_css_parser_at_rule = v8::String::new(scope, "CSSParserAtRule").unwrap();
+        global.define_own_property(scope, name_css_parser_at_rule.into(), ctor_css_parser_at_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssparser_declaration) = tmpl_cssparser_declaration.get_function(scope) {
-        let name_cssparser_declaration = v8::String::new(scope, "CSSParserDeclaration").unwrap();
-        global.define_own_property(scope, name_cssparser_declaration.into(), ctor_cssparser_declaration.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_parser_declaration) = tmpl_css_parser_declaration.get_function(scope) {
+        let name_css_parser_declaration = v8::String::new(scope, "CSSParserDeclaration").unwrap();
+        global.define_own_property(scope, name_css_parser_declaration.into(), ctor_css_parser_declaration.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssparser_qualified_rule) = tmpl_cssparser_qualified_rule.get_function(scope) {
-        let name_cssparser_qualified_rule = v8::String::new(scope, "CSSParserQualifiedRule").unwrap();
-        global.define_own_property(scope, name_cssparser_qualified_rule.into(), ctor_cssparser_qualified_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_parser_qualified_rule) = tmpl_css_parser_qualified_rule.get_function(scope) {
+        let name_css_parser_qualified_rule = v8::String::new(scope, "CSSParserQualifiedRule").unwrap();
+        global.define_own_property(scope, name_css_parser_qualified_rule.into(), ctor_css_parser_qualified_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssparser_block) = tmpl_cssparser_block.get_function(scope) {
-        let name_cssparser_block = v8::String::new(scope, "CSSParserBlock").unwrap();
-        global.define_own_property(scope, name_cssparser_block.into(), ctor_cssparser_block.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_parser_block) = tmpl_css_parser_block.get_function(scope) {
+        let name_css_parser_block = v8::String::new(scope, "CSSParserBlock").unwrap();
+        global.define_own_property(scope, name_css_parser_block.into(), ctor_css_parser_block.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssparser_function) = tmpl_cssparser_function.get_function(scope) {
-        let name_cssparser_function = v8::String::new(scope, "CSSParserFunction").unwrap();
-        global.define_own_property(scope, name_cssparser_function.into(), ctor_cssparser_function.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_parser_function) = tmpl_css_parser_function.get_function(scope) {
+        let name_css_parser_function = v8::String::new(scope, "CSSParserFunction").unwrap();
+        global.define_own_property(scope, name_css_parser_function.into(), ctor_css_parser_function.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssapply_statement_rule) = tmpl_cssapply_statement_rule.get_function(scope) {
-        let name_cssapply_statement_rule = v8::String::new(scope, "CSSApplyStatementRule").unwrap();
-        global.define_own_property(scope, name_cssapply_statement_rule.into(), ctor_cssapply_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_apply_statement_rule) = tmpl_css_apply_statement_rule.get_function(scope) {
+        let name_css_apply_statement_rule = v8::String::new(scope, "CSSApplyStatementRule").unwrap();
+        global.define_own_property(scope, name_css_apply_statement_rule.into(), ctor_css_apply_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscolor_profile_rule) = tmpl_csscolor_profile_rule.get_function(scope) {
-        let name_csscolor_profile_rule = v8::String::new(scope, "CSSColorProfileRule").unwrap();
-        global.define_own_property(scope, name_csscolor_profile_rule.into(), ctor_csscolor_profile_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_color_profile_rule) = tmpl_css_color_profile_rule.get_function(scope) {
+        let name_css_color_profile_rule = v8::String::new(scope, "CSSColorProfileRule").unwrap();
+        global.define_own_property(scope, name_css_color_profile_rule.into(), ctor_css_color_profile_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscontents_statement_rule) = tmpl_csscontents_statement_rule.get_function(scope) {
-        let name_csscontents_statement_rule = v8::String::new(scope, "CSSContentsStatementRule").unwrap();
-        global.define_own_property(scope, name_csscontents_statement_rule.into(), ctor_csscontents_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_contents_statement_rule) = tmpl_css_contents_statement_rule.get_function(scope) {
+        let name_css_contents_statement_rule = v8::String::new(scope, "CSSContentsStatementRule").unwrap();
+        global.define_own_property(scope, name_css_contents_statement_rule.into(), ctor_css_contents_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscounter_style_rule) = tmpl_csscounter_style_rule.get_function(scope) {
-        let name_csscounter_style_rule = v8::String::new(scope, "CSSCounterStyleRule").unwrap();
-        global.define_own_property(scope, name_csscounter_style_rule.into(), ctor_csscounter_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_counter_style_rule) = tmpl_css_counter_style_rule.get_function(scope) {
+        let name_css_counter_style_rule = v8::String::new(scope, "CSSCounterStyleRule").unwrap();
+        global.define_own_property(scope, name_css_counter_style_rule.into(), ctor_css_counter_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscustom_media_rule) = tmpl_csscustom_media_rule.get_function(scope) {
-        let name_csscustom_media_rule = v8::String::new(scope, "CSSCustomMediaRule").unwrap();
-        global.define_own_property(scope, name_csscustom_media_rule.into(), ctor_csscustom_media_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_custom_media_rule) = tmpl_css_custom_media_rule.get_function(scope) {
+        let name_css_custom_media_rule = v8::String::new(scope, "CSSCustomMediaRule").unwrap();
+        global.define_own_property(scope, name_css_custom_media_rule.into(), ctor_css_custom_media_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssfont_face_rule) = tmpl_cssfont_face_rule.get_function(scope) {
-        let name_cssfont_face_rule = v8::String::new(scope, "CSSFontFaceRule").unwrap();
-        global.define_own_property(scope, name_cssfont_face_rule.into(), ctor_cssfont_face_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_font_face_rule) = tmpl_css_font_face_rule.get_function(scope) {
+        let name_css_font_face_rule = v8::String::new(scope, "CSSFontFaceRule").unwrap();
+        global.define_own_property(scope, name_css_font_face_rule.into(), ctor_css_font_face_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssfont_feature_values_rule) = tmpl_cssfont_feature_values_rule.get_function(scope) {
-        let name_cssfont_feature_values_rule = v8::String::new(scope, "CSSFontFeatureValuesRule").unwrap();
-        global.define_own_property(scope, name_cssfont_feature_values_rule.into(), ctor_cssfont_feature_values_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_font_feature_values_rule) = tmpl_css_font_feature_values_rule.get_function(scope) {
+        let name_css_font_feature_values_rule = v8::String::new(scope, "CSSFontFeatureValuesRule").unwrap();
+        global.define_own_property(scope, name_css_font_feature_values_rule.into(), ctor_css_font_feature_values_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssfont_palette_values_rule) = tmpl_cssfont_palette_values_rule.get_function(scope) {
-        let name_cssfont_palette_values_rule = v8::String::new(scope, "CSSFontPaletteValuesRule").unwrap();
-        global.define_own_property(scope, name_cssfont_palette_values_rule.into(), ctor_cssfont_palette_values_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_font_palette_values_rule) = tmpl_css_font_palette_values_rule.get_function(scope) {
+        let name_css_font_palette_values_rule = v8::String::new(scope, "CSSFontPaletteValuesRule").unwrap();
+        global.define_own_property(scope, name_css_font_palette_values_rule.into(), ctor_css_font_palette_values_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssfunction_declarations) = tmpl_cssfunction_declarations.get_function(scope) {
-        let name_cssfunction_declarations = v8::String::new(scope, "CSSFunctionDeclarations").unwrap();
-        global.define_own_property(scope, name_cssfunction_declarations.into(), ctor_cssfunction_declarations.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_function_declarations) = tmpl_css_function_declarations.get_function(scope) {
+        let name_css_function_declarations = v8::String::new(scope, "CSSFunctionDeclarations").unwrap();
+        global.define_own_property(scope, name_css_function_declarations.into(), ctor_css_function_declarations.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssgrouping_rule) = tmpl_cssgrouping_rule.get_function(scope) {
-        let name_cssgrouping_rule = v8::String::new(scope, "CSSGroupingRule").unwrap();
-        global.define_own_property(scope, name_cssgrouping_rule.into(), ctor_cssgrouping_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_grouping_rule) = tmpl_css_grouping_rule.get_function(scope) {
+        let name_css_grouping_rule = v8::String::new(scope, "CSSGroupingRule").unwrap();
+        global.define_own_property(scope, name_css_grouping_rule.into(), ctor_css_grouping_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssimport_rule) = tmpl_cssimport_rule.get_function(scope) {
-        let name_cssimport_rule = v8::String::new(scope, "CSSImportRule").unwrap();
-        global.define_own_property(scope, name_cssimport_rule.into(), ctor_cssimport_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_import_rule) = tmpl_css_import_rule.get_function(scope) {
+        let name_css_import_rule = v8::String::new(scope, "CSSImportRule").unwrap();
+        global.define_own_property(scope, name_css_import_rule.into(), ctor_css_import_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csskeyframe_rule) = tmpl_csskeyframe_rule.get_function(scope) {
-        let name_csskeyframe_rule = v8::String::new(scope, "CSSKeyframeRule").unwrap();
-        global.define_own_property(scope, name_csskeyframe_rule.into(), ctor_csskeyframe_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_keyframe_rule) = tmpl_css_keyframe_rule.get_function(scope) {
+        let name_css_keyframe_rule = v8::String::new(scope, "CSSKeyframeRule").unwrap();
+        global.define_own_property(scope, name_css_keyframe_rule.into(), ctor_css_keyframe_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csskeyframes_rule) = tmpl_csskeyframes_rule.get_function(scope) {
-        let name_csskeyframes_rule = v8::String::new(scope, "CSSKeyframesRule").unwrap();
-        global.define_own_property(scope, name_csskeyframes_rule.into(), ctor_csskeyframes_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_keyframes_rule) = tmpl_css_keyframes_rule.get_function(scope) {
+        let name_css_keyframes_rule = v8::String::new(scope, "CSSKeyframesRule").unwrap();
+        global.define_own_property(scope, name_css_keyframes_rule.into(), ctor_css_keyframes_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csslayer_statement_rule) = tmpl_csslayer_statement_rule.get_function(scope) {
-        let name_csslayer_statement_rule = v8::String::new(scope, "CSSLayerStatementRule").unwrap();
-        global.define_own_property(scope, name_csslayer_statement_rule.into(), ctor_csslayer_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_layer_statement_rule) = tmpl_css_layer_statement_rule.get_function(scope) {
+        let name_css_layer_statement_rule = v8::String::new(scope, "CSSLayerStatementRule").unwrap();
+        global.define_own_property(scope, name_css_layer_statement_rule.into(), ctor_css_layer_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmargin_rule) = tmpl_cssmargin_rule.get_function(scope) {
-        let name_cssmargin_rule = v8::String::new(scope, "CSSMarginRule").unwrap();
-        global.define_own_property(scope, name_cssmargin_rule.into(), ctor_cssmargin_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_margin_rule) = tmpl_css_margin_rule.get_function(scope) {
+        let name_css_margin_rule = v8::String::new(scope, "CSSMarginRule").unwrap();
+        global.define_own_property(scope, name_css_margin_rule.into(), ctor_css_margin_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssnamespace_rule) = tmpl_cssnamespace_rule.get_function(scope) {
-        let name_cssnamespace_rule = v8::String::new(scope, "CSSNamespaceRule").unwrap();
-        global.define_own_property(scope, name_cssnamespace_rule.into(), ctor_cssnamespace_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_namespace_rule) = tmpl_css_namespace_rule.get_function(scope) {
+        let name_css_namespace_rule = v8::String::new(scope, "CSSNamespaceRule").unwrap();
+        global.define_own_property(scope, name_css_namespace_rule.into(), ctor_css_namespace_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssnested_declarations) = tmpl_cssnested_declarations.get_function(scope) {
-        let name_cssnested_declarations = v8::String::new(scope, "CSSNestedDeclarations").unwrap();
-        global.define_own_property(scope, name_cssnested_declarations.into(), ctor_cssnested_declarations.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_nested_declarations) = tmpl_css_nested_declarations.get_function(scope) {
+        let name_css_nested_declarations = v8::String::new(scope, "CSSNestedDeclarations").unwrap();
+        global.define_own_property(scope, name_css_nested_declarations.into(), ctor_css_nested_declarations.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssposition_try_rule) = tmpl_cssposition_try_rule.get_function(scope) {
-        let name_cssposition_try_rule = v8::String::new(scope, "CSSPositionTryRule").unwrap();
-        global.define_own_property(scope, name_cssposition_try_rule.into(), ctor_cssposition_try_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_position_try_rule) = tmpl_css_position_try_rule.get_function(scope) {
+        let name_css_position_try_rule = v8::String::new(scope, "CSSPositionTryRule").unwrap();
+        global.define_own_property(scope, name_css_position_try_rule.into(), ctor_css_position_try_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssproperty_rule) = tmpl_cssproperty_rule.get_function(scope) {
-        let name_cssproperty_rule = v8::String::new(scope, "CSSPropertyRule").unwrap();
-        global.define_own_property(scope, name_cssproperty_rule.into(), ctor_cssproperty_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_property_rule) = tmpl_css_property_rule.get_function(scope) {
+        let name_css_property_rule = v8::String::new(scope, "CSSPropertyRule").unwrap();
+        global.define_own_property(scope, name_css_property_rule.into(), ctor_css_property_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssview_transition_rule) = tmpl_cssview_transition_rule.get_function(scope) {
-        let name_cssview_transition_rule = v8::String::new(scope, "CSSViewTransitionRule").unwrap();
-        global.define_own_property(scope, name_cssview_transition_rule.into(), ctor_cssview_transition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_view_transition_rule) = tmpl_css_view_transition_rule.get_function(scope) {
+        let name_css_view_transition_rule = v8::String::new(scope, "CSSViewTransitionRule").unwrap();
+        global.define_own_property(scope, name_css_view_transition_rule.into(), ctor_css_view_transition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssfont_face_descriptors) = tmpl_cssfont_face_descriptors.get_function(scope) {
-        let name_cssfont_face_descriptors = v8::String::new(scope, "CSSFontFaceDescriptors").unwrap();
-        global.define_own_property(scope, name_cssfont_face_descriptors.into(), ctor_cssfont_face_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_font_face_descriptors) = tmpl_css_font_face_descriptors.get_function(scope) {
+        let name_css_font_face_descriptors = v8::String::new(scope, "CSSFontFaceDescriptors").unwrap();
+        global.define_own_property(scope, name_css_font_face_descriptors.into(), ctor_css_font_face_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssfunction_descriptors) = tmpl_cssfunction_descriptors.get_function(scope) {
-        let name_cssfunction_descriptors = v8::String::new(scope, "CSSFunctionDescriptors").unwrap();
-        global.define_own_property(scope, name_cssfunction_descriptors.into(), ctor_cssfunction_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_function_descriptors) = tmpl_css_function_descriptors.get_function(scope) {
+        let name_css_function_descriptors = v8::String::new(scope, "CSSFunctionDescriptors").unwrap();
+        global.define_own_property(scope, name_css_function_descriptors.into(), ctor_css_function_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csspage_descriptors) = tmpl_csspage_descriptors.get_function(scope) {
-        let name_csspage_descriptors = v8::String::new(scope, "CSSPageDescriptors").unwrap();
-        global.define_own_property(scope, name_csspage_descriptors.into(), ctor_csspage_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_page_descriptors) = tmpl_css_page_descriptors.get_function(scope) {
+        let name_css_page_descriptors = v8::String::new(scope, "CSSPageDescriptors").unwrap();
+        global.define_own_property(scope, name_css_page_descriptors.into(), ctor_css_page_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssposition_try_descriptors) = tmpl_cssposition_try_descriptors.get_function(scope) {
-        let name_cssposition_try_descriptors = v8::String::new(scope, "CSSPositionTryDescriptors").unwrap();
-        global.define_own_property(scope, name_cssposition_try_descriptors.into(), ctor_cssposition_try_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_position_try_descriptors) = tmpl_css_position_try_descriptors.get_function(scope) {
+        let name_css_position_try_descriptors = v8::String::new(scope, "CSSPositionTryDescriptors").unwrap();
+        global.define_own_property(scope, name_css_position_try_descriptors.into(), ctor_css_position_try_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssstyle_properties) = tmpl_cssstyle_properties.get_function(scope) {
-        let name_cssstyle_properties = v8::String::new(scope, "CSSStyleProperties").unwrap();
-        global.define_own_property(scope, name_cssstyle_properties.into(), ctor_cssstyle_properties.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_style_properties) = tmpl_css_style_properties.get_function(scope) {
+        let name_css_style_properties = v8::String::new(scope, "CSSStyleProperties").unwrap();
+        global.define_own_property(scope, name_css_style_properties.into(), ctor_css_style_properties.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscolor_value) = tmpl_csscolor_value.get_function(scope) {
-        let name_csscolor_value = v8::String::new(scope, "CSSColorValue").unwrap();
-        global.define_own_property(scope, name_csscolor_value.into(), ctor_csscolor_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_color_value) = tmpl_css_color_value.get_function(scope) {
+        let name_css_color_value = v8::String::new(scope, "CSSColorValue").unwrap();
+        global.define_own_property(scope, name_css_color_value.into(), ctor_css_color_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssimage_value) = tmpl_cssimage_value.get_function(scope) {
-        let name_cssimage_value = v8::String::new(scope, "CSSImageValue").unwrap();
-        global.define_own_property(scope, name_cssimage_value.into(), ctor_cssimage_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_image_value) = tmpl_css_image_value.get_function(scope) {
+        let name_css_image_value = v8::String::new(scope, "CSSImageValue").unwrap();
+        global.define_own_property(scope, name_css_image_value.into(), ctor_css_image_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csskeyword_value) = tmpl_csskeyword_value.get_function(scope) {
-        let name_csskeyword_value = v8::String::new(scope, "CSSKeywordValue").unwrap();
-        global.define_own_property(scope, name_csskeyword_value.into(), ctor_csskeyword_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_keyword_value) = tmpl_css_keyword_value.get_function(scope) {
+        let name_css_keyword_value = v8::String::new(scope, "CSSKeywordValue").unwrap();
+        global.define_own_property(scope, name_css_keyword_value.into(), ctor_css_keyword_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssnumeric_value) = tmpl_cssnumeric_value.get_function(scope) {
-        let name_cssnumeric_value = v8::String::new(scope, "CSSNumericValue").unwrap();
-        global.define_own_property(scope, name_cssnumeric_value.into(), ctor_cssnumeric_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_numeric_value) = tmpl_css_numeric_value.get_function(scope) {
+        let name_css_numeric_value = v8::String::new(scope, "CSSNumericValue").unwrap();
+        global.define_own_property(scope, name_css_numeric_value.into(), ctor_css_numeric_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csstransform_value) = tmpl_csstransform_value.get_function(scope) {
-        let name_csstransform_value = v8::String::new(scope, "CSSTransformValue").unwrap();
-        global.define_own_property(scope, name_csstransform_value.into(), ctor_csstransform_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_transform_value) = tmpl_css_transform_value.get_function(scope) {
+        let name_css_transform_value = v8::String::new(scope, "CSSTransformValue").unwrap();
+        global.define_own_property(scope, name_css_transform_value.into(), ctor_css_transform_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssunparsed_value) = tmpl_cssunparsed_value.get_function(scope) {
-        let name_cssunparsed_value = v8::String::new(scope, "CSSUnparsedValue").unwrap();
-        global.define_own_property(scope, name_cssunparsed_value.into(), ctor_cssunparsed_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_unparsed_value) = tmpl_css_unparsed_value.get_function(scope) {
+        let name_css_unparsed_value = v8::String::new(scope, "CSSUnparsedValue").unwrap();
+        global.define_own_property(scope, name_css_unparsed_value.into(), ctor_css_unparsed_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmatrix_component) = tmpl_cssmatrix_component.get_function(scope) {
-        let name_cssmatrix_component = v8::String::new(scope, "CSSMatrixComponent").unwrap();
-        global.define_own_property(scope, name_cssmatrix_component.into(), ctor_cssmatrix_component.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_matrix_component) = tmpl_css_matrix_component.get_function(scope) {
+        let name_css_matrix_component = v8::String::new(scope, "CSSMatrixComponent").unwrap();
+        global.define_own_property(scope, name_css_matrix_component.into(), ctor_css_matrix_component.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssperspective) = tmpl_cssperspective.get_function(scope) {
-        let name_cssperspective = v8::String::new(scope, "CSSPerspective").unwrap();
-        global.define_own_property(scope, name_cssperspective.into(), ctor_cssperspective.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_perspective) = tmpl_css_perspective.get_function(scope) {
+        let name_css_perspective = v8::String::new(scope, "CSSPerspective").unwrap();
+        global.define_own_property(scope, name_css_perspective.into(), ctor_css_perspective.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssrotate) = tmpl_cssrotate.get_function(scope) {
-        let name_cssrotate = v8::String::new(scope, "CSSRotate").unwrap();
-        global.define_own_property(scope, name_cssrotate.into(), ctor_cssrotate.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_rotate) = tmpl_css_rotate.get_function(scope) {
+        let name_css_rotate = v8::String::new(scope, "CSSRotate").unwrap();
+        global.define_own_property(scope, name_css_rotate.into(), ctor_css_rotate.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssscale) = tmpl_cssscale.get_function(scope) {
-        let name_cssscale = v8::String::new(scope, "CSSScale").unwrap();
-        global.define_own_property(scope, name_cssscale.into(), ctor_cssscale.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_scale) = tmpl_css_scale.get_function(scope) {
+        let name_css_scale = v8::String::new(scope, "CSSScale").unwrap();
+        global.define_own_property(scope, name_css_scale.into(), ctor_css_scale.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssskew) = tmpl_cssskew.get_function(scope) {
-        let name_cssskew = v8::String::new(scope, "CSSSkew").unwrap();
-        global.define_own_property(scope, name_cssskew.into(), ctor_cssskew.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_skew) = tmpl_css_skew.get_function(scope) {
+        let name_css_skew = v8::String::new(scope, "CSSSkew").unwrap();
+        global.define_own_property(scope, name_css_skew.into(), ctor_css_skew.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssskew_x) = tmpl_cssskew_x.get_function(scope) {
-        let name_cssskew_x = v8::String::new(scope, "CSSSkewX").unwrap();
-        global.define_own_property(scope, name_cssskew_x.into(), ctor_cssskew_x.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_skew_x) = tmpl_css_skew_x.get_function(scope) {
+        let name_css_skew_x = v8::String::new(scope, "CSSSkewX").unwrap();
+        global.define_own_property(scope, name_css_skew_x.into(), ctor_css_skew_x.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssskew_y) = tmpl_cssskew_y.get_function(scope) {
-        let name_cssskew_y = v8::String::new(scope, "CSSSkewY").unwrap();
-        global.define_own_property(scope, name_cssskew_y.into(), ctor_cssskew_y.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_skew_y) = tmpl_css_skew_y.get_function(scope) {
+        let name_css_skew_y = v8::String::new(scope, "CSSSkewY").unwrap();
+        global.define_own_property(scope, name_css_skew_y.into(), ctor_css_skew_y.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csstranslate) = tmpl_csstranslate.get_function(scope) {
-        let name_csstranslate = v8::String::new(scope, "CSSTranslate").unwrap();
-        global.define_own_property(scope, name_csstranslate.into(), ctor_csstranslate.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_translate) = tmpl_css_translate.get_function(scope) {
+        let name_css_translate = v8::String::new(scope, "CSSTranslate").unwrap();
+        global.define_own_property(scope, name_css_translate.into(), ctor_css_translate.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_window_client) = tmpl_window_client.get_function(scope) {
         let name_window_client = v8::String::new(scope, "WindowClient").unwrap();
@@ -5320,9 +5317,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_identity_credential = v8::String::new(scope, "IdentityCredential").unwrap();
         global.define_own_property(scope, name_identity_credential.into(), ctor_identity_credential.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_otpcredential) = tmpl_otpcredential.get_function(scope) {
-        let name_otpcredential = v8::String::new(scope, "OTPCredential").unwrap();
-        global.define_own_property(scope, name_otpcredential.into(), ctor_otpcredential.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_otp_credential) = tmpl_otp_credential.get_function(scope) {
+        let name_otp_credential = v8::String::new(scope, "OTPCredential").unwrap();
+        global.define_own_property(scope, name_otp_credential.into(), ctor_otp_credential.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_password_credential) = tmpl_password_credential.get_function(scope) {
         let name_password_credential = v8::String::new(scope, "PasswordCredential").unwrap();
@@ -5332,9 +5329,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_public_key_credential = v8::String::new(scope, "PublicKeyCredential").unwrap();
         global.define_own_property(scope, name_public_key_credential.into(), ctor_public_key_credential.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpupipeline_error) = tmpl_gpupipeline_error.get_function(scope) {
-        let name_gpupipeline_error = v8::String::new(scope, "GPUPipelineError").unwrap();
-        global.define_own_property(scope, name_gpupipeline_error.into(), ctor_gpupipeline_error.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_pipeline_error) = tmpl_gpu_pipeline_error.get_function(scope) {
+        let name_gpu_pipeline_error = v8::String::new(scope, "GPUPipelineError").unwrap();
+        global.define_own_property(scope, name_gpu_pipeline_error.into(), ctor_gpu_pipeline_error.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_identity_credential_error) = tmpl_identity_credential_error.get_function(scope) {
         let name_identity_credential_error = v8::String::new(scope, "IdentityCredentialError").unwrap();
@@ -5348,25 +5345,25 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_quota_exceeded_error = v8::String::new(scope, "QuotaExceededError").unwrap();
         global.define_own_property(scope, name_quota_exceeded_error.into(), ctor_quota_exceeded_error.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcerror) = tmpl_rtcerror.get_function(scope) {
-        let name_rtcerror = v8::String::new(scope, "RTCError").unwrap();
-        global.define_own_property(scope, name_rtcerror.into(), ctor_rtcerror.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_error) = tmpl_rtc_error.get_function(scope) {
+        let name_rtc_error = v8::String::new(scope, "RTCError").unwrap();
+        global.define_own_property(scope, name_rtc_error.into(), ctor_rtc_error.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_web_transport_error) = tmpl_web_transport_error.get_function(scope) {
         let name_web_transport_error = v8::String::new(scope, "WebTransportError").unwrap();
         global.define_own_property(scope, name_web_transport_error.into(), ctor_web_transport_error.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_dommatrix) = tmpl_dommatrix.get_function(scope) {
-        let name_dommatrix = v8::String::new(scope, "DOMMatrix").unwrap();
-        global.define_own_property(scope, name_dommatrix.into(), ctor_dommatrix.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_matrix) = tmpl_dom_matrix.get_function(scope) {
+        let name_dom_matrix = v8::String::new(scope, "DOMMatrix").unwrap();
+        global.define_own_property(scope, name_dom_matrix.into(), ctor_dom_matrix.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_dompoint) = tmpl_dompoint.get_function(scope) {
-        let name_dompoint = v8::String::new(scope, "DOMPoint").unwrap();
-        global.define_own_property(scope, name_dompoint.into(), ctor_dompoint.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_point) = tmpl_dom_point.get_function(scope) {
+        let name_dom_point = v8::String::new(scope, "DOMPoint").unwrap();
+        global.define_own_property(scope, name_dom_point.into(), ctor_dom_point.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_domrect) = tmpl_domrect.get_function(scope) {
-        let name_domrect = v8::String::new(scope, "DOMRect").unwrap();
-        global.define_own_property(scope, name_domrect.into(), ctor_domrect.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_dom_rect) = tmpl_dom_rect.get_function(scope) {
+        let name_dom_rect = v8::String::new(scope, "DOMRect").unwrap();
+        global.define_own_property(scope, name_dom_rect.into(), ctor_dom_rect.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_animation_event) = tmpl_animation_event.get_function(scope) {
         let name_animation_event = v8::String::new(scope, "AnimationEvent").unwrap();
@@ -5476,41 +5473,41 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_form_data_event = v8::String::new(scope, "FormDataEvent").unwrap();
         global.define_own_property(scope, name_form_data_event.into(), ctor_form_data_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuuncaptured_error_event) = tmpl_gpuuncaptured_error_event.get_function(scope) {
-        let name_gpuuncaptured_error_event = v8::String::new(scope, "GPUUncapturedErrorEvent").unwrap();
-        global.define_own_property(scope, name_gpuuncaptured_error_event.into(), ctor_gpuuncaptured_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_uncaptured_error_event) = tmpl_gpu_uncaptured_error_event.get_function(scope) {
+        let name_gpu_uncaptured_error_event = v8::String::new(scope, "GPUUncapturedErrorEvent").unwrap();
+        global.define_own_property(scope, name_gpu_uncaptured_error_event.into(), ctor_gpu_uncaptured_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_gamepad_event) = tmpl_gamepad_event.get_function(scope) {
         let name_gamepad_event = v8::String::new(scope, "GamepadEvent").unwrap();
         global.define_own_property(scope, name_gamepad_event.into(), ctor_gamepad_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_hidconnection_event) = tmpl_hidconnection_event.get_function(scope) {
-        let name_hidconnection_event = v8::String::new(scope, "HIDConnectionEvent").unwrap();
-        global.define_own_property(scope, name_hidconnection_event.into(), ctor_hidconnection_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_hid_connection_event) = tmpl_hid_connection_event.get_function(scope) {
+        let name_hid_connection_event = v8::String::new(scope, "HIDConnectionEvent").unwrap();
+        global.define_own_property(scope, name_hid_connection_event.into(), ctor_hid_connection_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_hidinput_report_event) = tmpl_hidinput_report_event.get_function(scope) {
-        let name_hidinput_report_event = v8::String::new(scope, "HIDInputReportEvent").unwrap();
-        global.define_own_property(scope, name_hidinput_report_event.into(), ctor_hidinput_report_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_hid_input_report_event) = tmpl_hid_input_report_event.get_function(scope) {
+        let name_hid_input_report_event = v8::String::new(scope, "HIDInputReportEvent").unwrap();
+        global.define_own_property(scope, name_hid_input_report_event.into(), ctor_hid_input_report_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_hash_change_event) = tmpl_hash_change_event.get_function(scope) {
         let name_hash_change_event = v8::String::new(scope, "HashChangeEvent").unwrap();
         global.define_own_property(scope, name_hash_change_event.into(), ctor_hash_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbversion_change_event) = tmpl_idbversion_change_event.get_function(scope) {
-        let name_idbversion_change_event = v8::String::new(scope, "IDBVersionChangeEvent").unwrap();
-        global.define_own_property(scope, name_idbversion_change_event.into(), ctor_idbversion_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_version_change_event) = tmpl_idb_version_change_event.get_function(scope) {
+        let name_idb_version_change_event = v8::String::new(scope, "IDBVersionChangeEvent").unwrap();
+        global.define_own_property(scope, name_idb_version_change_event.into(), ctor_idb_version_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_key_frame_request_event) = tmpl_key_frame_request_event.get_function(scope) {
         let name_key_frame_request_event = v8::String::new(scope, "KeyFrameRequestEvent").unwrap();
         global.define_own_property(scope, name_key_frame_request_event.into(), ctor_key_frame_request_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_midiconnection_event) = tmpl_midiconnection_event.get_function(scope) {
-        let name_midiconnection_event = v8::String::new(scope, "MIDIConnectionEvent").unwrap();
-        global.define_own_property(scope, name_midiconnection_event.into(), ctor_midiconnection_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_midi_connection_event) = tmpl_midi_connection_event.get_function(scope) {
+        let name_midi_connection_event = v8::String::new(scope, "MIDIConnectionEvent").unwrap();
+        global.define_own_property(scope, name_midi_connection_event.into(), ctor_midi_connection_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_midimessage_event) = tmpl_midimessage_event.get_function(scope) {
-        let name_midimessage_event = v8::String::new(scope, "MIDIMessageEvent").unwrap();
-        global.define_own_property(scope, name_midimessage_event.into(), ctor_midimessage_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_midi_message_event) = tmpl_midi_message_event.get_function(scope) {
+        let name_midi_message_event = v8::String::new(scope, "MIDIMessageEvent").unwrap();
+        global.define_own_property(scope, name_midi_message_event.into(), ctor_midi_message_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_media_encrypted_event) = tmpl_media_encrypted_event.get_function(scope) {
         let name_media_encrypted_event = v8::String::new(scope, "MediaEncryptedEvent").unwrap();
@@ -5532,9 +5529,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_message_event = v8::String::new(scope, "MessageEvent").unwrap();
         global.define_own_property(scope, name_message_event.into(), ctor_message_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_ndefreading_event) = tmpl_ndefreading_event.get_function(scope) {
-        let name_ndefreading_event = v8::String::new(scope, "NDEFReadingEvent").unwrap();
-        global.define_own_property(scope, name_ndefreading_event.into(), ctor_ndefreading_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ndef_reading_event) = tmpl_ndef_reading_event.get_function(scope) {
+        let name_ndef_reading_event = v8::String::new(scope, "NDEFReadingEvent").unwrap();
+        global.define_own_property(scope, name_ndef_reading_event.into(), ctor_ndef_reading_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_navigate_event) = tmpl_navigate_event.get_function(scope) {
         let name_navigate_event = v8::String::new(scope, "NavigateEvent").unwrap();
@@ -5592,37 +5589,37 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_promise_rejection_event = v8::String::new(scope, "PromiseRejectionEvent").unwrap();
         global.define_own_property(scope, name_promise_rejection_event.into(), ctor_promise_rejection_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcdtmftone_change_event) = tmpl_rtcdtmftone_change_event.get_function(scope) {
-        let name_rtcdtmftone_change_event = v8::String::new(scope, "RTCDTMFToneChangeEvent").unwrap();
-        global.define_own_property(scope, name_rtcdtmftone_change_event.into(), ctor_rtcdtmftone_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtcdtmf_tone_change_event) = tmpl_rtcdtmf_tone_change_event.get_function(scope) {
+        let name_rtcdtmf_tone_change_event = v8::String::new(scope, "RTCDTMFToneChangeEvent").unwrap();
+        global.define_own_property(scope, name_rtcdtmf_tone_change_event.into(), ctor_rtcdtmf_tone_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcdata_channel_event) = tmpl_rtcdata_channel_event.get_function(scope) {
-        let name_rtcdata_channel_event = v8::String::new(scope, "RTCDataChannelEvent").unwrap();
-        global.define_own_property(scope, name_rtcdata_channel_event.into(), ctor_rtcdata_channel_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_data_channel_event) = tmpl_rtc_data_channel_event.get_function(scope) {
+        let name_rtc_data_channel_event = v8::String::new(scope, "RTCDataChannelEvent").unwrap();
+        global.define_own_property(scope, name_rtc_data_channel_event.into(), ctor_rtc_data_channel_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcerror_event) = tmpl_rtcerror_event.get_function(scope) {
-        let name_rtcerror_event = v8::String::new(scope, "RTCErrorEvent").unwrap();
-        global.define_own_property(scope, name_rtcerror_event.into(), ctor_rtcerror_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_error_event) = tmpl_rtc_error_event.get_function(scope) {
+        let name_rtc_error_event = v8::String::new(scope, "RTCErrorEvent").unwrap();
+        global.define_own_property(scope, name_rtc_error_event.into(), ctor_rtc_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcpeer_connection_ice_error_event) = tmpl_rtcpeer_connection_ice_error_event.get_function(scope) {
-        let name_rtcpeer_connection_ice_error_event = v8::String::new(scope, "RTCPeerConnectionIceErrorEvent").unwrap();
-        global.define_own_property(scope, name_rtcpeer_connection_ice_error_event.into(), ctor_rtcpeer_connection_ice_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_peer_connection_ice_error_event) = tmpl_rtc_peer_connection_ice_error_event.get_function(scope) {
+        let name_rtc_peer_connection_ice_error_event = v8::String::new(scope, "RTCPeerConnectionIceErrorEvent").unwrap();
+        global.define_own_property(scope, name_rtc_peer_connection_ice_error_event.into(), ctor_rtc_peer_connection_ice_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcpeer_connection_ice_event) = tmpl_rtcpeer_connection_ice_event.get_function(scope) {
-        let name_rtcpeer_connection_ice_event = v8::String::new(scope, "RTCPeerConnectionIceEvent").unwrap();
-        global.define_own_property(scope, name_rtcpeer_connection_ice_event.into(), ctor_rtcpeer_connection_ice_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_peer_connection_ice_event) = tmpl_rtc_peer_connection_ice_event.get_function(scope) {
+        let name_rtc_peer_connection_ice_event = v8::String::new(scope, "RTCPeerConnectionIceEvent").unwrap();
+        global.define_own_property(scope, name_rtc_peer_connection_ice_event.into(), ctor_rtc_peer_connection_ice_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtctrack_event) = tmpl_rtctrack_event.get_function(scope) {
-        let name_rtctrack_event = v8::String::new(scope, "RTCTrackEvent").unwrap();
-        global.define_own_property(scope, name_rtctrack_event.into(), ctor_rtctrack_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_track_event) = tmpl_rtc_track_event.get_function(scope) {
+        let name_rtc_track_event = v8::String::new(scope, "RTCTrackEvent").unwrap();
+        global.define_own_property(scope, name_rtc_track_event.into(), ctor_rtc_track_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtctransform_event) = tmpl_rtctransform_event.get_function(scope) {
-        let name_rtctransform_event = v8::String::new(scope, "RTCTransformEvent").unwrap();
-        global.define_own_property(scope, name_rtctransform_event.into(), ctor_rtctransform_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_transform_event) = tmpl_rtc_transform_event.get_function(scope) {
+        let name_rtc_transform_event = v8::String::new(scope, "RTCTransformEvent").unwrap();
+        global.define_own_property(scope, name_rtc_transform_event.into(), ctor_rtc_transform_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_sframe_transform_error_event) = tmpl_sframe_transform_error_event.get_function(scope) {
-        let name_sframe_transform_error_event = v8::String::new(scope, "SFrameTransformErrorEvent").unwrap();
-        global.define_own_property(scope, name_sframe_transform_error_event.into(), ctor_sframe_transform_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_s_frame_transform_error_event) = tmpl_s_frame_transform_error_event.get_function(scope) {
+        let name_s_frame_transform_error_event = v8::String::new(scope, "SFrameTransformErrorEvent").unwrap();
+        global.define_own_property(scope, name_s_frame_transform_error_event.into(), ctor_s_frame_transform_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_security_policy_violation_event) = tmpl_security_policy_violation_event.get_function(scope) {
         let name_security_policy_violation_event = v8::String::new(scope, "SecurityPolicyViolationEvent").unwrap();
@@ -5684,49 +5681,49 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_transition_event = v8::String::new(scope, "TransitionEvent").unwrap();
         global.define_own_property(scope, name_transition_event.into(), ctor_transition_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_uievent) = tmpl_uievent.get_function(scope) {
-        let name_uievent = v8::String::new(scope, "UIEvent").unwrap();
-        global.define_own_property(scope, name_uievent.into(), ctor_uievent.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ui_event) = tmpl_ui_event.get_function(scope) {
+        let name_ui_event = v8::String::new(scope, "UIEvent").unwrap();
+        global.define_own_property(scope, name_ui_event.into(), ctor_ui_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbconnection_event) = tmpl_usbconnection_event.get_function(scope) {
-        let name_usbconnection_event = v8::String::new(scope, "USBConnectionEvent").unwrap();
-        global.define_own_property(scope, name_usbconnection_event.into(), ctor_usbconnection_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_connection_event) = tmpl_usb_connection_event.get_function(scope) {
+        let name_usb_connection_event = v8::String::new(scope, "USBConnectionEvent").unwrap();
+        global.define_own_property(scope, name_usb_connection_event.into(), ctor_usb_connection_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_value_event) = tmpl_value_event.get_function(scope) {
         let name_value_event = v8::String::new(scope, "ValueEvent").unwrap();
         global.define_own_property(scope, name_value_event.into(), ctor_value_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glcontext_event) = tmpl_web_glcontext_event.get_function(scope) {
-        let name_web_glcontext_event = v8::String::new(scope, "WebGLContextEvent").unwrap();
-        global.define_own_property(scope, name_web_glcontext_event.into(), ctor_web_glcontext_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_context_event) = tmpl_web_gl_context_event.get_function(scope) {
+        let name_web_gl_context_event = v8::String::new(scope, "WebGLContextEvent").unwrap();
+        global.define_own_property(scope, name_web_gl_context_event.into(), ctor_web_gl_context_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_window_controls_overlay_geometry_change_event) = tmpl_window_controls_overlay_geometry_change_event.get_function(scope) {
         let name_window_controls_overlay_geometry_change_event = v8::String::new(scope, "WindowControlsOverlayGeometryChangeEvent").unwrap();
         global.define_own_property(scope, name_window_controls_overlay_geometry_change_event.into(), ctor_window_controls_overlay_geometry_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrinput_source_event) = tmpl_xrinput_source_event.get_function(scope) {
-        let name_xrinput_source_event = v8::String::new(scope, "XRInputSourceEvent").unwrap();
-        global.define_own_property(scope, name_xrinput_source_event.into(), ctor_xrinput_source_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_input_source_event) = tmpl_xr_input_source_event.get_function(scope) {
+        let name_xr_input_source_event = v8::String::new(scope, "XRInputSourceEvent").unwrap();
+        global.define_own_property(scope, name_xr_input_source_event.into(), ctor_xr_input_source_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrinput_sources_change_event) = tmpl_xrinput_sources_change_event.get_function(scope) {
-        let name_xrinput_sources_change_event = v8::String::new(scope, "XRInputSourcesChangeEvent").unwrap();
-        global.define_own_property(scope, name_xrinput_sources_change_event.into(), ctor_xrinput_sources_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_input_sources_change_event) = tmpl_xr_input_sources_change_event.get_function(scope) {
+        let name_xr_input_sources_change_event = v8::String::new(scope, "XRInputSourcesChangeEvent").unwrap();
+        global.define_own_property(scope, name_xr_input_sources_change_event.into(), ctor_xr_input_sources_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrlayer_event) = tmpl_xrlayer_event.get_function(scope) {
-        let name_xrlayer_event = v8::String::new(scope, "XRLayerEvent").unwrap();
-        global.define_own_property(scope, name_xrlayer_event.into(), ctor_xrlayer_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_layer_event) = tmpl_xr_layer_event.get_function(scope) {
+        let name_xr_layer_event = v8::String::new(scope, "XRLayerEvent").unwrap();
+        global.define_own_property(scope, name_xr_layer_event.into(), ctor_xr_layer_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrreference_space_event) = tmpl_xrreference_space_event.get_function(scope) {
-        let name_xrreference_space_event = v8::String::new(scope, "XRReferenceSpaceEvent").unwrap();
-        global.define_own_property(scope, name_xrreference_space_event.into(), ctor_xrreference_space_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_reference_space_event) = tmpl_xr_reference_space_event.get_function(scope) {
+        let name_xr_reference_space_event = v8::String::new(scope, "XRReferenceSpaceEvent").unwrap();
+        global.define_own_property(scope, name_xr_reference_space_event.into(), ctor_xr_reference_space_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrsession_event) = tmpl_xrsession_event.get_function(scope) {
-        let name_xrsession_event = v8::String::new(scope, "XRSessionEvent").unwrap();
-        global.define_own_property(scope, name_xrsession_event.into(), ctor_xrsession_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_session_event) = tmpl_xr_session_event.get_function(scope) {
+        let name_xr_session_event = v8::String::new(scope, "XRSessionEvent").unwrap();
+        global.define_own_property(scope, name_xr_session_event.into(), ctor_xr_session_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrvisibility_mask_change_event) = tmpl_xrvisibility_mask_change_event.get_function(scope) {
-        let name_xrvisibility_mask_change_event = v8::String::new(scope, "XRVisibilityMaskChangeEvent").unwrap();
-        global.define_own_property(scope, name_xrvisibility_mask_change_event.into(), ctor_xrvisibility_mask_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_visibility_mask_change_event) = tmpl_xr_visibility_mask_change_event.get_function(scope) {
+        let name_xr_visibility_mask_change_event = v8::String::new(scope, "XRVisibilityMaskChangeEvent").unwrap();
+        global.define_own_property(scope, name_xr_visibility_mask_change_event.into(), ctor_xr_visibility_mask_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_abort_signal) = tmpl_abort_signal.get_function(scope) {
         let name_abort_signal = v8::String::new(scope, "AbortSignal").unwrap();
@@ -5776,13 +5773,13 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_bluetooth_device = v8::String::new(scope, "BluetoothDevice").unwrap();
         global.define_own_property(scope, name_bluetooth_device.into(), ctor_bluetooth_device.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_bluetooth_remote_gattcharacteristic) = tmpl_bluetooth_remote_gattcharacteristic.get_function(scope) {
-        let name_bluetooth_remote_gattcharacteristic = v8::String::new(scope, "BluetoothRemoteGATTCharacteristic").unwrap();
-        global.define_own_property(scope, name_bluetooth_remote_gattcharacteristic.into(), ctor_bluetooth_remote_gattcharacteristic.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_bluetooth_remote_gatt_characteristic) = tmpl_bluetooth_remote_gatt_characteristic.get_function(scope) {
+        let name_bluetooth_remote_gatt_characteristic = v8::String::new(scope, "BluetoothRemoteGATTCharacteristic").unwrap();
+        global.define_own_property(scope, name_bluetooth_remote_gatt_characteristic.into(), ctor_bluetooth_remote_gatt_characteristic.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_bluetooth_remote_gattservice) = tmpl_bluetooth_remote_gattservice.get_function(scope) {
-        let name_bluetooth_remote_gattservice = v8::String::new(scope, "BluetoothRemoteGATTService").unwrap();
-        global.define_own_property(scope, name_bluetooth_remote_gattservice.into(), ctor_bluetooth_remote_gattservice.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_bluetooth_remote_gatt_service) = tmpl_bluetooth_remote_gatt_service.get_function(scope) {
+        let name_bluetooth_remote_gatt_service = v8::String::new(scope, "BluetoothRemoteGATTService").unwrap();
+        global.define_own_property(scope, name_bluetooth_remote_gatt_service.into(), ctor_bluetooth_remote_gatt_service.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_broadcast_channel) = tmpl_broadcast_channel.get_function(scope) {
         let name_broadcast_channel = v8::String::new(scope, "BroadcastChannel").unwrap();
@@ -5832,29 +5829,29 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_font_face_set = v8::String::new(scope, "FontFaceSet").unwrap();
         global.define_own_property(scope, name_font_face_set.into(), ctor_font_face_set.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpudevice) = tmpl_gpudevice.get_function(scope) {
-        let name_gpudevice = v8::String::new(scope, "GPUDevice").unwrap();
-        global.define_own_property(scope, name_gpudevice.into(), ctor_gpudevice.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_device) = tmpl_gpu_device.get_function(scope) {
+        let name_gpu_device = v8::String::new(scope, "GPUDevice").unwrap();
+        global.define_own_property(scope, name_gpu_device.into(), ctor_gpu_device.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_hid) = tmpl_hid.get_function(scope) {
         let name_hid = v8::String::new(scope, "HID").unwrap();
         global.define_own_property(scope, name_hid.into(), ctor_hid.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_hiddevice) = tmpl_hiddevice.get_function(scope) {
-        let name_hiddevice = v8::String::new(scope, "HIDDevice").unwrap();
-        global.define_own_property(scope, name_hiddevice.into(), ctor_hiddevice.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_hid_device) = tmpl_hid_device.get_function(scope) {
+        let name_hid_device = v8::String::new(scope, "HIDDevice").unwrap();
+        global.define_own_property(scope, name_hid_device.into(), ctor_hid_device.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbdatabase) = tmpl_idbdatabase.get_function(scope) {
-        let name_idbdatabase = v8::String::new(scope, "IDBDatabase").unwrap();
-        global.define_own_property(scope, name_idbdatabase.into(), ctor_idbdatabase.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_database) = tmpl_idb_database.get_function(scope) {
+        let name_idb_database = v8::String::new(scope, "IDBDatabase").unwrap();
+        global.define_own_property(scope, name_idb_database.into(), ctor_idb_database.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbrequest) = tmpl_idbrequest.get_function(scope) {
-        let name_idbrequest = v8::String::new(scope, "IDBRequest").unwrap();
-        global.define_own_property(scope, name_idbrequest.into(), ctor_idbrequest.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_request) = tmpl_idb_request.get_function(scope) {
+        let name_idb_request = v8::String::new(scope, "IDBRequest").unwrap();
+        global.define_own_property(scope, name_idb_request.into(), ctor_idb_request.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbtransaction) = tmpl_idbtransaction.get_function(scope) {
-        let name_idbtransaction = v8::String::new(scope, "IDBTransaction").unwrap();
-        global.define_own_property(scope, name_idbtransaction.into(), ctor_idbtransaction.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_transaction) = tmpl_idb_transaction.get_function(scope) {
+        let name_idb_transaction = v8::String::new(scope, "IDBTransaction").unwrap();
+        global.define_own_property(scope, name_idb_transaction.into(), ctor_idb_transaction.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_idle_detector) = tmpl_idle_detector.get_function(scope) {
         let name_idle_detector = v8::String::new(scope, "IdleDetector").unwrap();
@@ -5868,13 +5865,13 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_language_model = v8::String::new(scope, "LanguageModel").unwrap();
         global.define_own_property(scope, name_language_model.into(), ctor_language_model.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_midiaccess) = tmpl_midiaccess.get_function(scope) {
-        let name_midiaccess = v8::String::new(scope, "MIDIAccess").unwrap();
-        global.define_own_property(scope, name_midiaccess.into(), ctor_midiaccess.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_midi_access) = tmpl_midi_access.get_function(scope) {
+        let name_midi_access = v8::String::new(scope, "MIDIAccess").unwrap();
+        global.define_own_property(scope, name_midi_access.into(), ctor_midi_access.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_midiport) = tmpl_midiport.get_function(scope) {
-        let name_midiport = v8::String::new(scope, "MIDIPort").unwrap();
-        global.define_own_property(scope, name_midiport.into(), ctor_midiport.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_midi_port) = tmpl_midi_port.get_function(scope) {
+        let name_midi_port = v8::String::new(scope, "MIDIPort").unwrap();
+        global.define_own_property(scope, name_midi_port.into(), ctor_midi_port.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_media_devices) = tmpl_media_devices.get_function(scope) {
         let name_media_devices = v8::String::new(scope, "MediaDevices").unwrap();
@@ -5912,9 +5909,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_model_context = v8::String::new(scope, "ModelContext").unwrap();
         global.define_own_property(scope, name_model_context.into(), ctor_model_context.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_ndefreader) = tmpl_ndefreader.get_function(scope) {
-        let name_ndefreader = v8::String::new(scope, "NDEFReader").unwrap();
-        global.define_own_property(scope, name_ndefreader.into(), ctor_ndefreader.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_ndef_reader) = tmpl_ndef_reader.get_function(scope) {
+        let name_ndef_reader = v8::String::new(scope, "NDEFReader").unwrap();
+        global.define_own_property(scope, name_ndef_reader.into(), ctor_ndef_reader.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_named_flow) = tmpl_named_flow.get_function(scope) {
         let name_named_flow = v8::String::new(scope, "NamedFlow").unwrap();
@@ -5996,45 +5993,45 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_profiler = v8::String::new(scope, "Profiler").unwrap();
         global.define_own_property(scope, name_profiler.into(), ctor_profiler.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcdtmfsender) = tmpl_rtcdtmfsender.get_function(scope) {
-        let name_rtcdtmfsender = v8::String::new(scope, "RTCDTMFSender").unwrap();
-        global.define_own_property(scope, name_rtcdtmfsender.into(), ctor_rtcdtmfsender.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtcdtmf_sender) = tmpl_rtcdtmf_sender.get_function(scope) {
+        let name_rtcdtmf_sender = v8::String::new(scope, "RTCDTMFSender").unwrap();
+        global.define_own_property(scope, name_rtcdtmf_sender.into(), ctor_rtcdtmf_sender.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcdata_channel) = tmpl_rtcdata_channel.get_function(scope) {
-        let name_rtcdata_channel = v8::String::new(scope, "RTCDataChannel").unwrap();
-        global.define_own_property(scope, name_rtcdata_channel.into(), ctor_rtcdata_channel.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_data_channel) = tmpl_rtc_data_channel.get_function(scope) {
+        let name_rtc_data_channel = v8::String::new(scope, "RTCDataChannel").unwrap();
+        global.define_own_property(scope, name_rtc_data_channel.into(), ctor_rtc_data_channel.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcdtls_transport) = tmpl_rtcdtls_transport.get_function(scope) {
-        let name_rtcdtls_transport = v8::String::new(scope, "RTCDtlsTransport").unwrap();
-        global.define_own_property(scope, name_rtcdtls_transport.into(), ctor_rtcdtls_transport.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_dtls_transport) = tmpl_rtc_dtls_transport.get_function(scope) {
+        let name_rtc_dtls_transport = v8::String::new(scope, "RTCDtlsTransport").unwrap();
+        global.define_own_property(scope, name_rtc_dtls_transport.into(), ctor_rtc_dtls_transport.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcice_transport) = tmpl_rtcice_transport.get_function(scope) {
-        let name_rtcice_transport = v8::String::new(scope, "RTCIceTransport").unwrap();
-        global.define_own_property(scope, name_rtcice_transport.into(), ctor_rtcice_transport.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_ice_transport) = tmpl_rtc_ice_transport.get_function(scope) {
+        let name_rtc_ice_transport = v8::String::new(scope, "RTCIceTransport").unwrap();
+        global.define_own_property(scope, name_rtc_ice_transport.into(), ctor_rtc_ice_transport.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcpeer_connection) = tmpl_rtcpeer_connection.get_function(scope) {
-        let name_rtcpeer_connection = v8::String::new(scope, "RTCPeerConnection").unwrap();
-        global.define_own_property(scope, name_rtcpeer_connection.into(), ctor_rtcpeer_connection.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_peer_connection) = tmpl_rtc_peer_connection.get_function(scope) {
+        let name_rtc_peer_connection = v8::String::new(scope, "RTCPeerConnection").unwrap();
+        global.define_own_property(scope, name_rtc_peer_connection.into(), ctor_rtc_peer_connection.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcrtp_sframe_decrypter) = tmpl_rtcrtp_sframe_decrypter.get_function(scope) {
-        let name_rtcrtp_sframe_decrypter = v8::String::new(scope, "RTCRtpSFrameDecrypter").unwrap();
-        global.define_own_property(scope, name_rtcrtp_sframe_decrypter.into(), ctor_rtcrtp_sframe_decrypter.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_rtp_s_frame_decrypter) = tmpl_rtc_rtp_s_frame_decrypter.get_function(scope) {
+        let name_rtc_rtp_s_frame_decrypter = v8::String::new(scope, "RTCRtpSFrameDecrypter").unwrap();
+        global.define_own_property(scope, name_rtc_rtp_s_frame_decrypter.into(), ctor_rtc_rtp_s_frame_decrypter.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcrtp_script_transformer) = tmpl_rtcrtp_script_transformer.get_function(scope) {
-        let name_rtcrtp_script_transformer = v8::String::new(scope, "RTCRtpScriptTransformer").unwrap();
-        global.define_own_property(scope, name_rtcrtp_script_transformer.into(), ctor_rtcrtp_script_transformer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_rtp_script_transformer) = tmpl_rtc_rtp_script_transformer.get_function(scope) {
+        let name_rtc_rtp_script_transformer = v8::String::new(scope, "RTCRtpScriptTransformer").unwrap();
+        global.define_own_property(scope, name_rtc_rtp_script_transformer.into(), ctor_rtc_rtp_script_transformer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcsctp_transport) = tmpl_rtcsctp_transport.get_function(scope) {
-        let name_rtcsctp_transport = v8::String::new(scope, "RTCSctpTransport").unwrap();
-        global.define_own_property(scope, name_rtcsctp_transport.into(), ctor_rtcsctp_transport.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_sctp_transport) = tmpl_rtc_sctp_transport.get_function(scope) {
+        let name_rtc_sctp_transport = v8::String::new(scope, "RTCSctpTransport").unwrap();
+        global.define_own_property(scope, name_rtc_sctp_transport.into(), ctor_rtc_sctp_transport.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_remote_playback) = tmpl_remote_playback.get_function(scope) {
         let name_remote_playback = v8::String::new(scope, "RemotePlayback").unwrap();
         global.define_own_property(scope, name_remote_playback.into(), ctor_remote_playback.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_sframe_decrypter_stream) = tmpl_sframe_decrypter_stream.get_function(scope) {
-        let name_sframe_decrypter_stream = v8::String::new(scope, "SFrameDecrypterStream").unwrap();
-        global.define_own_property(scope, name_sframe_decrypter_stream.into(), ctor_sframe_decrypter_stream.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_s_frame_decrypter_stream) = tmpl_s_frame_decrypter_stream.get_function(scope) {
+        let name_s_frame_decrypter_stream = v8::String::new(scope, "SFrameDecrypterStream").unwrap();
+        global.define_own_property(scope, name_s_frame_decrypter_stream.into(), ctor_s_frame_decrypter_stream.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_screen_details) = tmpl_screen_details.get_function(scope) {
         let name_screen_details = v8::String::new(scope, "ScreenDetails").unwrap();
@@ -6152,29 +6149,29 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_worker_global_scope = v8::String::new(scope, "WorkerGlobalScope").unwrap();
         global.define_own_property(scope, name_worker_global_scope.into(), ctor_worker_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xmlhttp_request_event_target) = tmpl_xmlhttp_request_event_target.get_function(scope) {
-        let name_xmlhttp_request_event_target = v8::String::new(scope, "XMLHttpRequestEventTarget").unwrap();
-        global.define_own_property(scope, name_xmlhttp_request_event_target.into(), ctor_xmlhttp_request_event_target.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xml_http_request_event_target) = tmpl_xml_http_request_event_target.get_function(scope) {
+        let name_xml_http_request_event_target = v8::String::new(scope, "XMLHttpRequestEventTarget").unwrap();
+        global.define_own_property(scope, name_xml_http_request_event_target.into(), ctor_xml_http_request_event_target.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrlayer) = tmpl_xrlayer.get_function(scope) {
-        let name_xrlayer = v8::String::new(scope, "XRLayer").unwrap();
-        global.define_own_property(scope, name_xrlayer.into(), ctor_xrlayer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_layer) = tmpl_xr_layer.get_function(scope) {
+        let name_xr_layer = v8::String::new(scope, "XRLayer").unwrap();
+        global.define_own_property(scope, name_xr_layer.into(), ctor_xr_layer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrlight_probe) = tmpl_xrlight_probe.get_function(scope) {
-        let name_xrlight_probe = v8::String::new(scope, "XRLightProbe").unwrap();
-        global.define_own_property(scope, name_xrlight_probe.into(), ctor_xrlight_probe.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_light_probe) = tmpl_xr_light_probe.get_function(scope) {
+        let name_xr_light_probe = v8::String::new(scope, "XRLightProbe").unwrap();
+        global.define_own_property(scope, name_xr_light_probe.into(), ctor_xr_light_probe.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrsession) = tmpl_xrsession.get_function(scope) {
-        let name_xrsession = v8::String::new(scope, "XRSession").unwrap();
-        global.define_own_property(scope, name_xrsession.into(), ctor_xrsession.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_session) = tmpl_xr_session.get_function(scope) {
+        let name_xr_session = v8::String::new(scope, "XRSession").unwrap();
+        global.define_own_property(scope, name_xr_session.into(), ctor_xr_session.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrspace) = tmpl_xrspace.get_function(scope) {
-        let name_xrspace = v8::String::new(scope, "XRSpace").unwrap();
-        global.define_own_property(scope, name_xrspace.into(), ctor_xrspace.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_space) = tmpl_xr_space.get_function(scope) {
+        let name_xr_space = v8::String::new(scope, "XRSpace").unwrap();
+        global.define_own_property(scope, name_xr_space.into(), ctor_xr_space.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrsystem) = tmpl_xrsystem.get_function(scope) {
-        let name_xrsystem = v8::String::new(scope, "XRSystem").unwrap();
-        global.define_own_property(scope, name_xrsystem.into(), ctor_xrsystem.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_system) = tmpl_xr_system.get_function(scope) {
+        let name_xr_system = v8::String::new(scope, "XRSystem").unwrap();
+        global.define_own_property(scope, name_xr_system.into(), ctor_xr_system.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_file_system_directory_entry) = tmpl_file_system_directory_entry.get_function(scope) {
         let name_file_system_directory_entry = v8::String::new(scope, "FileSystemDirectoryEntry").unwrap();
@@ -6192,33 +6189,33 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_file_system_file_handle = v8::String::new(scope, "FileSystemFileHandle").unwrap();
         global.define_own_property(scope, name_file_system_file_handle.into(), ctor_file_system_file_handle.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuinternal_error) = tmpl_gpuinternal_error.get_function(scope) {
-        let name_gpuinternal_error = v8::String::new(scope, "GPUInternalError").unwrap();
-        global.define_own_property(scope, name_gpuinternal_error.into(), ctor_gpuinternal_error.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_internal_error) = tmpl_gpu_internal_error.get_function(scope) {
+        let name_gpu_internal_error = v8::String::new(scope, "GPUInternalError").unwrap();
+        global.define_own_property(scope, name_gpu_internal_error.into(), ctor_gpu_internal_error.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuout_of_memory_error) = tmpl_gpuout_of_memory_error.get_function(scope) {
-        let name_gpuout_of_memory_error = v8::String::new(scope, "GPUOutOfMemoryError").unwrap();
-        global.define_own_property(scope, name_gpuout_of_memory_error.into(), ctor_gpuout_of_memory_error.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_out_of_memory_error) = tmpl_gpu_out_of_memory_error.get_function(scope) {
+        let name_gpu_out_of_memory_error = v8::String::new(scope, "GPUOutOfMemoryError").unwrap();
+        global.define_own_property(scope, name_gpu_out_of_memory_error.into(), ctor_gpu_out_of_memory_error.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_gpuvalidation_error) = tmpl_gpuvalidation_error.get_function(scope) {
-        let name_gpuvalidation_error = v8::String::new(scope, "GPUValidationError").unwrap();
-        global.define_own_property(scope, name_gpuvalidation_error.into(), ctor_gpuvalidation_error.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_gpu_validation_error) = tmpl_gpu_validation_error.get_function(scope) {
+        let name_gpu_validation_error = v8::String::new(scope, "GPUValidationError").unwrap();
+        global.define_own_property(scope, name_gpu_validation_error.into(), ctor_gpu_validation_error.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_sequence_effect) = tmpl_sequence_effect.get_function(scope) {
         let name_sequence_effect = v8::String::new(scope, "SequenceEffect").unwrap();
         global.define_own_property(scope, name_sequence_effect.into(), ctor_sequence_effect.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_htmlform_controls_collection) = tmpl_htmlform_controls_collection.get_function(scope) {
-        let name_htmlform_controls_collection = v8::String::new(scope, "HTMLFormControlsCollection").unwrap();
-        global.define_own_property(scope, name_htmlform_controls_collection.into(), ctor_htmlform_controls_collection.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_html_form_controls_collection) = tmpl_html_form_controls_collection.get_function(scope) {
+        let name_html_form_controls_collection = v8::String::new(scope, "HTMLFormControlsCollection").unwrap();
+        global.define_own_property(scope, name_html_form_controls_collection.into(), ctor_html_form_controls_collection.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_htmloptions_collection) = tmpl_htmloptions_collection.get_function(scope) {
-        let name_htmloptions_collection = v8::String::new(scope, "HTMLOptionsCollection").unwrap();
-        global.define_own_property(scope, name_htmloptions_collection.into(), ctor_htmloptions_collection.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_html_options_collection) = tmpl_html_options_collection.get_function(scope) {
+        let name_html_options_collection = v8::String::new(scope, "HTMLOptionsCollection").unwrap();
+        global.define_own_property(scope, name_html_options_collection.into(), ctor_html_options_collection.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbcursor_with_value) = tmpl_idbcursor_with_value.get_function(scope) {
-        let name_idbcursor_with_value = v8::String::new(scope, "IDBCursorWithValue").unwrap();
-        global.define_own_property(scope, name_idbcursor_with_value.into(), ctor_idbcursor_with_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_cursor_with_value) = tmpl_idb_cursor_with_value.get_function(scope) {
+        let name_idb_cursor_with_value = v8::String::new(scope, "IDBCursorWithValue").unwrap();
+        global.define_own_property(scope, name_idb_cursor_with_value.into(), ctor_idb_cursor_with_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_input_device_info) = tmpl_input_device_info.get_function(scope) {
         let name_input_device_info = v8::String::new(scope, "InputDeviceInfo").unwrap();
@@ -6296,54 +6293,54 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_style_property_map = v8::String::new(scope, "StylePropertyMap").unwrap();
         global.define_own_property(scope, name_style_property_map.into(), ctor_style_property_map.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssstyle_sheet) = tmpl_cssstyle_sheet.get_function(scope) {
-        let name_cssstyle_sheet = v8::String::new(scope, "CSSStyleSheet").unwrap();
-        global.define_own_property(scope, name_cssstyle_sheet.into(), ctor_cssstyle_sheet.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_style_sheet) = tmpl_css_style_sheet.get_function(scope) {
+        let name_css_style_sheet = v8::String::new(scope, "CSSStyleSheet").unwrap();
+        global.define_own_property(scope, name_css_style_sheet.into(), ctor_css_style_sheet.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glbuffer) = tmpl_web_glbuffer.get_function(scope) {
-        let name_web_glbuffer = v8::String::new(scope, "WebGLBuffer").unwrap();
-        global.define_own_property(scope, name_web_glbuffer.into(), ctor_web_glbuffer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_buffer) = tmpl_web_gl_buffer.get_function(scope) {
+        let name_web_gl_buffer = v8::String::new(scope, "WebGLBuffer").unwrap();
+        global.define_own_property(scope, name_web_gl_buffer.into(), ctor_web_gl_buffer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glframebuffer) = tmpl_web_glframebuffer.get_function(scope) {
-        let name_web_glframebuffer = v8::String::new(scope, "WebGLFramebuffer").unwrap();
-        global.define_own_property(scope, name_web_glframebuffer.into(), ctor_web_glframebuffer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_framebuffer) = tmpl_web_gl_framebuffer.get_function(scope) {
+        let name_web_gl_framebuffer = v8::String::new(scope, "WebGLFramebuffer").unwrap();
+        global.define_own_property(scope, name_web_gl_framebuffer.into(), ctor_web_gl_framebuffer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glprogram) = tmpl_web_glprogram.get_function(scope) {
-        let name_web_glprogram = v8::String::new(scope, "WebGLProgram").unwrap();
-        global.define_own_property(scope, name_web_glprogram.into(), ctor_web_glprogram.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_program) = tmpl_web_gl_program.get_function(scope) {
+        let name_web_gl_program = v8::String::new(scope, "WebGLProgram").unwrap();
+        global.define_own_property(scope, name_web_gl_program.into(), ctor_web_gl_program.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glquery) = tmpl_web_glquery.get_function(scope) {
-        let name_web_glquery = v8::String::new(scope, "WebGLQuery").unwrap();
-        global.define_own_property(scope, name_web_glquery.into(), ctor_web_glquery.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_query) = tmpl_web_gl_query.get_function(scope) {
+        let name_web_gl_query = v8::String::new(scope, "WebGLQuery").unwrap();
+        global.define_own_property(scope, name_web_gl_query.into(), ctor_web_gl_query.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glrenderbuffer) = tmpl_web_glrenderbuffer.get_function(scope) {
-        let name_web_glrenderbuffer = v8::String::new(scope, "WebGLRenderbuffer").unwrap();
-        global.define_own_property(scope, name_web_glrenderbuffer.into(), ctor_web_glrenderbuffer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_renderbuffer) = tmpl_web_gl_renderbuffer.get_function(scope) {
+        let name_web_gl_renderbuffer = v8::String::new(scope, "WebGLRenderbuffer").unwrap();
+        global.define_own_property(scope, name_web_gl_renderbuffer.into(), ctor_web_gl_renderbuffer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glsampler) = tmpl_web_glsampler.get_function(scope) {
-        let name_web_glsampler = v8::String::new(scope, "WebGLSampler").unwrap();
-        global.define_own_property(scope, name_web_glsampler.into(), ctor_web_glsampler.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_sampler) = tmpl_web_gl_sampler.get_function(scope) {
+        let name_web_gl_sampler = v8::String::new(scope, "WebGLSampler").unwrap();
+        global.define_own_property(scope, name_web_gl_sampler.into(), ctor_web_gl_sampler.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glshader) = tmpl_web_glshader.get_function(scope) {
-        let name_web_glshader = v8::String::new(scope, "WebGLShader").unwrap();
-        global.define_own_property(scope, name_web_glshader.into(), ctor_web_glshader.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_shader) = tmpl_web_gl_shader.get_function(scope) {
+        let name_web_gl_shader = v8::String::new(scope, "WebGLShader").unwrap();
+        global.define_own_property(scope, name_web_gl_shader.into(), ctor_web_gl_shader.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glsync) = tmpl_web_glsync.get_function(scope) {
-        let name_web_glsync = v8::String::new(scope, "WebGLSync").unwrap();
-        global.define_own_property(scope, name_web_glsync.into(), ctor_web_glsync.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_sync) = tmpl_web_gl_sync.get_function(scope) {
+        let name_web_gl_sync = v8::String::new(scope, "WebGLSync").unwrap();
+        global.define_own_property(scope, name_web_gl_sync.into(), ctor_web_gl_sync.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_gltexture) = tmpl_web_gltexture.get_function(scope) {
-        let name_web_gltexture = v8::String::new(scope, "WebGLTexture").unwrap();
-        global.define_own_property(scope, name_web_gltexture.into(), ctor_web_gltexture.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_texture) = tmpl_web_gl_texture.get_function(scope) {
+        let name_web_gl_texture = v8::String::new(scope, "WebGLTexture").unwrap();
+        global.define_own_property(scope, name_web_gl_texture.into(), ctor_web_gl_texture.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     // WebGLTimerQueryEXT: NoInterfaceObject — skip global registration
-    if let Some(ctor_web_gltransform_feedback) = tmpl_web_gltransform_feedback.get_function(scope) {
-        let name_web_gltransform_feedback = v8::String::new(scope, "WebGLTransformFeedback").unwrap();
-        global.define_own_property(scope, name_web_gltransform_feedback.into(), ctor_web_gltransform_feedback.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_transform_feedback) = tmpl_web_gl_transform_feedback.get_function(scope) {
+        let name_web_gl_transform_feedback = v8::String::new(scope, "WebGLTransformFeedback").unwrap();
+        global.define_own_property(scope, name_web_gl_transform_feedback.into(), ctor_web_gl_transform_feedback.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_web_glvertex_array_object) = tmpl_web_glvertex_array_object.get_function(scope) {
-        let name_web_glvertex_array_object = v8::String::new(scope, "WebGLVertexArrayObject").unwrap();
-        global.define_own_property(scope, name_web_glvertex_array_object.into(), ctor_web_glvertex_array_object.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_web_gl_vertex_array_object) = tmpl_web_gl_vertex_array_object.get_function(scope) {
+        let name_web_gl_vertex_array_object = v8::String::new(scope, "WebGLVertexArrayObject").unwrap();
+        global.define_own_property(scope, name_web_gl_vertex_array_object.into(), ctor_web_gl_vertex_array_object.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     // WebGLVertexArrayObjectOES: NoInterfaceObject — skip global registration
     if let Some(ctor_audio_worklet) = tmpl_audio_worklet.get_function(scope) {
@@ -6382,77 +6379,77 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_web_transport_writer = v8::String::new(scope, "WebTransportWriter").unwrap();
         global.define_own_property(scope, name_web_transport_writer.into(), ctor_web_transport_writer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrcpudepth_information) = tmpl_xrcpudepth_information.get_function(scope) {
-        let name_xrcpudepth_information = v8::String::new(scope, "XRCPUDepthInformation").unwrap();
-        global.define_own_property(scope, name_xrcpudepth_information.into(), ctor_xrcpudepth_information.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xrcpu_depth_information) = tmpl_xrcpu_depth_information.get_function(scope) {
+        let name_xrcpu_depth_information = v8::String::new(scope, "XRCPUDepthInformation").unwrap();
+        global.define_own_property(scope, name_xrcpu_depth_information.into(), ctor_xrcpu_depth_information.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrweb_gldepth_information) = tmpl_xrweb_gldepth_information.get_function(scope) {
-        let name_xrweb_gldepth_information = v8::String::new(scope, "XRWebGLDepthInformation").unwrap();
-        global.define_own_property(scope, name_xrweb_gldepth_information.into(), ctor_xrweb_gldepth_information.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_web_gl_depth_information) = tmpl_xr_web_gl_depth_information.get_function(scope) {
+        let name_xr_web_gl_depth_information = v8::String::new(scope, "XRWebGLDepthInformation").unwrap();
+        global.define_own_property(scope, name_xr_web_gl_depth_information.into(), ctor_xr_web_gl_depth_information.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrjoint_pose) = tmpl_xrjoint_pose.get_function(scope) {
-        let name_xrjoint_pose = v8::String::new(scope, "XRJointPose").unwrap();
-        global.define_own_property(scope, name_xrjoint_pose.into(), ctor_xrjoint_pose.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_joint_pose) = tmpl_xr_joint_pose.get_function(scope) {
+        let name_xr_joint_pose = v8::String::new(scope, "XRJointPose").unwrap();
+        global.define_own_property(scope, name_xr_joint_pose.into(), ctor_xr_joint_pose.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrviewer_pose) = tmpl_xrviewer_pose.get_function(scope) {
-        let name_xrviewer_pose = v8::String::new(scope, "XRViewerPose").unwrap();
-        global.define_own_property(scope, name_xrviewer_pose.into(), ctor_xrviewer_pose.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_viewer_pose) = tmpl_xr_viewer_pose.get_function(scope) {
+        let name_xr_viewer_pose = v8::String::new(scope, "XRViewerPose").unwrap();
+        global.define_own_property(scope, name_xr_viewer_pose.into(), ctor_xr_viewer_pose.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrweb_glsub_image) = tmpl_xrweb_glsub_image.get_function(scope) {
-        let name_xrweb_glsub_image = v8::String::new(scope, "XRWebGLSubImage").unwrap();
-        global.define_own_property(scope, name_xrweb_glsub_image.into(), ctor_xrweb_glsub_image.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_web_gl_sub_image) = tmpl_xr_web_gl_sub_image.get_function(scope) {
+        let name_xr_web_gl_sub_image = v8::String::new(scope, "XRWebGLSubImage").unwrap();
+        global.define_own_property(scope, name_xr_web_gl_sub_image.into(), ctor_xr_web_gl_sub_image.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_view_timeline) = tmpl_view_timeline.get_function(scope) {
         let name_view_timeline = v8::String::new(scope, "ViewTimeline").unwrap();
         global.define_own_property(scope, name_view_timeline.into(), ctor_view_timeline.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssapply_block_rule) = tmpl_cssapply_block_rule.get_function(scope) {
-        let name_cssapply_block_rule = v8::String::new(scope, "CSSApplyBlockRule").unwrap();
-        global.define_own_property(scope, name_cssapply_block_rule.into(), ctor_cssapply_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_apply_block_rule) = tmpl_css_apply_block_rule.get_function(scope) {
+        let name_css_apply_block_rule = v8::String::new(scope, "CSSApplyBlockRule").unwrap();
+        global.define_own_property(scope, name_css_apply_block_rule.into(), ctor_css_apply_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscondition_rule) = tmpl_csscondition_rule.get_function(scope) {
-        let name_csscondition_rule = v8::String::new(scope, "CSSConditionRule").unwrap();
-        global.define_own_property(scope, name_csscondition_rule.into(), ctor_csscondition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_condition_rule) = tmpl_css_condition_rule.get_function(scope) {
+        let name_css_condition_rule = v8::String::new(scope, "CSSConditionRule").unwrap();
+        global.define_own_property(scope, name_css_condition_rule.into(), ctor_css_condition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscontents_block_rule) = tmpl_csscontents_block_rule.get_function(scope) {
-        let name_csscontents_block_rule = v8::String::new(scope, "CSSContentsBlockRule").unwrap();
-        global.define_own_property(scope, name_csscontents_block_rule.into(), ctor_csscontents_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_contents_block_rule) = tmpl_css_contents_block_rule.get_function(scope) {
+        let name_css_contents_block_rule = v8::String::new(scope, "CSSContentsBlockRule").unwrap();
+        global.define_own_property(scope, name_css_contents_block_rule.into(), ctor_css_contents_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssfunction_rule) = tmpl_cssfunction_rule.get_function(scope) {
-        let name_cssfunction_rule = v8::String::new(scope, "CSSFunctionRule").unwrap();
-        global.define_own_property(scope, name_cssfunction_rule.into(), ctor_cssfunction_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_function_rule) = tmpl_css_function_rule.get_function(scope) {
+        let name_css_function_rule = v8::String::new(scope, "CSSFunctionRule").unwrap();
+        global.define_own_property(scope, name_css_function_rule.into(), ctor_css_function_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csslayer_block_rule) = tmpl_csslayer_block_rule.get_function(scope) {
-        let name_csslayer_block_rule = v8::String::new(scope, "CSSLayerBlockRule").unwrap();
-        global.define_own_property(scope, name_csslayer_block_rule.into(), ctor_csslayer_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_layer_block_rule) = tmpl_css_layer_block_rule.get_function(scope) {
+        let name_css_layer_block_rule = v8::String::new(scope, "CSSLayerBlockRule").unwrap();
+        global.define_own_property(scope, name_css_layer_block_rule.into(), ctor_css_layer_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmixin_rule) = tmpl_cssmixin_rule.get_function(scope) {
-        let name_cssmixin_rule = v8::String::new(scope, "CSSMixinRule").unwrap();
-        global.define_own_property(scope, name_cssmixin_rule.into(), ctor_cssmixin_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_mixin_rule) = tmpl_css_mixin_rule.get_function(scope) {
+        let name_css_mixin_rule = v8::String::new(scope, "CSSMixinRule").unwrap();
+        global.define_own_property(scope, name_css_mixin_rule.into(), ctor_css_mixin_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csspage_rule) = tmpl_csspage_rule.get_function(scope) {
-        let name_csspage_rule = v8::String::new(scope, "CSSPageRule").unwrap();
-        global.define_own_property(scope, name_csspage_rule.into(), ctor_csspage_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_page_rule) = tmpl_css_page_rule.get_function(scope) {
+        let name_css_page_rule = v8::String::new(scope, "CSSPageRule").unwrap();
+        global.define_own_property(scope, name_css_page_rule.into(), ctor_css_page_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssscope_rule) = tmpl_cssscope_rule.get_function(scope) {
-        let name_cssscope_rule = v8::String::new(scope, "CSSScopeRule").unwrap();
-        global.define_own_property(scope, name_cssscope_rule.into(), ctor_cssscope_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_scope_rule) = tmpl_css_scope_rule.get_function(scope) {
+        let name_css_scope_rule = v8::String::new(scope, "CSSScopeRule").unwrap();
+        global.define_own_property(scope, name_css_scope_rule.into(), ctor_css_scope_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssstarting_style_rule) = tmpl_cssstarting_style_rule.get_function(scope) {
-        let name_cssstarting_style_rule = v8::String::new(scope, "CSSStartingStyleRule").unwrap();
-        global.define_own_property(scope, name_cssstarting_style_rule.into(), ctor_cssstarting_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_starting_style_rule) = tmpl_css_starting_style_rule.get_function(scope) {
+        let name_css_starting_style_rule = v8::String::new(scope, "CSSStartingStyleRule").unwrap();
+        global.define_own_property(scope, name_css_starting_style_rule.into(), ctor_css_starting_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssstyle_rule) = tmpl_cssstyle_rule.get_function(scope) {
-        let name_cssstyle_rule = v8::String::new(scope, "CSSStyleRule").unwrap();
-        global.define_own_property(scope, name_cssstyle_rule.into(), ctor_cssstyle_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_style_rule) = tmpl_css_style_rule.get_function(scope) {
+        let name_css_style_rule = v8::String::new(scope, "CSSStyleRule").unwrap();
+        global.define_own_property(scope, name_css_style_rule.into(), ctor_css_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csssupports_condition_rule) = tmpl_csssupports_condition_rule.get_function(scope) {
-        let name_csssupports_condition_rule = v8::String::new(scope, "CSSSupportsConditionRule").unwrap();
-        global.define_own_property(scope, name_csssupports_condition_rule.into(), ctor_csssupports_condition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_supports_condition_rule) = tmpl_css_supports_condition_rule.get_function(scope) {
+        let name_css_supports_condition_rule = v8::String::new(scope, "CSSSupportsConditionRule").unwrap();
+        global.define_own_property(scope, name_css_supports_condition_rule.into(), ctor_css_supports_condition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscolor) = tmpl_csscolor.get_function(scope) {
-        let name_csscolor = v8::String::new(scope, "CSSColor").unwrap();
-        global.define_own_property(scope, name_csscolor.into(), ctor_csscolor.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_color) = tmpl_css_color.get_function(scope) {
+        let name_css_color = v8::String::new(scope, "CSSColor").unwrap();
+        global.define_own_property(scope, name_css_color.into(), ctor_css_color.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_csshsl) = tmpl_csshsl.get_function(scope) {
         let name_csshsl = v8::String::new(scope, "CSSHSL").unwrap();
@@ -6466,29 +6463,29 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_csslch = v8::String::new(scope, "CSSLCH").unwrap();
         global.define_own_property(scope, name_csslch.into(), ctor_csslch.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csslab) = tmpl_csslab.get_function(scope) {
-        let name_csslab = v8::String::new(scope, "CSSLab").unwrap();
-        global.define_own_property(scope, name_csslab.into(), ctor_csslab.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_lab) = tmpl_css_lab.get_function(scope) {
+        let name_css_lab = v8::String::new(scope, "CSSLab").unwrap();
+        global.define_own_property(scope, name_css_lab.into(), ctor_css_lab.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_cssoklch) = tmpl_cssoklch.get_function(scope) {
         let name_cssoklch = v8::String::new(scope, "CSSOKLCH").unwrap();
         global.define_own_property(scope, name_cssoklch.into(), ctor_cssoklch.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssoklab) = tmpl_cssoklab.get_function(scope) {
-        let name_cssoklab = v8::String::new(scope, "CSSOKLab").unwrap();
-        global.define_own_property(scope, name_cssoklab.into(), ctor_cssoklab.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_cssok_lab) = tmpl_cssok_lab.get_function(scope) {
+        let name_cssok_lab = v8::String::new(scope, "CSSOKLab").unwrap();
+        global.define_own_property(scope, name_cssok_lab.into(), ctor_cssok_lab.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_cssrgb) = tmpl_cssrgb.get_function(scope) {
         let name_cssrgb = v8::String::new(scope, "CSSRGB").unwrap();
         global.define_own_property(scope, name_cssrgb.into(), ctor_cssrgb.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmath_value) = tmpl_cssmath_value.get_function(scope) {
-        let name_cssmath_value = v8::String::new(scope, "CSSMathValue").unwrap();
-        global.define_own_property(scope, name_cssmath_value.into(), ctor_cssmath_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_math_value) = tmpl_css_math_value.get_function(scope) {
+        let name_css_math_value = v8::String::new(scope, "CSSMathValue").unwrap();
+        global.define_own_property(scope, name_css_math_value.into(), ctor_css_math_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssunit_value) = tmpl_cssunit_value.get_function(scope) {
-        let name_cssunit_value = v8::String::new(scope, "CSSUnitValue").unwrap();
-        global.define_own_property(scope, name_cssunit_value.into(), ctor_cssunit_value.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_unit_value) = tmpl_css_unit_value.get_function(scope) {
+        let name_css_unit_value = v8::String::new(scope, "CSSUnitValue").unwrap();
+        global.define_own_property(scope, name_css_unit_value.into(), ctor_css_unit_value.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_background_fetch_event) = tmpl_background_fetch_event.get_function(scope) {
         let name_background_fetch_event = v8::String::new(scope, "BackgroundFetchEvent").unwrap();
@@ -6586,13 +6583,13 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_task_signal = v8::String::new(scope, "TaskSignal").unwrap();
         global.define_own_property(scope, name_task_signal.into(), ctor_task_signal.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssanimation) = tmpl_cssanimation.get_function(scope) {
-        let name_cssanimation = v8::String::new(scope, "CSSAnimation").unwrap();
-        global.define_own_property(scope, name_cssanimation.into(), ctor_cssanimation.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_animation) = tmpl_css_animation.get_function(scope) {
+        let name_css_animation = v8::String::new(scope, "CSSAnimation").unwrap();
+        global.define_own_property(scope, name_css_animation.into(), ctor_css_animation.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csstransition) = tmpl_csstransition.get_function(scope) {
-        let name_csstransition = v8::String::new(scope, "CSSTransition").unwrap();
-        global.define_own_property(scope, name_csstransition.into(), ctor_csstransition.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_transition) = tmpl_css_transition.get_function(scope) {
+        let name_css_transition = v8::String::new(scope, "CSSTransition").unwrap();
+        global.define_own_property(scope, name_css_transition.into(), ctor_css_transition.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_shadow_animation) = tmpl_shadow_animation.get_function(scope) {
         let name_shadow_animation = v8::String::new(scope, "ShadowAnimation").unwrap();
@@ -6646,9 +6643,9 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_gain_node = v8::String::new(scope, "GainNode").unwrap();
         global.define_own_property(scope, name_gain_node.into(), ctor_gain_node.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_iirfilter_node) = tmpl_iirfilter_node.get_function(scope) {
-        let name_iirfilter_node = v8::String::new(scope, "IIRFilterNode").unwrap();
-        global.define_own_property(scope, name_iirfilter_node.into(), ctor_iirfilter_node.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_iir_filter_node) = tmpl_iir_filter_node.get_function(scope) {
+        let name_iir_filter_node = v8::String::new(scope, "IIRFilterNode").unwrap();
+        global.define_own_property(scope, name_iir_filter_node.into(), ctor_iir_filter_node.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_media_element_audio_source_node) = tmpl_media_element_audio_source_node.get_function(scope) {
         let name_media_element_audio_source_node = v8::String::new(scope, "MediaElementAudioSourceNode").unwrap();
@@ -6690,17 +6687,17 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_offline_audio_context = v8::String::new(scope, "OfflineAudioContext").unwrap();
         global.define_own_property(scope, name_offline_audio_context.into(), ctor_offline_audio_context.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_idbopen_dbrequest) = tmpl_idbopen_dbrequest.get_function(scope) {
-        let name_idbopen_dbrequest = v8::String::new(scope, "IDBOpenDBRequest").unwrap();
-        global.define_own_property(scope, name_idbopen_dbrequest.into(), ctor_idbopen_dbrequest.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_idb_open_db_request) = tmpl_idb_open_db_request.get_function(scope) {
+        let name_idb_open_db_request = v8::String::new(scope, "IDBOpenDBRequest").unwrap();
+        global.define_own_property(scope, name_idb_open_db_request.into(), ctor_idb_open_db_request.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_midiinput) = tmpl_midiinput.get_function(scope) {
-        let name_midiinput = v8::String::new(scope, "MIDIInput").unwrap();
-        global.define_own_property(scope, name_midiinput.into(), ctor_midiinput.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_midi_input) = tmpl_midi_input.get_function(scope) {
+        let name_midi_input = v8::String::new(scope, "MIDIInput").unwrap();
+        global.define_own_property(scope, name_midi_input.into(), ctor_midi_input.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_midioutput) = tmpl_midioutput.get_function(scope) {
-        let name_midioutput = v8::String::new(scope, "MIDIOutput").unwrap();
-        global.define_own_property(scope, name_midioutput.into(), ctor_midioutput.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_midi_output) = tmpl_midi_output.get_function(scope) {
+        let name_midi_output = v8::String::new(scope, "MIDIOutput").unwrap();
+        global.define_own_property(scope, name_midi_output.into(), ctor_midi_output.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_managed_media_source) = tmpl_managed_media_source.get_function(scope) {
         let name_managed_media_source = v8::String::new(scope, "ManagedMediaSource").unwrap();
@@ -6738,21 +6735,21 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_element = v8::String::new(scope, "Element").unwrap();
         global.define_own_property(scope, name_element.into(), ctor_element.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_bluetooth_lescan_permission_result) = tmpl_bluetooth_lescan_permission_result.get_function(scope) {
-        let name_bluetooth_lescan_permission_result = v8::String::new(scope, "BluetoothLEScanPermissionResult").unwrap();
-        global.define_own_property(scope, name_bluetooth_lescan_permission_result.into(), ctor_bluetooth_lescan_permission_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_bluetooth_le_scan_permission_result) = tmpl_bluetooth_le_scan_permission_result.get_function(scope) {
+        let name_bluetooth_le_scan_permission_result = v8::String::new(scope, "BluetoothLEScanPermissionResult").unwrap();
+        global.define_own_property(scope, name_bluetooth_le_scan_permission_result.into(), ctor_bluetooth_le_scan_permission_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_bluetooth_permission_result) = tmpl_bluetooth_permission_result.get_function(scope) {
         let name_bluetooth_permission_result = v8::String::new(scope, "BluetoothPermissionResult").unwrap();
         global.define_own_property(scope, name_bluetooth_permission_result.into(), ctor_bluetooth_permission_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_usbpermission_result) = tmpl_usbpermission_result.get_function(scope) {
-        let name_usbpermission_result = v8::String::new(scope, "USBPermissionResult").unwrap();
-        global.define_own_property(scope, name_usbpermission_result.into(), ctor_usbpermission_result.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_usb_permission_result) = tmpl_usb_permission_result.get_function(scope) {
+        let name_usb_permission_result = v8::String::new(scope, "USBPermissionResult").unwrap();
+        global.define_own_property(scope, name_usb_permission_result.into(), ctor_usb_permission_result.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrpermission_status) = tmpl_xrpermission_status.get_function(scope) {
-        let name_xrpermission_status = v8::String::new(scope, "XRPermissionStatus").unwrap();
-        global.define_own_property(scope, name_xrpermission_status.into(), ctor_xrpermission_status.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_permission_status) = tmpl_xr_permission_status.get_function(scope) {
+        let name_xr_permission_status = v8::String::new(scope, "XRPermissionStatus").unwrap();
+        global.define_own_property(scope, name_xr_permission_status.into(), ctor_xr_permission_status.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_accelerometer) = tmpl_accelerometer.get_function(scope) {
         let name_accelerometer = v8::String::new(scope, "Accelerometer").unwrap();
@@ -6790,17 +6787,17 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_data_cue = v8::String::new(scope, "DataCue").unwrap();
         global.define_own_property(scope, name_data_cue.into(), ctor_data_cue.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_vttcue) = tmpl_vttcue.get_function(scope) {
-        let name_vttcue = v8::String::new(scope, "VTTCue").unwrap();
-        global.define_own_property(scope, name_vttcue.into(), ctor_vttcue.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_vtt_cue) = tmpl_vtt_cue.get_function(scope) {
+        let name_vtt_cue = v8::String::new(scope, "VTTCue").unwrap();
+        global.define_own_property(scope, name_vtt_cue.into(), ctor_vtt_cue.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_dedicated_worker_global_scope) = tmpl_dedicated_worker_global_scope.get_function(scope) {
         let name_dedicated_worker_global_scope = v8::String::new(scope, "DedicatedWorkerGlobalScope").unwrap();
         global.define_own_property(scope, name_dedicated_worker_global_scope.into(), ctor_dedicated_worker_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_rtcidentity_provider_global_scope) = tmpl_rtcidentity_provider_global_scope.get_function(scope) {
-        let name_rtcidentity_provider_global_scope = v8::String::new(scope, "RTCIdentityProviderGlobalScope").unwrap();
-        global.define_own_property(scope, name_rtcidentity_provider_global_scope.into(), ctor_rtcidentity_provider_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_rtc_identity_provider_global_scope) = tmpl_rtc_identity_provider_global_scope.get_function(scope) {
+        let name_rtc_identity_provider_global_scope = v8::String::new(scope, "RTCIdentityProviderGlobalScope").unwrap();
+        global.define_own_property(scope, name_rtc_identity_provider_global_scope.into(), ctor_rtc_identity_provider_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_service_worker_global_scope) = tmpl_service_worker_global_scope.get_function(scope) {
         let name_service_worker_global_scope = v8::String::new(scope, "ServiceWorkerGlobalScope").unwrap();
@@ -6810,81 +6807,81 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_shared_worker_global_scope = v8::String::new(scope, "SharedWorkerGlobalScope").unwrap();
         global.define_own_property(scope, name_shared_worker_global_scope.into(), ctor_shared_worker_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xmlhttp_request) = tmpl_xmlhttp_request.get_function(scope) {
-        let name_xmlhttp_request = v8::String::new(scope, "XMLHttpRequest").unwrap();
-        global.define_own_property(scope, name_xmlhttp_request.into(), ctor_xmlhttp_request.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xml_http_request) = tmpl_xml_http_request.get_function(scope) {
+        let name_xml_http_request = v8::String::new(scope, "XMLHttpRequest").unwrap();
+        global.define_own_property(scope, name_xml_http_request.into(), ctor_xml_http_request.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xmlhttp_request_upload) = tmpl_xmlhttp_request_upload.get_function(scope) {
-        let name_xmlhttp_request_upload = v8::String::new(scope, "XMLHttpRequestUpload").unwrap();
-        global.define_own_property(scope, name_xmlhttp_request_upload.into(), ctor_xmlhttp_request_upload.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xml_http_request_upload) = tmpl_xml_http_request_upload.get_function(scope) {
+        let name_xml_http_request_upload = v8::String::new(scope, "XMLHttpRequestUpload").unwrap();
+        global.define_own_property(scope, name_xml_http_request_upload.into(), ctor_xml_http_request_upload.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrcomposition_layer) = tmpl_xrcomposition_layer.get_function(scope) {
-        let name_xrcomposition_layer = v8::String::new(scope, "XRCompositionLayer").unwrap();
-        global.define_own_property(scope, name_xrcomposition_layer.into(), ctor_xrcomposition_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_composition_layer) = tmpl_xr_composition_layer.get_function(scope) {
+        let name_xr_composition_layer = v8::String::new(scope, "XRCompositionLayer").unwrap();
+        global.define_own_property(scope, name_xr_composition_layer.into(), ctor_xr_composition_layer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrweb_gllayer) = tmpl_xrweb_gllayer.get_function(scope) {
-        let name_xrweb_gllayer = v8::String::new(scope, "XRWebGLLayer").unwrap();
-        global.define_own_property(scope, name_xrweb_gllayer.into(), ctor_xrweb_gllayer.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_web_gl_layer) = tmpl_xr_web_gl_layer.get_function(scope) {
+        let name_xr_web_gl_layer = v8::String::new(scope, "XRWebGLLayer").unwrap();
+        global.define_own_property(scope, name_xr_web_gl_layer.into(), ctor_xr_web_gl_layer.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrbody_space) = tmpl_xrbody_space.get_function(scope) {
-        let name_xrbody_space = v8::String::new(scope, "XRBodySpace").unwrap();
-        global.define_own_property(scope, name_xrbody_space.into(), ctor_xrbody_space.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_body_space) = tmpl_xr_body_space.get_function(scope) {
+        let name_xr_body_space = v8::String::new(scope, "XRBodySpace").unwrap();
+        global.define_own_property(scope, name_xr_body_space.into(), ctor_xr_body_space.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrjoint_space) = tmpl_xrjoint_space.get_function(scope) {
-        let name_xrjoint_space = v8::String::new(scope, "XRJointSpace").unwrap();
-        global.define_own_property(scope, name_xrjoint_space.into(), ctor_xrjoint_space.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_joint_space) = tmpl_xr_joint_space.get_function(scope) {
+        let name_xr_joint_space = v8::String::new(scope, "XRJointSpace").unwrap();
+        global.define_own_property(scope, name_xr_joint_space.into(), ctor_xr_joint_space.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrreference_space) = tmpl_xrreference_space.get_function(scope) {
-        let name_xrreference_space = v8::String::new(scope, "XRReferenceSpace").unwrap();
-        global.define_own_property(scope, name_xrreference_space.into(), ctor_xrreference_space.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_reference_space) = tmpl_xr_reference_space.get_function(scope) {
+        let name_xr_reference_space = v8::String::new(scope, "XRReferenceSpace").unwrap();
+        global.define_own_property(scope, name_xr_reference_space.into(), ctor_xr_reference_space.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_performance_navigation_timing) = tmpl_performance_navigation_timing.get_function(scope) {
         let name_performance_navigation_timing = v8::String::new(scope, "PerformanceNavigationTiming").unwrap();
         global.define_own_property(scope, name_performance_navigation_timing.into(), ctor_performance_navigation_timing.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csscontainer_rule) = tmpl_csscontainer_rule.get_function(scope) {
-        let name_csscontainer_rule = v8::String::new(scope, "CSSContainerRule").unwrap();
-        global.define_own_property(scope, name_csscontainer_rule.into(), ctor_csscontainer_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_container_rule) = tmpl_css_container_rule.get_function(scope) {
+        let name_css_container_rule = v8::String::new(scope, "CSSContainerRule").unwrap();
+        global.define_own_property(scope, name_css_container_rule.into(), ctor_css_container_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmedia_rule) = tmpl_cssmedia_rule.get_function(scope) {
-        let name_cssmedia_rule = v8::String::new(scope, "CSSMediaRule").unwrap();
-        global.define_own_property(scope, name_cssmedia_rule.into(), ctor_cssmedia_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_media_rule) = tmpl_css_media_rule.get_function(scope) {
+        let name_css_media_rule = v8::String::new(scope, "CSSMediaRule").unwrap();
+        global.define_own_property(scope, name_css_media_rule.into(), ctor_css_media_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_csssupports_rule) = tmpl_csssupports_rule.get_function(scope) {
-        let name_csssupports_rule = v8::String::new(scope, "CSSSupportsRule").unwrap();
-        global.define_own_property(scope, name_csssupports_rule.into(), ctor_csssupports_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_supports_rule) = tmpl_css_supports_rule.get_function(scope) {
+        let name_css_supports_rule = v8::String::new(scope, "CSSSupportsRule").unwrap();
+        global.define_own_property(scope, name_css_supports_rule.into(), ctor_css_supports_rule.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmath_clamp) = tmpl_cssmath_clamp.get_function(scope) {
-        let name_cssmath_clamp = v8::String::new(scope, "CSSMathClamp").unwrap();
-        global.define_own_property(scope, name_cssmath_clamp.into(), ctor_cssmath_clamp.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_math_clamp) = tmpl_css_math_clamp.get_function(scope) {
+        let name_css_math_clamp = v8::String::new(scope, "CSSMathClamp").unwrap();
+        global.define_own_property(scope, name_css_math_clamp.into(), ctor_css_math_clamp.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmath_invert) = tmpl_cssmath_invert.get_function(scope) {
-        let name_cssmath_invert = v8::String::new(scope, "CSSMathInvert").unwrap();
-        global.define_own_property(scope, name_cssmath_invert.into(), ctor_cssmath_invert.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_math_invert) = tmpl_css_math_invert.get_function(scope) {
+        let name_css_math_invert = v8::String::new(scope, "CSSMathInvert").unwrap();
+        global.define_own_property(scope, name_css_math_invert.into(), ctor_css_math_invert.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmath_max) = tmpl_cssmath_max.get_function(scope) {
-        let name_cssmath_max = v8::String::new(scope, "CSSMathMax").unwrap();
-        global.define_own_property(scope, name_cssmath_max.into(), ctor_cssmath_max.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_math_max) = tmpl_css_math_max.get_function(scope) {
+        let name_css_math_max = v8::String::new(scope, "CSSMathMax").unwrap();
+        global.define_own_property(scope, name_css_math_max.into(), ctor_css_math_max.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmath_min) = tmpl_cssmath_min.get_function(scope) {
-        let name_cssmath_min = v8::String::new(scope, "CSSMathMin").unwrap();
-        global.define_own_property(scope, name_cssmath_min.into(), ctor_cssmath_min.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_math_min) = tmpl_css_math_min.get_function(scope) {
+        let name_css_math_min = v8::String::new(scope, "CSSMathMin").unwrap();
+        global.define_own_property(scope, name_css_math_min.into(), ctor_css_math_min.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmath_negate) = tmpl_cssmath_negate.get_function(scope) {
-        let name_cssmath_negate = v8::String::new(scope, "CSSMathNegate").unwrap();
-        global.define_own_property(scope, name_cssmath_negate.into(), ctor_cssmath_negate.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_math_negate) = tmpl_css_math_negate.get_function(scope) {
+        let name_css_math_negate = v8::String::new(scope, "CSSMathNegate").unwrap();
+        global.define_own_property(scope, name_css_math_negate.into(), ctor_css_math_negate.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmath_product) = tmpl_cssmath_product.get_function(scope) {
-        let name_cssmath_product = v8::String::new(scope, "CSSMathProduct").unwrap();
-        global.define_own_property(scope, name_cssmath_product.into(), ctor_cssmath_product.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_math_product) = tmpl_css_math_product.get_function(scope) {
+        let name_css_math_product = v8::String::new(scope, "CSSMathProduct").unwrap();
+        global.define_own_property(scope, name_css_math_product.into(), ctor_css_math_product.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_cssmath_sum) = tmpl_cssmath_sum.get_function(scope) {
-        let name_cssmath_sum = v8::String::new(scope, "CSSMathSum").unwrap();
-        global.define_own_property(scope, name_cssmath_sum.into(), ctor_cssmath_sum.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_css_math_sum) = tmpl_css_math_sum.get_function(scope) {
+        let name_css_math_sum = v8::String::new(scope, "CSSMathSum").unwrap();
+        global.define_own_property(scope, name_css_math_sum.into(), ctor_css_math_sum.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_background_fetch_update_uievent) = tmpl_background_fetch_update_uievent.get_function(scope) {
-        let name_background_fetch_update_uievent = v8::String::new(scope, "BackgroundFetchUpdateUIEvent").unwrap();
-        global.define_own_property(scope, name_background_fetch_update_uievent.into(), ctor_background_fetch_update_uievent.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_background_fetch_update_ui_event) = tmpl_background_fetch_update_ui_event.get_function(scope) {
+        let name_background_fetch_update_ui_event = v8::String::new(scope, "BackgroundFetchUpdateUIEvent").unwrap();
+        global.define_own_property(scope, name_background_fetch_update_ui_event.into(), ctor_background_fetch_update_ui_event.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_drag_event) = tmpl_drag_event.get_function(scope) {
         let name_drag_event = v8::String::new(scope, "DragEvent").unwrap();
@@ -6926,25 +6923,25 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_text = v8::String::new(scope, "Text").unwrap();
         global.define_own_property(scope, name_text.into(), ctor_text.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xmldocument) = tmpl_xmldocument.get_function(scope) {
-        let name_xmldocument = v8::String::new(scope, "XMLDocument").unwrap();
-        global.define_own_property(scope, name_xmldocument.into(), ctor_xmldocument.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xml_document) = tmpl_xml_document.get_function(scope) {
+        let name_xml_document = v8::String::new(scope, "XMLDocument").unwrap();
+        global.define_own_property(scope, name_xml_document.into(), ctor_xml_document.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_shadow_root) = tmpl_shadow_root.get_function(scope) {
         let name_shadow_root = v8::String::new(scope, "ShadowRoot").unwrap();
         global.define_own_property(scope, name_shadow_root.into(), ctor_shadow_root.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_htmlelement) = tmpl_htmlelement.get_function(scope) {
-        let name_htmlelement = v8::String::new(scope, "HTMLElement").unwrap();
-        global.define_own_property(scope, name_htmlelement.into(), ctor_htmlelement.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_html_element) = tmpl_html_element.get_function(scope) {
+        let name_html_element = v8::String::new(scope, "HTMLElement").unwrap();
+        global.define_own_property(scope, name_html_element.into(), ctor_html_element.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_math_mlelement) = tmpl_math_mlelement.get_function(scope) {
-        let name_math_mlelement = v8::String::new(scope, "MathMLElement").unwrap();
-        global.define_own_property(scope, name_math_mlelement.into(), ctor_math_mlelement.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_math_ml_element) = tmpl_math_ml_element.get_function(scope) {
+        let name_math_ml_element = v8::String::new(scope, "MathMLElement").unwrap();
+        global.define_own_property(scope, name_math_ml_element.into(), ctor_math_ml_element.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_svgelement) = tmpl_svgelement.get_function(scope) {
-        let name_svgelement = v8::String::new(scope, "SVGElement").unwrap();
-        global.define_own_property(scope, name_svgelement.into(), ctor_svgelement.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_svg_element) = tmpl_svg_element.get_function(scope) {
+        let name_svg_element = v8::String::new(scope, "SVGElement").unwrap();
+        global.define_own_property(scope, name_svg_element.into(), ctor_svg_element.into(), v8::PropertyAttribute::DONT_ENUM);
     }
     if let Some(ctor_gravity_sensor) = tmpl_gravity_sensor.get_function(scope) {
         let name_gravity_sensor = v8::String::new(scope, "GravitySensor").unwrap();
@@ -6962,620 +6959,620 @@ pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {
         let name_relative_orientation_sensor = v8::String::new(scope, "RelativeOrientationSensor").unwrap();
         global.define_own_property(scope, name_relative_orientation_sensor.into(), ctor_relative_orientation_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
     }
-    if let Some(ctor_xrcube_layer) = tmpl_xrcube_layer.get_function(scope) {
-        let name_xrcube_layer = v8::String::new(scope, "XRCubeLayer").unwrap();
-        global.define_own_property(scope, name_xrcube_layer.into(), ctor_xrcube_layer.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_xrcylinder_layer) = tmpl_xrcylinder_layer.get_function(scope) {
-        let name_xrcylinder_layer = v8::String::new(scope, "XRCylinderLayer").unwrap();
-        global.define_own_property(scope, name_xrcylinder_layer.into(), ctor_xrcylinder_layer.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_xrequirect_layer) = tmpl_xrequirect_layer.get_function(scope) {
-        let name_xrequirect_layer = v8::String::new(scope, "XREquirectLayer").unwrap();
-        global.define_own_property(scope, name_xrequirect_layer.into(), ctor_xrequirect_layer.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_xrprojection_layer) = tmpl_xrprojection_layer.get_function(scope) {
-        let name_xrprojection_layer = v8::String::new(scope, "XRProjectionLayer").unwrap();
-        global.define_own_property(scope, name_xrprojection_layer.into(), ctor_xrprojection_layer.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_xrquad_layer) = tmpl_xrquad_layer.get_function(scope) {
-        let name_xrquad_layer = v8::String::new(scope, "XRQuadLayer").unwrap();
-        global.define_own_property(scope, name_xrquad_layer.into(), ctor_xrquad_layer.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_xrbounded_reference_space) = tmpl_xrbounded_reference_space.get_function(scope) {
-        let name_xrbounded_reference_space = v8::String::new(scope, "XRBoundedReferenceSpace").unwrap();
-        global.define_own_property(scope, name_xrbounded_reference_space.into(), ctor_xrbounded_reference_space.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_cdatasection) = tmpl_cdatasection.get_function(scope) {
-        let name_cdatasection = v8::String::new(scope, "CDATASection").unwrap();
-        global.define_own_property(scope, name_cdatasection.into(), ctor_cdatasection.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svguse_element_shadow_root) = tmpl_svguse_element_shadow_root.get_function(scope) {
-        let name_svguse_element_shadow_root = v8::String::new(scope, "SVGUseElementShadowRoot").unwrap();
-        global.define_own_property(scope, name_svguse_element_shadow_root.into(), ctor_svguse_element_shadow_root.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlanchor_element) = tmpl_htmlanchor_element.get_function(scope) {
-        let name_htmlanchor_element = v8::String::new(scope, "HTMLAnchorElement").unwrap();
-        global.define_own_property(scope, name_htmlanchor_element.into(), ctor_htmlanchor_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlarea_element) = tmpl_htmlarea_element.get_function(scope) {
-        let name_htmlarea_element = v8::String::new(scope, "HTMLAreaElement").unwrap();
-        global.define_own_property(scope, name_htmlarea_element.into(), ctor_htmlarea_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlbrelement) = tmpl_htmlbrelement.get_function(scope) {
-        let name_htmlbrelement = v8::String::new(scope, "HTMLBRElement").unwrap();
-        global.define_own_property(scope, name_htmlbrelement.into(), ctor_htmlbrelement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlbase_element) = tmpl_htmlbase_element.get_function(scope) {
-        let name_htmlbase_element = v8::String::new(scope, "HTMLBaseElement").unwrap();
-        global.define_own_property(scope, name_htmlbase_element.into(), ctor_htmlbase_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlbody_element) = tmpl_htmlbody_element.get_function(scope) {
-        let name_htmlbody_element = v8::String::new(scope, "HTMLBodyElement").unwrap();
-        global.define_own_property(scope, name_htmlbody_element.into(), ctor_htmlbody_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlbutton_element) = tmpl_htmlbutton_element.get_function(scope) {
-        let name_htmlbutton_element = v8::String::new(scope, "HTMLButtonElement").unwrap();
-        global.define_own_property(scope, name_htmlbutton_element.into(), ctor_htmlbutton_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlcanvas_element) = tmpl_htmlcanvas_element.get_function(scope) {
-        let name_htmlcanvas_element = v8::String::new(scope, "HTMLCanvasElement").unwrap();
-        global.define_own_property(scope, name_htmlcanvas_element.into(), ctor_htmlcanvas_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmldlist_element) = tmpl_htmldlist_element.get_function(scope) {
-        let name_htmldlist_element = v8::String::new(scope, "HTMLDListElement").unwrap();
-        global.define_own_property(scope, name_htmldlist_element.into(), ctor_htmldlist_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmldata_element) = tmpl_htmldata_element.get_function(scope) {
-        let name_htmldata_element = v8::String::new(scope, "HTMLDataElement").unwrap();
-        global.define_own_property(scope, name_htmldata_element.into(), ctor_htmldata_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmldata_list_element) = tmpl_htmldata_list_element.get_function(scope) {
-        let name_htmldata_list_element = v8::String::new(scope, "HTMLDataListElement").unwrap();
-        global.define_own_property(scope, name_htmldata_list_element.into(), ctor_htmldata_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmldetails_element) = tmpl_htmldetails_element.get_function(scope) {
-        let name_htmldetails_element = v8::String::new(scope, "HTMLDetailsElement").unwrap();
-        global.define_own_property(scope, name_htmldetails_element.into(), ctor_htmldetails_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmldialog_element) = tmpl_htmldialog_element.get_function(scope) {
-        let name_htmldialog_element = v8::String::new(scope, "HTMLDialogElement").unwrap();
-        global.define_own_property(scope, name_htmldialog_element.into(), ctor_htmldialog_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmldirectory_element) = tmpl_htmldirectory_element.get_function(scope) {
-        let name_htmldirectory_element = v8::String::new(scope, "HTMLDirectoryElement").unwrap();
-        global.define_own_property(scope, name_htmldirectory_element.into(), ctor_htmldirectory_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmldiv_element) = tmpl_htmldiv_element.get_function(scope) {
-        let name_htmldiv_element = v8::String::new(scope, "HTMLDivElement").unwrap();
-        global.define_own_property(scope, name_htmldiv_element.into(), ctor_htmldiv_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlembed_element) = tmpl_htmlembed_element.get_function(scope) {
-        let name_htmlembed_element = v8::String::new(scope, "HTMLEmbedElement").unwrap();
-        global.define_own_property(scope, name_htmlembed_element.into(), ctor_htmlembed_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlfenced_frame_element) = tmpl_htmlfenced_frame_element.get_function(scope) {
-        let name_htmlfenced_frame_element = v8::String::new(scope, "HTMLFencedFrameElement").unwrap();
-        global.define_own_property(scope, name_htmlfenced_frame_element.into(), ctor_htmlfenced_frame_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlfield_set_element) = tmpl_htmlfield_set_element.get_function(scope) {
-        let name_htmlfield_set_element = v8::String::new(scope, "HTMLFieldSetElement").unwrap();
-        global.define_own_property(scope, name_htmlfield_set_element.into(), ctor_htmlfield_set_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlfont_element) = tmpl_htmlfont_element.get_function(scope) {
-        let name_htmlfont_element = v8::String::new(scope, "HTMLFontElement").unwrap();
-        global.define_own_property(scope, name_htmlfont_element.into(), ctor_htmlfont_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlform_element) = tmpl_htmlform_element.get_function(scope) {
-        let name_htmlform_element = v8::String::new(scope, "HTMLFormElement").unwrap();
-        global.define_own_property(scope, name_htmlform_element.into(), ctor_htmlform_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlframe_element) = tmpl_htmlframe_element.get_function(scope) {
-        let name_htmlframe_element = v8::String::new(scope, "HTMLFrameElement").unwrap();
-        global.define_own_property(scope, name_htmlframe_element.into(), ctor_htmlframe_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlframe_set_element) = tmpl_htmlframe_set_element.get_function(scope) {
-        let name_htmlframe_set_element = v8::String::new(scope, "HTMLFrameSetElement").unwrap();
-        global.define_own_property(scope, name_htmlframe_set_element.into(), ctor_htmlframe_set_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlgeolocation_element) = tmpl_htmlgeolocation_element.get_function(scope) {
-        let name_htmlgeolocation_element = v8::String::new(scope, "HTMLGeolocationElement").unwrap();
-        global.define_own_property(scope, name_htmlgeolocation_element.into(), ctor_htmlgeolocation_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlhrelement) = tmpl_htmlhrelement.get_function(scope) {
-        let name_htmlhrelement = v8::String::new(scope, "HTMLHRElement").unwrap();
-        global.define_own_property(scope, name_htmlhrelement.into(), ctor_htmlhrelement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlhead_element) = tmpl_htmlhead_element.get_function(scope) {
-        let name_htmlhead_element = v8::String::new(scope, "HTMLHeadElement").unwrap();
-        global.define_own_property(scope, name_htmlhead_element.into(), ctor_htmlhead_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlheading_element) = tmpl_htmlheading_element.get_function(scope) {
-        let name_htmlheading_element = v8::String::new(scope, "HTMLHeadingElement").unwrap();
-        global.define_own_property(scope, name_htmlheading_element.into(), ctor_htmlheading_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlhtml_element) = tmpl_htmlhtml_element.get_function(scope) {
-        let name_htmlhtml_element = v8::String::new(scope, "HTMLHtmlElement").unwrap();
-        global.define_own_property(scope, name_htmlhtml_element.into(), ctor_htmlhtml_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmliframe_element) = tmpl_htmliframe_element.get_function(scope) {
-        let name_htmliframe_element = v8::String::new(scope, "HTMLIFrameElement").unwrap();
-        global.define_own_property(scope, name_htmliframe_element.into(), ctor_htmliframe_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlimage_element) = tmpl_htmlimage_element.get_function(scope) {
-        let name_htmlimage_element = v8::String::new(scope, "HTMLImageElement").unwrap();
-        global.define_own_property(scope, name_htmlimage_element.into(), ctor_htmlimage_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlinput_element) = tmpl_htmlinput_element.get_function(scope) {
-        let name_htmlinput_element = v8::String::new(scope, "HTMLInputElement").unwrap();
-        global.define_own_property(scope, name_htmlinput_element.into(), ctor_htmlinput_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmllielement) = tmpl_htmllielement.get_function(scope) {
-        let name_htmllielement = v8::String::new(scope, "HTMLLIElement").unwrap();
-        global.define_own_property(scope, name_htmllielement.into(), ctor_htmllielement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmllabel_element) = tmpl_htmllabel_element.get_function(scope) {
-        let name_htmllabel_element = v8::String::new(scope, "HTMLLabelElement").unwrap();
-        global.define_own_property(scope, name_htmllabel_element.into(), ctor_htmllabel_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmllegend_element) = tmpl_htmllegend_element.get_function(scope) {
-        let name_htmllegend_element = v8::String::new(scope, "HTMLLegendElement").unwrap();
-        global.define_own_property(scope, name_htmllegend_element.into(), ctor_htmllegend_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmllink_element) = tmpl_htmllink_element.get_function(scope) {
-        let name_htmllink_element = v8::String::new(scope, "HTMLLinkElement").unwrap();
-        global.define_own_property(scope, name_htmllink_element.into(), ctor_htmllink_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlmap_element) = tmpl_htmlmap_element.get_function(scope) {
-        let name_htmlmap_element = v8::String::new(scope, "HTMLMapElement").unwrap();
-        global.define_own_property(scope, name_htmlmap_element.into(), ctor_htmlmap_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlmarquee_element) = tmpl_htmlmarquee_element.get_function(scope) {
-        let name_htmlmarquee_element = v8::String::new(scope, "HTMLMarqueeElement").unwrap();
-        global.define_own_property(scope, name_htmlmarquee_element.into(), ctor_htmlmarquee_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlmedia_element) = tmpl_htmlmedia_element.get_function(scope) {
-        let name_htmlmedia_element = v8::String::new(scope, "HTMLMediaElement").unwrap();
-        global.define_own_property(scope, name_htmlmedia_element.into(), ctor_htmlmedia_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlmenu_element) = tmpl_htmlmenu_element.get_function(scope) {
-        let name_htmlmenu_element = v8::String::new(scope, "HTMLMenuElement").unwrap();
-        global.define_own_property(scope, name_htmlmenu_element.into(), ctor_htmlmenu_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlmeta_element) = tmpl_htmlmeta_element.get_function(scope) {
-        let name_htmlmeta_element = v8::String::new(scope, "HTMLMetaElement").unwrap();
-        global.define_own_property(scope, name_htmlmeta_element.into(), ctor_htmlmeta_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlmeter_element) = tmpl_htmlmeter_element.get_function(scope) {
-        let name_htmlmeter_element = v8::String::new(scope, "HTMLMeterElement").unwrap();
-        global.define_own_property(scope, name_htmlmeter_element.into(), ctor_htmlmeter_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlmod_element) = tmpl_htmlmod_element.get_function(scope) {
-        let name_htmlmod_element = v8::String::new(scope, "HTMLModElement").unwrap();
-        global.define_own_property(scope, name_htmlmod_element.into(), ctor_htmlmod_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlmodel_element) = tmpl_htmlmodel_element.get_function(scope) {
-        let name_htmlmodel_element = v8::String::new(scope, "HTMLModelElement").unwrap();
-        global.define_own_property(scope, name_htmlmodel_element.into(), ctor_htmlmodel_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlolist_element) = tmpl_htmlolist_element.get_function(scope) {
-        let name_htmlolist_element = v8::String::new(scope, "HTMLOListElement").unwrap();
-        global.define_own_property(scope, name_htmlolist_element.into(), ctor_htmlolist_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlobject_element) = tmpl_htmlobject_element.get_function(scope) {
-        let name_htmlobject_element = v8::String::new(scope, "HTMLObjectElement").unwrap();
-        global.define_own_property(scope, name_htmlobject_element.into(), ctor_htmlobject_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlopt_group_element) = tmpl_htmlopt_group_element.get_function(scope) {
-        let name_htmlopt_group_element = v8::String::new(scope, "HTMLOptGroupElement").unwrap();
-        global.define_own_property(scope, name_htmlopt_group_element.into(), ctor_htmlopt_group_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmloption_element) = tmpl_htmloption_element.get_function(scope) {
-        let name_htmloption_element = v8::String::new(scope, "HTMLOptionElement").unwrap();
-        global.define_own_property(scope, name_htmloption_element.into(), ctor_htmloption_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmloutput_element) = tmpl_htmloutput_element.get_function(scope) {
-        let name_htmloutput_element = v8::String::new(scope, "HTMLOutputElement").unwrap();
-        global.define_own_property(scope, name_htmloutput_element.into(), ctor_htmloutput_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlparagraph_element) = tmpl_htmlparagraph_element.get_function(scope) {
-        let name_htmlparagraph_element = v8::String::new(scope, "HTMLParagraphElement").unwrap();
-        global.define_own_property(scope, name_htmlparagraph_element.into(), ctor_htmlparagraph_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlparam_element) = tmpl_htmlparam_element.get_function(scope) {
-        let name_htmlparam_element = v8::String::new(scope, "HTMLParamElement").unwrap();
-        global.define_own_property(scope, name_htmlparam_element.into(), ctor_htmlparam_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlpicture_element) = tmpl_htmlpicture_element.get_function(scope) {
-        let name_htmlpicture_element = v8::String::new(scope, "HTMLPictureElement").unwrap();
-        global.define_own_property(scope, name_htmlpicture_element.into(), ctor_htmlpicture_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlportal_element) = tmpl_htmlportal_element.get_function(scope) {
-        let name_htmlportal_element = v8::String::new(scope, "HTMLPortalElement").unwrap();
-        global.define_own_property(scope, name_htmlportal_element.into(), ctor_htmlportal_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlpre_element) = tmpl_htmlpre_element.get_function(scope) {
-        let name_htmlpre_element = v8::String::new(scope, "HTMLPreElement").unwrap();
-        global.define_own_property(scope, name_htmlpre_element.into(), ctor_htmlpre_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlprogress_element) = tmpl_htmlprogress_element.get_function(scope) {
-        let name_htmlprogress_element = v8::String::new(scope, "HTMLProgressElement").unwrap();
-        global.define_own_property(scope, name_htmlprogress_element.into(), ctor_htmlprogress_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlquote_element) = tmpl_htmlquote_element.get_function(scope) {
-        let name_htmlquote_element = v8::String::new(scope, "HTMLQuoteElement").unwrap();
-        global.define_own_property(scope, name_htmlquote_element.into(), ctor_htmlquote_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlscript_element) = tmpl_htmlscript_element.get_function(scope) {
-        let name_htmlscript_element = v8::String::new(scope, "HTMLScriptElement").unwrap();
-        global.define_own_property(scope, name_htmlscript_element.into(), ctor_htmlscript_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlselect_element) = tmpl_htmlselect_element.get_function(scope) {
-        let name_htmlselect_element = v8::String::new(scope, "HTMLSelectElement").unwrap();
-        global.define_own_property(scope, name_htmlselect_element.into(), ctor_htmlselect_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlselected_content_element) = tmpl_htmlselected_content_element.get_function(scope) {
-        let name_htmlselected_content_element = v8::String::new(scope, "HTMLSelectedContentElement").unwrap();
-        global.define_own_property(scope, name_htmlselected_content_element.into(), ctor_htmlselected_content_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlslot_element) = tmpl_htmlslot_element.get_function(scope) {
-        let name_htmlslot_element = v8::String::new(scope, "HTMLSlotElement").unwrap();
-        global.define_own_property(scope, name_htmlslot_element.into(), ctor_htmlslot_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlsource_element) = tmpl_htmlsource_element.get_function(scope) {
-        let name_htmlsource_element = v8::String::new(scope, "HTMLSourceElement").unwrap();
-        global.define_own_property(scope, name_htmlsource_element.into(), ctor_htmlsource_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlspan_element) = tmpl_htmlspan_element.get_function(scope) {
-        let name_htmlspan_element = v8::String::new(scope, "HTMLSpanElement").unwrap();
-        global.define_own_property(scope, name_htmlspan_element.into(), ctor_htmlspan_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlstyle_element) = tmpl_htmlstyle_element.get_function(scope) {
-        let name_htmlstyle_element = v8::String::new(scope, "HTMLStyleElement").unwrap();
-        global.define_own_property(scope, name_htmlstyle_element.into(), ctor_htmlstyle_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltable_caption_element) = tmpl_htmltable_caption_element.get_function(scope) {
-        let name_htmltable_caption_element = v8::String::new(scope, "HTMLTableCaptionElement").unwrap();
-        global.define_own_property(scope, name_htmltable_caption_element.into(), ctor_htmltable_caption_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltable_cell_element) = tmpl_htmltable_cell_element.get_function(scope) {
-        let name_htmltable_cell_element = v8::String::new(scope, "HTMLTableCellElement").unwrap();
-        global.define_own_property(scope, name_htmltable_cell_element.into(), ctor_htmltable_cell_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltable_col_element) = tmpl_htmltable_col_element.get_function(scope) {
-        let name_htmltable_col_element = v8::String::new(scope, "HTMLTableColElement").unwrap();
-        global.define_own_property(scope, name_htmltable_col_element.into(), ctor_htmltable_col_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltable_element) = tmpl_htmltable_element.get_function(scope) {
-        let name_htmltable_element = v8::String::new(scope, "HTMLTableElement").unwrap();
-        global.define_own_property(scope, name_htmltable_element.into(), ctor_htmltable_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltable_row_element) = tmpl_htmltable_row_element.get_function(scope) {
-        let name_htmltable_row_element = v8::String::new(scope, "HTMLTableRowElement").unwrap();
-        global.define_own_property(scope, name_htmltable_row_element.into(), ctor_htmltable_row_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltable_section_element) = tmpl_htmltable_section_element.get_function(scope) {
-        let name_htmltable_section_element = v8::String::new(scope, "HTMLTableSectionElement").unwrap();
-        global.define_own_property(scope, name_htmltable_section_element.into(), ctor_htmltable_section_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltemplate_element) = tmpl_htmltemplate_element.get_function(scope) {
-        let name_htmltemplate_element = v8::String::new(scope, "HTMLTemplateElement").unwrap();
-        global.define_own_property(scope, name_htmltemplate_element.into(), ctor_htmltemplate_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltext_area_element) = tmpl_htmltext_area_element.get_function(scope) {
-        let name_htmltext_area_element = v8::String::new(scope, "HTMLTextAreaElement").unwrap();
-        global.define_own_property(scope, name_htmltext_area_element.into(), ctor_htmltext_area_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltime_element) = tmpl_htmltime_element.get_function(scope) {
-        let name_htmltime_element = v8::String::new(scope, "HTMLTimeElement").unwrap();
-        global.define_own_property(scope, name_htmltime_element.into(), ctor_htmltime_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltitle_element) = tmpl_htmltitle_element.get_function(scope) {
-        let name_htmltitle_element = v8::String::new(scope, "HTMLTitleElement").unwrap();
-        global.define_own_property(scope, name_htmltitle_element.into(), ctor_htmltitle_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmltrack_element) = tmpl_htmltrack_element.get_function(scope) {
-        let name_htmltrack_element = v8::String::new(scope, "HTMLTrackElement").unwrap();
-        global.define_own_property(scope, name_htmltrack_element.into(), ctor_htmltrack_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlulist_element) = tmpl_htmlulist_element.get_function(scope) {
-        let name_htmlulist_element = v8::String::new(scope, "HTMLUListElement").unwrap();
-        global.define_own_property(scope, name_htmlulist_element.into(), ctor_htmlulist_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlunknown_element) = tmpl_htmlunknown_element.get_function(scope) {
-        let name_htmlunknown_element = v8::String::new(scope, "HTMLUnknownElement").unwrap();
-        global.define_own_property(scope, name_htmlunknown_element.into(), ctor_htmlunknown_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_math_mlanchor_element) = tmpl_math_mlanchor_element.get_function(scope) {
-        let name_math_mlanchor_element = v8::String::new(scope, "MathMLAnchorElement").unwrap();
-        global.define_own_property(scope, name_math_mlanchor_element.into(), ctor_math_mlanchor_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svganimation_element) = tmpl_svganimation_element.get_function(scope) {
-        let name_svganimation_element = v8::String::new(scope, "SVGAnimationElement").unwrap();
-        global.define_own_property(scope, name_svganimation_element.into(), ctor_svganimation_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgclip_path_element) = tmpl_svgclip_path_element.get_function(scope) {
-        let name_svgclip_path_element = v8::String::new(scope, "SVGClipPathElement").unwrap();
-        global.define_own_property(scope, name_svgclip_path_element.into(), ctor_svgclip_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgcomponent_transfer_function_element) = tmpl_svgcomponent_transfer_function_element.get_function(scope) {
-        let name_svgcomponent_transfer_function_element = v8::String::new(scope, "SVGComponentTransferFunctionElement").unwrap();
-        global.define_own_property(scope, name_svgcomponent_transfer_function_element.into(), ctor_svgcomponent_transfer_function_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgdesc_element) = tmpl_svgdesc_element.get_function(scope) {
-        let name_svgdesc_element = v8::String::new(scope, "SVGDescElement").unwrap();
-        global.define_own_property(scope, name_svgdesc_element.into(), ctor_svgdesc_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfeblend_element) = tmpl_svgfeblend_element.get_function(scope) {
-        let name_svgfeblend_element = v8::String::new(scope, "SVGFEBlendElement").unwrap();
-        global.define_own_property(scope, name_svgfeblend_element.into(), ctor_svgfeblend_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfecolor_matrix_element) = tmpl_svgfecolor_matrix_element.get_function(scope) {
-        let name_svgfecolor_matrix_element = v8::String::new(scope, "SVGFEColorMatrixElement").unwrap();
-        global.define_own_property(scope, name_svgfecolor_matrix_element.into(), ctor_svgfecolor_matrix_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfecomponent_transfer_element) = tmpl_svgfecomponent_transfer_element.get_function(scope) {
-        let name_svgfecomponent_transfer_element = v8::String::new(scope, "SVGFEComponentTransferElement").unwrap();
-        global.define_own_property(scope, name_svgfecomponent_transfer_element.into(), ctor_svgfecomponent_transfer_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfecomposite_element) = tmpl_svgfecomposite_element.get_function(scope) {
-        let name_svgfecomposite_element = v8::String::new(scope, "SVGFECompositeElement").unwrap();
-        global.define_own_property(scope, name_svgfecomposite_element.into(), ctor_svgfecomposite_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfeconvolve_matrix_element) = tmpl_svgfeconvolve_matrix_element.get_function(scope) {
-        let name_svgfeconvolve_matrix_element = v8::String::new(scope, "SVGFEConvolveMatrixElement").unwrap();
-        global.define_own_property(scope, name_svgfeconvolve_matrix_element.into(), ctor_svgfeconvolve_matrix_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfediffuse_lighting_element) = tmpl_svgfediffuse_lighting_element.get_function(scope) {
-        let name_svgfediffuse_lighting_element = v8::String::new(scope, "SVGFEDiffuseLightingElement").unwrap();
-        global.define_own_property(scope, name_svgfediffuse_lighting_element.into(), ctor_svgfediffuse_lighting_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfedisplacement_map_element) = tmpl_svgfedisplacement_map_element.get_function(scope) {
-        let name_svgfedisplacement_map_element = v8::String::new(scope, "SVGFEDisplacementMapElement").unwrap();
-        global.define_own_property(scope, name_svgfedisplacement_map_element.into(), ctor_svgfedisplacement_map_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfedistant_light_element) = tmpl_svgfedistant_light_element.get_function(scope) {
-        let name_svgfedistant_light_element = v8::String::new(scope, "SVGFEDistantLightElement").unwrap();
-        global.define_own_property(scope, name_svgfedistant_light_element.into(), ctor_svgfedistant_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfedrop_shadow_element) = tmpl_svgfedrop_shadow_element.get_function(scope) {
-        let name_svgfedrop_shadow_element = v8::String::new(scope, "SVGFEDropShadowElement").unwrap();
-        global.define_own_property(scope, name_svgfedrop_shadow_element.into(), ctor_svgfedrop_shadow_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfeflood_element) = tmpl_svgfeflood_element.get_function(scope) {
-        let name_svgfeflood_element = v8::String::new(scope, "SVGFEFloodElement").unwrap();
-        global.define_own_property(scope, name_svgfeflood_element.into(), ctor_svgfeflood_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfegaussian_blur_element) = tmpl_svgfegaussian_blur_element.get_function(scope) {
-        let name_svgfegaussian_blur_element = v8::String::new(scope, "SVGFEGaussianBlurElement").unwrap();
-        global.define_own_property(scope, name_svgfegaussian_blur_element.into(), ctor_svgfegaussian_blur_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfeimage_element) = tmpl_svgfeimage_element.get_function(scope) {
-        let name_svgfeimage_element = v8::String::new(scope, "SVGFEImageElement").unwrap();
-        global.define_own_property(scope, name_svgfeimage_element.into(), ctor_svgfeimage_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfemerge_element) = tmpl_svgfemerge_element.get_function(scope) {
-        let name_svgfemerge_element = v8::String::new(scope, "SVGFEMergeElement").unwrap();
-        global.define_own_property(scope, name_svgfemerge_element.into(), ctor_svgfemerge_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfemerge_node_element) = tmpl_svgfemerge_node_element.get_function(scope) {
-        let name_svgfemerge_node_element = v8::String::new(scope, "SVGFEMergeNodeElement").unwrap();
-        global.define_own_property(scope, name_svgfemerge_node_element.into(), ctor_svgfemerge_node_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfemorphology_element) = tmpl_svgfemorphology_element.get_function(scope) {
-        let name_svgfemorphology_element = v8::String::new(scope, "SVGFEMorphologyElement").unwrap();
-        global.define_own_property(scope, name_svgfemorphology_element.into(), ctor_svgfemorphology_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfeoffset_element) = tmpl_svgfeoffset_element.get_function(scope) {
-        let name_svgfeoffset_element = v8::String::new(scope, "SVGFEOffsetElement").unwrap();
-        global.define_own_property(scope, name_svgfeoffset_element.into(), ctor_svgfeoffset_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfepoint_light_element) = tmpl_svgfepoint_light_element.get_function(scope) {
-        let name_svgfepoint_light_element = v8::String::new(scope, "SVGFEPointLightElement").unwrap();
-        global.define_own_property(scope, name_svgfepoint_light_element.into(), ctor_svgfepoint_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfespecular_lighting_element) = tmpl_svgfespecular_lighting_element.get_function(scope) {
-        let name_svgfespecular_lighting_element = v8::String::new(scope, "SVGFESpecularLightingElement").unwrap();
-        global.define_own_property(scope, name_svgfespecular_lighting_element.into(), ctor_svgfespecular_lighting_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfespot_light_element) = tmpl_svgfespot_light_element.get_function(scope) {
-        let name_svgfespot_light_element = v8::String::new(scope, "SVGFESpotLightElement").unwrap();
-        global.define_own_property(scope, name_svgfespot_light_element.into(), ctor_svgfespot_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfetile_element) = tmpl_svgfetile_element.get_function(scope) {
-        let name_svgfetile_element = v8::String::new(scope, "SVGFETileElement").unwrap();
-        global.define_own_property(scope, name_svgfetile_element.into(), ctor_svgfetile_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfeturbulence_element) = tmpl_svgfeturbulence_element.get_function(scope) {
-        let name_svgfeturbulence_element = v8::String::new(scope, "SVGFETurbulenceElement").unwrap();
-        global.define_own_property(scope, name_svgfeturbulence_element.into(), ctor_svgfeturbulence_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfilter_element) = tmpl_svgfilter_element.get_function(scope) {
-        let name_svgfilter_element = v8::String::new(scope, "SVGFilterElement").unwrap();
-        global.define_own_property(scope, name_svgfilter_element.into(), ctor_svgfilter_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svggradient_element) = tmpl_svggradient_element.get_function(scope) {
-        let name_svggradient_element = v8::String::new(scope, "SVGGradientElement").unwrap();
-        global.define_own_property(scope, name_svggradient_element.into(), ctor_svggradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svggraphics_element) = tmpl_svggraphics_element.get_function(scope) {
-        let name_svggraphics_element = v8::String::new(scope, "SVGGraphicsElement").unwrap();
-        global.define_own_property(scope, name_svggraphics_element.into(), ctor_svggraphics_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgmpath_element) = tmpl_svgmpath_element.get_function(scope) {
-        let name_svgmpath_element = v8::String::new(scope, "SVGMPathElement").unwrap();
-        global.define_own_property(scope, name_svgmpath_element.into(), ctor_svgmpath_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgmarker_element) = tmpl_svgmarker_element.get_function(scope) {
-        let name_svgmarker_element = v8::String::new(scope, "SVGMarkerElement").unwrap();
-        global.define_own_property(scope, name_svgmarker_element.into(), ctor_svgmarker_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgmask_element) = tmpl_svgmask_element.get_function(scope) {
-        let name_svgmask_element = v8::String::new(scope, "SVGMaskElement").unwrap();
-        global.define_own_property(scope, name_svgmask_element.into(), ctor_svgmask_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgmetadata_element) = tmpl_svgmetadata_element.get_function(scope) {
-        let name_svgmetadata_element = v8::String::new(scope, "SVGMetadataElement").unwrap();
-        global.define_own_property(scope, name_svgmetadata_element.into(), ctor_svgmetadata_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgpattern_element) = tmpl_svgpattern_element.get_function(scope) {
-        let name_svgpattern_element = v8::String::new(scope, "SVGPatternElement").unwrap();
-        global.define_own_property(scope, name_svgpattern_element.into(), ctor_svgpattern_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgscript_element) = tmpl_svgscript_element.get_function(scope) {
-        let name_svgscript_element = v8::String::new(scope, "SVGScriptElement").unwrap();
-        global.define_own_property(scope, name_svgscript_element.into(), ctor_svgscript_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgstop_element) = tmpl_svgstop_element.get_function(scope) {
-        let name_svgstop_element = v8::String::new(scope, "SVGStopElement").unwrap();
-        global.define_own_property(scope, name_svgstop_element.into(), ctor_svgstop_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgstyle_element) = tmpl_svgstyle_element.get_function(scope) {
-        let name_svgstyle_element = v8::String::new(scope, "SVGStyleElement").unwrap();
-        global.define_own_property(scope, name_svgstyle_element.into(), ctor_svgstyle_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgtitle_element) = tmpl_svgtitle_element.get_function(scope) {
-        let name_svgtitle_element = v8::String::new(scope, "SVGTitleElement").unwrap();
-        global.define_own_property(scope, name_svgtitle_element.into(), ctor_svgtitle_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgview_element) = tmpl_svgview_element.get_function(scope) {
-        let name_svgview_element = v8::String::new(scope, "SVGViewElement").unwrap();
-        global.define_own_property(scope, name_svgview_element.into(), ctor_svgview_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlaudio_element) = tmpl_htmlaudio_element.get_function(scope) {
-        let name_htmlaudio_element = v8::String::new(scope, "HTMLAudioElement").unwrap();
-        global.define_own_property(scope, name_htmlaudio_element.into(), ctor_htmlaudio_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_htmlvideo_element) = tmpl_htmlvideo_element.get_function(scope) {
-        let name_htmlvideo_element = v8::String::new(scope, "HTMLVideoElement").unwrap();
-        global.define_own_property(scope, name_htmlvideo_element.into(), ctor_htmlvideo_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svganimate_element) = tmpl_svganimate_element.get_function(scope) {
-        let name_svganimate_element = v8::String::new(scope, "SVGAnimateElement").unwrap();
-        global.define_own_property(scope, name_svganimate_element.into(), ctor_svganimate_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svganimate_motion_element) = tmpl_svganimate_motion_element.get_function(scope) {
-        let name_svganimate_motion_element = v8::String::new(scope, "SVGAnimateMotionElement").unwrap();
-        global.define_own_property(scope, name_svganimate_motion_element.into(), ctor_svganimate_motion_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svganimate_transform_element) = tmpl_svganimate_transform_element.get_function(scope) {
-        let name_svganimate_transform_element = v8::String::new(scope, "SVGAnimateTransformElement").unwrap();
-        global.define_own_property(scope, name_svganimate_transform_element.into(), ctor_svganimate_transform_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgset_element) = tmpl_svgset_element.get_function(scope) {
-        let name_svgset_element = v8::String::new(scope, "SVGSetElement").unwrap();
-        global.define_own_property(scope, name_svgset_element.into(), ctor_svgset_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfefunc_aelement) = tmpl_svgfefunc_aelement.get_function(scope) {
-        let name_svgfefunc_aelement = v8::String::new(scope, "SVGFEFuncAElement").unwrap();
-        global.define_own_property(scope, name_svgfefunc_aelement.into(), ctor_svgfefunc_aelement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfefunc_belement) = tmpl_svgfefunc_belement.get_function(scope) {
-        let name_svgfefunc_belement = v8::String::new(scope, "SVGFEFuncBElement").unwrap();
-        global.define_own_property(scope, name_svgfefunc_belement.into(), ctor_svgfefunc_belement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfefunc_gelement) = tmpl_svgfefunc_gelement.get_function(scope) {
-        let name_svgfefunc_gelement = v8::String::new(scope, "SVGFEFuncGElement").unwrap();
-        global.define_own_property(scope, name_svgfefunc_gelement.into(), ctor_svgfefunc_gelement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgfefunc_relement) = tmpl_svgfefunc_relement.get_function(scope) {
-        let name_svgfefunc_relement = v8::String::new(scope, "SVGFEFuncRElement").unwrap();
-        global.define_own_property(scope, name_svgfefunc_relement.into(), ctor_svgfefunc_relement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svglinear_gradient_element) = tmpl_svglinear_gradient_element.get_function(scope) {
-        let name_svglinear_gradient_element = v8::String::new(scope, "SVGLinearGradientElement").unwrap();
-        global.define_own_property(scope, name_svglinear_gradient_element.into(), ctor_svglinear_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgradial_gradient_element) = tmpl_svgradial_gradient_element.get_function(scope) {
-        let name_svgradial_gradient_element = v8::String::new(scope, "SVGRadialGradientElement").unwrap();
-        global.define_own_property(scope, name_svgradial_gradient_element.into(), ctor_svgradial_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgaelement) = tmpl_svgaelement.get_function(scope) {
-        let name_svgaelement = v8::String::new(scope, "SVGAElement").unwrap();
-        global.define_own_property(scope, name_svgaelement.into(), ctor_svgaelement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgdefs_element) = tmpl_svgdefs_element.get_function(scope) {
-        let name_svgdefs_element = v8::String::new(scope, "SVGDefsElement").unwrap();
-        global.define_own_property(scope, name_svgdefs_element.into(), ctor_svgdefs_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgforeign_object_element) = tmpl_svgforeign_object_element.get_function(scope) {
-        let name_svgforeign_object_element = v8::String::new(scope, "SVGForeignObjectElement").unwrap();
-        global.define_own_property(scope, name_svgforeign_object_element.into(), ctor_svgforeign_object_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svggelement) = tmpl_svggelement.get_function(scope) {
-        let name_svggelement = v8::String::new(scope, "SVGGElement").unwrap();
-        global.define_own_property(scope, name_svggelement.into(), ctor_svggelement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svggeometry_element) = tmpl_svggeometry_element.get_function(scope) {
-        let name_svggeometry_element = v8::String::new(scope, "SVGGeometryElement").unwrap();
-        global.define_own_property(scope, name_svggeometry_element.into(), ctor_svggeometry_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgimage_element) = tmpl_svgimage_element.get_function(scope) {
-        let name_svgimage_element = v8::String::new(scope, "SVGImageElement").unwrap();
-        global.define_own_property(scope, name_svgimage_element.into(), ctor_svgimage_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgsvgelement) = tmpl_svgsvgelement.get_function(scope) {
-        let name_svgsvgelement = v8::String::new(scope, "SVGSVGElement").unwrap();
-        global.define_own_property(scope, name_svgsvgelement.into(), ctor_svgsvgelement.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgswitch_element) = tmpl_svgswitch_element.get_function(scope) {
-        let name_svgswitch_element = v8::String::new(scope, "SVGSwitchElement").unwrap();
-        global.define_own_property(scope, name_svgswitch_element.into(), ctor_svgswitch_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgsymbol_element) = tmpl_svgsymbol_element.get_function(scope) {
-        let name_svgsymbol_element = v8::String::new(scope, "SVGSymbolElement").unwrap();
-        global.define_own_property(scope, name_svgsymbol_element.into(), ctor_svgsymbol_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgtext_content_element) = tmpl_svgtext_content_element.get_function(scope) {
-        let name_svgtext_content_element = v8::String::new(scope, "SVGTextContentElement").unwrap();
-        global.define_own_property(scope, name_svgtext_content_element.into(), ctor_svgtext_content_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svguse_element) = tmpl_svguse_element.get_function(scope) {
-        let name_svguse_element = v8::String::new(scope, "SVGUseElement").unwrap();
-        global.define_own_property(scope, name_svguse_element.into(), ctor_svguse_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgcircle_element) = tmpl_svgcircle_element.get_function(scope) {
-        let name_svgcircle_element = v8::String::new(scope, "SVGCircleElement").unwrap();
-        global.define_own_property(scope, name_svgcircle_element.into(), ctor_svgcircle_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgellipse_element) = tmpl_svgellipse_element.get_function(scope) {
-        let name_svgellipse_element = v8::String::new(scope, "SVGEllipseElement").unwrap();
-        global.define_own_property(scope, name_svgellipse_element.into(), ctor_svgellipse_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgline_element) = tmpl_svgline_element.get_function(scope) {
-        let name_svgline_element = v8::String::new(scope, "SVGLineElement").unwrap();
-        global.define_own_property(scope, name_svgline_element.into(), ctor_svgline_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgpath_element) = tmpl_svgpath_element.get_function(scope) {
-        let name_svgpath_element = v8::String::new(scope, "SVGPathElement").unwrap();
-        global.define_own_property(scope, name_svgpath_element.into(), ctor_svgpath_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgpolygon_element) = tmpl_svgpolygon_element.get_function(scope) {
-        let name_svgpolygon_element = v8::String::new(scope, "SVGPolygonElement").unwrap();
-        global.define_own_property(scope, name_svgpolygon_element.into(), ctor_svgpolygon_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgpolyline_element) = tmpl_svgpolyline_element.get_function(scope) {
-        let name_svgpolyline_element = v8::String::new(scope, "SVGPolylineElement").unwrap();
-        global.define_own_property(scope, name_svgpolyline_element.into(), ctor_svgpolyline_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgrect_element) = tmpl_svgrect_element.get_function(scope) {
-        let name_svgrect_element = v8::String::new(scope, "SVGRectElement").unwrap();
-        global.define_own_property(scope, name_svgrect_element.into(), ctor_svgrect_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgtext_path_element) = tmpl_svgtext_path_element.get_function(scope) {
-        let name_svgtext_path_element = v8::String::new(scope, "SVGTextPathElement").unwrap();
-        global.define_own_property(scope, name_svgtext_path_element.into(), ctor_svgtext_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgtext_positioning_element) = tmpl_svgtext_positioning_element.get_function(scope) {
-        let name_svgtext_positioning_element = v8::String::new(scope, "SVGTextPositioningElement").unwrap();
-        global.define_own_property(scope, name_svgtext_positioning_element.into(), ctor_svgtext_positioning_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgtspan_element) = tmpl_svgtspan_element.get_function(scope) {
-        let name_svgtspan_element = v8::String::new(scope, "SVGTSpanElement").unwrap();
-        global.define_own_property(scope, name_svgtspan_element.into(), ctor_svgtspan_element.into(), v8::PropertyAttribute::DONT_ENUM);
-    }
-    if let Some(ctor_svgtext_element) = tmpl_svgtext_element.get_function(scope) {
-        let name_svgtext_element = v8::String::new(scope, "SVGTextElement").unwrap();
-        global.define_own_property(scope, name_svgtext_element.into(), ctor_svgtext_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    if let Some(ctor_xr_cube_layer) = tmpl_xr_cube_layer.get_function(scope) {
+        let name_xr_cube_layer = v8::String::new(scope, "XRCubeLayer").unwrap();
+        global.define_own_property(scope, name_xr_cube_layer.into(), ctor_xr_cube_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_xr_cylinder_layer) = tmpl_xr_cylinder_layer.get_function(scope) {
+        let name_xr_cylinder_layer = v8::String::new(scope, "XRCylinderLayer").unwrap();
+        global.define_own_property(scope, name_xr_cylinder_layer.into(), ctor_xr_cylinder_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_xr_equirect_layer) = tmpl_xr_equirect_layer.get_function(scope) {
+        let name_xr_equirect_layer = v8::String::new(scope, "XREquirectLayer").unwrap();
+        global.define_own_property(scope, name_xr_equirect_layer.into(), ctor_xr_equirect_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_xr_projection_layer) = tmpl_xr_projection_layer.get_function(scope) {
+        let name_xr_projection_layer = v8::String::new(scope, "XRProjectionLayer").unwrap();
+        global.define_own_property(scope, name_xr_projection_layer.into(), ctor_xr_projection_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_xr_quad_layer) = tmpl_xr_quad_layer.get_function(scope) {
+        let name_xr_quad_layer = v8::String::new(scope, "XRQuadLayer").unwrap();
+        global.define_own_property(scope, name_xr_quad_layer.into(), ctor_xr_quad_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_xr_bounded_reference_space) = tmpl_xr_bounded_reference_space.get_function(scope) {
+        let name_xr_bounded_reference_space = v8::String::new(scope, "XRBoundedReferenceSpace").unwrap();
+        global.define_own_property(scope, name_xr_bounded_reference_space.into(), ctor_xr_bounded_reference_space.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_cdata_section) = tmpl_cdata_section.get_function(scope) {
+        let name_cdata_section = v8::String::new(scope, "CDATASection").unwrap();
+        global.define_own_property(scope, name_cdata_section.into(), ctor_cdata_section.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_use_element_shadow_root) = tmpl_svg_use_element_shadow_root.get_function(scope) {
+        let name_svg_use_element_shadow_root = v8::String::new(scope, "SVGUseElementShadowRoot").unwrap();
+        global.define_own_property(scope, name_svg_use_element_shadow_root.into(), ctor_svg_use_element_shadow_root.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_anchor_element) = tmpl_html_anchor_element.get_function(scope) {
+        let name_html_anchor_element = v8::String::new(scope, "HTMLAnchorElement").unwrap();
+        global.define_own_property(scope, name_html_anchor_element.into(), ctor_html_anchor_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_area_element) = tmpl_html_area_element.get_function(scope) {
+        let name_html_area_element = v8::String::new(scope, "HTMLAreaElement").unwrap();
+        global.define_own_property(scope, name_html_area_element.into(), ctor_html_area_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_htmlbr_element) = tmpl_htmlbr_element.get_function(scope) {
+        let name_htmlbr_element = v8::String::new(scope, "HTMLBRElement").unwrap();
+        global.define_own_property(scope, name_htmlbr_element.into(), ctor_htmlbr_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_base_element) = tmpl_html_base_element.get_function(scope) {
+        let name_html_base_element = v8::String::new(scope, "HTMLBaseElement").unwrap();
+        global.define_own_property(scope, name_html_base_element.into(), ctor_html_base_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_body_element) = tmpl_html_body_element.get_function(scope) {
+        let name_html_body_element = v8::String::new(scope, "HTMLBodyElement").unwrap();
+        global.define_own_property(scope, name_html_body_element.into(), ctor_html_body_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_button_element) = tmpl_html_button_element.get_function(scope) {
+        let name_html_button_element = v8::String::new(scope, "HTMLButtonElement").unwrap();
+        global.define_own_property(scope, name_html_button_element.into(), ctor_html_button_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_canvas_element) = tmpl_html_canvas_element.get_function(scope) {
+        let name_html_canvas_element = v8::String::new(scope, "HTMLCanvasElement").unwrap();
+        global.define_own_property(scope, name_html_canvas_element.into(), ctor_html_canvas_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_htmld_list_element) = tmpl_htmld_list_element.get_function(scope) {
+        let name_htmld_list_element = v8::String::new(scope, "HTMLDListElement").unwrap();
+        global.define_own_property(scope, name_htmld_list_element.into(), ctor_htmld_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_data_element) = tmpl_html_data_element.get_function(scope) {
+        let name_html_data_element = v8::String::new(scope, "HTMLDataElement").unwrap();
+        global.define_own_property(scope, name_html_data_element.into(), ctor_html_data_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_data_list_element) = tmpl_html_data_list_element.get_function(scope) {
+        let name_html_data_list_element = v8::String::new(scope, "HTMLDataListElement").unwrap();
+        global.define_own_property(scope, name_html_data_list_element.into(), ctor_html_data_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_details_element) = tmpl_html_details_element.get_function(scope) {
+        let name_html_details_element = v8::String::new(scope, "HTMLDetailsElement").unwrap();
+        global.define_own_property(scope, name_html_details_element.into(), ctor_html_details_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_dialog_element) = tmpl_html_dialog_element.get_function(scope) {
+        let name_html_dialog_element = v8::String::new(scope, "HTMLDialogElement").unwrap();
+        global.define_own_property(scope, name_html_dialog_element.into(), ctor_html_dialog_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_directory_element) = tmpl_html_directory_element.get_function(scope) {
+        let name_html_directory_element = v8::String::new(scope, "HTMLDirectoryElement").unwrap();
+        global.define_own_property(scope, name_html_directory_element.into(), ctor_html_directory_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_div_element) = tmpl_html_div_element.get_function(scope) {
+        let name_html_div_element = v8::String::new(scope, "HTMLDivElement").unwrap();
+        global.define_own_property(scope, name_html_div_element.into(), ctor_html_div_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_embed_element) = tmpl_html_embed_element.get_function(scope) {
+        let name_html_embed_element = v8::String::new(scope, "HTMLEmbedElement").unwrap();
+        global.define_own_property(scope, name_html_embed_element.into(), ctor_html_embed_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_fenced_frame_element) = tmpl_html_fenced_frame_element.get_function(scope) {
+        let name_html_fenced_frame_element = v8::String::new(scope, "HTMLFencedFrameElement").unwrap();
+        global.define_own_property(scope, name_html_fenced_frame_element.into(), ctor_html_fenced_frame_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_field_set_element) = tmpl_html_field_set_element.get_function(scope) {
+        let name_html_field_set_element = v8::String::new(scope, "HTMLFieldSetElement").unwrap();
+        global.define_own_property(scope, name_html_field_set_element.into(), ctor_html_field_set_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_font_element) = tmpl_html_font_element.get_function(scope) {
+        let name_html_font_element = v8::String::new(scope, "HTMLFontElement").unwrap();
+        global.define_own_property(scope, name_html_font_element.into(), ctor_html_font_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_form_element) = tmpl_html_form_element.get_function(scope) {
+        let name_html_form_element = v8::String::new(scope, "HTMLFormElement").unwrap();
+        global.define_own_property(scope, name_html_form_element.into(), ctor_html_form_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_frame_element) = tmpl_html_frame_element.get_function(scope) {
+        let name_html_frame_element = v8::String::new(scope, "HTMLFrameElement").unwrap();
+        global.define_own_property(scope, name_html_frame_element.into(), ctor_html_frame_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_frame_set_element) = tmpl_html_frame_set_element.get_function(scope) {
+        let name_html_frame_set_element = v8::String::new(scope, "HTMLFrameSetElement").unwrap();
+        global.define_own_property(scope, name_html_frame_set_element.into(), ctor_html_frame_set_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_geolocation_element) = tmpl_html_geolocation_element.get_function(scope) {
+        let name_html_geolocation_element = v8::String::new(scope, "HTMLGeolocationElement").unwrap();
+        global.define_own_property(scope, name_html_geolocation_element.into(), ctor_html_geolocation_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_htmlhr_element) = tmpl_htmlhr_element.get_function(scope) {
+        let name_htmlhr_element = v8::String::new(scope, "HTMLHRElement").unwrap();
+        global.define_own_property(scope, name_htmlhr_element.into(), ctor_htmlhr_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_head_element) = tmpl_html_head_element.get_function(scope) {
+        let name_html_head_element = v8::String::new(scope, "HTMLHeadElement").unwrap();
+        global.define_own_property(scope, name_html_head_element.into(), ctor_html_head_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_heading_element) = tmpl_html_heading_element.get_function(scope) {
+        let name_html_heading_element = v8::String::new(scope, "HTMLHeadingElement").unwrap();
+        global.define_own_property(scope, name_html_heading_element.into(), ctor_html_heading_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_html_element) = tmpl_html_html_element.get_function(scope) {
+        let name_html_html_element = v8::String::new(scope, "HTMLHtmlElement").unwrap();
+        global.define_own_property(scope, name_html_html_element.into(), ctor_html_html_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_htmli_frame_element) = tmpl_htmli_frame_element.get_function(scope) {
+        let name_htmli_frame_element = v8::String::new(scope, "HTMLIFrameElement").unwrap();
+        global.define_own_property(scope, name_htmli_frame_element.into(), ctor_htmli_frame_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_image_element) = tmpl_html_image_element.get_function(scope) {
+        let name_html_image_element = v8::String::new(scope, "HTMLImageElement").unwrap();
+        global.define_own_property(scope, name_html_image_element.into(), ctor_html_image_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_input_element) = tmpl_html_input_element.get_function(scope) {
+        let name_html_input_element = v8::String::new(scope, "HTMLInputElement").unwrap();
+        global.define_own_property(scope, name_html_input_element.into(), ctor_html_input_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_htmlli_element) = tmpl_htmlli_element.get_function(scope) {
+        let name_htmlli_element = v8::String::new(scope, "HTMLLIElement").unwrap();
+        global.define_own_property(scope, name_htmlli_element.into(), ctor_htmlli_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_label_element) = tmpl_html_label_element.get_function(scope) {
+        let name_html_label_element = v8::String::new(scope, "HTMLLabelElement").unwrap();
+        global.define_own_property(scope, name_html_label_element.into(), ctor_html_label_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_legend_element) = tmpl_html_legend_element.get_function(scope) {
+        let name_html_legend_element = v8::String::new(scope, "HTMLLegendElement").unwrap();
+        global.define_own_property(scope, name_html_legend_element.into(), ctor_html_legend_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_link_element) = tmpl_html_link_element.get_function(scope) {
+        let name_html_link_element = v8::String::new(scope, "HTMLLinkElement").unwrap();
+        global.define_own_property(scope, name_html_link_element.into(), ctor_html_link_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_map_element) = tmpl_html_map_element.get_function(scope) {
+        let name_html_map_element = v8::String::new(scope, "HTMLMapElement").unwrap();
+        global.define_own_property(scope, name_html_map_element.into(), ctor_html_map_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_marquee_element) = tmpl_html_marquee_element.get_function(scope) {
+        let name_html_marquee_element = v8::String::new(scope, "HTMLMarqueeElement").unwrap();
+        global.define_own_property(scope, name_html_marquee_element.into(), ctor_html_marquee_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_media_element) = tmpl_html_media_element.get_function(scope) {
+        let name_html_media_element = v8::String::new(scope, "HTMLMediaElement").unwrap();
+        global.define_own_property(scope, name_html_media_element.into(), ctor_html_media_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_menu_element) = tmpl_html_menu_element.get_function(scope) {
+        let name_html_menu_element = v8::String::new(scope, "HTMLMenuElement").unwrap();
+        global.define_own_property(scope, name_html_menu_element.into(), ctor_html_menu_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_meta_element) = tmpl_html_meta_element.get_function(scope) {
+        let name_html_meta_element = v8::String::new(scope, "HTMLMetaElement").unwrap();
+        global.define_own_property(scope, name_html_meta_element.into(), ctor_html_meta_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_meter_element) = tmpl_html_meter_element.get_function(scope) {
+        let name_html_meter_element = v8::String::new(scope, "HTMLMeterElement").unwrap();
+        global.define_own_property(scope, name_html_meter_element.into(), ctor_html_meter_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_mod_element) = tmpl_html_mod_element.get_function(scope) {
+        let name_html_mod_element = v8::String::new(scope, "HTMLModElement").unwrap();
+        global.define_own_property(scope, name_html_mod_element.into(), ctor_html_mod_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_model_element) = tmpl_html_model_element.get_function(scope) {
+        let name_html_model_element = v8::String::new(scope, "HTMLModelElement").unwrap();
+        global.define_own_property(scope, name_html_model_element.into(), ctor_html_model_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_htmlo_list_element) = tmpl_htmlo_list_element.get_function(scope) {
+        let name_htmlo_list_element = v8::String::new(scope, "HTMLOListElement").unwrap();
+        global.define_own_property(scope, name_htmlo_list_element.into(), ctor_htmlo_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_object_element) = tmpl_html_object_element.get_function(scope) {
+        let name_html_object_element = v8::String::new(scope, "HTMLObjectElement").unwrap();
+        global.define_own_property(scope, name_html_object_element.into(), ctor_html_object_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_opt_group_element) = tmpl_html_opt_group_element.get_function(scope) {
+        let name_html_opt_group_element = v8::String::new(scope, "HTMLOptGroupElement").unwrap();
+        global.define_own_property(scope, name_html_opt_group_element.into(), ctor_html_opt_group_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_option_element) = tmpl_html_option_element.get_function(scope) {
+        let name_html_option_element = v8::String::new(scope, "HTMLOptionElement").unwrap();
+        global.define_own_property(scope, name_html_option_element.into(), ctor_html_option_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_output_element) = tmpl_html_output_element.get_function(scope) {
+        let name_html_output_element = v8::String::new(scope, "HTMLOutputElement").unwrap();
+        global.define_own_property(scope, name_html_output_element.into(), ctor_html_output_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_paragraph_element) = tmpl_html_paragraph_element.get_function(scope) {
+        let name_html_paragraph_element = v8::String::new(scope, "HTMLParagraphElement").unwrap();
+        global.define_own_property(scope, name_html_paragraph_element.into(), ctor_html_paragraph_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_param_element) = tmpl_html_param_element.get_function(scope) {
+        let name_html_param_element = v8::String::new(scope, "HTMLParamElement").unwrap();
+        global.define_own_property(scope, name_html_param_element.into(), ctor_html_param_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_picture_element) = tmpl_html_picture_element.get_function(scope) {
+        let name_html_picture_element = v8::String::new(scope, "HTMLPictureElement").unwrap();
+        global.define_own_property(scope, name_html_picture_element.into(), ctor_html_picture_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_portal_element) = tmpl_html_portal_element.get_function(scope) {
+        let name_html_portal_element = v8::String::new(scope, "HTMLPortalElement").unwrap();
+        global.define_own_property(scope, name_html_portal_element.into(), ctor_html_portal_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_pre_element) = tmpl_html_pre_element.get_function(scope) {
+        let name_html_pre_element = v8::String::new(scope, "HTMLPreElement").unwrap();
+        global.define_own_property(scope, name_html_pre_element.into(), ctor_html_pre_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_progress_element) = tmpl_html_progress_element.get_function(scope) {
+        let name_html_progress_element = v8::String::new(scope, "HTMLProgressElement").unwrap();
+        global.define_own_property(scope, name_html_progress_element.into(), ctor_html_progress_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_quote_element) = tmpl_html_quote_element.get_function(scope) {
+        let name_html_quote_element = v8::String::new(scope, "HTMLQuoteElement").unwrap();
+        global.define_own_property(scope, name_html_quote_element.into(), ctor_html_quote_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_script_element) = tmpl_html_script_element.get_function(scope) {
+        let name_html_script_element = v8::String::new(scope, "HTMLScriptElement").unwrap();
+        global.define_own_property(scope, name_html_script_element.into(), ctor_html_script_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_select_element) = tmpl_html_select_element.get_function(scope) {
+        let name_html_select_element = v8::String::new(scope, "HTMLSelectElement").unwrap();
+        global.define_own_property(scope, name_html_select_element.into(), ctor_html_select_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_selected_content_element) = tmpl_html_selected_content_element.get_function(scope) {
+        let name_html_selected_content_element = v8::String::new(scope, "HTMLSelectedContentElement").unwrap();
+        global.define_own_property(scope, name_html_selected_content_element.into(), ctor_html_selected_content_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_slot_element) = tmpl_html_slot_element.get_function(scope) {
+        let name_html_slot_element = v8::String::new(scope, "HTMLSlotElement").unwrap();
+        global.define_own_property(scope, name_html_slot_element.into(), ctor_html_slot_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_source_element) = tmpl_html_source_element.get_function(scope) {
+        let name_html_source_element = v8::String::new(scope, "HTMLSourceElement").unwrap();
+        global.define_own_property(scope, name_html_source_element.into(), ctor_html_source_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_span_element) = tmpl_html_span_element.get_function(scope) {
+        let name_html_span_element = v8::String::new(scope, "HTMLSpanElement").unwrap();
+        global.define_own_property(scope, name_html_span_element.into(), ctor_html_span_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_style_element) = tmpl_html_style_element.get_function(scope) {
+        let name_html_style_element = v8::String::new(scope, "HTMLStyleElement").unwrap();
+        global.define_own_property(scope, name_html_style_element.into(), ctor_html_style_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_table_caption_element) = tmpl_html_table_caption_element.get_function(scope) {
+        let name_html_table_caption_element = v8::String::new(scope, "HTMLTableCaptionElement").unwrap();
+        global.define_own_property(scope, name_html_table_caption_element.into(), ctor_html_table_caption_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_table_cell_element) = tmpl_html_table_cell_element.get_function(scope) {
+        let name_html_table_cell_element = v8::String::new(scope, "HTMLTableCellElement").unwrap();
+        global.define_own_property(scope, name_html_table_cell_element.into(), ctor_html_table_cell_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_table_col_element) = tmpl_html_table_col_element.get_function(scope) {
+        let name_html_table_col_element = v8::String::new(scope, "HTMLTableColElement").unwrap();
+        global.define_own_property(scope, name_html_table_col_element.into(), ctor_html_table_col_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_table_element) = tmpl_html_table_element.get_function(scope) {
+        let name_html_table_element = v8::String::new(scope, "HTMLTableElement").unwrap();
+        global.define_own_property(scope, name_html_table_element.into(), ctor_html_table_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_table_row_element) = tmpl_html_table_row_element.get_function(scope) {
+        let name_html_table_row_element = v8::String::new(scope, "HTMLTableRowElement").unwrap();
+        global.define_own_property(scope, name_html_table_row_element.into(), ctor_html_table_row_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_table_section_element) = tmpl_html_table_section_element.get_function(scope) {
+        let name_html_table_section_element = v8::String::new(scope, "HTMLTableSectionElement").unwrap();
+        global.define_own_property(scope, name_html_table_section_element.into(), ctor_html_table_section_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_template_element) = tmpl_html_template_element.get_function(scope) {
+        let name_html_template_element = v8::String::new(scope, "HTMLTemplateElement").unwrap();
+        global.define_own_property(scope, name_html_template_element.into(), ctor_html_template_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_text_area_element) = tmpl_html_text_area_element.get_function(scope) {
+        let name_html_text_area_element = v8::String::new(scope, "HTMLTextAreaElement").unwrap();
+        global.define_own_property(scope, name_html_text_area_element.into(), ctor_html_text_area_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_time_element) = tmpl_html_time_element.get_function(scope) {
+        let name_html_time_element = v8::String::new(scope, "HTMLTimeElement").unwrap();
+        global.define_own_property(scope, name_html_time_element.into(), ctor_html_time_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_title_element) = tmpl_html_title_element.get_function(scope) {
+        let name_html_title_element = v8::String::new(scope, "HTMLTitleElement").unwrap();
+        global.define_own_property(scope, name_html_title_element.into(), ctor_html_title_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_track_element) = tmpl_html_track_element.get_function(scope) {
+        let name_html_track_element = v8::String::new(scope, "HTMLTrackElement").unwrap();
+        global.define_own_property(scope, name_html_track_element.into(), ctor_html_track_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_htmlu_list_element) = tmpl_htmlu_list_element.get_function(scope) {
+        let name_htmlu_list_element = v8::String::new(scope, "HTMLUListElement").unwrap();
+        global.define_own_property(scope, name_htmlu_list_element.into(), ctor_htmlu_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_unknown_element) = tmpl_html_unknown_element.get_function(scope) {
+        let name_html_unknown_element = v8::String::new(scope, "HTMLUnknownElement").unwrap();
+        global.define_own_property(scope, name_html_unknown_element.into(), ctor_html_unknown_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_math_ml_anchor_element) = tmpl_math_ml_anchor_element.get_function(scope) {
+        let name_math_ml_anchor_element = v8::String::new(scope, "MathMLAnchorElement").unwrap();
+        global.define_own_property(scope, name_math_ml_anchor_element.into(), ctor_math_ml_anchor_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_animation_element) = tmpl_svg_animation_element.get_function(scope) {
+        let name_svg_animation_element = v8::String::new(scope, "SVGAnimationElement").unwrap();
+        global.define_own_property(scope, name_svg_animation_element.into(), ctor_svg_animation_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_clip_path_element) = tmpl_svg_clip_path_element.get_function(scope) {
+        let name_svg_clip_path_element = v8::String::new(scope, "SVGClipPathElement").unwrap();
+        global.define_own_property(scope, name_svg_clip_path_element.into(), ctor_svg_clip_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_component_transfer_function_element) = tmpl_svg_component_transfer_function_element.get_function(scope) {
+        let name_svg_component_transfer_function_element = v8::String::new(scope, "SVGComponentTransferFunctionElement").unwrap();
+        global.define_own_property(scope, name_svg_component_transfer_function_element.into(), ctor_svg_component_transfer_function_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_desc_element) = tmpl_svg_desc_element.get_function(scope) {
+        let name_svg_desc_element = v8::String::new(scope, "SVGDescElement").unwrap();
+        global.define_own_property(scope, name_svg_desc_element.into(), ctor_svg_desc_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_blend_element) = tmpl_svgfe_blend_element.get_function(scope) {
+        let name_svgfe_blend_element = v8::String::new(scope, "SVGFEBlendElement").unwrap();
+        global.define_own_property(scope, name_svgfe_blend_element.into(), ctor_svgfe_blend_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_color_matrix_element) = tmpl_svgfe_color_matrix_element.get_function(scope) {
+        let name_svgfe_color_matrix_element = v8::String::new(scope, "SVGFEColorMatrixElement").unwrap();
+        global.define_own_property(scope, name_svgfe_color_matrix_element.into(), ctor_svgfe_color_matrix_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_component_transfer_element) = tmpl_svgfe_component_transfer_element.get_function(scope) {
+        let name_svgfe_component_transfer_element = v8::String::new(scope, "SVGFEComponentTransferElement").unwrap();
+        global.define_own_property(scope, name_svgfe_component_transfer_element.into(), ctor_svgfe_component_transfer_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_composite_element) = tmpl_svgfe_composite_element.get_function(scope) {
+        let name_svgfe_composite_element = v8::String::new(scope, "SVGFECompositeElement").unwrap();
+        global.define_own_property(scope, name_svgfe_composite_element.into(), ctor_svgfe_composite_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_convolve_matrix_element) = tmpl_svgfe_convolve_matrix_element.get_function(scope) {
+        let name_svgfe_convolve_matrix_element = v8::String::new(scope, "SVGFEConvolveMatrixElement").unwrap();
+        global.define_own_property(scope, name_svgfe_convolve_matrix_element.into(), ctor_svgfe_convolve_matrix_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_diffuse_lighting_element) = tmpl_svgfe_diffuse_lighting_element.get_function(scope) {
+        let name_svgfe_diffuse_lighting_element = v8::String::new(scope, "SVGFEDiffuseLightingElement").unwrap();
+        global.define_own_property(scope, name_svgfe_diffuse_lighting_element.into(), ctor_svgfe_diffuse_lighting_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_displacement_map_element) = tmpl_svgfe_displacement_map_element.get_function(scope) {
+        let name_svgfe_displacement_map_element = v8::String::new(scope, "SVGFEDisplacementMapElement").unwrap();
+        global.define_own_property(scope, name_svgfe_displacement_map_element.into(), ctor_svgfe_displacement_map_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_distant_light_element) = tmpl_svgfe_distant_light_element.get_function(scope) {
+        let name_svgfe_distant_light_element = v8::String::new(scope, "SVGFEDistantLightElement").unwrap();
+        global.define_own_property(scope, name_svgfe_distant_light_element.into(), ctor_svgfe_distant_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_drop_shadow_element) = tmpl_svgfe_drop_shadow_element.get_function(scope) {
+        let name_svgfe_drop_shadow_element = v8::String::new(scope, "SVGFEDropShadowElement").unwrap();
+        global.define_own_property(scope, name_svgfe_drop_shadow_element.into(), ctor_svgfe_drop_shadow_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_flood_element) = tmpl_svgfe_flood_element.get_function(scope) {
+        let name_svgfe_flood_element = v8::String::new(scope, "SVGFEFloodElement").unwrap();
+        global.define_own_property(scope, name_svgfe_flood_element.into(), ctor_svgfe_flood_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_gaussian_blur_element) = tmpl_svgfe_gaussian_blur_element.get_function(scope) {
+        let name_svgfe_gaussian_blur_element = v8::String::new(scope, "SVGFEGaussianBlurElement").unwrap();
+        global.define_own_property(scope, name_svgfe_gaussian_blur_element.into(), ctor_svgfe_gaussian_blur_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_image_element) = tmpl_svgfe_image_element.get_function(scope) {
+        let name_svgfe_image_element = v8::String::new(scope, "SVGFEImageElement").unwrap();
+        global.define_own_property(scope, name_svgfe_image_element.into(), ctor_svgfe_image_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_merge_element) = tmpl_svgfe_merge_element.get_function(scope) {
+        let name_svgfe_merge_element = v8::String::new(scope, "SVGFEMergeElement").unwrap();
+        global.define_own_property(scope, name_svgfe_merge_element.into(), ctor_svgfe_merge_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_merge_node_element) = tmpl_svgfe_merge_node_element.get_function(scope) {
+        let name_svgfe_merge_node_element = v8::String::new(scope, "SVGFEMergeNodeElement").unwrap();
+        global.define_own_property(scope, name_svgfe_merge_node_element.into(), ctor_svgfe_merge_node_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_morphology_element) = tmpl_svgfe_morphology_element.get_function(scope) {
+        let name_svgfe_morphology_element = v8::String::new(scope, "SVGFEMorphologyElement").unwrap();
+        global.define_own_property(scope, name_svgfe_morphology_element.into(), ctor_svgfe_morphology_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_offset_element) = tmpl_svgfe_offset_element.get_function(scope) {
+        let name_svgfe_offset_element = v8::String::new(scope, "SVGFEOffsetElement").unwrap();
+        global.define_own_property(scope, name_svgfe_offset_element.into(), ctor_svgfe_offset_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_point_light_element) = tmpl_svgfe_point_light_element.get_function(scope) {
+        let name_svgfe_point_light_element = v8::String::new(scope, "SVGFEPointLightElement").unwrap();
+        global.define_own_property(scope, name_svgfe_point_light_element.into(), ctor_svgfe_point_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_specular_lighting_element) = tmpl_svgfe_specular_lighting_element.get_function(scope) {
+        let name_svgfe_specular_lighting_element = v8::String::new(scope, "SVGFESpecularLightingElement").unwrap();
+        global.define_own_property(scope, name_svgfe_specular_lighting_element.into(), ctor_svgfe_specular_lighting_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_spot_light_element) = tmpl_svgfe_spot_light_element.get_function(scope) {
+        let name_svgfe_spot_light_element = v8::String::new(scope, "SVGFESpotLightElement").unwrap();
+        global.define_own_property(scope, name_svgfe_spot_light_element.into(), ctor_svgfe_spot_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_tile_element) = tmpl_svgfe_tile_element.get_function(scope) {
+        let name_svgfe_tile_element = v8::String::new(scope, "SVGFETileElement").unwrap();
+        global.define_own_property(scope, name_svgfe_tile_element.into(), ctor_svgfe_tile_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_turbulence_element) = tmpl_svgfe_turbulence_element.get_function(scope) {
+        let name_svgfe_turbulence_element = v8::String::new(scope, "SVGFETurbulenceElement").unwrap();
+        global.define_own_property(scope, name_svgfe_turbulence_element.into(), ctor_svgfe_turbulence_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_filter_element) = tmpl_svg_filter_element.get_function(scope) {
+        let name_svg_filter_element = v8::String::new(scope, "SVGFilterElement").unwrap();
+        global.define_own_property(scope, name_svg_filter_element.into(), ctor_svg_filter_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_gradient_element) = tmpl_svg_gradient_element.get_function(scope) {
+        let name_svg_gradient_element = v8::String::new(scope, "SVGGradientElement").unwrap();
+        global.define_own_property(scope, name_svg_gradient_element.into(), ctor_svg_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_graphics_element) = tmpl_svg_graphics_element.get_function(scope) {
+        let name_svg_graphics_element = v8::String::new(scope, "SVGGraphicsElement").unwrap();
+        global.define_own_property(scope, name_svg_graphics_element.into(), ctor_svg_graphics_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgm_path_element) = tmpl_svgm_path_element.get_function(scope) {
+        let name_svgm_path_element = v8::String::new(scope, "SVGMPathElement").unwrap();
+        global.define_own_property(scope, name_svgm_path_element.into(), ctor_svgm_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_marker_element) = tmpl_svg_marker_element.get_function(scope) {
+        let name_svg_marker_element = v8::String::new(scope, "SVGMarkerElement").unwrap();
+        global.define_own_property(scope, name_svg_marker_element.into(), ctor_svg_marker_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_mask_element) = tmpl_svg_mask_element.get_function(scope) {
+        let name_svg_mask_element = v8::String::new(scope, "SVGMaskElement").unwrap();
+        global.define_own_property(scope, name_svg_mask_element.into(), ctor_svg_mask_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_metadata_element) = tmpl_svg_metadata_element.get_function(scope) {
+        let name_svg_metadata_element = v8::String::new(scope, "SVGMetadataElement").unwrap();
+        global.define_own_property(scope, name_svg_metadata_element.into(), ctor_svg_metadata_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_pattern_element) = tmpl_svg_pattern_element.get_function(scope) {
+        let name_svg_pattern_element = v8::String::new(scope, "SVGPatternElement").unwrap();
+        global.define_own_property(scope, name_svg_pattern_element.into(), ctor_svg_pattern_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_script_element) = tmpl_svg_script_element.get_function(scope) {
+        let name_svg_script_element = v8::String::new(scope, "SVGScriptElement").unwrap();
+        global.define_own_property(scope, name_svg_script_element.into(), ctor_svg_script_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_stop_element) = tmpl_svg_stop_element.get_function(scope) {
+        let name_svg_stop_element = v8::String::new(scope, "SVGStopElement").unwrap();
+        global.define_own_property(scope, name_svg_stop_element.into(), ctor_svg_stop_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_style_element) = tmpl_svg_style_element.get_function(scope) {
+        let name_svg_style_element = v8::String::new(scope, "SVGStyleElement").unwrap();
+        global.define_own_property(scope, name_svg_style_element.into(), ctor_svg_style_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_title_element) = tmpl_svg_title_element.get_function(scope) {
+        let name_svg_title_element = v8::String::new(scope, "SVGTitleElement").unwrap();
+        global.define_own_property(scope, name_svg_title_element.into(), ctor_svg_title_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_view_element) = tmpl_svg_view_element.get_function(scope) {
+        let name_svg_view_element = v8::String::new(scope, "SVGViewElement").unwrap();
+        global.define_own_property(scope, name_svg_view_element.into(), ctor_svg_view_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_audio_element) = tmpl_html_audio_element.get_function(scope) {
+        let name_html_audio_element = v8::String::new(scope, "HTMLAudioElement").unwrap();
+        global.define_own_property(scope, name_html_audio_element.into(), ctor_html_audio_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_html_video_element) = tmpl_html_video_element.get_function(scope) {
+        let name_html_video_element = v8::String::new(scope, "HTMLVideoElement").unwrap();
+        global.define_own_property(scope, name_html_video_element.into(), ctor_html_video_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_animate_element) = tmpl_svg_animate_element.get_function(scope) {
+        let name_svg_animate_element = v8::String::new(scope, "SVGAnimateElement").unwrap();
+        global.define_own_property(scope, name_svg_animate_element.into(), ctor_svg_animate_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_animate_motion_element) = tmpl_svg_animate_motion_element.get_function(scope) {
+        let name_svg_animate_motion_element = v8::String::new(scope, "SVGAnimateMotionElement").unwrap();
+        global.define_own_property(scope, name_svg_animate_motion_element.into(), ctor_svg_animate_motion_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_animate_transform_element) = tmpl_svg_animate_transform_element.get_function(scope) {
+        let name_svg_animate_transform_element = v8::String::new(scope, "SVGAnimateTransformElement").unwrap();
+        global.define_own_property(scope, name_svg_animate_transform_element.into(), ctor_svg_animate_transform_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_set_element) = tmpl_svg_set_element.get_function(scope) {
+        let name_svg_set_element = v8::String::new(scope, "SVGSetElement").unwrap();
+        global.define_own_property(scope, name_svg_set_element.into(), ctor_svg_set_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_func_a_element) = tmpl_svgfe_func_a_element.get_function(scope) {
+        let name_svgfe_func_a_element = v8::String::new(scope, "SVGFEFuncAElement").unwrap();
+        global.define_own_property(scope, name_svgfe_func_a_element.into(), ctor_svgfe_func_a_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_func_b_element) = tmpl_svgfe_func_b_element.get_function(scope) {
+        let name_svgfe_func_b_element = v8::String::new(scope, "SVGFEFuncBElement").unwrap();
+        global.define_own_property(scope, name_svgfe_func_b_element.into(), ctor_svgfe_func_b_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_func_g_element) = tmpl_svgfe_func_g_element.get_function(scope) {
+        let name_svgfe_func_g_element = v8::String::new(scope, "SVGFEFuncGElement").unwrap();
+        global.define_own_property(scope, name_svgfe_func_g_element.into(), ctor_svgfe_func_g_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgfe_func_r_element) = tmpl_svgfe_func_r_element.get_function(scope) {
+        let name_svgfe_func_r_element = v8::String::new(scope, "SVGFEFuncRElement").unwrap();
+        global.define_own_property(scope, name_svgfe_func_r_element.into(), ctor_svgfe_func_r_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_linear_gradient_element) = tmpl_svg_linear_gradient_element.get_function(scope) {
+        let name_svg_linear_gradient_element = v8::String::new(scope, "SVGLinearGradientElement").unwrap();
+        global.define_own_property(scope, name_svg_linear_gradient_element.into(), ctor_svg_linear_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_radial_gradient_element) = tmpl_svg_radial_gradient_element.get_function(scope) {
+        let name_svg_radial_gradient_element = v8::String::new(scope, "SVGRadialGradientElement").unwrap();
+        global.define_own_property(scope, name_svg_radial_gradient_element.into(), ctor_svg_radial_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svga_element) = tmpl_svga_element.get_function(scope) {
+        let name_svga_element = v8::String::new(scope, "SVGAElement").unwrap();
+        global.define_own_property(scope, name_svga_element.into(), ctor_svga_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_defs_element) = tmpl_svg_defs_element.get_function(scope) {
+        let name_svg_defs_element = v8::String::new(scope, "SVGDefsElement").unwrap();
+        global.define_own_property(scope, name_svg_defs_element.into(), ctor_svg_defs_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_foreign_object_element) = tmpl_svg_foreign_object_element.get_function(scope) {
+        let name_svg_foreign_object_element = v8::String::new(scope, "SVGForeignObjectElement").unwrap();
+        global.define_own_property(scope, name_svg_foreign_object_element.into(), ctor_svg_foreign_object_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgg_element) = tmpl_svgg_element.get_function(scope) {
+        let name_svgg_element = v8::String::new(scope, "SVGGElement").unwrap();
+        global.define_own_property(scope, name_svgg_element.into(), ctor_svgg_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_geometry_element) = tmpl_svg_geometry_element.get_function(scope) {
+        let name_svg_geometry_element = v8::String::new(scope, "SVGGeometryElement").unwrap();
+        global.define_own_property(scope, name_svg_geometry_element.into(), ctor_svg_geometry_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_image_element) = tmpl_svg_image_element.get_function(scope) {
+        let name_svg_image_element = v8::String::new(scope, "SVGImageElement").unwrap();
+        global.define_own_property(scope, name_svg_image_element.into(), ctor_svg_image_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgsvg_element) = tmpl_svgsvg_element.get_function(scope) {
+        let name_svgsvg_element = v8::String::new(scope, "SVGSVGElement").unwrap();
+        global.define_own_property(scope, name_svgsvg_element.into(), ctor_svgsvg_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_switch_element) = tmpl_svg_switch_element.get_function(scope) {
+        let name_svg_switch_element = v8::String::new(scope, "SVGSwitchElement").unwrap();
+        global.define_own_property(scope, name_svg_switch_element.into(), ctor_svg_switch_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_symbol_element) = tmpl_svg_symbol_element.get_function(scope) {
+        let name_svg_symbol_element = v8::String::new(scope, "SVGSymbolElement").unwrap();
+        global.define_own_property(scope, name_svg_symbol_element.into(), ctor_svg_symbol_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_text_content_element) = tmpl_svg_text_content_element.get_function(scope) {
+        let name_svg_text_content_element = v8::String::new(scope, "SVGTextContentElement").unwrap();
+        global.define_own_property(scope, name_svg_text_content_element.into(), ctor_svg_text_content_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_use_element) = tmpl_svg_use_element.get_function(scope) {
+        let name_svg_use_element = v8::String::new(scope, "SVGUseElement").unwrap();
+        global.define_own_property(scope, name_svg_use_element.into(), ctor_svg_use_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_circle_element) = tmpl_svg_circle_element.get_function(scope) {
+        let name_svg_circle_element = v8::String::new(scope, "SVGCircleElement").unwrap();
+        global.define_own_property(scope, name_svg_circle_element.into(), ctor_svg_circle_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_ellipse_element) = tmpl_svg_ellipse_element.get_function(scope) {
+        let name_svg_ellipse_element = v8::String::new(scope, "SVGEllipseElement").unwrap();
+        global.define_own_property(scope, name_svg_ellipse_element.into(), ctor_svg_ellipse_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_line_element) = tmpl_svg_line_element.get_function(scope) {
+        let name_svg_line_element = v8::String::new(scope, "SVGLineElement").unwrap();
+        global.define_own_property(scope, name_svg_line_element.into(), ctor_svg_line_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_path_element) = tmpl_svg_path_element.get_function(scope) {
+        let name_svg_path_element = v8::String::new(scope, "SVGPathElement").unwrap();
+        global.define_own_property(scope, name_svg_path_element.into(), ctor_svg_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_polygon_element) = tmpl_svg_polygon_element.get_function(scope) {
+        let name_svg_polygon_element = v8::String::new(scope, "SVGPolygonElement").unwrap();
+        global.define_own_property(scope, name_svg_polygon_element.into(), ctor_svg_polygon_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_polyline_element) = tmpl_svg_polyline_element.get_function(scope) {
+        let name_svg_polyline_element = v8::String::new(scope, "SVGPolylineElement").unwrap();
+        global.define_own_property(scope, name_svg_polyline_element.into(), ctor_svg_polyline_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_rect_element) = tmpl_svg_rect_element.get_function(scope) {
+        let name_svg_rect_element = v8::String::new(scope, "SVGRectElement").unwrap();
+        global.define_own_property(scope, name_svg_rect_element.into(), ctor_svg_rect_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_text_path_element) = tmpl_svg_text_path_element.get_function(scope) {
+        let name_svg_text_path_element = v8::String::new(scope, "SVGTextPathElement").unwrap();
+        global.define_own_property(scope, name_svg_text_path_element.into(), ctor_svg_text_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_text_positioning_element) = tmpl_svg_text_positioning_element.get_function(scope) {
+        let name_svg_text_positioning_element = v8::String::new(scope, "SVGTextPositioningElement").unwrap();
+        global.define_own_property(scope, name_svg_text_positioning_element.into(), ctor_svg_text_positioning_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svgt_span_element) = tmpl_svgt_span_element.get_function(scope) {
+        let name_svgt_span_element = v8::String::new(scope, "SVGTSpanElement").unwrap();
+        global.define_own_property(scope, name_svgt_span_element.into(), ctor_svgt_span_element.into(), v8::PropertyAttribute::DONT_ENUM);
+    }
+    if let Some(ctor_svg_text_element) = tmpl_svg_text_element.get_function(scope) {
+        let name_svg_text_element = v8::String::new(scope, "SVGTextElement").unwrap();
+        global.define_own_property(scope, name_svg_text_element.into(), ctor_svg_text_element.into(), v8::PropertyAttribute::DONT_ENUM);
     }
 }
