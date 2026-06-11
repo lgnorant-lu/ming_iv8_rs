@@ -1221,6 +1221,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "iv8-surface"
+version = "0.1.0"
+dependencies = [
+ "tracing",
+ "v8",
+]
+
+[[package]]
+name = "iv8-surface-codegen"
+version = "0.1.0"
+dependencies = [
+ "heck",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "iv8-undetect"
 version = "0.8.11"
 dependencies = [

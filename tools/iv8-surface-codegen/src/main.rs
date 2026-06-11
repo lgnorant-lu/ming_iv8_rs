@@ -43,39 +43,35 @@ fn main() {
 
     // Generate code
     eprintln!("Generating code to {} ...", output_dir);
-    let files = codegen::generate_all(&merged, &topo_result.sorted);
+    let (files, install_info) = codegen::generate_all(&merged, &topo_result.sorted);
 
-    // Ensure output directory exists
     std::fs::create_dir_all(&output_dir).unwrap_or_else(|e| {
         eprintln!("Failed to create output dir: {}", e);
         std::process::exit(1);
     });
 
     let mut total_ifaces = 0;
-    let mut total_members = 0;
     let mut domain_names: Vec<String> = Vec::new();
 
     for file in &files {
         total_ifaces += file.interface_count;
-        total_members += file.member_count;
-        domain_names.push(file.domain.clone());
+        let mod_name = file.domain.replace('-', "_");
+        domain_names.push(mod_name.clone());
 
-        let file_path = format!("{}/{}.rs", output_dir, file.domain);
-        std::fs::write(&file_path, &file.content).unwrap_or_else(|e| {
-            eprintln!("Failed to write {}: {}", file_path, e);
-        });
-        eprintln!("  {}: {} interfaces, {} members -> {}.rs",
-            file.domain, file.interface_count, file.member_count, file.domain);
+        let file_path = format!("{}/{}.rs", output_dir, mod_name);
+        std::fs::write(&file_path, &file.content).unwrap();
+        eprintln!("  {}: {} interfaces -> {}.rs", file.domain, file.interface_count, mod_name);
     }
 
     // Generate mod.rs
     let mod_content = codegen::generate_mod_rs(&domain_names);
-    let mod_path = format!("{}/mod.rs", output_dir);
-    std::fs::write(&mod_path, &mod_content).unwrap();
-    eprintln!("  mod.rs: {} domain modules", domain_names.len());
+    std::fs::write(format!("{}/mod.rs", output_dir), &mod_content).unwrap();
 
-    eprintln!("\nGenerated {} interfaces, {} members across {} files.",
-        total_ifaces, total_members, files.len());
+    // Generate install_all.rs
+    let install_content = codegen::generate_install_all(&merged, &topo_result.sorted, &install_info.domain_of);
+    std::fs::write(format!("{}/install_all.rs", output_dir), &install_content).unwrap();
+    eprintln!("  install_all.rs: {} interfaces in topological order", install_info.sorted.len());
+    eprintln!("\nGenerated {} interfaces across {} files.", total_ifaces, files.len());
     eprintln!("Done.");
 }
 

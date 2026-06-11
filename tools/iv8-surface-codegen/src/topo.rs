@@ -129,21 +129,112 @@ pub fn merge_and_sort(
 }
 
 pub fn classify_domain(name: &str) -> &'static str {
-    if name.starts_with("HTML") || name == "Element" || name == "Node" || name == "EventTarget" || name == "Document" || name == "Attr" || name == "CharacterData" || name == "Text" || name == "Comment" || name == "DocumentType" || name == "DocumentFragment" || name == "ShadowRoot" || name == "DOMImplementation" || name == "NodeList" || name == "HTMLCollection" || name == "DOMTokenList" || name == "NamedNodeMap" || name == "Range" || name == "TreeWalker" || name == "NodeIterator" || name == "MutationObserver" || name == "MutationRecord" || name == "AbstractRange" || name == "StaticRange" {
-        return "dom_core";
-    }
-    if name.starts_with("HTML") { return "html_elements"; }
-    if name.starts_with("CSS") || name.contains("Style") || name == "StyleSheet" || name == "StyleSheetList" || name == "MediaList" || name.contains("StyleDeclaration") {
-        return "css_om";
-    }
-    if name.starts_with("Event") || name.ends_with("Event") || name == "CustomEvent" { return "events"; }
-    if name.starts_with("WebGL") || name == "WebGLRenderingContext" || name == "WebGL2RenderingContext" { return "webgl"; }
-    if name.starts_with("Audio") || name.contains("AudioNode") || name == "AudioContext" || name == "OfflineAudioContext" { return "web_audio"; }
+    // SVG — ~95 interfaces
+    if name.starts_with("SVG") { return "svg"; }
+    // WebXR — ~49 interfaces
+    if name.starts_with("XR") || name.starts_with("WebXR") { return "webxr"; }
+    // HTML Elements — ~120 interfaces (must be AFTER SVG check)
+    if name.starts_with("HTML") || name == "HTMLElement" { return "html_elements"; }
+    // DOM Core — complex inheritance chain
+    if name == "Element" || name == "Node" || name == "EventTarget" || name == "Document"
+        || name == "Attr" || name == "CharacterData" || name == "Text" || name == "Comment"
+        || name == "DocumentType" || name == "DocumentFragment" || name == "ShadowRoot"
+        || name == "DOMImplementation" || name == "NodeList" || name == "HTMLCollection"
+        || name == "DOMTokenList" || name == "NamedNodeMap" || name == "Range"
+        || name == "TreeWalker" || name == "NodeIterator" || name == "MutationObserver"
+        || name == "MutationRecord" || name == "AbstractRange" || name == "StaticRange"
+        || name == "AbortController" || name == "AbortSignal" || name == "DOMRect"
+        || name == "DOMRectReadOnly" || name == "DOMPoint" || name == "DOMPointReadOnly"
+        || name == "DOMMatrix" || name == "DOMMatrixReadOnly" || name == "DOMQuad"
+    { return "dom_core"; }
+    // Events — ~130 interfaces
+    if name.starts_with("Event") || name.ends_with("Event") || name == "CustomEvent"
+        || name == "EventListener" || name == "EventTarget"
+    { return "events"; }
+    // CSS OM
+    if name.starts_with("CSS") || name.contains("StyleSheet") || name == "MediaList"
+        || name.contains("StyleDeclaration") || name == "StyleSheetList"
+        || name == "Screen" || name == "VisualViewport"
+    { return "css_om"; }
+    // WebGL
+    if name.starts_with("WebGL") || name.starts_with("WebGL2") { return "webgl"; }
+    // Web Audio
+    if name.starts_with("Audio") || name.contains("AudioNode") || name == "OfflineAudioContext"
+        || name.contains("Oscillator") || name.contains("BiquadFilter")
+        || name.contains("Delay") || name.contains("Gain") || name == "AudioContext"
+        || name == "BaseAudioContext"
+    { return "web_audio"; }
+    // Crypto
     if name.starts_with("Crypto") || name == "SubtleCrypto" { return "crypto"; }
-    if name == "Request" || name == "Response" || name == "Headers" || name == "FetchEvent" || name == "FormData" { return "fetch"; }
-    if name.starts_with("Worker") || name.starts_with("ServiceWorker") || name == "MessagePort" || name == "MessageChannel" { return "workers"; }
-    if name.starts_with("Chrome") || name.starts_with("chrome") || name.starts_with("webkit") || name == "External" { return "chrome_extensions"; }
-    if name.starts_with("Media") || name.contains("MediaStream") || name.contains("MediaDevice") || name == "Permissions" { return "media_apis"; }
-    if name.ends_with("Observer") || name.starts_with("Intersection") || name.starts_with("Resize") { return "observers"; }
+    // Fetch
+    if name == "Request" || name == "Response" || name == "Headers" || name == "FormData"
+    { return "fetch"; }
+    // Workers
+    if name.starts_with("Worker") || name.starts_with("ServiceWorker")
+        || name == "MessagePort" || name == "MessageChannel"
+    { return "workers"; }
+    // Streams
+    if name.starts_with("Readable") || name.starts_with("Writable")
+        || name.starts_with("Transform") || name == "ByteLengthQueuingStrategy"
+        || name == "CountQueuingStrategy"
+    { return "streams"; }
+    // Bluetooth
+    if name.starts_with("Bluetooth") { return "bluetooth"; }
+    // Sensors
+    if name.starts_with("Sensor") || name.ends_with("Sensor")
+        || name == "Accelerometer" || name == "Gyroscope" || name == "Magnetometer"
+        || name == "AmbientLightSensor" || name == "AbsoluteOrientationSensor"
+        || name == "RelativeOrientationSensor"
+    { return "sensors"; }
+    // Chrome extensions
+    if name.starts_with("Chrome") || name.starts_with("chrome") || name.starts_with("webkit")
+        || name == "External"
+    { return "chrome_extensions"; }
+    // Media
+    if name.starts_with("Media") || name.contains("MediaStream") || name.contains("MediaDevice")
+        || name == "Permissions" || name == "PermissionStatus"
+    { return "media_apis"; }
+    // Observers
+    if name.ends_with("Observer") || name.starts_with("Intersection") || name.starts_with("Resize")
+    { return "observers"; }
+    // Remaining web APIs
+    if name.starts_with("Web") || name.starts_with("Navigator") || name == "Window"
+        || name == "Location" || name == "History" || name == "Storage"
+        || name.starts_with("IDB") || name.starts_with("XML")
+        || name == "TextEncoder" || name == "TextDecoder"
+        || name == "URL" || name == "URLSearchParams"
+        || name.starts_with("USB") || name.starts_with("HID")
+        || name.starts_with("MIDI") || name.starts_with("GPU")
+        || name.starts_with("Gamepad") || name == "Geolocation"
+        || name.starts_with("RTCPeer") || name.starts_with("RTC")
+        || name.starts_with("WebTransport") || name.starts_with("WebSocket")
+        || name.starts_with("Cache") || name == "CacheStorage"
+        || name.starts_with("BackgroundFetch") || name.starts_with("Payment")
+        || name.starts_with("Presentation") || name.starts_with("Credential")
+        || name.starts_with("WakeLock") || name == "BarcodeDetector"
+        || name == "FaceDetector" || name.starts_with("NDEF")
+        || name.starts_with("Clipboard") || name == "ClipboardItem"
+        || name.starts_with("FileSystem") || name.starts_with("FileSystemWritable")
+        || name.starts_with("Launch") || name.starts_with("EyeDropper")
+        || name.starts_with("CookieStore") || name.starts_with("Task")
+        || name.starts_with("Scheduler") || name.starts_with("Trusted")
+        || name.starts_with("Sanitizer") || name.starts_with("Highlight")
+        || name.starts_with("Scheduling") || name.starts_with("SharedStorage")
+        || name.starts_with("Navigation") || name.starts_with("ViewTransition")
+        || name.starts_with("Scroll") || name.starts_with("Speculation")
+        || name.starts_with("Fence") || name.starts_with("FencedFrame")
+        || name.starts_with("AdAuction") || name.starts_with("ProtectedAudience")
+        || name.starts_with("Bidding") || name.starts_with("Attribution")
+        || name.starts_with("InterestGroup") || name.starts_with("PrivateAggregation")
+        || name.starts_with("StorageAccess") || name.starts_with("FedCM")
+        || name.starts_with("Identity") && !name.starts_with("IdentityCredential")
+        || name.starts_with("Digital") || name.starts_with("Multi")
+        || name == "BroadcastChannel" || name == "CloseWatcher"
+        || name.starts_with("Toggle") || name.starts_with("Popover")
+        || name.starts_with("Command") || name.starts_with("Invoker")
+        || name.starts_with("Intl") || name.starts_with("Temporal")
+        || name.starts_with("WebAssembly") || name.starts_with("Wasm")
+    { return "web_apis"; }
+    // Final catch-all — should ideally be empty
     "web_apis"
 }

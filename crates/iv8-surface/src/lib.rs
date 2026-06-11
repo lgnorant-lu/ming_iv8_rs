@@ -20,5 +20,5 @@ pub mod type_conv;
 /// on the global object and sets up prototype chains. The stubs return
 /// type-correct default values — deep behavior is implemented in v0.8.21+.
 pub fn install_browser_surface(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    generated::install_all(scope, global);
+    generated::install_all::install_all(scope, global);
 }
