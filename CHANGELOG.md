@@ -6,6 +6,146 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.22] - 2026-06-11
+
+> Local milestone. P1 deep stubs: Document/createElement/classList/style/Fetch
+> FunctionTemplate migration. Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Document.createElement 深桩**: tagName 统一 to_ascii_lowercase()。
+  HTMLUnknownElement FunctionTemplate 作为未知标签 fallback。
+  template_for_tag 扩展到 75+ 标签名覆盖。
+- **NodeList FunctionTemplate + querySelectorAll 接线**: 全部集合返回方法
+  （querySelectorAll/getElementsByTagName/getElementsByClassName）返回
+  NodeList FT 实例（含 item()/length）+ indexed properties。
+- **DOMTokenList classList 深桩**: 从 plain Object 迁移到 DOMTokenList
+  FunctionTemplate。__nodeId__ 从 DONT_ENUM JS 属性迁移到 internal field
+  External。新增 replace/forEach/entries/keys/values 方法。
+  toggle 支持 force 参数（truthy/falsy 判断）。Symbol.toStringTag 正确设置。
+- **CSSStyleDeclaration style 深桩**: CSSStyleDeclaration FunctionTemplate
+  创建（setProperty/getPropertyValue/removeProperty/item/cssText/length）。
+  NodeData::Element 新增 style_map 字段实现 per-node 状态持久化。
+  camelCase/kebab-case 双向映射。style_cache 实现 element.style===element.style。
+- **Headers/Response/Request FunctionTemplate**: 三个 Fetch API FT 及完整
+  prototype 方法/accessor 集。build_response_object 使用 Response FT 创建实例。
+  clone() 深拷贝 headers。heap_registry 注册 Box 分配供 RuntimeState drop 释放。
+- **AudioContext 去重**: element_prototypes.rs 死代码删除。BaseAudioContext.state
+  初始值修正为 'suspended'。
+
+### Changed
+
+- install_browser_surface_init() 先 build_dom_templates 再 install_all
+  再 install_dom_constructors 覆写，确保 createElement instanceof 闭合。
+
+### Quality Gates
+
+- cargo test -p iv8-core --lib: 179/179 PASS
+- cargo test -p iv8-surface --lib: 30/30 PASS
+- cargo check --features native-surface: zero errors
+
+## [0.8.21] - 2026-06-10
+
+> Local milestone. P0 deep stubs: Canvas2D data / WebGL data / Location URL
+> parser / Navigator getters. Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Canvas2D 深桩数据骨架**: 24 属性默认值 + 38 方法 FunctionTemplate 注册。
+  create_canvas_2d_context_instance() 工厂函数（留待 v0.8.22 回调签名升级后
+  接入 getContext('2d')）。
+- **WebGL 深桩数据骨架**: 36 pname → default-value 参数映射表、28 extensions、
+  76 constants。全部与 Chrome 147 对齐。
+- **Location URL 解析器**: LocationState 数据结构 + rebuild_href()。
+  install_browser_surface() 中 debug_assert! 验证 + 严格断言。
+- **Navigator 22 属性验证**: 全部 getter 名称确认。debug_assert! 验证返回值。
+
+### Quality Gates
+
+- cargo test -p iv8-surface --lib: 30/30 PASS
+- cargo test -p iv8-core --lib: 176/176 PASS
+- cargo clippy --features native-surface: clean
+
+## [0.8.20] - 2026-06-10
+
+> Local milestone. BrowserSurface integration + Feature Flag architecture.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **native-surface Feature Flag** (Cargo.toml): 默认关闭。使用 dep: 语法精准
+  控制 iv8-surface 可选依赖。
+- **BehaviorCallbackRegistry**: 10 字段双分组（6 V8-bound !Send + 4 Send-safe）。
+  Canvas 2D factory/gradient、WebGL factory/getParameter/getExtension、
+  Audio context factory 回调槽位。
+- **BrowserSurfaceRegistry + SurfaceInstallError**: 安装结果类型。
+- **RuntimeState 双字段**: surface_registry + behavior_callbacks（cfg-gated）。
+
+### Changed
+
+- embedded_v8.rs: cfg 分支——install_browser_surface_init()（native-surface）
+  vs install_dom_templates()（default）。旧链行为不变。
+- cargo check 双模式通过。176/176 old-chain regression PASS。
+
+## [0.8.19] - 2026-06-10
+
+> Local milestone. Rust codegen + iv8-surface crate with 1284 interfaces.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Rust 代码生成器** (tools/iv8-surface-codegen/): 6 源文件（ir/topo/
+  type_mapper/ea_handler/codegen/main），1182 行。从 unified_ir.json 生成
+  Rust FunctionTemplate 构建代码。
+- **iv8-surface crate**: 31 域文件 + install_all.rs + mod.rs，~128K 行生成代码。
+  1284 interfaces 全覆盖。
+- **install_all() 两阶段拓扑注册**: 660 无父 + 624 有父通过 HashMap 查找 parent。
+- toStringTag 1284/1284、setter 2528、method 2020、DONT_ENUM 1238、
+  tmpl.inherit 624。
+
+### Changed
+
+- empty_constructor 从 19 重复项合并为 generated/mod.rs 单一定义。
+- classify_domain() 死代码清理。
+- cargo check -p iv8-surface: zero errors。14/14 codegen tests PASS。
+
+## [0.8.18] - 2026-06-09
+
+> Local milestone. IDL preprocessing toolchain → unified_ir.json.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Node.js IDL 管线** (tools/idl/): fetch-webref.js → normalize-ast.js →
+  merge-tool.js → type-mapper.js → validate.js → generate-ir.js。
+- **unified_ir.json**: 5,645 KB，2913 定义，1284 interfaces，覆盖度 91%。
+- **Go Gate**: 13/13 PASS。幂等性验证通过。Chrome extensions IR: 161/150 门槛。
+
+### Quality Gates
+
+- Go Gate: 13/13 PASS
+- 幂等性验证: 通过（仅 generated_at 时间戳不同）
+
+## [0.8.17] - 2026-06-09
+
+> Local milestone. Navigator/Screen FunctionTemplate migration —
+> prototype chain correct，instanceof checks pass.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Navigator FunctionTemplate**: 原型链 Navigator.prototype → Object.prototype。
+  illegal_constructor 抛 TypeError。instance_template 绕过 new 构造。
+- **Screen FunctionTemplate**: 原型链 Screen.prototype → Object.prototype。
+- **descriptor.m1**: 184/184 PASS（23 样本 × 8 探针）。
+- **fingerprint.m1**: 322/322 PASS。
+
+### Changed
+
+- native_env.rs: 388→434 行。1 处测试更新。5 Python 测试修正。
+  4 compat fixture 修正。
+- delete navigator.userAgent: 从抛异常改为返回 true（与 Chrome 行为匹配）。
+
 ## [0.8.16] - 2026-06-09
 
 > Local milestone. Focused final audit complete. Package metadata and lock
