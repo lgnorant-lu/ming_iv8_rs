@@ -664,7 +664,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             this.currentTime = 0;
             this.destination = new AudioDestinationNode(this);
             this.listener = {};
-            this.state = 'running';
+            this.state = 'suspended';
             this.onstatechange = null;
         }
         BaseAudioContext.prototype.createOscillator = function(options) {
