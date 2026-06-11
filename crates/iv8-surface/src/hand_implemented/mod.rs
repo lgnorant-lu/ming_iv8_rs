@@ -4,7 +4,6 @@
 //! stubs wired through BehaviorCallbackRegistry.
 
 use crate::behavior::{CanvasContextFactory, GradientFactory};
-use crate::hand_implemented::canvas2d::create_canvas_rendering_context_2d_template;
 
 /// Register Canvas 2D factory callback into BehaviorCallbackRegistry.
 /// The factory creates CanvasRenderingContext2D instances when

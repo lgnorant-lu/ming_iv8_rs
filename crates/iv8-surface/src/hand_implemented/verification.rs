@@ -10,7 +10,6 @@
 #[cfg(test)]
 mod tests {
     use super::super::{CANVAS_2D_DEFAULTS, CANVAS_2D_METHODS};
-    use crate::hand_implemented::canvas2d::create_canvas_rendering_context_2d_template;
     use super::super::navigator::*;
     use super::super::webgl::*;
 
