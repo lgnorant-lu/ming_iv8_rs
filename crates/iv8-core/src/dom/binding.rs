@@ -566,20 +566,6 @@ fn node_to_v8_object_plain<'s>(
 }
 
 /// Convert a list of NodeIds to a V8 array of node objects.
-fn node_list_to_v8_array<'s>(
-    scope: &v8::PinScope<'s, '_>,
-    state: &RuntimeState,
-    node_ids: &[NodeId],
-) -> v8::Local<'s, v8::Value> {
-    let arr = v8::Array::new(scope, node_ids.len() as i32);
-    for (i, &nid) in node_ids.iter().enumerate() {
-        if let Some(obj) = node_to_v8_object(scope, state, nid) {
-            arr.set_index(scope, i as u32, obj);
-        }
-    }
-    arr.into()
-}
-
 // ─── V8 Callbacks ───────────────────────────────────────────────────────────
 
 /// document.getElementById(id) callback
@@ -691,8 +677,9 @@ unsafe extern "C" fn query_selector_all(info: *const v8::FunctionCallbackInfo) {
             }
         };
 
-        let arr = node_list_to_v8_array(scope, state, &node_ids);
-        rv.set(arr);
+        let list = crate::dom::template::create_node_list_instance(scope, state, &node_ids)
+            .unwrap_or_else(|| v8::Array::new(scope, 0).into());
+        rv.set(list);
     }));
     if result.is_err() {
         tracing::error!("panic in querySelectorAll callback");
@@ -726,8 +713,9 @@ unsafe extern "C" fn get_elements_by_tag_name(info: *const v8::FunctionCallbackI
             }
         };
 
-        let arr = node_list_to_v8_array(scope, state, &node_ids);
-        rv.set(arr);
+        let list = crate::dom::template::create_node_list_instance(scope, state, &node_ids)
+            .unwrap_or_else(|| v8::Array::new(scope, 0).into());
+        rv.set(list);
     }));
     if result.is_err() {
         tracing::error!("panic in getElementsByTagName callback");
@@ -778,8 +766,9 @@ unsafe extern "C" fn get_elements_by_class_name(info: *const v8::FunctionCallbac
             }
         };
 
-        let arr = node_list_to_v8_array(scope, state, &node_ids);
-        rv.set(arr);
+        let list = crate::dom::template::create_node_list_instance(scope, state, &node_ids)
+            .unwrap_or_else(|| v8::Array::new(scope, 0).into());
+        rv.set(list);
     }));
     if result.is_err() {
         tracing::error!("panic in getElementsByClassName callback");

@@ -89,6 +89,8 @@ pub struct DomTemplates {
     pub comment_node: v8::Global<v8::FunctionTemplate>,
     /// Document node — inherits Node.
     pub document_node: v8::Global<v8::FunctionTemplate>,
+    /// NodeList — live or static node collection.
+    pub node_list: v8::Global<v8::FunctionTemplate>,
 }
 
 /// Helper: create a FunctionTemplate with a class name and internal field count.
@@ -701,6 +703,15 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     let document_node = make_template(scope, "Document");
     document_node.inherit(node);
 
+    // ── 10. NodeList ────────────────────────────────────────────────────────
+    let node_list = make_template(scope, "NodeList");
+    node_list.instance_template(scope).set_internal_field_count(2);
+    {
+        let proto = node_list.prototype_template(scope);
+        install_proto_method(scope, proto, "item", node_list_item_cb);
+        install_proto_accessor(scope, proto, "length", node_list_length_getter, None);
+    }
+
     // Convert all to Globals
     DomTemplates {
         event_target: v8::Global::new(scope, event_target),
@@ -736,6 +747,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         text_node: v8::Global::new(scope, text_node),
         comment_node: v8::Global::new(scope, comment_node),
         document_node: v8::Global::new(scope, document_node),
+        node_list: v8::Global::new(scope, node_list),
     }
 }
 
@@ -777,6 +789,7 @@ pub fn install_dom_constructors(
         ("HTMLLinkElement", &templates.html_link_element),
         ("HTMLMetaElement", &templates.html_meta_element),
         ("HTMLUnknownElement", &templates.html_unknown_element),
+        ("NodeList", &templates.node_list),
         ("Text", &templates.text_node),
         ("Comment", &templates.comment_node),
     ];
@@ -2242,14 +2255,111 @@ unsafe extern "C" fn query_selector_all_cb(info: *const v8::FunctionCallbackInfo
         } else {
             vec![]
         };
-        let arr = v8::Array::new(scope, ids.len() as i32);
-        for (i, id) in ids.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *id) {
-                arr.set_index(scope, i as u32, obj);
+        if let Some(list) = create_node_list_instance(scope, state, &ids) {
+            rv.set(list);
+        } else {
+            rv.set(v8::Array::new(scope, 0).into());
+        }
+    });
+}
+
+/// Create a NodeList FunctionTemplate instance from a slice of NodeIds.
+/// Uses internal field 1 to store the node ID array pointer.
+pub fn create_node_list_instance<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    state: &RuntimeState,
+    node_ids: &[NodeId],
+) -> Option<v8::Local<'s, v8::Value>> {
+    let templates = state.dom_templates.borrow();
+    let templates = templates.as_ref()?;
+    let tmpl = v8::Local::new(scope, &templates.node_list);
+    let func = tmpl.get_function(scope)?;
+    let obj = func.new_instance(scope, &[])?;
+
+    let ids: Vec<usize> = node_ids
+        .iter()
+        .map(|&nid| super::binding::node_id_to_usize(nid))
+        .collect();
+    let len = ids.len();
+    let boxed_ids = Box::new(ids);
+    let ptr = Box::into_raw(boxed_ids) as *mut std::ffi::c_void;
+    let external = v8::External::new(scope, ptr);
+    obj.set_internal_field(1, external.into());
+
+    for (i, &nid) in node_ids.iter().enumerate() {
+        if let Some(node_obj) = create_node_object(scope, state, nid) {
+            obj.set_index(scope, i as u32, node_obj);
+        }
+    }
+    let len_key = crate::v8_utils::v8_string(scope, "length");
+    let len_val = v8::Integer::new(scope, len as i32);
+    obj.set(scope, len_key.into(), len_val.into());
+
+    Some(obj.into())
+}
+
+unsafe extern "C" fn node_list_item_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+
+        if let Some(idx_val) = args.get(0).uint32_value(scope) {
+            let idx = idx_val as usize;
+            let field = this.get_internal_field(scope, 1);
+            if let Some(field) = field {
+                let value: v8::Local<v8::Value> = unsafe { v8::Local::cast_unchecked(field) };
+                if value.is_external() {
+                    let external: v8::Local<v8::External> =
+                        unsafe { v8::Local::cast_unchecked(value) };
+                    let vec_ptr = external.value() as *const Vec<usize>;
+                    if !vec_ptr.is_null() {
+                        let ids: &Vec<usize> = unsafe { &*vec_ptr };
+                        if idx < ids.len() {
+                            let isolate: &v8::Isolate = &*scope;
+                            let state = RuntimeState::get(isolate);
+                            let nid = super::binding::usize_to_node_id(ids[idx]);
+                            if let Some(nid) = nid {
+                                if let Some(obj) = create_node_object(scope, state, nid) {
+                                    rv.set(obj);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-        rv.set(arr.into());
-    });
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+unsafe extern "C" fn node_list_length_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+
+        let field = this.get_internal_field(scope, 1);
+        if let Some(field) = field {
+            let value: v8::Local<v8::Value> = unsafe { v8::Local::cast_unchecked(field) };
+            if value.is_external() {
+                let external: v8::Local<v8::External> =
+                    unsafe { v8::Local::cast_unchecked(value) };
+                let vec_ptr = external.value() as *const Vec<usize>;
+                if !vec_ptr.is_null() {
+                    let ids: &Vec<usize> = unsafe { &*vec_ptr };
+                    rv.set(v8::Integer::new(scope, ids.len() as i32).into());
+                    return;
+                }
+            }
+        }
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
 }
 
 unsafe extern "C" fn get_elements_by_tag_name_cb(info: *const v8::FunctionCallbackInfo) {
@@ -2267,13 +2377,11 @@ unsafe extern "C" fn get_elements_by_tag_name_cb(info: *const v8::FunctionCallba
         } else {
             vec![]
         };
-        let arr = v8::Array::new(scope, ids.len() as i32);
-        for (i, id) in ids.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *id) {
-                arr.set_index(scope, i as u32, obj);
-            }
+        if let Some(list) = create_node_list_instance(scope, state, &ids) {
+            rv.set(list);
+        } else {
+            rv.set(v8::Array::new(scope, 0).into());
         }
-        rv.set(arr.into());
     });
 }
 
@@ -2309,13 +2417,11 @@ unsafe extern "C" fn get_elements_by_class_name_cb(info: *const v8::FunctionCall
         } else {
             vec![]
         };
-        let arr = v8::Array::new(scope, ids.len() as i32);
-        for (i, id) in ids.iter().enumerate() {
-            if let Some(obj) = create_node_object(scope, state, *id) {
-                arr.set_index(scope, i as u32, obj);
-            }
+        if let Some(list) = create_node_list_instance(scope, state, &ids) {
+            rv.set(list);
+        } else {
+            rv.set(v8::Array::new(scope, 0).into());
         }
-        rv.set(arr.into());
     });
 }
 
