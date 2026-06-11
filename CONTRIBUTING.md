@@ -57,6 +57,7 @@
 | `network`    | crates/iv8-core/src/network/             |
 | `inspector`  | crates/iv8-core/src/inspector/           |
 | `shims`      | crates/iv8-core/src/shims/（含 navigator/document/storage 等）|
+| `surface`    | crates/iv8-surface + tools/iv8-surface-codegen |
 | `compat`     | tests/compat/ 差异测试                   |
 
 如果一次提交跨多个 scope，选择**主要影响的 scope**，在 body 中说明其他变更。
@@ -74,7 +75,10 @@
 
 - **语言**：中文为主，专业术语保留英文（如 EventTarget / NodeId / cppgc）
 - **格式**：每行 ≤ 72 字符
-- **内容**：说明做了什么、为什么、实现思路、影响范围
+- **内容三段式**：
+  1. 实施内容：做了什么、实现思路、影响范围
+  2. 本提交不授权：scope 边界、deferred 项
+  3. 已执行审阅：验证命令及结果（test/check/clippy 通过数）
 - **禁止 emoji**：body 中严禁出现 emoji（包括 `[OK]` 等替代标记仅在状态文档中使用，不在 commit message 中使用）
 - **链接 REQ ID**：如果与某条需求相关，标注 `Refs: REQ-DOM-009` 或 `Closes: REQ-CORE-005`
 
