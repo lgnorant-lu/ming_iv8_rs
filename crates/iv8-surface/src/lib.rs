@@ -1,6 +1,14 @@
 //! iv8-surface — Generated browser surface FunctionTemplate stubs.
 //!
+//! This crate provides install_browser_surface(), the single entry point
+//! for registering all generated FunctionTemplate stubs to a V8 context.
+//!
+//! The generated code lives in `generated/` — produced by iv8-surface-codegen
+//! from unified_ir.json (v0.8.18).
+//!
 //! v0.8.20: BrowserSurface integration with Feature Flag control.
+//! Layers 0/2/3/4 are deferred to v0.8.21+.
+//! C++ wrapper build.rs is deferred to v0.8.21 (requires cross-crate V8 header paths).
 
 pub mod behavior;
 pub mod descriptor;
