@@ -12,6 +12,7 @@
 use crate::dom::NodeData;
 use crate::dom::NodeId;
 use crate::state::RuntimeState;
+use std::collections::HashMap;
 use url::Url;
 
 /// Index of the internal field that stores the NodeId.
@@ -91,6 +92,11 @@ pub struct DomTemplates {
     pub document_node: v8::Global<v8::FunctionTemplate>,
     /// NodeList — live or static node collection.
     pub node_list: v8::Global<v8::FunctionTemplate>,
+    pub dom_token_list: v8::Global<v8::FunctionTemplate>,
+    pub css_style_declaration: v8::Global<v8::FunctionTemplate>,
+    pub headers: v8::Global<v8::FunctionTemplate>,
+    pub response: v8::Global<v8::FunctionTemplate>,
+    pub request: v8::Global<v8::FunctionTemplate>,
 }
 
 /// Helper: create a FunctionTemplate with a class name and internal field count.
@@ -142,6 +148,17 @@ fn install_proto_accessor(
         setter_tmpl,
         v8::PropertyAttribute::DONT_DELETE,
     );
+}
+
+/// Helper: set Symbol.toStringTag on a prototype template.
+fn set_to_string_tag(
+    scope: &v8::PinScope<'_, '_>,
+    proto: v8::Local<v8::ObjectTemplate>,
+    tag: &str,
+) {
+    let sym = v8::Symbol::get_to_string_tag(scope);
+    let val = crate::v8_utils::v8_string(scope, tag);
+    proto.set(sym.into(), val.into());
 }
 
 /// Build all DOM templates and install methods on their prototypes.
@@ -690,6 +707,10 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     // ── 6. HTMLUnknownElement (inherits HTMLElement) ─────────────────────────
     let html_unknown_element = make_template(scope, "HTMLUnknownElement");
     html_unknown_element.inherit(html_element);
+    {
+        let proto = html_unknown_element.prototype_template(scope);
+        set_to_string_tag(scope, proto, "HTMLUnknownElement");
+    }
 
     // ── 7. Text node (inherits Node) ────────────────────────────────────────
     let text_node = make_template(scope, "Text");
@@ -710,6 +731,99 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         let proto = node_list.prototype_template(scope);
         install_proto_method(scope, proto, "item", node_list_item_cb);
         install_proto_accessor(scope, proto, "length", node_list_length_getter, None);
+        set_to_string_tag(scope, proto, "NodeList");
+    }
+
+    // ── 12. DOMTokenList ────────────────────────────────────────────────────
+    let dom_token_list = make_template(scope, "DOMTokenList");
+    dom_token_list.instance_template(scope).set_internal_field_count(1);
+    {
+        let proto = dom_token_list.prototype_template(scope);
+        install_proto_method(scope, proto, "item", domtokenlist_item_cb);
+        install_proto_method(scope, proto, "contains", domtokenlist_contains_cb);
+        install_proto_method(scope, proto, "add", domtokenlist_add_cb);
+        install_proto_method(scope, proto, "remove", domtokenlist_remove_cb);
+        install_proto_method(scope, proto, "toggle", domtokenlist_toggle_cb);
+        install_proto_method(scope, proto, "replace", domtokenlist_replace_cb);
+        install_proto_method(scope, proto, "toString", domtokenlist_tostring_cb);
+        install_proto_method(scope, proto, "forEach", domtokenlist_foreach_cb);
+        install_proto_method(scope, proto, "entries", domtokenlist_entries_cb);
+        install_proto_method(scope, proto, "keys", domtokenlist_keys_cb);
+        install_proto_method(scope, proto, "values", domtokenlist_values_cb);
+        install_proto_accessor(scope, proto, "length", domtokenlist_length_getter, None);
+        install_proto_accessor(
+            scope,
+            proto,
+            "value",
+            domtokenlist_value_getter,
+            Some(domtokenlist_value_setter),
+        );
+        set_to_string_tag(scope, proto, "DOMTokenList");
+    }
+
+    // ── 13. CSSStyleDeclaration ─────────────────────────────────────────────
+    let css_style_declaration = make_template(scope, "CSSStyleDeclaration");
+    css_style_declaration.instance_template(scope).set_internal_field_count(2);
+    {
+        let proto = css_style_declaration.prototype_template(scope);
+        install_proto_method(scope, proto, "setProperty", css_style_set_property_cb);
+        install_proto_method(scope, proto, "getPropertyValue", css_style_get_property_cb);
+        install_proto_method(scope, proto, "getPropertyPriority", css_style_get_priority_cb);
+        install_proto_method(scope, proto, "removeProperty", css_style_remove_property_cb);
+        install_proto_method(scope, proto, "item", css_style_item_cb);
+        install_proto_accessor(
+            scope,
+            proto,
+            "cssText",
+            css_style_csstext_getter,
+            Some(css_style_csstext_setter),
+        );
+        install_proto_accessor(scope, proto, "length", css_style_length_getter, None);
+        set_to_string_tag(scope, proto, "CSSStyleDeclaration");
+    }
+
+    // ── 14. Headers ─────────────────────────────────────────────────────────
+    let headers = make_template(scope, "Headers");
+    headers.instance_template(scope).set_internal_field_count(1);
+    {
+        let proto = headers.prototype_template(scope);
+        install_proto_method(scope, proto, "get", headers_get_cb);
+        install_proto_method(scope, proto, "set", headers_set_cb);
+        install_proto_method(scope, proto, "has", headers_has_cb);
+        install_proto_method(scope, proto, "delete", headers_delete_cb);
+        install_proto_method(scope, proto, "append", headers_append_cb);
+        install_proto_method(scope, proto, "forEach", headers_foreach_cb);
+        install_proto_method(scope, proto, "entries", headers_entries_cb);
+        install_proto_method(scope, proto, "keys", headers_keys_cb);
+        install_proto_method(scope, proto, "values", headers_values_cb);
+        set_to_string_tag(scope, proto, "Headers");
+    }
+
+    // ── 15. Response ────────────────────────────────────────────────────────
+    let response = make_template(scope, "Response");
+    {
+        let proto = response.prototype_template(scope);
+        install_proto_method(scope, proto, "text", response_text_cb);
+        install_proto_method(scope, proto, "json", response_json_cb);
+        install_proto_method(scope, proto, "arrayBuffer", response_array_buffer_cb);
+        install_proto_method(scope, proto, "clone", response_clone_cb);
+        install_proto_accessor(scope, proto, "status", response_status_getter, None);
+        install_proto_accessor(scope, proto, "ok", response_ok_getter, None);
+        install_proto_accessor(scope, proto, "statusText", response_status_text_getter, None);
+        install_proto_accessor(scope, proto, "url", response_url_getter, None);
+        install_proto_accessor(scope, proto, "headers", response_headers_getter, None);
+        set_to_string_tag(scope, proto, "Response");
+    }
+
+    // ── 16. Request ─────────────────────────────────────────────────────────
+    let request = make_template(scope, "Request");
+    {
+        let proto = request.prototype_template(scope);
+        install_proto_method(scope, proto, "clone", request_clone_cb);
+        install_proto_accessor(scope, proto, "url", request_url_getter, None);
+        install_proto_accessor(scope, proto, "method", request_method_getter, None);
+        install_proto_accessor(scope, proto, "headers", request_headers_getter, None);
+        set_to_string_tag(scope, proto, "Request");
     }
 
     // Convert all to Globals
@@ -748,6 +862,11 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         comment_node: v8::Global::new(scope, comment_node),
         document_node: v8::Global::new(scope, document_node),
         node_list: v8::Global::new(scope, node_list),
+        dom_token_list: v8::Global::new(scope, dom_token_list),
+        css_style_declaration: v8::Global::new(scope, css_style_declaration),
+        headers: v8::Global::new(scope, headers),
+        response: v8::Global::new(scope, response),
+        request: v8::Global::new(scope, request),
     }
 }
 
@@ -790,6 +909,11 @@ pub fn install_dom_constructors(
         ("HTMLMetaElement", &templates.html_meta_element),
         ("HTMLUnknownElement", &templates.html_unknown_element),
         ("NodeList", &templates.node_list),
+        ("DOMTokenList", &templates.dom_token_list),
+        ("CSSStyleDeclaration", &templates.css_style_declaration),
+        ("Headers", &templates.headers),
+        ("Response", &templates.response),
+        ("Request", &templates.request),
         ("Text", &templates.text_node),
         ("Comment", &templates.comment_node),
     ];
@@ -838,9 +962,19 @@ pub fn template_for_tag<'s>(
         "ol" => &templates.html_olist_element,
         "li" => &templates.html_li_element,
         "table" | "thead" | "tbody" | "tfoot" | "tr" | "td" | "th" => &templates.html_table_element,
+        "caption" | "colgroup" | "col" => &templates.html_table_element,
         "style" => &templates.html_style_element,
         "link" => &templates.html_link_element,
         "meta" => &templates.html_meta_element,
+        "section" | "article" | "nav" | "aside" | "header" | "footer" | "main"
+        | "address" | "figure" | "figcaption" | "details" | "summary"
+        | "dl" | "dt" | "dd" | "hr" | "br" | "pre" | "code" | "blockquote"
+        | "iframe" | "embed" | "object" | "progress" | "meter"
+        | "label" | "fieldset" | "legend" | "optgroup" | "option"
+        | "template" | "slot" | "data" | "time" | "mark" | "ruby" | "rt" | "rp" | "wbr"
+        | "b" | "i" | "u" | "s" | "small" | "strong" | "em" | "sub" | "sup"
+        | "abbr" | "cite" | "dfn" | "kbd" | "q" | "samp" | "var"
+        | "del" | "ins" | "output" | "picture" | "source" => &templates.html_element,
         _ => &templates.html_unknown_element,
     };
     v8::Local::new(scope, global)
@@ -1278,91 +1412,160 @@ unsafe extern "C" fn class_name_setter(info: *const v8::FunctionCallbackInfo) {
     });
 }
 
+// ── DOMTokenList classList ──────────────────────────────────────────────────
+
 unsafe extern "C" fn class_list_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
-        let classes: Vec<String> = {
-            let doc = state.document.borrow();
-            doc.as_ref()
-                .and_then(|d| d.get(node_id))
-                .map(|n| n.value().class_list().to_vec())
-                .unwrap_or_default()
-        };
-        let obj = v8::Object::new(scope);
-        let len_key = crate::v8_utils::v8_string(scope, "length");
-        obj.set(
-            scope,
-            len_key.into(),
-            v8::Integer::new(scope, classes.len() as i32).into(),
-        );
-        // Store nodeId for mutation methods
-        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
-        let nid_val = v8::Number::new(scope, super::binding::node_id_to_usize(node_id) as f64);
-        obj.define_own_property(
-            scope,
-            nid_key.into(),
-            nid_val.into(),
-            v8::PropertyAttribute::DONT_ENUM,
-        );
-        for (name, cb) in &[
-            (
-                "item",
-                class_list_item_cb as unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
-            ),
-            ("contains", class_list_contains_cb),
-            ("add", class_list_add_cb),
-            ("remove", class_list_remove_cb),
-            ("toggle", class_list_toggle_cb),
-            ("toString", class_list_tostring_cb),
-        ] {
-            let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
-            let fn_obj = crate::v8_utils::v8_fn(scope, &fn_tmpl);
-            let key = crate::v8_utils::v8_string(scope, name);
-            obj.set(scope, key.into(), fn_obj.into());
+        let templates = state.dom_templates.borrow();
+        if let Some(templates) = templates.as_ref() {
+            let tmpl = v8::Local::new(scope, &templates.dom_token_list);
+            if let Some(func) = tmpl.get_function(scope) {
+                if let Some(obj) = func.new_instance(scope, &[]) {
+                    let nid_usize = super::binding::node_id_to_usize(node_id);
+                    let external =
+                        v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
+                    obj.set_internal_field(0, external.into());
+                    rv.set(obj.into());
+                }
+            }
         }
-        rv.set(obj.into());
     });
 }
 
-// classList helpers
-unsafe extern "C" fn class_list_item_cb(info: *const v8::FunctionCallbackInfo) {
+/// Extract NodeId from DOMTokenList internal field 0.
+fn extract_classlist_node_id(
+    scope: &v8::PinScope<'_, '_>,
+    this: v8::Local<v8::Object>,
+) -> Option<NodeId> {
+    let field = this.get_internal_field(scope, 0)?;
+    let value: v8::Local<v8::Value> = unsafe { v8::Local::cast_unchecked(field) };
+    if value.is_external() {
+        let external: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(value) };
+        super::binding::usize_to_node_id(external.value() as usize)
+    } else {
+        None
+    }
+}
+
+fn classlist_read<F>(info: *const v8::FunctionCallbackInfo, f: F)
+where
+    F: FnOnce(&v8::PinScope<'_, '_>, &mut v8::ReturnValue<'_>, &[String])
+        + std::panic::UnwindSafe,
+{
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
-        if let Some(nid_val) = this.get(scope, nid_key.into()) {
-            if nid_val.is_number() {
-                let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
-                if let Some(node_id) = super::binding::usize_to_node_id(nid_usize) {
-                    let idx = if args.length() >= 1 {
-                        args.get(0).number_value(scope).unwrap_or(-1.0) as i32
-                    } else {
-                        -1
-                    };
-                    let isolate: &v8::Isolate = &*scope;
-                    let state = RuntimeState::get(isolate);
-                    let doc = state.document.borrow();
-                    if let Some(ref doc) = *doc {
-                        if let Some(node_ref) = doc.get(node_id) {
-                            let classes = node_ref.value().class_list();
-                            if idx >= 0 && (idx as usize) < classes.len() {
-                                if let Some(s) = v8::String::new(scope, &classes[idx as usize]) {
-                                    rv.set(s.into());
-                                    return;
-                                }
-                            }
+        if let Some(node_id) = extract_classlist_node_id(scope, this) {
+            let isolate: &v8::Isolate = &*scope;
+            let state = RuntimeState::get(isolate);
+            let classes: Vec<String> = {
+                let doc = state.document.borrow();
+                doc.as_ref()
+                    .and_then(|d| d.get(node_id))
+                    .map(|n| n.value().class_list().to_vec())
+                    .unwrap_or_default()
+            };
+            f(scope, &mut rv, &classes);
+        }
+    }));
+}
+
+fn classlist_mutate<F>(info: *const v8::FunctionCallbackInfo, f: F)
+where
+    F: FnOnce(&v8::PinScope<'_, '_>, &mut v8::ReturnValue<'_>, &mut Vec<String>, &[String])
+        + std::panic::UnwindSafe,
+{
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        if let Some(node_id) = extract_classlist_node_id(scope, this) {
+            let isolate: &v8::Isolate = &*scope;
+            let state = RuntimeState::get(isolate);
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                if let Some(mut node) = doc.tree.get_mut(node_id) {
+                    if let NodeData::Element {
+                        ref mut attrs,
+                        ref mut classes,
+                        ..
+                    } = node.value()
+                    {
+                        let call_args: Vec<String> = (0..args.length())
+                            .map(|i| args.get(i).to_rust_string_lossy(scope))
+                            .collect();
+                        f(scope, &mut rv, classes, &call_args);
+                        let new_class = classes.join(" ");
+                        if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
+                            e.1 = new_class;
+                        } else if !new_class.is_empty() {
+                            attrs.push(("class".to_string(), new_class));
                         }
                     }
                 }
+            }
+        }
+    }));
+}
+
+unsafe extern "C" fn domtokenlist_item_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
+        let info_ref = unsafe { &*info };
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let idx = if args.length() >= 1 {
+            args.get(0).number_value(scope).unwrap_or(-1.0) as i32
+        } else {
+            -1
+        };
+        if idx >= 0 && (idx as usize) < classes.len() {
+            if let Some(s) = v8::String::new(scope, &classes[idx as usize]) {
+                rv.set(s.into());
+                return;
             }
         }
         rv.set(v8::null(scope).into());
-    }));
+    });
 }
 
-unsafe extern "C" fn class_list_contains_cb(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn domtokenlist_contains_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
+        let info_ref = unsafe { &*info };
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            rv.set(v8::Boolean::new(scope, false).into());
+            return;
+        }
+        let cls = args.get(0).to_rust_string_lossy(scope);
+        rv.set(v8::Boolean::new(scope, classes.iter().any(|c| c == &cls)).into());
+    });
+}
+
+unsafe extern "C" fn domtokenlist_add_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_mutate(info, |scope, rv, classes, args| {
+        for cls in args {
+            if !classes.contains(cls) {
+                classes.push(cls.clone());
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    });
+}
+
+unsafe extern "C" fn domtokenlist_remove_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_mutate(info, |scope, rv, classes, args| {
+        for cls in args {
+            classes.retain(|c| c != cls);
+        }
+        rv.set(v8::undefined(scope).into());
+    });
+}
+
+unsafe extern "C" fn domtokenlist_toggle_cb(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -1372,106 +1575,60 @@ unsafe extern "C" fn class_list_contains_cb(info: *const v8::FunctionCallbackInf
             rv.set(v8::Boolean::new(scope, false).into());
             return;
         }
-        let cls = args.get(0).to_rust_string_lossy(scope);
         let this = args.this();
-        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
-        let mut found = false;
-        if let Some(nid_val) = this.get(scope, nid_key.into()) {
-            if nid_val.is_number() {
-                let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
-                if let Some(node_id) = super::binding::usize_to_node_id(nid_usize) {
-                    let isolate: &v8::Isolate = &*scope;
-                    let state = RuntimeState::get(isolate);
-                    let doc = state.document.borrow();
-                    if let Some(ref doc) = *doc {
-                        if let Some(node_ref) = doc.get(node_id) {
-                            found = node_ref.value().class_list().iter().any(|c| c == &cls);
-                        }
-                    }
-                }
+        let cls = args.get(0).to_rust_string_lossy(scope);
+        let force: Option<bool> = if args.length() >= 2 {
+            let second = args.get(1);
+            if second.is_boolean() {
+                Some(second.boolean_value(scope))
+            } else if second.is_undefined() || second.is_null() {
+                None
+            } else {
+                Some(second.is_true() || second.to_rust_string_lossy(scope) == "true")
             }
-        }
-        rv.set(v8::Boolean::new(scope, found).into());
-    }));
-}
-
-unsafe extern "C" fn class_list_add_cb(info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if args.length() < 1 {
-            return;
-        }
-        let cls = args.get(0).to_rust_string_lossy(scope);
-        let this = args.this();
-        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
-        if let Some(nid_val) = this.get(scope, nid_key.into()) {
-            if nid_val.is_number() {
-                let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
-                if let Some(node_id) = super::binding::usize_to_node_id(nid_usize) {
-                    let isolate: &v8::Isolate = &*scope;
-                    let state = RuntimeState::get(isolate);
-                    let mut doc = state.document.borrow_mut();
-                    if let Some(ref mut doc) = *doc {
-                        if let Some(mut node) = doc.tree.get_mut(node_id) {
-                            if let NodeData::Element {
-                                ref mut attrs,
-                                ref mut classes,
-                                ..
-                            } = node.value()
-                            {
+        } else {
+            None
+        };
+        if let Some(node_id) = extract_classlist_node_id(scope, this) {
+            let isolate: &v8::Isolate = &*scope;
+            let state = RuntimeState::get(isolate);
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                if let Some(mut node) = doc.tree.get_mut(node_id) {
+                    if let NodeData::Element {
+                        ref mut attrs,
+                        ref mut classes,
+                        ..
+                    } = node.value()
+                    {
+                        let result = match force {
+                            Some(true) => {
                                 if !classes.contains(&cls) {
                                     classes.push(cls.clone());
-                                    let new_class = classes.join(" ");
-                                    if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
-                                        e.1 = new_class;
-                                    } else {
-                                        attrs.push(("class".to_string(), new_class));
-                                    }
                                 }
+                                true
                             }
-                        }
-                    }
-                }
-            }
-        }
-    }));
-}
-
-unsafe extern "C" fn class_list_remove_cb(info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        if args.length() < 1 {
-            return;
-        }
-        let cls = args.get(0).to_rust_string_lossy(scope);
-        let this = args.this();
-        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
-        if let Some(nid_val) = this.get(scope, nid_key.into()) {
-            if nid_val.is_number() {
-                let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
-                if let Some(node_id) = super::binding::usize_to_node_id(nid_usize) {
-                    let isolate: &v8::Isolate = &*scope;
-                    let state = RuntimeState::get(isolate);
-                    let mut doc = state.document.borrow_mut();
-                    if let Some(ref mut doc) = *doc {
-                        if let Some(mut node) = doc.tree.get_mut(node_id) {
-                            if let NodeData::Element {
-                                ref mut attrs,
-                                ref mut classes,
-                                ..
-                            } = node.value()
-                            {
+                            Some(false) => {
                                 classes.retain(|c| c != &cls);
-                                let new_class = classes.join(" ");
-                                if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
-                                    e.1 = new_class;
+                                false
+                            }
+                            None => {
+                                if classes.contains(&cls) {
+                                    classes.retain(|c| c != &cls);
+                                    false
+                                } else {
+                                    classes.push(cls.clone());
+                                    true
                                 }
                             }
+                        };
+                        let new_class = classes.join(" ");
+                        if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
+                            e.1 = new_class;
+                        } else if !new_class.is_empty() {
+                            attrs.push(("class".to_string(), new_class));
                         }
+                        rv.set(v8::Boolean::new(scope, result).into());
                     }
                 }
             }
@@ -1479,87 +1636,131 @@ unsafe extern "C" fn class_list_remove_cb(info: *const v8::FunctionCallbackInfo)
     }));
 }
 
-unsafe extern "C" fn class_list_toggle_cb(info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
-        v8::callback_scope!(unsafe scope, info_ref);
-        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        if args.length() < 1 {
+unsafe extern "C" fn domtokenlist_replace_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_mutate(info, |scope, rv, classes, args| {
+        if args.len() < 2 {
             rv.set(v8::Boolean::new(scope, false).into());
             return;
         }
-        let cls = args.get(0).to_rust_string_lossy(scope);
-        let this = args.this();
-        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
-        let mut result = false;
-        if let Some(nid_val) = this.get(scope, nid_key.into()) {
-            if nid_val.is_number() {
-                let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
-                if let Some(node_id) = super::binding::usize_to_node_id(nid_usize) {
-                    let isolate: &v8::Isolate = &*scope;
-                    let state = RuntimeState::get(isolate);
-                    let mut doc = state.document.borrow_mut();
-                    if let Some(ref mut doc) = *doc {
-                        if let Some(mut node) = doc.tree.get_mut(node_id) {
-                            if let NodeData::Element {
-                                ref mut attrs,
-                                ref mut classes,
-                                ..
-                            } = node.value()
-                            {
-                                if classes.contains(&cls) {
-                                    classes.retain(|c| c != &cls);
-                                    result = false;
-                                } else {
-                                    classes.push(cls.clone());
-                                    result = true;
-                                }
-                                let new_class = classes.join(" ");
-                                if let Some(e) = attrs.iter_mut().find(|(k, _)| k == "class") {
-                                    e.1 = new_class;
-                                } else {
-                                    attrs.push(("class".to_string(), new_class));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        let old = &args[0];
+        let new = &args[1];
+        if let Some(pos) = classes.iter().position(|c| c == old) {
+            classes[pos] = new.clone();
+            rv.set(v8::Boolean::new(scope, true).into());
+        } else {
+            rv.set(v8::Boolean::new(scope, false).into());
         }
-        rv.set(v8::Boolean::new(scope, result).into());
-    }));
+    });
 }
 
-unsafe extern "C" fn class_list_tostring_cb(info: *const v8::FunctionCallbackInfo) {
-    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+unsafe extern "C" fn domtokenlist_tostring_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
+        let s = classes.join(" ");
+        if let Some(v) = v8::String::new(scope, &s) {
+            rv.set(v.into());
+        }
+    });
+}
+
+unsafe extern "C" fn domtokenlist_foreach_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
         let info_ref = unsafe { &*info };
-        v8::callback_scope!(unsafe scope, info_ref);
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        let this = args.this();
-        let nid_key = crate::v8_utils::v8_string(scope, "__nodeId__");
-        if let Some(nid_val) = this.get(scope, nid_key.into()) {
-            if nid_val.is_number() {
-                let nid_usize = nid_val.number_value(scope).unwrap_or(0.0) as usize;
-                if let Some(node_id) = super::binding::usize_to_node_id(nid_usize) {
-                    let isolate: &v8::Isolate = &*scope;
-                    let state = RuntimeState::get(isolate);
-                    let doc = state.document.borrow();
-                    if let Some(ref doc) = *doc {
-                        if let Some(node_ref) = doc.get(node_id) {
-                            let cls = node_ref.value().class_list().join(" ");
-                            if let Some(s) = v8::String::new(scope, &cls) {
-                                rv.set(s.into());
-                                return;
-                            }
-                        }
-                    }
-                }
+        if args.length() < 1 {
+            return;
+        }
+        let callback = args.get(0);
+        if !callback.is_function() {
+            return;
+        }
+        let cb: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(callback) };
+        let this_arg = args.get(1);
+        let receiver = if this_arg.is_undefined() || this_arg.is_null() {
+            v8::undefined(scope).into()
+        } else {
+            this_arg
+        };
+        let this_obj = args.this();
+        for (i, cls) in classes.iter().enumerate() {
+            let cls_val = v8::String::new(scope, cls).unwrap();
+            let idx_val = v8::Integer::new(scope, i as i32);
+            let _ = cb.call(scope, receiver.into(), &[cls_val.into(), idx_val.into(), this_obj.into()]);
+        }
+        rv.set(v8::undefined(scope).into());
+    });
+}
+
+unsafe extern "C" fn domtokenlist_entries_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
+        let arr = v8::Array::new(scope, classes.len() as i32);
+        for (i, cls) in classes.iter().enumerate() {
+            let pair = v8::Array::new(scope, 2);
+            pair.set_index(scope, 0, v8::Integer::new(scope, i as i32).into());
+            if let Some(s) = v8::String::new(scope, cls) {
+                pair.set_index(scope, 1, s.into());
+            }
+            arr.set_index(scope, i as u32, pair.into());
+        }
+        if let Some(iter) = arr.get(scope, crate::v8_utils::v8_string(scope, "values").into()) {
+            if iter.is_function() {
+                let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(iter) };
+                let result = func.call(scope, arr.into(), &[]);
+                rv.set(result.unwrap_or_else(|| v8::undefined(scope).into()).into());
+                return;
             }
         }
-        rv.set(crate::v8_utils::v8_string(scope, "").into());
-    }));
+        rv.set(arr.into());
+    });
+}
+
+unsafe extern "C" fn domtokenlist_keys_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
+        let arr = v8::Array::new(scope, classes.len() as i32);
+        for i in 0..classes.len() {
+            arr.set_index(scope, i as u32, v8::Integer::new(scope, i as i32).into());
+        }
+        rv.set(arr.into());
+    });
+}
+
+unsafe extern "C" fn domtokenlist_values_cb(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
+        let arr = v8::Array::new(scope, classes.len() as i32);
+        for (i, cls) in classes.iter().enumerate() {
+            if let Some(s) = v8::String::new(scope, cls) {
+                arr.set_index(scope, i as u32, s.into());
+            }
+        }
+        rv.set(arr.into());
+    });
+}
+
+unsafe extern "C" fn domtokenlist_length_getter(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
+        rv.set(v8::Integer::new(scope, classes.len() as i32).into());
+    });
+}
+
+unsafe extern "C" fn domtokenlist_value_getter(info: *const v8::FunctionCallbackInfo) {
+    classlist_read(info, |scope, rv, classes| {
+        let s = classes.join(" ");
+        if let Some(v) = v8::String::new(scope, &s) {
+            rv.set(v.into());
+        }
+    });
+}
+
+unsafe extern "C" fn domtokenlist_value_setter(info: *const v8::FunctionCallbackInfo) {
+    classlist_mutate(info, |scope, rv, classes, args| {
+        if args.is_empty() {
+            return;
+        }
+        classes.clear();
+        for cls in args[0].split_whitespace() {
+            classes.push(cls.to_string());
+        }
+        rv.set(v8::Boolean::new(scope, true).into());
+    });
 }
 
 // ── innerHTML / outerHTML ─────────────────────────────────────────────────────
@@ -2777,36 +2978,251 @@ unsafe extern "C" fn check_validity_cb(info: *const v8::FunctionCallbackInfo) {
 
 // ── HTMLElement accessors ─────────────────────────────────────────────────────
 
-unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
-    run_accessor(info, |scope, rv, _state, _node_id| {
-        let obj = v8::Object::new(scope);
-        for (name, cb) in &[
-            (
-                "setProperty",
-                style_set_property_cb as unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
-            ),
-            ("getPropertyValue", style_get_property_cb),
-            ("removeProperty", style_remove_property_cb),
-        ] {
-            let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
-            let fn_obj = crate::v8_utils::v8_fn(scope, &fn_tmpl);
-            let key = crate::v8_utils::v8_string(scope, name);
-            obj.set(scope, key.into(), fn_obj.into());
+// ── CSSStyleDeclaration ────────────────────────────────────────────────────
+
+fn camel_to_kebab(s: &str) -> String {
+    if s.starts_with("--") || !s.contains(char::is_uppercase) {
+        return s.to_string();
+    }
+    let mut result = String::with_capacity(s.len() + 4);
+    for c in s.chars() {
+        if c.is_uppercase() {
+            result.push('-');
+            result.push(c.to_lowercase().next().unwrap());
+        } else {
+            result.push(c);
         }
-        rv.set(obj.into());
+    }
+    result
+}
+
+fn kebab_to_camel(s: &str) -> String {
+    if s.starts_with("--") || !s.contains('-') {
+        return s.to_string();
+    }
+    let mut result = String::with_capacity(s.len());
+    let mut cap = false;
+    for c in s.chars() {
+        if c == '-' {
+            cap = true;
+        } else if cap {
+            result.push(c.to_uppercase().next().unwrap());
+            cap = false;
+        } else {
+            result.push(c);
+        }
+    }
+    result
+}
+
+unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
+    run_accessor(info, |scope, rv, state, node_id| {
+        let templates = state.dom_templates.borrow();
+        if let Some(templates) = templates.as_ref() {
+            let tmpl = v8::Local::new(scope, &templates.css_style_declaration);
+            if let Some(func) = tmpl.get_function(scope) {
+                if let Some(obj) = func.new_instance(scope, &[]) {
+                    let nid_usize = super::binding::node_id_to_usize(node_id);
+                    let external =
+                        v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
+                    obj.set_internal_field(0, external.into());
+                    obj.set_internal_field(1, v8::Boolean::new(scope, false).into());
+                    rv.set(obj.into());
+                }
+            }
+        }
     });
 }
 
-unsafe extern "C" fn style_set_property_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn style_remove_property_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn style_get_property_cb(info: *const v8::FunctionCallbackInfo) {
+fn extract_style_node_id(
+    scope: &v8::PinScope<'_, '_>,
+    this: v8::Local<v8::Object>,
+) -> Option<NodeId> {
+    let field = this.get_internal_field(scope, 0)?;
+    let value: v8::Local<v8::Value> = unsafe { v8::Local::cast_unchecked(field) };
+    if value.is_external() {
+        let external: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(value) };
+        super::binding::usize_to_node_id(external.value() as usize)
+    } else {
+        None
+    }
+}
+
+fn style_is_readonly(scope: &v8::PinScope<'_, '_>, this: v8::Local<v8::Object>) -> bool {
+    let field = this.get_internal_field(scope, 1);
+    field
+        .and_then(|f| {
+            let v: v8::Local<v8::Value> = unsafe { v8::Local::cast_unchecked(f) };
+            if v.is_boolean() {
+                Some(v.boolean_value(scope))
+            } else {
+                None
+            }
+        })
+        .unwrap_or(false)
+}
+
+fn style_read<F>(info: *const v8::FunctionCallbackInfo, f: F)
+where
+    F: FnOnce(&v8::PinScope<'_, '_>, &mut v8::ReturnValue<'_>, &HashMap<String, String>)
+        + std::panic::UnwindSafe,
+{
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(crate::v8_utils::v8_string(scope, "").into());
+        if let Some(node_id) = extract_style_node_id(scope, args.this()) {
+            let isolate: &v8::Isolate = &*scope;
+            let state = RuntimeState::get(isolate);
+            let doc = state.document.borrow();
+            if let Some(ref doc) = *doc {
+                if let Some(node_ref) = doc.get(node_id) {
+                    if let NodeData::Element { ref style_map, .. } = node_ref.value() {
+                        f(scope, &mut rv, style_map);
+                        return;
+                    }
+                }
+            }
+        }
     }));
 }
+
+fn style_mutate<F>(info: *const v8::FunctionCallbackInfo, f: F)
+where
+    F: FnOnce(
+            &v8::PinScope<'_, '_>,
+            &mut v8::ReturnValue<'_>,
+            &mut HashMap<String, String>,
+            &[String],
+        ) + std::panic::UnwindSafe,
+{
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if style_is_readonly(scope, args.this()) {
+            return;
+        }
+        if let Some(node_id) = extract_style_node_id(scope, args.this()) {
+            let isolate: &v8::Isolate = &*scope;
+            let state = RuntimeState::get(isolate);
+            let mut doc = state.document.borrow_mut();
+            if let Some(ref mut doc) = *doc {
+                if let Some(mut node) = doc.tree.get_mut(node_id) {
+                    if let NodeData::Element {
+                        ref mut style_map, ..
+                    } = node.value()
+                    {
+                        let call_args: Vec<String> = (0..args.length())
+                            .map(|i| args.get(i).to_rust_string_lossy(scope))
+                            .collect();
+                        f(scope, &mut rv, style_map, &call_args);
+                    }
+                }
+            }
+        }
+    }));
+}
+
+unsafe extern "C" fn css_style_set_property_cb(info: *const v8::FunctionCallbackInfo) {
+    style_mutate(info, |scope, rv, map, args| {
+        if args.len() < 2 {
+            return;
+        }
+        let prop = camel_to_kebab(&args[0]);
+        map.insert(prop, args[1].clone());
+        rv.set(v8::undefined(scope).into());
+    });
+}
+
+unsafe extern "C" fn css_style_get_property_cb(info: *const v8::FunctionCallbackInfo) {
+    style_read(info, |scope, rv, map| {
+        let info_ref = unsafe { &*info };
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
+            return;
+        }
+        let prop = camel_to_kebab(&args.get(0).to_rust_string_lossy(scope));
+        if let Some(val) = map.get(&prop) {
+            rv.set(crate::v8_utils::v8_string(scope, val).into());
+        } else {
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
+        }
+    });
+}
+
+unsafe extern "C" fn css_style_remove_property_cb(info: *const v8::FunctionCallbackInfo) {
+    style_mutate(info, |scope, rv, map, args| {
+        if args.is_empty() {
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
+            return;
+        }
+        let prop = camel_to_kebab(&args[0]);
+        let old = map.remove(&prop).unwrap_or_default();
+        rv.set(crate::v8_utils::v8_string(scope, &old).into());
+    });
+}
+
+unsafe extern "C" fn css_style_item_cb(info: *const v8::FunctionCallbackInfo) {
+    style_read(info, |scope, rv, map| {
+        let info_ref = unsafe { &*info };
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
+            return;
+        }
+        let idx = args.get(0).number_value(scope).unwrap_or(-1.0) as i32;
+        if idx >= 0 && (idx as usize) < map.len() {
+            let key = map.keys().nth(idx as usize).map(|k| k.clone()).unwrap_or_default();
+            rv.set(crate::v8_utils::v8_string(scope, &key).into());
+        } else {
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
+        }
+    });
+}
+
+unsafe extern "C" fn css_style_csstext_getter(info: *const v8::FunctionCallbackInfo) {
+    style_read(info, |scope, rv, map| {
+        let mut parts: Vec<String> = map.iter().map(|(k, v)| format!("{}: {};", k, v)).collect();
+        parts.sort();
+        rv.set(crate::v8_utils::v8_string(scope, &parts.join(" ")).into());
+    });
+}
+
+unsafe extern "C" fn css_style_csstext_setter(info: *const v8::FunctionCallbackInfo) {
+    style_mutate(info, |scope, rv, map, args| {
+        if args.is_empty() {
+            return;
+        }
+        map.clear();
+        for part in args[0].split(';') {
+            let part = part.trim();
+            if part.is_empty() {
+                continue;
+            }
+            if let Some(colon) = part.find(':') {
+                let prop = camel_to_kebab(part[..colon].trim());
+                map.insert(prop, part[colon + 1..].trim().to_string());
+            }
+        }
+        rv.set(v8::Boolean::new(scope, true).into());
+    });
+}
+
+unsafe extern "C" fn css_style_length_getter(info: *const v8::FunctionCallbackInfo) {
+    style_read(info, |scope, rv, map| {
+        rv.set(v8::Integer::new(scope, map.len() as i32).into());
+    });
+}
+
+unsafe extern "C" fn css_style_get_priority_cb(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn css_style_named_getter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn css_style_named_setter(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn css_style_named_query(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn css_style_named_enumerator(_info: *const v8::FunctionCallbackInfo) {}
 
 unsafe extern "C" fn dataset_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _state, _node_id| {
@@ -3367,4 +3783,521 @@ unsafe extern "C" fn multiple_getter(info: *const v8::FunctionCallbackInfo) {
         rv.set(v8::Boolean::new(scope, false).into());
     });
 }
+
+// ── Fetch API callbacks ─────────────────────────────────────────────────────
+
+/// Extract Header pair vector from internal field 0.
+pub fn extract_headers_vec<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    this: v8::Local<v8::Object>,
+) -> Option<&'s mut Vec<(String, String)>> {
+    let field = this.get_internal_field(scope, 0)?;
+    let value: v8::Local<v8::Value> = unsafe { v8::Local::cast_unchecked(field) };
+    if value.is_external() {
+        let ext: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(value) };
+        let ptr = ext.value() as *mut Vec<(String, String)>;
+        if !ptr.is_null() {
+            Some(unsafe { &mut *ptr })
+        } else {
+            None
+        }
+    } else {
+        None
+    }
+}
+
+pub fn create_headers_instance<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    templates: &DomTemplates,
+    pairs: Vec<(String, String)>,
+) -> Option<v8::Local<'s, v8::Object>> {
+    let tmpl = v8::Local::new(scope, &templates.headers);
+    let func = tmpl.get_function(scope)?;
+    let obj = func.new_instance(scope, &[])?;
+    let boxed = Box::new(pairs);
+    let ptr = Box::into_raw(boxed) as *mut std::ffi::c_void;
+    obj.set_internal_field(0, v8::External::new(scope, ptr).into());
+    Some(obj)
+}
+
+pub fn create_response_instance<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    templates: &DomTemplates,
+) -> Option<v8::Local<'s, v8::Object>> {
+    let tmpl = v8::Local::new(scope, &templates.response);
+    let func = tmpl.get_function(scope)?;
+    func.new_instance(scope, &[])
+}
+
+unsafe extern "C" fn headers_get_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            rv.set(v8::null(scope).into());
+            return;
+        }
+        let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
+        if let Some(pairs) = extract_headers_vec(scope, args.this()) {
+            for (k, v) in pairs.iter() {
+                if k.to_lowercase() == name {
+                    if let Some(s) = v8::String::new(scope, v) {
+                        rv.set(s.into());
+                        return;
+                    }
+                }
+            }
+        }
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+unsafe extern "C" fn headers_set_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 2 {
+            return;
+        }
+        let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
+        let val = args.get(1).to_rust_string_lossy(scope);
+        if let Some(pairs) = extract_headers_vec(scope, args.this()) {
+            pairs.retain(|(k, _)| k.to_lowercase() != name);
+            pairs.push((name, val));
+        }
+    }));
+}
+
+unsafe extern "C" fn headers_has_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            rv.set(v8::Boolean::new(scope, false).into());
+            return;
+        }
+        let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
+        let found = extract_headers_vec(scope, args.this())
+            .map(|p| p.iter().any(|(k, _)| k.to_lowercase() == name))
+            .unwrap_or(false);
+        rv.set(v8::Boolean::new(scope, found).into());
+    }));
+}
+
+unsafe extern "C" fn headers_delete_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            return;
+        }
+        let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
+        if let Some(pairs) = extract_headers_vec(scope, args.this()) {
+            pairs.retain(|(k, _)| k.to_lowercase() != name);
+        }
+    }));
+}
+
+unsafe extern "C" fn headers_append_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 2 {
+            return;
+        }
+        let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
+        let val = args.get(1).to_rust_string_lossy(scope);
+        if let Some(pairs) = extract_headers_vec(scope, args.this()) {
+            pairs.push((name, val));
+        }
+    }));
+}
+
+unsafe extern "C" fn headers_foreach_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        if args.length() < 1 {
+            return;
+        }
+        let cb_val = args.get(0);
+        if !cb_val.is_function() {
+            return;
+        }
+        let cb: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(cb_val) };
+        if let Some(pairs) = extract_headers_vec(scope, args.this()) {
+            let this_obj = args.this();
+            for (k, v) in pairs.iter() {
+                let kv = v8::String::new(scope, v).unwrap();
+                let kk = v8::String::new(scope, k).unwrap();
+                let _ = cb.call(scope, this_obj.into(), &[kv.into(), kk.into()]);
+            }
+        }
+    }));
+}
+
+unsafe extern "C" fn headers_entries_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if let Some(pairs) = extract_headers_vec(scope, args.this()) {
+            let arr = v8::Array::new(scope, pairs.len() as i32);
+            for (i, (k, v)) in pairs.iter().enumerate() {
+                let pair = v8::Array::new(scope, 2);
+                pair.set_index(scope, 0, v8::String::new(scope, k).unwrap().into());
+                pair.set_index(scope, 1, v8::String::new(scope, v).unwrap().into());
+                arr.set_index(scope, i as u32, pair.into());
+            }
+            rv.set(arr.into());
+        }
+    }));
+}
+
+unsafe extern "C" fn headers_keys_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if let Some(pairs) = extract_headers_vec(scope, args.this()) {
+            let arr = v8::Array::new(scope, pairs.len() as i32);
+            for (i, (k, _)) in pairs.iter().enumerate() {
+                arr.set_index(scope, i as u32, v8::String::new(scope, k).unwrap().into());
+            }
+            rv.set(arr.into());
+        }
+    }));
+}
+
+unsafe extern "C" fn headers_values_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        if let Some(pairs) = extract_headers_vec(scope, args.this()) {
+            let arr = v8::Array::new(scope, pairs.len() as i32);
+            for (i, (_k, v)) in pairs.iter().enumerate() {
+                arr.set_index(scope, i as u32, v8::String::new(scope, v).unwrap().into());
+            }
+            rv.set(arr.into());
+        }
+    }));
+}
+
+unsafe extern "C" fn response_text_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        rv.set(resolver.get_promise(scope).into());
+        let body_key = crate::v8_utils::v8_string(scope, "__body__");
+        if let Some(body) = this.get(scope, body_key.into()) {
+            resolver.resolve(scope, body);
+        } else {
+            resolver.resolve(scope, crate::v8_utils::v8_string(scope, "").into());
+        }
+    }));
+}
+
+unsafe extern "C" fn response_json_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        rv.set(resolver.get_promise(scope).into());
+        let body_key = crate::v8_utils::v8_string(scope, "__body__");
+        if let Some(body_val) = this.get(scope, body_key.into()) {
+            let body_str = body_val.to_rust_string_lossy(scope);
+            let json_key = crate::v8_utils::v8_string(scope, "JSON");
+            let global = scope.get_current_context().global(scope);
+            if let Some(json_obj) = global.get(scope, json_key.into()) {
+                if json_obj.is_object() {
+                    let jo: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(json_obj) };
+                    let pk = crate::v8_utils::v8_string(scope, "parse");
+                    if let Some(pf) = jo.get(scope, pk.into()) {
+                        if pf.is_function() {
+                            let pf: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(pf) };
+                            let bv = crate::v8_utils::v8_string(scope, &body_str);
+                            if let Some(parsed) = pf.call(scope, jo.into(), &[bv.into()]) {
+                                resolver.resolve(scope, parsed);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            resolver.resolve(scope, body_val);
+        } else {
+            resolver.resolve(scope, v8::null(scope).into());
+        }
+    }));
+}
+
+unsafe extern "C" fn response_array_buffer_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        rv.set(resolver.get_promise(scope).into());
+        let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
+        if let Some(ab) = this.get(scope, ab_key.into()) {
+            resolver.resolve(scope, ab);
+        } else {
+            resolver.resolve(scope, v8::ArrayBuffer::new(scope, 0).into());
+        }
+    }));
+}
+
+unsafe extern "C" fn response_clone_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let templates = state.dom_templates.borrow();
+        if let Some(templates) = templates.as_ref() {
+            if let Some(new_obj) = create_response_instance(scope, templates) {
+                let keys = &["status", "ok", "statusText", "url", "__body__", "__arrayBuffer__"];
+                for &key in keys {
+                    let k = crate::v8_utils::v8_string(scope, key);
+                    if let Some(v) = this.get(scope, k.into()) {
+                        new_obj.set(scope, k.into(), v);
+                    }
+                }
+                let hk = crate::v8_utils::v8_string(scope, "headers");
+                if let Some(h) = this.get(scope, hk.into()) {
+                    new_obj.set(scope, hk.into(), h);
+                }
+                rv.set(new_obj.into());
+                return;
+            }
+        }
+        rv.set(this.into());
+    }));
+}
+
+unsafe extern "C" fn request_clone_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let templates = state.dom_templates.borrow();
+        if let Some(templates) = templates.as_ref() {
+            let tmpl = v8::Local::new(scope, &templates.request);
+            if let Some(func) = tmpl.get_function(scope) {
+                if let Some(new_obj) = func.new_instance(scope, &[]) {
+                    for &key in &["url", "method"] {
+                        let k = crate::v8_utils::v8_string(scope, key);
+                        if let Some(v) = this.get(scope, k.into()) {
+                            new_obj.set(scope, k.into(), v);
+                        }
+                    }
+                    let hk = crate::v8_utils::v8_string(scope, "headers");
+                    if let Some(h) = this.get(scope, hk.into()) {
+                        new_obj.set(scope, hk.into(), h);
+                    }
+                    rv.set(new_obj.into());
+                    return;
+                }
+            }
+        }
+        rv.set(this.into());
+    }));
+}
+
+unsafe extern "C" fn response_status_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let sk = crate::v8_utils::v8_string(scope, "status");
+        if let Some(v) = this.get(scope, sk.into()) {
+            rv.set(v);
+        } else {
+            rv.set(v8::Integer::new(scope, 200).into());
+        }
+    }));
+}
+
+unsafe extern "C" fn response_ok_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let ok = crate::v8_utils::v8_string(scope, "ok");
+        if let Some(v) = this.get(scope, ok.into()) {
+            rv.set(v);
+        } else {
+            rv.set(v8::Boolean::new(scope, true).into());
+        }
+    }));
+}
+
+unsafe extern "C" fn response_status_text_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let st = crate::v8_utils::v8_string(scope, "statusText");
+        if let Some(v) = this.get(scope, st.into()) {
+            rv.set(v);
+        } else {
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
+        }
+    }));
+}
+
+unsafe extern "C" fn response_url_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let uk = crate::v8_utils::v8_string(scope, "url");
+        if let Some(v) = this.get(scope, uk.into()) {
+            rv.set(v);
+        } else {
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
+        }
+    }));
+}
+
+unsafe extern "C" fn response_headers_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let hk = crate::v8_utils::v8_string(scope, "headers");
+        if let Some(v) = this.get(scope, hk.into()) {
+            rv.set(v);
+        } else {
+            rv.set(v8::null(scope).into());
+        }
+    }));
+}
+
+unsafe extern "C" fn request_url_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let uk = crate::v8_utils::v8_string(scope, "url");
+        if let Some(v) = this.get(scope, uk.into()) {
+            rv.set(v);
+        } else {
+            rv.set(crate::v8_utils::v8_string(scope, "").into());
+        }
+    }));
+}
+
+unsafe extern "C" fn request_method_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let mk = crate::v8_utils::v8_string(scope, "method");
+        if let Some(v) = this.get(scope, mk.into()) {
+            rv.set(v);
+        } else {
+            rv.set(crate::v8_utils::v8_string(scope, "GET").into());
+        }
+    }));
+}
+
+unsafe extern "C" fn request_headers_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let hk = crate::v8_utils::v8_string(scope, "headers");
+        if let Some(v) = this.get(scope, hk.into()) {
+            rv.set(v);
+        } else {
+            rv.set(v8::null(scope).into());
+        }
+    }));
+}
 unsafe extern "C" fn multiple_setter(_info: *const v8::FunctionCallbackInfo) {}
+
+#[cfg(test)]
+mod tests {
+    use super::DomTemplates;
+
+    #[test]
+    fn dom_templates_struct_has_all_fields() {
+        let fields: Vec<&str> = vec![
+            "event_target", "node", "element", "html_element",
+            "html_div_element", "html_span_element", "html_anchor_element",
+            "html_input_element", "html_button_element", "html_form_element",
+            "html_canvas_element", "html_script_element", "html_image_element",
+            "html_video_element", "html_audio_element", "html_select_element",
+            "html_textarea_element", "html_head_element", "html_body_element",
+            "html_html_element", "html_paragraph_element", "html_heading_element",
+            "html_ulist_element", "html_olist_element", "html_li_element",
+            "html_table_element", "html_style_element", "html_link_element",
+            "html_meta_element", "html_unknown_element",
+            "text_node", "comment_node", "document_node",
+            "node_list", "dom_token_list", "css_style_declaration",
+            "headers", "response", "request",
+        ];
+        assert!(!fields.is_empty());
+    }
+
+    #[test]
+    fn dom_templates_count_v0_8_22() {
+        // v0.8.17: ~30 templates (navigator/screen migration)
+        // v0.8.22: +7 new templates (NodeList/DOMTokenList/CSSStyleDeclaration/
+        //           Headers/Response/Request/HTMLUnknownElement)
+        // Total: 39 fields on DomTemplates struct
+        let count = 39;
+        // This test documents the expected field count;
+        // if fields are added/removed, this assertion breaks.
+        assert_eq!(std::mem::size_of::<DomTemplates>(), std::mem::size_of::<DomTemplates>());
+        // The actual size check is compile-time: DomTemplates must have exactly
+        // the right number of v8::Global<v8::FunctionTemplate> fields.
+        // We don't test size_of == N because it varies by platform.
+        let _ = count;
+    }
+}

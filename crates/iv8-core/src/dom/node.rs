@@ -39,6 +39,8 @@ pub enum NodeData {
         id: Option<String>,
         /// Cached class list (split from class attribute).
         classes: Vec<String>,
+        /// Cached inline style properties (kebab-case → value).
+        style_map: HashMap<String, String>,
     },
 
     /// A text node (nodeType = 3).
@@ -72,6 +74,7 @@ impl NodeData {
             attrs,
             id,
             classes,
+            style_map: HashMap::new(),
         }
     }
 
