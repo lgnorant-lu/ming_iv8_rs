@@ -4,20 +4,19 @@
 //! stubs wired through BehaviorCallbackRegistry.
 
 use crate::behavior::{CanvasContextFactory, GradientFactory};
+use crate::hand_implemented::canvas2d::create_canvas_rendering_context_2d_template;
 
-/// Register Canvas 2D deep stub callbacks into the BehaviorCallbackRegistry.
-/// Called during Layer 2 installation (after Layer 1 IDL surface is ready).
+/// Register Canvas 2D factory callback into BehaviorCallbackRegistry.
+/// The factory creates CanvasRenderingContext2D instances when
+/// HTMLCanvasElement.getContext('2d') is called in JS.
 pub fn register_canvas_2d_callbacks(
-    canvas_2d_factory: &CanvasContextFactory,
-    canvas_2d_gradient: &GradientFactory,
+    factory: &CanvasContextFactory,
+    _gradient: &GradientFactory,
 ) {
-    // Factory callback: creates a CanvasRenderingContext2D instance when
-    // HTMLCanvasElement.getContext('2d') is called.
-    // v0.8.21: placeholders — actual factory functions in Task 2.
-    let _ = canvas_2d_factory;
-    let _ = canvas_2d_gradient;
-
-    tracing::info!("Canvas 2D deep stub callbacks registered");
+    // Wrap the template creation in a closure that can be stored.
+    // v0.8.21: placeholder — full V8 scope injection in Task 2 continuation.
+    tracing::info!("Canvas 2D deep stub factory registered (placeholder)");
+    let _ = factory;
 }
 
 /// Default property values for CanvasRenderingContext2D.
@@ -66,3 +65,4 @@ pub const CANVAS_2D_METHODS: &[&str] = &[
 ];
 
 pub mod canvas2d;
+pub mod location;
