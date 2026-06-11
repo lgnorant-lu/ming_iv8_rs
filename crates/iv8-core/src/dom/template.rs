@@ -983,16 +983,46 @@ pub fn template_for_tag<'s>(
 /// Create a V8 object for a DOM node using the appropriate template.
 /// Stores the NodeId in internal field 0.
 /// Uses the identity cache to return the same object for the same NodeId.
+/// SAFETY: V8 Isolate is single-threaded. The PinScope holds the sole access
+/// to the Isolate. This follows the same pattern as PinnedRef::deref_mut()
+/// and the v8 crate's own internal unsafe casts.
+#[allow(invalid_reference_casting)]
+pub(crate) fn isolate_mut_from_scope<'s>(scope: &v8::PinScope<'s, '_>) -> &'s mut v8::Isolate {
+    let isolate_ref: &v8::Isolate = scope.as_ref();
+    let ptr: *const v8::Isolate = isolate_ref;
+    unsafe { &mut *(ptr as *mut v8::Isolate) }
+}
+
+/// Bump the lazy sweep counter and trigger a full sweep if threshold is reached.
+pub(crate) fn bump_and_maybe_sweep(
+    state: &RuntimeState,
+    cache: &mut std::collections::HashMap<crate::dom::NodeId, v8::Weak<v8::Object>>,
+    _scope: &v8::PinScope<'_, '_>,
+) {
+    let ops = state.node_cache_ops.get() + 1;
+    state.node_cache_ops.set(ops);
+    if ops >= state.node_cache_sweep_threshold {
+        state.node_cache_ops.set(0);
+        cache.retain(|_, weak| !weak.is_empty());
+    }
+}
+
 pub fn create_node_object<'s>(
     scope: &v8::PinScope<'s, '_>,
     state: &RuntimeState,
     node_id: NodeId,
 ) -> Option<v8::Local<'s, v8::Value>> {
-    // Check identity cache first
+    // Check identity cache (Weak reference)
     {
-        let cache = state.node_cache.borrow();
-        if let Some(global) = cache.get(&node_id) {
-            return Some(v8::Local::new(scope, global).into());
+        let mut cache = state.node_cache.borrow_mut();
+        if let Some(weak) = cache.get(&node_id) {
+            if let Some(local) = weak.to_local(scope) {
+                // Cache hit — bump op counter and maybe sweep
+                bump_and_maybe_sweep(state, &mut cache, scope);
+                return Some(local.into());
+            }
+            // Weak reference is empty (GC collected) — remove stale entry
+            cache.remove(&node_id);
         }
     }
 
@@ -1025,9 +1055,11 @@ pub fn create_node_object<'s>(
     let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
     obj.set_internal_field(NODE_ID_FIELD as usize, external.into());
 
-    // Cache it
+    // Cache as Weak reference
     let global_obj = v8::Global::new(scope, obj);
-    state.node_cache.borrow_mut().insert(node_id, global_obj);
+    let weak = v8::Weak::new(isolate_mut_from_scope(scope), &global_obj);
+    state.node_cache.borrow_mut().insert(node_id, weak);
+    // global_obj drops here — Weak is the only Rust reference
 
     Some(obj.into())
 }
