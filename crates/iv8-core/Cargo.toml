@@ -49,6 +49,14 @@ swc_ecma_parser = "41"
 swc_ecma_visit = "25"
 swc_ecma_codegen = "28"
 
+[features]
+default = []
+native-surface = ["dep:iv8-surface"]
+
+[dependencies.iv8-surface]
+path = "../iv8-surface"
+optional = true
+
 [dev-dependencies]
 tracing-subscriber = { workspace = true }
 criterion = { version = "0.5", features = ["html_reports"] }

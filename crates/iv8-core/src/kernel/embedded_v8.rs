@@ -154,8 +154,16 @@ impl EmbeddedV8Kernel {
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
-        // Install DOM templates (FunctionTemplate hierarchy)
-        kernel.install_dom_templates();
+        // Install DOM templates or BrowserSurface (old vs new init chain)
+        #[cfg(feature = "native-surface")]
+        {
+            tracing::info!("Installing BrowserSurface (native-surface feature enabled)");
+            kernel.install_browser_surface_init();
+        }
+        #[cfg(not(feature = "native-surface"))]
+        {
+            kernel.install_dom_templates();
+        }
 
         // Exit the isolate so it's not "entered" at rest.
         // This allows multiple JSContext instances to coexist without LIFO drop panic.
@@ -770,6 +778,29 @@ impl EmbeddedV8Kernel {
     pub fn dispose(&mut self) {
         let state = RuntimeState::get(&self.isolate);
         state.mark_disposed();
+    }
+
+    /// Install BrowserSurface (new init chain, native-surface feature flag).
+    #[cfg(feature = "native-surface")]
+    fn install_browser_surface_init(&mut self) {
+        unsafe { self.isolate.enter(); }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+            let global = context.global(scope);
+
+            let callbacks = iv8_surface::BehaviorCallbackRegistry::new();
+            let registry = iv8_surface::install_browser_surface(scope, global, &callbacks);
+            {
+                let state = RuntimeState::get(&*scope);
+                *state.surface_registry.borrow_mut() = Some(registry);
+                *state.behavior_callbacks.borrow_mut() = Some(callbacks);
+                tracing::info!(interfaces = state.surface_registry.borrow().as_ref().map(|r| r.interface_count()).unwrap_or(0),
+                    "BrowserSurface installation complete");
+            }
+        }
+        unsafe { self.isolate.exit(); }
     }
 
     /// Load an HTML document into the context, making DOM query APIs available.

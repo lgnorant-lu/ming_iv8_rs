@@ -10,9 +10,13 @@ use std::collections::HashMap;
 use v8::Global;
 use v8::FunctionTemplate;
 
+/// Tracks generated FunctionTemplate instances by interface name.
 pub struct SurfaceRegistry {
     templates: HashMap<String, Global<FunctionTemplate>>,
 }
+
+/// Alias for public API surface.
+pub type BrowserSurfaceRegistry = SurfaceRegistry;
 
 impl SurfaceRegistry {
     pub fn new() -> Self {
@@ -35,6 +39,11 @@ impl SurfaceRegistry {
 
     pub fn is_empty(&self) -> bool {
         self.templates.is_empty()
+    }
+
+    /// Return the number of registered templates (interface count).
+    pub fn interface_count(&self) -> usize {
+        self.templates.len()
     }
 }
 

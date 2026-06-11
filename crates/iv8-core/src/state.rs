@@ -54,6 +54,14 @@ pub struct RuntimeState {
     /// DOM FunctionTemplate hierarchy (built once per isolate)
     pub dom_templates: RefCell<Option<DomTemplates>>,
 
+    /// BrowserSurface registry — new init chain (native-surface feature flag)
+    #[cfg(feature = "native-surface")]
+    pub surface_registry: RefCell<Option<iv8_surface::BrowserSurfaceRegistry>>,
+
+    /// Behavior callbacks for generated stubs (native-surface feature flag)
+    #[cfg(feature = "native-surface")]
+    pub behavior_callbacks: RefCell<Option<iv8_surface::BehaviorCallbackRegistry>>,
+
     /// Console messages captured from JS console.log/warn/error etc.
     pub console_messages: RefCell<Vec<ConsoleMessage>>,
 
@@ -111,6 +119,10 @@ impl RuntimeState {
             resource_bundle: RefCell::new(ResourceBundle::new()),
             node_cache: RefCell::new(std::collections::HashMap::new()),
             dom_templates: RefCell::new(None),
+            #[cfg(feature = "native-surface")]
+            surface_registry: RefCell::new(None),
+            #[cfg(feature = "native-surface")]
+            behavior_callbacks: RefCell::new(None),
             console_messages: RefCell::new(Vec::new()),
             network_handler: RefCell::new(None),
             inspector_session: RefCell::new(None),
