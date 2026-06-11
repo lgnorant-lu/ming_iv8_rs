@@ -237,8 +237,7 @@ pub fn classify_domain(name: &str) -> &'static str {
         || name.starts_with("XML") || name == "URL" || name == "URLSearchParams"
         || name.starts_with("WebTransport") || name.starts_with("WebSocket")
         || name.starts_with("Cache") || name == "CacheStorage"
-        || name.starts_with("BackgroundFetch") || name.starts_with("Payment")
-        || name.starts_with("Presentation") || name.starts_with("Credential")
+        || name.starts_with("BackgroundFetch")
         || name.starts_with("WakeLock") || name == "BarcodeDetector"
         || name == "FaceDetector" || name.starts_with("NDEF")
         || name.starts_with("Clipboard") || name == "ClipboardItem"
