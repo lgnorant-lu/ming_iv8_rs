@@ -55,16 +55,6 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         configurable: true,
     });
 
-    // document.title
-    if (!('title' in document)) {
-        Object.defineProperty(document, 'title', {
-            value: '',
-            writable: true,
-            enumerable: true,
-            configurable: true,
-        });
-    }
-
     // document.domain
     if (!('domain' in document)) {
         Object.defineProperty(document, 'domain', {
@@ -197,9 +187,6 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     }
     if (!document.baseURI) {
         Object.defineProperty(document, 'baseURI', { get: function() { return location.href; }, configurable: true });
-    }
-    if (!document.documentURI) {
-        Object.defineProperty(document, 'documentURI', { get: function() { return location.href; }, configurable: true });
     }
     if (!document.characterSet) {
         Object.defineProperty(document, 'characterSet', { get: function() { return 'UTF-8'; }, configurable: true });
