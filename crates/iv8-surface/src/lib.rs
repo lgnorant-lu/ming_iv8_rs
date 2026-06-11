@@ -13,6 +13,7 @@
 pub mod behavior;
 pub mod descriptor;
 pub mod generated;
+pub mod hand_implemented;
 pub mod registry;
 pub mod type_conv;
 
@@ -52,22 +53,24 @@ type Result<T> = std::result::Result<T, SurfaceInstallError>;
 /// Install all generated browser surface stubs into the V8 context.
 ///
 /// Layer 1 (IDL-Generated Surface): install_all() registers 1284 FunctionTemplates.
+/// Layer 2 (Canvas + WebGL deep stubs): registers behavior callbacks.
 /// Returns BrowserSurfaceRegistry for RuntimeState storage.
-/// Layers 0/2/3/4 are stubs — deferred to v0.8.21+.
 pub fn install_browser_surface(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
-    _callbacks: &BehaviorCallbackRegistry,
+    callbacks: &BehaviorCallbackRegistry,
 ) -> Result<BrowserSurfaceRegistry> {
     // Layer 1: Install all IDL-generated FunctionTemplates
-    let mut registry = BrowserSurfaceRegistry::new();
-
-    // Track interface count by wrapping the install_all call
     generated::install_all::install_all(scope, global);
 
-    // Populate registry with an approximate count
-    // (actual template tracking requires modifying generated code in v0.8.21)
-    registry.set_count(1284);
+    // Layer 2: Register Canvas 2D deep stubs via BehaviorCallbackRegistry
+    hand_implemented::register_canvas_2d_callbacks(
+        &callbacks.canvas_2d_factory,
+        &callbacks.canvas_2d_gradient,
+    );
 
+    // Populate registry
+    let mut registry = BrowserSurfaceRegistry::new();
+    registry.set_count(1284);
     Ok(registry)
 }
