@@ -67,4 +67,5 @@ pub const CANVAS_2D_METHODS: &[&str] = &[
 pub mod canvas2d;
 pub mod location;
 pub mod navigator;
+pub mod verification;
 pub mod webgl;
