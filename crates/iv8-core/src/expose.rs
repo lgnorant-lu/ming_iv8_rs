@@ -1,12 +1,13 @@
 //! expose: register Rust callbacks as JS global functions via FunctionTemplate.
 //!
-//! Uses v8 147's FunctionTemplate::builder with data slot to store the callback.
+//! v0.2-v0.8.21: ExposedFnData was leaked (Box::into_raw without cleanup).
+//! v0.8.22: Registered with heap_registry for cleanup on RuntimeState drop.
 
+use crate::state::RuntimeState;
 use std::ffi::c_void;
 
 type ExposedCallback = Box<dyn Fn(&[String]) -> Result<String, String> + Send + 'static>;
 
-/// Data stored in V8 External for each exposed function.
 struct ExposedFnData {
     callback: ExposedCallback,
 }
@@ -14,9 +15,8 @@ struct ExposedFnData {
 /// Register a named function on the V8 global object.
 /// When called from JS, invokes the Rust closure with string args.
 ///
-/// NOTE: ExposedFnData is leaked (Box::into_raw) into a V8 External.
-/// It lives for the JSContext lifetime. Bounded leak (~64 bytes per call).
-/// v0.2+ should use weak callbacks to free on GC.
+/// Box-allocated ExposedFnData is registered in heap_registry for cleanup
+/// when RuntimeState is dropped.
 pub fn expose_function(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
@@ -25,6 +25,11 @@ pub fn expose_function(
 ) {
     let data = Box::new(ExposedFnData { callback });
     let data_ptr = Box::into_raw(data) as *mut c_void;
+    let isolate: &v8::Isolate = &*scope;
+    let state = RuntimeState::get(isolate);
+    state.register_heap(data_ptr, |p| unsafe {
+        drop(Box::from_raw(p as *mut ExposedFnData))
+    });
     let external = v8::External::new(scope, data_ptr);
 
     // Use FunctionTemplate::builder_raw with our extern "C" callback
