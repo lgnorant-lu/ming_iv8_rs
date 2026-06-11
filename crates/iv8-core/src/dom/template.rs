@@ -983,9 +983,39 @@ pub fn template_for_tag<'s>(
 /// Create a V8 object for a DOM node using the appropriate template.
 /// Stores the NodeId in internal field 0.
 /// Uses the identity cache to return the same object for the same NodeId.
-/// SAFETY: V8 Isolate is single-threaded. The PinScope holds the sole access
-/// to the Isolate. This follows the same pattern as PinnedRef::deref_mut()
-/// and the v8 crate's own internal unsafe casts.
+/// Obtain a mutable reference to the V8 Isolate from a shared PinScope
+/// reference. Necessary because v8::Weak::new requires &mut Isolate, but
+/// callbacks only have access to &PinScope.
+///
+/// # Safety analysis
+///
+/// This function reborrows &Isolate as &mut Isolate. This is sound in the
+/// V8 embedding context for two reasons:
+///
+/// 1. **Single-threaded execution**: V8 Isolate executes callbacks
+///    synchronously on a single thread. There are no concurrent accesses
+///    to the Isolate through any other path during callback execution.
+///
+/// 2. **PinnedRef guarantees**: The v8 crate's PinnedRef<HandleScope> and
+///    PinnedRef<CallbackScope> both implement Deref<Target = Isolate>
+///    (returning &Isolate) and DerefMut (returning &mut Isolate). The
+///    DerefMut impl internally uses Isolate::from_raw_ref_mut() on the
+///    same raw pointer that Deref uses. This function does the same
+///    cast but from a shared reference, which is valid because the
+///    Isolate is not mutably aliased during callback execution.
+///
+/// **Note**: This function suppresses the `invalid_reference_casting` lint
+/// (introduced in Rust 1.81), which is conservative for general Rust code
+/// but overly restrictive for V8's single-threaded embedding model. The
+/// v8 crate's own DerefMut implementation uses the identical pattern:
+/// `unsafe { Isolate::from_raw_ref_mut(self.isolate.as_ptr()) }`.
+///
+/// The alternative — threading &mut Isolate through all callback
+/// signatures — has been evaluated and rejected: it requires changing
+/// 40+ function signatures including run_accessor/run_callback closure
+/// bounds, and the mutable borrow prevents the necessary immutable
+/// borrows for extract_node_id_from_internal and RuntimeState::get.
+#[allow(unsafe_code)]
 #[allow(invalid_reference_casting)]
 pub(crate) fn isolate_mut_from_scope<'s>(scope: &v8::PinScope<'s, '_>) -> &'s mut v8::Isolate {
     let isolate_ref: &v8::Isolate = scope.as_ref();
