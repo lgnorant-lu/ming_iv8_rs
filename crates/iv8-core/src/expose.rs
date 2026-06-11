@@ -96,6 +96,9 @@ unsafe extern "C" fn exposed_fn_trampoline(info: *const v8::FunctionCallbackInfo
 #[cfg(test)]
 mod tests {
     use crate::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};
+    use super::{ExposedFnData, expose_function};
+    use crate::state::RuntimeState;
+    use std::ffi::c_void;
 
     #[test]
     fn expose_simple_function() {
@@ -174,5 +177,26 @@ mod tests {
             kernel.eval_to_rust_value("increment()"),
             RustValue::String("3".into())
         );
+    }
+
+    #[test]
+    fn expose_heap_registry_verification() {
+        let state = RuntimeState::new(
+            false,
+            crate::state::TimeMode::Logical,
+            "__test__".to_string(),
+            std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+        );
+        let before = state.heap_registry.borrow().len();
+
+        let data = Box::new(ExposedFnData {
+            callback: Box::new(|_| Ok("ok".to_string())),
+        });
+        let ptr = Box::into_raw(data) as *mut c_void;
+        state.register_heap(ptr, |p| unsafe {
+            drop(Box::from_raw(p as *mut ExposedFnData))
+        });
+
+        assert_eq!(state.heap_registry.borrow().len(), before + 1);
     }
 }
