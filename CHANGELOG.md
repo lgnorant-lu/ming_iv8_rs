@@ -6,6 +6,43 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.23] - 2026-06-12
+
+> Local milestone. Infrastructure optimization: node_cache v8::Weak migration,
+> dead code cleanup, document_props.rs modularization.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Changed
+
+- **node_cache v8::Weak 迁移**: HashMap<NodeId, v8::Global<Object>> 改为
+  HashMap<NodeId, v8::Weak<Object>>。V8 GC 可回收未使用的 DOM 对象，
+  5000 节点场景内存从 ~9MB 降至 ~1.5MB。
+- **create_node_object / node_to_v8_object_plain**: 缓存读写逻辑改为
+  Weak::to_local + is_empty 检查，miss 时被动清扫失效条目。
+- **Lazy Sweep**: 新增 bump_and_maybe_sweep 混合清扫策略，每 500 次
+  缓存操作触发全量 retain 清理。
+
+### Removed
+
+- **死代码归档**: dom_prototypes.rs / element_prototypes.rs / navigation.rs
+  移动到 _archive/ 目录并附带记录 README.md。
+- **document_props.rs 死代码**: 删除被覆盖的 document.title 定义和
+  冗余的 document.documentURI 定义。
+
+### Refactored
+
+- **document_props.rs 模块化**: 833 行巨型文件拆分为 254 行核心 +
+  audio_context.rs (280 行) + window_extras.rs (280 行)。
+  AudioContext 子系统、Window 属性、全局构造函数、structuredClone、
+  Blob、performance.timing 独立模块化。
+
+### Quality Gates
+
+- cargo check 零错误
+- cargo test -p iv8-core --lib 180/180 通过
+- cargo test -p iv8-surface --lib 30/30 通过
+- cargo check --features native-surface 通过
+
 ## [0.8.22] - 2026-06-11
 
 > Local milestone. P1 deep stubs: Document/createElement/classList/style/Fetch
