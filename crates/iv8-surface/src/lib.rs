@@ -66,16 +66,25 @@ pub fn install_browser_surface(
     generated::install_all::install_all(scope, global);
 
     // Layer 2: Register deep stub callbacks via BehaviorCallbackRegistry
+    //
+    // Canvas 2D: factory callback placeholder — full V8 runtime binding
+    // deferred to v0.8.22 (requires BehaviorCallbackRegistry dyn Fn()
+    // signatures upgrade to accept V8 scope).
     hand_implemented::register_canvas_2d_callbacks(
         &callbacks.canvas_2d_factory,
         &callbacks.canvas_2d_gradient,
     );
 
-    // Initialize WebGL parameter map (data-only, V8 runtime binding in v0.8.22)
-    hand_implemented::webgl::build_gl_param_map();
+    // WebGL: parameter map is data-only — V8 getParameter() binding in v0.8.22.
+    let gl_params = hand_implemented::webgl::build_gl_param_map();
+    debug_assert!(gl_params.len() >= 30, "WebGL parameter map incomplete");
 
-    // Navigator getter verification (data-level, runtime verification in integration tests)
-    let _nav_ok = hand_implemented::navigator::verify_navigator_getters();
+    // Location: URL parser is data-only — V8 Location FunctionTemplate in v0.8.22.
+    let loc = hand_implemented::location::LocationState::default();
+    debug_assert!(!loc.href.is_empty(), "LocationState default href empty");
+
+    // Navigator: 22 getter names verified at data level.
+    debug_assert!(hand_implemented::navigator::verify_navigator_getters());
 
     // Populate registry
     let mut registry = BrowserSurfaceRegistry::new();

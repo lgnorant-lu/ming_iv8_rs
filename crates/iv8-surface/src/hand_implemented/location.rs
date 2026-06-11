@@ -105,25 +105,33 @@ mod tests {
     }
 
     #[test]
-    fn test_ipv6() {
+    fn test_ipv6_full() {
         let loc = LocationState::from_href("http://[::1]:8080/test");
-        // url crate may or may not preserve brackets in hostname
-        assert!(loc.port == "8080" || loc.port.is_empty());
+        // url crate may or may not preserve brackets; test what we get
+        assert!(!loc.hostname.is_empty(), "hostname must not be empty for IPv6 URL");
+        assert!(!loc.href.is_empty(), "href must not be empty");
     }
 
     #[test]
-    fn test_rebuild_href() {
+    fn test_rebuild_href_preserves_changes() {
         let mut loc = LocationState::from_href("https://example.com/path");
         loc.hash = "#new".to_string();
         loc.rebuild_href();
         assert_eq!(loc.hash, "#new");
+        assert!(loc.href.ends_with("#new"), "href should end with updated hash");
     }
 
     #[test]
     fn test_protocol_relative() {
         let loc = LocationState::from_href("//example.com/path");
-        // Protocol-relative URLs parse relative to the base (unknown here)
-        // The url crate treats these differently depending on context
-        assert!(loc.hostname.contains("example") || loc.hostname.is_empty());
+        // Protocol-relative URLs are parsed relative to base; at minimum
+        // the URL should not be empty
+        assert!(!loc.href.is_empty());
+    }
+
+    #[test]
+    fn test_default_location_is_about_blank() {
+        let loc = LocationState::default();
+        assert_eq!(loc.href, "about:blank");
     }
 }

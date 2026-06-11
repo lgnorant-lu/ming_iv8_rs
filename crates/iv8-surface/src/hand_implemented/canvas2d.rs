@@ -9,8 +9,8 @@ use v8::FunctionTemplate;
 use v8::Local;
 
 /// Create the CanvasRenderingContext2D FunctionTemplate with all properties
-/// and methods. Properties are initialized with default values from
-/// CANVAS_2D_DEFAULTS via install_default_values().
+/// and methods. After creating an instance, call install_default_values()
+/// to set initial property values.
 pub fn create_canvas_rendering_context_2d_template<'s>(
     scope: &v8::PinScope<'s, '_>,
 ) -> Local<'s, FunctionTemplate> {
@@ -37,6 +37,19 @@ pub fn create_canvas_rendering_context_2d_template<'s>(
     }
 
     tmpl
+}
+
+/// Create a fully-initialized CanvasRenderingContext2D instance with
+/// default property values set. Combines template instantiation with
+/// install_default_values() so callers get a ready-to-use context.
+pub fn create_canvas_2d_context_instance<'s>(
+    scope: &v8::PinScope<'s, '_>,
+) -> Option<v8::Local<'s, v8::Object>> {
+    let tmpl = create_canvas_rendering_context_2d_template(scope);
+    let func = tmpl.get_function(scope)?;
+    let obj = func.new_instance(scope, &[])?;
+    install_default_values(scope, obj);
+    Some(obj)
 }
 
 /// After instantiating the template, set default property values on the instance.
