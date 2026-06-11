@@ -9,4 +9,4 @@ description = "IV8 browser surface — generated FunctionTemplate stubs for W3C 
 [dependencies]
 v8 = { workspace = true }
 tracing = "0.1"
-url = "2"
+url = { workspace = true }
