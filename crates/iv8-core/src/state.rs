@@ -51,6 +51,9 @@ pub struct RuntimeState {
     /// DOM node identity cache: same NodeId → same V8 object
     pub node_cache: RefCell<std::collections::HashMap<crate::dom::NodeId, v8::Global<v8::Object>>>,
 
+    /// CSSStyleDeclaration instance cache per element node
+    pub style_cache: RefCell<std::collections::HashMap<crate::dom::NodeId, v8::Global<v8::Object>>>,
+
     /// DOM FunctionTemplate hierarchy (built once per isolate)
     pub dom_templates: RefCell<Option<DomTemplates>>,
 
@@ -80,6 +83,10 @@ pub struct RuntimeState {
 
     /// Canvas 2D instances keyed by canvas ID (for toDataURL/getImageData).
     pub canvases: RefCell<std::collections::HashMap<String, crate::canvas::canvas2d::Canvas2D>>,
+
+    /// Heap registries for Box allocations stored via External pointers.
+    /// Each entry: (pointer, free function). Freed on RuntimeState drop.
+    pub heap_registry: RefCell<Vec<(*mut std::ffi::c_void, fn(*mut std::ffi::c_void))>>,
 }
 
 /// Time mode for the JS context.
@@ -118,6 +125,7 @@ impl RuntimeState {
             event_listeners: RefCell::new(EventListenerRegistry::new()),
             resource_bundle: RefCell::new(ResourceBundle::new()),
             node_cache: RefCell::new(std::collections::HashMap::new()),
+            style_cache: RefCell::new(std::collections::HashMap::new()),
             dom_templates: RefCell::new(None),
             #[cfg(feature = "native-surface")]
             surface_registry: RefCell::new(None),
@@ -129,6 +137,7 @@ impl RuntimeState {
             cdp_client: RefCell::new(None),
             crypto_seed: RefCell::new(None),
             canvases: RefCell::new(std::collections::HashMap::new()),
+            heap_registry: RefCell::new(Vec::new()),
         }
     }
 
@@ -171,6 +180,16 @@ impl RuntimeState {
     pub fn is_disposed(&self) -> bool {
         *self.disposed.borrow()
     }
+
+    /// Register a heap allocation for cleanup when RuntimeState drops.
+    /// Used for Box-allocated data stored in V8 External pointers.
+    pub fn register_heap(
+        &self,
+        ptr: *mut std::ffi::c_void,
+        free_fn: fn(*mut std::ffi::c_void),
+    ) {
+        self.heap_registry.borrow_mut().push((ptr, free_fn));
+    }
 }
 
 impl Drop for RuntimeState {
@@ -179,6 +198,9 @@ impl Drop for RuntimeState {
             eval_count = *self.eval_count.borrow(),
             "RuntimeState dropping"
         );
+        for (ptr, free_fn) in self.heap_registry.borrow_mut().drain(..) {
+            free_fn(ptr);
+        }
     }
 }
 

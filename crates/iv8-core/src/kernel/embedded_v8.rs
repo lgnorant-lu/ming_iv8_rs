@@ -827,6 +827,7 @@ impl EmbeddedV8Kernel {
             let state = RuntimeState::get(&self.isolate);
             *state.document.borrow_mut() = Some(doc);
             state.node_cache.borrow_mut().clear();
+            state.style_cache.borrow_mut().clear();
         }
 
         // Install V8 bindings
@@ -880,6 +881,7 @@ impl EmbeddedV8Kernel {
             let state = RuntimeState::get(&self.isolate);
             *state.document.borrow_mut() = Some(doc);
             state.node_cache.borrow_mut().clear();
+            state.style_cache.borrow_mut().clear();
         }
 
         // 4. Install DOM V8 bindings

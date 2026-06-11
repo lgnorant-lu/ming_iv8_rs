@@ -286,7 +286,7 @@ fn build_response_object<'s>(
 
     // Build Headers object using Headers FunctionTemplate
     let header_pairs: Vec<(String, String)> = resource.headers.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
-    let headers_obj = if let Some(ho) = crate::dom::template::create_headers_instance(scope, templates, header_pairs) {
+    let headers_obj = if let Some(ho) = crate::dom::template::create_headers_instance(scope, state, templates, header_pairs) {
         ho
     } else {
         v8::Object::new(scope)
