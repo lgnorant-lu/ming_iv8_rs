@@ -71,7 +71,7 @@ pub fn build_gl_param_map() -> HashMap<u32, GlParamSpec> {
         GlParamSpec { pname: 0x9240, name: "UNPACK_FLIP_Y_WEBGL", param_type: GlParamType::Boolean, default: "false" },
         GlParamSpec { pname: 0x9241, name: "UNPACK_PREMULTIPLY_ALPHA_WEBGL", param_type: GlParamType::Boolean, default: "false" },
         // Float
-        GlParamSpec { pname: 0x84FF, name: "MAX_FRAGMENT_SHADER_DERIVATIVE_HAVE_OVERRIDES?", param_type: GlParamType::Float, default: "1.0" },
+        GlParamSpec { pname: 0x84FF, name: "MAX_FRAGMENT_SHADER_DERIVATIVE", param_type: GlParamType::Float, default: "1.0" },
     ];
 
     let mut map = HashMap::with_capacity(specs.len());
@@ -210,12 +210,20 @@ mod tests {
     }
 
     #[test]
-    fn test_constants_non_zero() {
-        for (val, _name) in WEBGL_CONSTANTS {
-            if *val == 0x0000 {
-                // ZERO and NO_ERROR and POINTS are valid zero constants
-                continue;
-            }
+    fn test_constants_all_defined() {
+        assert!(WEBGL_CONSTANTS.len() >= 50);
+        // Verify each constant has a non-empty name
+        for (_val, name) in WEBGL_CONSTANTS {
+            assert!(!name.is_empty(), "constant name must not be empty");
         }
+    }
+
+    #[test]
+    fn test_no_duplicate_constants() {
+        let mut names: Vec<&str> = WEBGL_CONSTANTS.iter().map(|(_, n)| *n).collect();
+        let len_before = names.len();
+        names.sort();
+        names.dedup();
+        assert_eq!(len_before, names.len(), "duplicate constant names found");
     }
 }

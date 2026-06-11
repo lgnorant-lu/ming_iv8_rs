@@ -9,8 +9,8 @@ use v8::FunctionTemplate;
 use v8::Local;
 
 /// Create the CanvasRenderingContext2D FunctionTemplate with all properties
-/// and methods. The returned template can be instantiated via
-/// `template.get_function(scope).new_instance(scope, &[])`.
+/// and methods. Properties are initialized with default values from
+/// CANVAS_2D_DEFAULTS via install_default_values().
 pub fn create_canvas_rendering_context_2d_template<'s>(
     scope: &v8::PinScope<'s, '_>,
 ) -> Local<'s, FunctionTemplate> {
@@ -37,6 +37,30 @@ pub fn create_canvas_rendering_context_2d_template<'s>(
     }
 
     tmpl
+}
+
+/// After instantiating the template, set default property values on the instance.
+pub fn install_default_values<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    obj: v8::Local<'s, v8::Object>,
+) {
+    for (name, value) in CANVAS_2D_DEFAULTS {
+        let key = v8::String::new(scope, name).unwrap();
+
+        let val: v8::Local<'s, v8::Value> = if let Ok(v) = value.trim_matches('"').parse::<f64>() {
+            v8::Number::new(scope, v).into()
+        } else if *value == "true" {
+            v8::Boolean::new(scope, true).into()
+        } else if *value == "false" {
+            v8::Boolean::new(scope, false).into()
+        } else {
+            // String value — strip surrounding quotes
+            let s = value.trim_matches('"');
+            v8::String::new(scope, s).map(|v| v.into()).unwrap_or_else(|| v8::undefined(scope).into())
+        };
+
+        obj.set(scope, key.into(), val);
+    }
 }
 
 /// No-op constructor — instances created by Rust.
@@ -105,9 +129,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_create_template_has_correct_name() {
-        // This test validates the template creation compiles
-        // Full V8 instantiation tests require an Isolate
+    fn test_create_template_compiles() {
+        // Validates that create_canvas_rendering_context_2d_template
+        // type-checks correctly. Full V8 runtime test requires Isolate.
+        // The function signature is: (scope) -> Local<FunctionTemplate>
+        assert!(CANVAS_2D_DEFAULTS.len() >= 20);
+        assert!(CANVAS_2D_METHODS.len() >= 30);
     }
 
     #[test]

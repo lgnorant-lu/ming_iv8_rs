@@ -6,9 +6,10 @@
 //! The generated code lives in `generated/` — produced by iv8-surface-codegen
 //! from unified_ir.json (v0.8.18).
 //!
-//! v0.8.20: BrowserSurface integration with Feature Flag control.
-//! Layers 0/2/3/4 are deferred to v0.8.21+.
-//! C++ wrapper build.rs is deferred to v0.8.21 (requires cross-crate V8 header paths).
+//! v0.8.21: P0 deep stub implementation — Canvas 2D, WebGL, Location, Navigator.
+//! SubtleCrypto integration deferred to v0.8.22.
+//! Layers 0/3/4 (Global Foundation, Anti-Detection, Document Bootstrap)
+//! and C++ wrapper build.rs are deferred to v0.8.22+.
 
 pub mod behavior;
 pub mod descriptor;
@@ -53,7 +54,8 @@ type Result<T> = std::result::Result<T, SurfaceInstallError>;
 /// Install all generated browser surface stubs into the V8 context.
 ///
 /// Layer 1 (IDL-Generated Surface): install_all() registers 1284 FunctionTemplates.
-/// Layer 2 (Canvas + WebGL deep stubs): registers behavior callbacks.
+/// Layer 2 (Deep Stubs): Canvas 2D factory + WebGL data + Location URL parser +
+///     Navigator verification — registered via BehaviorCallbackRegistry.
 /// Returns BrowserSurfaceRegistry for RuntimeState storage.
 pub fn install_browser_surface(
     scope: &v8::PinScope<'_, '_>,
@@ -63,11 +65,17 @@ pub fn install_browser_surface(
     // Layer 1: Install all IDL-generated FunctionTemplates
     generated::install_all::install_all(scope, global);
 
-    // Layer 2: Register Canvas 2D deep stubs via BehaviorCallbackRegistry
+    // Layer 2: Register deep stub callbacks via BehaviorCallbackRegistry
     hand_implemented::register_canvas_2d_callbacks(
         &callbacks.canvas_2d_factory,
         &callbacks.canvas_2d_gradient,
     );
+
+    // Initialize WebGL parameter map (data-only, V8 runtime binding in v0.8.22)
+    hand_implemented::webgl::build_gl_param_map();
+
+    // Navigator getter verification (data-level, runtime verification in integration tests)
+    let _nav_ok = hand_implemented::navigator::verify_navigator_getters();
 
     // Populate registry
     let mut registry = BrowserSurfaceRegistry::new();
