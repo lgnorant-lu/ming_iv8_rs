@@ -243,92 +243,67 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-/// Build a Response-like object with status, ok, headers, text(), json(), arrayBuffer().
+/// Build a Response object using the Response FunctionTemplate.
 fn build_response_object<'s>(
     scope: &v8::PinScope<'s, '_>,
     resource: &crate::network::Resource,
 ) -> v8::Local<'s, v8::Object> {
-    let obj = v8::Object::new(scope);
-
-    // status
-    let status_key = crate::v8_utils::v8_string(scope, "status");
-    let status_val = v8::Integer::new(scope, resource.status as i32);
-    obj.set(scope, status_key.into(), status_val.into());
-
-    // ok (status 200-299)
-    let ok_key = crate::v8_utils::v8_string(scope, "ok");
-    let ok_val = v8::Boolean::new(scope, resource.status >= 200 && resource.status < 300);
-    obj.set(scope, ok_key.into(), ok_val.into());
-
-    // statusText
-    let st_key = crate::v8_utils::v8_string(scope, "statusText");
-    let st_val = crate::v8_utils::v8_string(scope, if resource.status == 200 { "OK" } else { "" });
-    obj.set(scope, st_key.into(), st_val.into());
-
-    // url (empty for now)
-    let url_key = crate::v8_utils::v8_string(scope, "url");
-    let url_val = crate::v8_utils::v8_string(scope, "");
-    obj.set(scope, url_key.into(), url_val.into());
-
-    // headers — build a Headers-like object
-    let headers_obj = v8::Object::new(scope);
-    for (k, v) in &resource.headers {
-        if let (Some(hk), Some(hv)) = (v8::String::new(scope, k), v8::String::new(scope, v)) {
-            headers_obj.set(scope, hk.into(), hv.into());
+    let state = RuntimeState::get(&*scope);
+    let templates = state.dom_templates.borrow();
+    let templates = match templates.as_ref() {
+        Some(t) => t,
+        None => {
+            // Fallback: plain object (no DomTemplates available)
+            let obj = v8::Object::new(scope);
+            let sk = crate::v8_utils::v8_string(scope, "status");
+            obj.set(scope, sk.into(), v8::Integer::new(scope, resource.status as i32).into());
+            return obj;
         }
-    }
-    // Install get() method on headers
-    let get_tmpl = v8::FunctionTemplate::builder_raw(headers_get_cb).build(scope);
-    let get_fn = crate::v8_utils::v8_fn(scope, &get_tmpl);
-    let get_key = crate::v8_utils::v8_string(scope, "get");
-    headers_obj.set(scope, get_key.into(), get_fn.into());
-    // Install has() method
-    let has_tmpl = v8::FunctionTemplate::builder_raw(headers_has_cb).build(scope);
-    let has_fn = crate::v8_utils::v8_fn(scope, &has_tmpl);
-    let has_key = crate::v8_utils::v8_string(scope, "has");
-    headers_obj.set(scope, has_key.into(), has_fn.into());
+    };
+
+    let tmpl = v8::Local::new(scope, &templates.response);
+    let func = match tmpl.get_function(scope) {
+        Some(f) => f,
+        None => return v8::Object::new(scope),
+    };
+    let obj = match func.new_instance(scope, &[]) {
+        Some(o) => o,
+        None => return v8::Object::new(scope),
+    };
+
+    // Set properties on instance
+    let status_key = crate::v8_utils::v8_string(scope, "status");
+    obj.set(scope, status_key.into(), v8::Integer::new(scope, resource.status as i32).into());
+
+    let ok_key = crate::v8_utils::v8_string(scope, "ok");
+    obj.set(scope, ok_key.into(), v8::Boolean::new(scope, resource.status >= 200 && resource.status < 300).into());
+
+    let st_key = crate::v8_utils::v8_string(scope, "statusText");
+    obj.set(scope, st_key.into(), crate::v8_utils::v8_string(scope, if resource.status == 200 { "OK" } else { "" }).into());
+
+    let url_key = crate::v8_utils::v8_string(scope, "url");
+    obj.set(scope, url_key.into(), crate::v8_utils::v8_string(scope, "").into());
+
+    // Build Headers object using Headers FunctionTemplate
+    let header_pairs: Vec<(String, String)> = resource.headers.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
+    let headers_obj = if let Some(ho) = crate::dom::template::create_headers_instance(scope, templates, header_pairs) {
+        ho
+    } else {
+        v8::Object::new(scope)
+    };
     let headers_key = crate::v8_utils::v8_string(scope, "headers");
     obj.set(scope, headers_key.into(), headers_obj.into());
 
-    // Store body as hidden property for text()/json()/arrayBuffer()
+    // Store body as hidden property
     let body_str = String::from_utf8_lossy(&resource.body);
     let body_key = crate::v8_utils::v8_string(scope, "__body__");
-    let body_val = crate::v8_utils::v8_string(scope, &body_str);
-    obj.define_own_property(
-        scope,
-        body_key.into(),
-        body_val.into(),
-        v8::PropertyAttribute::DONT_ENUM,
-    );
+    obj.define_own_property(scope, body_key.into(), crate::v8_utils::v8_string(scope, &body_str).into(), v8::PropertyAttribute::DONT_ENUM);
 
     // Store raw bytes for arrayBuffer
     let store = v8::ArrayBuffer::new_backing_store_from_vec(resource.body.clone());
     let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
     let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
-    obj.define_own_property(
-        scope,
-        ab_key.into(),
-        ab.into(),
-        v8::PropertyAttribute::DONT_ENUM,
-    );
-
-    // text() → Promise<string>
-    let text_tmpl = v8::FunctionTemplate::builder_raw(response_text).build(scope);
-    let text_fn = crate::v8_utils::v8_fn(scope, &text_tmpl);
-    let text_key = crate::v8_utils::v8_string(scope, "text");
-    obj.set(scope, text_key.into(), text_fn.into());
-
-    // json() → Promise<object>
-    let json_tmpl = v8::FunctionTemplate::builder_raw(response_json).build(scope);
-    let json_fn = crate::v8_utils::v8_fn(scope, &json_tmpl);
-    let json_key = crate::v8_utils::v8_string(scope, "json");
-    obj.set(scope, json_key.into(), json_fn.into());
-
-    // arrayBuffer() → Promise<ArrayBuffer>
-    let ab_tmpl = v8::FunctionTemplate::builder_raw(response_array_buffer).build(scope);
-    let ab_fn = crate::v8_utils::v8_fn(scope, &ab_tmpl);
-    let ab_fn_key = crate::v8_utils::v8_string(scope, "arrayBuffer");
-    obj.set(scope, ab_fn_key.into(), ab_fn.into());
+    obj.define_own_property(scope, ab_key.into(), ab.into(), v8::PropertyAttribute::DONT_ENUM);
 
     obj
 }
