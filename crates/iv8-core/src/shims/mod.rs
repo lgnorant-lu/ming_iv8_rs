@@ -3,6 +3,7 @@
 //! These are standard Web APIs that V8 doesn't provide natively.
 
 pub mod atob_btoa;
+pub mod audio_context;
 pub mod browser_apis;
 pub mod console;
 pub mod document_props;

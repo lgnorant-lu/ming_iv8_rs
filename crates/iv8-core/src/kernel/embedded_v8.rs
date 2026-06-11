@@ -714,6 +714,13 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
+        // 19b. Install AudioContext subsystem (extracted from document_props.rs)
+        self.eval(
+            crate::shims::audio_context::AUDIO_CONTEXT_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
         // 20. Install Canvas2D shim (after document.createElement is available)
         self.eval(
             crate::canvas::binding::CANVAS2D_SHIM_JS,
@@ -904,6 +911,13 @@ impl EmbeddedV8Kernel {
         // These are reset when install_document_bindings creates a new document object
         self.eval(
             crate::shims::document_props::DOCUMENT_PROPS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
+        // 4d2. Re-install AudioContext subsystem
+        self.eval(
+            crate::shims::audio_context::AUDIO_CONTEXT_JS,
             crate::kernel::EvalOpts::default(),
         )
         .ok();
