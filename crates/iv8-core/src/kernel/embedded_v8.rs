@@ -160,11 +160,19 @@ impl EmbeddedV8Kernel {
         // for full 1284-template installation when V8 GC scope issue is resolved.
         kernel.install_dom_templates();
 
-        // LEGACY_CHAIN_REF — install_browser_surface_init kept as public method.
-        // The full BrowserSurface (1284 templates) triggers V8 GC IsOnCentralStack
-        // crash during mass template creation. Deferred to v0.8.25 when a batched
-        // scope-break installation strategy or lazy-loading can be implemented.
-        // See v0.8.24-foundation-audit.md A-1 known issues.
+        // LEGACY_CHAIN_START — TODO(v0.8.25): Remove dual-chain legacy structure
+        // See D-031: old chain code retained for one version cycle.
+        //
+        // Pre v0.8.24, initialization was controlled by cfg conditionals:
+        //   #[cfg(feature = "native-surface")] { install_browser_surface_init(); }
+        //   #[cfg(not(feature = "native-surface"))] { install_dom_templates(); }
+        //
+        // v0.8.24 removed all cfg attributes. install_dom_templates() (31 templates)
+        // is the active default. install_browser_surface_init() (1284 templates)
+        // is a public method available for manual activation, but deferred from
+        // default due to V8 GC IsOnCentralStack crash during mass template creation.
+        // Planned: v0.8.25 batched scope-break strategy or lazy-loading.
+        // LEGACY_CHAIN_END
 
         // Step 8: Install user-defined property overrides (highest priority).
         if !user_overrides.is_empty() {

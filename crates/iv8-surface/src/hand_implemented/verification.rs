@@ -5,7 +5,7 @@
 //! at compile time and via isolated unit checks.
 //!
 //! Full V8-runtime integration tests require an Isolate and are in
-//! tests/integration/ (executed with --features native-surface).
+//! tests/integration/ (native-surface is default since v0.8.24).
 
 #[cfg(test)]
 mod tests {

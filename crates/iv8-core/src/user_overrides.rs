@@ -107,6 +107,15 @@ pub fn install_user_overrides(
         if segments.is_empty() {
             continue;
         }
+        // Reject empty segments (e.g. "a..b") and prototype-chain paths
+        if segments.iter().any(|s| s.is_empty()) {
+            continue;
+        }
+        if segments.iter().any(|s| {
+            *s == "__proto__" || *s == "constructor" || *s == "prototype"
+        }) {
+            continue;
+        }
 
         let last_idx = segments.len() - 1;
         let mut current = global;
