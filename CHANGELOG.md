@@ -6,6 +6,34 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.25] - 2026-06-12
+
+> Local milestone (partial completion). BehaviorCallbackRegistry upgrade,
+> install_all Global-handle transform, behavior wiring to install_browser_surface_init.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Changed
+
+- **BehaviorCallbackRegistry 签名升级**: 10 个回调字段从 Box<dyn Fn()>
+  占位符升级为真实 V8 签名（for<'s> HRTB + scope/local 参数）。
+  clippy::type_complexity 预期抑制。
+- **install_all Global-handle 转换**: HashMap 从 Local<FunctionTemplate>
+  改为 Global<FunctionTemplate>，1284 模板创建后 Global 句柄存活。
+  insert 包裹 Global::new，get 使用 Local::new 转换。
+- **install_browser_surface_init 行为接线**: 6 个旧链行为模块
+  （Canvas2D/WebGL/Fetch/XHR/SubtleCrypto/Navigator）全部接入，
+  与 1284 IDL 模板在同一 scope 安装。
+
+### Known Issues
+
+- V8 GC IsOnCentralStack 崩溃未修复。HandleScope::new(scope) 返回
+  ScopeStorage 需 Pin::new + init 才能激活实际嵌套 scope。
+  简单 scope-break 模式不产生实际 HandleScope。需要 v0.8.26
+  使用 EscapableHandleScope 或 Codegen 批量安装策略。
+- 默认 init 路径仍为 install_dom_templates()（31 模板）。
+- 旧 shim 文件归档未执行（依赖默认路径切换）。
+- LEGACY_CHAIN 注释块保留（依赖归档完成）。
+
 ## [0.8.24] - 2026-06-12
 
 > Local milestone (partial completion). Feature Flag removal,
