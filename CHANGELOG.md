@@ -50,10 +50,22 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 - `cargo build`: PASS
 - `cargo test --workspace --lib`: 255/255 PASS (183 core + 30 surface + 42 undetect)
-- `cargo test --test phase_c_comparison`: 81/81 PASS (80 side-by-side + 1 coverage gate)
+- `cargo test --test test_init_chain_comparison`: 81/81 PASS (80 side-by-side + 1 coverage gate)
 - `uv run pytest tests/ -q`: 1284 passed, 1 skipped
-- Real samples: 9/9 PASS (test_v07_real_samples.py)
+- Real samples: 9 of 23 automated samples PASS (test_v07_real_samples.py covers 9; remaining 14 require external assets and are not in automated scope)
 - Coverage: window props 1391 (> 1380 = 95% Chrome 147)
+
+### Known Issues
+
+- **23-sample coverage**: test_v07_real_samples.py covers 9 of 23 samples.
+  Remaining 14 samples (abogus, h5st, zp_stoken, rui-shu variants, tdc, etc.)
+  require external JS files or network requests not in automated scope.
+- **BCR Step A is registration, not replacement**: 7/10 BCR fields are populated
+  but no runtime consumer invokes them. Actual behavior continues via direct
+  `install_X(scope, global)` calls. BCR-mediated dispatch deferred to v0.8.29.
+- **KernelConfig.use_old_chain**: flag exists solely for regression comparison.
+  Adds ~15 lines of maintenance burden in embedded_v8.rs. Consider removal in
+  v0.9+ after verification is deemed sufficient.
 
 ## [0.8.27] - 2026-06-12
 
