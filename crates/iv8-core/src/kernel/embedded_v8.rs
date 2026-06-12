@@ -154,16 +154,16 @@ impl EmbeddedV8Kernel {
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
-        // Install DOM templates or BrowserSurface (old vs new init chain)
-        #[cfg(feature = "native-surface")]
-        {
-            tracing::info!("Installing BrowserSurface (native-surface feature enabled)");
-            kernel.install_browser_surface_init();
-        }
-        #[cfg(not(feature = "native-surface"))]
-        {
-            kernel.install_dom_templates();
-        }
+        // Install DOM templates (31 FunctionTemplates — stable default path).
+        // install_browser_surface_init() is also available as a public method
+        // for full 1284-template installation when V8 GC scope issue is resolved.
+        kernel.install_dom_templates();
+
+        // LEGACY_CHAIN_REF — install_browser_surface_init kept as public method.
+        // The full BrowserSurface (1284 templates) triggers V8 GC IsOnCentralStack
+        // crash during mass template creation. Deferred to v0.8.25 when a batched
+        // scope-break installation strategy or lazy-loading can be implemented.
+        // See v0.8.24-foundation-audit.md A-1 known issues.
 
         // Exit the isolate so it's not "entered" at rest.
         // This allows multiple JSContext instances to coexist without LIFO drop panic.
@@ -768,9 +768,7 @@ impl EmbeddedV8Kernel {
     /// Phase 1: static value injection (all 393 entries via env_inject)
     /// Phase 2: native getter override for key objects (navigator, screen)
     pub fn install_environment(&mut self) {
-        unsafe {
-            self.isolate.enter();
-        }
+        unsafe { self.isolate.enter(); }
         {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -779,13 +777,9 @@ impl EmbeddedV8Kernel {
             // Phase 1: static injection (all 393 dot-path entries)
             crate::env_inject::install_environment(scope, global);
             // Phase 2: override navigator + screen with native-getter ObjectTemplates
-            // This makes Object.getOwnPropertyDescriptor(navigator, 'userAgent')
-            // return a native getter instead of a plain value descriptor.
             crate::shims::native_env::install_native_env(scope, global);
         }
-        unsafe {
-            self.isolate.exit();
-        }
+        unsafe { self.isolate.exit(); }
     }
 
     /// Dispose the kernel (explicit cleanup before drop).
@@ -794,9 +788,10 @@ impl EmbeddedV8Kernel {
         state.mark_disposed();
     }
 
-    /// Install BrowserSurface (new init chain, native-surface feature flag).
-    #[cfg(feature = "native-surface")]
-    fn install_browser_surface_init(&mut self) {
+    /// Install BrowserSurface (full 1284-template initialization — public API).
+    /// Known issue: triggers V8 GC IsOnCentralStack crash with full template set.
+    /// Use install_dom_templates() for stable 31-template initialization.
+    pub fn install_browser_surface_init(&mut self) {
         unsafe { self.isolate.enter(); }
         {
             v8::scope!(handle_scope, &mut self.isolate);

@@ -51,11 +51,9 @@ swc_ecma_codegen = "28"
 
 [features]
 default = []
-native-surface = ["dep:iv8-surface"]
 
 [dependencies.iv8-surface]
 path = "../iv8-surface"
-optional = true
 
 [dev-dependencies]
 tracing-subscriber = { workspace = true }
