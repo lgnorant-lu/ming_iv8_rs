@@ -152,14 +152,20 @@ impl EmbeddedV8Kernel {
         // Install environment fields (navigator.*, screen.*, etc.) into global
         kernel.install_environment();
 
-        // Install BrowserSurface (1284 IDL templates + 14 native behaviors).
-        // Heap limits increased from default 1.4GB to 4GB to accommodate
-        // 1284 FunctionTemplate creation without V8 GC IsOnCentralStack crash.
-        kernel.install_browser_surface_init();
+        if config.use_old_chain {
+            // Pre-v0.8.26 init chain: JS shims + 31 DomTemplate constructors
+            kernel.install_undetect_shims(false);
+            kernel.install_dom_templates();
+        } else {
+            // Install BrowserSurface (1284 IDL templates + 14 native behaviors).
+            // Heap limits increased from default 1.4GB to 4GB to accommodate
+            // 1284 FunctionTemplate creation without V8 GC IsOnCentralStack crash.
+            kernel.install_browser_surface_init();
 
-        // Install anti-detection shims + JS shims (skip native behaviors
-        // — already installed by install_browser_surface_init above).
-        kernel.install_undetect_shims(true);
+            // Install anti-detection shims + JS shims (skip native behaviors
+            // — already installed by install_browser_surface_init above).
+            kernel.install_undetect_shims(true);
+        }
 
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
