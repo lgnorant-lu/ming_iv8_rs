@@ -813,8 +813,8 @@ impl EmbeddedV8Kernel {
     }
 
     /// Install BrowserSurface (full 1284-template initialization — public API).
-    /// Known issue: triggers V8 GC IsOnCentralStack crash with full template set.
-    /// Use install_dom_templates() for stable 31-template initialization.
+    /// All deep behavior from old-chain modules is wired directly via their
+    /// existing install functions (Canvas/WebGL/Fetch/XHR/SubtleCrypto/Navigator).
     pub fn install_browser_surface_init(&mut self) {
         unsafe { self.isolate.enter(); }
         {
@@ -832,8 +832,16 @@ impl EmbeddedV8Kernel {
                     let state = RuntimeState::get(&*scope);
 
                     // Overwrite HTML element constructors with DomTemplate versions
-                    // so createElement objects and global constructors share the same templates
                     crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
+
+                    // Wire deep behavior from old-chain modules
+                    // (P0: Canvas2D, WebGL; P1: Fetch, XHR, Navigator, SubtleCrypto)
+                    crate::canvas::binding::install_canvas_bindings(scope, global);
+                    crate::canvas::webgl::install_webgl_stubs(scope, global);
+                    crate::network::fetch::install_fetch(scope, global);
+                    crate::network::xhr::install_xhr(scope, global);
+                    crate::crypto::subtle::install_subtle_crypto(scope, global);
+                    crate::shims::native_env::install_native_env(scope, global);
 
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
                     let count = registry.interface_count();
