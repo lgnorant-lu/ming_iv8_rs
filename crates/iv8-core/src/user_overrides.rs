@@ -2,7 +2,7 @@
 //!
 //! install_user_overrides() allows Python API users to override browser
 //! environment properties (navigator.userAgent, screen.width, etc.) with
-//! custom values. Overrides are applied after BrowserSurface installation
+//! custom values. Overrides are applied after DOM template installation
 //! and deterministic overrides, giving them the highest priority.
 
 use serde_json::Value as JsonValue;
@@ -121,7 +121,10 @@ pub fn install_user_overrides(
         let mut current = global;
 
         for (i, &seg) in segments.iter().enumerate() {
-            let key = v8::String::new(scope, seg).unwrap();
+            let key = match v8::String::new(scope, seg) {
+                Some(s) => s,
+                None => break,
+            };
             if i == last_idx {
                 let v8_value = override_value_to_v8(scope, value);
                 let _ = current.delete(scope, key.into());
@@ -146,7 +149,9 @@ fn override_value_to_v8<'s>(
     value: &OverrideValue,
 ) -> v8::Local<'s, v8::Value> {
     match value {
-        OverrideValue::String(s) => v8::String::new(scope, s).unwrap().into(),
+        OverrideValue::String(s) => v8::String::new(scope, s)
+            .map(|v| v.into())
+            .unwrap_or_else(|| v8::undefined(scope).into()),
         OverrideValue::Number(n) => v8::Number::new(scope, *n).into(),
         OverrideValue::Boolean(b) => v8::Boolean::new(scope, *b).into(),
         OverrideValue::Null => v8::null(scope).into(),
@@ -161,7 +166,10 @@ fn override_value_to_v8<'s>(
         OverrideValue::Object(entries) => {
             let obj = v8::Object::new(scope);
             for (k, v) in entries {
-                let key = v8::String::new(scope, k).unwrap();
+                let key = match v8::String::new(scope, k) {
+                    Some(s) => s,
+                    None => continue,
+                };
                 let val = override_value_to_v8(scope, v);
                 obj.set(scope, key.into(), val);
             }

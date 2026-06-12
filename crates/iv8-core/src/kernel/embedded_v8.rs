@@ -799,6 +799,8 @@ impl EmbeddedV8Kernel {
             // Phase 1: static injection (all 393 dot-path entries)
             crate::env_inject::install_environment(scope, global);
             // Phase 2: override navigator + screen with native-getter ObjectTemplates
+            // This makes Object.getOwnPropertyDescriptor(navigator, 'userAgent')
+            // return a native getter instead of a plain value descriptor.
             crate::shims::native_env::install_native_env(scope, global);
         }
         unsafe { self.isolate.exit(); }
