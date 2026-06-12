@@ -6,6 +6,42 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.26] - 2026-06-12
+
+> Local milestone. BREAKTHROUGH: V8 GC heap_limits fix enables
+> default path switch to install_browser_surface_init.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Changed
+
+- **V8 GC fix**: 根因确认为 heap pressure（非 HandleScope capacity）。
+  `CreateParams::heap_limits(512MB initial, 4GB max)` 使 1284 模板
+  全量安装成功。3 版本阻塞（v0.8.24-v0.8.26）解除。
+- **Codegen 重写**: generate_install_all 产出 Global-handle HashMap +
+  v8::scope! 批次（100模板/批，27 scope blocks）。`_parent` →
+  `parent` 参数改名引入 624 个 `tmpl.inherit(p)` 原型链改进。
+- **install_browser_surface_init**: 成为默认 init 路径。1284 IDL
+  模板 + 14 原生行为模块 + 38 DomTemplate 构造函数。
+- **install_undetect_shims 参数化**: `skip_native_behaviors: bool`
+  控制 Step 5 14 个原生行为是否安装。
+- **域文件附带重生成**: 33 文件变更（install_all.rs + 31 域 +
+  mod.rs），624 inherit 调用现已正确连接。
+
+### Known Issues
+
+- 6 个旧 shim 文件未归档（post-switch cleanup, deferred v0.8.27）
+- Phase C 新旧链对比回归未执行（deferred v0.8.27）
+- install_browser_surface_init 未安装 JS shim（Canvas2D/XHR/WebGL
+  等仍通过 install_undetect_shims 的 JS eval 步骤提供）
+- 域文件附带重生成超出 scope 声明范围（仅 install_all.rs），
+  但这是 codegen 全量重生成的自然结果，`_parent`→`parent` 改进为正向
+
+### Quality Gates
+
+- `cargo build`: PASS
+- `cargo test --workspace --lib`: 255/255 PASS
+- `cargo clippy` (新增警告): 0
+
 ## [0.8.25] - 2026-06-12
 
 > Local milestone (partial completion). BehaviorCallbackRegistry upgrade,
