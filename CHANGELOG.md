@@ -6,6 +6,32 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.24] - 2026-06-12
+
+> Local milestone. Feature Flag removal, install_user_overrides entry,
+> V8 GC scope investigation.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Changed
+
+- **Feature Flag 移除**: `native-surface` feature 定义及全部
+  `#[cfg(feature = "native-surface")]` 条件编译（7 处）已移除。
+  iv8-surface 变为无条件依赖。初始化链统一单路径。
+- **install_user_overrides**: 新增 UserOverrides 结构体和
+  install_user_overrides() V8 安装函数，支持 String/Number/Boolean/
+  Array/Object/Null 覆写类型及点分隔路径解析。
+- **install_browser_surface_init**: 转为公开 API（保留为可选入口，
+  全量 1284 模板激活触发 V8 GC IsOnCentralStack 崩溃，
+  延迟到 v0.8.25 修复）。
+
+### Known Issues
+
+- V8 GC IsOnCentralStack 崩溃在 install_all 创建约 850+ 模板时触发。
+  需要 v0.8.25 批量 scope-break 策略或延迟加载机制。
+- 旧 shim 文件（tier1_stubs / env_inject / geometry）仍活跃于
+  默认 install_dom_templates 初始化路径，归档延迟到 v0.8.25。
+- Python API 未暴露 user_overrides 参数（仅 Rust 侧实现）。
+
 ## [0.8.23] - 2026-06-12
 
 > Local milestone. Infrastructure optimization: node_cache v8::Weak migration,
