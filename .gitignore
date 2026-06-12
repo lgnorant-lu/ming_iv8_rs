@@ -138,3 +138,12 @@ scripts/diag*.py
 # -- 前端产物 -------------------------
 node_modules/*
 temp/
+
+# ── IDL toolchain generated output ─────────────────────────────────────────────
+tools/idl/output/
+
+# ── Coverage artifacts ─────────────────────────────────────────────────────────
+coverage-summary.txt
+
+# ── Ad-hoc examples (not core) ─────────────────────────────────────────────────
+crates/iv8-core/examples/
