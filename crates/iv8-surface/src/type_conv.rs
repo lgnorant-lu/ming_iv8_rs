@@ -36,3 +36,27 @@ pub fn v8_str<'s>(scope: &v8::PinScope<'s, '_>, s: &str) -> Local<'s, Value> {
         .map(|v| v.into())
         .unwrap_or_else(|| v8::undefined(scope).into())
 }
+
+/// Create a Float32Array from a slice of f64 values.
+pub fn make_float32_array<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    values: &[f64],
+) -> Local<'s, Value> {
+    let arr = v8::Array::new(scope, values.len() as i32);
+    for (i, &v) in values.iter().enumerate() {
+        arr.set_index(scope, i as u32, v8::Number::new(scope, v).into());
+    }
+    arr.into()
+}
+
+/// Create an Int32Array from a slice of i32 values.
+pub fn make_int32_array<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    values: &[i32],
+) -> Local<'s, Value> {
+    let arr = v8::Array::new(scope, values.len() as i32);
+    for (i, &v) in values.iter().enumerate() {
+        arr.set_index(scope, i as u32, v8::Integer::new(scope, v).into());
+    }
+    arr.into()
+}

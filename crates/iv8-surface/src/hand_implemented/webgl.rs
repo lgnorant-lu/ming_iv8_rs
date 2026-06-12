@@ -6,6 +6,8 @@
 
 use std::collections::HashMap;
 
+use v8::Local;
+
 /// Type specification for a WebGL parameter.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum GlParamType {
@@ -185,6 +187,170 @@ pub const WEBGL_CONSTANTS: &[(u32, &str)] = &[
     (0x8033, "UNSIGNED_SHORT_5_5_5_1"),
     (0x8034, "UNSIGNED_SHORT_5_6_5"),
 ];
+
+/// Create a WebGLRenderingContext stub instance.
+pub fn create_webgl_rendering_context_instance<'s>(
+    scope: &v8::PinScope<'s, '_>,
+) -> v8::Local<'s, v8::Object> {
+    let tmpl = v8::FunctionTemplate::builder_raw(empty_webgl_constructor).build(scope);
+    tmpl.set_class_name(v8::String::new(scope, "WebGLRenderingContext").unwrap());
+    let proto = tmpl.prototype_template(scope);
+
+    // Symbol.toStringTag
+    let tag_sym = v8::Symbol::get_to_string_tag(scope);
+    let tag_val = v8::String::new(scope, "WebGLRenderingContext").unwrap();
+    proto.set(tag_sym.into(), tag_val.into());
+
+    // Install WebGL constants on prototype
+    for (value, name) in WEBGL_CONSTANTS {
+        let key = v8::String::new(scope, name).unwrap();
+        proto.set(key.into(), v8::Integer::new(scope, *value as i32).into());
+    }
+
+    // Install getParameter / getExtension method stubs
+    // (Actual dispatch through BCR when wired)
+    install_webgl_method_stub(scope, proto, "getParameter");
+    install_webgl_method_stub(scope, proto, "getExtension");
+    install_webgl_method_stub(scope, proto, "getSupportedExtensions");
+    install_webgl_method_stub(scope, proto, "getShaderPrecisionFormat");
+    install_webgl_method_stub(scope, proto, "getParameter");
+    install_webgl_method_stub(scope, proto, "getContextAttributes");
+    install_webgl_method_stub(scope, proto, "isContextLost");
+    install_webgl_method_stub(scope, proto, "getError");
+    install_webgl_method_stub(scope, proto, "createShader");
+    install_webgl_method_stub(scope, proto, "createProgram");
+    install_webgl_method_stub(scope, proto, "createTexture");
+    install_webgl_method_stub(scope, proto, "createBuffer");
+    install_webgl_method_stub(scope, proto, "createFramebuffer");
+    install_webgl_method_stub(scope, proto, "createRenderbuffer");
+    install_webgl_method_stub(scope, proto, "bindBuffer");
+    install_webgl_method_stub(scope, proto, "bindTexture");
+    install_webgl_method_stub(scope, proto, "bindFramebuffer");
+    install_webgl_method_stub(scope, proto, "bindRenderbuffer");
+    install_webgl_method_stub(scope, proto, "useProgram");
+    install_webgl_method_stub(scope, proto, "shaderSource");
+    install_webgl_method_stub(scope, proto, "compileShader");
+    install_webgl_method_stub(scope, proto, "attachShader");
+    install_webgl_method_stub(scope, proto, "linkProgram");
+    install_webgl_method_stub(scope, proto, "enableVertexAttribArray");
+    install_webgl_method_stub(scope, proto, "vertexAttribPointer");
+    install_webgl_method_stub(scope, proto, "bufferData");
+    install_webgl_method_stub(scope, proto, "drawArrays");
+    install_webgl_method_stub(scope, proto, "drawElements");
+    install_webgl_method_stub(scope, proto, "clearColor");
+    install_webgl_method_stub(scope, proto, "clear");
+    install_webgl_method_stub(scope, proto, "enable");
+    install_webgl_method_stub(scope, proto, "disable");
+    install_webgl_method_stub(scope, proto, "viewport");
+    install_webgl_method_stub(scope, proto, "scissor");
+    install_webgl_method_stub(scope, proto, "blendFunc");
+    install_webgl_method_stub(scope, proto, "depthFunc");
+    install_webgl_method_stub(scope, proto, "cullFace");
+    install_webgl_method_stub(scope, proto, "frontFace");
+    install_webgl_method_stub(scope, proto, "pixelStorei");
+    install_webgl_method_stub(scope, proto, "uniformMatrix4fv");
+    install_webgl_method_stub(scope, proto, "activeTexture");
+    install_webgl_method_stub(scope, proto, "uniform1i");
+    install_webgl_method_stub(scope, proto, "uniform1f");
+    install_webgl_method_stub(scope, proto, "uniform2f");
+    install_webgl_method_stub(scope, proto, "uniform3f");
+    install_webgl_method_stub(scope, proto, "uniform4f");
+    install_webgl_method_stub(scope, proto, "getAttribLocation");
+    install_webgl_method_stub(scope, proto, "getUniformLocation");
+    install_webgl_method_stub(scope, proto, "getProgramParameter");
+    install_webgl_method_stub(scope, proto, "getShaderParameter");
+    install_webgl_method_stub(scope, proto, "getProgramInfoLog");
+    install_webgl_method_stub(scope, proto, "getShaderInfoLog");
+    install_webgl_method_stub(scope, proto, "flush");
+    install_webgl_method_stub(scope, proto, "finish");
+
+    let func = tmpl.get_function(scope).unwrap();
+    func.new_instance(scope, &[]).unwrap()
+}
+
+fn install_webgl_method_stub<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    proto: v8::Local<'s, v8::ObjectTemplate>,
+    name: &str,
+) {
+    let name = v8::String::new(scope, name).unwrap();
+    let tmpl = v8::FunctionTemplate::builder_raw(empty_webgl_method).build(scope);
+    proto.set(name.into(), tmpl.into());
+}
+
+unsafe extern "C" fn empty_webgl_constructor(_info: *const v8::FunctionCallbackInfo) {}
+unsafe extern "C" fn empty_webgl_method(_info: *const v8::FunctionCallbackInfo) {}
+
+/// Resolve a WebGL pname to a V8 value using the parameter map.
+pub fn gl_get_parameter_value<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    params: &HashMap<u32, GlParamSpec>,
+    pname: u32,
+) -> v8::Local<'s, v8::Value> {
+    if let Some(spec) = params.get(&pname) {
+        match spec.param_type {
+            GlParamType::String => {
+                let s = spec.default.trim_matches('"');
+                v8::String::new(scope, s)
+                    .map(|v| v.into())
+                    .unwrap_or_else(|| v8::undefined(scope).into())
+            }
+            GlParamType::Int => {
+                if let Ok(n) = spec.default.parse::<i32>() {
+                    v8::Integer::new(scope, n).into()
+                } else {
+                    v8::Integer::new(scope, 0).into()
+                }
+            }
+            GlParamType::Float => {
+                if let Ok(f) = spec.default.parse::<f64>() {
+                    v8::Number::new(scope, f).into()
+                } else {
+                    v8::Number::new(scope, 0.0).into()
+                }
+            }
+            GlParamType::Boolean => {
+                v8::Boolean::new(scope, spec.default == "true").into()
+            }
+            GlParamType::IntArray | GlParamType::FloatArray => {
+                // Parse JSON array "[1, 2, 3]" → Float32Array/Int32Array
+                let default = spec.default.trim_matches(|c| c == '[' || c == ']');
+                let values: Vec<f64> = default
+                    .split(',')
+                    .filter_map(|s| s.trim().parse::<f64>().ok())
+                    .collect();
+                if values.is_empty() {
+                    return v8::undefined(scope).into();
+                }
+                if spec.param_type == GlParamType::FloatArray {
+                    crate::type_conv::make_float32_array(scope, &values)
+                } else {
+                    crate::type_conv::make_int32_array(scope, &values.iter().map(|&v| v as i32).collect::<Vec<_>>())
+                }
+            }
+            GlParamType::Null => v8::null(scope).into(),
+        }
+    } else {
+        v8::null(scope).into()
+    }
+}
+
+/// Resolve a WebGL extension name to a V8 value.
+pub fn gl_get_extension_value<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    name: &str,
+) -> v8::Local<'s, v8::Value> {
+    if WEBGL_EXTENSIONS.contains(&name) {
+        // Return a stub extension object
+        let obj = v8::Object::new(scope);
+        let key = v8::String::new(scope, "name").unwrap();
+        let val = v8::String::new(scope, name).unwrap();
+        obj.set(scope, key.into(), val.into());
+        obj.into()
+    } else {
+        v8::null(scope).into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

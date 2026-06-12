@@ -67,15 +67,27 @@ pub fn install_browser_surface(
 
     // Layer 2: Register deep stub callbacks via BehaviorCallbackRegistry
     //
-    // Canvas 2D: factory callback placeholder — full V8 runtime binding
-    // deferred to v0.8.22 (requires BehaviorCallbackRegistry dyn Fn()
-    // signatures upgrade to accept V8 scope).
+    // Canvas 2D: factory callback creates CanvasRenderingContext2D instances.
     hand_implemented::register_canvas_2d_callbacks(
         &callbacks.canvas_2d_factory,
         &callbacks.canvas_2d_gradient,
     );
 
-    // WebGL: parameter map is data-only — V8 getParameter() binding in v0.8.22.
+    // Canvas 2D send-safe: toDataURL, getImageData, setSize.
+    hand_implemented::register_canvas_send_safe_callbacks(
+        &callbacks.canvas_2d_to_data_url,
+        &callbacks.canvas_2d_get_image_data,
+        &callbacks.canvas_2d_set_size,
+    );
+
+    // WebGL: factory + getParameter + getExtension.
+    hand_implemented::register_webgl_callbacks(
+        &callbacks.webgl_factory,
+        &callbacks.webgl_get_parameter,
+        &callbacks.webgl_get_extension,
+    );
+
+    // WebGL: parameter map is data-only — used by getParameter callback above.
     let gl_params = hand_implemented::webgl::build_gl_param_map();
     debug_assert!(gl_params.len() >= 30, "WebGL parameter map incomplete");
 
