@@ -8,29 +8,36 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [0.8.24] - 2026-06-12
 
-> Local milestone. Feature Flag removal, install_user_overrides entry,
-> V8 GC scope investigation.
+> Local milestone (partial completion). Feature Flag removal,
+> install_user_overrides, V8 GC scope investigation.
 > Package metadata and lock metadata remain `0.8.11`.
 
 ### Changed
 
-- **Feature Flag 移除**: `native-surface` feature 定义及全部
-  `#[cfg(feature = "native-surface")]` 条件编译（7 处）已移除。
-  iv8-surface 变为无条件依赖。初始化链统一单路径。
-- **install_user_overrides**: 新增 UserOverrides 结构体和
-  install_user_overrides() V8 安装函数，支持 String/Number/Boolean/
-  Array/Object/Null 覆写类型及点分隔路径解析。
-- **install_browser_surface_init**: 转为公开 API（保留为可选入口，
-  全量 1284 模板激活触发 V8 GC IsOnCentralStack 崩溃，
-  延迟到 v0.8.25 修复）。
+- **Feature Flag 移除**: `native-surface` feature 定义及全部 7 处
+  `#[cfg(feature = "native-surface")]` 条件编译已移除，零残留。
+  iv8-surface 变为无条件依赖。LEGACY_CHAIN_START/END 标记旧 cfg 结构。
+- **install_user_overrides**: UserOverrides 结构体 + OverrideValue 枚举 +
+  install_user_overrides() V8 安装函数。空段和原型链路径过滤。
+  INIT 链 Step 8 位置正确（最高优先级）。
+- **install_browser_surface_init**: 转为公开 API（可选入口）。
 
 ### Known Issues
 
-- V8 GC IsOnCentralStack 崩溃在 install_all 创建约 850+ 模板时触发。
-  需要 v0.8.25 批量 scope-break 策略或延迟加载机制。
-- 旧 shim 文件（tier1_stubs / env_inject / geometry）仍活跃于
-  默认 install_dom_templates 初始化路径，归档延迟到 v0.8.25。
-- Python API 未暴露 user_overrides 参数（仅 Rust 侧实现）。
+- V8 GC IsOnCentralStack 崩溃：install_all 创建 ~850+ 模板时触发。
+  v0.8.25 需批量 scope-break 或延迟加载策略。见 D-032。
+- install_browser_surface() 未成为默认初始化路径（v0.8.25 修复）。
+  当前默认 install_dom_templates（31 模板）。
+- 旧 shim 文件归档延迟到 v0.8.25（6 文件：tier1_stubs.js/rs、
+  env_inject.rs、browser_apis.js、geometry.rs、embedded_v8.rs 旧链）。
+- Python API user_overrides 参数未暴露（仅 Rust KernelConfig 字段就绪）。
+
+### Quality Gates
+
+- `cargo build`（单路径，无 feature flag）: PASS
+- `cargo test --workspace --lib`: 255/255 PASS (183 core + 30 surface + 42 undetect)
+- `cargo test --workspace`: 306/306 PASS
+- `cargo clippy`（新增警告）: 0
 
 ## [0.8.23] - 2026-06-12
 
