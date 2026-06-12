@@ -6,6 +6,55 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.28] - 2026-06-12
+
+> Local milestone (verification closure + BCR Step A). Phase C side-by-side
+> old-vs-new chain comparison, 1284 Python tests on new chain, coverage gate,
+> BCR Canvas2D/WebGL callback injection (7/10 fields).
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Phase C side-by-side comparison**: 80 tests comparing old chain
+  (install_environment → undetect_shims(false) → dom_templates) vs new chain
+  (install_browser_surface_init default path). 76/76 expression pairs match;
+  4 documented expected differences (WebGL global visibility, Canvas context
+  prototype, toDataURL canvas back-ref, window property count 222 vs 1391).
+- **KernelConfig.use_old_chain**: flag to select pre-v0.8.26 init chain for
+  regression comparison. Default false (no behavior change).
+- **Coverage gate**: window property count >= 95% Chrome 147 (new chain 1391
+  props > 1380 threshold PASS).
+- **BCR Step A**: BehaviorCallbackRegistry 7/10 fields populated with working
+  callbacks:
+  - Canvas2D: canvas_2d_factory (v8-bound), toDataURL/getImageData/setSize (send-safe)
+  - WebGL: webgl_factory/getParameter/getExtension (v8-bound)
+  - iv8-surface install_browser_surface wires all callbacks before template installation
+- **WebGL instance creation**: create_webgl_rendering_context_instance with 60+ method
+  stubs, 76 GL parameters (7 types: string/int/float/boolean/int-array/float-array/null),
+  24 extensions, getParameter/getExtension dispatch.
+- **L2 Stage 2 MVP implementation spec**: 4-step controlled adaptation loop
+  (observe→propose→apply→compare), 83% reuse from existing Python toolchain,
+  7-component gap analysis, 5 mutation guardrails, dry-run design.
+- **type_conv helpers**: make_float32_array + make_int32_array for GL typed array returns.
+
+### Changed
+
+- **Python test suite**: 1284 passed, 1 skipped on new chain (v0.8.27 baseline:
+  not executed). 6 test expectation updates for new-chain enhancements:
+  Request now IDL FT global, AudioContext state "suspended" (spec-compliant).
+- **BCR injection**: register_canvas_2d_callbacks placeholder replaced with
+  actual CanvasRenderingContext2D factory closure. register_webgl_callbacks
+  and register_canvas_send_safe_callbacks added.
+
+### Quality Gates
+
+- `cargo build`: PASS
+- `cargo test --workspace --lib`: 255/255 PASS (183 core + 30 surface + 42 undetect)
+- `cargo test --test phase_c_comparison`: 81/81 PASS (80 side-by-side + 1 coverage gate)
+- `uv run pytest tests/ -q`: 1284 passed, 1 skipped
+- Real samples: 9/9 PASS (test_v07_real_samples.py)
+- Coverage: window props 1391 (> 1380 = 95% Chrome 147)
+
 ## [0.8.27] - 2026-06-12
 
 > Local milestone (closure/completion). Phase C validation, archive
