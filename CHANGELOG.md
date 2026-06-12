@@ -14,25 +14,37 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ### Changed
 
-- **BehaviorCallbackRegistry 签名升级**: 10 个回调字段从 Box<dyn Fn()>
+- **BehaviorCallbackRegistry 签名升级**: 10/10 回调字段从 Box<dyn Fn()>
   占位符升级为真实 V8 签名（for<'s> HRTB + scope/local 参数）。
   clippy::type_complexity 预期抑制。
 - **install_all Global-handle 转换**: HashMap 从 Local<FunctionTemplate>
   改为 Global<FunctionTemplate>，1284 模板创建后 Global 句柄存活。
-  insert 包裹 Global::new，get 使用 Local::new 转换。
+  Scope-break 分批未实施（HandleScope::new 返回 ScopeStorage
+  需 Pin::new + init，简单模式不激活实际嵌套 scope）。
 - **install_browser_surface_init 行为接线**: 6 个旧链行为模块
-  （Canvas2D/WebGL/Fetch/XHR/SubtleCrypto/Navigator）全部接入，
-  与 1284 IDL 模板在同一 scope 安装。
+  （Canvas2D/WebGL/Fetch/XHR/SubtleCrypto/Navigator）通过直接调用
+  旧链 install_X(scope, global) 函数接入，与 1284 IDL 模板在同一
+  scope 安装。BCR 回调注入路径（register_canvas_2d_callbacks）
+  仅签名就位，内部逻辑为空壳。
+- **LEGACY_CHAIN 注释块物理删除**: 按 D-031 在 v0.8.25 执行，
+  embedded_v8.rs 中 LEGACY_CHAIN_START/END 块已删除。
 
 ### Known Issues
 
-- V8 GC IsOnCentralStack 崩溃未修复。HandleScope::new(scope) 返回
-  ScopeStorage 需 Pin::new + init 才能激活实际嵌套 scope。
-  简单 scope-break 模式不产生实际 HandleScope。需要 v0.8.26
-  使用 EscapableHandleScope 或 Codegen 批量安装策略。
+- V8 GC IsOnCentralStack 崩溃未修复。install_all 7573 行仍在单一
+  HandleScope 内。HandleScope::new(scope) 返回 ScopeStorage
+  需 Pin::new + init 才能激活实际嵌套 scope。
+  需 v0.8.26 调查 EscapableHandleScope 或 codegen 批量安装策略。
 - 默认 init 路径仍为 install_dom_templates()（31 模板）。
 - 旧 shim 文件归档未执行（依赖默认路径切换）。
-- LEGACY_CHAIN 注释块保留（依赖归档完成）。
+- BCR 回调注入为空壳（register_canvas_2d_callbacks 等仅 let _ = factory）。
+
+### Quality Gates
+
+- `cargo build`: PASS
+- `cargo test --workspace --lib`: 255/255 PASS (183 core + 30 surface + 42 undetect)
+- `cargo clippy` (新增警告): 0
+- 运行时验证: 阻塞（V8 GC 崩溃，新链 install_browser_surface_init 无法执行）
 
 ## [0.8.24] - 2026-06-12
 
@@ -53,11 +65,15 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 ### Known Issues
 
 - V8 GC IsOnCentralStack 崩溃：install_all 创建 ~850+ 模板时触发。
-  v0.8.25 需批量 scope-break 或延迟加载策略。见 D-032。
-- install_browser_surface() 未成为默认初始化路径（v0.8.25 修复）。
-  当前默认 install_dom_templates（31 模板）。
-- 旧 shim 文件归档延迟到 v0.8.25（6 文件：tier1_stubs.js/rs、
+  v0.8.25 尝试 scope-break (HandleScope::new) 未成功——发现
+  ScopeStorage 需 Pin::new + init 才能激活。推迟到 v0.8.26。
+  见 D-032/D-033。
+- install_browser_surface() 未成为默认初始化路径。
+  当前默认 install_dom_templates（31 模板）。依赖 V8 GC 修复，
+  推迟到 v0.8.26。
+- 旧 shim 文件归档延迟到 v0.8.26（6 文件：tier1_stubs.js/rs、
   env_inject.rs、browser_apis.js、geometry.rs、embedded_v8.rs 旧链）。
+  依赖默认路径切换完成。
 - Python API user_overrides 参数未暴露（仅 Rust KernelConfig 字段就绪）。
 
 ### Quality Gates
