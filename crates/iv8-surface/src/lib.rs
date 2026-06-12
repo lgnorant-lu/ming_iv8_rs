@@ -58,7 +58,7 @@ type Result<T> = std::result::Result<T, SurfaceInstallError>;
 ///     Navigator verification — registered via BehaviorCallbackRegistry.
 /// Returns BrowserSurfaceRegistry for RuntimeState storage.
 pub fn install_browser_surface(
-    scope: &v8::PinScope<'_, '_>,
+    scope: &mut v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
     callbacks: &BehaviorCallbackRegistry,
 ) -> Result<BrowserSurfaceRegistry> {
