@@ -6,6 +6,57 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.29] - 2026-06-12
+
+> Local milestone (BCR Step B dispatch hub + L2 Stage 2 MVP). BCR
+> BehaviorInstaller type + 15 installer fields + Tier 1 dispatch (atob_btoa,
+> fetch), canvas_2d_gradient fill, SPIKE-1 (prototype.set no-overwrite),
+> L2 probe runner + dry-run engine + report builder + 5 guardrail tests.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **BCR Step B dispatch hub**: BehaviorInstaller type + 15 named installer
+  fields in BehaviorCallbackRegistry. `install_behavior_via_bcr()` dispatch
+  hook replaces direct install_X calls with BCR-mediated dispatch (dual-path:
+  fallback to direct call if BCR field is None).
+- **Tier 1 BCR migration**: atob_btoa (2 methods) and fetch (1 method)
+  dispatched through BCR. Timers installer populated (retained direct call
+  pending event_loop dependency resolution).
+- **canvas_2d_gradient**: GradientFactory field populated with
+  createLinearGradient-style callback (CanvasGradient stub with addColorStop,
+  x0/y0/x1/y1 properties).
+- **SPIKE-1**: FunctionTemplate late-bound callback discovery.
+  Result: ObjectTemplate.set() does NOT override existing prototype methods.
+  First set wins; subsequent sets with same key silently ignored.
+  Implication: v0.8.30+ template-level BCR injection requires codegen mods.
+- **L2 Stage 2 MVP**:
+  - S1 Probe Runner: fingerprint.m1 + descriptor.m1 execution in JSContext,
+    gap classification (missing/mismatch/present), IIFE wrapping for
+    return-statement probes.
+  - S3 Dry-Run Engine: fresh EmbeddedV8Kernel per candidate, JS eval apply,
+    before/after ComparisonReport with gap delta.
+  - S4 Report Builder: Environment Plane Report v0.1 JSON
+    (l2-stage2.v0.1 schema), diagnostic emission for gap detection and
+    candidate selection.
+  - 5 guardrail tests (G1-G5): no profile/manifest/corpus/probe/candidate
+    file mutation. 12/12 tests PASS.
+
+### Changed
+
+- **Comment fix**: install_browser_surface_init native behavior count
+  14 → 15 (verified against actual call sites).
+- **BCR installer registration**: Tier 1 closures populated in
+  install_browser_surface_init before install_browser_surface call.
+
+### Quality Gates
+
+- `cargo build`: PASS
+- `cargo test --workspace --lib`: 255/255 PASS (183 core + 30 surface + 42 undetect)
+- `cargo test --test test_init_chain_comparison`: 81/81 PASS
+- `uv run pytest tests/ -q`: 1296 passed, 1 skipped
+- L2 Stage 2 MVP: 12/12 PASS
+
 ## [0.8.28] - 2026-06-12
 
 > Local milestone (verification closure + BCR Step A). Phase C side-by-side
