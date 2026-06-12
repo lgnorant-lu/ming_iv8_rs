@@ -803,9 +803,19 @@ impl EmbeddedV8Kernel {
         state.mark_disposed();
     }
 
-    /// Install BrowserSurface (full 1284-template initialization — public API).
-    /// All deep behavior from old-chain modules is wired directly via their
-    /// existing install functions (Canvas/WebGL/Fetch/XHR/SubtleCrypto/Navigator).
+    /// Install BrowserSurface — default init path since v0.8.26.
+    /// 1284 IDL templates + 14 native behaviors + 38 DomTemplate constructors.
+    ///
+    /// Requires V8 heap_limits >= 4GB (configured in EmbeddedV8Kernel::new()
+    /// via CreateParams::heap_limits). Default 1.4GB max_old_generation is
+    /// insufficient for 1284 FunctionTemplate creation.
+    ///
+    /// Native behaviors installed (14 total):
+    ///   Event system: event_loop, timers, date_interceptor, page_api, input_sim
+    ///   Crypto: crypto_random, subtle_crypto
+    ///   Canvas/WebGL: canvas_bindings, webgl_stubs
+    ///   Network: fetch, xhr
+    ///   Shims: atob_btoa, location, console, native_env
     pub fn install_browser_surface_init(&mut self) {
         unsafe { self.isolate.enter(); }
         {

@@ -18,7 +18,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   `CreateParams::heap_limits(512MB initial, 4GB max)` 使 1284 模板
   全量安装成功。3 版本阻塞（v0.8.24-v0.8.26）解除。
 - **Codegen 重写**: generate_install_all 产出 Global-handle HashMap +
-  v8::scope! 批次（100模板/批，27 scope blocks）。`_parent` →
+  v8::scope! 批次（100模板/批，26 scope blocks）。`_parent` →
   `parent` 参数改名引入 624 个 `tmpl.inherit(p)` 原型链改进。
 - **install_browser_surface_init**: 成为默认 init 路径。1284 IDL
   模板 + 14 原生行为模块 + 38 DomTemplate 构造函数。
