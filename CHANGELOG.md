@@ -57,6 +57,25 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - `uv run pytest tests/ -q`: 1296 passed, 1 skipped
 - L2 Stage 2 MVP: 12/12 PASS
 
+### Known Issues
+
+- **Timers BCR dispatch not completed**: Scope declares Tier 1 includes timers
+  (9 callbacks total), but only atob_btoa + fetch (3 callbacks) are dispatched
+  through BCR. Timers installer field is populated but never queried by dispatch
+  hook. Deferred to v0.8.30.
+- **BCR 12/15 installer fields still None**: Only 3 of 15 BehaviorInstaller
+  fields registered (atob_btoa, fetch, timers). 12 fields await Tier 2-4
+  migration. Deferred to v0.8.30.
+- **SPIKE-1 codegen debt**: ObjectTemplate.set() does NOT support overriding
+  existing prototype methods. v0.8.30+ template-level BCR injection requires
+  modifying the iv8-surface-codegen pipeline to pass BCR callbacks at
+  FunctionTemplate creation time.
+- **23-sample regression not re-executed**: v0.8.28 Known Issues recorded
+  9/23 PASS. v0.8.29 BCR dispatch changes did not trigger a re-verification
+  of the full 23-sample baseline.
+- **use_old_chain flag remains**: Inherited from v0.8.28. Maintenance burden
+  of ~5 lines across 4 files. Removal deferred to v0.8.30+.
+
 ## [0.8.28] - 2026-06-12
 
 > Local milestone (verification closure + BCR Step A). Phase C side-by-side
