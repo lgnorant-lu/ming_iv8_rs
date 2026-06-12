@@ -3,43 +3,48 @@
 //! Stores optional callback functions that override the default stub behavior
 //! for specific interface members. Callbacks are divided into two groups:
 //!
-//! V8-bound (Rc<RefCell<>>, !Send): callbacks that return v8::Local types
-//! Send-safe (Box<dyn Fn + Send>): callbacks without V8 type dependencies
-//!
-//! v0.8.20: placeholder types (all Box<dyn Fn()>).
-//! Actual callback signatures will be refined in v0.8.21 when Canvas/WebGL
-//! deep stubs are implemented (scope/v8.0.2/Canvas2D/v8_frame_rgba, etc.).
+//! V8-bound (Rc<RefCell<>>, !Send): callbacks that receive V8 scope and
+//! return v8::Local types. These cannot cross thread boundaries.
+//! Send-safe: callbacks without V8 type dependencies, safe to share.
+
+#![expect(
+    clippy::type_complexity,
+    reason = "Rc<RefCell<Option<Box<dyn Fn(...)>>>> is the standard pattern for optional V8 callbacks"
+)]
 
 use std::cell::RefCell;
 use std::rc::Rc;
 
-// ── Callback type aliases (placeholder — actual signatures in v0.8.21) ──────
+// ── V8-bound callback type aliases (!Send) ──────────────────────────────────
 
-/// Canvas 2D context factory — deferred to v0.8.21.
-pub type CanvasContextFactory = Rc<RefCell<Option<Box<dyn Fn()>>>>;
+/// Canvas 2D context factory: creates CanvasRenderingContext2D from HTMLCanvasElement.
+pub type CanvasContextFactory = Rc<RefCell<Option<Box<dyn for<'s> Fn(&v8::PinScope<'s, '_>, v8::Local<'s, v8::Object>) -> v8::Local<'s, v8::Object>>>>>;
 
-/// Canvas 2D create gradient — deferred to v0.8.21.
-pub type GradientFactory = Rc<RefCell<Option<Box<dyn Fn()>>>>;
+/// Canvas 2D gradient factory: creates CanvasGradient from x0,y0,x1,y1.
+pub type GradientFactory = Rc<RefCell<Option<Box<dyn for<'s> Fn(&v8::PinScope<'s, '_>, f64, f64, f64, f64) -> v8::Local<'s, v8::Object>>>>>;
 
-/// WebGL context factory — deferred to v0.8.21.
-pub type WebGLContextFactory = Rc<RefCell<Option<Box<dyn Fn()>>>>;
+/// WebGL context factory: creates WebGLRenderingContext from HTMLCanvasElement.
+pub type WebGLContextFactory = Rc<RefCell<Option<Box<dyn for<'s> Fn(&v8::PinScope<'s, '_>, v8::Local<'s, v8::Object>) -> v8::Local<'s, v8::Object>>>>>;
 
-/// WebGL getParameter — deferred to v0.8.21.
-pub type WebGLGetParameter = Rc<RefCell<Option<Box<dyn Fn()>>>>;
+/// WebGL getParameter: (pname: u32) -> GL value.
+pub type WebGLGetParameter = Rc<RefCell<Option<Box<dyn for<'s> Fn(&v8::PinScope<'s, '_>, u32) -> v8::Local<'s, v8::Value>>>>>;
 
-/// WebGL getExtension — deferred to v0.8.21.
-pub type WebGLGetExtension = Rc<RefCell<Option<Box<dyn Fn()>>>>;
+/// WebGL getExtension: (name: &str) -> extension object or null.
+pub type WebGLGetExtension = Rc<RefCell<Option<Box<dyn for<'s> Fn(&v8::PinScope<'s, '_>, &str) -> v8::Local<'s, v8::Value>>>>>;
 
-/// Audio context factory — deferred to v0.8.21.
-pub type AudioContextFactory = Rc<RefCell<Option<Box<dyn Fn()>>>>;
+/// Audio context factory: creates AudioContext.
+pub type AudioContextFactory = Rc<RefCell<Option<Box<dyn for<'s> Fn(&v8::PinScope<'s, '_>) -> v8::Local<'s, v8::Object>>>>>;
 
-/// Send-safe callbacks — deferred to v0.8.21.
-pub type SendSafeCallback = RefCell<Option<Box<dyn Fn() + Send + 'static>>>;
+// ── Send-safe callback type alias ────────────────────────────────────────────
+
+/// Send-safe behavior callback: input bytes -> result string or error.
+/// Used for operations that don't require V8 scope (e.g. toDataURL encoding).
+pub type SendSafeCallback = RefCell<Option<Box<dyn Fn(Vec<u8>) -> Result<String, String> + Send + 'static>>>;
 
 // ── Registry struct ──────────────────────────────────────────────────────────
 
 pub struct BehaviorCallbackRegistry {
-    // V8-bound group (!Send) — deferred signatures to v0.8.21
+    // V8-bound group (!Send)
     pub canvas_2d_factory: CanvasContextFactory,
     pub canvas_2d_gradient: GradientFactory,
     pub webgl_factory: WebGLContextFactory,
@@ -47,7 +52,7 @@ pub struct BehaviorCallbackRegistry {
     pub webgl_get_extension: WebGLGetExtension,
     pub audio_factory: AudioContextFactory,
 
-    // Send-safe group — deferred to v0.8.21
+    // Send-safe group
     pub canvas_2d_to_data_url: SendSafeCallback,
     pub canvas_2d_get_image_data: SendSafeCallback,
     pub canvas_2d_set_size: SendSafeCallback,
