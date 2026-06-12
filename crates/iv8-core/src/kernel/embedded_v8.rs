@@ -149,18 +149,19 @@ impl EmbeddedV8Kernel {
         // Install environment fields (navigator.*, screen.*, etc.) into global
         kernel.install_environment();
 
-        // Install anti-detection shims (__iv8__ + wrapNative + window.chrome)
-        kernel.install_undetect_shims();
+        // Install anti-detection shims + JS shims + native behaviors (default path)
+        kernel.install_undetect_shims(false);
 
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
         // Install DOM templates (31 FunctionTemplates — stable default path).
         // install_browser_surface_init() is also available as a public method
-        // for full 1284-template installation.
-        // NOTE: install_browser_surface_init triggers V8 GC IsOnCentralStack
-        // crash with 1284 templates. Scope-break strategy (v0.8.25 T-2) needs
-        // deeper HandleScope init investigation. Deferred to v0.8.26.
+        // for full 1284-template installation (14 native behaviors + 1284 IDL).
+        // NOTE: 1284-template path still triggers V8 GC IsOnCentralStack crash
+        // despite v8::scope! batch strategy (v0.8.26 T-2/T-3). Global-handle
+        // codegen is complete; runtime scope-break needs deeper V8 heap tuning.
+        // Deferred to v0.8.27.
         kernel.install_dom_templates();
 
         // Step 8: Install user-defined property overrides (highest priority).
@@ -488,7 +489,7 @@ unsafe extern "C" fn undetectable_noop_handler(_info: *const v8::FunctionCallbac
 
 impl EmbeddedV8Kernel {
     /// Install anti-detection shims (__iv8__ tool object + wrapNative + hookNative + window.chrome).
-    pub fn install_undetect_shims(&mut self) {
+    pub fn install_undetect_shims(&mut self, skip_native_behaviors: bool) {
         let js_api_name = {
             let state = crate::state::RuntimeState::get(&self.isolate);
             state.js_api_name.clone()
@@ -551,35 +552,34 @@ impl EmbeddedV8Kernel {
         self.eval(&chrome_script, crate::kernel::EvalOpts::default())
             .ok();
 
-        // 5. Install eventLoop API + all runtime bindings
-        // NOTE: Behavior modules here overlap with install_browser_surface_init
-        // (called optionally). Both paths write to same global paths and are
-        // idempotent. Unification planned for v0.8.26 when V8 GC scope issue resolved.
-        unsafe {
-            self.isolate.enter();
-        }
-        {
-            v8::scope!(handle_scope, &mut self.isolate);
-            let context = v8::Local::new(handle_scope, &self.context);
-            v8::scope_with_context!(scope, handle_scope, context);
-            let global = context.global(scope);
-            crate::events::binding::install_event_loop_bindings(scope, global);
-            crate::events::timers::install_timer_globals(scope, global);
-            crate::events::date_interceptor::install_date_interceptor(scope, global);
-            crate::crypto::random::install_crypto_random(scope, global);
-            crate::crypto::subtle::install_subtle_crypto(scope, global);
-            crate::canvas::webgl::install_webgl_stubs(scope, global);
-            crate::canvas::binding::install_canvas_bindings(scope, global);
-            crate::network::fetch::install_fetch(scope, global);
-            crate::network::xhr::install_xhr(scope, global);
-            crate::shims::atob_btoa::install_atob_btoa(scope, global);
-            crate::shims::location::install_location(scope, global);
-            crate::shims::console::install_console(scope, global);
-            crate::events::page_api::install_page_api(scope, global);
-            crate::events::input_sim::install_input_api(scope, global);
-        }
-        unsafe {
-            self.isolate.exit();
+        // 5. Install native behavior modules (skip when install_browser_surface_init handles them)
+        if !skip_native_behaviors {
+            unsafe {
+                self.isolate.enter();
+            }
+            {
+                v8::scope!(handle_scope, &mut self.isolate);
+                let context = v8::Local::new(handle_scope, &self.context);
+                v8::scope_with_context!(scope, handle_scope, context);
+                let global = context.global(scope);
+                crate::events::binding::install_event_loop_bindings(scope, global);
+                crate::events::timers::install_timer_globals(scope, global);
+                crate::events::date_interceptor::install_date_interceptor(scope, global);
+                crate::crypto::random::install_crypto_random(scope, global);
+                crate::crypto::subtle::install_subtle_crypto(scope, global);
+                crate::canvas::webgl::install_webgl_stubs(scope, global);
+                crate::canvas::binding::install_canvas_bindings(scope, global);
+                crate::network::fetch::install_fetch(scope, global);
+                crate::network::xhr::install_xhr(scope, global);
+                crate::shims::atob_btoa::install_atob_btoa(scope, global);
+                crate::shims::location::install_location(scope, global);
+                crate::shims::console::install_console(scope, global);
+                crate::events::page_api::install_page_api(scope, global);
+                crate::events::input_sim::install_input_api(scope, global);
+            }
+            unsafe {
+                self.isolate.exit();
+            }
         }
 
         // 6. Install Date constructor shim (JS-level, needs __iv8_now__ to be ready)

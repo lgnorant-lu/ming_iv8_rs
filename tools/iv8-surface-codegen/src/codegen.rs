@@ -231,7 +231,7 @@ pub fn generate_install_all(definitions: &[Definition], sorted: &[String], domai
     out.push_str("pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {\n");
     out.push_str("    let mut templates: std::collections::HashMap<&str, v8::Global<FunctionTemplate>> = std::collections::HashMap::new();\n\n");
 
-    const BATCH_SIZE: usize = 150;
+    const BATCH_SIZE: usize = 50;
 
     // Phase 1: Template creation with scope-break batches
     for (i, name) in sorted.iter().enumerate() {
@@ -273,7 +273,7 @@ pub fn generate_install_all(definitions: &[Definition], sorted: &[String], domai
     // Phase 2: Global registration with scope-break batches
     out.push_str("    // Register constructors on global (non-enumerable)\n");
 
-    let reg_batch_size: usize = 200;
+    let reg_batch_size: usize = 50;
     let mut reg_count = 0;
     for name in sorted {
         let def = match by_name.get(name.as_str()) { Some(d) => d, None => continue };
