@@ -6,6 +6,48 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.27] - 2026-06-12
+
+> Local milestone (closure/completion). Phase C validation, archive
+> tier1_stubs+browser_apis+legacy snapshot, scope_validation extension.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Phase C new-chain validation**: 4 tests confirming install_browser_surface_init
+  default path creates a working JS environment (create/eval/shim globals/multi-kernel).
+  11 JS shim global checks pass.
+- **scope_validation extension**: 500 templates in 5 batches, inherit chain
+  (EventTarget→Node→Element→HTMLElement→HTMLDivElement) across 5 batch boundaries.
+  Both tests use heap_limits(512MB,4GB) matching production config.
+
+### Changed
+
+- **Archive**: tier1_stubs.js/rs → _archive/shims/ (716 empty constructors,
+  replaced by 1284 IDL templates). browser_apis.js → _archive/dom/
+  (API existence stubs, replaced by 1284 IDL templates).
+- **embedded_v8.rs**: steps 16/16b (tier1_stubs + browser_apis eval) removed,
+  replaced with explanatory comments.
+- **embedded_v8.rs legacy snapshot**: 1761 lines extracted from v0.8.24 tag
+  to _archive/kernel/.
+
+### Known Issues
+
+- Phase C scope reduced: side-by-side old-vs-new chain comparison
+  (scope.md Track 1) not executed. Current tests are new-chain-only
+  validation. Deferred to v0.8.28.
+- Python 1285-test regression on new chain not executed. Deferred.
+- 23-sample regression on new chain not executed. Deferred.
+- env_inject.rs + geometry.rs not archived: still provide 393 real values
+  and getBoundingClientRect behavior respectively. Deferred.
+
+### Quality Gates
+
+- `cargo build`: PASS
+- `cargo test --workspace --lib`: 255/255 PASS (183 core + 30 surface + 42 undetect)
+- Phase C: 4/4 PASS (new-chain-only)
+- scope_validation: 3/3 PASS (200 + 500 + inherit chain)
+
 ## [0.8.26] - 2026-06-12
 
 > Local milestone. BREAKTHROUGH: V8 GC heap_limits fix enables
