@@ -15,7 +15,7 @@ use crate::behavior::{
 /// HTMLCanvasElement.getContext('2d') is called in JS.
 pub fn register_canvas_2d_callbacks(
     factory: &CanvasContextFactory,
-    _gradient: &GradientFactory,
+    gradient: &GradientFactory,
 ) {
     *factory.borrow_mut() = Some(Box::new(
         |scope: &v8::PinScope<'_, '_>, _canvas_element: v8::Local<v8::Object>| {
@@ -25,7 +25,28 @@ pub fn register_canvas_2d_callbacks(
             }
         },
     ));
+
+    *gradient.borrow_mut() = Some(Box::new(
+        |scope, x0, y0, x1, y1| {
+            let obj = v8::Object::new(scope);
+            // CanvasGradient stub with addColorStop method
+            let key = v8::String::new(scope, "addColorStop").unwrap();
+            let tmpl = v8::FunctionTemplate::builder_raw(empty_add_color_stop).build(scope);
+            obj.set(scope, key.into(), tmpl.get_function(scope).unwrap().into());
+            let key_x0 = v8::String::new(scope, "x0").unwrap();
+            let key_y0 = v8::String::new(scope, "y0").unwrap();
+            let key_x1 = v8::String::new(scope, "x1").unwrap();
+            let key_y1 = v8::String::new(scope, "y1").unwrap();
+            obj.set(scope, key_x0.into(), v8::Number::new(scope, x0).into());
+            obj.set(scope, key_y0.into(), v8::Number::new(scope, y0).into());
+            obj.set(scope, key_x1.into(), v8::Number::new(scope, x1).into());
+            obj.set(scope, key_y1.into(), v8::Number::new(scope, y1).into());
+            obj
+        },
+    ));
 }
+
+unsafe extern "C" fn empty_add_color_stop(_info: *const v8::FunctionCallbackInfo) {}
 
 /// Register WebGL callbacks into BehaviorCallbackRegistry.
 pub fn register_webgl_callbacks(
