@@ -26,6 +26,8 @@ pub struct KernelConfig {
     pub crypto_seed: Option<u64>,
     /// If set, Date.now() / performance.now() / new Date() return this fixed timestamp (ms).
     pub time_freeze: Option<f64>,
+    /// User-defined property overrides applied after all system initialization.
+    pub user_overrides: crate::user_overrides::UserOverrides,
 }
 
 impl Default for KernelConfig {
@@ -38,6 +40,7 @@ impl Default for KernelConfig {
             random_seed: None,
             crypto_seed: None,
             time_freeze: None,
+            user_overrides: crate::user_overrides::UserOverrides::new(),
         }
     }
 }

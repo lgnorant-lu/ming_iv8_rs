@@ -195,6 +195,7 @@ impl JSContext {
             random_seed,
             crypto_seed,
             time_freeze,
+            user_overrides: Default::default(),
         };
 
         let kernel = EmbeddedV8Kernel::new(kernel_config).map_err(error::iv8_error_to_pyerr)?;

@@ -1178,6 +1178,7 @@ dependencies = [
  "hkdf",
  "hmac",
  "html5ever",
+ "iv8-surface",
  "p256",
  "p384",
  "parking_lot",
@@ -1225,6 +1226,7 @@ name = "iv8-surface"
 version = "0.1.0"
 dependencies = [
  "tracing",
+ "url",
  "v8",
 ]
 

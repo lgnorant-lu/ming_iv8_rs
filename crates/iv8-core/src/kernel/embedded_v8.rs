@@ -112,6 +112,7 @@ impl EmbeddedV8Kernel {
         let random_seed = config.random_seed;
         let crypto_seed = config.crypto_seed;
         let time_freeze = config.time_freeze;
+        let user_overrides = config.user_overrides;
 
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
 
@@ -164,6 +165,19 @@ impl EmbeddedV8Kernel {
         // crash during mass template creation. Deferred to v0.8.25 when a batched
         // scope-break installation strategy or lazy-loading can be implemented.
         // See v0.8.24-foundation-audit.md A-1 known issues.
+
+        // Step 8: Install user-defined property overrides (highest priority).
+        if !user_overrides.is_empty() {
+            unsafe { kernel.isolate.enter(); }
+            {
+                v8::scope!(handle_scope, &mut kernel.isolate);
+                let context = v8::Local::new(handle_scope, &kernel.context);
+                v8::scope_with_context!(scope, handle_scope, context);
+                let global = context.global(scope);
+                crate::user_overrides::install_user_overrides(scope, global, &user_overrides);
+            }
+            unsafe { kernel.isolate.exit(); }
+        }
 
         // Exit the isolate so it's not "entered" at rest.
         // This allows multiple JSContext instances to coexist without LIFO drop panic.
