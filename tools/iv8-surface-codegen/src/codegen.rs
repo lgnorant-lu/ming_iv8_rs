@@ -231,21 +231,21 @@ pub fn generate_install_all(definitions: &[Definition], sorted: &[String], domai
     out.push_str("pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {\n");
     out.push_str("    let mut templates: std::collections::HashMap<&str, v8::Global<FunctionTemplate>> = std::collections::HashMap::new();\n\n");
 
-    const BATCH_SIZE: usize = 50;
+    const BATCH_SIZE: usize = 100;
 
     // Phase 1: Template creation with scope-break batches
-    for (i, name) in sorted.iter().enumerate() {
+    // BATCH_SIZE counts ACTUAL templates created, not sorted array indices
+    let mut created = 0usize;
+    let mut batch_num = 0usize;
+    for name in sorted {
         let def = match by_name.get(name.as_str()) { Some(d) => d, None => continue };
 
-        if i % BATCH_SIZE == 0 {
-            if i > 0 {
+        if created % BATCH_SIZE == 0 {
+            if created > 0 {
                 out.push_str("    } // end batch\n");
             }
-            let batch_end = std::cmp::min(i + BATCH_SIZE, sorted.len());
-            out.push_str(&format!(
-                "    // Batch {}: templates {}-{}\n",
-                i / BATCH_SIZE + 1, i, batch_end - 1
-            ));
+            batch_num += 1;
+            out.push_str(&format!("    // Batch {}: {} templates\n", batch_num, BATCH_SIZE));
             out.push_str("    {\n");
             out.push_str("        v8::scope!(let scope, scope);\n");
         }
@@ -267,13 +267,14 @@ pub fn generate_install_all(definitions: &[Definition], sorted: &[String], domai
             "        templates.insert(\"{}\", v8::Global::new(scope, tmpl_{}));\n",
             name, fn_name,
         ));
+        created += 1;
     }
     out.push_str("    } // end last batch\n\n");
 
     // Phase 2: Global registration with scope-break batches
     out.push_str("    // Register constructors on global (non-enumerable)\n");
 
-    let reg_batch_size: usize = 50;
+    let reg_batch_size: usize = 100;
     let mut reg_count = 0;
     for name in sorted {
         let def = match by_name.get(name.as_str()) { Some(d) => d, None => continue };

@@ -116,7 +116,10 @@ impl EmbeddedV8Kernel {
 
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
 
-        let mut isolate = v8::Isolate::new(v8::CreateParams::default());
+        let mut isolate = v8::Isolate::new(
+            v8::CreateParams::default()
+                .heap_limits(512 * 1024 * 1024, 4 * 1024 * 1024 * 1024),
+        );
 
         // Set microtask policy to Explicit (we drive microtasks manually)
         isolate.set_microtasks_policy(v8::MicrotasksPolicy::Explicit);
@@ -149,20 +152,20 @@ impl EmbeddedV8Kernel {
         // Install environment fields (navigator.*, screen.*, etc.) into global
         kernel.install_environment();
 
-        // Install anti-detection shims + JS shims + native behaviors (default path)
-        kernel.install_undetect_shims(false);
+        // Install BrowserSurface (1284 IDL templates + 14 native behaviors).
+        // Heap limits increased from default 1.4GB to 4GB to accommodate
+        // 1284 FunctionTemplate creation without V8 GC IsOnCentralStack crash.
+        kernel.install_browser_surface_init();
+
+        // Install anti-detection shims + JS shims (skip native behaviors
+        // — already installed by install_browser_surface_init above).
+        kernel.install_undetect_shims(true);
 
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
-        // Install DOM templates (31 FunctionTemplates — stable default path).
-        // install_browser_surface_init() is also available as a public method
-        // for full 1284-template installation (14 native behaviors + 1284 IDL).
-        // NOTE: 1284-template path still triggers V8 GC IsOnCentralStack crash
-        // despite v8::scope! batch strategy (v0.8.26 T-2/T-3). Global-handle
-        // codegen is complete; runtime scope-break needs deeper V8 heap tuning.
-        // Deferred to v0.8.27.
-        kernel.install_dom_templates();
+        // DOM templates are installed inside install_browser_surface_init
+        // via install_dom_constructors() — no separate call needed.
 
         // Step 8: Install user-defined property overrides (highest priority).
         if !user_overrides.is_empty() {
