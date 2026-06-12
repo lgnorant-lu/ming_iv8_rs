@@ -822,13 +822,27 @@ impl EmbeddedV8Kernel {
                     // Overwrite HTML element constructors with DomTemplate versions
                     crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
 
-                    // Wire deep behavior from old-chain modules
-                    // (P0: Canvas2D, WebGL; P1: Fetch, XHR, Navigator, SubtleCrypto)
+                    // Wire all 14 native behavior modules from old chain
+                    // (v0.8.26: expanded from 6 to complete set)
+                    // Event system
+                    crate::events::binding::install_event_loop_bindings(scope, global);
+                    crate::events::timers::install_timer_globals(scope, global);
+                    crate::events::date_interceptor::install_date_interceptor(scope, global);
+                    crate::events::page_api::install_page_api(scope, global);
+                    crate::events::input_sim::install_input_api(scope, global);
+                    // Crypto
+                    crate::crypto::random::install_crypto_random(scope, global);
+                    crate::crypto::subtle::install_subtle_crypto(scope, global);
+                    // Canvas + WebGL
                     crate::canvas::binding::install_canvas_bindings(scope, global);
                     crate::canvas::webgl::install_webgl_stubs(scope, global);
+                    // Network
                     crate::network::fetch::install_fetch(scope, global);
                     crate::network::xhr::install_xhr(scope, global);
-                    crate::crypto::subtle::install_subtle_crypto(scope, global);
+                    // Shims
+                    crate::shims::atob_btoa::install_atob_btoa(scope, global);
+                    crate::shims::location::install_location(scope, global);
+                    crate::shims::console::install_console(scope, global);
                     crate::shims::native_env::install_native_env(scope, global);
 
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
