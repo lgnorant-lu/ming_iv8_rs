@@ -88,7 +88,7 @@ fn is_valid_js_identifier(name: &str) -> bool {
     chars.all(|ch| ch == '_' || ch == '$' || ch.is_ascii_alphanumeric())
 }
 
-/// The embedded V8 kernel — owns an Isolate + Context.
+/// The embedded V8 kernel 鈥?owns an Isolate + Context.
 pub struct EmbeddedV8Kernel {
     pub(crate) isolate: v8::OwnedIsolate,
     pub(crate) context: v8::Global<v8::Context>,
@@ -116,10 +116,7 @@ impl EmbeddedV8Kernel {
 
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
 
-        let mut isolate = v8::Isolate::new(
-            v8::CreateParams::default()
-                .heap_limits(512 * 1024 * 1024, 4 * 1024 * 1024 * 1024),
-        );
+        let mut isolate = v8::Isolate::new(v8::CreateParams::default());
 
         // Set microtask policy to Explicit (we drive microtasks manually)
         isolate.set_microtasks_policy(v8::MicrotasksPolicy::Explicit);
@@ -152,20 +149,30 @@ impl EmbeddedV8Kernel {
         // Install environment fields (navigator.*, screen.*, etc.) into global
         kernel.install_environment();
 
-        // Install BrowserSurface (1284 IDL templates + 14 native behaviors).
-        // Heap limits increased from default 1.4GB to 4GB to accommodate
-        // 1284 FunctionTemplate creation without V8 GC IsOnCentralStack crash.
-        kernel.install_browser_surface_init();
-
-        // Install anti-detection shims + JS shims (skip native behaviors
-        // — already installed by install_browser_surface_init above).
-        kernel.install_undetect_shims(true);
+        // Install anti-detection shims (__iv8__ + wrapNative + window.chrome)
+        kernel.install_undetect_shims();
 
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
-        // DOM templates are installed inside install_browser_surface_init
-        // via install_dom_constructors() — no separate call needed.
+        // Install DOM templates (31 FunctionTemplates 鈥?stable default path).
+        // install_browser_surface_init() is also available as a public method
+        // for full 1284-template installation when V8 GC scope issue is resolved.
+        kernel.install_dom_templates();
+
+        // LEGACY_CHAIN_START 鈥?TODO(v0.8.25): Remove dual-chain legacy structure
+        // See D-031: old chain code retained for one version cycle.
+        //
+        // Pre v0.8.24, initialization was controlled by cfg conditionals:
+        //   #[cfg(feature = "native-surface")] { install_browser_surface_init(); }
+        //   #[cfg(not(feature = "native-surface"))] { install_dom_templates(); }
+        //
+        // v0.8.24 removed all cfg attributes. install_dom_templates() (31 templates)
+        // is the active default. install_browser_surface_init() (1284 templates)
+        // is a public method available for manual activation, but deferred from
+        // default due to V8 GC IsOnCentralStack crash during mass template creation.
+        // Planned: v0.8.25 batched scope-break strategy or lazy-loading.
+        // LEGACY_CHAIN_END
 
         // Step 8: Install user-defined property overrides (highest priority).
         if !user_overrides.is_empty() {
@@ -369,7 +376,7 @@ impl EmbeddedV8Kernel {
 
     /// Expose a Rust function to JS global scope.
     /// The function receives args as Vec<String> and returns Result<String, String>.
-    /// (Simplified for v0.1 — M2 will add proper V8 value conversion.)
+    /// (Simplified for v0.1 鈥?M2 will add proper V8 value conversion.)
     pub fn expose_fn(&mut self, name: &str, callback: ExposedCallback) {
         unsafe {
             self.isolate.enter();
@@ -412,7 +419,7 @@ impl EmbeddedV8Kernel {
     /// Install deterministic overrides for Math.random, crypto, and time.
     ///
     /// Called during init if random_seed / crypto_seed / time_freeze are set.
-    /// Uses JS-layer override (not V8 native) — simple and effective for our use case.
+    /// Uses JS-layer override (not V8 native) 鈥?simple and effective for our use case.
     /// ChaosVM caching `var R = Math.random` before our override is handled by
     /// installing this BEFORE any user code runs (including tdc.js).
     fn install_deterministic_overrides_from(
@@ -492,7 +499,7 @@ unsafe extern "C" fn undetectable_noop_handler(_info: *const v8::FunctionCallbac
 
 impl EmbeddedV8Kernel {
     /// Install anti-detection shims (__iv8__ tool object + wrapNative + hookNative + window.chrome).
-    pub fn install_undetect_shims(&mut self, skip_native_behaviors: bool) {
+    pub fn install_undetect_shims(&mut self) {
         let js_api_name = {
             let state = crate::state::RuntimeState::get(&self.isolate);
             state.js_api_name.clone()
@@ -555,34 +562,36 @@ impl EmbeddedV8Kernel {
         self.eval(&chrome_script, crate::kernel::EvalOpts::default())
             .ok();
 
-        // 5. Install native behavior modules (skip when install_browser_surface_init handles them)
-        if !skip_native_behaviors {
-            unsafe {
-                self.isolate.enter();
-            }
-            {
-                v8::scope!(handle_scope, &mut self.isolate);
-                let context = v8::Local::new(handle_scope, &self.context);
-                v8::scope_with_context!(scope, handle_scope, context);
-                let global = context.global(scope);
-                crate::events::binding::install_event_loop_bindings(scope, global);
-                crate::events::timers::install_timer_globals(scope, global);
-                crate::events::date_interceptor::install_date_interceptor(scope, global);
-                crate::crypto::random::install_crypto_random(scope, global);
-                crate::crypto::subtle::install_subtle_crypto(scope, global);
-                crate::canvas::webgl::install_webgl_stubs(scope, global);
-                crate::canvas::binding::install_canvas_bindings(scope, global);
-                crate::network::fetch::install_fetch(scope, global);
-                crate::network::xhr::install_xhr(scope, global);
-                crate::shims::atob_btoa::install_atob_btoa(scope, global);
-                crate::shims::location::install_location(scope, global);
-                crate::shims::console::install_console(scope, global);
-                crate::events::page_api::install_page_api(scope, global);
-                crate::events::input_sim::install_input_api(scope, global);
-            }
-            unsafe {
-                self.isolate.exit();
-            }
+        // 5. Install eventLoop API on __iv8__
+        unsafe {
+            self.isolate.enter();
+        }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+            let global = context.global(scope);
+            crate::events::binding::install_event_loop_bindings(scope, global);
+            crate::events::timers::install_timer_globals(scope, global);
+            crate::events::date_interceptor::install_date_interceptor(scope, global);
+            crate::crypto::random::install_crypto_random(scope, global);
+            crate::crypto::subtle::install_subtle_crypto(scope, global);
+            crate::canvas::webgl::install_webgl_stubs(scope, global);
+            crate::canvas::binding::install_canvas_bindings(scope, global);
+            crate::network::fetch::install_fetch(scope, global);
+            crate::network::xhr::install_xhr(scope, global);
+            crate::shims::atob_btoa::install_atob_btoa(scope, global);
+            crate::shims::location::install_location(scope, global);
+            crate::shims::console::install_console(scope, global);
+            // NOTE: install_dom_navigation removed 鈥?navigation is now handled by
+            // native accessors in dom/template.rs (ObjectTemplate refactor).
+            // Install __iv8__.page.load(snapshot) API
+            crate::events::page_api::install_page_api(scope, global);
+            // Install __iv8__.input.dispatchMouseEvent/dispatchPointerEvent
+            crate::events::input_sim::install_input_api(scope, global);
+        }
+        unsafe {
+            self.isolate.exit();
         }
 
         // 6. Install Date constructor shim (JS-level, needs __iv8_now__ to be ready)
@@ -652,10 +661,22 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
-        // 16 removed — tier1_stubs.js archived in v0.8.27.
-        // 1284 IDL templates from install_browser_surface_init provide all constructors.
-        // 16b removed — browser_apis.js archived in v0.8.27.
-        // 1284 IDL templates + navigator_extras.js cover all API existence stubs.
+        // 16. Install Tier 1 browser API surface stubs (empty constructors for typeof checks)
+        // NOTE: DOM_PROTOTYPES_JS and ELEMENT_PROTOTYPES_JS removed 鈥?the ObjectTemplate
+        // refactor (dom/template.rs) now handles the full prototype chain natively.
+        // HTMLDivElement, HTMLElement, etc. are installed by install_dom_templates().
+        self.eval(
+            crate::shims::tier1_stubs::TIER1_STUBS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
+        // 16b. Browser API stubs (P0/P1: navigator properties, matchMedia, performance.now fix)
+        self.eval(
+            crate::shims::browser_apis::BROWSER_APIS_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 17. Install timezone shim (override Intl.DateTimeFormat default timezone)
         {
@@ -791,19 +812,9 @@ impl EmbeddedV8Kernel {
         state.mark_disposed();
     }
 
-    /// Install BrowserSurface — default init path since v0.8.26.
-    /// 1284 IDL templates + 14 native behaviors + 38 DomTemplate constructors.
-    ///
-    /// Requires V8 heap_limits >= 4GB (configured in EmbeddedV8Kernel::new()
-    /// via CreateParams::heap_limits). Default 1.4GB max_old_generation is
-    /// insufficient for 1284 FunctionTemplate creation.
-    ///
-    /// Native behaviors installed (14 total):
-    ///   Event system: event_loop, timers, date_interceptor, page_api, input_sim
-    ///   Crypto: crypto_random, subtle_crypto
-    ///   Canvas/WebGL: canvas_bindings, webgl_stubs
-    ///   Network: fetch, xhr
-    ///   Shims: atob_btoa, location, console, native_env
+    /// Install BrowserSurface (full 1284-template initialization 鈥?public API).
+    /// Known issue: triggers V8 GC IsOnCentralStack crash with full template set.
+    /// Use install_dom_templates() for stable 31-template initialization.
     pub fn install_browser_surface_init(&mut self) {
         unsafe { self.isolate.enter(); }
         {
@@ -821,30 +832,8 @@ impl EmbeddedV8Kernel {
                     let state = RuntimeState::get(&*scope);
 
                     // Overwrite HTML element constructors with DomTemplate versions
+                    // so createElement objects and global constructors share the same templates
                     crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
-
-                    // Wire all 14 native behavior modules from old chain
-                    // (v0.8.26: expanded from 6 to complete set)
-                    // Event system
-                    crate::events::binding::install_event_loop_bindings(scope, global);
-                    crate::events::timers::install_timer_globals(scope, global);
-                    crate::events::date_interceptor::install_date_interceptor(scope, global);
-                    crate::events::page_api::install_page_api(scope, global);
-                    crate::events::input_sim::install_input_api(scope, global);
-                    // Crypto
-                    crate::crypto::random::install_crypto_random(scope, global);
-                    crate::crypto::subtle::install_subtle_crypto(scope, global);
-                    // Canvas + WebGL
-                    crate::canvas::binding::install_canvas_bindings(scope, global);
-                    crate::canvas::webgl::install_webgl_stubs(scope, global);
-                    // Network
-                    crate::network::fetch::install_fetch(scope, global);
-                    crate::network::xhr::install_xhr(scope, global);
-                    // Shims
-                    crate::shims::atob_btoa::install_atob_btoa(scope, global);
-                    crate::shims::location::install_location(scope, global);
-                    crate::shims::console::install_console(scope, global);
-                    crate::shims::native_env::install_native_env(scope, global);
 
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
                     let count = registry.interface_count();
@@ -878,7 +867,7 @@ impl EmbeddedV8Kernel {
         self.with_global_scope(|scope, global| {
             crate::dom::binding::install_document_bindings(scope, global);
         });
-        // NOTE: DOM_NAV_SHIM_JS removed — navigation properties (parentNode, childNodes, etc.)
+        // NOTE: DOM_NAV_SHIM_JS removed 鈥?navigation properties (parentNode, childNodes, etc.)
         // are now native accessors on the ObjectTemplate prototype chain (dom/template.rs).
 
         // Re-install Canvas2D shim (DOM bindings may reset HTMLCanvasElement.prototype)
@@ -1199,7 +1188,7 @@ impl EmbeddedV8Kernel {
         }
     }
 
-    // ─── CDP Programmatic API (v0.3 M15) ─────────────────────────────────────
+    // 鈹€鈹€鈹€ CDP Programmatic API (v0.3 M15) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
 
     /// Set a breakpoint by URL. Returns breakpoint_id or error.
     pub fn cdp_set_breakpoint(
@@ -1660,7 +1649,7 @@ impl EmbeddedV8Kernel {
 
 impl Drop for EmbeddedV8Kernel {
     fn drop(&mut self) {
-        // Re-enter the isolate before drop — OwnedIsolate expects to be entered
+        // Re-enter the isolate before drop 鈥?OwnedIsolate expects to be entered
         // SAFETY: we exited after new(), now re-enter for proper cleanup
         unsafe {
             self.isolate.enter();
