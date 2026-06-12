@@ -490,6 +490,22 @@ impl EmbeddedV8Kernel {
     }
 }
 
+/// Dispatch behavior installation through BCR if callback exists,
+/// otherwise fall back to the direct install function.
+fn install_behavior_via_bcr(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+    _bcr: &iv8_surface::BehaviorCallbackRegistry,
+    installer: &iv8_surface::behavior::BehaviorInstaller,
+    fallback: fn(&v8::PinScope<'_, '_>, v8::Local<v8::Object>),
+) {
+    if let Some(ref install_fn) = *installer.borrow() {
+        install_fn(scope, global);
+    } else {
+        fallback(scope, global);
+    }
+}
+
 /// No-op call-as-function handler for the undetectable __iv8__ tool object.
 /// V8 requires this when MarkAsUndetectable is set on an ObjectTemplate.
 unsafe extern "C" fn undetectable_noop_handler(_info: *const v8::FunctionCallbackInfo) {
@@ -821,7 +837,21 @@ impl EmbeddedV8Kernel {
             // Build DomTemplates first (required by create_node_object/createElement)
             let dom_templates = crate::dom::template::build_dom_templates(scope);
 
-            let callbacks = iv8_surface::BehaviorCallbackRegistry::new();
+            let mut callbacks = iv8_surface::BehaviorCallbackRegistry::new();
+
+            // v0.8.29 BCR Step B: register Tier 1 installer callbacks.
+            // Each closure wraps the corresponding install_X function.
+            // When dispatch is active, these replace the direct calls below.
+            *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(
+                |scope, global| crate::shims::atob_btoa::install_atob_btoa(scope, global),
+            ));
+            *callbacks.install_fetch.borrow_mut() = Some(Box::new(
+                |scope, global| crate::network::fetch::install_fetch(scope, global),
+            ));
+            *callbacks.install_timers.borrow_mut() = Some(Box::new(
+                |scope, global| crate::events::timers::install_timer_globals(scope, global),
+            ));
+
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
                     let state = RuntimeState::get(&*scope);
@@ -829,8 +859,8 @@ impl EmbeddedV8Kernel {
                     // Overwrite HTML element constructors with DomTemplate versions
                     crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
 
-                    // Wire all 14 native behavior modules from old chain
-                    // (v0.8.26: expanded from 6 to complete set)
+                    // Wire all 15 native behavior modules from old chain
+                    // (v0.8.29: 15 install_X actual count, not 14)
                     // Event system
                     crate::events::binding::install_event_loop_bindings(scope, global);
                     crate::events::timers::install_timer_globals(scope, global);
@@ -844,10 +874,18 @@ impl EmbeddedV8Kernel {
                     crate::canvas::binding::install_canvas_bindings(scope, global);
                     crate::canvas::webgl::install_webgl_stubs(scope, global);
                     // Network
-                    crate::network::fetch::install_fetch(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_fetch,
+                        crate::network::fetch::install_fetch,
+                    );
                     crate::network::xhr::install_xhr(scope, global);
                     // Shims
-                    crate::shims::atob_btoa::install_atob_btoa(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_atob_btoa,
+                        crate::shims::atob_btoa::install_atob_btoa,
+                    );
                     crate::shims::location::install_location(scope, global);
                     crate::shims::console::install_console(scope, global);
                     crate::shims::native_env::install_native_env(scope, global);

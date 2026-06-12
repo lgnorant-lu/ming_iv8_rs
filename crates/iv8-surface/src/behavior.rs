@@ -41,6 +41,17 @@ pub type AudioContextFactory = Rc<RefCell<Option<Box<dyn for<'s> Fn(&v8::PinScop
 /// Used for operations that don't require V8 scope (e.g. toDataURL encoding).
 pub type SendSafeCallback = RefCell<Option<Box<dyn Fn(Vec<u8>) -> Result<String, String> + Send + 'static>>>;
 
+// ── Unified installer type ────────────────────────────────────────────────────
+
+/// Unified behavior installer: installs a module's global behavior.
+/// All 15 install_X modules share this exact signature.
+/// Used by BCR dispatch hub to route behavior installation through
+/// the callback registry instead of direct function calls.
+pub type BehaviorInstaller = Rc<RefCell<Option<Box<dyn for<'s> Fn(
+    &v8::PinScope<'s, '_>,
+    v8::Local<'s, v8::Object>,
+)>>>>;
+
 // ── Registry struct ──────────────────────────────────────────────────────────
 
 pub struct BehaviorCallbackRegistry {
@@ -57,6 +68,26 @@ pub struct BehaviorCallbackRegistry {
     pub canvas_2d_get_image_data: SendSafeCallback,
     pub canvas_2d_set_size: SendSafeCallback,
     pub reserved_behavior: SendSafeCallback,
+
+    // Unified installer group (v0.8.29 BCR Step B):
+    // 15 installers map to the 15 install_X modules called from
+    // install_browser_surface_init. Each stores an optional closure
+    // that replicates the corresponding install_X behavior.
+    pub install_event_loop: BehaviorInstaller,
+    pub install_timers: BehaviorInstaller,
+    pub install_date_interceptor: BehaviorInstaller,
+    pub install_page_api: BehaviorInstaller,
+    pub install_input_api: BehaviorInstaller,
+    pub install_crypto_random: BehaviorInstaller,
+    pub install_subtle_crypto: BehaviorInstaller,
+    pub install_canvas_bindings: BehaviorInstaller,
+    pub install_webgl_stubs: BehaviorInstaller,
+    pub install_fetch: BehaviorInstaller,
+    pub install_xhr: BehaviorInstaller,
+    pub install_atob_btoa: BehaviorInstaller,
+    pub install_location: BehaviorInstaller,
+    pub install_console: BehaviorInstaller,
+    pub install_native_env: BehaviorInstaller,
 }
 
 impl BehaviorCallbackRegistry {
@@ -72,6 +103,21 @@ impl BehaviorCallbackRegistry {
             canvas_2d_get_image_data: RefCell::new(None),
             canvas_2d_set_size: RefCell::new(None),
             reserved_behavior: RefCell::new(None),
+            install_event_loop: Rc::new(RefCell::new(None)),
+            install_timers: Rc::new(RefCell::new(None)),
+            install_date_interceptor: Rc::new(RefCell::new(None)),
+            install_page_api: Rc::new(RefCell::new(None)),
+            install_input_api: Rc::new(RefCell::new(None)),
+            install_crypto_random: Rc::new(RefCell::new(None)),
+            install_subtle_crypto: Rc::new(RefCell::new(None)),
+            install_canvas_bindings: Rc::new(RefCell::new(None)),
+            install_webgl_stubs: Rc::new(RefCell::new(None)),
+            install_fetch: Rc::new(RefCell::new(None)),
+            install_xhr: Rc::new(RefCell::new(None)),
+            install_atob_btoa: Rc::new(RefCell::new(None)),
+            install_location: Rc::new(RefCell::new(None)),
+            install_console: Rc::new(RefCell::new(None)),
+            install_native_env: Rc::new(RefCell::new(None)),
         }
     }
 }

@@ -6,8 +6,8 @@
 //! working closures from existing install_X functions.
 
 use crate::behavior::{
-    CanvasContextFactory, GradientFactory, SendSafeCallback, WebGLContextFactory,
-    WebGLGetExtension, WebGLGetParameter,
+    BehaviorInstaller, CanvasContextFactory, GradientFactory, SendSafeCallback,
+    WebGLContextFactory, WebGLGetExtension, WebGLGetParameter,
 };
 
 /// Register Canvas 2D factory callback into BehaviorCallbackRegistry.
