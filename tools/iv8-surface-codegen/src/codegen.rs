@@ -224,54 +224,91 @@ pub fn generate_install_all(definitions: &[Definition], sorted: &[String], domai
     }
 
     let mut out = String::new();
-    out.push_str("//! Generated install_all — creates all templates in topological order.\n\n");
-    out.push_str("use v8::Local;\nuse v8::Object;\nuse v8::FunctionTemplate;\n\n");
+    out.push_str("//! Generated install_all — creates all templates in topological order.\n");
+    out.push_str("//! v0.8.26: Global-handle HashMap + v8::scope! batch blocks.\n\n");
+    out.push_str("use v8::Local;\nuse v8::Object;\nuse v8::Global;\nuse v8::FunctionTemplate;\n\n");
 
-    out.push_str("pub fn install_all(scope: &v8::PinScope<'_, '_>, global: Local<Object>) {\n");
-    out.push_str("    let mut templates: std::collections::HashMap<&str, v8::Local<FunctionTemplate>> = std::collections::HashMap::new();\n\n");
+    out.push_str("pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {\n");
+    out.push_str("    let mut templates: std::collections::HashMap<&str, v8::Global<FunctionTemplate>> = std::collections::HashMap::new();\n\n");
 
-    for name in sorted {
-        let def = match by_name.get(name) { Some(d) => d, None => continue };
+    const BATCH_SIZE: usize = 150;
+
+    // Phase 1: Template creation with scope-break batches
+    for (i, name) in sorted.iter().enumerate() {
+        let def = match by_name.get(name.as_str()) { Some(d) => d, None => continue };
+
+        if i % BATCH_SIZE == 0 {
+            if i > 0 {
+                out.push_str("    } // end batch\n");
+            }
+            let batch_end = std::cmp::min(i + BATCH_SIZE, sorted.len());
+            out.push_str(&format!(
+                "    // Batch {}: templates {}-{}\n",
+                i / BATCH_SIZE + 1, i, batch_end - 1
+            ));
+            out.push_str("    {\n");
+            out.push_str("        v8::scope!(let scope, scope);\n");
+        }
+
         let fn_name = type_mapper::idl_name_to_rust(name);
-        let domain = domain_of.get(name).map(|d| d.as_str()).unwrap_or("web_apis");
+        let domain = domain_of.get(name.as_str()).map(|d| d.as_str()).unwrap_or("web_apis");
         let domain_mod = domain.replace('-', "_");
 
-        // Parent lookup
         let parent_code = match &def.inheritance {
-            Some(p) => format!("templates.get(\"{}\").copied()", p),
+            Some(p) => format!("templates.get(\"{}\").map(|g| v8::Local::new(scope, g))", p),
             None => "None".to_string(),
         };
 
         out.push_str(&format!(
-            "    let tmpl_{0} = super::{dom}::create_{0}_template(scope, {parent});\n",
-            fn_name,
-            dom = domain_mod,
-            parent = parent_code,
+            "        let tmpl_{0} = super::{dom}::create_{0}_template(scope, {parent});\n",
+            fn_name, dom = domain_mod, parent = parent_code,
         ));
         out.push_str(&format!(
-            "    templates.insert(\"{}\", tmpl_{});\n", name, fn_name));
+            "        templates.insert(\"{}\", v8::Global::new(scope, tmpl_{}));\n",
+            name, fn_name,
+        ));
     }
+    out.push_str("    } // end last batch\n\n");
 
-    out.push_str("\n    // Register constructors on global (non-enumerable)\n");
+    // Phase 2: Global registration with scope-break batches
+    out.push_str("    // Register constructors on global (non-enumerable)\n");
+
+    let reg_batch_size: usize = 200;
+    let mut reg_count = 0;
     for name in sorted {
-        let def = match by_name.get(name) { Some(d) => d, None => continue };
-        let fn_name = type_mapper::idl_name_to_rust(name);
-
-        // Skip NoInterfaceObject
+        let def = match by_name.get(name.as_str()) { Some(d) => d, None => continue };
         let ea = process_interface_ea(def);
         if ea.no_interface_object {
             out.push_str(&format!("    // {}: NoInterfaceObject — skip global registration\n", name));
             continue;
         }
 
+        if reg_count % reg_batch_size == 0 {
+            if reg_count > 0 {
+                out.push_str("    } // end registration batch\n");
+            }
+            out.push_str("    {\n");
+            out.push_str("        v8::scope!(let scope, scope);\n");
+        }
+
+        let fn_name = type_mapper::idl_name_to_rust(name);
         out.push_str(&format!(
-            "    if let Some(ctor_{0}) = tmpl_{0}.get_function(scope) {{\n", fn_name));
+            "        if let Some(ctor_{0}) = templates.get(\"{1}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
+            fn_name, name,
+        ));
         out.push_str(&format!(
-            "        let name_{0} = v8::String::new(scope, \"{1}\").unwrap();\n", fn_name, name));
+            "            let name_{0} = v8::String::new(scope, \"{1}\").unwrap();\n",
+            fn_name, name,
+        ));
         out.push_str(&format!(
-            "        global.define_own_property(scope, name_{0}.into(), ctor_{0}.into(), v8::PropertyAttribute::DONT_ENUM);\n", fn_name));
-        out.push_str("    }\n");
+            "            global.define_own_property(scope, name_{0}.into(), ctor_{0}.into(), v8::PropertyAttribute::DONT_ENUM);\n",
+            fn_name,
+        ));
+        out.push_str("        }\n");
+
+        reg_count += 1;
     }
+    out.push_str("    } // end last registration batch\n");
 
     out.push_str("}\n");
     out
