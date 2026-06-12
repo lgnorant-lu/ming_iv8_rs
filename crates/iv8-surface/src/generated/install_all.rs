@@ -406,9 +406,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Clients", v8::Global::new(scope, tmpl_clients));
     let tmpl_clipboard_item = super::web_apis::create_clipboard_item_template(scope, None);
     templates.insert("ClipboardItem", v8::Global::new(scope, tmpl_clipboard_item));
-    let tmpl_compression_stream = super::web_apis::create_compression_stream_template(scope, None);
-    { let _ = &mut v8::HandleScope::new(scope); }
-    templates.insert("CompressionStream", v8::Global::new(scope, tmpl_compression_stream));
+    let tmpl_compression_stream = super::web_apis::create_compression_stream_template(scope, None);    templates.insert("CompressionStream", v8::Global::new(scope, tmpl_compression_stream));
     let tmpl_contact_address = super::web_apis::create_contact_address_template(scope, None);
     templates.insert("ContactAddress", v8::Global::new(scope, tmpl_contact_address));
     let tmpl_contacts_manager = super::web_apis::create_contacts_manager_template(scope, None);
@@ -807,9 +805,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("Navigator", v8::Global::new(scope, tmpl_navigator));
     let tmpl_navigator_login = super::web_apis::create_navigator_login_template(scope, None);
     templates.insert("NavigatorLogin", v8::Global::new(scope, tmpl_navigator_login));
-    let tmpl_navigator_ua_data = super::web_apis::create_navigator_ua_data_template(scope, None);
-    { let _ = &mut v8::HandleScope::new(scope); }
-    templates.insert("NavigatorUAData", v8::Global::new(scope, tmpl_navigator_ua_data));
+    let tmpl_navigator_ua_data = super::web_apis::create_navigator_ua_data_template(scope, None);    templates.insert("NavigatorUAData", v8::Global::new(scope, tmpl_navigator_ua_data));
     let tmpl_node_iterator = super::dom_core::create_node_iterator_template(scope, None);
     templates.insert("NodeIterator", v8::Global::new(scope, tmpl_node_iterator));
     let tmpl_node_list = super::dom_core::create_node_list_template(scope, None);
@@ -1208,9 +1204,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("WorkerLocation", v8::Global::new(scope, tmpl_worker_location));
     let tmpl_worker_navigator = super::workers::create_worker_navigator_template(scope, None);
     templates.insert("WorkerNavigator", v8::Global::new(scope, tmpl_worker_navigator));
-    let tmpl_worklet = super::web_apis::create_worklet_template(scope, None);
-    { let _ = &mut v8::HandleScope::new(scope); }
-    templates.insert("Worklet", v8::Global::new(scope, tmpl_worklet));
+    let tmpl_worklet = super::web_apis::create_worklet_template(scope, None);    templates.insert("Worklet", v8::Global::new(scope, tmpl_worklet));
     let tmpl_worklet_animation_effect = super::web_apis::create_worklet_animation_effect_template(scope, None);
     templates.insert("WorkletAnimationEffect", v8::Global::new(scope, tmpl_worklet_animation_effect));
     let tmpl_worklet_global_scope = super::web_apis::create_worklet_global_scope_template(scope, None);
@@ -1609,9 +1603,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("SpeechRecognitionErrorEvent", v8::Global::new(scope, tmpl_speech_recognition_error_event));
     let tmpl_speech_recognition_event = super::events::create_speech_recognition_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
     templates.insert("SpeechRecognitionEvent", v8::Global::new(scope, tmpl_speech_recognition_event));
-    let tmpl_speech_synthesis_event = super::events::create_speech_synthesis_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
-    { let _ = &mut v8::HandleScope::new(scope); }
-    templates.insert("SpeechSynthesisEvent", v8::Global::new(scope, tmpl_speech_synthesis_event));
+    let tmpl_speech_synthesis_event = super::events::create_speech_synthesis_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));    templates.insert("SpeechSynthesisEvent", v8::Global::new(scope, tmpl_speech_synthesis_event));
     let tmpl_storage_event = super::events::create_storage_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
     templates.insert("StorageEvent", v8::Global::new(scope, tmpl_storage_event));
     let tmpl_submit_event = super::events::create_submit_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -2010,9 +2002,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("CSSPageRule", v8::Global::new(scope, tmpl_css_page_rule));
     let tmpl_css_scope_rule = super::css_om::create_css_scope_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
     templates.insert("CSSScopeRule", v8::Global::new(scope, tmpl_css_scope_rule));
-    let tmpl_css_starting_style_rule = super::css_om::create_css_starting_style_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
-    { let _ = &mut v8::HandleScope::new(scope); }
-    templates.insert("CSSStartingStyleRule", v8::Global::new(scope, tmpl_css_starting_style_rule));
+    let tmpl_css_starting_style_rule = super::css_om::create_css_starting_style_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));    templates.insert("CSSStartingStyleRule", v8::Global::new(scope, tmpl_css_starting_style_rule));
     let tmpl_css_style_rule = super::css_om::create_css_style_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
     templates.insert("CSSStyleRule", v8::Global::new(scope, tmpl_css_style_rule));
     let tmpl_css_supports_condition_rule = super::css_om::create_css_supports_condition_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
@@ -2411,9 +2401,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
     templates.insert("HTMLStyleElement", v8::Global::new(scope, tmpl_html_style_element));
     let tmpl_html_table_caption_element = super::html_elements::create_html_table_caption_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
     templates.insert("HTMLTableCaptionElement", v8::Global::new(scope, tmpl_html_table_caption_element));
-    let tmpl_html_table_cell_element = super::html_elements::create_html_table_cell_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
-    { let _ = &mut v8::HandleScope::new(scope); }
-    templates.insert("HTMLTableCellElement", v8::Global::new(scope, tmpl_html_table_cell_element));
+    let tmpl_html_table_cell_element = super::html_elements::create_html_table_cell_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));    templates.insert("HTMLTableCellElement", v8::Global::new(scope, tmpl_html_table_cell_element));
     let tmpl_html_table_col_element = super::html_elements::create_html_table_col_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
     templates.insert("HTMLTableColElement", v8::Global::new(scope, tmpl_html_table_col_element));
     let tmpl_html_table_element = super::html_elements::create_html_table_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));

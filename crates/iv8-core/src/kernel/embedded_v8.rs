@@ -157,22 +157,11 @@ impl EmbeddedV8Kernel {
 
         // Install DOM templates (31 FunctionTemplates — stable default path).
         // install_browser_surface_init() is also available as a public method
-        // for full 1284-template installation when V8 GC scope issue is resolved.
+        // for full 1284-template installation.
+        // NOTE: install_browser_surface_init triggers V8 GC IsOnCentralStack
+        // crash with 1284 templates. Scope-break strategy (v0.8.25 T-2) needs
+        // deeper HandleScope init investigation. Deferred to v0.8.26.
         kernel.install_dom_templates();
-
-        // LEGACY_CHAIN_START — TODO(v0.8.25): Remove dual-chain legacy structure
-        // See D-031: old chain code retained for one version cycle.
-        //
-        // Pre v0.8.24, initialization was controlled by cfg conditionals:
-        //   #[cfg(feature = "native-surface")] { install_browser_surface_init(); }
-        //   #[cfg(not(feature = "native-surface"))] { install_dom_templates(); }
-        //
-        // v0.8.24 removed all cfg attributes. install_dom_templates() (31 templates)
-        // is the active default. install_browser_surface_init() (1284 templates)
-        // is a public method available for manual activation, but deferred from
-        // default due to V8 GC IsOnCentralStack crash during mass template creation.
-        // Planned: v0.8.25 batched scope-break strategy or lazy-loading.
-        // LEGACY_CHAIN_END
 
         // Step 8: Install user-defined property overrides (highest priority).
         if !user_overrides.is_empty() {
@@ -562,7 +551,10 @@ impl EmbeddedV8Kernel {
         self.eval(&chrome_script, crate::kernel::EvalOpts::default())
             .ok();
 
-        // 5. Install eventLoop API on __iv8__
+        // 5. Install eventLoop API + all runtime bindings
+        // NOTE: Behavior modules here overlap with install_browser_surface_init
+        // (called optionally). Both paths write to same global paths and are
+        // idempotent. Unification planned for v0.8.26 when V8 GC scope issue resolved.
         unsafe {
             self.isolate.enter();
         }
@@ -583,11 +575,7 @@ impl EmbeddedV8Kernel {
             crate::shims::atob_btoa::install_atob_btoa(scope, global);
             crate::shims::location::install_location(scope, global);
             crate::shims::console::install_console(scope, global);
-            // NOTE: install_dom_navigation removed — navigation is now handled by
-            // native accessors in dom/template.rs (ObjectTemplate refactor).
-            // Install __iv8__.page.load(snapshot) API
             crate::events::page_api::install_page_api(scope, global);
-            // Install __iv8__.input.dispatchMouseEvent/dispatchPointerEvent
             crate::events::input_sim::install_input_api(scope, global);
         }
         unsafe {
