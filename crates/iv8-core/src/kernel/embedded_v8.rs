@@ -858,6 +858,17 @@ impl EmbeddedV8Kernel {
             *callbacks.install_location.borrow_mut() = Some(Box::new(
                 |scope, global| crate::shims::location::install_location(scope, global),
             ));
+            // v0.8.30 Batch 2: event_loop + page_api + input_api
+            // (timers already registered in v0.8.29)
+            *callbacks.install_event_loop.borrow_mut() = Some(Box::new(
+                |scope, global| crate::events::binding::install_event_loop_bindings(scope, global),
+            ));
+            *callbacks.install_page_api.borrow_mut() = Some(Box::new(
+                |scope, global| crate::events::page_api::install_page_api(scope, global),
+            ));
+            *callbacks.install_input_api.borrow_mut() = Some(Box::new(
+                |scope, global| crate::events::input_sim::install_input_api(scope, global),
+            ));
 
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
@@ -866,14 +877,30 @@ impl EmbeddedV8Kernel {
                     // Overwrite HTML element constructors with DomTemplate versions
                     crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
 
-                    // Wire all 15 native behavior modules from old chain
-                    // (v0.8.29: 15 install_X actual count, not 14)
+                    // Wire all 15 native behavior modules via BCR dispatch
+                    // (v0.8.30: all modules migrated to BCR dispatch)
                     // Event system
-                    crate::events::binding::install_event_loop_bindings(scope, global);
-                    crate::events::timers::install_timer_globals(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_event_loop,
+                        crate::events::binding::install_event_loop_bindings,
+                    );
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_timers,
+                        crate::events::timers::install_timer_globals,
+                    );
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_page_api,
+                        crate::events::page_api::install_page_api,
+                    );
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_input_api,
+                        crate::events::input_sim::install_input_api,
+                    );
                     crate::events::date_interceptor::install_date_interceptor(scope, global);
-                    crate::events::page_api::install_page_api(scope, global);
-                    crate::events::input_sim::install_input_api(scope, global);
                     // Crypto
                     crate::crypto::random::install_crypto_random(scope, global);
                     crate::crypto::subtle::install_subtle_crypto(scope, global);
