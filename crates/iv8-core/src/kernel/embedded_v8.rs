@@ -499,6 +499,7 @@ fn install_behavior_via_bcr(
     installer: &iv8_surface::behavior::BehaviorInstaller,
     fallback: fn(&v8::PinScope<'_, '_>, v8::Local<v8::Object>),
 ) {
+    let _ = bcr; // Reserved for v0.8.31 L2-native injection path
     if let Some(ref install_fn) = *installer.borrow() {
         install_fn(scope, global);
     } else {
@@ -814,13 +815,13 @@ impl EmbeddedV8Kernel {
     }
 
     /// Install BrowserSurface — default init path since v0.8.26.
-    /// 1284 IDL templates + 14 native behaviors + 38 DomTemplate constructors.
+    /// 1284 IDL templates + 15 native behaviors + 38 DomTemplate constructors.
     ///
     /// Requires V8 heap_limits >= 4GB (configured in EmbeddedV8Kernel::new()
     /// via CreateParams::heap_limits). Default 1.4GB max_old_generation is
     /// insufficient for 1284 FunctionTemplate creation.
     ///
-    /// Native behaviors installed (14 total):
+    /// Native behaviors installed (15 total):
     ///   Event system: event_loop, timers, date_interceptor, page_api, input_sim
     ///   Crypto: crypto_random, subtle_crypto
     ///   Canvas/WebGL: canvas_bindings, webgl_stubs
