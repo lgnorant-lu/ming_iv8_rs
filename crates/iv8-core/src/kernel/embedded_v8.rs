@@ -756,6 +756,10 @@ impl EmbeddedV8Kernel {
 
     /// Install DOM FunctionTemplate hierarchy into the isolate.
     /// Called once after kernel creation.
+    #[deprecated(
+        since = "0.8.31",
+        note = "DOM templates are now installed by install_browser_surface_init() via install_dom_constructors(). This function is retained for archival reference only."
+    )]
     pub fn install_dom_templates(&mut self) {
         unsafe {
             self.isolate.enter();
