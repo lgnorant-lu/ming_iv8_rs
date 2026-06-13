@@ -59,8 +59,8 @@ _GAP_CLASS_TO_PRESSURE_CATEGORY = {
 _ORDERED_RECIPE_RE = re.compile(r"apply\s+.+request\s+.+(?:copy|rerun)", re.IGNORECASE)
 _RAW_LOCAL_PATH_RE = re.compile(r"(?:^[a-zA-Z]:[\\/]|^[/\\]{1,2}(?!/)|\s[a-zA-Z]:[\\/])")
 _PROBE_PACK_FILES = {
-    "descriptor.m1": "descriptor.m1.json",
-    "fingerprint.m1": "fingerprint.m1.json",
+    "descriptor.m1": "_archive/descriptor.m1.json",
+    "fingerprint.m1": "_archive/fingerprint.m1.json",
 }
 _CANDIDATE_PACK_FILES = {"chrome_generic": "chrome_generic.json"}
 _ADAPTATION_STOP_REASONS = {

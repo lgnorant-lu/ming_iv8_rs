@@ -1,0 +1,96 @@
+{
+  "probe_pack": "descriptor.m1",
+  "version": 1,
+  "description": "diagnostic navigator and screen descriptor probes",
+  "evidence_ceiling": "diagnostic_only",
+  "probes": [
+    {
+      "probe_id": "navigator.userAgent.descriptor.prototype",
+      "target": "navigator.userAgent",
+      "category": "descriptor",
+      "js": "var proto = Object.getPrototypeOf(navigator); var d = proto && Object.getOwnPropertyDescriptor(proto, 'userAgent'); return !!d && typeof d.get === 'function' && d.set === undefined;",
+      "expected": true,
+      "gap_class": "descriptor_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.language.descriptor.prototype",
+      "target": "navigator.language",
+      "category": "descriptor",
+      "js": "var proto = Object.getPrototypeOf(navigator); var d = proto && Object.getOwnPropertyDescriptor(proto, 'language'); return !!d && typeof d.get === 'function' && d.set === undefined;",
+      "expected": true,
+      "gap_class": "descriptor_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.languages.descriptor.prototype",
+      "target": "navigator.languages",
+      "category": "descriptor",
+      "js": "var proto = Object.getPrototypeOf(navigator); var d = proto && Object.getOwnPropertyDescriptor(proto, 'languages'); return !!d && typeof d.get === 'function' && d.set === undefined;",
+      "expected": true,
+      "gap_class": "descriptor_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.webdriver.descriptor.mode",
+      "target": "navigator.webdriver",
+      "category": "descriptor",
+      "js": "var proto = Object.getPrototypeOf(navigator); var d = proto && Object.getOwnPropertyDescriptor(proto, 'webdriver'); return d === undefined || (typeof d.get === 'function' && d.set === undefined);",
+      "expected": true,
+      "gap_class": "descriptor_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "screen.width.descriptor.prototype",
+      "target": "screen.width",
+      "category": "descriptor",
+      "js": "var proto = Object.getPrototypeOf(screen); var d = proto && Object.getOwnPropertyDescriptor(proto, 'width'); return !!d && typeof d.get === 'function' && d.set === undefined;",
+      "expected": true,
+      "gap_class": "descriptor_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "screen.height.descriptor.prototype",
+      "target": "screen.height",
+      "category": "descriptor",
+      "js": "var proto = Object.getPrototypeOf(screen); var d = proto && Object.getOwnPropertyDescriptor(proto, 'height'); return !!d && typeof d.get === 'function' && d.set === undefined;",
+      "expected": true,
+      "gap_class": "descriptor_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "navigator.prototype.chain.basic",
+      "target": "navigator",
+      "category": "descriptor",
+      "js": "var proto = Object.getPrototypeOf(navigator); return !!proto && proto !== Object.prototype && Object.prototype.isPrototypeOf.call(Object.prototype, proto);",
+      "expected": true,
+      "gap_class": "prototype_chain_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    },
+    {
+      "probe_id": "screen.prototype.chain.basic",
+      "target": "screen",
+      "category": "descriptor",
+      "js": "var proto = Object.getPrototypeOf(screen); return !!proto && proto !== Object.prototype && Object.prototype.isPrototypeOf.call(Object.prototype, proto);",
+      "expected": true,
+      "gap_class": "prototype_chain_mismatch",
+      "side_effects": [],
+      "cleanup": "none",
+      "evidence_ceiling": "diagnostic_only"
+    }
+  ]
+}
