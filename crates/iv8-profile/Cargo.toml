@@ -1,0 +1,13 @@
+[package]
+name = "iv8-profile"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Profile schema, validation, materialization, and projection for iv8-rs L2 environment injection"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true

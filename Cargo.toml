@@ -4,6 +4,7 @@ members = [
     "crates/iv8-undetect",
     "crates/iv8-py",
     "crates/iv8-surface",
+    "crates/iv8-profile",
     "tools/iv8-surface-codegen",
 ]
 resolver = "2"
