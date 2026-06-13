@@ -1178,6 +1178,7 @@ dependencies = [
  "hkdf",
  "hmac",
  "html5ever",
+ "iv8-profile",
  "iv8-surface",
  "p256",
  "p384",
@@ -1204,6 +1205,16 @@ dependencies = [
  "tracing-subscriber",
  "url",
  "v8",
+]
+
+[[package]]
+name = "iv8-profile"
+version = "0.8.11"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tracing",
 ]
 
 [[package]]
