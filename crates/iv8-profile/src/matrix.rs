@@ -150,16 +150,22 @@ impl ProfileMatrix {
 fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> {
     let mut env = HashMap::new();
 
+    // Profile identity
     env.insert(
         "config.features.profile".into(),
         serde_json::json!("chrome147_win"),
     );
+    env.insert(
+        "config.features.browserVersion".into(),
+        serde_json::Value::String(source.identity.browser.version.clone()),
+    );
 
-    // Navigator
+    // === navigator.* (native_env.rs getters) ===
     env.insert(
         "navigator.userAgent".into(),
         serde_json::Value::String(source.navigator.user_agent.clone()),
     );
+    env.insert("navigator.appVersion".into(), serde_json::json!("5.0"));
     env.insert(
         "navigator.platform".into(),
         serde_json::Value::String(source.navigator.platform.clone()),
@@ -168,13 +174,15 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         "navigator.vendor".into(),
         serde_json::Value::String(source.navigator.vendor.clone()),
     );
+    env.insert("navigator.vendorSub".into(), serde_json::json!(""));
+    env.insert("navigator.product".into(), serde_json::json!("Gecko"));
+    env.insert(
+        "navigator.productSub".into(),
+        serde_json::json!("20030107"),
+    );
     env.insert(
         "navigator.language".into(),
         serde_json::Value::String(source.navigator.language.clone()),
-    );
-    env.insert(
-        "navigator.languages".into(),
-        serde_json::to_value(&source.navigator.languages).unwrap_or_default(),
     );
     env.insert(
         "navigator.hardwareConcurrency".into(),
@@ -189,15 +197,74 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         serde_json::json!(source.navigator.max_touch_points),
     );
     env.insert(
+        "navigator.cookieEnabled".into(),
+        serde_json::json!(true),
+    );
+    env.insert("navigator.onLine".into(), serde_json::json!(true));
+    env.insert(
+        "navigator.doNotTrack".into(),
+        serde_json::Value::Null,
+    );
+    env.insert(
         "navigator.webdriver".into(),
         serde_json::json!(source.navigator.webdriver),
+    );
+    env.insert("navigator.appName".into(), serde_json::json!("Netscape"));
+    env.insert(
+        "navigator.appCodeName".into(),
+        serde_json::json!("Mozilla"),
     );
     env.insert(
         "navigator.pdfViewerEnabled".into(),
         serde_json::json!(source.navigator.pdf_viewer_enabled),
     );
+    env.insert(
+        "navigator.languages".into(),
+        serde_json::to_value(&source.navigator.languages).unwrap_or_default(),
+    );
 
-    // Screen
+    // === navigator.userAgentData (user_agent_data.rs) ===
+    env.insert(
+        "navigator.userAgentData.brands".into(),
+        serde_json::to_value(&source.navigator.user_agent_data.brands).unwrap_or_default(),
+    );
+    env.insert(
+        "navigator.userAgentData.mobile".into(),
+        serde_json::json!(source.navigator.user_agent_data.mobile),
+    );
+    env.insert(
+        "navigator.userAgentData.platform".into(),
+        serde_json::Value::String(source.navigator.user_agent_data.platform.clone()),
+    );
+    env.insert(
+        "navigator.userAgentData.architecture".into(),
+        serde_json::Value::String(source.navigator.user_agent_data.architecture.clone()),
+    );
+    env.insert(
+        "navigator.userAgentData.bitness".into(),
+        serde_json::Value::String(source.navigator.user_agent_data.bitness.clone()),
+    );
+    env.insert(
+        "navigator.userAgentData.model".into(),
+        serde_json::json!(""),
+    );
+    env.insert(
+        "navigator.userAgentData.platformVersion".into(),
+        serde_json::Value::String(
+            source.navigator.user_agent_data.platform_version.clone(),
+        ),
+    );
+    env.insert(
+        "navigator.userAgentData.wow64".into(),
+        serde_json::json!(false),
+    );
+    env.insert(
+        "navigator.userAgentData.fullVersionList".into(),
+        serde_json::to_value(&source.navigator.user_agent_data.full_version_list)
+            .unwrap_or_default(),
+    );
+
+    // === screen.* (native_env.rs screen getters) ===
     env.insert(
         "screen.width".into(),
         serde_json::json!(source.display.screen.width),
@@ -222,8 +289,10 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         "screen.pixelDepth".into(),
         serde_json::json!(source.display.screen.pixel_depth),
     );
+    env.insert("screen.availLeft".into(), serde_json::json!(0));
+    env.insert("screen.availTop".into(), serde_json::json!(0));
 
-    // Window
+    // === window.* ===
     env.insert(
         "window.innerWidth".into(),
         serde_json::json!(source.display.window.inner_width),
@@ -237,33 +306,39 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         serde_json::json!(source.display.window.device_pixel_ratio),
     );
 
-    // Locale
+    // === location.* (location.rs) ===
+    env.insert("location.href".into(), serde_json::json!("about:blank"));
+    env.insert("location.origin".into(), serde_json::json!("null"));
+    env.insert("location.protocol".into(), serde_json::json!("about:"));
+    env.insert("location.host".into(), serde_json::json!(""));
+    env.insert("location.hostname".into(), serde_json::json!(""));
+    env.insert("location.port".into(), serde_json::json!(""));
     env.insert(
-        "locale.timezone".into(),
-        serde_json::Value::String(source.locale.timezone.clone()),
+        "location.pathname".into(),
+        serde_json::json!("blank"),
+    );
+    env.insert("location.search".into(), serde_json::json!(""));
+    env.insert("location.hash".into(), serde_json::json!(""));
+
+    // === webgl.* (webgl.rs getParameter) ===
+    env.insert(
+        "webgl.VENDOR".into(),
+        serde_json::Value::String(source.identity.gpu.vendor.clone()),
     );
     env.insert(
-        "locale.language".into(),
-        serde_json::Value::String(source.locale.language.clone()),
+        "webgl.RENDERER".into(),
+        serde_json::Value::String(source.identity.gpu.renderer.clone()),
     );
     env.insert(
-        "navigator.language".into(),
-        serde_json::Value::String(source.locale.language.clone()),
+        "webgl.UNMASKED_VENDOR_WEBGL".into(),
+        serde_json::Value::String(source.identity.gpu.webgl_unmasked_vendor.clone()),
+    );
+    env.insert(
+        "webgl.UNMASKED_RENDERER_WEBGL".into(),
+        serde_json::Value::String(source.identity.gpu.webgl_unmasked_renderer.clone()),
     );
 
-    // Identity
-    env.insert(
-        "config.features.browserVersion".into(),
-        serde_json::Value::String(source.identity.browser.version.clone()),
-    );
-
-    // Locale/network
-    env.insert(
-        "location.href".into(),
-        serde_json::json!("about:blank"),
-    );
-
-    // Rendering modes
+    // === rendering modes ===
     env.insert(
         "canvas.mode".into(),
         serde_json::Value::String(source.rendering.canvas_2d.mode.clone()),
@@ -273,7 +348,17 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         serde_json::Value::String(source.rendering.webgl_1.mode.clone()),
     );
 
-    // Compat overrides
+    // === timers ===
+    env.insert(
+        "timers.raf_interval_ms".into(),
+        serde_json::json!(16.67),
+    );
+    env.insert(
+        "timers.min_interval_ms".into(),
+        serde_json::json!(1.0),
+    );
+
+    // === compat overrides ===
     for (k, v) in &source.compat.flat_env_overrides {
         env.insert(k.clone(), v.clone());
     }
@@ -299,11 +384,20 @@ mod tests {
     fn materialization_has_flat_env_entries() {
         let source = default_profile_source();
         let (matrix, _) = ProfileMatrix::from_source(&source);
-        assert!(matrix.flat_env.len() > 20);
+        assert!(
+            matrix.flat_env.len() > 50,
+            "expanded env should have >50 keys, got {}",
+            matrix.flat_env.len()
+        );
         assert_eq!(
             matrix.flat_env.get("navigator.userAgent").and_then(|v| v.as_str()),
             Some(source.navigator.user_agent.as_str())
         );
+        // Verify critical expanded keys exist
+        assert!(matrix.flat_env.contains_key("navigator.userAgentData.brands"));
+        assert!(matrix.flat_env.contains_key("webgl.UNMASKED_VENDOR_WEBGL"));
+        assert!(matrix.flat_env.contains_key("screen.availLeft"));
+        assert!(matrix.flat_env.contains_key("timers.raf_interval_ms"));
     }
 
     #[test]

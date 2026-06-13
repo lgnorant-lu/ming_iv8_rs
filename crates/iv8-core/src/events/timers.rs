@@ -87,16 +87,22 @@ unsafe extern "C" fn set_interval(info: *const v8::FunctionCallbackInfo) {
             0.0
         };
 
-        let period_us = (delay_ms * 1000.0) as i64;
         let global_fn = v8::Global::new(scope, func);
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
+        // min interval from environment, default 1ms
+        let min_interval_us: i64 = state
+            .environment
+            .get_f64("timers.min_interval_ms")
+            .map(|ms| (ms * 1000.0) as i64)
+            .unwrap_or(1000);
+        let period_us = (delay_ms * 1000.0) as i64;
         let id = state.event_loop.borrow_mut().add_timer(
             global_fn,
             delay_ms,
             TaskKind::Interval {
-                period_us: period_us.max(1000), // minimum 1ms interval
+                period_us: period_us.max(min_interval_us),
             },
         );
 
@@ -141,11 +147,14 @@ unsafe extern "C" fn request_animation_frame(info: *const v8::FunctionCallbackIn
 
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        // rAF fires on next frame (~16.67ms from now)
+        let raf_ms = state
+            .environment
+            .get_f64("timers.raf_interval_ms")
+            .unwrap_or(16.67);
         let id = state
             .event_loop
             .borrow_mut()
-            .add_timer(global_fn, 16.67, TaskKind::Raf);
+            .add_timer(global_fn, raf_ms, TaskKind::Raf);
 
         rv.set(v8::Integer::new(scope, id as i32).into());
     }));
