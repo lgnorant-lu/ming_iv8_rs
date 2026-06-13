@@ -869,6 +869,25 @@ impl EmbeddedV8Kernel {
             *callbacks.install_input_api.borrow_mut() = Some(Box::new(
                 |scope, global| crate::events::input_sim::install_input_api(scope, global),
             ));
+            // v0.8.30 Batch 3: crypto + network + canvas/webgl + date
+            *callbacks.install_crypto_random.borrow_mut() = Some(Box::new(
+                |scope, global| crate::crypto::random::install_crypto_random(scope, global),
+            ));
+            *callbacks.install_subtle_crypto.borrow_mut() = Some(Box::new(
+                |scope, global| crate::crypto::subtle::install_subtle_crypto(scope, global),
+            ));
+            *callbacks.install_canvas_bindings.borrow_mut() = Some(Box::new(
+                |scope, global| crate::canvas::binding::install_canvas_bindings(scope, global),
+            ));
+            *callbacks.install_webgl_stubs.borrow_mut() = Some(Box::new(
+                |scope, global| crate::canvas::webgl::install_webgl_stubs(scope, global),
+            ));
+            *callbacks.install_xhr.borrow_mut() = Some(Box::new(
+                |scope, global| crate::network::xhr::install_xhr(scope, global),
+            ));
+            *callbacks.install_date_interceptor.borrow_mut() = Some(Box::new(
+                |scope, global| crate::events::date_interceptor::install_date_interceptor(scope, global),
+            ));
 
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
@@ -900,20 +919,44 @@ impl EmbeddedV8Kernel {
                         &callbacks.install_input_api,
                         crate::events::input_sim::install_input_api,
                     );
-                    crate::events::date_interceptor::install_date_interceptor(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_date_interceptor,
+                        crate::events::date_interceptor::install_date_interceptor,
+                    );
                     // Crypto
-                    crate::crypto::random::install_crypto_random(scope, global);
-                    crate::crypto::subtle::install_subtle_crypto(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_crypto_random,
+                        crate::crypto::random::install_crypto_random,
+                    );
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_subtle_crypto,
+                        crate::crypto::subtle::install_subtle_crypto,
+                    );
                     // Canvas + WebGL
-                    crate::canvas::binding::install_canvas_bindings(scope, global);
-                    crate::canvas::webgl::install_webgl_stubs(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_canvas_bindings,
+                        crate::canvas::binding::install_canvas_bindings,
+                    );
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_webgl_stubs,
+                        crate::canvas::webgl::install_webgl_stubs,
+                    );
                     // Network
                     install_behavior_via_bcr(
                         scope, global, &callbacks,
                         &callbacks.install_fetch,
                         crate::network::fetch::install_fetch,
                     );
-                    crate::network::xhr::install_xhr(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_xhr,
+                        crate::network::xhr::install_xhr,
+                    );
                     // Shims
                     install_behavior_via_bcr(
                         scope, global, &callbacks,
