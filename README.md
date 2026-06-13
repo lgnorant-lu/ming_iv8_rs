@@ -30,8 +30,8 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Environment Pressure-To-Plan Bridge (v0.8.11)**: diagnostic-only pressure plan summaries/items that connect explicit pressure harness output to review-only dry-run planning routes
 - **Environment Mainline Audits And Governance (v0.8.12-v0.8.15)**: continuity audit, debt taxonomy, probe/bridge boundaries, external ecosystem reference, evidence boundary, bridge contract helpers, pressure route bridge context, stage map, governance closeout, and bridge vocabulary cleanup (deferred)
 - **Environment Pressure-Aware Adaptation (v0.8.16)**: diagnostic-only pressure adaptation attempt model, candidate query bridge, and fresh-context attempt execution harness; single reusable module; no apply / no writes / no adapters
-- **Native Substrate Mainline (v0.8.17-v0.8.30)**: Navigator/Screen FT migration, IDL toolchain, codegen + iv8-surface (1284 interfaces), P0/P1 deep stubs, infrastructure optimization, Feature Flag removal (v0.8.24), BCR upgrade (v0.8.25), GC fix (v0.8.26), Phase C + archive (v0.8.27), verification + BCR Step A (v0.8.28), BCR Step B + L2 MVP (v0.8.29), L3 100% BCR 15/15 dispatch hub (v0.8.30). 255 lib + 81 Phase C + 1296 Python + 23/23 samples PASS.
-Current `0.8.11` package release scope. v0.8.12-v0.8.30 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
+- **Native Substrate Mainline (v0.8.17-v0.8.31)**: Navigator/Screen FT migration, IDL toolchain, codegen + iv8-surface (1284 interfaces), P0/P1 deep stubs, infrastructure optimization, Feature Flag removal (v0.8.24), BCR upgrade (v0.8.25), GC fix (v0.8.26), Phase C + archive (v0.8.27), verification + BCR Step A (v0.8.28), BCR Step B + L2 MVP (v0.8.29), L3 100% BCR 15/15 dispatch hub (v0.8.30), use_old_chain retirement + L2 architecture foundation (v0.8.31). 255 lib + 81 Phase C + 1296 Python + 23/23 samples PASS.
+Current `0.8.11` package release scope. v0.8.12-v0.8.31 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
 
 ## Install
 

@@ -6,6 +6,41 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.31] - 2026-06-13
+
+> Local milestone tag. v0.8.31 finalizes the pre-v0.6 native substrate mainline
+> with use_old_chain retirement and L2 architecture foundation design.
+
+### Removed
+
+- **KernelConfig.use_old_chain**: field removed from struct, Default impl, iv8-py context.rs. The pre-v0.8.26 init chain (install_environment → undetect_shims → dom_templates) is no longer reachable. All initialization follows the new chain path (install_browser_surface_init → install_undetect_shims(true)).
+- **make_old_chain_kernel()**: removed from test_init_chain_comparison.rs. All 81 Phase C tests converted to new-chain-only assertions.
+- **assert_both_eval_equal() / assert_both_truthy()**: removed alongside dual-kernel comparison framework.
+
+### Changed
+
+- **EmbeddedV8Kernel::new()**: simplified from if/else branch to unconditional new-chain-only path.
+- **Phase C tests (81)**: all dual-kernel comparison assertions converted to single-kernel direct value assertions. Zero cross-chain comparison remains.
+- **Probe packs**: fingerprint.m1.json and descriptor.m1.json archived to `probe_packs/_archive/`. Still loadable via existing `load_probe_pack()` API. Replacement by IDL-generated probes planned for v0.8.32.
+
+### Added
+
+- **8 diagnostic codes**: ENV_TOOLCHAIN_PROBE_RUN_STARTED, ENV_TOOLCHAIN_DRY_RUN_STARTED, ENV_TOOLCHAIN_DRY_RUN_COMPLETED, ENV_TOOLCHAIN_COMPARISON_REPORT_BUILT, PATCH_POLICY_RUNTIME_SAFE, PATCH_POLICY_ANALYSIS_ONLY, PATCH_POLICY_UNSAFE_HOOK, PATCH_POLICY_DRY_RUN_SKIPPED. Total: 10/10 diagnostic codes emitted by environment_report_builder.py.
+- **5 L2 architecture design documents**:
+  - Profile model design (AD-1): 5-layer serde schema, deterministic noise, fluent builder, crates/iv8-profile/ skeleton
+  - IDL-to-probe compiler design (AD-2): unified_ir.json → auto-generated ProbePack JSON, 5 probe categories, CLI
+  - Feedback architecture design (AD-3): MAPE-K+TDD+AFL tri-level nested loop replacing linear pipeline
+  - 105-Vector gap matrix audit: full inventory 7 categories, 55% handled, V8-hard-limit analysis
+  - BCR fluent builder API spec (AD-4): BehaviorConfig 36-field model, per-context closure switching
+
+### Quality Gates
+
+- Rust lib: 255/255 PASS
+- Phase C: 81/81 PASS (new-chain-only)
+- Python: 1296/1296 PASS (1 skipped)
+- zero `use_old_chain` / `old_chain` references in Rust codebase
+- 12/12 acceptance dimensions verified PASS
+
 ## [0.8.30] - 2026-06-13
 
 > Local milestone (L3 100% closure). BCR dispatch hub complete —
