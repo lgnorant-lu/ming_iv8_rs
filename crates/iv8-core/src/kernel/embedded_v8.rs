@@ -851,6 +851,13 @@ impl EmbeddedV8Kernel {
             *callbacks.install_timers.borrow_mut() = Some(Box::new(
                 |scope, global| crate::events::timers::install_timer_globals(scope, global),
             ));
+            // v0.8.30 Batch 1: console + location
+            *callbacks.install_console.borrow_mut() = Some(Box::new(
+                |scope, global| crate::shims::console::install_console(scope, global),
+            ));
+            *callbacks.install_location.borrow_mut() = Some(Box::new(
+                |scope, global| crate::shims::location::install_location(scope, global),
+            ));
 
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
@@ -886,8 +893,16 @@ impl EmbeddedV8Kernel {
                         &callbacks.install_atob_btoa,
                         crate::shims::atob_btoa::install_atob_btoa,
                     );
-                    crate::shims::location::install_location(scope, global);
-                    crate::shims::console::install_console(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_location,
+                        crate::shims::location::install_location,
+                    );
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_console,
+                        crate::shims::console::install_console,
+                    );
                     crate::shims::native_env::install_native_env(scope, global);
 
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
