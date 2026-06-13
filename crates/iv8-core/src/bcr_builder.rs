@@ -33,51 +33,51 @@ pub fn build_registry(config: Arc<BehaviorConfig>) -> BehaviorCallbackRegistry {
     });
 
     registry.install_native_env = make_installer("install_native_env", {
-        let cfg = cfg_native_env;
+        let _cfg = cfg_native_env;
         move |scope, global| {
-            let _ = (&cfg, scope, global);
+            crate::shims::native_env::install_native_env(scope, global);
         }
     });
 
     registry.install_location = make_installer("install_location", {
-        let cfg = cfg_location;
+        let _cfg = cfg_location;
         move |scope, global| {
-            let _ = (&cfg, scope, global);
+            crate::shims::location::install_location(scope, global);
         }
     });
 
     registry.install_webgl_stubs = make_installer("install_webgl_stubs", {
-        let cfg = cfg_webgl;
+        let _cfg = cfg_webgl;
         move |scope, global| {
-            let _ = (&cfg, scope, global);
+            crate::canvas::webgl::install_webgl_stubs(scope, global);
         }
     });
 
     registry.install_canvas_bindings = make_installer("install_canvas_bindings", {
-        let cfg = cfg_canvas;
+        let _cfg = cfg_canvas;
         move |scope, global| {
-            let _ = (&cfg, scope, global);
+            crate::canvas::binding::install_canvas_bindings(scope, global);
         }
     });
 
     registry.install_crypto_random = make_installer("install_crypto_random", {
-        let cfg = cfg_crypto;
+        let _cfg = cfg_crypto;
         move |scope, global| {
-            let _ = (&cfg, scope, global);
+            crate::crypto::random::install_crypto_random(scope, global);
         }
     });
 
     registry.install_date_interceptor = make_installer("install_date_interceptor", {
-        let cfg = cfg_time;
+        let _cfg = cfg_time;
         move |scope, global| {
-            let _ = (&cfg, scope, global);
+            crate::events::date_interceptor::install_date_interceptor(scope, global);
         }
     });
 
     registry.install_timers = make_installer("install_timers", {
-        let cfg = cfg_timers;
+        let _cfg = cfg_timers;
         move |scope, global| {
-            let _ = (&cfg, scope, global);
+            crate::events::timers::install_timer_globals(scope, global);
         }
     });
 

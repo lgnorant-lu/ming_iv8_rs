@@ -139,6 +139,12 @@ impl ProfileMatrix {
 
         (matrix, vr)
     }
+
+    /// Return the flat environment overrides map for downstream consumers.
+    /// Compatible with `iv8_core::KernelConfig::environment_overrides`.
+    pub fn to_environment_overrides(&self) -> std::collections::HashMap<String, serde_json::Value> {
+        self.flat_env.clone()
+    }
 }
 
 fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> {

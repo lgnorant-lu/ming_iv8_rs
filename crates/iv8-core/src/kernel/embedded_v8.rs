@@ -9,6 +9,7 @@ use crate::state::RuntimeState;
 
 type ExposedCallback = Box<dyn Fn(&[String]) -> Result<String, String> + Send + 'static>;
 use crate::v8_init::ensure_v8_initialized;
+use iv8_profile::BehaviorConfig;
 use std::sync::Arc;
 
 /// document.write workaround shim (REQ-DOM-008).
@@ -501,6 +502,92 @@ fn install_behavior_via_bcr(
     }
 }
 
+/// Build a BehaviorCallbackRegistry with all 15 installers registered as
+/// hardcoded wrappers around the install_X functions. This is the existing
+/// default path since v0.8.29/30.
+fn build_hardcoded_bcr() -> iv8_surface::BehaviorCallbackRegistry {
+    let mut callbacks = iv8_surface::BehaviorCallbackRegistry::new();
+
+    *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(
+        |scope, global| crate::shims::atob_btoa::install_atob_btoa(scope, global),
+    ));
+    *callbacks.install_fetch.borrow_mut() = Some(Box::new(
+        |scope, global| crate::network::fetch::install_fetch(scope, global),
+    ));
+    *callbacks.install_timers.borrow_mut() = Some(Box::new(
+        |scope, global| crate::events::timers::install_timer_globals(scope, global),
+    ));
+    *callbacks.install_console.borrow_mut() = Some(Box::new(
+        |scope, global| crate::shims::console::install_console(scope, global),
+    ));
+    *callbacks.install_location.borrow_mut() = Some(Box::new(
+        |scope, global| crate::shims::location::install_location(scope, global),
+    ));
+    *callbacks.install_event_loop.borrow_mut() = Some(Box::new(
+        |scope, global| crate::events::binding::install_event_loop_bindings(scope, global),
+    ));
+    *callbacks.install_page_api.borrow_mut() = Some(Box::new(
+        |scope, global| crate::events::page_api::install_page_api(scope, global),
+    ));
+    *callbacks.install_input_api.borrow_mut() = Some(Box::new(
+        |scope, global| crate::events::input_sim::install_input_api(scope, global),
+    ));
+    *callbacks.install_crypto_random.borrow_mut() = Some(Box::new(
+        |scope, global| crate::crypto::random::install_crypto_random(scope, global),
+    ));
+    *callbacks.install_subtle_crypto.borrow_mut() = Some(Box::new(
+        |scope, global| crate::crypto::subtle::install_subtle_crypto(scope, global),
+    ));
+    *callbacks.install_canvas_bindings.borrow_mut() = Some(Box::new(
+        |scope, global| crate::canvas::binding::install_canvas_bindings(scope, global),
+    ));
+    *callbacks.install_webgl_stubs.borrow_mut() = Some(Box::new(
+        |scope, global| crate::canvas::webgl::install_webgl_stubs(scope, global),
+    ));
+    *callbacks.install_xhr.borrow_mut() = Some(Box::new(
+        |scope, global| crate::network::xhr::install_xhr(scope, global),
+    ));
+    *callbacks.install_date_interceptor.borrow_mut() = Some(Box::new(
+        |scope, global| crate::events::date_interceptor::install_date_interceptor(scope, global),
+    ));
+    *callbacks.install_native_env.borrow_mut() = Some(Box::new(
+        |scope, global| crate::shims::native_env::install_native_env(scope, global),
+    ));
+
+    callbacks
+}
+
+/// Fill the 8 non-parameterized installer slots with hardcoded wrappers.
+/// Called after `build_registry` which sets the 7 parameterized slots.
+fn fill_hardcoded_remaining(
+    callbacks: &mut iv8_surface::BehaviorCallbackRegistry,
+) {
+    *callbacks.install_event_loop.borrow_mut() = Some(Box::new(
+        |scope, global| crate::events::binding::install_event_loop_bindings(scope, global),
+    ));
+    *callbacks.install_page_api.borrow_mut() = Some(Box::new(
+        |scope, global| crate::events::page_api::install_page_api(scope, global),
+    ));
+    *callbacks.install_input_api.borrow_mut() = Some(Box::new(
+        |scope, global| crate::events::input_sim::install_input_api(scope, global),
+    ));
+    *callbacks.install_subtle_crypto.borrow_mut() = Some(Box::new(
+        |scope, global| crate::crypto::subtle::install_subtle_crypto(scope, global),
+    ));
+    *callbacks.install_fetch.borrow_mut() = Some(Box::new(
+        |scope, global| crate::network::fetch::install_fetch(scope, global),
+    ));
+    *callbacks.install_xhr.borrow_mut() = Some(Box::new(
+        |scope, global| crate::network::xhr::install_xhr(scope, global),
+    ));
+    *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(
+        |scope, global| crate::shims::atob_btoa::install_atob_btoa(scope, global),
+    ));
+    *callbacks.install_console.borrow_mut() = Some(Box::new(
+        |scope, global| crate::shims::console::install_console(scope, global),
+    ));
+}
+
 /// No-op call-as-function handler for the undetectable __iv8__ tool object.
 /// V8 requires this when MarkAsUndetectable is set on an ObjectTemplate.
 unsafe extern "C" fn undetectable_noop_handler(_info: *const v8::FunctionCallbackInfo) {
@@ -815,17 +902,28 @@ impl EmbeddedV8Kernel {
     /// Install BrowserSurface — default init path since v0.8.26.
     /// 1284 IDL templates + 15 native behaviors + 38 DomTemplate constructors.
     ///
-    /// Requires V8 heap_limits >= 4GB (configured in EmbeddedV8Kernel::new()
-    /// via CreateParams::heap_limits). Default 1.4GB max_old_generation is
-    /// insufficient for 1284 FunctionTemplate creation.
-    ///
-    /// Native behaviors installed (15 total):
-    ///   Event system: event_loop, timers, date_interceptor, page_api, input_sim
-    ///   Crypto: crypto_random, subtle_crypto
-    ///   Canvas/WebGL: canvas_bindings, webgl_stubs
-    ///   Network: fetch, xhr
-    ///   Shims: atob_btoa, location, console, native_env
+    /// Delegates to the core install path with hardcoded BCR closures.
     pub fn install_browser_surface_init(&mut self) {
+        let callbacks = build_hardcoded_bcr();
+        self.install_browser_surface_with_callbacks(callbacks);
+    }
+
+    /// Install BrowserSurface from a profile-derived BehaviorConfig.
+    ///
+    /// Builds a BCR from the config, registers the remaining 8 installers
+    /// with hardcoded wrappers, and dispatches all 15 via BCR.
+    pub fn install_browser_surface_with_config(&mut self, config: Arc<BehaviorConfig>) {
+        let mut callbacks = crate::bcr_builder::build_registry(config);
+        fill_hardcoded_remaining(&mut callbacks);
+        self.install_browser_surface_with_callbacks(callbacks);
+    }
+
+    /// Core install: DomTemplates -> install_browser_surface ->
+    /// install_dom_constructors -> BCR dispatch -> store in state.
+    fn install_browser_surface_with_callbacks(
+        &mut self,
+        callbacks: iv8_surface::BehaviorCallbackRegistry,
+    ) {
         unsafe { self.isolate.enter(); }
         {
             v8::scope!(handle_scope, &mut self.isolate);
@@ -833,74 +931,15 @@ impl EmbeddedV8Kernel {
             v8::scope_with_context!(scope, handle_scope, context);
             let global = context.global(scope);
 
-            // Build DomTemplates first (required by create_node_object/createElement)
             let dom_templates = crate::dom::template::build_dom_templates(scope);
-
-            let mut callbacks = iv8_surface::BehaviorCallbackRegistry::new();
-
-            // v0.8.29 BCR Step B: register Tier 1 installer callbacks.
-            // Each closure wraps the corresponding install_X function.
-            // When dispatch is active, these replace the direct calls below.
-            *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(
-                |scope, global| crate::shims::atob_btoa::install_atob_btoa(scope, global),
-            ));
-            *callbacks.install_fetch.borrow_mut() = Some(Box::new(
-                |scope, global| crate::network::fetch::install_fetch(scope, global),
-            ));
-            *callbacks.install_timers.borrow_mut() = Some(Box::new(
-                |scope, global| crate::events::timers::install_timer_globals(scope, global),
-            ));
-            // v0.8.30 Batch 1: console + location
-            *callbacks.install_console.borrow_mut() = Some(Box::new(
-                |scope, global| crate::shims::console::install_console(scope, global),
-            ));
-            *callbacks.install_location.borrow_mut() = Some(Box::new(
-                |scope, global| crate::shims::location::install_location(scope, global),
-            ));
-            // v0.8.30 Batch 2: event_loop + page_api + input_api
-            // (timers already registered in v0.8.29)
-            *callbacks.install_event_loop.borrow_mut() = Some(Box::new(
-                |scope, global| crate::events::binding::install_event_loop_bindings(scope, global),
-            ));
-            *callbacks.install_page_api.borrow_mut() = Some(Box::new(
-                |scope, global| crate::events::page_api::install_page_api(scope, global),
-            ));
-            *callbacks.install_input_api.borrow_mut() = Some(Box::new(
-                |scope, global| crate::events::input_sim::install_input_api(scope, global),
-            ));
-            // v0.8.30 Batch 3: crypto + network + canvas/webgl + date
-            *callbacks.install_crypto_random.borrow_mut() = Some(Box::new(
-                |scope, global| crate::crypto::random::install_crypto_random(scope, global),
-            ));
-            *callbacks.install_subtle_crypto.borrow_mut() = Some(Box::new(
-                |scope, global| crate::crypto::subtle::install_subtle_crypto(scope, global),
-            ));
-            *callbacks.install_canvas_bindings.borrow_mut() = Some(Box::new(
-                |scope, global| crate::canvas::binding::install_canvas_bindings(scope, global),
-            ));
-            *callbacks.install_webgl_stubs.borrow_mut() = Some(Box::new(
-                |scope, global| crate::canvas::webgl::install_webgl_stubs(scope, global),
-            ));
-            *callbacks.install_xhr.borrow_mut() = Some(Box::new(
-                |scope, global| crate::network::xhr::install_xhr(scope, global),
-            ));
-            *callbacks.install_date_interceptor.borrow_mut() = Some(Box::new(
-                |scope, global| crate::events::date_interceptor::install_date_interceptor(scope, global),
-            ));
-            // v0.8.30 Batch 4: native_env (30+ native getters)
-            *callbacks.install_native_env.borrow_mut() = Some(Box::new(
-                |scope, global| crate::shims::native_env::install_native_env(scope, global),
-            ));
 
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
                     let state = RuntimeState::get(&*scope);
+                    crate::dom::template::install_dom_constructors(
+                        scope, global, &dom_templates,
+                    );
 
-                    // Overwrite HTML element constructors with DomTemplate versions
-                    crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
-
-                    // Wire all 15 native behavior modules via BCR dispatch
-                    // (v0.8.30: all modules migrated to BCR dispatch)
                     // Event system
                     install_behavior_via_bcr(
                         scope, global, &callbacks,
