@@ -6,6 +6,50 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.30] - 2026-06-13
+
+> Local milestone (L3 100% closure). BCR dispatch hub complete —
+> 15/15 install_X modules via BCR, zero direct calls remaining.
+> Package metadata and lock metadata remain `0.8.11`.
+
+### Added
+
+- **Batch 1**: console (17 methods) + location (2 methods) via BCR dispatch.
+- **Batch 2**: event_loop (9) + timers (6) + page_api (1) + input_api (3)
+  via BCR dispatch. Timers dependency on event_loop verified.
+- **Batch 3**: crypto_random (2) + subtle_crypto (12) + canvas_bindings
+  (4+JS) + webgl_stubs (3+JS) + xhr (1+JS) + date_interceptor (3+JS)
+  via BCR dispatch.
+- **Batch 4**: native_env (30+ native getters) via BCR dispatch.
+
+### Changed
+
+- **15/15 modules via BCR**: install_browser_surface_init now routes all
+  behavior installation through install_behavior_via_bcr. Zero direct
+  `install_X(scope, global)` calls remain.
+- **BCR interface hardened**: `_bcr` → `bcr` parameter activated, documented
+  for v0.8.31 L2-native candidate injection path.
+
+### Known Issues
+
+- **use_old_chain flag remains** (5 refs across 4 files). 23-sample regression
+  now at 23/23 PASS (v0.8.28: 9/23), meeting the >=15 threshold for removal.
+  Removal candidate for v0.8.31.
+- **JS shims retained**: 15 JS shim eval calls preserved. BCR dispatch replaces
+  Rust-side install_X calls only; JS prototype overrides (e.g. Canvas2D,
+  WebGL, XHR, Date) remain as JS-layer behavior.
+- **SPIKE-1 constraint**: ObjectTemplate.set() does not support overriding
+  existing prototype methods. Template-level injection requires codegen
+  modification — optional for v0.8.31+, not blocking L3 100%.
+
+### Quality Gates
+
+- `cargo build`: PASS
+- `cargo test --workspace --lib`: 255/255 PASS (183 core + 30 surface + 42 undetect)
+- `cargo test --test test_init_chain_comparison`: 81/81 PASS
+- `uv run pytest tests/ -q`: 1296 passed, 1 skipped
+- 23-sample regression: 23/23 PASS (baseline for v0.8.31 use_old_chain removal)
+
 ## [0.8.29] - 2026-06-12
 
 > Local milestone (BCR Step B dispatch hub + L2 Stage 2 MVP). BCR
