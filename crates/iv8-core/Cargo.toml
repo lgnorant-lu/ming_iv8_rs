@@ -55,6 +55,9 @@ default = []
 [dependencies.iv8-surface]
 path = "../iv8-surface"
 
+[dependencies.iv8-profile]
+path = "../iv8-profile"
+
 [dev-dependencies]
 tracing-subscriber = { workspace = true }
 criterion = { version = "0.5", features = ["html_reports"] }

@@ -14,6 +14,7 @@
 //! This crate provides the core Rust API for creating and managing
 //! JavaScript contexts with full browser surface emulation.
 
+pub mod bcr_builder;
 pub mod canvas;
 pub mod config;
 pub mod convert;
@@ -36,6 +37,7 @@ pub mod v8_utils;
 #[macro_use]
 pub mod safe_callback;
 
+pub use bcr_builder::build_registry;
 pub use config::EnvironmentMap;
 pub use convert::{v8_to_rust_impl, RustValue};
 pub use error::IV8Error;
