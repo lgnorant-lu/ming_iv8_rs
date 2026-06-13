@@ -28,9 +28,6 @@ pub struct KernelConfig {
     pub time_freeze: Option<f64>,
     /// User-defined property overrides applied after all system initialization.
     pub user_overrides: crate::user_overrides::UserOverrides,
-    /// Use pre-v0.8.26 init chain (install_environment → undetect_shims → dom_templates).
-    /// Default false: uses install_browser_surface_init (1284 IDL + 14 native behaviors).
-    pub use_old_chain: bool,
 }
 
 impl Default for KernelConfig {
@@ -44,7 +41,6 @@ impl Default for KernelConfig {
             crypto_seed: None,
             time_freeze: None,
             user_overrides: crate::user_overrides::UserOverrides::new(),
-            use_old_chain: false,
         }
     }
 }
