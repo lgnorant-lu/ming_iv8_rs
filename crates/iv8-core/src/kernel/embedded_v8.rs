@@ -495,7 +495,7 @@ impl EmbeddedV8Kernel {
 fn install_behavior_via_bcr(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
-    _bcr: &iv8_surface::BehaviorCallbackRegistry,
+    bcr: &iv8_surface::BehaviorCallbackRegistry,
     installer: &iv8_surface::behavior::BehaviorInstaller,
     fallback: fn(&v8::PinScope<'_, '_>, v8::Local<v8::Object>),
 ) {
@@ -888,6 +888,10 @@ impl EmbeddedV8Kernel {
             *callbacks.install_date_interceptor.borrow_mut() = Some(Box::new(
                 |scope, global| crate::events::date_interceptor::install_date_interceptor(scope, global),
             ));
+            // v0.8.30 Batch 4: native_env (30+ native getters)
+            *callbacks.install_native_env.borrow_mut() = Some(Box::new(
+                |scope, global| crate::shims::native_env::install_native_env(scope, global),
+            ));
 
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
@@ -973,7 +977,11 @@ impl EmbeddedV8Kernel {
                         &callbacks.install_console,
                         crate::shims::console::install_console,
                     );
-                    crate::shims::native_env::install_native_env(scope, global);
+                    install_behavior_via_bcr(
+                        scope, global, &callbacks,
+                        &callbacks.install_native_env,
+                        crate::shims::native_env::install_native_env,
+                    );
 
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
                     let count = registry.interface_count();
