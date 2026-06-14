@@ -218,3 +218,45 @@ def test_union_type_generates_combined_check():
     for probe in url_attrs:
         assert "typeof __v__" in probe["js"]
         assert probe["gap_class"] == "value_mismatch"
+
+
+# -- v0.8.35 Navigator regression --------------------------------------------
+
+def test_navigator_expanded_probe_count():
+    pack = generate_probe_pack(interfaces=["Navigator"])
+    attr_probes = [p for p in pack["probes"] if p["probe_id"].startswith("idl.attr.Navigator.")]
+    assert len(attr_probes) >= 25
+
+
+# -- v0.8.35 descriptor probes -----------------------------------------------
+
+def test_descriptor_probes_generated_for_attributes():
+    pack = generate_probe_pack(interfaces=["Navigator", "Screen"])
+    descr = [p for p in pack["probes"] if p["probe_id"].startswith("idl.descr.")]
+    assert len(descr) >= 30
+
+
+def test_descriptor_probe_checks_configurable_and_enumerable():
+    pack = generate_probe_pack(interfaces=["Navigator"])
+    descr = [
+        p for p in pack["probes"]
+        if p["probe_id"].startswith("idl.descr.Navigator.maxTouchPoints")
+    ]
+    assert len(descr) == 1
+    js = descr[0]["js"]
+    assert "configurable" in js
+    assert "enumerable" in js
+    assert descr[0]["gap_class"] == "descriptor_mismatch"
+    assert descr[0]["category"] == "descriptor"
+
+
+# -- v0.8.35 prototype chain -------------------------------------------------
+
+def test_inheritance_probes_for_interfaces_with_inheritance():
+    pack = generate_probe_pack(interfaces=["Window", "Document", "Element"])
+    inherits = {
+        p["probe_id"] for p in pack["probes"]
+        if p["probe_id"].startswith("idl.inherits.")
+    }
+    assert "idl.inherits.Window" in inherits
+    assert "idl.inherits.Document" in inherits or "idl.inherits.Element" in inherits

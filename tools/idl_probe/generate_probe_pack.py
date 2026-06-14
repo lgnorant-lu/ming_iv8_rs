@@ -129,6 +129,9 @@ def generate_probe_pack(
             probe = _build_attribute_probe(ir_schema, iface_name, attr_name, member)
             if probe:
                 probes.append(probe)
+            descr_probe = _build_descriptor_probe(ir_schema, iface_name, attr_name, member)
+            if descr_probe:
+                probes.append(descr_probe)
 
     pack_name = "idl-core-window.m1"
     return {
@@ -316,3 +319,59 @@ def _build_union_check(type_info: dict[str, Any]) -> str | None:
         else:
             checks.append("(typeof __v__ !== 'undefined')")
     return " || ".join(checks)
+
+
+def _build_descriptor_probe(
+    ir_schema: str,
+    iface_name: str,
+    attr_name: str,
+    member: dict[str, Any],
+) -> dict[str, Any] | None:
+    access_path = f"{iface_name.lower()}.{attr_name}"
+    parent_path = iface_name.lower()
+
+    ext_attrs = member.get("extended_attributes", [])
+    if not isinstance(ext_attrs, list):
+        ext_attrs = []
+    attrs_set = {ea.get("name", "") for ea in ext_attrs if isinstance(ea, dict)}
+
+    if "LegacyUnforgeable" in attrs_set or "Unforgeable" in attrs_set:
+        expected_configurable = "false"
+    else:
+        expected_configurable = "true"
+
+    if "LegacyUnenumerableNamedProperties" in attrs_set:
+        expected_enumerable = "false"
+    else:
+        expected_enumerable = "true"
+
+    js_code = (
+        f"(function() {{"
+        f"  var d = Object.getOwnPropertyDescriptor({parent_path}, '{attr_name}');"
+        f"  if (!d) {{"
+        f"    var proto = Object.getPrototypeOf({parent_path});"
+        f"    d = proto && Object.getOwnPropertyDescriptor(proto, '{attr_name}');"
+        f"  }}"
+        f"  return !!d"
+        f"    && d.configurable === {expected_configurable}"
+        f"    && d.enumerable === {expected_enumerable};"
+        f"}})()"
+    )
+
+    return {
+        "probe_id": f"idl.descr.{iface_name}.{attr_name}",
+        "target": access_path,
+        "category": "descriptor",
+        "js": js_code,
+        "expected": True,
+        "gap_class": "descriptor_mismatch",
+        "side_effects": [],
+        "cleanup": "none",
+        "evidence_ceiling": "diagnostic_only",
+        "source_ir": {
+            "schema_version": ir_schema,
+            "definition": iface_name,
+            "member": attr_name,
+            "layer": 3,
+        },
+    }
