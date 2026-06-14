@@ -445,3 +445,40 @@ def test_coverage_report_is_diagnostic_only():
     assert report["writes"] == []
     assert report["evidence_ceiling"] == "diagnostic_only"
     assert report["schema_version"] == "iv8-coverage-gap-report.v0.1"
+
+
+# -- v0.8.36 coverage map data-fill ------------------------------------------
+
+
+def test_coverage_report_maps_identity_rendering_behavioral_jsvm_protocol():
+    probe_ids = [
+        "idl.attr.Screen.width",
+        "browser_surface.window_chrome_object",
+        "browser_surface.crypto_subtle_object",
+        "idl.attr.Performance.timeOrigin",
+        "idl.inherits.Window",
+        "browser_surface.typeof_fetch",
+        "browser_surface.typeof_XMLHttpRequest",
+        "browser_surface.typeof_WebGLRenderingContext",
+    ]
+    report = generate_coverage_report(probe_ids)
+    covered = set(report["coverage"]["covered"])
+    assert {"V015", "V022", "V095", "V103", "V032", "V067", "V085"} <= covered
+
+
+def test_coverage_report_mapping_does_not_promote_hard_limits():
+    probe_ids = [
+        "idl.attr.Screen.width",
+        "browser_surface.typeof_fetch",
+    ]
+    report = generate_coverage_report(probe_ids)
+    assert "V058" in report["coverage"]["hard_limit"]
+    assert "V091" in report["coverage"]["hard_limit"]
+    assert "V058" not in report["coverage"]["covered"]
+    assert "V091" not in report["coverage"]["covered"]
+
+
+def test_coverage_report_data_fill_expands_known_vector_universe():
+    report = generate_coverage_report([])
+    assert report["total_vectors"] >= 45
+    assert report["summary"]["hard_limit"] >= 13
