@@ -11,6 +11,7 @@ from tools.convergence import (  # noqa: E402
     build_convergence_snapshot,
     build_knowledge_index,
     diff_convergence_snapshots,
+    generate_coverage_report,
     make_convergence_event,
     normalize_events_from_report,
     stable_subject_key,
@@ -416,3 +417,31 @@ def test_contract_no_target_flow_in_generated_payloads():
     encoded = json.dumps(event, sort_keys=True)
     for term in ("token", "cookie", "signature", "nonce", "authorization", "endpoint", "domain"):
         assert term not in encoded.lower() or "redacted" in encoded.lower()
+
+
+# -- v0.8.35 coverage gap report tests ---------------------------------------
+
+def test_coverage_report_classifies_covered_vectors():
+    probe_ids = [
+        "idl.attr.Navigator.userAgent",
+        "idl.attr.Navigator.webdriver",
+        "idl.descr.Navigator.maxTouchPoints",
+    ]
+    report = generate_coverage_report(probe_ids)
+    assert report["writes"] == []
+    assert report["evidence_ceiling"] == "diagnostic_only"
+    assert report["summary"]["covered"] >= 2
+
+
+def test_coverage_report_classifies_hard_limits():
+    probe_ids = ["idl.attr.Navigator.userAgent"]
+    report = generate_coverage_report(probe_ids)
+    assert report["summary"]["hard_limit"] >= 10
+
+
+def test_coverage_report_is_diagnostic_only():
+    probe_ids = ["idl.attr.Navigator.userAgent"]
+    report = generate_coverage_report(probe_ids)
+    assert report["writes"] == []
+    assert report["evidence_ceiling"] == "diagnostic_only"
+    assert report["schema_version"] == "iv8-coverage-gap-report.v0.1"
