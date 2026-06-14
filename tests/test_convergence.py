@@ -311,3 +311,108 @@ def test_stable_subject_key_ignores_expected_actual_changes():
     )
     assert event_a["event_id"] != event_b["event_id"]
     assert stable_subject_key(event_a) == stable_subject_key(event_b)
+
+
+# -- v0.8.35 contract validator tests ----------------------------------------
+
+def test_contract_event_always_diagnostic_only():
+    statuses = (
+        "matched", "mismatched", "errored", "expected_divergence",
+        "missing", "unexpected", "skipped",
+    )
+    for status in statuses:
+        event = make_convergence_event(
+            source={"report_schema": "s", "report_kind": "k", "source_id": "p"},
+            subject={"probe_id": "p", "target": "p", "category": "value"},
+            status=status,
+        )
+        assert event["writes"] == []
+        assert event["evidence_ceiling"] == "diagnostic_only"
+        assert event["schema_version"] == "iv8-convergence-event.v0.1"
+        assert event["event_id"].startswith("sha256:")
+
+
+def test_contract_event_with_minimal_fields_is_valid():
+    event = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "p"},
+        subject={"probe_id": "p", "target": "p", "category": "value"},
+        status="fail",
+    )
+    required = {"schema_version", "event_id", "source", "subject", "status",
+                "gap_class", "severity", "expected", "actual",
+                "source_evidence_ceiling", "evidence_ceiling", "writes"}
+    assert set(event.keys()) == required
+    assert event["gap_class"] in {
+        "none", "missing_api", "value_mismatch", "type_mismatch",
+        "descriptor_mismatch", "prototype_chain_mismatch", "runtime_error",
+        "expected_divergence", "structural_mismatch", "unsupported_boundary",
+    }
+
+
+def test_contract_snapshot_always_diagnostic_only():
+    snapshot = build_convergence_snapshot([])
+    assert snapshot["writes"] == []
+    assert snapshot["evidence_ceiling"] == "diagnostic_only"
+    assert snapshot["schema_version"] == "iv8-convergence-snapshot.v0.1"
+    assert snapshot["snapshot_id"].startswith("sha256:")
+    assert snapshot["summary"]["total_events"] == 0
+
+
+def test_contract_snapshot_empty_events_is_still_valid():
+    snapshot = build_convergence_snapshot([])
+    assert snapshot["events"] == []
+    assert snapshot["summary"]["total_events"] == 0
+    assert snapshot["source_reports"] == []
+
+
+def test_contract_delta_always_diagnostic_only():
+    empty = build_convergence_snapshot([])
+    delta = diff_convergence_snapshots(empty, empty)
+    assert delta["writes"] == []
+    assert delta["evidence_ceiling"] == "diagnostic_only"
+    assert delta["schema_version"] == "iv8-convergence-delta.v0.1"
+    for cls in ("new", "resolved", "persisting", "changed_status", "changed_severity"):
+        assert delta["summary"][cls] == 0
+
+
+def test_contract_delta_empty_base_produces_all_new():
+    empty = build_convergence_snapshot([])
+    event = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "p"},
+        subject={"probe_id": "p", "target": "p", "category": "value"},
+        status="fail",
+    )
+    current = build_convergence_snapshot([event])
+    delta = diff_convergence_snapshots(empty, current)
+    assert delta["summary"]["new"] == 1
+
+
+def test_contract_knowledge_index_always_diagnostic_only():
+    snapshot = build_convergence_snapshot([])
+    index = build_knowledge_index(snapshot)
+    assert index["writes"] == []
+    assert index["evidence_ceiling"] == "diagnostic_only"
+    assert index["schema_version"] == "iv8-feedback-knowledge-index.v0.1"
+    assert index["known_gaps"] == []
+
+
+def test_contract_knowledge_index_empty_snapshot_is_still_valid():
+    snapshot = build_convergence_snapshot([])
+    index = build_knowledge_index(snapshot)
+    assert index["known_gaps"] == []
+    assert index["summary"]["known_gaps"] == 0
+    assert index["summary"]["new"] == 0
+    assert index["source_snapshot_id"] == snapshot["snapshot_id"]
+
+
+def test_contract_no_target_flow_in_generated_payloads():
+    event = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "p"},
+        subject={"probe_id": "p", "target": "p", "category": "value"},
+        status="fail",
+        expected={"token": "bad", "cookie": "bad", "signature": "bad", "nonce": "bad"},
+        actual="safe",
+    )
+    encoded = json.dumps(event, sort_keys=True)
+    for term in ("token", "cookie", "signature", "nonce", "authorization", "endpoint", "domain"):
+        assert term not in encoded.lower() or "redacted" in encoded.lower()
