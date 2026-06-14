@@ -35,6 +35,8 @@ def generate_probe_pack(
     ir_path: str | Path | None = None,
     interfaces: list[str] | None = None,
     version: int = 1,
+    *,
+    profile_values: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Generate a ProbePack dict from unified_ir.json for the given interfaces.
 
@@ -43,6 +45,7 @@ def generate_probe_pack(
         interfaces: Interface names to generate probes for.
                     Defaults to [Window, Navigator, Screen, Location].
         version: ProbePack version number.
+        profile_values: Optional in-memory profile dot-path expected values.
 
     Returns:
         A dict matching the ProbePack schema recognized by ProbePack.from_dict.
@@ -72,6 +75,7 @@ def generate_probe_pack(
             "HTMLCanvasElement", "ValidityState",
             "DOMRect", "DOMRectReadOnly", "DOMPoint", "DOMMatrix",
         ]
+    profile_values = dict(profile_values or {})
 
     source_path = Path(ir_path) if ir_path else _UNIFIED_IR_PATH
     ir_data = _load_ir(source_path)
@@ -165,7 +169,13 @@ def generate_probe_pack(
             if member.get("kind") != "attribute":
                 continue
             attr_name = member["name"]
-            probe = _build_attribute_probe(ir_schema, iface_name, attr_name, member)
+            probe = _build_attribute_probe(
+                ir_schema,
+                iface_name,
+                attr_name,
+                member,
+                profile_values=profile_values,
+            )
             if probe:
                 probes.append(probe)
             descr_probe = _build_descriptor_probe(ir_schema, iface_name, attr_name, member)
@@ -248,6 +258,8 @@ def _build_attribute_probe(
     iface_name: str,
     attr_name: str,
     member: dict[str, Any],
+    *,
+    profile_values: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     type_info = member.get("type")
     if not isinstance(type_info, dict):
@@ -276,7 +288,20 @@ def _build_attribute_probe(
 
     access_path = _access_path_for(iface_name, attr_name)
     js_access_path = _js_access_path_for(iface_name, attr_name)
-    js_code = f"(function() {{ var __v__ = {js_access_path}; return {js_check}; }})()"
+    profile_values = profile_values or {}
+    profile_expected = profile_values.get(access_path)
+    has_profile_expected = (
+        access_path in profile_values
+        and (iface_name, attr_name) not in _SENSITIVE_IDL_SURFACES
+    )
+    if has_profile_expected:
+        expected_literal = _js_literal(profile_expected)
+        js_code = (
+            f"(function() {{ var __v__ = {js_access_path}; "
+            f"return ({js_check}) && __v__ === {expected_literal}; }})()"
+        )
+    else:
+        js_code = f"(function() {{ var __v__ = {js_access_path}; return {js_check}; }})()"
 
     probe = {
         "probe_id": f"idl.attr.{iface_name}.{attr_name}",
@@ -294,8 +319,13 @@ def _build_attribute_probe(
             "member": attr_name,
             "idl_type": type_info.get("name", ""),
             "runtime_accessibility": _runtime_accessibility_for(iface_name),
+            "check_mode": "type_and_profile_value" if has_profile_expected else "type_only",
         },
     }
+    if has_profile_expected:
+        probe["source_ir"]["expected_source"] = "profile_values"
+        probe["source_ir"]["profile_path"] = access_path
+        probe["source_ir"]["profile_expected"] = profile_expected
     _mark_sensitive_surface(probe, iface_name, attr_name)
     return probe
 
@@ -447,6 +477,10 @@ def _runtime_accessibility_for(iface_name: str) -> str:
     if iface_name in _GLOBAL_INSTANCE_NAMES:
         return "global"
     return "instance_unresolved"
+
+
+def _js_literal(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=True, sort_keys=True)
 
 
 def _mark_sensitive_surface(probe: dict[str, Any], iface_name: str, attr_name: str) -> None:

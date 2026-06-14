@@ -343,3 +343,77 @@ def test_sensitive_idl_surface_names_are_explicitly_marked():
     for probe in by_id.values():
         assert probe["sensitive_surface_probe"] is True
         assert probe["sensitivity_reason"] == "standard_idl_surface_name_only"
+
+
+# -- v0.8.36 Profile -> Probe expected overlay -------------------------------
+
+
+def test_profile_overlay_preserves_no_profile_probe_count():
+    baseline = generate_probe_pack()
+    overlaid = generate_probe_pack(profile_values={})
+    assert len(overlaid["interfaces"]) == len(baseline["interfaces"]) == 51
+    assert len(overlaid["probes"]) == len(baseline["probes"]) == 1125
+    assert [p["probe_id"] for p in overlaid["probes"]] == [
+        p["probe_id"] for p in baseline["probes"]
+    ]
+
+
+def test_profile_overlay_generates_profile_aware_value_probe():
+    pack = generate_probe_pack(
+        interfaces=["Screen"],
+        profile_values={"screen.width": 1920},
+    )
+    probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Screen.width"]
+    assert len(probe) == 1
+    source = probe[0]["source_ir"]
+    assert source["expected_source"] == "profile_values"
+    assert source["profile_path"] == "screen.width"
+    assert source["check_mode"] == "type_and_profile_value"
+    assert source["profile_expected"] == 1920
+
+
+def test_profile_overlay_keeps_type_guard_before_value_check():
+    pack = generate_probe_pack(
+        interfaces=["Screen"],
+        profile_values={"screen.width": 1920},
+    )
+    probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Screen.width"][0]
+    js = probe["js"]
+    assert "typeof __v__ === 'number'" in js
+    assert "__v__ === 1920" in js
+    assert js.index("typeof __v__ === 'number'") < js.index("__v__ === 1920")
+    assert probe["expected"] is True
+
+
+def test_profile_overlay_records_type_only_for_unmapped_probe():
+    pack = generate_probe_pack(
+        interfaces=["Screen"],
+        profile_values={"screen.width": 1920},
+    )
+    probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Screen.height"]
+    assert len(probe) == 1
+    assert probe[0]["source_ir"]["check_mode"] == "type_only"
+    assert "expected_source" not in probe[0]["source_ir"]
+
+
+def test_profile_overlay_skips_sensitive_surface_paths():
+    pack = generate_probe_pack(
+        interfaces=["Document"],
+        profile_values={"document.cookie": "session=blocked"},
+    )
+    probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Document.cookie"]
+    assert len(probe) == 1
+    assert probe[0]["source_ir"]["check_mode"] == "type_only"
+    assert "session=blocked" not in probe[0]["js"]
+    assert not _TARGET_FLOW_TERMS.search(probe[0]["js"])
+
+
+def test_profile_overlay_does_not_write_files(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    pre = set(tmp_path.iterdir())
+    generate_probe_pack(
+        interfaces=["Screen"],
+        profile_values={"screen.width": 1920},
+    )
+    post = set(tmp_path.iterdir())
+    assert pre == post
