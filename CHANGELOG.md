@@ -6,6 +6,43 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.32] - 2026-06-14
+
+> Local milestone tag. v0.8.32 completes the L2 Profile Injection Verification
+> Foundation as a profile-to-environment certified path, not as full
+> profile-to-BCR native parameterization. Package metadata remains `0.8.11`.
+
+### Added
+
+- **iv8-profile crate implementation**: `ProfileSource`, `ProfileMatrix`, strict validation, deterministic materialization, environment projection, `BehaviorConfig`, `ProfileManifest`, and `ProfileReport`.
+- **Certified runtime path**: `KernelConfig::with_profile_matrix()` projects a materialized profile into `RuntimeState.environment` through `environment_overrides`.
+- **Runtime E2E coverage**: profile-derived navigator, screen, window DPR, location, UA-CH, WebGL vendor/renderer, and timer projection are verified through Rust tests.
+- **Python convergence checker**: report-only expected-vs-actual verification with separate expected and runtime environments.
+- **IDL output readiness**: `tools/idl/output/unified_ir.json` verified locally as generated output; directory remains intentionally gitignored.
+- **Final audit**: v0.8.32 completion boundary recorded in `v0.8.32-final-audit.md`.
+
+### Changed
+
+- **v0.8.32 scope corrected**: certified path is now profile -> environment -> runtime observations. BehaviorConfig/BCR remains scaffold for v0.8.33+.
+- **Profile validation hardened**: unknown modes, zero timing fps, and invalid extended permission states are errors.
+- **Timer projection**: `timing.fps` now derives `timers.raf_interval_ms`.
+- **Noise seeds**: per-surface `sub_seed` overrides now materialize into deterministic seed domains.
+- **Report verdicts**: empty reports now finalize to `no_data`, not `equivalent`.
+
+### Quality Gates
+
+- Rust lib: 289/289 PASS
+- Python: 1305/1305 PASS (1 skipped)
+- v0.8.32 checker negative case: mismatched runtime UA fails as material failure
+
+### Non-Goals Preserved
+
+- No Chromium zero-diff claim.
+- No full 105-vector claim.
+- No full IDL-to-probe compiler implementation.
+- No full MAPE-K/AFL feedback loop.
+- No full BehaviorConfig/BCR native installer parameterization claim.
+
 ## [0.8.31] - 2026-06-13
 
 > Local milestone tag. v0.8.31 finalizes the pre-v0.6 native substrate mainline
