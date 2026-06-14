@@ -75,9 +75,10 @@ def test_evidence_ceiling_is_diagnostic_only(generated_pack_dict):
         assert probe["evidence_ceiling"] == "diagnostic_only"
 
 
-def test_generation_does_not_write_files(tmp_path):
+def test_generation_does_not_write_files(tmp_path, monkeypatch):
     """Generating a probe pack is pure-function; must not write any files."""
-    pre_files = set(tmp_path.iterdir())
+    monkeypatch.chdir(tmp_path)
+    pre = set(tmp_path.iterdir())
     generate_probe_pack()
-    post_files = set(tmp_path.iterdir())
-    assert pre_files == post_files, "generate_probe_pack() wrote files"
+    post = set(tmp_path.iterdir())
+    assert pre == post, "generate_probe_pack() wrote files to working directory"

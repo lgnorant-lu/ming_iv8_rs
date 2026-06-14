@@ -96,7 +96,7 @@ def test_feedback_state_composable():
 def test_plan_recommendations_target_fail_gaps():
     mon = monitor(_SAMPLE_PROBES)
     anl = analyze(mon)
-    pln = plan(anl, max_items=5)
+    pln = plan(anl, max_items_per_group=5)
     recs = pln["recommendations"]
     assert len(recs) > 0
     targets = {r["target"] for r in recs}
@@ -119,7 +119,7 @@ def test_monitor_with_empty_input():
 def test_plan_with_max_items_zero():
     mon = monitor(_SAMPLE_PROBES)
     anl = analyze(mon)
-    pln = plan(anl, max_items=0)
+    pln = plan(anl, max_items_per_group=0)
     assert pln["total_recommendations"] == 0
 
 

@@ -78,6 +78,11 @@ def generate_probe_pack(
                 "side_effects": [],
                 "cleanup": "none",
                 "evidence_ceiling": "diagnostic_only",
+                "source_ir": {
+                    "schema_version": ir_schema,
+                    "definition": iface_name,
+                    "not_found_in_ir": True,
+                },
             })
             continue
 
@@ -194,7 +199,6 @@ def _build_attribute_probe(
 
     idl_type = str(type_info.get("name", ""))
     nullable = bool(type_info.get("nullable", False))
-    readonly = bool(member.get("readonly", False))
 
     js_check = _IDL_TYPE_TO_JS_CHECK.get(idl_type)
     if js_check is None:

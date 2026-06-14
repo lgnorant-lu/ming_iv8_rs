@@ -80,11 +80,13 @@ def test_window_inheritance_probe_exists():
 
 def test_attribute_probes_exist_for_navigator():
     data = generate_probe_pack()
-    attr_probes = [
+    nav_attrs = [
         p for p in data["probes"]
-        if p["probe_id"].startswith("idl.attr.")
+        if p["probe_id"].startswith("idl.attr.Navigator.")
     ]
-    assert len(attr_probes) > 0
+    assert len(nav_attrs) > 0, (
+        f"expected Navigator attribute probes, got {len(nav_attrs)}"
+    )
 
 
 def test_ir_meta_probe_present():

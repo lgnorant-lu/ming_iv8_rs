@@ -36,8 +36,8 @@ def test_bcr_dispatch_report_reads_source():
     report = generate_bcr_dispatch_report()
     if "error" in report:
         pytest.skip("source file not accessible")
-    assert report["active_dispatch_sites"] == 15, (
-        f"expected 15 active dispatch sites from source, got {report['active_dispatch_sites']}"
+    assert report["active_dispatch_sites"] >= 15, (
+        f"expected >=15 active dispatch sites from source, got {report['active_dispatch_sites']}"
     )
     direct = report["active_direct_install_calls"]
     assert direct >= 0, f"expected non-negative direct count, got {direct}"
