@@ -7,8 +7,11 @@ Screen, and Location existence probes.
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Any
+
+_logger = logging.getLogger(__name__)
 
 _UNIFIED_IR_PATH = Path(__file__).parent.parent / "idl" / "output" / "unified_ir.json"
 
@@ -50,7 +53,7 @@ def generate_probe_pack(
         "category": "presence",
         "js": "return true;",
         "expected": True,
-        "gap_class": "missing_interface",
+        "gap_class": "missing_api",
         "side_effects": [],
         "cleanup": "none",
         "evidence_ceiling": "diagnostic_only",
@@ -65,7 +68,7 @@ def generate_probe_pack(
                 "category": "presence",
                 "js": f"return typeof {iface_name} !== 'undefined';",
                 "expected": False,
-                "gap_class": "missing_interface",
+                "gap_class": "missing_api",
                 "side_effects": [],
                 "cleanup": "none",
                 "evidence_ceiling": "diagnostic_only",
@@ -78,7 +81,7 @@ def generate_probe_pack(
             "category": "presence",
             "js": f"return typeof {iface_name} !== 'undefined';",
             "expected": True,
-            "gap_class": "missing_interface",
+            "gap_class": "missing_api",
             "side_effects": [],
             "cleanup": "none",
             "evidence_ceiling": "diagnostic_only",
@@ -95,7 +98,7 @@ def generate_probe_pack(
                     f"{iface['inheritance']});"
                 ),
                 "expected": True,
-                "gap_class": "prototype_chain_broken",
+                "gap_class": "prototype_chain_mismatch",
                 "side_effects": [],
                 "cleanup": "none",
                 "evidence_ceiling": "diagnostic_only",
@@ -126,8 +129,16 @@ def generate_probe_pack(
 
 
 def _load_ir(path: Path) -> dict[str, Any]:
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            f"unified_ir.json not found at {path}. "
+            "Run 'node tools/idl/generate-ir.js' to regenerate."
+        )
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"unified_ir.json at {path} is not valid JSON: {exc}")
 
 
 _IDL_TYPE_TO_JS_CHECK: dict[str, str] = {
@@ -154,7 +165,14 @@ def _build_attribute_probe(
     member: dict[str, Any],
 ) -> dict[str, Any] | None:
     type_info = member.get("type")
-    if not isinstance(type_info, dict) or type_info.get("kind") != "name":
+    if not isinstance(type_info, dict):
+        return None
+    type_kind = type_info.get("kind", "")
+    if type_kind not in ("name",):
+        _logger.debug(
+            "skipping %s.%s: type kind=%r not yet supported",
+            iface_name, attr_name, type_kind,
+        )
         return None
 
     idl_type = str(type_info.get("name", ""))
@@ -163,6 +181,10 @@ def _build_attribute_probe(
 
     js_check = _IDL_TYPE_TO_JS_CHECK.get(idl_type)
     if js_check is None:
+        _logger.debug(
+            "skipping %s.%s: IDL type %r not in js-check mapping",
+            iface_name, attr_name, idl_type,
+        )
         return None
 
     access_path = f"{iface_name.lower()}.{attr_name}"
@@ -178,7 +200,7 @@ def _build_attribute_probe(
         "category": "value",
         "js": js_code,
         "expected": True,
-        "gap_class": "wrong_type",
+        "gap_class": "value_mismatch",
         "side_effects": [],
         "cleanup": "none",
         "evidence_ceiling": "diagnostic_only",
