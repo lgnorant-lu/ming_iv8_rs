@@ -177,6 +177,27 @@ _IDL_TYPE_TO_JS_CHECK: dict[str, str] = {
     "unrestricted float": "typeof __v__ === 'number'",
     "byte": "typeof __v__ === 'number'",
     "octet": "typeof __v__ === 'number'",
+    # v0.8.35: numeric / string / any types
+    "unsigned long long": "typeof __v__ === 'number'",
+    "long long": "typeof __v__ === 'number'",
+    "DOMHighResTimeStamp": "typeof __v__ === 'number'",
+    "EpochTimeStamp": "typeof __v__ === 'number'",
+    "SVGAnimatedNumber": "typeof __v__ === 'number'",
+    "CSSOMString": "typeof __v__ === 'string'",
+    "any": "typeof __v__ !== 'undefined'",
+    # v0.8.35: callback / event handler types
+    "EventHandler": "typeof __v__ === 'function' || __v__ === null",
+    "OnErrorEventHandler": "typeof __v__ === 'function' || __v__ === null",
+    "OnBeforeUnloadEventHandler": "typeof __v__ === 'function' || __v__ === null",
+    "VoidFunction": "typeof __v__ === 'function'",
+    "FunctionStringCallback": "typeof __v__ === 'function'",
+    # v0.8.35: typed array constructors (V8 built-ins)
+    "Float32Array": "__v__ instanceof Float32Array",
+    "Float64Array": "__v__ instanceof Float64Array",
+    "Int32Array": "__v__ instanceof Int32Array",
+    "Uint8Array": "__v__ instanceof Uint8Array",
+    "ArrayBuffer": "__v__ instanceof ArrayBuffer",
+    "DataView": "__v__ instanceof DataView",
 }
 
 

@@ -140,3 +140,45 @@ def test_corrupted_ir_raises_value_error(tmp_path):
     bad.write_text("{invalid json")
     with pytest.raises(ValueError):
         generate_probe_pack(ir_path=str(bad))
+
+
+# -- v0.8.35 type dictionary expansion tests ---------------------------------
+
+_NEW_TYPE_ATTRS = (
+    "onorientationchange",    # EventHandler
+    "orientation",            # CSSOMString
+    "scrollX",                # unsigned long long
+    "credentialless",         # any
+)
+
+
+def test_type_dict_expansion_catches_new_navigator_types():
+    pack = generate_probe_pack(interfaces=["Screen"])
+    ids = {p["probe_id"] for p in pack["probes"]}
+    assert "idl.attr.Screen.onchange" in ids
+
+
+def test_type_dict_expansion_catches_event_handler():
+    pack = generate_probe_pack(interfaces=["Window"])
+    ids = {p["probe_id"] for p in pack["probes"]}
+    assert "idl.attr.Window.onorientationchange" in ids
+    assert "idl.attr.Window.ondevicemotion" in ids
+
+
+def test_type_dict_expansion_catches_cssom_string():
+    pack = generate_probe_pack(interfaces=["Window"])
+    ids = {p["probe_id"] for p in pack["probes"]}
+    assert "idl.attr.Window.orientation" in ids
+
+
+def test_type_dict_expansion_catches_unsigned_long_long():
+    pack = generate_probe_pack(interfaces=["Window"])
+    ids = {p["probe_id"] for p in pack["probes"]}
+    assert "idl.attr.Window.scrollX" in ids
+    assert "idl.attr.Window.scrollY" in ids
+
+
+def test_type_dict_expansion_catches_any_type():
+    pack = generate_probe_pack(interfaces=["Window"])
+    ids = {p["probe_id"] for p in pack["probes"]}
+    assert "idl.attr.Window.credentialless" in ids
