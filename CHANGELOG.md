@@ -6,6 +6,60 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.33] - 2026-06-14
+
+> Local milestone tag. v0.8.33 completes the L2 IDL Probe Automation and
+> report-only Python MAPE-K phases. Package metadata remains `0.8.11`.
+
+### Added
+
+- **IDL probe compiler** (`tools/idl_probe/`): generates ProbePack JSON from
+  `unified_ir.json` for Window, Navigator, Screen, and Location interfaces.
+  Produces 43 probe definitions with deterministic output and schema-validated
+  shape. All probes include `source_ir` provenance metadata.
+- **L3 runtime witness reports** (`tools/witness_reports/`):
+  - BCR dispatch structural report — source-code analysis of
+    `install_behavior_via_bcr` calls in active path (15 dispatch / 1 direct).
+  - BrowserSurface expression matrix report — 26 runtime probes over
+    typeof/instanceof/navigator/screen/crypto/WebGL surfaces.
+  - Native undetectable semantics report — 7 MarkAsUndetectable checks
+    (typeof, loose/strict equality, boolean, key enumeration).
+- **Python MAPE-K feedback loop** (`tools/feedback_loop/`):
+  Monitor→Analyze→Plan→Execute phases as report-only functions.
+  Execute runs in dry-run mode with no mutation.
+  Knowledge base provides read-only schema access.
+  All reports carry `writes=[]` and `evidence_ceiling=diagnostic_only`.
+- **L3 deep refinement backlog** (`l3-deep-refinement-backlog-from-iv8-0.1.3-comparison.md`):
+  three-tier gap classification from direct IV8 0.1.3 vs IV8 Rust comparison
+  (deferred, not a v0.8.33 gate).
+
+### Design Documents
+
+- `v0.8.33-scope.md`, `v0.8.33-foundation-audit.md`,
+  `v0.8.33-idl-probe-runtime-design.md`,
+  `v0.8.33-feedback-loop-boundary-matrix.md`,
+  `v0.8.33-negative-gate-plan.md`,
+  `v0.8.33-implementation-task-plan.md`,
+  `v0.8.33-acceptance.md`.
+
+### Quality Gates
+
+- Python: 1349/1349 PASS (1 skipped)
+- Focused IDL probe + reports + feedback: 44/44 PASS
+- L3 Phase C: 81/81 PASS
+- v0.8.30 BCR 15/15 dispatch hub: unchanged
+- v0.8.31 use_old_chain retirement: unchanged
+- v0.8.32 ProfileMatrix certified path: unchanged
+
+### Non-Goals Preserved
+
+- No Chromium zero-diff claim.
+- No L3 broad semantic rewrite.
+- No full 1284-interface probe generation (only 4-interface subset).
+- No mutation of existing hand-written probe packs, profiles, or baselines.
+- No Rust `iv8-feedback` crate created.
+- No BCR registry or dispatch architecture changes.
+
 ## [0.8.32] - 2026-06-14
 
 > Local milestone tag. v0.8.32 completes the L2 Profile Injection Verification
