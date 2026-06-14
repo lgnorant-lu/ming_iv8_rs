@@ -52,6 +52,30 @@ def test_event_filters_blocked_target_flow_keys():
     assert event["actual"] == {"safe": 2}
 
 
+def test_event_redacts_blocked_target_flow_string_values():
+    event = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "p"},
+        subject={"probe_id": "p", "target": "x", "category": "value"},
+        status="fail",
+        expected="token=secret",
+        actual="safe",
+    )
+    assert event["expected"] == "<redacted:target_flow>"
+    assert event["actual"] == "safe"
+
+
+def test_error_actual_overrides_conflicting_pass_result():
+    event = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "p"},
+        subject={"probe_id": "p", "target": "x", "category": "value"},
+        status="pass",
+        expected=True,
+        actual="ERR:JSError",
+    )
+    assert event["status"] == "errored"
+    assert event["gap_class"] == "runtime_error"
+
+
 def test_browser_surface_report_normalizes_to_events():
     report = {
         "schema_version": "iv8-browser-surface-report.v0.1",
@@ -151,6 +175,19 @@ def test_snapshot_is_deterministic_and_summarizes_statuses():
     assert snapshot_a["summary"]["matched"] == 1
     assert snapshot_a["summary"]["mismatched"] == 1
     assert snapshot_a["writes"] == []
+
+
+def test_snapshot_forces_embedded_events_to_no_write():
+    event = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "p"},
+        subject={"probe_id": "p", "target": "p", "category": "value"},
+        status="fail",
+    )
+    event["writes"] = ["bad"]
+    event["evidence_ceiling"] = "accepted_equivalence"
+    snapshot = build_convergence_snapshot([event])
+    assert snapshot["events"][0]["writes"] == []
+    assert snapshot["events"][0]["evidence_ceiling"] == "diagnostic_only"
 
 
 def test_snapshot_delta_classifies_lifecycle():
