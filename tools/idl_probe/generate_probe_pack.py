@@ -90,8 +90,9 @@ def generate_probe_pack(
                 "target": iface_name,
                 "category": "presence",
                 "js": (
-                    f"return {iface_name}.prototype instanceof "
-                    f"{iface['inheritance']};"
+                    f"return (typeof {iface_name} !== 'undefined') && "
+                    f"({iface_name}.prototype instanceof "
+                    f"{iface['inheritance']});"
                 ),
                 "expected": True,
                 "gap_class": "prototype_chain_broken",
