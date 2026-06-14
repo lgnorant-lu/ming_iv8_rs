@@ -6,6 +6,53 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.34] - 2026-06-14
+
+> Local milestone pending tag confirmation. v0.8.34 completes convergence event
+> normalization and reproducible feedback snapshots. Package metadata remains
+> `0.8.11`.
+
+### Added
+
+- **Convergence tooling** (`tools/convergence/`): pure-function helpers for
+  deterministic `iv8-convergence-event.v0.1`, reproducible
+  `iv8-convergence-snapshot.v0.1`, `iv8-convergence-delta.v0.1`, and derived
+  `iv8-feedback-knowledge-index.v0.1` artifacts.
+- **Source report adapters**: normalize BrowserSurface, undetectable, BCR,
+  feedback monitor/loop, profile report, and convergence checker reports into
+  diagnostic-only convergence events.
+- **Feedback integration**: additive
+  `tools.feedback_loop.run_mapek_cycle_with_snapshot()` attaches convergence
+  events, snapshot, and read-only knowledge index while preserving dry-run
+  Execute semantics.
+- **Focused tests** (`tests/test_convergence.py`): deterministic IDs, blocked
+  target-flow key filtering, source ceiling preservation, BCR error handling,
+  snapshot delta lifecycle, and expected-divergence knowledge filtering.
+
+### Changed
+
+- Stable subject key design excludes `gap_class` for snapshot deltas so
+  fail-to-pass transitions classify as lifecycle changes for the same subject.
+- v0.8.34 governance wording now explicitly says derived read-only knowledge
+  index, not mutable Knowledge DB.
+
+### Quality Gates
+
+- Python: 1362/1362 PASS (1 skipped)
+- Focused convergence + feedback: 26/26 PASS
+- v0.8.33/v0.8.34 focused gates: 57/57 PASS
+- L3 Phase C: 81/81 PASS
+
+### Non-Goals Preserved
+
+- No mutable Knowledge DB.
+- No profile, baseline, probe-pack, manifest, or corpus writes.
+- No auto apply.
+- No Rust `iv8-feedback` crate.
+- No full 1284-interface probe generation.
+- No L3 runtime behavior changes.
+- No Chromium zero-diff or live-network acceptance.
+
 ## [0.8.33] - 2026-06-14
 
 > Local milestone tag. v0.8.33 completes the L2 IDL Probe Automation and
