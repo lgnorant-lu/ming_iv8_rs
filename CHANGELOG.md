@@ -8,9 +8,9 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [0.8.34] - 2026-06-14
 
-> Local milestone pending tag confirmation. v0.8.34 completes convergence event
-> normalization and reproducible feedback snapshots. Package metadata remains
-> `0.8.11`.
+> Local milestone tag closeout ready after final strict review. v0.8.34 completes
+> convergence event normalization and reproducible feedback snapshots. Package
+> metadata remains `0.8.11`.
 
 ### Added
 
