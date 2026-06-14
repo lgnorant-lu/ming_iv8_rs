@@ -260,3 +260,29 @@ def test_inheritance_probes_for_interfaces_with_inheritance():
     }
     assert "idl.inherits.Window" in inherits
     assert "idl.inherits.Document" in inherits or "idl.inherits.Element" in inherits
+
+
+# -- v0.8.35 interface batch expansion ---------------------------------------
+
+def test_expanded_batch_generates_probes_for_tier1_interfaces():
+    pack = generate_probe_pack()
+    iface_names = pack["interfaces"]
+    tier1 = {"Document", "Element", "HTMLElement", "Performance", "Storage",
+             "History", "NavigatorUAData", "Crypto", "SubtleCrypto"}
+    missing = tier1 - set(iface_names)
+    assert not missing, f"missing tier1 interfaces: {missing}"
+
+
+def test_expanded_batch_has_meaningful_probe_count():
+    pack = generate_probe_pack()
+    assert len(pack["interfaces"]) >= 40
+    assert len(pack["probes"]) >= 500
+
+
+def test_expanded_batch_all_probes_have_required_fields():
+    pack = generate_probe_pack()
+    required = {"probe_id", "target", "category", "js", "expected",
+                "gap_class", "evidence_ceiling"}
+    for probe in pack["probes"]:
+        for field in required:
+            assert field in probe, f"missing {field} in {probe.get('probe_id', '?')}"

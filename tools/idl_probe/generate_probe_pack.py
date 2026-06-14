@@ -32,7 +32,30 @@ def generate_probe_pack(
         A dict matching the ProbePack schema recognized by ProbePack.from_dict.
     """
     if interfaces is None:
-        interfaces = ["Window", "Navigator", "Screen", "Location"]
+        interfaces = [
+            # Tier 0: baseline v0.8.33
+            "Window", "Navigator", "Screen", "Location",
+            # Tier 1: high detection value, 105-vector aligned
+            "Document", "Element", "HTMLElement", "HTMLDivElement",
+            "HTMLSpanElement", "Performance", "Storage",
+            "History", "NavigatorUAData", "PluginArray",
+            "MimeTypeArray", "Crypto", "SubtleCrypto",
+            # Tier 2: medium value, runtime visibility
+            "Node", "EventTarget", "Event", "CustomEvent",
+            "MouseEvent", "KeyboardEvent",
+            "URL", "Blob", "File", "FileList",
+            "Headers", "Request", "Response",
+            "XMLHttpRequest", "WebSocket",
+            "MessageChannel", "MessagePort",
+            "TextEncoder", "TextDecoder", "DOMParser",
+            # Tier 3: structural
+            "NodeList", "HTMLCollection", "DOMTokenList",
+            "CSSStyleDeclaration",
+            "HTMLFormElement", "HTMLInputElement",
+            "HTMLAnchorElement", "HTMLImageElement",
+            "HTMLCanvasElement", "ValidityState",
+            "DOMRect", "DOMRectReadOnly", "DOMPoint", "DOMMatrix",
+        ]
 
     source_path = Path(ir_path) if ir_path else _UNIFIED_IR_PATH
     ir_data = _load_ir(source_path)

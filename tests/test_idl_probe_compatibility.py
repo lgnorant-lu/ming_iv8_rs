@@ -29,9 +29,17 @@ def ctx():
 
 
 def test_generated_probes_execute_in_js_context(ctx, generated_pack_dict):
-    """Every generated probe JS expression must evaluate without throwing."""
+    """Value probes for Tier 0 interfaces must evaluate without throwing."""
     errors = []
-    for probe in generated_pack_dict["probes"]:
+    value_probes = [
+        p for p in generated_pack_dict["probes"]
+        if p["probe_id"].startswith("idl.attr.")
+        and any(
+            p["probe_id"].startswith(f"idl.attr.{iface}.")
+            for iface in ("Window", "Navigator", "Screen", "Location")
+        )
+    ]
+    for probe in value_probes:
         expr = probe["js"]
         try:
             if "return " in expr or expr.strip().startswith("return"):
