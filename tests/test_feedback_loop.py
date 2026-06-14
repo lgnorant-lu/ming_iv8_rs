@@ -16,6 +16,7 @@ from tools.feedback_loop import (
     monitor,
     plan,
     run_mapek_cycle,
+    run_mapek_cycle_with_snapshot,
 )
 
 
@@ -141,3 +142,16 @@ def test_gap_class_flows_through_pipeline():
     obs = mon["observations"][0]
     assert obs["gap_class"] == "missing_api"
     assert obs["status"] == "fail"
+
+
+def test_mapek_cycle_with_snapshot_is_report_only():
+    cycle = run_mapek_cycle_with_snapshot(_SAMPLE_PROBES)
+    assert cycle["writes"] == []
+    assert cycle["evidence_ceiling"] == "diagnostic_only"
+    assert cycle["phases"]["execute"]["execution_mode"] == "dry_run"
+    convergence = cycle["convergence"]
+    assert convergence["writes"] == []
+    assert convergence["evidence_ceiling"] == "diagnostic_only"
+    assert convergence["snapshot"]["writes"] == []
+    assert convergence["knowledge_index"]["writes"] == []
+    assert len(convergence["events"]) == len(_SAMPLE_PROBES)
