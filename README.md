@@ -34,7 +34,9 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **L2 Profile-To-Environment Verification Foundation (v0.8.32)**: `iv8-profile` crate, `KernelConfig::with_profile_matrix()` certified runtime path, strict Python convergence checker, manifest/report schemas; 289 Rust lib + 1305 Python PASS.
 - **L2 IDL Probe Automation + Report-Only MAPE-K (v0.8.33)**: IDL probe compiler (4 interfaces, 43 probes), L3 witness reports (BCR/BrowserSurface/undetectable), Python MAPE-K phases (Monitor/Analyze/Plan/Execute/Knowledge, report-only, dry-run); 1349 Python PASS.
 - **L2 Convergence Event + Reproducible Snapshot (v0.8.34)**: `tools/convergence/` event/snapshot/delta/knowledge-index helpers, source report adapters, additive MAPE-K snapshot/delta integration; final strict audit pass; 1367 Python PASS.
-Current `0.8.11` package release scope. v0.8.12-v0.8.34 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
+- **L2 Probe Coverage Expansion M1 (v0.8.35)**: IDL probe compiler expands to 51 curated interfaces and 1,125 diagnostic probes with descriptor/prototype layers and coverage gap reporting; 1400 Python PASS.
+- **L2 Data-Flow Connectivity M1 (v0.8.36)**: profile-aware probe expectations, audited constructor allowlist, witness-to-convergence routing, and expanded 105-vector coverage map; 1415 Python PASS.
+Current `0.8.11` package release scope. v0.8.12-v0.8.36 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
 
 ## Install
 

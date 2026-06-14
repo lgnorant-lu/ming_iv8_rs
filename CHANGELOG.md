@@ -6,6 +6,98 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.36] - 2026-06-15
+
+> Local milestone tag. v0.8.36 completes L2 Data-Flow Connectivity M1 by
+> connecting profile-derived expectations, IDL probes, witness reports, MAPE-K,
+> convergence snapshots, and 105-vector coverage mapping. Package metadata
+> remains `0.8.11`.
+
+### Added
+
+- **Profile-aware IDL probes** (`tools/idl_probe/`): optional keyword-only
+  `profile_values` overlay adds in-memory expected-value checks for generated
+  value probes while keeping type/shape guards first.
+- **Constructor allowlist checks**: conservative live-global `instanceof`
+  checks for audited constructors, with `source_ir.type_check_strength`
+  metadata for constructor, explicit-map, V8 built-in, and weak fallback cases.
+- **Witness report routing** (`tools/feedback_loop/`): optional keyword-only
+  `witness_reports` input routes source reports into convergence snapshots
+  without turning them into fake probe results or monitor observations.
+- **Coverage map data-fill** (`tools/convergence/`): expanded representative
+  105-vector cross-reference mapping across identity, rendering, locale,
+  behavioral, JSVM, and protocol surfaces.
+
+### Changed
+
+- Profile overlay is path-agnostic for generated probe targets and remains
+  sensitive-surface-aware; blocked IDL surfaces such as `Document.cookie` stay
+  type-only.
+- Coverage reporting observes more vector paths but does not promote any vector
+  to fixed, handled, or browser-equivalent status.
+- v0.8.36 acceptance and post-implementation review now record QoderWork
+  independent audit observations and tag readiness.
+
+### Quality Gates
+
+- Focused convergence + IDL + compat + feedback: 100/100 PASS
+- IDL focused: 44/44 PASS
+- Feedback focused: 19/19 PASS
+- Convergence focused: 31/31 PASS
+- Python: 1415/1415 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+
+### Non-Goals Preserved
+
+- No profile, baseline, probe-pack, manifest, corpus, sample, or source writes.
+- No auto apply; Execute remains dry-run/report-only.
+- No Rust `iv8-feedback` crate or mutable Knowledge DB.
+- No full 1284-interface probe generation.
+- No Rust runtime vector fixes, L3 behavior changes, or instance-aware descriptor
+  execution.
+- No Chromium zero-diff or live-network acceptance.
+
+## [0.8.35] - 2026-06-14
+
+> Local milestone tag. v0.8.35 completes L2 Probe Coverage Expansion M1 by
+> expanding the IDL probe compiler from a narrow MVP to a curated 51-interface,
+> 1,125-probe diagnostic surface. Package metadata remains `0.8.11`.
+
+### Added
+
+- **Probe type dictionary expansion** (`tools/idl_probe/`): type entries expanded
+  from 14 to 31 with additional primitive aliases, typed arrays, callbacks, and
+  nullable handling.
+- **IDL generic and union handlers**: generic sequences and selected unions now
+  produce diagnostic checks instead of being skipped.
+- **Descriptor and prototype-chain probes**: generated probes now include
+  existence, value, descriptor, and inheritance/prototype-chain layers.
+- **Curated interface batch**: default generation expanded from 4 to 51 verified
+  interfaces while preserving deterministic output and no-write behavior.
+- **Coverage gap report** (`tools/convergence/`): diagnostic-only report for
+  generated probe coverage versus the 105-vector audit.
+
+### Changed
+
+- WebIDL interface types use weak object fallback by default; v0.8.35 does not
+  add general `instanceof` checks.
+- Sensitive surfaces and runtime accessibility metadata were hardened in R2 for
+  `Document.cookie`, `Document.domain`, and generated JS access paths.
+
+### Quality Gates
+
+- Focused v0.8.35 gates: 85/85 PASS
+- Python: 1400/1400 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+
+### Non-Goals Preserved
+
+- No full 1284-interface generation.
+- No Profile-to-Probe data-flow connection.
+- No AFL/TDD automatic feedback loop.
+- No mutable Knowledge DB or Rust feedback crate.
+- No L3 runtime behavior changes or runtime vector fixes.
+
 ## [0.8.34] - 2026-06-14
 
 > Local milestone tag closeout ready after final strict review. v0.8.34 completes

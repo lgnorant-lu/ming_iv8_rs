@@ -210,6 +210,18 @@ Refs: REQ-CORE-013, REQ-ENG-004
 - **未推送**的本地 commit 可以用 `git commit --amend` / `git rebase -i` 修改
 - **已推送**的 commit 不要 force push（除非自用项目且明确知道后果）
 
+### 3.5 本地里程碑 tag 规则
+
+v0.8.12 之后的 `v0.8.x` tag 默认是 local milestone tag，而不是
+package release tag，除非发布文档明确说明 package metadata 已同步。
+
+- 里程碑 tag 必须使用 annotated tag。
+- tag message 必须写明 `not a package release` 或等价说明。
+- 不因里程碑 tag 修改 `Cargo.toml`、`pyproject.toml`、lock metadata。
+- 不 push tag、不创建 GitHub release、不发布构建产物，除非用户显式授权。
+- 更新 `docs/roadmap/post-v0.6/v0.8-release-and-tag-governance-closeout.md`
+  后再打里程碑 tag。
+
 ---
 
 ## 四、开发流程
