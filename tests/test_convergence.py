@@ -57,8 +57,20 @@ def test_browser_surface_report_normalizes_to_events():
         "schema_version": "iv8-browser-surface-report.v0.1",
         "evidence_ceiling": "diagnostic_only",
         "results": [
-            {"id": "typeof_window", "expr": "typeof window", "expected": "object", "actual": "object", "result": "pass"},
-            {"id": "typeof_fetch", "expr": "typeof fetch", "expected": "function", "actual": "undefined", "result": "fail"},
+            {
+                "id": "typeof_window",
+                "expr": "typeof window",
+                "expected": "object",
+                "actual": "object",
+                "result": "pass",
+            },
+            {
+                "id": "typeof_fetch",
+                "expr": "typeof fetch",
+                "expected": "function",
+                "actual": "undefined",
+                "result": "fail",
+            },
         ],
         "writes": [],
     }
@@ -210,6 +222,25 @@ def test_knowledge_index_skips_expected_divergence():
     index = build_knowledge_index(snapshot)
     assert index["summary"]["known_gaps"] == 0
     assert index["known_gaps"] == []
+
+
+def test_knowledge_index_counts_resolved_gap_from_changed_status():
+    failing = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "same"},
+        subject={"probe_id": "same", "target": "same", "category": "value"},
+        status="fail",
+    )
+    passing = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "same"},
+        subject={"probe_id": "same", "target": "same", "category": "value"},
+        status="pass",
+    )
+    base = build_convergence_snapshot([failing])
+    current = build_convergence_snapshot([passing])
+    delta = diff_convergence_snapshots(base, current)
+    index = build_knowledge_index(current, delta)
+    assert index["summary"]["known_gaps"] == 0
+    assert index["summary"]["changed"] == 1
 
 
 def test_reports_are_json_serializable():

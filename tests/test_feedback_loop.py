@@ -5,8 +5,6 @@ import json
 import sys
 from pathlib import Path
 
-import pytest
-
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.feedback_loop import (
     FeedbackState,
@@ -19,14 +17,23 @@ from tools.feedback_loop import (
     run_mapek_cycle_with_snapshot,
 )
 
-
 _SAMPLE_PROBES: list[dict] = [
     {"probe_id": "idl.exists.Window", "category": "presence", "expected": True, "actual": False},
     {"probe_id": "idl.exists.Navigator", "category": "presence", "expected": True, "actual": True},
     {"probe_id": "idl.exists.Screen", "category": "presence", "expected": True, "actual": True},
-    {"probe_id": "idl.attr.Navigator.userAgent", "category": "value", "expected": True, "actual": True},
+    {
+        "probe_id": "idl.attr.Navigator.userAgent",
+        "category": "value",
+        "expected": True,
+        "actual": True,
+    },
     {"probe_id": "idl.attr.Screen.width", "category": "value", "expected": True, "actual": True},
-    {"probe_id": "idl.exists.NotFound", "category": "presence", "expected": True, "actual": "ERR:JSError"},
+    {
+        "probe_id": "idl.exists.NotFound",
+        "category": "presence",
+        "expected": True,
+        "actual": "ERR:JSError",
+    },
 ]
 
 
@@ -89,7 +96,7 @@ def test_knowledge_base_read_only():
 def test_feedback_state_composable():
     state = FeedbackState()
     mon = monitor(_SAMPLE_PROBES, state)
-    anl = analyze(mon, state)
+    analyze(mon, state)
     assert len(state.observations) == len(_SAMPLE_PROBES)
     assert len(state.analysis_groups) > 0
 
@@ -155,3 +162,17 @@ def test_mapek_cycle_with_snapshot_is_report_only():
     assert convergence["snapshot"]["writes"] == []
     assert convergence["knowledge_index"]["writes"] == []
     assert len(convergence["events"]) == len(_SAMPLE_PROBES)
+
+
+def test_mapek_cycle_with_snapshot_delta():
+    base_cycle = run_mapek_cycle_with_snapshot(_SAMPLE_PROBES)
+    fixed_probes = [dict(item) for item in _SAMPLE_PROBES]
+    fixed_probes[0]["actual"] = True
+    current_cycle = run_mapek_cycle_with_snapshot(
+        fixed_probes,
+        base_snapshot=base_cycle["convergence"]["snapshot"],
+    )
+    convergence = current_cycle["convergence"]
+    assert convergence["delta"]["writes"] == []
+    assert convergence["delta"]["summary"]["changed_status"] == 1
+    assert convergence["knowledge_index"]["writes"] == []
