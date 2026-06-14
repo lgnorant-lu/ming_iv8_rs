@@ -144,15 +144,8 @@ def test_corrupted_ir_raises_value_error(tmp_path):
 
 # -- v0.8.35 type dictionary expansion tests ---------------------------------
 
-_NEW_TYPE_ATTRS = (
-    "onorientationchange",    # EventHandler
-    "orientation",            # CSSOMString
-    "scrollX",                # unsigned long long
-    "credentialless",         # any
-)
 
-
-def test_type_dict_expansion_catches_new_navigator_types():
+def test_type_dict_expansion_catches_new_screen_event_handler():
     pack = generate_probe_pack(interfaces=["Screen"])
     ids = {p["probe_id"] for p in pack["probes"]}
     assert "idl.attr.Screen.onchange" in ids
@@ -206,9 +199,11 @@ def test_interface_fallback_uses_weak_object_check():
 def test_generic_sequence_generates_array_check():
     pack = generate_probe_pack(interfaces=["Window"])
     ids = {p["probe_id"] for p in pack["probes"]}
-    if "idl.attr.Window.length" in ids:
-        probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Window.length"][0]
-        assert "typeof __v__" in probe["js"]
+    assert "idl.attr.Window.length" in ids, (
+        "Window.length probe missing — IR may have changed type_kind from generic"
+    )
+    probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Window.length"][0]
+    assert "Array.isArray" in probe["js"] or "typeof __v__" in probe["js"]
 
 
 def test_union_type_generates_combined_check():
@@ -259,7 +254,12 @@ def test_inheritance_probes_for_interfaces_with_inheritance():
         if p["probe_id"].startswith("idl.inherits.")
     }
     assert "idl.inherits.Window" in inherits
-    assert "idl.inherits.Document" in inherits or "idl.inherits.Element" in inherits
+    has_doc_or_elem = any(
+        x in inherits for x in ("idl.inherits.Document", "idl.inherits.Element")
+    )
+    assert has_doc_or_elem, (
+        f"expected at least one of Document/Element inherits probes, got: {inherits}"
+    )
 
 
 # -- v0.8.35 interface batch expansion ---------------------------------------
