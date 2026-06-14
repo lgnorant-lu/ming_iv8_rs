@@ -43,14 +43,14 @@ def test_generated_probes_execute_in_js_context(ctx, generated_pack_dict):
         expr = probe["js"]
         try:
             if "return " in expr or expr.strip().startswith("return"):
-                result = ctx.eval(f"(function() {{ {expr} }})()")
+                _ = ctx.eval(f"(function() {{ {expr} }})()")
             elif "(function()" in expr:
-                result = ctx.eval(expr)
+                _ = ctx.eval(expr)
             else:
-                result = ctx.eval(f"(function() {{ return {expr}; }})()")
+                _ = ctx.eval(f"(function() {{ return {expr}; }})()")
         except Exception as exc:
             errors.append(f"{probe['probe_id']}: {type(exc).__name__}: {exc}")
-    assert not errors, f"probes failed in JSContext:\n" + "\n".join(errors[:20])
+    assert not errors, "probes failed in JSContext:\n" + "\n".join(errors[:20])
 
 
 def test_window_existence_probe_evaluates(ctx, generated_pack_dict):
