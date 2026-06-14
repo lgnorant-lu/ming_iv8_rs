@@ -31,6 +31,25 @@ _SENSITIVE_IDL_SURFACES: set[tuple[str, str]] = {
     ("Document", "domain"),
 }
 
+_CONSTRUCTOR_AVAILABLE: set[str] = {
+    "Blob",
+    "DOMRect",
+    "DOMTokenList",
+    "Element",
+    "Event",
+    "Headers",
+    "HTMLElement",
+    "Navigator",
+    "Request",
+    "Response",
+    "Screen",
+    "TextDecoder",
+    "TextEncoder",
+    "URL",
+    "WebSocket",
+    "XMLHttpRequest",
+}
+
 def generate_probe_pack(
     ir_path: str | Path | None = None,
     interfaces: list[str] | None = None,
@@ -320,6 +339,7 @@ def _build_attribute_probe(
             "idl_type": type_info.get("name", ""),
             "runtime_accessibility": _runtime_accessibility_for(iface_name),
             "check_mode": "type_and_profile_value" if has_profile_expected else "type_only",
+            "type_check_strength": _type_check_strength(type_info),
         },
     }
     if has_profile_expected:
@@ -339,6 +359,8 @@ def _build_name_type_check(
     js_check = _IDL_TYPE_TO_JS_CHECK.get(idl_type)
     if js_check is not None:
         return js_check
+    if idl_type in _CONSTRUCTOR_AVAILABLE:
+        return f"__v__ instanceof {idl_type}"
     _logger.debug(
         "interface-type fallback %s.%s: IDL type %r -> object check",
         iface_name, attr_name, idl_type,
@@ -477,6 +499,19 @@ def _runtime_accessibility_for(iface_name: str) -> str:
     if iface_name in _GLOBAL_INSTANCE_NAMES:
         return "global"
     return "instance_unresolved"
+
+
+def _type_check_strength(type_info: dict[str, Any]) -> str:
+    if type_info.get("kind") != "name":
+        return str(type_info.get("kind", "unknown"))
+    idl_type = str(type_info.get("name", ""))
+    if idl_type in _IDL_TYPE_TO_JS_CHECK:
+        if "instanceof" in _IDL_TYPE_TO_JS_CHECK[idl_type]:
+            return "v8_builtin_constructor"
+        return "explicit_type_map"
+    if idl_type in _CONSTRUCTOR_AVAILABLE:
+        return "constructor_allowlist"
+    return "weak_object_fallback"
 
 
 def _js_literal(value: Any) -> str:

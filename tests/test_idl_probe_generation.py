@@ -16,7 +16,10 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from tools.idl_probe.generate_probe_pack import generate_probe_pack  # noqa: E402
+from tools.idl_probe.generate_probe_pack import (  # noqa: E402
+    _CONSTRUCTOR_AVAILABLE,
+    generate_probe_pack,
+)
 
 from iv8_rs.environment_toolchain_asset_models import ProbePack  # noqa: E402
 
@@ -417,3 +420,41 @@ def test_profile_overlay_does_not_write_files(tmp_path, monkeypatch):
     )
     post = set(tmp_path.iterdir())
     assert pre == post
+
+
+# -- v0.8.36 constructor allowlist -------------------------------------------
+
+
+def test_constructor_allowlist_generates_strong_interface_check():
+    pack = generate_probe_pack(interfaces=["Window"])
+    probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Window.navigator"]
+    assert len(probe) == 1
+    assert "__v__ instanceof Navigator" in probe[0]["js"]
+    assert probe[0]["source_ir"]["type_check_strength"] == "constructor_allowlist"
+
+
+def test_constructor_allowlist_keeps_unavailable_constructor_weak():
+    pack = generate_probe_pack(interfaces=["Window"])
+    probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Window.document"]
+    assert len(probe) == 1
+    assert "typeof __v__ === 'object'" in probe[0]["js"]
+    assert "instanceof Document" not in probe[0]["js"]
+    assert probe[0]["source_ir"]["type_check_strength"] == "weak_object_fallback"
+
+
+def test_attribute_instanceof_checks_are_allowlisted():
+    builtins = {
+        "Float32Array", "Float64Array", "Int32Array",
+        "Uint8Array", "ArrayBuffer", "DataView",
+    }
+    allowed = _CONSTRUCTOR_AVAILABLE | builtins
+    pack = generate_probe_pack()
+    offenders = []
+    for probe in pack["probes"]:
+        if not probe["probe_id"].startswith("idl.attr."):
+            continue
+        for match in re.finditer(r"__v__ instanceof ([A-Za-z0-9_]+)", probe["js"]):
+            ctor = match.group(1)
+            if ctor not in allowed:
+                offenders.append((probe["probe_id"], ctor))
+    assert not offenders, f"non-allowlisted instanceof checks: {offenders}"
