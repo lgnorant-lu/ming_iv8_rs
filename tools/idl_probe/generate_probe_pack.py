@@ -211,29 +211,28 @@ def _build_attribute_probe(
     if not isinstance(type_info, dict):
         return None
     type_kind = type_info.get("kind", "")
-    if type_kind not in ("name",):
+    nullable = bool(type_info.get("nullable", False))
+
+    if type_kind == "name":
+        js_check = _build_name_type_check(type_info, iface_name, attr_name)
+    elif type_kind == "generic":
+        js_check = _build_generic_type_check(type_info)
+    elif type_kind == "union":
+        js_check = _build_union_check(type_info)
+    else:
         _logger.debug(
             "skipping %s.%s: type kind=%r not yet supported",
             iface_name, attr_name, type_kind,
         )
         return None
 
-    idl_type = str(type_info.get("name", ""))
-    nullable = bool(type_info.get("nullable", False))
-
-    js_check = _IDL_TYPE_TO_JS_CHECK.get(idl_type)
     if js_check is None:
-        _logger.debug(
-            "skipping %s.%s: IDL type %r not in js-check mapping",
-            iface_name, attr_name, idl_type,
-        )
         return None
-
-    access_path = f"{iface_name.lower()}.{attr_name}"
 
     if nullable:
         js_check = f"({js_check} || __v__ === null)"
 
+    access_path = f"{iface_name.lower()}.{attr_name}"
     js_code = f"(function() {{ var __v__ = {access_path}; return {js_check}; }})()"
 
     return {
@@ -250,6 +249,70 @@ def _build_attribute_probe(
             "schema_version": ir_schema,
             "definition": iface_name,
             "member": attr_name,
-            "idl_type": idl_type,
+            "idl_type": type_info.get("name", ""),
         },
     }
+
+
+def _build_name_type_check(
+    type_info: dict[str, Any],
+    iface_name: str,
+    attr_name: str,
+) -> str | None:
+    idl_type = str(type_info.get("name", ""))
+    js_check = _IDL_TYPE_TO_JS_CHECK.get(idl_type)
+    if js_check is not None:
+        return js_check
+    _logger.debug(
+        "interface-type fallback %s.%s: IDL type %r -> object check",
+        iface_name, attr_name, idl_type,
+    )
+    return "typeof __v__ === 'object' && __v__ !== null"
+
+
+def _build_generic_type_check(type_info: dict[str, Any]) -> str | None:
+    generic_name = str(type_info.get("name", ""))
+    if generic_name in ("sequence", "FrozenArray"):
+        return "Array.isArray(__v__)"
+    if generic_name == "Promise":
+        return (
+            "typeof __v__ === 'object' && __v__ !== null "
+            "&& typeof __v__.then === 'function'"
+        )
+    if generic_name in ("record", "maplike", "setlike", "iterable"):
+        return "typeof __v__ === 'object' && __v__ !== null"
+    _logger.debug("generic type %r -> object fallback", generic_name)
+    return "typeof __v__ === 'object' && __v__ !== null"
+
+
+def _build_union_check(type_info: dict[str, Any]) -> str | None:
+    members = type_info.get("member_types", [])
+    if not members:
+        return "typeof __v__ !== 'undefined'"
+    checks: list[str] = []
+    for member in members:
+        if not isinstance(member, dict):
+            continue
+        member_kind = member.get("kind", "")
+        member_name = str(member.get("name", ""))
+        member_nullable = bool(member.get("nullable", False))
+        if member_kind == "name":
+            check = _IDL_TYPE_TO_JS_CHECK.get(member_name)
+            if check is None:
+                check = "typeof __v__ === 'object' && __v__ !== null"
+            if member_nullable:
+                check = f"({check} || __v__ === null)"
+            checks.append(f"({check})")
+        elif member_kind == "generic":
+            if member_name in ("sequence", "FrozenArray"):
+                checks.append("(Array.isArray(__v__))")
+            elif member_name == "Promise":
+                checks.append(
+                    "(typeof __v__ === 'object' && __v__ !== null "
+                    "&& typeof __v__.then === 'function')"
+                )
+            else:
+                checks.append("(typeof __v__ === 'object' && __v__ !== null)")
+        else:
+            checks.append("(typeof __v__ !== 'undefined')")
+    return " || ".join(checks)

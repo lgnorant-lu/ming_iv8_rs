@@ -182,3 +182,39 @@ def test_type_dict_expansion_catches_any_type():
     pack = generate_probe_pack(interfaces=["Window"])
     ids = {p["probe_id"] for p in pack["probes"]}
     assert "idl.attr.Window.credentialless" in ids
+
+
+# -- v0.8.35 interface fallback + generic + union tests ----------------------
+
+def test_interface_fallback_catches_navigator_attrs():
+    pack = generate_probe_pack(interfaces=["Navigator"])
+    ids = {p["probe_id"] for p in pack["probes"]}
+    assert "idl.attr.Navigator.clipboard" in ids
+    assert "idl.attr.Navigator.geolocation" in ids
+    assert "idl.attr.Navigator.mediaDevices" in ids
+    assert len([x for x in pack["probes"] if x["probe_id"].startswith("idl.attr.Navigator")]) >= 20
+
+
+def test_interface_fallback_uses_weak_object_check():
+    pack = generate_probe_pack(interfaces=["Navigator"])
+    clipboard = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Navigator.clipboard"]
+    assert len(clipboard) == 1
+    assert "typeof __v__ === 'object'" in clipboard[0]["js"]
+    assert "instanceof" not in clipboard[0]["js"]
+
+
+def test_generic_sequence_generates_array_check():
+    pack = generate_probe_pack(interfaces=["Window"])
+    ids = {p["probe_id"] for p in pack["probes"]}
+    if "idl.attr.Window.length" in ids:
+        probe = [p for p in pack["probes"] if p["probe_id"] == "idl.attr.Window.length"][0]
+        assert "typeof __v__" in probe["js"]
+
+
+def test_union_type_generates_combined_check():
+    pack = generate_probe_pack(interfaces=["Location"])
+    url_attrs = [p for p in pack["probes"] if p["probe_id"].startswith("idl.attr.Location")]
+    assert len(url_attrs) >= 8
+    for probe in url_attrs:
+        assert "typeof __v__" in probe["js"]
+        assert probe["gap_class"] == "value_mismatch"
