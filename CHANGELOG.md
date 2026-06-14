@@ -26,7 +26,8 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   events, snapshot, and read-only knowledge index while preserving dry-run
   Execute semantics.
 - **Focused tests** (`tests/test_convergence.py`): deterministic IDs, blocked
-  target-flow key filtering, source ceiling preservation, BCR error handling,
+  target-flow key filtering and string redaction, source ceiling preservation,
+  BCR error handling, error-result precedence, snapshot no-write enforcement,
   snapshot delta lifecycle, expected-divergence knowledge filtering, and feedback
   delta integration.
 
@@ -39,9 +40,9 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ### Quality Gates
 
-- Python: 1364/1364 PASS (1 skipped)
-- Focused convergence + feedback: 28/28 PASS
-- v0.8.33/v0.8.34 focused gates: 59/59 PASS
+- Python: 1367/1367 PASS (1 skipped)
+- Focused convergence + feedback: 31/31 PASS
+- v0.8.33/v0.8.34 focused gates: 62/62 PASS
 - L3 Phase C: 81/81 PASS
 
 ### Non-Goals Preserved
