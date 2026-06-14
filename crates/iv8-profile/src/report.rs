@@ -188,7 +188,9 @@ impl ProfileReport {
 
     /// Compute final verdict from summary using default acceptance criteria.
     pub fn finalize(&mut self) {
-        if self.summary.material_failures > 0
+        if self.summary.total == 0 {
+            self.verdict = "no_data".into();
+        } else if self.summary.material_failures > 0
             || self.summary.unexpected_divergences > 0
         {
             self.verdict = "failed".into();
@@ -260,6 +262,13 @@ mod tests {
         r.finalize();
         assert_eq!(r.verdict, "failed");
         assert!(r.summary.material_failures > 0);
+    }
+
+    #[test]
+    fn report_finalize_no_data_on_empty_report() {
+        let mut r = ProfileReport::new("test", "test.profile.json");
+        r.finalize();
+        assert_eq!(r.verdict, "no_data");
     }
 
     #[test]

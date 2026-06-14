@@ -44,3 +44,16 @@ impl Default for KernelConfig {
         }
     }
 }
+
+impl KernelConfig {
+    /// Use a materialized profile as the certified v0.8.32 environment source.
+    ///
+    /// This intentionally projects through `environment_overrides`, because the
+    /// active native getters read `RuntimeState.environment` as their single
+    /// source of truth. BehaviorConfig/BCR parameterization remains a scaffold
+    /// for later native installer specialization.
+    pub fn with_profile_matrix(mut self, matrix: &iv8_profile::ProfileMatrix) -> Self {
+        self.environment_overrides = Some(matrix.to_environment_overrides());
+        self
+    }
+}

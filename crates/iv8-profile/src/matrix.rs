@@ -45,11 +45,26 @@ impl ProfileMatrix {
         let seed = u64::from(source.identity.noise_seed);
 
         let mut seeds = HashMap::new();
-        seeds.insert("canvas".into(), seed ^ DOMAIN_CANVAS);
-        seeds.insert("webgl1".into(), seed ^ DOMAIN_WEBGL1);
-        seeds.insert("webgl2".into(), seed ^ DOMAIN_WEBGL2);
-        seeds.insert("audio".into(), seed ^ DOMAIN_AUDIO);
-        seeds.insert("client_rects".into(), seed ^ DOMAIN_CLIENT_RECTS);
+        seeds.insert(
+            "canvas".into(),
+            source.rendering.canvas_2d.sub_seed.unwrap_or(seed ^ DOMAIN_CANVAS),
+        );
+        seeds.insert(
+            "webgl1".into(),
+            source.rendering.webgl_1.sub_seed.unwrap_or(seed ^ DOMAIN_WEBGL1),
+        );
+        seeds.insert(
+            "webgl2".into(),
+            source.rendering.webgl_2.sub_seed.unwrap_or(seed ^ DOMAIN_WEBGL2),
+        );
+        seeds.insert(
+            "audio".into(),
+            source.rendering.audio_context.sub_seed.unwrap_or(seed ^ DOMAIN_AUDIO),
+        );
+        seeds.insert(
+            "client_rects".into(),
+            source.rendering.client_rects.sub_seed.unwrap_or(seed ^ DOMAIN_CLIENT_RECTS),
+        );
 
         let flat_env = build_flat_env(source);
 
@@ -349,9 +364,14 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
     );
 
     // === timers ===
+    let raf_interval_ms = if source.timing.fps > 0 {
+        1000.0 / source.timing.fps as f64
+    } else {
+        16.67
+    };
     env.insert(
         "timers.raf_interval_ms".into(),
-        serde_json::json!(16.67),
+        serde_json::json!(raf_interval_ms),
     );
     env.insert(
         "timers.min_interval_ms".into(),
@@ -420,6 +440,28 @@ mod tests {
         source.identity.noise_seed = 888_888;
         let (m2, _) = ProfileMatrix::from_source(&source);
         assert_ne!(m1.seeds["canvas"], m2.seeds["canvas"]);
+    }
+
+    #[test]
+    fn materialization_honors_surface_sub_seed() {
+        let mut source = default_profile_source();
+        source.rendering.canvas_2d.sub_seed = Some(42);
+        let (matrix, _) = ProfileMatrix::from_source(&source);
+        assert_eq!(matrix.seeds["canvas"], 42);
+        assert_eq!(matrix.rendering.canvas_seed, 42);
+    }
+
+    #[test]
+    fn materialization_derives_raf_interval_from_fps() {
+        let mut source = default_profile_source();
+        source.timing.fps = 120;
+        let (matrix, _) = ProfileMatrix::from_source(&source);
+        let raf = matrix
+            .flat_env
+            .get("timers.raf_interval_ms")
+            .and_then(|v| v.as_f64())
+            .expect("raf interval should be present");
+        assert!((raf - 8.333333333333334).abs() < f64::EPSILON);
     }
 }
 

@@ -31,14 +31,20 @@ class TestProfileVerification:
         assert len(report.writes) == 0, f"expected zero writes, got {report.writes}"
 
     def test_checker_detects_material_failure(self):
-        bad_overrides = chrome147_win10_overrides()
-        bad_overrides["navigator.userAgent"] = "evilbot/1.0"
-        checker = ConvergenceChecker(bad_overrides)
+        expected_overrides = chrome147_win10_overrides()
+        runtime_overrides = chrome147_win10_overrides()
+        runtime_overrides["navigator.userAgent"] = "evilbot/1.0"
+        checker = ConvergenceChecker(
+            expected_overrides,
+            runtime_environment=runtime_overrides,
+        )
         report = checker.check_static_core()
-        # The checker doesn't do UA string validation — it only checks presence.
-        # But the verdict should still be equivalent since presence is confirmed.
-        # This test only verifies the checker runs without error on bad data.
-        assert report.verdict in ("equivalent", "partial", "failed")
+        assert report.verdict == "failed"
+        assert report.material_failures > 0
+        assert any(
+            r.probe_id == "navigator.userAgent" and r.status == "material"
+            for r in report.probe_results
+        )
 
     def test_checker_deterministic_rerun(self):
         checker_a = ConvergenceChecker(chrome147_win10_overrides())

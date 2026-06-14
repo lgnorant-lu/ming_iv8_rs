@@ -1944,4 +1944,94 @@ mod tests {
             "TestAgent/1.0"
         );
     }
+
+    #[test]
+    fn profile_matrix_environment_overrides_are_observable_in_js() {
+        use crate::RustValue;
+
+        fn assert_number_eq(actual: RustValue, expected: f64) {
+            match actual {
+                RustValue::Int(v) => assert_eq!(v as f64, expected),
+                RustValue::Float(v) => assert!((v - expected).abs() < f64::EPSILON),
+                other => panic!("expected numeric RustValue, got {:?}", other),
+            }
+        }
+
+        let source = iv8_profile::defaults::default_profile_source();
+        let (matrix, validation) = iv8_profile::ProfileMatrix::from_source(&source);
+        assert!(validation.is_valid(), "default profile should validate: {}", validation);
+
+        let config = KernelConfig::default().with_profile_matrix(&matrix);
+        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.userAgent"),
+            RustValue::String(source.navigator.user_agent)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.platform"),
+            RustValue::String(source.navigator.platform)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.vendor"),
+            RustValue::String(source.navigator.vendor)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.language"),
+            RustValue::String(source.navigator.language)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.languages[0]"),
+            RustValue::String(source.navigator.languages[0].clone())
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.width"),
+            RustValue::Int(source.display.screen.width as i64)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.availWidth"),
+            RustValue::Int(source.display.screen.avail_width as i64)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.colorDepth"),
+            RustValue::Int(source.display.screen.color_depth as i64)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.webdriver"),
+            RustValue::Bool(source.navigator.webdriver)
+        );
+        assert_number_eq(
+            kernel.eval_to_rust_value("window.devicePixelRatio"),
+            source.display.window.device_pixel_ratio,
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("location.href"),
+            RustValue::String("about:blank".into())
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.userAgentData.platform"),
+            RustValue::String(source.navigator.user_agent_data.platform)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.userAgentData.mobile"),
+            RustValue::Bool(source.navigator.user_agent_data.mobile)
+        );
+        assert!((
+            kernel
+                .environment()
+                .get_f64("timers.raf_interval_ms")
+                .expect("timer projection should be present")
+                - (1000.0 / source.timing.fps as f64)
+        )
+            .abs()
+            < f64::EPSILON);
+        assert_eq!(
+            kernel.eval_to_rust_value("document.createElement('canvas').getContext('webgl').getParameter(0x1F00)"),
+            RustValue::String(source.identity.gpu.vendor)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("document.createElement('canvas').getContext('webgl').getParameter(0x9246)"),
+            RustValue::String(source.identity.gpu.webgl_unmasked_renderer)
+        );
+    }
 }

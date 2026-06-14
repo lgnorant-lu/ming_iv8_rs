@@ -288,6 +288,66 @@ pub fn validate(source: &ProfileSource) -> ValidationResult {
         ));
     }
 
+    if source.timing.fps == 0 {
+        r = r.error(ValidationIssue::new("timing.fps", "must be > 0"));
+    }
+
+    // 9. Mode enum validation.
+    for (field, val, allowed) in [
+        (
+            "rendering.canvas_2d.mode",
+            source.rendering.canvas_2d.mode.as_str(),
+            &["none", "stable", "noise"] as &[&str],
+        ),
+        (
+            "rendering.webgl_1.mode",
+            source.rendering.webgl_1.mode.as_str(),
+            &["none", "stable", "noise"],
+        ),
+        (
+            "rendering.webgl_2.mode",
+            source.rendering.webgl_2.mode.as_str(),
+            &["none", "stable", "noise"],
+        ),
+        (
+            "rendering.audio_context.mode",
+            source.rendering.audio_context.mode.as_str(),
+            &["none", "stable", "noise"],
+        ),
+        (
+            "rendering.client_rects.mode",
+            source.rendering.client_rects.mode.as_str(),
+            &["none", "stable", "noise"],
+        ),
+        (
+            "rendering.webgpu.mode",
+            source.rendering.webgpu.mode.as_str(),
+            &["unsupported", "supported"],
+        ),
+        (
+            "rendering.fonts.mode",
+            source.rendering.fonts.mode.as_str(),
+            &["none", "common", "custom"],
+        ),
+        (
+            "timing.mode",
+            source.timing.mode.as_str(),
+            &["logical", "frozen", "real"],
+        ),
+        (
+            "network.webrtc.mode",
+            source.network.webrtc.mode.as_str(),
+            &["disabled", "proxy", "real"],
+        ),
+    ] {
+        if !allowed.contains(&val) {
+            r = r.error(ValidationIssue::new(
+                field,
+                format!("unexpected mode '{}'; allowed: {}", val, allowed.join(", ")),
+            ));
+        }
+    }
+
     // 13. WebRTC vs proxy coherence
     if source.network.webrtc.mode == "real" && source.network.proxy.is_none() {
         r = r.warn(ValidationIssue::new(
@@ -303,9 +363,12 @@ pub fn validate(source: &ProfileSource) -> ValidationResult {
         ("permissions.notifications", &source.permissions.notifications),
         ("permissions.camera", &source.permissions.camera),
         ("permissions.microphone", &source.permissions.microphone),
+        ("permissions.clipboard-read", &source.permissions.clipboard_read),
+        ("permissions.clipboard-write", &source.permissions.clipboard_write),
+        ("permissions.local-fonts", &source.permissions.local_fonts),
     ] {
         if !valid_states.contains(&val.as_str()) {
-            r = r.warn(ValidationIssue::new(
+            r = r.error(ValidationIssue::new(
                 field,
                 format!("unexpected permission state '{}'", val),
             ));
@@ -378,6 +441,30 @@ mod tests {
     fn rejects_zero_cpu_cores() {
         let mut p = default_profile_source();
         p.identity.cpu_cores = 0;
+        let r = validate(&p);
+        assert!(r.error_count() > 0);
+    }
+
+    #[test]
+    fn rejects_zero_timing_fps() {
+        let mut p = default_profile_source();
+        p.timing.fps = 0;
+        let r = validate(&p);
+        assert!(r.error_count() > 0);
+    }
+
+    #[test]
+    fn rejects_unknown_modes() {
+        let mut p = default_profile_source();
+        p.rendering.canvas_2d.mode = "magic".into();
+        let r = validate(&p);
+        assert!(r.error_count() > 0);
+    }
+
+    #[test]
+    fn rejects_invalid_extended_permission_state() {
+        let mut p = default_profile_source();
+        p.permissions.local_fonts = "sometimes".into();
         let r = validate(&p);
         assert!(r.error_count() > 0);
     }

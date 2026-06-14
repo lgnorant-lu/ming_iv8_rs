@@ -390,15 +390,61 @@ impl BehaviorConfig {
                 deterministic_random_uuid: false,
                 max_random_values_bytes: 65536,
             },
-            time: ConfigTime::default(),
-            timers: ConfigTimers::default(),
+            time: ConfigTime {
+                mode: matrix.timing.mode.clone(),
+                ..ConfigTime::default()
+            },
+            timers: ConfigTimers {
+                raf_interval_ms: if matrix.timing.fps > 0 {
+                    1000.0 / matrix.timing.fps as f64
+                } else {
+                    ConfigTimers::default().raf_interval_ms
+                },
+                min_interval_ms: ConfigTimers::default().min_interval_ms,
+            },
             permissions: ConfigPermissions {
                 geolocation: matrix.permissions.geolocation.clone(),
                 notifications: matrix.permissions.notifications.clone(),
                 camera: "prompt".into(),
                 microphone: "prompt".into(),
             },
-            user_agent_data: ConfigUserAgentData::default(),
+            user_agent_data: ConfigUserAgentData {
+                platform: matrix
+                    .flat_env
+                    .get("navigator.userAgentData.platform")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("Windows")
+                    .into(),
+                platform_version: matrix
+                    .flat_env
+                    .get("navigator.userAgentData.platformVersion")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("10.0.0")
+                    .into(),
+                architecture: matrix
+                    .flat_env
+                    .get("navigator.userAgentData.architecture")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("x86")
+                    .into(),
+                bitness: matrix
+                    .flat_env
+                    .get("navigator.userAgentData.bitness")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("64")
+                    .into(),
+                mobile: matrix
+                    .flat_env
+                    .get("navigator.userAgentData.mobile")
+                    .and_then(|v| v.as_bool())
+                    .unwrap_or(false),
+                model: matrix
+                    .flat_env
+                    .get("navigator.userAgentData.model")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .into(),
+            },
         }
     }
 }
@@ -433,5 +479,19 @@ mod tests {
         let (matrix, _) = crate::ProfileMatrix::from_source(&source);
         let config = BehaviorConfig::from_matrix(&matrix);
         assert_eq!(config.canvas.noise_seed, matrix.rendering.canvas_seed);
+    }
+
+    #[test]
+    fn behavior_config_maps_timing_and_user_agent_data() {
+        let mut source = default_profile_source();
+        source.timing.fps = 120;
+        source.navigator.user_agent_data.platform = "Android".into();
+        source.navigator.user_agent_data.mobile = true;
+        let (matrix, _) = crate::ProfileMatrix::from_source(&source);
+        let config = BehaviorConfig::from_matrix(&matrix);
+        assert_eq!(config.time.mode, matrix.timing.mode);
+        assert!((config.timers.raf_interval_ms - 8.333333333333334).abs() < f64::EPSILON);
+        assert_eq!(config.user_agent_data.platform, "Android");
+        assert!(config.user_agent_data.mobile);
     }
 }
