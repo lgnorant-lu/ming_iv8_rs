@@ -176,3 +176,39 @@ def test_mapek_cycle_with_snapshot_delta():
     assert convergence["delta"]["writes"] == []
     assert convergence["delta"]["summary"]["changed_status"] == 1
     assert convergence["knowledge_index"]["writes"] == []
+
+
+# -- v0.8.35 expanded probe pipeline test ------------------------------------
+
+def test_expanded_probes_mapek_convergence_pipeline():
+    expanded_results = _SAMPLE_PROBES + [
+        {"probe_id": "idl.attr.Navigator.clipboard", "category": "value",
+         "expected": True, "actual": True},
+        {"probe_id": "idl.attr.Navigator.geolocation", "category": "value",
+         "expected": True, "actual": False,
+         "gap_class": "value_mismatch"},
+        {"probe_id": "idl.attr.Document.title", "category": "value",
+         "expected": True, "actual": True},
+        {"probe_id": "idl.descr.Navigator.maxTouchPoints", "category": "descriptor",
+         "expected": True, "actual": False,
+         "gap_class": "descriptor_mismatch"},
+        {"probe_id": "idl.inherits.Window", "category": "presence",
+         "expected": True, "actual": True},
+    ]
+    base = run_mapek_cycle_with_snapshot(_SAMPLE_PROBES)
+    current = run_mapek_cycle_with_snapshot(
+        expanded_results,
+        base_snapshot=base["convergence"]["snapshot"],
+    )
+    assert current["writes"] == []
+    assert current["evidence_ceiling"] == "diagnostic_only"
+    conv = current["convergence"]
+    assert conv["snapshot"]["writes"] == []
+    delta = conv.get("delta")
+    assert delta is not None
+    assert delta["summary"]["new"] >= 2
+    assert delta["writes"] == []
+    index = conv["knowledge_index"]
+    assert index["writes"] == []
+    assert index["evidence_ceiling"] == "diagnostic_only"
+    assert index["summary"]["known_gaps"] >= 1
