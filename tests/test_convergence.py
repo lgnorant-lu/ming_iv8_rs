@@ -83,6 +83,20 @@ def test_bcr_report_normalizes_structural_events():
     assert all(event["writes"] == [] for event in events)
 
 
+def test_bcr_error_report_normalizes_to_errored_events():
+    report = {
+        "schema_version": "iv8-bcr-dispatch-report.v0.1",
+        "result": "error",
+        "error": "missing source",
+        "evidence_ceiling": "diagnostic_only",
+        "writes": [],
+    }
+    events = normalize_events_from_report(report)
+    assert len(events) == 2
+    assert all(event["status"] == "errored" for event in events)
+    assert all(event["gap_class"] == "runtime_error" for event in events)
+
+
 def test_feedback_monitor_preserves_source_evidence_ceiling():
     report = {
         "schema_version": "iv8-feedback-monitor.v0.1",
@@ -182,6 +196,20 @@ def test_knowledge_index_is_derived_and_read_only():
     assert index["evidence_ceiling"] == "diagnostic_only"
     assert index["summary"]["known_gaps"] == 1
     assert index["known_gaps"][0]["lifecycle"] == "new"
+
+
+def test_knowledge_index_skips_expected_divergence():
+    event = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "expected"},
+        subject={"probe_id": "expected", "target": "expected", "category": "value"},
+        status="expected_divergence",
+        expected="browser_only",
+        actual="v8_only",
+    )
+    snapshot = build_convergence_snapshot([event])
+    index = build_knowledge_index(snapshot)
+    assert index["summary"]["known_gaps"] == 0
+    assert index["known_gaps"] == []
 
 
 def test_reports_are_json_serializable():
