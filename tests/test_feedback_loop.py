@@ -212,3 +212,80 @@ def test_expanded_probes_mapek_convergence_pipeline():
     assert index["writes"] == []
     assert index["evidence_ceiling"] == "diagnostic_only"
     assert index["summary"]["known_gaps"] >= 1
+
+
+# -- v0.8.36 witness report routing ------------------------------------------
+
+
+_SAMPLE_BROWSER_SURFACE_REPORT = {
+    "schema_version": "iv8-browser-surface-report.v0.1",
+    "surface": "BrowserSurface (synthetic)",
+    "total": 2,
+    "passed": 1,
+    "failed": 1,
+    "writes": [],
+    "evidence_ceiling": "diagnostic_only",
+    "results": [
+        {
+            "id": "typeof_window",
+            "expr": "typeof window",
+            "expected": "object",
+            "actual": "object",
+            "result": "pass",
+        },
+        {
+            "id": "typeof_fetch",
+            "expr": "typeof fetch",
+            "expected": "function",
+            "actual": "undefined",
+            "result": "fail",
+        },
+    ],
+    "result": "partial",
+}
+
+
+def test_mapek_snapshot_routes_witness_reports_as_convergence_events():
+    cycle = run_mapek_cycle_with_snapshot(
+        _SAMPLE_PROBES,
+        witness_reports=[_SAMPLE_BROWSER_SURFACE_REPORT],
+    )
+    monitor_report = cycle["phases"]["monitor"]
+    assert monitor_report["total_observations"] == len(_SAMPLE_PROBES)
+    assert len(monitor_report["observations"]) == len(_SAMPLE_PROBES)
+
+    convergence = cycle["convergence"]
+    assert len(convergence["events"]) == len(_SAMPLE_PROBES) + 2
+    sources = {
+        (src["report_schema"], src["report_kind"])
+        for src in convergence["snapshot"]["source_reports"]
+    }
+    assert ("iv8-browser-surface-report.v0.1", "browser_surface") in sources
+    assert ("iv8-feedback-monitor.v0.1", "feedback_monitor") in sources
+
+
+def test_mapek_snapshot_witness_reports_are_report_only():
+    cycle = run_mapek_cycle_with_snapshot(
+        _SAMPLE_PROBES,
+        witness_reports=[_SAMPLE_BROWSER_SURFACE_REPORT],
+    )
+    assert cycle["writes"] == []
+    assert cycle["evidence_ceiling"] == "diagnostic_only"
+    convergence = cycle["convergence"]
+    assert convergence["writes"] == []
+    assert convergence["evidence_ceiling"] == "diagnostic_only"
+    for event in convergence["events"]:
+        assert event["writes"] == []
+        assert event["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_mapek_snapshot_preserves_positional_arguments_with_witness_keyword():
+    base = run_mapek_cycle_with_snapshot(_SAMPLE_PROBES)
+    cycle = run_mapek_cycle_with_snapshot(
+        _SAMPLE_PROBES,
+        3,
+        base["convergence"]["snapshot"],
+        witness_reports=[_SAMPLE_BROWSER_SURFACE_REPORT],
+    )
+    assert cycle["convergence"].get("delta") is not None
+    assert cycle["phases"]["plan"]["total_recommendations"] <= 6
