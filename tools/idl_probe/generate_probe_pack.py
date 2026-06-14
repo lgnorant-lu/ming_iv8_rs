@@ -47,6 +47,8 @@ def generate_probe_pack(
 
     probes: list[dict[str, Any]] = []
 
+    ir_schema = ir_meta.get("schema_version", ir_data.get("schema_version", "unknown"))
+
     probes.append({
         "probe_id": "idl.meta.ir_version",
         "target": "__idl_ir__",
@@ -57,6 +59,10 @@ def generate_probe_pack(
         "side_effects": [],
         "cleanup": "none",
         "evidence_ceiling": "diagnostic_only",
+        "source_ir": {
+            "schema_version": ir_schema,
+            "total_interfaces": ir_meta.get("total_interfaces"),
+        },
     })
 
     for iface_name in interfaces:
@@ -85,6 +91,7 @@ def generate_probe_pack(
             "side_effects": [],
             "cleanup": "none",
             "evidence_ceiling": "diagnostic_only",
+            "source_ir": {"schema_version": ir_schema, "definition": iface_name},
         })
 
         if isinstance(iface.get("inheritance"), str) and iface["inheritance"]:
@@ -102,6 +109,11 @@ def generate_probe_pack(
                 "side_effects": [],
                 "cleanup": "none",
                 "evidence_ceiling": "diagnostic_only",
+                "source_ir": {
+                    "schema_version": ir_schema,
+                    "definition": iface_name,
+                    "inheritance": iface["inheritance"],
+                },
             })
 
         member: dict[str, Any]
@@ -109,14 +121,18 @@ def generate_probe_pack(
             if member.get("kind") != "attribute":
                 continue
             attr_name = member["name"]
-            probe = _build_attribute_probe(iface_name, attr_name, member)
+            probe = _build_attribute_probe(ir_schema, iface_name, attr_name, member)
             if probe:
                 probes.append(probe)
 
     pack_name = "idl-core-window.m1"
     return {
+        "schema_version": "iv8-generated-probepack.v0.1",
         "probe_pack": pack_name,
         "version": version,
+        "source": str(source_path),
+        "generator": "iv8-idl-probe",
+        "interfaces": list(interfaces),
         "description": (
             f"v{version} IDL-generated presence probes for "
             f"{', '.join(interfaces)} — "
@@ -160,6 +176,7 @@ _IDL_TYPE_TO_JS_CHECK: dict[str, str] = {
 
 
 def _build_attribute_probe(
+    ir_schema: str,
     iface_name: str,
     attr_name: str,
     member: dict[str, Any],
@@ -204,4 +221,10 @@ def _build_attribute_probe(
         "side_effects": [],
         "cleanup": "none",
         "evidence_ceiling": "diagnostic_only",
+        "source_ir": {
+            "schema_version": ir_schema,
+            "definition": iface_name,
+            "member": attr_name,
+            "idl_type": idl_type,
+        },
     }

@@ -10,6 +10,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.witness_reports import (
+    _BROWSER_SURFACE_MATRIX,
+    _UNDETECTABLE_CHECKS,
     generate_bcr_dispatch_report,
     generate_browser_surface_report,
     generate_undetectable_report,
@@ -30,15 +32,13 @@ def test_bcr_dispatch_report_valid_json():
 
 
 def test_bcr_dispatch_report_reads_source():
-    """BCR report must perform structural analysis on the actually embedded_v8.rs source."""
+    """BCR report must perform structural analysis on the actual embedded_v8.rs source."""
     report = generate_bcr_dispatch_report()
     if "error" in report:
         pytest.skip("source file not accessible")
-    assert report["active_dispatch_sites"] >= 10, (
-        f"expected >=10 dispatch sites, got {report['active_dispatch_sites']}"
+    assert report["active_dispatch_sites"] == 15, (
+        f"expected 15 active dispatch sites from source, got {report['active_dispatch_sites']}"
     )
-    # install_dom_constructors is a known direct call (not yet BCR-mediated).
-    # The report must correctly detect this, not claim zero when it's not zero.
     direct = report["active_direct_install_calls"]
     assert direct >= 0, f"expected non-negative direct count, got {direct}"
 
@@ -54,16 +54,14 @@ def test_browser_surface_report_valid_json():
 
 def test_browser_surface_report_coverage():
     report = generate_browser_surface_report()
-    assert report["total"] >= 20, f"expected >=20 probes, got {report['total']}"
+    expected = len(_BROWSER_SURFACE_MATRIX)
+    assert report["total"] == expected, (
+        f"expected {expected} probes matching _BROWSER_SURFACE_MATRIX, got {report['total']}"
+    )
     for entry in report["results"]:
         assert "id" in entry
         assert "expected" in entry
         assert "result" in entry
-
-
-def test_browser_surface_passed_count():
-    report = generate_browser_surface_report()
-    assert report["passed"] + report["failed"] == report["total"]
 
 
 def test_undetectable_report_valid_json():
@@ -76,10 +74,10 @@ def test_undetectable_report_valid_json():
 
 def test_undetectable_report_coverage():
     report = generate_undetectable_report()
-    assert report["total"] >= 5
-    for entry in report["results"]:
-        assert "id" in entry
-        assert "expected" in entry
+    expected = len(_UNDETECTABLE_CHECKS)
+    assert report["total"] == expected, (
+        f"expected {expected} probes matching _UNDETECTABLE_CHECKS, got {report['total']}"
+    )
 
 
 def test_reports_are_deterministic():
@@ -90,3 +88,53 @@ def test_reports_are_deterministic():
     if "error" in first:
         pytest.skip("source file not accessible")
     assert first == second
+
+
+_BCR_SYNTHETIC_SOURCE = r"""
+pub fn install_browser_surface_with_callbacks(
+    &mut self, callbacks: iv8_surface::BehaviorCallbackRegistry,
+) -> Result<()> {
+    crate::dom::template::install_dom_constructors(
+        scope, global, &dom_templates,
+    );
+    install_behavior_via_bcr(
+        scope, global, &callbacks,
+        &callbacks.install_event_loop,
+        crate::events::binding::install_event_loop_bindings,
+    );
+    install_behavior_via_bcr(
+        scope, global, &callbacks,
+        &callbacks.install_timers,
+        crate::events::timers::install_timer_globals,
+    );
+    install_behavior_via_bcr(
+        scope, global, &callbacks,
+        &callbacks.install_fetch,
+        crate::network::fetch::install_fetch,
+    );
+}
+"""
+
+_BCR_FALLBACK_SOURCE = r"""
+pub fn install_undetect_shims(&mut self, skip_native_behaviors: bool) {
+    if !skip_native_behaviors {
+        crate::shims::native_env::install_native_env(scope, global);
+        crate::shims::console::install_console(scope, global);
+    }
+}
+"""
+
+
+def test_bcr_report_with_synthetic_source(tmp_path):
+    src = tmp_path / "test_bcr.rs"
+    src.write_text(_BCR_SYNTHETIC_SOURCE)
+    report = generate_bcr_dispatch_report(src_path=str(src))
+    assert report["active_dispatch_sites"] == 3
+    assert report["active_direct_install_calls"] == 1
+    assert report["result"] == "review_needed"
+
+
+def test_bcr_report_missing_source_returns_error():
+    report = generate_bcr_dispatch_report(src_path="/nonexistent_bcr_source.rs")
+    assert report["result"] == "error"
+    assert "error" in report

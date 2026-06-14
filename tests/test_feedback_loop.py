@@ -105,5 +105,39 @@ def test_plan_recommendations_target_fail_gaps():
 
 def test_report_json_serializable():
     cycle = run_mapek_cycle(_SAMPLE_PROBES)
-    data = json.dumps(cycle, sort_keys=True, default=str)
+    data = json.dumps(cycle, sort_keys=True)
     assert len(data) > 100
+
+
+def test_monitor_with_empty_input():
+    report = monitor([])
+    assert report["total_observations"] == 0
+    assert report["observations"] == []
+    assert report["writes"] == []
+
+
+def test_plan_with_max_items_zero():
+    mon = monitor(_SAMPLE_PROBES)
+    anl = analyze(mon)
+    pln = plan(anl, max_items=0)
+    assert pln["total_recommendations"] == 0
+
+
+def test_analyze_only_pass_probes():
+    all_pass = [
+        {"probe_id": "a", "expected": True, "actual": True},
+        {"probe_id": "b", "expected": True, "actual": True},
+    ]
+    mon = monitor(all_pass)
+    anl = analyze(mon)
+    groups = {g["group"]: g["count"] for g in anl["groups"]}
+    assert groups.get("pass", 0) == 2
+    assert groups.get("fail", 0) == 0
+
+
+def test_gap_class_flows_through_pipeline():
+    probes = [{"probe_id": "x", "expected": True, "actual": False, "gap_class": "missing_api"}]
+    mon = monitor(probes)
+    obs = mon["observations"][0]
+    assert obs["gap_class"] == "missing_api"
+    assert obs["status"] == "fail"

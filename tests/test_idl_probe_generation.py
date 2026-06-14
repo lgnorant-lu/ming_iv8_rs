@@ -91,3 +91,50 @@ def test_ir_meta_probe_present():
     data = generate_probe_pack()
     found = [p for p in data["probes"] if p["probe_id"] == "idl.meta.ir_version"]
     assert len(found) == 1
+
+
+def test_gap_classes_match_canonical_mapping():
+    from iv8_rs.environment_toolchain_static import _GAP_CLASS_TO_PRESSURE_CATEGORY
+
+    data = generate_probe_pack()
+    for probe in data["probes"]:
+        gc = probe["gap_class"]
+        assert gc in _GAP_CLASS_TO_PRESSURE_CATEGORY, (
+            f"probe {probe['probe_id']} has gap_class {gc!r} "
+            f"not in _GAP_CLASS_TO_PRESSURE_CATEGORY"
+        )
+
+
+def test_pack_has_schema_version_and_source():
+    data = generate_probe_pack()
+    assert data.get("schema_version") == "iv8-generated-probepack.v0.1"
+    assert "source" in data
+    assert data.get("generator") == "iv8-idl-probe"
+    assert "interfaces" in data
+
+
+def test_probes_have_source_ir():
+    data = generate_probe_pack()
+    for probe in data["probes"]:
+        assert "source_ir" in probe, (
+            f"probe {probe['probe_id']} missing source_ir"
+        )
+
+
+def test_non_existent_interface_probe():
+    data = generate_probe_pack(interfaces=["NoSuchIface"])
+    found = [p for p in data["probes"] if p["probe_id"] == "idl.exists.NoSuchIface"]
+    assert len(found) == 1
+    assert found[0]["expected"] == False
+
+
+def test_missing_ir_raises_file_not_found():
+    with pytest.raises(FileNotFoundError):
+        generate_probe_pack(ir_path="/nonexistent/unified_ir.json")
+
+
+def test_corrupted_ir_raises_value_error(tmp_path):
+    bad = tmp_path / "bad.json"
+    bad.write_text("{invalid json")
+    with pytest.raises(ValueError):
+        generate_probe_pack(ir_path=str(bad))
