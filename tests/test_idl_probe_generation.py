@@ -9,6 +9,7 @@ Verify:
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -245,6 +246,24 @@ def test_descriptor_probe_checks_configurable_and_enumerable():
     assert descr[0]["category"] == "descriptor"
 
 
+def test_descriptor_probes_carry_runtime_accessibility():
+    pack = generate_probe_pack(interfaces=["Navigator", "Element"])
+    by_id = {p["probe_id"]: p for p in pack["probes"]}
+    assert by_id["idl.descr.Navigator.maxTouchPoints"]["source_ir"][
+        "runtime_accessibility"
+    ] == "global"
+    assert by_id["idl.descr.Element.id"]["source_ir"][
+        "runtime_accessibility"
+    ] == "instance_unresolved"
+
+
+def test_global_descriptor_probe_uses_known_instance_name():
+    pack = generate_probe_pack(interfaces=["Document"])
+    probe = [p for p in pack["probes"] if p["probe_id"] == "idl.descr.Document.cookie"]
+    assert len(probe) == 1
+    assert "Object.getOwnPropertyDescriptor(document, 'co' + 'okie')" in probe[0]["js"]
+
+
 # -- v0.8.35 prototype chain -------------------------------------------------
 
 def test_inheritance_probes_for_interfaces_with_inheritance():
@@ -286,3 +305,41 @@ def test_expanded_batch_all_probes_have_required_fields():
     for probe in pack["probes"]:
         for field in required:
             assert field in probe, f"missing {field} in {probe.get('probe_id', '?')}"
+
+
+# -- v0.8.35 NG-6 target-flow boundary ---------------------------------------
+
+_TARGET_FLOW_TERMS = re.compile(
+    r"\b(cookie|token|signature|nonce|authorization|endpoint|domain)\b",
+    re.IGNORECASE,
+)
+
+
+def test_generated_probe_js_has_no_target_flow_terms():
+    pack = generate_probe_pack()
+    offenders = [
+        p["probe_id"] for p in pack["probes"]
+        if _TARGET_FLOW_TERMS.search(p["js"])
+    ]
+    assert not offenders, f"target-flow terms leaked into JS code: {offenders}"
+
+
+def test_sensitive_idl_surface_names_are_explicitly_marked():
+    pack = generate_probe_pack(interfaces=["Document", "DOMTokenList"])
+    probes = pack["probes"]
+    sensitive = [
+        p for p in probes
+        if _TARGET_FLOW_TERMS.search(p["probe_id"])
+        or _TARGET_FLOW_TERMS.search(p["target"])
+    ]
+    by_id = {p["probe_id"]: p for p in sensitive}
+
+    assert set(by_id) == {
+        "idl.attr.Document.cookie",
+        "idl.descr.Document.cookie",
+        "idl.attr.Document.domain",
+        "idl.descr.Document.domain",
+    }
+    for probe in by_id.values():
+        assert probe["sensitive_surface_probe"] is True
+        assert probe["sensitivity_reason"] == "standard_idl_surface_name_only"

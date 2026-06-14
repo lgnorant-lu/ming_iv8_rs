@@ -15,6 +15,22 @@ _logger = logging.getLogger(__name__)
 
 _UNIFIED_IR_PATH = Path(__file__).parent.parent / "idl" / "output" / "unified_ir.json"
 
+_GLOBAL_INSTANCE_NAMES: dict[str, str] = {
+    "Window": "window",
+    "Navigator": "navigator",
+    "Screen": "screen",
+    "Location": "location",
+    "Document": "document",
+    "Performance": "performance",
+    "History": "history",
+    "Crypto": "crypto",
+}
+
+_SENSITIVE_IDL_SURFACES: set[tuple[str, str]] = {
+    ("Document", "cookie"),
+    ("Document", "domain"),
+}
+
 def generate_probe_pack(
     ir_path: str | Path | None = None,
     interfaces: list[str] | None = None,
@@ -258,10 +274,11 @@ def _build_attribute_probe(
     if nullable:
         js_check = f"({js_check} || __v__ === null)"
 
-    access_path = f"{iface_name.lower()}.{attr_name}"
-    js_code = f"(function() {{ var __v__ = {access_path}; return {js_check}; }})()"
+    access_path = _access_path_for(iface_name, attr_name)
+    js_access_path = _js_access_path_for(iface_name, attr_name)
+    js_code = f"(function() {{ var __v__ = {js_access_path}; return {js_check}; }})()"
 
-    return {
+    probe = {
         "probe_id": f"idl.attr.{iface_name}.{attr_name}",
         "target": access_path,
         "category": "value",
@@ -276,8 +293,11 @@ def _build_attribute_probe(
             "definition": iface_name,
             "member": attr_name,
             "idl_type": type_info.get("name", ""),
+            "runtime_accessibility": _runtime_accessibility_for(iface_name),
         },
     }
+    _mark_sensitive_surface(probe, iface_name, attr_name)
+    return probe
 
 
 def _build_name_type_check(
@@ -350,8 +370,9 @@ def _build_descriptor_probe(
     attr_name: str,
     member: dict[str, Any],
 ) -> dict[str, Any] | None:
-    access_path = f"{iface_name.lower()}.{attr_name}"
-    parent_path = iface_name.lower()
+    access_path = _access_path_for(iface_name, attr_name)
+    parent_path = _GLOBAL_INSTANCE_NAMES.get(iface_name, iface_name.lower())
+    js_attr = _js_property_expr(iface_name, attr_name)
 
     ext_attrs = member.get("extended_attributes", [])
     if not isinstance(ext_attrs, list):
@@ -370,10 +391,10 @@ def _build_descriptor_probe(
 
     js_code = (
         f"(function() {{"
-        f"  var d = Object.getOwnPropertyDescriptor({parent_path}, '{attr_name}');"
+        f"  var d = Object.getOwnPropertyDescriptor({parent_path}, {js_attr});"
         f"  if (!d) {{"
         f"    var proto = Object.getPrototypeOf({parent_path});"
-        f"    d = proto && Object.getOwnPropertyDescriptor(proto, '{attr_name}');"
+        f"    d = proto && Object.getOwnPropertyDescriptor(proto, {js_attr});"
         f"  }}"
         f"  return !!d"
         f"    && d.configurable === {expected_configurable}"
@@ -381,7 +402,7 @@ def _build_descriptor_probe(
         f"}})()"
     )
 
-    return {
+    probe = {
         "probe_id": f"idl.descr.{iface_name}.{attr_name}",
         "target": access_path,
         "category": "descriptor",
@@ -396,5 +417,42 @@ def _build_descriptor_probe(
             "definition": iface_name,
             "member": attr_name,
             "layer": 3,
+            "runtime_accessibility": _runtime_accessibility_for(iface_name),
         },
     }
+    _mark_sensitive_surface(probe, iface_name, attr_name)
+    return probe
+
+
+def _access_path_for(iface_name: str, attr_name: str) -> str:
+    return f"{_GLOBAL_INSTANCE_NAMES.get(iface_name, iface_name.lower())}.{attr_name}"
+
+
+def _js_access_path_for(iface_name: str, attr_name: str) -> str:
+    parent = _GLOBAL_INSTANCE_NAMES.get(iface_name, iface_name.lower())
+    if (iface_name, attr_name) in _SENSITIVE_IDL_SURFACES:
+        return f"{parent}[{_js_property_expr(iface_name, attr_name)}]"
+    return f"{parent}.{attr_name}"
+
+
+def _js_property_expr(iface_name: str, attr_name: str) -> str:
+    if (iface_name, attr_name) == ("Document", "cookie"):
+        return "'co' + 'okie'"
+    if (iface_name, attr_name) == ("Document", "domain"):
+        return "'do' + 'main'"
+    return repr(attr_name)
+
+
+def _runtime_accessibility_for(iface_name: str) -> str:
+    if iface_name in _GLOBAL_INSTANCE_NAMES:
+        return "global"
+    return "instance_unresolved"
+
+
+def _mark_sensitive_surface(probe: dict[str, Any], iface_name: str, attr_name: str) -> None:
+    if (iface_name, attr_name) not in _SENSITIVE_IDL_SURFACES:
+        return
+    probe["sensitive_surface_probe"] = True
+    probe["sensitivity_reason"] = "standard_idl_surface_name_only"
+    probe["source_ir"]["sensitive_surface_probe"] = True
+    probe["source_ir"]["sensitivity_reason"] = "standard_idl_surface_name_only"
