@@ -688,3 +688,65 @@ def test_profile_auto_fill_preserves_existing_probe_set():
     values = build_profile_values_from_env(flat)
     overlaid = generate_probe_pack(profile_values=values)
     assert len(overlaid["probes"]) == len(baseline["probes"])
+
+
+# -- v0.8.38 constructor allowlist review gates ---------------------------
+
+
+def test_constructor_allowlist_expanded_for_live_globals():
+    added = {
+        "CustomEvent", "DOMMatrix", "DOMPoint", "DOMParser",
+        "DOMRectReadOnly", "File", "KeyboardEvent", "MessageChannel",
+        "MouseEvent",
+    }
+    assert added <= _CONSTRUCTOR_AVAILABLE
+
+
+def test_constructor_expansion_preserves_existing_entries():
+    preserved = {
+        "Blob", "DOMRect", "DOMTokenList", "Element", "Event",
+        "Headers", "HTMLElement", "Navigator", "Request", "Response",
+        "Screen", "TextDecoder", "TextEncoder", "URL", "WebSocket",
+        "XMLHttpRequest",
+    }
+    assert preserved <= _CONSTRUCTOR_AVAILABLE
+
+
+def test_constructor_expansion_strong_interface_checks_are_generated():
+    pack = generate_probe_pack(interfaces=["MouseEvent"])
+    probe = [
+        p for p in pack["probes"]
+        if p["probe_id"] == "idl.attr.MouseEvent.altKey"
+    ]
+    assert len(probe) == 1
+    assert "typeof __v__ === 'boolean'" in probe[0]["js"]
+
+
+def test_constructor_expansion_no_non_allowlisted_instanceof():
+    builtins = {
+        "Float32Array", "Float64Array", "Int32Array",
+        "Uint8Array", "ArrayBuffer", "DataView",
+    }
+    allowed = _CONSTRUCTOR_AVAILABLE | builtins
+    pack = generate_probe_pack()
+    offenders = []
+    for probe in pack["probes"]:
+        if not probe["probe_id"].startswith("idl.attr."):
+            continue
+        for match in re.finditer(r"__v__ instanceof ([A-Za-z0-9_]+)", probe["js"]):
+            ctor = match.group(1)
+            if ctor not in allowed:
+                offenders.append((probe["probe_id"], ctor))
+    assert not offenders, f"non-allowlisted instanceof checks: {offenders}"
+
+
+def test_constructor_expansion_keeps_weak_fallback_for_non_allowlisted():
+    pack = generate_probe_pack(interfaces=["History"])
+    probe = [
+        p for p in pack["probes"]
+        if p["probe_id"] == "idl.attr.History.length"
+    ]
+    assert len(probe) == 1
+    js = probe[0]["js"]
+    if "History" not in _CONSTRUCTOR_AVAILABLE:
+        assert "instanceof History" not in js
