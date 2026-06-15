@@ -6,6 +6,41 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.38] - 2026-06-15
+
+> Local milestone tag pending. v0.8.38 completes L2 Signal Completion M1 by
+> filling handled coverage visibility, adding in-memory profile auto-fill, and
+> conservatively expanding the constructor allowlist. Package metadata remains
+> `0.8.11`.
+
+### Added
+
+- **Coverage map completion** (`tools/convergence/`): ~27 new entries in
+  `_VECTOR_COVERAGE_MAP` for handled-but-unmapped screen, window, element
+  box-model, and DOM shape surfaces.
+- **Profile auto-fill** (`tools/idl_probe/generate_probe_pack.py`):
+  `build_profile_values_from_env()` projects flat environment data into the
+  `profile_values` dot-path shape, skipping sensitive standard-IDL surfaces.
+- **Constructor allowlist expansion**: 9 live-global constructors added to
+  `_CONSTRUCTOR_AVAILABLE` (`CustomEvent`, `DOMMatrix`, `DOMPoint`, `DOMParser`,
+  `DOMRectReadOnly`, `File`, `KeyboardEvent`, `MessageChannel`, `MouseEvent`).
+
+### Quality Gates
+
+- Focused convergence + IDL + compat: 111/111 PASS
+- IDL + compatibility focused: 69/69 PASS
+- Convergence focused: 36/36 PASS
+- Python: 1445/1445 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff for implementation files: PASS (3 pre-existing issues only)
+
+### Non-Goals Preserved
+
+- No Rust runtime vector fixes or L3 behavior changes.
+- No Analyze/Plan depth or repair ticket schema.
+- No BCR parameterization activation.
+- No profile, baseline, probe-pack, manifest, corpus, sample, or source writes.
+
 ## [0.8.37] - 2026-06-15
 
 > Local milestone tagged. v0.8.37 completes L2 Data-Flow Depth M1 by
