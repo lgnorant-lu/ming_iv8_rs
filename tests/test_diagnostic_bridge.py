@@ -509,3 +509,153 @@ def test_classify_repair_readiness_deferred_with_reason():
     assert readiness["readiness"] == "deferred"
     assert "awaiting upstream BCR" in readiness["readiness_reasons"]
     assert readiness["evidence_ceiling"] == "diagnostic_only"
+
+
+# -- v0.8.43 L3 P0 runtime batch gates ----------------------------------
+
+
+def test_select_runtime_briefs_filters_non_ready():
+    from tools.diagnostic_bridge import build_repair_brief, select_runtime_briefs
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    assert brief["readiness"] != "ready"
+    result = select_runtime_briefs([brief])
+    assert len(result) == 0
+
+
+def test_select_runtime_briefs_filters_wrong_owner():
+    from tools.diagnostic_bridge import build_repair_brief, select_runtime_briefs
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V015"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["risk_level"] = "low"
+    assert brief["l3_owner_module"] != "iv8-core/native_env.rs"
+    result = select_runtime_briefs([brief])
+    assert len(result) == 0
+
+
+def test_select_runtime_briefs_filters_wrong_gap_class():
+    from tools.diagnostic_bridge import build_repair_brief, select_runtime_briefs
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "structural_mismatch"
+    brief["risk_level"] = "low"
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+    result = select_runtime_briefs([brief])
+    assert len(result) == 0
+
+
+def test_select_runtime_briefs_filters_high_risk():
+    from tools.diagnostic_bridge import build_repair_brief, select_runtime_briefs
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["risk_level"] = "high"
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+    result = select_runtime_briefs([brief])
+    assert len(result) == 0
+
+
+def test_select_runtime_briefs_selects_valid_navigator_brief():
+    from tools.diagnostic_bridge import (
+        build_evidence_bundle_manifest,
+        build_repair_brief,
+        build_validation_plan,
+        classify_repair_readiness,
+        select_runtime_briefs,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+    brief["gap_class"] = "value_mismatch"
+    brief["risk_level"] = "low"
+    manifest = build_evidence_bundle_manifest(
+        brief,
+        {"source_reports": ["snapshot:base"], "delta_contract_ref": "delta:1"},
+    )
+    plan = build_validation_plan(brief)
+    readiness = classify_repair_readiness(brief, manifest, plan)
+    assert readiness["readiness"] == "ready"
+    brief["readiness"] = readiness["readiness"]
+    result = select_runtime_briefs([brief])
+    assert len(result) == 1
+    assert result[0]["ticket_id"] == "t-001"
+
+
+def test_select_runtime_briefs_sorts_low_before_medium():
+    from tools.diagnostic_bridge import build_repair_brief, select_runtime_briefs
+
+    b1 = build_repair_brief({"ticket_id": "t-a", "source_vector": "V001"})
+    b1["readiness"] = "ready"
+    b1["gap_class"] = "value_mismatch"
+    b1["risk_level"] = "medium"
+    b1["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    b2 = build_repair_brief({"ticket_id": "t-b", "source_vector": "V046"})
+    b2["readiness"] = "ready"
+    b2["gap_class"] = "value_mismatch"
+    b2["risk_level"] = "low"
+    b2["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    result = select_runtime_briefs([b1, b2])
+    assert len(result) == 2
+    assert result[0]["risk_level"] == "low"
+    assert result[1]["risk_level"] == "medium"
+
+
+def test_validate_runtime_brief_rejects_non_navigator_vector():
+    from tools.diagnostic_bridge import build_repair_brief, validate_runtime_brief
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V015"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+    result = validate_runtime_brief(brief)
+    assert result["valid"] is False
+    assert any("not_in_navigator_runtime_set" in r for r in result["blocked_reasons"])
+    assert result["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_validate_runtime_brief_accepts_valid_navigator_brief():
+    from tools.diagnostic_bridge import build_repair_brief, validate_runtime_brief
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+    result = validate_runtime_brief(brief)
+    assert result["valid"] is True
+    assert result["blocked_reasons"] == []
+    assert result["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_runtime_brief_end_to_end_selection_and_validation():
+    from tools.diagnostic_bridge import (
+        build_evidence_bundle_manifest,
+        build_repair_brief,
+        build_validation_plan,
+        classify_repair_readiness,
+        select_runtime_briefs,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+    brief["gap_class"] = "value_mismatch"
+    brief["risk_level"] = "low"
+    manifest = build_evidence_bundle_manifest(
+        brief,
+        {"source_reports": ["snapshot:base"], "delta_contract_ref": "delta:1"},
+    )
+    plan = build_validation_plan(brief)
+    readiness = classify_repair_readiness(brief, manifest, plan)
+    assert readiness["readiness"] == "ready"
+    brief["readiness"] = readiness["readiness"]
+    selected = select_runtime_briefs([brief])
+    assert len(selected) == 1
+    validation = validate_runtime_brief(selected[0])
+    assert validation["valid"] is True
+    assert validation["writes"] == []
