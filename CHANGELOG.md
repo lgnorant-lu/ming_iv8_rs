@@ -6,6 +6,37 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.43] - 2026-06-15
+
+> Local milestone tag pending. v0.8.43 completes L3 P0 Navigator/Profile
+> Runtime Batch M1, the first evidence-driven Rust runtime mutation version.
+> Package metadata remains `0.8.11`.
+
+### Added
+
+- **Runtime brief selection** (`tools/diagnostic_bridge/`): `select_runtime_briefs()`
+  filters v0.8.42 repair briefs by readiness, Navigator/Profile owner path,
+  value_mismatch gap class, and ≤medium risk.
+- **Runtime validation**: `validate_runtime_brief()` verifies source_vector is
+  in the Navigator runtime set and all gating conditions are met.
+- **Navigator runtime test** (`crates/iv8-core/`): `navigator_profile_runtime_batch_v043`
+  covers all six target Navigator fields (language, languages, platform,
+  webdriver, hardwareConcurrency, deviceMemory) via `KernelConfig::with_profile_matrix()`.
+
+### Quality Gates
+
+- Bridge + convergence focused: 71/71 PASS
+- Python: 1490/1490 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff: PASS
+
+### Non-Goals Preserved
+
+- No Screen/Window, NavigatorUAData, Timing, or Descriptor repair.
+- No BCR parameterization activation.
+- No userAgent construction change.
+- No profile, baseline, or probe-pack writes.
+
 ## [0.8.42] - 2026-06-15
 
 > Local milestone tagged. v0.8.42 completes Runtime Repair Harness M1 by
