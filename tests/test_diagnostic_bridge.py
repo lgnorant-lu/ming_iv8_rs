@@ -832,3 +832,68 @@ def test_uadata_async_ghev_not_in_bridge_scope():
     src = inspect.getsource(diagnostic_bridge)
     assert "getHighEntropyValues" not in src
     assert "fullVersionList" not in src
+
+
+# -- v0.8.46 L3 P3 timing/performance boundary gates -------------------
+
+
+def test_select_runtime_briefs_timing_owner_selects_v067():
+    from tools.diagnostic_bridge import (
+        TIMING_OWNER_PATH,
+        build_repair_brief,
+        select_runtime_briefs,
+    )
+
+    timing = build_repair_brief({"ticket_id": "t-timing", "source_vector": "V067"})
+    timing["readiness"] = "ready"
+    timing["gap_class"] = "value_mismatch"
+    timing["risk_level"] = "low"
+    timing["l3_owner_module"] = "iv8-core/events/"
+
+    nav = build_repair_brief({"ticket_id": "t-nav", "source_vector": "V001"})
+    nav["readiness"] = "ready"
+    nav["gap_class"] = "value_mismatch"
+    nav["risk_level"] = "low"
+    nav["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    result = select_runtime_briefs([timing, nav], owner_path=TIMING_OWNER_PATH)
+    assert len(result) == 1
+    assert result[0]["source_vector"] == "V067"
+
+
+def test_validate_runtime_brief_timing_owner_accepts_v067():
+    from tools.diagnostic_bridge import (
+        TIMING_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V067"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-core/events/"
+    result = validate_runtime_brief(brief, owner_path=TIMING_OWNER_PATH)
+    assert result["valid"] is True
+    assert result["blocked_reasons"] == []
+
+
+def test_validate_runtime_brief_timing_owner_rejects_non_v067():
+    from tools.diagnostic_bridge import (
+        TIMING_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V068"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-core/events/"
+    result = validate_runtime_brief(brief, owner_path=TIMING_OWNER_PATH)
+    assert result["valid"] is False
+    assert any("not_in_runtime_set" in r for r in result["blocked_reasons"])
+
+
+def test_timing_runtime_vectors_only_contains_v067():
+    from tools.diagnostic_bridge import TIMING_RUNTIME_VECTORS
+
+    assert TIMING_RUNTIME_VECTORS == {"V067"}

@@ -2152,4 +2152,33 @@ mod tests {
             other => panic!("expected brands to be an Array, got {:?}", other),
         }
     }
+
+    #[test]
+    fn timing_performance_now_boundary_v046() {
+        use crate::convert::RustValue;
+
+        let source = iv8_profile::defaults::default_profile_source();
+        let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
+        let config = KernelConfig::default().with_profile_matrix(&matrix);
+        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+
+        assert_eq!(
+            kernel.eval_to_rust_value("typeof performance.now"),
+            RustValue::String("function".into())
+        );
+
+        let t0 = kernel.eval_to_rust_value("performance.now()");
+        match t0 {
+            RustValue::Float(v) => assert!(v >= 0.0, "performance.now() >= 0, got {}", v),
+            other => panic!("expected float from performance.now(), got {:?}", other),
+        }
+
+        let t1 = kernel.eval_to_rust_value("performance.now()");
+        match (t0, t1) {
+            (RustValue::Float(a), RustValue::Float(b)) => {
+                assert!(b >= a, "performance.now() monotonic: {} then {}", a, b);
+            }
+            other => panic!("expected two floats from performance.now(), got {:?}", other),
+        }
+    }
 }
