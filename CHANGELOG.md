@@ -6,6 +6,36 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.46] - 2026-06-15
+
+> Local milestone accepted. v0.8.46 starts P3 Timing/Performance with a boundary
+> slice: owner routing, brief selection, performance.now profile-backed coherence
+> gate, and timing surface classification. Package metadata remains `0.8.11`.
+
+### Added
+
+- **Timing owner path**: `TIMING_OWNER_PATH = "iv8-core/events/"` with
+  `TIMING_RUNTIME_VECTORS = {"V067"}` for performance.now brief selection.
+- **performance.now Rust test**: `timing_performance_now_boundary_v046` verifies
+  `typeof`/`>=0`/monotonic with profile injection.
+
+### Quality Gates
+
+- Bridge + convergence focused: 85/85 PASS
+- Python: 1504/1504 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff: PASS
+
+### Deferred to P3 Follow-Up
+
+- `performance.timeOrigin` exact value, `performance.timing` offset fidelity,
+  `PerformanceObserver`, navigation timing level 2, sub-ms precision.
+
+### Non-Goals Preserved
+
+- No timing precision modification, no timeOrigin/navigation mutation,
+  no BCR/UA mutation, no Chromium zero-diff claim.
+
 ## [0.8.45] - 2026-06-15
 
 > Local milestone accepted. v0.8.45 starts P2 NavigatorUAData / Client Hints with
