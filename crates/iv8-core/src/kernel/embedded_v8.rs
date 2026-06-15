@@ -1774,7 +1774,47 @@ impl EmbeddedV8Kernel {
                                 let undefined = v8::undefined(tc);
                                 if let Some(result) = func.call(tc, undefined.into(), &[]) {
                                     return result.to_rust_string_lossy(tc);
-                                }
+    }
+
+    #[test]
+    fn screen_profile_runtime_batch_v044() {
+        let source = iv8_profile::defaults::default_profile_source();
+        let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
+        let config = KernelConfig::default().with_profile_matrix(&matrix);
+        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.width"),
+            RustValue::Int(source.display.screen.width as i64)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.height"),
+            RustValue::Int(source.display.screen.height as i64)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.availWidth"),
+            RustValue::Int(source.display.screen.avail_width as i64)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.availHeight"),
+            RustValue::Int(source.display.screen.avail_height as i64)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.colorDepth"),
+            RustValue::Int(source.display.screen.color_depth as i64)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("screen.pixelDepth"),
+            RustValue::Int(source.display.screen.color_depth as i64)
+        );
+
+        let dpr = kernel.eval_to_rust_value("window.devicePixelRatio");
+        match dpr {
+            RustValue::Int(v) => assert_eq!(v as f64, source.display.window.device_pixel_ratio),
+            RustValue::Float(v) => assert!((v - source.display.window.device_pixel_ratio).abs() < f64::EPSILON),
+            other => panic!("expected numeric devicePixelRatio, got {:?}", other),
+        }
+    }
                             }
                         }
                         String::new()
