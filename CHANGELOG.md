@@ -6,6 +6,56 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.37] - 2026-06-15
+
+> Local milestone tag pending. v0.8.37 completes L2 Data-Flow Depth M1 by
+> repairing Navigator/NavigatorUAData probe data depth and adding a report-only
+> Probe/Witness cross-source correlation layer. Package metadata remains
+> `0.8.11`.
+
+### Added
+
+- **Navigator supplementary IR repair** (`tools/idl_probe/`): in-memory
+  supplementary attributes add probes for 9 classic Navigator fingerprint paths:
+  `userAgent`, `platform`, `vendor`, `language`, `languages`,
+  `hardwareConcurrency`, `deviceMemory`, `webdriver`, and `cookieEnabled`.
+- **NavigatorUAData supplementary attributes**: adds diagnostic probes for
+  `architecture`, `bitness`, `model`, `platformVersion`, `wow64`, and
+  `fullVersionList`.
+- **Probe/Witness cross-reference** (`tools/cross_reference/`): static exact
+  `iv8-cross-source-map.v0.1` plus report-only
+  `iv8-cross-source-correlation.v0.1` with `consistent`, `divergent`, and
+  `one_sided` classifications.
+- **Focused tests** (`tests/test_cross_reference.py` and IDL probe gates): cover
+  supplementary probes, profile overlay activation, sensitive split access,
+  deterministic mapping, no-mutation behavior, and report-only invariants.
+
+### Changed
+
+- Default 51-interface generated probe count increases from 1,125 to 1,155 while
+  preserving the original 1,125 probe IDs and relative order.
+- `navigator.cookieEnabled` is treated as a sensitive standard IDL surface and
+  uses split property access in generated JS.
+
+### Quality Gates
+
+- Focused convergence + IDL + compat + feedback + cross-reference: 111/111 PASS
+- IDL + compatibility focused: 56/56 PASS
+- Cross-reference focused: 5/5 PASS
+- Python: 1426/1426 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff for implementation files and cross-reference tests: PASS
+
+### Non-Goals Preserved
+
+- No Rust runtime vector fixes or L3 behavior changes.
+- No profile auto-fill from `flat_env`.
+- No constructor allowlist expansion.
+- No MAPE-K Analyze depth enhancement.
+- No coverage map unmapped vector fill.
+- No profile, baseline, probe-pack, manifest, corpus, sample, or source writes.
+- No full 1284-interface probe generation.
+
 ## [0.8.36] - 2026-06-15
 
 > Local milestone tag. v0.8.36 completes L2 Data-Flow Connectivity M1 by
