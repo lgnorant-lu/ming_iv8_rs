@@ -6,6 +6,33 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.44] - 2026-06-15
+
+> Local milestone tag pending. v0.8.44 completes L3 P1 Screen/Window
+> Coherence Batch by extending multi-owner runtime brief selection to
+> Screen/Window vectors. Package metadata remains `0.8.11`.
+
+### Added
+
+- **Multi-owner brief selection**: `select_runtime_briefs()` and
+  `validate_runtime_brief()` now accept `owner_path` parameter;
+  `SCREEN_WINDOW_OWNER_PATH = "iv8-surface"` and `SCREEN_RUNTIME_VECTORS`
+  added.
+- **Screen runtime test**: `screen_profile_runtime_batch_v044` covers 7
+  screen/display fields via `KernelConfig::with_profile_matrix()`.
+
+### Quality Gates
+
+- Bridge + convergence focused: 75/75 PASS
+- Python: 1494/1494 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff: PASS
+
+### Non-Goals Preserved
+
+- No NavigatorUAData, Timing, Descriptor, or layout parity claim.
+- No BCR parameterization activation.
+
 ## [0.8.43] - 2026-06-15
 
 > Local milestone tagged. v0.8.43 completes L3 P0 Navigator/Profile
