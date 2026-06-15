@@ -377,3 +377,18 @@ def test_enriched_outputs_are_diagnostic_only():
     assert anl["evidence_ceiling"] == "diagnostic_only"
     assert pln["writes"] == []
     assert pln["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_severity_weighting_is_correct_for_fail_and_error():
+    mon = monitor(_SAMPLE_PROBES)
+    anl = analyze(mon)
+    groups = anl["groups"]
+    fail_group = [g for g in groups if g["group"] == "fail"]
+    error_group = [g for g in groups if g["group"] == "error"]
+    pass_group = [g for g in groups if g["group"] == "pass"]
+    if fail_group:
+        assert fail_group[0]["severity"]["medium"] >= 1
+    if error_group:
+        assert error_group[0]["severity"]["high"] >= 1
+    if pass_group:
+        assert pass_group[0]["severity"]["info"] >= 1
