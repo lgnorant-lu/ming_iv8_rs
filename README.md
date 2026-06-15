@@ -38,7 +38,8 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **L2 Data-Flow Connectivity M1 (v0.8.36)**: profile-aware probe expectations, audited constructor allowlist, witness-to-convergence routing, and expanded 105-vector coverage map; 1415 Python PASS.
 - **L2 Data-Flow Depth M1 (v0.8.37)**: Navigator/NavigatorUAData supplementary IR probes and report-only Probe/Witness cross-source correlation with R2 hardening; 1427 Python PASS.
 - **L2 Signal Completion M1 (v0.8.38)**: coverage map completion, in-memory profile auto-fill, and conservative constructor allowlist expansion; 1445 Python PASS.
-Current `0.8.11` package release scope. v0.8.12-v0.8.38 are local milestones; v0.8.39 is planned; metadata remains `0.8.11`. v0.9 holding track blocked.
+- **L2 Analyze Depth M1 (v0.8.39)**: enriched MAPE-K Analyze/Plan with gap taxonomy, severity weighting, and cross-source correlation consumption; 1454 Python PASS.
+Current `0.8.11` package release scope. v0.8.12-v0.8.39 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
 
 ## Install
 

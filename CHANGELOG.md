@@ -6,6 +6,37 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.39] - 2026-06-15
+
+> Local milestone tag pending. v0.8.39 completes L2 Analyze Depth M1 by
+> enriching MAPE-K Analyze/Plan with gap taxonomy, severity weighting, and
+> cross-source correlation consumption. Package metadata remains `0.8.11`.
+
+### Added
+
+- **Enriched `analyze()`**: Per-group gap_class distribution and severity
+  summary. Optional `cross_source_report` parameter for cross-reference
+  consumption.
+- **Enriched `plan()`**: PlanItem metadata now includes `gap_class`,
+  `severity`, and `cross_classification`. More specific reason text.
+- **Map depth gates**: 9 tests covering gap taxonomy, severity, backward
+  compatibility, crossref input, no-mutation, enriched PlanItems, and
+  report-only invariants.
+
+### Quality Gates
+
+- Feedback + convergence + crossref focused: 70/70 PASS
+- Python: 1454/1454 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff: PASS
+
+### Non-Goals Preserved
+
+- No repair ticket schema or L3 owner routing.
+- No Rust runtime vector fixes.
+- No BCR parameterization activation.
+- No profile, baseline, probe-pack writes.
+
 ## [0.8.38] - 2026-06-15
 
 > Local milestone tag pending. v0.8.38 completes L2 Signal Completion M1 by
