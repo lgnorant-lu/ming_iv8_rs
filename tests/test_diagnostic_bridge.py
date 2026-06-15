@@ -615,7 +615,7 @@ def test_validate_runtime_brief_rejects_non_navigator_vector():
     brief["l3_owner_module"] = "iv8-core/native_env.rs"
     result = validate_runtime_brief(brief)
     assert result["valid"] is False
-    assert any("not_in_navigator_runtime_set" in r for r in result["blocked_reasons"])
+    assert any("not_in_runtime_set" in r for r in result["blocked_reasons"])
     assert result["evidence_ceiling"] == "diagnostic_only"
 
 
@@ -659,3 +659,82 @@ def test_runtime_brief_end_to_end_selection_and_validation():
     validation = validate_runtime_brief(selected[0])
     assert validation["valid"] is True
     assert validation["writes"] == []
+
+
+# -- v0.8.44 L3 P1 screen/window runtime batch gates -------------------
+
+
+def test_select_runtime_briefs_default_still_navigator_only():
+    from tools.diagnostic_bridge import build_repair_brief, select_runtime_briefs
+
+    nav = build_repair_brief({"ticket_id": "t-nav", "source_vector": "V001"})
+    nav["readiness"] = "ready"
+    nav["gap_class"] = "value_mismatch"
+    nav["risk_level"] = "low"
+    nav["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    screen = build_repair_brief({"ticket_id": "t-screen", "source_vector": "V015"})
+    screen["readiness"] = "ready"
+    screen["gap_class"] = "value_mismatch"
+    screen["risk_level"] = "low"
+    screen["l3_owner_module"] = "iv8-surface"
+
+    result = select_runtime_briefs([nav, screen])
+    assert len(result) == 1
+    assert result[0]["ticket_id"] == "t-nav"
+
+
+def test_select_runtime_briefs_screen_owner_selects_screen_briefs():
+    from tools.diagnostic_bridge import (
+        SCREEN_WINDOW_OWNER_PATH,
+        build_repair_brief,
+        select_runtime_briefs,
+    )
+
+    nav = build_repair_brief({"ticket_id": "t-nav", "source_vector": "V001"})
+    nav["readiness"] = "ready"
+    nav["gap_class"] = "value_mismatch"
+    nav["risk_level"] = "low"
+    nav["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    screen = build_repair_brief({"ticket_id": "t-screen", "source_vector": "V015"})
+    screen["readiness"] = "ready"
+    screen["gap_class"] = "value_mismatch"
+    screen["risk_level"] = "low"
+    screen["l3_owner_module"] = "iv8-surface"
+
+    result = select_runtime_briefs([nav, screen], owner_path=SCREEN_WINDOW_OWNER_PATH)
+    assert len(result) == 1
+    assert result[0]["ticket_id"] == "t-screen"
+
+
+def test_validate_runtime_brief_screen_owner_vec_non_screen_rejected():
+    from tools.diagnostic_bridge import (
+        SCREEN_WINDOW_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-surface"
+    result = validate_runtime_brief(brief, owner_path=SCREEN_WINDOW_OWNER_PATH)
+    assert result["valid"] is False
+    assert any("not_in_runtime_set" in r for r in result["blocked_reasons"])
+
+
+def test_validate_runtime_brief_screen_owner_accepts_screen_vector():
+    from tools.diagnostic_bridge import (
+        SCREEN_WINDOW_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V015"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-surface"
+    result = validate_runtime_brief(brief, owner_path=SCREEN_WINDOW_OWNER_PATH)
+    assert result["valid"] is True
+    assert result["blocked_reasons"] == []
