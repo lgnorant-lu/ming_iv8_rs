@@ -125,6 +125,18 @@ def test_cross_source_report_classifies_one_sided():
     assert by_surface["screen.width.shape"]["witness_status"] == "pass"
 
 
+def test_cross_source_report_classifies_missing_both():
+    report = generate_cross_source_report(
+        probe_results=[],
+        witness_reports=[],
+    )
+    by_surface = {item["surface"]: item for item in report["correlations"]}
+    assert by_surface["screen.width.shape"]["classification"] == "missing_both"
+    assert by_surface["screen.width.shape"]["probe_status"] == "missing"
+    assert by_surface["screen.width.shape"]["witness_status"] == "missing"
+    assert report["summary"]["missing_both"] == len(report["correlations"])
+
+
 def test_cross_source_report_is_report_only_and_does_not_mutate_inputs():
     probe_results = copy.deepcopy(_PROBE_RESULTS)
     witness_reports = [copy.deepcopy(_BROWSER_SURFACE_REPORT)]

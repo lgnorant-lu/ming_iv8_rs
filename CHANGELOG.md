@@ -24,8 +24,8 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   `fullVersionList`.
 - **Probe/Witness cross-reference** (`tools/cross_reference/`): static exact
   `iv8-cross-source-map.v0.1` plus report-only
-  `iv8-cross-source-correlation.v0.1` with `consistent`, `divergent`, and
-  `one_sided` classifications.
+  `iv8-cross-source-correlation.v0.1` with `consistent`, `divergent`,
+  `one_sided`, and `missing_both` classifications.
 - **Focused tests** (`tests/test_cross_reference.py` and IDL probe gates): cover
   supplementary probes, profile overlay activation, sensitive split access,
   deterministic mapping, no-mutation behavior, and report-only invariants.

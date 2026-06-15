@@ -351,7 +351,7 @@ def test_sensitive_idl_surface_names_are_explicitly_marked():
 # -- v0.8.36 Profile -> Probe expected overlay -------------------------------
 
 
-def test_profile_overlay_preserves_no_profile_probe_count():
+def test_empty_profile_overlay_preserves_current_probe_set():
     baseline = generate_probe_pack()
     overlaid = generate_probe_pack(profile_values={})
     assert len(overlaid["interfaces"]) == len(baseline["interfaces"]) == 51
@@ -491,6 +491,9 @@ def test_navigator_fingerprint_value_probes_are_generated():
         assert probe["target"] == f"navigator.{attr}"
         assert probe["source_ir"]["idl_type"] == idl_type
         assert probe["source_ir"]["runtime_accessibility"] == "global"
+        assert probe["source_ir"]["supplementary_source"] == (
+            "iv8-navigator-fingerprint-supplement.v0.1"
+        )
 
 
 def test_navigator_fingerprint_type_strength_metadata():
@@ -532,15 +535,18 @@ def test_navigator_profile_overlay_activates_for_fingerprint_path():
 
 def test_navigator_cookie_enabled_is_sensitive_and_split():
     pack = generate_probe_pack(interfaces=["Navigator"])
-    probe = [
-        p for p in pack["probes"]
-        if p["probe_id"] == "idl.attr.Navigator.cookieEnabled"
-    ]
-    assert len(probe) == 1
-    assert probe[0]["sensitive_surface_probe"] is True
-    assert probe[0]["source_ir"]["check_mode"] == "type_only"
-    assert "'co' + 'okieEnabled'" in probe[0]["js"]
-    assert not _TARGET_FLOW_TERMS.search(probe[0]["js"])
+    by_id = {p["probe_id"]: p for p in pack["probes"]}
+    attr_probe = by_id["idl.attr.Navigator.cookieEnabled"]
+    descr_probe = by_id["idl.descr.Navigator.cookieEnabled"]
+
+    assert attr_probe["sensitive_surface_probe"] is True
+    assert attr_probe["source_ir"]["check_mode"] == "type_only"
+    assert "'co' + 'okieEnabled'" in attr_probe["js"]
+    assert not _TARGET_FLOW_TERMS.search(attr_probe["js"])
+
+    assert descr_probe["sensitive_surface_probe"] is True
+    assert "'co' + 'okieEnabled'" in descr_probe["js"]
+    assert not _TARGET_FLOW_TERMS.search(descr_probe["js"])
 
 
 def test_navigator_ir_repair_preserves_existing_probe_ids_and_order():
@@ -574,6 +580,14 @@ def test_navigator_ir_repair_preserves_existing_probe_ids_and_order():
     ]
     assert len(original_ids) == 1125
     assert original_ids == baseline_ids
+    assert ids.index("idl.exists.Navigator") < ids.index("idl.exists.Screen")
+    assert ids.index("idl.attr.Navigator.userAgent") < ids.index(
+        "idl.descr.Navigator.userAgent"
+    )
+    assert ids.index("idl.descr.Navigator.language") < ids.index("idl.exists.Screen")
+    assert ids.index("idl.exists.NavigatorUAData") < ids.index(
+        "idl.attr.NavigatorUAData.architecture"
+    )
 
 
 def test_navigator_ua_data_expansion_probes_are_generated():
@@ -590,3 +604,6 @@ def test_navigator_ua_data_expansion_probes_are_generated():
     for attr, idl_type in expected.items():
         probe = by_id[f"idl.attr.NavigatorUAData.{attr}"]
         assert probe["source_ir"]["idl_type"] == idl_type
+        assert probe["source_ir"]["supplementary_source"] == (
+            "iv8-navigator-fingerprint-supplement.v0.1"
+        )

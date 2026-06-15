@@ -409,6 +409,7 @@ def _build_attribute_probe(
             "type_check_strength": _type_check_strength(type_info),
         },
     }
+    _mark_supplementary_source(probe, member)
     if has_profile_expected:
         probe["source_ir"]["expected_source"] = "profile_values"
         probe["source_ir"]["profile_path"] = access_path
@@ -539,6 +540,7 @@ def _build_descriptor_probe(
             "runtime_accessibility": _runtime_accessibility_for(iface_name),
         },
     }
+    _mark_supplementary_source(probe, member)
     _mark_sensitive_surface(probe, iface_name, attr_name)
     return probe
 
@@ -594,3 +596,10 @@ def _mark_sensitive_surface(probe: dict[str, Any], iface_name: str, attr_name: s
     probe["sensitivity_reason"] = "standard_idl_surface_name_only"
     probe["source_ir"]["sensitive_surface_probe"] = True
     probe["source_ir"]["sensitivity_reason"] = "standard_idl_surface_name_only"
+
+
+def _mark_supplementary_source(probe: dict[str, Any], member: dict[str, Any]) -> None:
+    source = member.get("supplementary_source")
+    if not source:
+        return
+    probe["source_ir"]["supplementary_source"] = source
