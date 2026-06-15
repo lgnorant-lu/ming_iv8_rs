@@ -6,6 +6,42 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.42] - 2026-06-15
+
+> Local milestone tag pending. v0.8.42 completes Runtime Repair Harness M1 by
+> projecting repair candidates into repair briefs, evidence bundle manifests,
+> validation plans, and readiness classifications. Package metadata remains
+> `0.8.11`.
+
+### Added
+
+- **Repair brief schema** (`iv8-repair-brief.v0.1`): `build_repair_brief()`
+  creates deterministic, diagnostic-only repair instructions from candidate and
+  ticket data.
+- **Evidence bundle manifest** (`iv8-repair-evidence-bundle.v0.1`):
+  `build_evidence_bundle_manifest()` records source report refs, delta refs,
+  cross-source refs, knowledge refs, and explicit missing evidence without file
+  reads or writes.
+- **Validation plan schema** (`iv8-repair-validation-plan.v0.1`):
+  `build_validation_plan()` returns command strings, acceptance predicates, and
+  negative gates without executing commands.
+- **Readiness classification**: `classify_repair_readiness()` reports
+  `ready`, `incomplete`, or `blocked` with reasons while preserving
+  `diagnostic_only`.
+
+### Quality Gates
+
+- Bridge + convergence focused: 57/57 PASS
+- Python: 1476/1476 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff: PASS
+
+### Non-Goals Preserved
+
+- No Rust runtime repair or BCR parameterization.
+- No auto-apply, validation command execution, or patch generation.
+- No profile, baseline, probe-pack, corpus, source, or manifest writes.
+
 ## [0.8.41] - 2026-06-15
 
 > Local milestone tag pending. v0.8.41 completes Diagnostic-to-Substrate

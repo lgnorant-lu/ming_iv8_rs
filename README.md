@@ -41,7 +41,8 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **L2 Analyze Depth M1 (v0.8.39)**: enriched MAPE-K Analyze/Plan with gap taxonomy, severity weighting, and cross-source correlation consumption; 1454 Python PASS.
 - **Diagnostic-to-Substrate Bridge M1 (v0.8.40)**: repair ticket schema, knowledge-to-ticket projection, L3 owner routing table, and evidence referencing; 1464 Python PASS.
 - **Diagnostic-to-Substrate Bridge M2 (v0.8.41)**: before/after delta contract and repair candidate ledger; 1469 Python PASS.
-Current `0.8.11` package release scope. v0.8.12-v0.8.41 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
+- **Runtime Repair Harness M1 (v0.8.42)**: repair brief, evidence bundle manifest, validation plan, and readiness classification; 1476 Python PASS.
+Current `0.8.11` package release scope. v0.8.12-v0.8.42 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
 
 ## Install
 
