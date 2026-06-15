@@ -17,7 +17,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 - **Coverage map completion** (`tools/convergence/`): ~27 new entries in
   `_VECTOR_COVERAGE_MAP` for handled-but-unmapped screen, window, element
-  box-model, and DOM shape surfaces.
+  box-model, and DOM shape surfaces; map grows from 68 to 99.
 - **Profile auto-fill** (`tools/idl_probe/generate_probe_pack.py`):
   `build_profile_values_from_env()` projects flat environment data into the
   `profile_values` dot-path shape, skipping sensitive standard-IDL surfaces.
