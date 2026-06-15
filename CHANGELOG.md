@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [0.8.43] - 2026-06-15
 
-> Local milestone tag pending. v0.8.43 completes L3 P0 Navigator/Profile
+> Local milestone tagged. v0.8.43 completes L3 P0 Navigator/Profile
 > Runtime Batch M1, the first evidence-driven Rust runtime mutation version.
 > Package metadata remains `0.8.11`.
 
