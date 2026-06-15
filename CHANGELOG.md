@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [0.8.37] - 2026-06-15
 
-> Local milestone tag pending. v0.8.37 completes L2 Data-Flow Depth M1 by
+> Local milestone tagged. v0.8.37 completes L2 Data-Flow Depth M1 by
 > repairing Navigator/NavigatorUAData probe data depth and adding a report-only
 > Probe/Witness cross-source correlation layer. Package metadata remains
 > `0.8.11`.

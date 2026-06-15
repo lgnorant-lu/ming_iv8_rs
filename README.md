@@ -37,7 +37,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **L2 Probe Coverage Expansion M1 (v0.8.35)**: IDL probe compiler expands to 51 curated interfaces and 1,125 diagnostic probes with descriptor/prototype layers and coverage gap reporting; 1400 Python PASS.
 - **L2 Data-Flow Connectivity M1 (v0.8.36)**: profile-aware probe expectations, audited constructor allowlist, witness-to-convergence routing, and expanded 105-vector coverage map; 1415 Python PASS.
 - **L2 Data-Flow Depth M1 (v0.8.37)**: Navigator/NavigatorUAData supplementary IR probes and report-only Probe/Witness cross-source correlation with R2 hardening; 1427 Python PASS.
-Current `0.8.11` package release scope. v0.8.12-v0.8.37 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
+Current `0.8.11` package release scope. v0.8.12-v0.8.37 are local milestones; v0.8.38 is planned; metadata remains `0.8.11`. v0.9 holding track blocked.
 
 ## Install
 
