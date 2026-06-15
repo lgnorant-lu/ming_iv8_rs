@@ -6,6 +6,35 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.41] - 2026-06-15
+
+> Local milestone tag pending. v0.8.41 completes Diagnostic-to-Substrate
+> Bridge M2 with before/after delta contract and repair candidate ledger.
+> Package metadata remains `0.8.11`.
+
+### Added
+
+- **Delta contract** (`tools/diagnostic_bridge/`): `build_delta_contract()`
+  binds a repair ticket to base and current convergence snapshots.
+  `check_gap_resolved()` detects when a gap's status transitions from
+  mismatched/missing/errored to matched.
+- **Candidate ledger**: `build_candidate_ledger()` produces prioritized
+  ticket queue sorted by risk level and gap class severity.
+- **Bridge M2 gates**: 5 tests covering delta contract, gap resolution,
+  snapshot immutability, priority ordering, and lifecycle state.
+
+### Quality Gates
+
+- Bridge + convergence + crossref + feedback focused: 85/85 PASS
+- Python: 1469/1469 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff: PASS
+
+### Non-Goals Preserved
+
+- No runtime repair, harness, or BCR parameterization.
+- No Rust runtime changes.
+
 ## [0.8.40] - 2026-06-15
 
 > Local milestone tag pending. v0.8.40 completes Diagnostic-to-Substrate
