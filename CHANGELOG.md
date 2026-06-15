@@ -36,13 +36,13 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   preserving the original 1,125 probe IDs and relative order.
 - `navigator.cookieEnabled` is treated as a sensitive standard IDL surface and
   uses split property access in generated JS.
+- R2 review hardening records supplementary IR provenance in generated probe
+  metadata and separates `missing_both` from one-sided cross-source results.
 
 ### Quality Gates
 
-- Focused convergence + IDL + compat + feedback + cross-reference: 111/111 PASS
-- IDL + compatibility focused: 56/56 PASS
-- Cross-reference focused: 5/5 PASS
-- Python: 1426/1426 PASS (1 skipped)
+- R2 focused IDL + compatibility + cross-reference: 62/62 PASS
+- Python: 1427/1427 PASS (1 skipped)
 - L3 Phase C: 81/81 PASS
 - Scoped ruff for implementation files and cross-reference tests: PASS
 
