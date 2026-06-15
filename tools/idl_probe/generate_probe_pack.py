@@ -29,6 +29,38 @@ _GLOBAL_INSTANCE_NAMES: dict[str, str] = {
 _SENSITIVE_IDL_SURFACES: set[tuple[str, str]] = {
     ("Document", "cookie"),
     ("Document", "domain"),
+    ("Navigator", "cookieEnabled"),
+}
+
+
+def _idl_name(name: str) -> dict[str, Any]:
+    return {"kind": "name", "name": name, "nullable": False}
+
+
+def _idl_generic(name: str) -> dict[str, Any]:
+    return {"kind": "generic", "name": name, "nullable": False}
+
+
+_SUPPLEMENTARY_INTERFACE_ATTRIBUTES: dict[str, list[dict[str, Any]]] = {
+    "Navigator": [
+        {"name": "userAgent", "type": _idl_name("DOMString")},
+        {"name": "platform", "type": _idl_name("DOMString")},
+        {"name": "vendor", "type": _idl_name("DOMString")},
+        {"name": "language", "type": _idl_name("DOMString")},
+        {"name": "languages", "type": _idl_generic("FrozenArray")},
+        {"name": "hardwareConcurrency", "type": _idl_name("unsigned long")},
+        {"name": "deviceMemory", "type": _idl_name("double")},
+        {"name": "webdriver", "type": _idl_name("boolean")},
+        {"name": "cookieEnabled", "type": _idl_name("boolean")},
+    ],
+    "NavigatorUAData": [
+        {"name": "architecture", "type": _idl_name("DOMString")},
+        {"name": "bitness", "type": _idl_name("DOMString")},
+        {"name": "model", "type": _idl_name("DOMString")},
+        {"name": "platformVersion", "type": _idl_name("DOMString")},
+        {"name": "wow64", "type": _idl_name("boolean")},
+        {"name": "fullVersionList", "type": _idl_generic("FrozenArray")},
+    ],
 }
 
 _CONSTRUCTOR_AVAILABLE: set[str] = {
@@ -105,7 +137,7 @@ def generate_probe_pack(
     for defn in definitions:
         name = defn.get("name")
         if name and defn.get("kind") == "interface" and name in set(interfaces):
-            interface_map[name] = defn
+            interface_map[name] = _with_supplementary_attributes(defn)
 
     probes: list[dict[str, Any]] = []
 
@@ -231,6 +263,41 @@ def _load_ir(path: Path) -> dict[str, Any]:
         )
     except json.JSONDecodeError as exc:
         raise ValueError(f"unified_ir.json at {path} is not valid JSON: {exc}")
+
+
+def _with_supplementary_attributes(interface: dict[str, Any]) -> dict[str, Any]:
+    additions = _SUPPLEMENTARY_INTERFACE_ATTRIBUTES.get(str(interface.get("name", "")))
+    if not additions:
+        return interface
+    existing = {
+        member.get("name")
+        for member in interface.get("members", [])
+        if isinstance(member, dict)
+    }
+    missing = [item for item in additions if item["name"] not in existing]
+    if not missing:
+        return interface
+
+    merged = dict(interface)
+    merged["members"] = list(interface.get("members", [])) + [
+        _supplementary_attribute(item) for item in missing
+    ]
+    merged["supplementary_sources"] = [
+        *list(interface.get("supplementary_sources", [])),
+        "iv8-navigator-fingerprint-supplement.v0.1",
+    ]
+    return merged
+
+
+def _supplementary_attribute(item: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "kind": "attribute",
+        "name": item["name"],
+        "ext_attrs": [],
+        "type": dict(item["type"]),
+        "readonly": True,
+        "supplementary_source": "iv8-navigator-fingerprint-supplement.v0.1",
+    }
 
 
 _IDL_TYPE_TO_JS_CHECK: dict[str, str] = {
@@ -492,6 +559,8 @@ def _js_property_expr(iface_name: str, attr_name: str) -> str:
         return "'co' + 'okie'"
     if (iface_name, attr_name) == ("Document", "domain"):
         return "'do' + 'main'"
+    if (iface_name, attr_name) == ("Navigator", "cookieEnabled"):
+        return "'co' + 'okieEnabled'"
     return repr(attr_name)
 
 

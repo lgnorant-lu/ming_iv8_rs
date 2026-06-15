@@ -355,7 +355,8 @@ def test_profile_overlay_preserves_no_profile_probe_count():
     baseline = generate_probe_pack()
     overlaid = generate_probe_pack(profile_values={})
     assert len(overlaid["interfaces"]) == len(baseline["interfaces"]) == 51
-    assert len(overlaid["probes"]) == len(baseline["probes"]) == 1125
+    assert len(overlaid["probes"]) == len(baseline["probes"])
+    assert len(baseline["probes"]) >= 1125
     assert [p["probe_id"] for p in overlaid["probes"]] == [
         p["probe_id"] for p in baseline["probes"]
     ]
@@ -546,7 +547,7 @@ def test_navigator_ir_repair_preserves_existing_probe_ids_and_order():
     pack = generate_probe_pack()
     ids = [p["probe_id"] for p in pack["probes"]]
     assert len(pack["interfaces"]) == 51
-    assert len(ids) > 1125
+    assert len(ids) == 1155
 
     added = {
         f"idl.attr.Navigator.{attr}" for attr in _NAVIGATOR_FINGERPRINT_TYPES
@@ -566,7 +567,11 @@ def test_navigator_ir_repair_preserves_existing_probe_ids_and_order():
         )
     }
     original_ids = [probe_id for probe_id in ids if probe_id not in added]
-    baseline_ids = [p["probe_id"] for p in generate_probe_pack(profile_values={})["probes"] if p["probe_id"] not in added]
+    baseline_ids = [
+        p["probe_id"]
+        for p in generate_probe_pack(profile_values={})["probes"]
+        if p["probe_id"] not in added
+    ]
     assert len(original_ids) == 1125
     assert original_ids == baseline_ids
 
