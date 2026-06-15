@@ -6,6 +6,41 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.45] - 2026-06-15
+
+> Local milestone accepted. v0.8.45 starts P2 NavigatorUAData / Client Hints with
+> a low-entropy boundary slice: owner routing, brief selection, profile-backed
+> platform/mobile/brands-shape, and async inventory. Package metadata remains
+> `0.8.11`.
+
+### Added
+
+- **UAData owner path**: `NAVIGATOR_UADATA_OWNER_PATH = "iv8-core/user_agent_data.rs"`
+  with `_OWNER_ALIASES` accepting `"iv8-core/native_env.rs"` for backward compat.
+- **UAData runtime vectors**: `UADATA_RUNTIME_VECTORS = {"V014"}` — only V014
+  selected as low-entropy scope.
+- **UAData Rust test**: `uadata_low_entropy_boundary_v045` verifies
+  `platform`/`mobile` profile projection and `brands` array/key shape.
+
+### Quality Gates
+
+- Bridge + convergence focused: 79/79 PASS
+- Python: 1498/1498 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff: PASS
+
+### Deferred to P2 Follow-Up
+
+- `getHighEntropyValues()` Promise behavior (needs async shape design doc)
+- `fullVersionList`, brands value/order/version, UA string coherence
+
+### Non-Goals Preserved
+
+- No getHighEntropyValues behavior repair.
+- No fullVersionList or high-entropy value verification.
+- No brands value/order/version or UA string coherence claim.
+- No BCR/UA mutation.
+
 ## [0.8.44] - 2026-06-15
 
 > Local milestone tag pending. v0.8.44 completes L3 P1 Screen/Window
