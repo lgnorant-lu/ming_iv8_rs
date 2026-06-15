@@ -603,3 +603,27 @@ def _mark_supplementary_source(probe: dict[str, Any], member: dict[str, Any]) ->
     if not source:
         return
     probe["source_ir"]["supplementary_source"] = source
+
+
+def build_profile_values_from_env(
+    flat_env: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Build in-memory profile_values from generic flat environment data.
+
+    Projects flat dot-path keys into the shape consumed by
+    ``generate_probe_pack(profile_values=...)``, skipping sensitive
+    standard-IDL surfaces.
+
+    Returns a new dict. Does not write files. Does not mutate the input.
+    """
+    if flat_env is None:
+        return {}
+    sensitive_dot_paths = {
+        f"{_GLOBAL_INSTANCE_NAMES.get(iface, iface.lower())}.{attr}"
+        for iface, attr in _SENSITIVE_IDL_SURFACES
+    }
+    return {
+        key: value
+        for key, value in flat_env.items()
+        if isinstance(key, str) and key not in sensitive_dot_paths
+    }

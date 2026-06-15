@@ -18,6 +18,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.idl_probe.generate_probe_pack import (  # noqa: E402
     _CONSTRUCTOR_AVAILABLE,
+    build_profile_values_from_env,
     generate_probe_pack,
 )
 
@@ -607,3 +608,83 @@ def test_navigator_ua_data_expansion_probes_are_generated():
         assert probe["source_ir"]["supplementary_source"] == (
             "iv8-navigator-fingerprint-supplement.v0.1"
         )
+
+
+# -- v0.8.38 profile auto-fill gates --------------------------------------
+
+
+def test_profile_auto_fill_from_flat_env_is_deterministic():
+    flat = {"navigator.userAgent": "Mozilla/5.0", "screen.width": 1920}
+    first = build_profile_values_from_env(flat)
+    second = build_profile_values_from_env(flat)
+    assert first == second
+
+
+def test_profile_auto_fill_skips_sensitive_surfaces():
+    flat = {
+        "navigator.userAgent": "Mozilla/5.0",
+        "document.cookie": "session=secret",
+        "document.domain": "example.com",
+        "navigator.cookieEnabled": True,
+    }
+    values = build_profile_values_from_env(flat)
+    assert "document.cookie" not in values
+    assert "document.domain" not in values
+    assert "navigator.cookieEnabled" not in values
+    assert "navigator.userAgent" in values
+
+
+def test_profile_auto_fill_does_not_write_files(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    pre = set(tmp_path.iterdir())
+    build_profile_values_from_env({"screen.width": 1920})
+    post = set(tmp_path.iterdir())
+    assert pre == post
+
+
+def test_profile_auto_fill_empty_input_produces_empty_dict():
+    assert build_profile_values_from_env({}) == {}
+    assert build_profile_values_from_env(None) == {}
+
+
+def test_profile_auto_fill_projects_to_profile_values_dot_paths():
+    flat = {
+        "navigator.userAgent": "test-ua",
+        "screen.width": 1920,
+        "screen.height": 1080,
+    }
+    values = build_profile_values_from_env(flat)
+    assert values["navigator.userAgent"] == "test-ua"
+    assert values["screen.width"] == 1920
+    assert values["screen.height"] == 1080
+
+
+def test_profile_auto_fill_fuels_profile_aware_probes():
+    flat = {"navigator.userAgent": "Mozilla/5.0 expected"}
+    values = build_profile_values_from_env(flat)
+    pack = generate_probe_pack(
+        interfaces=["Navigator"],
+        profile_values=values,
+    )
+    probe = [
+        p for p in pack["probes"]
+        if p["probe_id"] == "idl.attr.Navigator.userAgent"
+    ]
+    assert len(probe) == 1
+    assert probe[0]["source_ir"]["check_mode"] == "type_and_profile_value"
+    assert "Mozilla/5.0 expected" in probe[0]["js"]
+
+
+def test_profile_auto_fill_does_not_mutate_input():
+    flat = {"screen.width": 1920, "screen.height": 1080}
+    before = dict(flat)
+    build_profile_values_from_env(flat)
+    assert flat == before
+
+
+def test_profile_auto_fill_preserves_existing_probe_set():
+    baseline = generate_probe_pack()
+    flat = {"screen.width": 1920}
+    values = build_profile_values_from_env(flat)
+    overlaid = generate_probe_pack(profile_values=values)
+    assert len(overlaid["probes"]) == len(baseline["probes"])
