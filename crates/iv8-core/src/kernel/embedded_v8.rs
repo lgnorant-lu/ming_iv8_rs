@@ -2113,4 +2113,43 @@ mod tests {
             other => panic!("expected numeric deviceMemory, got {:?}", other),
         }
     }
+
+    #[test]
+    fn uadata_low_entropy_boundary_v045() {
+        use crate::convert::RustValue;
+
+        let source = iv8_profile::defaults::default_profile_source();
+        let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
+        let config = KernelConfig::default().with_profile_matrix(&matrix);
+        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.userAgentData.platform"),
+            RustValue::String(source.navigator.user_agent_data.platform)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.userAgentData.mobile"),
+            RustValue::Bool(source.navigator.user_agent_data.mobile)
+        );
+
+        let brands = kernel.eval_to_rust_value("navigator.userAgentData.brands");
+        match brands {
+            RustValue::Array(ref entries) => {
+                assert!(!entries.is_empty(), "brands array should not be empty");
+                if let RustValue::Object(ref obj) = entries[0] {
+                    assert!(
+                        obj.contains_key("brand"),
+                        "brands[0] should have 'brand' key"
+                    );
+                    assert!(
+                        obj.contains_key("version"),
+                        "brands[0] should have 'version' key"
+                    );
+                } else {
+                    panic!("brands[0] should be an Object");
+                }
+            }
+            other => panic!("expected brands to be an Array, got {:?}", other),
+        }
+    }
 }

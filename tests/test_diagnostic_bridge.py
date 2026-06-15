@@ -738,3 +738,80 @@ def test_validate_runtime_brief_screen_owner_accepts_screen_vector():
     result = validate_runtime_brief(brief, owner_path=SCREEN_WINDOW_OWNER_PATH)
     assert result["valid"] is True
     assert result["blocked_reasons"] == []
+
+
+# -- v0.8.45 L3 P2 UAData low-entropy boundary gates -------------------
+
+
+def test_select_runtime_briefs_uadata_owner_selects_v014():
+    from tools.diagnostic_bridge import (
+        NAVIGATOR_UADATA_OWNER_PATH,
+        build_repair_brief,
+        select_runtime_briefs,
+    )
+
+    uad = build_repair_brief({"ticket_id": "t-uad", "source_vector": "V014"})
+    uad["readiness"] = "ready"
+    uad["gap_class"] = "value_mismatch"
+    uad["risk_level"] = "low"
+    uad["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    nav = build_repair_brief({"ticket_id": "t-nav", "source_vector": "V001"})
+    nav["readiness"] = "ready"
+    nav["gap_class"] = "value_mismatch"
+    nav["risk_level"] = "low"
+    nav["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    result = select_runtime_briefs(
+        [uad, nav],
+        owner_path=NAVIGATOR_UADATA_OWNER_PATH,
+    )
+    ids = {b["ticket_id"] for b in result}
+    assert "t-uad" in ids
+    assert len(result) >= 1
+
+
+def test_validate_runtime_brief_uadata_owner_accepts_v014():
+    from tools.diagnostic_bridge import (
+        NAVIGATOR_UADATA_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V014"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+    result = validate_runtime_brief(brief, owner_path=NAVIGATOR_UADATA_OWNER_PATH)
+    assert result["valid"] is True
+    assert result["blocked_reasons"] == []
+
+
+def test_validate_runtime_brief_uadata_owner_rejects_non_v014():
+    from tools.diagnostic_bridge import (
+        NAVIGATOR_UADATA_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+    result = validate_runtime_brief(brief, owner_path=NAVIGATOR_UADATA_OWNER_PATH)
+    assert result["valid"] is False
+    assert any("not_in_runtime_set" in r for r in result["blocked_reasons"])
+
+
+def test_select_runtime_briefs_default_includes_v014_in_navigator_set():
+    from tools.diagnostic_bridge import build_repair_brief, select_runtime_briefs
+
+    brief = build_repair_brief({"ticket_id": "t-uad", "source_vector": "V014"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["risk_level"] = "low"
+    brief["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    selected = select_runtime_briefs([brief])
+    assert len(selected) == 1
+    assert selected[0]["source_vector"] == "V014"
