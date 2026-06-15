@@ -897,3 +897,216 @@ def test_timing_runtime_vectors_only_contains_v067():
     from tools.diagnostic_bridge import TIMING_RUNTIME_VECTORS
 
     assert TIMING_RUNTIME_VECTORS == {"V067"}
+
+
+# -- v0.8.47 L3 P4 descriptor/native-code boundary gates -------------------
+
+
+def test_select_runtime_briefs_allows_undetect_owner_v083_v047():
+    from tools.diagnostic_bridge import (
+        UNDETECT_OWNER_PATH,
+        build_repair_brief,
+        select_runtime_briefs,
+    )
+
+    v083 = build_repair_brief({"ticket_id": "t-v083", "source_vector": "V083"})
+    v083["readiness"] = "ready"
+    v083["gap_class"] = "value_mismatch"
+    v083["risk_level"] = "low"
+    v083["l3_owner_module"] = "iv8-undetect/"
+
+    nav = build_repair_brief({"ticket_id": "t-nav", "source_vector": "V001"})
+    nav["readiness"] = "ready"
+    nav["gap_class"] = "value_mismatch"
+    nav["risk_level"] = "low"
+    nav["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    result = select_runtime_briefs([v083, nav], owner_path=UNDETECT_OWNER_PATH)
+    assert len(result) == 1
+    assert result[0]["source_vector"] == "V083"
+
+
+def test_select_runtime_briefs_allows_dom_owner_v085_v047():
+    from tools.diagnostic_bridge import (
+        DOM_OWNER_PATH,
+        build_repair_brief,
+        select_runtime_briefs,
+    )
+
+    v085 = build_repair_brief({"ticket_id": "t-v085", "source_vector": "V085"})
+    v085["readiness"] = "ready"
+    v085["gap_class"] = "value_mismatch"
+    v085["risk_level"] = "low"
+    v085["l3_owner_module"] = "iv8-core/dom/"
+
+    nav = build_repair_brief({"ticket_id": "t-nav", "source_vector": "V001"})
+    nav["readiness"] = "ready"
+    nav["gap_class"] = "value_mismatch"
+    nav["risk_level"] = "low"
+    nav["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    result = select_runtime_briefs([v085, nav], owner_path=DOM_OWNER_PATH)
+    assert len(result) == 1
+    assert result[0]["source_vector"] == "V085"
+
+
+def test_select_runtime_briefs_rejects_cross_owner_descriptor_vector_v047():
+    from tools.diagnostic_bridge import (
+        DOM_OWNER_PATH,
+        UNDETECT_OWNER_PATH,
+        build_repair_brief,
+        select_runtime_briefs,
+    )
+
+    v083 = build_repair_brief({"ticket_id": "t-v083", "source_vector": "V083"})
+    v083["readiness"] = "ready"
+    v083["gap_class"] = "value_mismatch"
+    v083["risk_level"] = "low"
+    v083["l3_owner_module"] = "iv8-undetect/"
+
+    v085 = build_repair_brief({"ticket_id": "t-v085", "source_vector": "V085"})
+    v085["readiness"] = "ready"
+    v085["gap_class"] = "value_mismatch"
+    v085["risk_level"] = "low"
+    v085["l3_owner_module"] = "iv8-core/dom/"
+
+    undetect_result = select_runtime_briefs([v083, v085], owner_path=UNDETECT_OWNER_PATH)
+    assert len(undetect_result) == 1
+    assert undetect_result[0]["source_vector"] == "V083"
+
+    dom_result = select_runtime_briefs([v083, v085], owner_path=DOM_OWNER_PATH)
+    assert len(dom_result) == 1
+    assert dom_result[0]["source_vector"] == "V085"
+
+
+def test_validate_runtime_brief_undetect_owner_accepts_v083():
+    from tools.diagnostic_bridge import (
+        UNDETECT_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V083"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-undetect/"
+    result = validate_runtime_brief(brief, owner_path=UNDETECT_OWNER_PATH)
+    assert result["valid"] is True
+    assert result["blocked_reasons"] == []
+
+
+def test_validate_runtime_brief_dom_owner_accepts_v085():
+    from tools.diagnostic_bridge import (
+        DOM_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V085"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-core/dom/"
+    result = validate_runtime_brief(brief, owner_path=DOM_OWNER_PATH)
+    assert result["valid"] is True
+    assert result["blocked_reasons"] == []
+
+
+def test_validate_runtime_brief_undetect_owner_rejects_non_v083():
+    from tools.diagnostic_bridge import (
+        UNDETECT_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V084"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-undetect/"
+    result = validate_runtime_brief(brief, owner_path=UNDETECT_OWNER_PATH)
+    assert result["valid"] is False
+    assert any("not_in_runtime_set" in r for r in result["blocked_reasons"])
+
+
+def test_validate_runtime_brief_dom_owner_rejects_non_v085():
+    from tools.diagnostic_bridge import (
+        DOM_OWNER_PATH,
+        build_repair_brief,
+        validate_runtime_brief,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V086"})
+    brief["readiness"] = "ready"
+    brief["gap_class"] = "value_mismatch"
+    brief["l3_owner_module"] = "iv8-core/dom/"
+    result = validate_runtime_brief(brief, owner_path=DOM_OWNER_PATH)
+    assert result["valid"] is False
+    assert any("not_in_runtime_set" in r for r in result["blocked_reasons"])
+
+
+def test_select_runtime_briefs_preserves_existing_owner_paths_v047():
+    from tools.diagnostic_bridge import (
+        NAVIGATOR_OWNER_PATH,
+        SCREEN_WINDOW_OWNER_PATH,
+        NAVIGATOR_UADATA_OWNER_PATH,
+        TIMING_OWNER_PATH,
+        UNDETECT_OWNER_PATH,
+        DOM_OWNER_PATH,
+        build_repair_brief,
+        select_runtime_briefs,
+    )
+
+    navigator = build_repair_brief({"ticket_id": "t-nav", "source_vector": "V001"})
+    navigator["readiness"] = "ready"
+    navigator["gap_class"] = "value_mismatch"
+    navigator["risk_level"] = "low"
+    navigator["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    screen = build_repair_brief({"ticket_id": "t-screen", "source_vector": "V015"})
+    screen["readiness"] = "ready"
+    screen["gap_class"] = "value_mismatch"
+    screen["risk_level"] = "low"
+    screen["l3_owner_module"] = "iv8-surface"
+
+    uadata = build_repair_brief({"ticket_id": "t-uadata", "source_vector": "V014"})
+    uadata["readiness"] = "ready"
+    uadata["gap_class"] = "value_mismatch"
+    uadata["risk_level"] = "low"
+    uadata["l3_owner_module"] = "iv8-core/native_env.rs"
+
+    timing = build_repair_brief({"ticket_id": "t-timing", "source_vector": "V067"})
+    timing["readiness"] = "ready"
+    timing["gap_class"] = "value_mismatch"
+    timing["risk_level"] = "low"
+    timing["l3_owner_module"] = "iv8-core/events/"
+
+    all_briefs = [navigator, screen, uadata, timing]
+
+    nav_result = select_runtime_briefs(all_briefs, owner_path=NAVIGATOR_OWNER_PATH)
+    assert any(b["source_vector"] == "V001" for b in nav_result)
+
+    screen_result = select_runtime_briefs(all_briefs, owner_path=SCREEN_WINDOW_OWNER_PATH)
+    assert any(b["source_vector"] == "V015" for b in screen_result)
+
+    ua_result = select_runtime_briefs(all_briefs, owner_path=NAVIGATOR_UADATA_OWNER_PATH)
+    assert any(b["source_vector"] == "V014" for b in ua_result)
+
+    timing_result = select_runtime_briefs(all_briefs, owner_path=TIMING_OWNER_PATH)
+    assert any(b["source_vector"] == "V067" for b in timing_result)
+
+    undetect_result = select_runtime_briefs(all_briefs, owner_path=UNDETECT_OWNER_PATH)
+    assert len(undetect_result) == 0
+
+    dom_result = select_runtime_briefs(all_briefs, owner_path=DOM_OWNER_PATH)
+    assert len(dom_result) == 0
+
+
+def test_undetect_runtime_vectors_only_contains_v083():
+    from tools.diagnostic_bridge import UNDETECT_RUNTIME_VECTORS
+
+    assert UNDETECT_RUNTIME_VECTORS == {"V083"}
+
+
+def test_dom_runtime_vectors_only_contains_v085():
+    from tools.diagnostic_bridge import DOM_RUNTIME_VECTORS
+
+    assert DOM_RUNTIME_VECTORS == {"V085"}

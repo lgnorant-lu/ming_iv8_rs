@@ -2077,6 +2077,8 @@ mod tests {
 
     #[test]
     fn navigator_profile_runtime_batch_v043() {
+        use crate::convert::RustValue;
+
         let source = iv8_profile::defaults::default_profile_source();
         let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
         let config = KernelConfig::default().with_profile_matrix(&matrix);
@@ -2179,6 +2181,38 @@ mod tests {
                 assert!(b >= a, "performance.now() monotonic: {} then {}", a, b);
             }
             other => panic!("expected two floats from performance.now(), got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn native_code_tostring_boundary_v047() {
+        use crate::convert::RustValue;
+
+        let source = iv8_profile::defaults::default_profile_source();
+        let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
+        let config = KernelConfig::default().with_profile_matrix(&matrix);
+        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+
+        assert_eq!(
+            kernel.eval_to_rust_value("typeof eval.toString"),
+            RustValue::String("function".into())
+        );
+
+        let ts = kernel.eval_to_rust_value("eval.toString()");
+        match ts {
+            RustValue::String(s) => {
+                assert!(
+                    s.contains("function"),
+                    "eval.toString() must contain 'function', got '{}'",
+                    s
+                );
+                assert!(
+                    s.contains("[native code]"),
+                    "eval.toString() must contain '[native code]', got '{}'",
+                    s
+                );
+            }
+            other => panic!("expected string from eval.toString(), got {:?}", other),
         }
     }
 }
