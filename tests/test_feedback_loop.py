@@ -6,7 +6,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from tools.feedback_loop import (
+from tools.cross_reference import generate_cross_source_report  # noqa: E402
+from tools.feedback_loop import (  # noqa: E402
     FeedbackState,
     KnowledgeBase,
     analyze,
@@ -289,3 +290,90 @@ def test_mapek_snapshot_preserves_positional_arguments_with_witness_keyword():
     )
     assert cycle["convergence"].get("delta") is not None
     assert cycle["phases"]["plan"]["total_recommendations"] <= 6
+
+
+# -- v0.8.39 analyze/plan depth gates --------------------------------------
+
+
+def test_analyze_includes_gap_class_distribution():
+    mon = monitor(_SAMPLE_PROBES)
+    anl = analyze(mon)
+    groups = anl["groups"]
+    assert len(groups) > 0
+    for group in groups:
+        assert "gap_classes" in group
+        assert isinstance(group["gap_classes"], dict)
+
+
+def test_analyze_includes_severity_summary():
+    mon = monitor(_SAMPLE_PROBES)
+    anl = analyze(mon)
+    groups = anl["groups"]
+    for group in groups:
+        assert "severity" in group
+        assert isinstance(group["severity"], dict)
+
+
+def test_analyze_preserves_backward_compatibility():
+    mon = monitor(_SAMPLE_PROBES)
+    anl = analyze(mon)
+    assert "groups" in anl
+    assert "phase" in anl
+    assert anl["phase"] == "analyze"
+    assert anl["writes"] == []
+    assert anl["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_analyze_accepts_cross_source_report():
+    mon = monitor(_SAMPLE_PROBES)
+    xref = generate_cross_source_report(_SAMPLE_PROBES, [])
+    anl = analyze(mon, cross_source_report=xref)
+    assert "cross_source" in anl
+    assert anl["cross_source"]["writes"] == []
+    assert anl["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_analyze_cross_source_report_not_mutated():
+    mon = monitor(_SAMPLE_PROBES)
+    xref = generate_cross_source_report(_SAMPLE_PROBES, [])
+    before = json.dumps(xref, sort_keys=True)
+    analyze(mon, cross_source_report=xref)
+    after = json.dumps(xref, sort_keys=True)
+    assert before == after
+
+
+def test_plan_includes_gap_class_and_severity():
+    mon = monitor(_SAMPLE_PROBES)
+    anl = analyze(mon)
+    pln = plan(anl)
+    recs = pln["recommendations"]
+    for rec in recs:
+        assert "gap_class" in rec
+        assert "severity" in rec
+
+
+def test_plan_action_remains_report_only():
+    mon = monitor(_SAMPLE_PROBES)
+    anl = analyze(mon)
+    pln = plan(anl)
+    for rec in pln["recommendations"]:
+        assert rec["action"] == "report_only"
+
+
+def test_plan_accepts_cross_source_classifications():
+    mon = monitor(_SAMPLE_PROBES)
+    xref = generate_cross_source_report(_SAMPLE_PROBES, [])
+    anl = analyze(mon, cross_source_report=xref)
+    pln = plan(anl, cross_source_report=xref)
+    for rec in pln["recommendations"]:
+        assert "cross_classification" in rec
+
+
+def test_enriched_outputs_are_diagnostic_only():
+    mon = monitor(_SAMPLE_PROBES)
+    anl = analyze(mon)
+    pln = plan(anl)
+    assert anl["writes"] == []
+    assert anl["evidence_ceiling"] == "diagnostic_only"
+    assert pln["writes"] == []
+    assert pln["evidence_ceiling"] == "diagnostic_only"
