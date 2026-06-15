@@ -275,7 +275,10 @@ def test_build_repair_brief_produces_diagnostic_only_brief():
 
     tickets = project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
     candidate = build_candidate_ledger(tickets)[0]
-    brief = build_repair_brief(candidate, ticket=tickets[0])
+    matching_ticket = next(
+        t for t in tickets if t["ticket_id"] == candidate["ticket_id"]
+    )
+    brief = build_repair_brief(candidate, ticket=matching_ticket)
     assert brief["schema_version"] == REPAIR_BRIEF_SCHEMA
     assert brief["brief_id"].startswith("sha256:")
     assert brief["ticket_id"] == candidate["ticket_id"]
@@ -294,13 +297,35 @@ def test_repair_brief_id_is_deterministic_and_inputs_not_mutated():
 
     tickets = project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
     candidate = build_candidate_ledger(tickets)[0]
+    matching_ticket = next(
+        t for t in tickets if t["ticket_id"] == candidate["ticket_id"]
+    )
     before_candidate = copy.deepcopy(candidate)
-    before_ticket = copy.deepcopy(tickets[0])
-    first = build_repair_brief(candidate, ticket=tickets[0])
-    second = build_repair_brief(candidate, ticket=tickets[0])
+    before_ticket = copy.deepcopy(matching_ticket)
+    first = build_repair_brief(candidate, ticket=matching_ticket)
+    second = build_repair_brief(candidate, ticket=matching_ticket)
     assert first["brief_id"] == second["brief_id"]
     assert candidate == before_candidate
-    assert tickets[0] == before_ticket
+    assert matching_ticket == before_ticket
+
+
+def test_repair_brief_blocks_on_ticket_candidate_mismatch():
+    from tools.diagnostic_bridge import (
+        build_candidate_ledger,
+        build_repair_brief,
+        project_tickets_from_knowledge_index,
+    )
+
+    tickets = project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
+    candidate = build_candidate_ledger(tickets)[0]
+    other_ticket = next(
+        t for t in tickets if t["ticket_id"] != candidate["ticket_id"]
+    )
+    brief = build_repair_brief(candidate, ticket=other_ticket)
+    assert brief["readiness"] == "blocked"
+    assert brief["blocked_reason"] == "ticket_candidate_mismatch"
+    assert brief["writes"] == []
+    assert brief["evidence_ceiling"] == "diagnostic_only"
 
 
 def test_build_evidence_bundle_manifest_references_only(tmp_path, monkeypatch):
@@ -397,4 +422,90 @@ def test_classify_repair_readiness_incomplete_with_missing_evidence():
     readiness = classify_repair_readiness(brief, manifest, plan)
     assert readiness["readiness"] == "incomplete"
     assert "missing_evidence_refs" in readiness["readiness_reasons"]
+    assert readiness["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_classify_repair_readiness_incomplete_with_missing_owner():
+    from tools.diagnostic_bridge import (
+        build_evidence_bundle_manifest,
+        build_repair_brief,
+        build_validation_plan,
+        classify_repair_readiness,
+    )
+
+    brief = build_repair_brief(
+        {"ticket_id": "t-001", "source_vector": "unmapped", "l3_owner_module": "unknown"},
+    )
+    manifest = build_evidence_bundle_manifest(
+        brief,
+        {"source_reports": ["snapshot:base"], "delta_contract_ref": "delta:1"},
+    )
+    plan = build_validation_plan(brief)
+    readiness = classify_repair_readiness(brief, manifest, plan)
+    assert readiness["readiness"] == "incomplete"
+    assert "missing_owner" in readiness["readiness_reasons"]
+    assert readiness["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_classify_repair_readiness_incomplete_without_validation_plan():
+    from tools.diagnostic_bridge import (
+        build_evidence_bundle_manifest,
+        build_repair_brief,
+        classify_repair_readiness,
+    )
+
+    brief = build_repair_brief({"ticket_id": "t-001", "source_vector": "V001"})
+    manifest = build_evidence_bundle_manifest(
+        brief,
+        {"source_reports": ["snapshot:base"], "delta_contract_ref": "delta:1"},
+    )
+    readiness = classify_repair_readiness(brief, manifest, None)
+    assert readiness["readiness"] == "incomplete"
+    assert "missing_validation_plan" in readiness["readiness_reasons"]
+    assert readiness["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_classify_repair_readiness_blocked_with_reason():
+    from tools.diagnostic_bridge import (
+        build_evidence_bundle_manifest,
+        build_repair_brief,
+        build_validation_plan,
+        classify_repair_readiness,
+    )
+
+    brief = build_repair_brief(
+        {"ticket_id": "t-001", "source_vector": "V001"},
+    )
+    brief["blocked_reason"] = "manual_block"
+    brief["readiness"] = "blocked"
+    manifest = build_evidence_bundle_manifest(
+        brief,
+        {"source_reports": ["snapshot:base"], "delta_contract_ref": "delta:1"},
+    )
+    plan = build_validation_plan(brief)
+    readiness = classify_repair_readiness(brief, manifest, plan)
+    assert readiness["readiness"] == "blocked"
+    assert "manual_block" in readiness["readiness_reasons"]
+    assert readiness["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_classify_repair_readiness_deferred_with_reason():
+    from tools.diagnostic_bridge import (
+        build_evidence_bundle_manifest,
+        build_repair_brief,
+        build_validation_plan,
+        classify_repair_readiness,
+    )
+
+    brief = build_repair_brief(
+        {"ticket_id": "t-001", "source_vector": "V001", "deferred_reason": "awaiting upstream BCR"},
+    )
+    manifest = build_evidence_bundle_manifest(
+        brief,
+        {"source_reports": ["snapshot:base"], "delta_contract_ref": "delta:1"},
+    )
+    plan = build_validation_plan(brief)
+    readiness = classify_repair_readiness(brief, manifest, plan)
+    assert readiness["readiness"] == "deferred"
+    assert "awaiting upstream BCR" in readiness["readiness_reasons"]
     assert readiness["evidence_ceiling"] == "diagnostic_only"
