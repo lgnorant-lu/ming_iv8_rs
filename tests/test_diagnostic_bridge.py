@@ -768,7 +768,8 @@ def test_select_runtime_briefs_uadata_owner_selects_v014():
     )
     ids = {b["ticket_id"] for b in result}
     assert "t-uad" in ids
-    assert len(result) >= 1
+    assert len(result) == 1
+    assert result[0]["source_vector"] == "V014"
 
 
 def test_validate_runtime_brief_uadata_owner_accepts_v014():
@@ -815,3 +816,19 @@ def test_select_runtime_briefs_default_includes_v014_in_navigator_set():
     selected = select_runtime_briefs([brief])
     assert len(selected) == 1
     assert selected[0]["source_vector"] == "V014"
+
+
+def test_uadata_runtime_vectors_only_contains_v014():
+    from tools.diagnostic_bridge import UADATA_RUNTIME_VECTORS
+
+    assert UADATA_RUNTIME_VECTORS == {"V014"}
+
+
+def test_uadata_async_ghev_not_in_bridge_scope():
+    import inspect
+
+    from tools import diagnostic_bridge
+
+    src = inspect.getsource(diagnostic_bridge)
+    assert "getHighEntropyValues" not in src
+    assert "fullVersionList" not in src
