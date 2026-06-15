@@ -6,6 +6,41 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.40] - 2026-06-15
+
+> Local milestone tag pending. v0.8.40 completes Diagnostic-to-Substrate
+> Bridge M1 by creating the repair ticket schema, knowledge-to-ticket
+> projection, L3 owner routing table, and evidence referencing layer.
+> Package metadata remains `0.8.11`.
+
+### Added
+
+- **Diagnostic bridge** (`tools/diagnostic_bridge/`): new module between L2
+  diagnostics and future L3 repair.
+- **Repair ticket schema** (`iv8-repair-ticket.v0.1`): `RepairTicket` dataclass
+  with deterministic `ticket_id`, `source_vector`, `gap_class`, `evidence_refs`,
+  `l3_owner_module`, `risk_level`.
+- **Knowledge projection**: `project_tickets_from_knowledge_index()` projects
+  convergence `known_gaps` into structured tickets.
+- **L3 owner routing**: `OWNER_ROUTING_TABLE` (~70 vectors → 6 crate targets)
+  with `route_ticket_to_owner()`.
+- **Evidence referencing**: tickets bundle `source_event_ids` from convergence.
+- **Bridge gates**: 9 tests covering schema, determinism, projection,
+  routing, no-mutation, no-write.
+
+### Quality Gates
+
+- Bridge + convergence + crossref + feedback focused: 80/80 PASS
+- Python: 1464/1464 PASS (1 skipped)
+- L3 Phase C: 81/81 PASS
+- Scoped ruff: PASS
+
+### Non-Goals Preserved
+
+- No runtime repair, BCR parameterization, or delta contract.
+- No Rust runtime changes.
+- No file writes.
+
 ## [0.8.39] - 2026-06-15
 
 > Local milestone tag pending. v0.8.39 completes L2 Analyze Depth M1 by
