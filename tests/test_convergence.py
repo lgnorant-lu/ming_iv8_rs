@@ -8,6 +8,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from tools.convergence import (  # noqa: E402
+    _V8_HARD_LIMITS,
+    _VECTOR_COVERAGE_MAP,
     build_convergence_snapshot,
     build_knowledge_index,
     diff_convergence_snapshots,
@@ -482,3 +484,47 @@ def test_coverage_report_data_fill_expands_known_vector_universe():
     report = generate_coverage_report([])
     assert report["total_vectors"] >= 45
     assert report["summary"]["hard_limit"] >= 13
+
+
+# -- v0.8.38 coverage map completion gates -------------------------------
+
+
+def test_coverage_map_completion_adds_handled_entries():
+    entries_from = set(_VECTOR_COVERAGE_MAP)
+    assert "screen.availLeft" in entries_from
+    assert "screen.availTop" in entries_from
+    assert "window.scrollX" in entries_from
+    assert "window.scrollY" in entries_from
+    assert len(entries_from) > 68
+
+
+def test_coverage_completion_does_not_promote_true_missing():
+    report = generate_coverage_report([])
+    assert report["summary"]["covered"] == 0
+    assert report["summary"]["not_yet_probed"] > 0
+    assert report["summary"]["hard_limit"] >= 13
+
+
+def test_coverage_completion_preserves_hard_limits():
+    report = generate_coverage_report([])
+    hard = set(report["coverage"]["hard_limit"])
+    for vid in _V8_HARD_LIMITS:
+        assert vid in hard, f"hard limit {vid} missing"
+
+
+def test_coverage_completion_handled_paths_reach_expected_vectors():
+    from tools.idl_probe.generate_probe_pack import generate_probe_pack
+
+    pack = generate_probe_pack()
+    ids = [p["probe_id"] for p in pack["probes"]]
+    report = generate_coverage_report(ids)
+    assert report["total_vectors"] >= 45
+    assert "V016" in set(report["coverage"]["covered"])
+    assert "V021" in set(report["coverage"]["covered"])
+
+
+
+def test_coverage_completion_report_is_diagnostic_only():
+    report = generate_coverage_report([])
+    assert report["writes"] == []
+    assert report["evidence_ceiling"] == "diagnostic_only"
