@@ -2034,4 +2034,43 @@ mod tests {
             RustValue::String(source.identity.gpu.webgl_unmasked_renderer)
         );
     }
+
+    #[test]
+    fn navigator_profile_runtime_batch_v043() {
+        let source = iv8_profile::defaults::default_profile_source();
+        let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
+        let config = KernelConfig::default().with_profile_matrix(&matrix);
+        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.language"),
+            RustValue::String(source.navigator.language)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.languages[0]"),
+            RustValue::String(source.navigator.languages[0].clone())
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.platform"),
+            RustValue::String(source.navigator.platform)
+        );
+        assert_eq!(
+            kernel.eval_to_rust_value("navigator.webdriver"),
+            RustValue::Bool(source.navigator.webdriver)
+        );
+
+        let hw = kernel.eval_to_rust_value("navigator.hardwareConcurrency");
+        match hw {
+            RustValue::Int(v) => assert_eq!(v as f64, source.navigator.hardware_concurrency as f64),
+            RustValue::Float(v) => assert!((v - source.navigator.hardware_concurrency as f64).abs() < f64::EPSILON),
+            other => panic!("expected numeric hardwareConcurrency, got {:?}", other),
+        }
+
+        let dm = kernel.eval_to_rust_value("navigator.deviceMemory");
+        match dm {
+            RustValue::Int(v) => assert_eq!(v as f64, source.navigator.device_memory as f64),
+            RustValue::Float(v) => assert!((v - source.navigator.device_memory as f64).abs() < f64::EPSILON),
+            other => panic!("expected numeric deviceMemory, got {:?}", other),
+        }
+    }
 }
