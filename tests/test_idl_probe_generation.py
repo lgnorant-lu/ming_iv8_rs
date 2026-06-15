@@ -458,3 +458,130 @@ def test_attribute_instanceof_checks_are_allowlisted():
             if ctor not in allowed:
                 offenders.append((probe["probe_id"], ctor))
     assert not offenders, f"non-allowlisted instanceof checks: {offenders}"
+
+
+# -- v0.8.37 Navigator IR fingerprint repair gates ---------------------------
+
+
+_NAVIGATOR_FINGERPRINT_TYPES = {
+    "userAgent": "DOMString",
+    "platform": "DOMString",
+    "vendor": "DOMString",
+    "language": "DOMString",
+    "languages": "FrozenArray",
+    "hardwareConcurrency": "unsigned long",
+    "deviceMemory": "double",
+    "webdriver": "boolean",
+    "cookieEnabled": "boolean",
+}
+
+
+def test_navigator_fingerprint_value_probes_are_generated():
+    pack = generate_probe_pack(interfaces=["Navigator"])
+    by_id = {p["probe_id"]: p for p in pack["probes"]}
+    missing = [
+        attr for attr in _NAVIGATOR_FINGERPRINT_TYPES
+        if f"idl.attr.Navigator.{attr}" not in by_id
+    ]
+    assert not missing, f"missing Navigator fingerprint probes: {missing}"
+
+    for attr, idl_type in _NAVIGATOR_FINGERPRINT_TYPES.items():
+        probe = by_id[f"idl.attr.Navigator.{attr}"]
+        assert probe["target"] == f"navigator.{attr}"
+        assert probe["source_ir"]["idl_type"] == idl_type
+        assert probe["source_ir"]["runtime_accessibility"] == "global"
+
+
+def test_navigator_fingerprint_type_strength_metadata():
+    pack = generate_probe_pack(interfaces=["Navigator"])
+    by_id = {p["probe_id"]: p for p in pack["probes"]}
+    expected_strength = {
+        "userAgent": "explicit_type_map",
+        "platform": "explicit_type_map",
+        "vendor": "explicit_type_map",
+        "language": "explicit_type_map",
+        "languages": "generic",
+        "hardwareConcurrency": "explicit_type_map",
+        "deviceMemory": "explicit_type_map",
+        "webdriver": "explicit_type_map",
+        "cookieEnabled": "explicit_type_map",
+    }
+    for attr, strength in expected_strength.items():
+        probe = by_id[f"idl.attr.Navigator.{attr}"]
+        assert probe["source_ir"]["type_check_strength"] == strength
+
+
+def test_navigator_profile_overlay_activates_for_fingerprint_path():
+    pack = generate_probe_pack(
+        interfaces=["Navigator"],
+        profile_values={"navigator.userAgent": "Mozilla/5.0 test"},
+    )
+    probe = [
+        p for p in pack["probes"]
+        if p["probe_id"] == "idl.attr.Navigator.userAgent"
+    ]
+    assert len(probe) == 1
+    source = probe[0]["source_ir"]
+    assert source["check_mode"] == "type_and_profile_value"
+    assert source["expected_source"] == "profile_values"
+    assert source["profile_path"] == "navigator.userAgent"
+    assert "typeof __v__ === 'string'" in probe[0]["js"]
+    assert "Mozilla/5.0 test" in probe[0]["js"]
+
+
+def test_navigator_cookie_enabled_is_sensitive_and_split():
+    pack = generate_probe_pack(interfaces=["Navigator"])
+    probe = [
+        p for p in pack["probes"]
+        if p["probe_id"] == "idl.attr.Navigator.cookieEnabled"
+    ]
+    assert len(probe) == 1
+    assert probe[0]["sensitive_surface_probe"] is True
+    assert probe[0]["source_ir"]["check_mode"] == "type_only"
+    assert "'co' + 'okieEnabled'" in probe[0]["js"]
+    assert not _TARGET_FLOW_TERMS.search(probe[0]["js"])
+
+
+def test_navigator_ir_repair_preserves_existing_probe_ids_and_order():
+    pack = generate_probe_pack()
+    ids = [p["probe_id"] for p in pack["probes"]]
+    assert len(pack["interfaces"]) == 51
+    assert len(ids) > 1125
+
+    added = {
+        f"idl.attr.Navigator.{attr}" for attr in _NAVIGATOR_FINGERPRINT_TYPES
+    } | {
+        f"idl.descr.Navigator.{attr}" for attr in _NAVIGATOR_FINGERPRINT_TYPES
+    } | {
+        f"idl.attr.NavigatorUAData.{attr}"
+        for attr in (
+            "architecture", "bitness", "model",
+            "platformVersion", "wow64", "fullVersionList",
+        )
+    } | {
+        f"idl.descr.NavigatorUAData.{attr}"
+        for attr in (
+            "architecture", "bitness", "model",
+            "platformVersion", "wow64", "fullVersionList",
+        )
+    }
+    original_ids = [probe_id for probe_id in ids if probe_id not in added]
+    baseline_ids = [p["probe_id"] for p in generate_probe_pack(profile_values={})["probes"] if p["probe_id"] not in added]
+    assert len(original_ids) == 1125
+    assert original_ids == baseline_ids
+
+
+def test_navigator_ua_data_expansion_probes_are_generated():
+    pack = generate_probe_pack(interfaces=["NavigatorUAData"])
+    by_id = {p["probe_id"]: p for p in pack["probes"]}
+    expected = {
+        "architecture": "DOMString",
+        "bitness": "DOMString",
+        "model": "DOMString",
+        "platformVersion": "DOMString",
+        "wow64": "boolean",
+        "fullVersionList": "FrozenArray",
+    }
+    for attr, idl_type in expected.items():
+        probe = by_id[f"idl.attr.NavigatorUAData.{attr}"]
+        assert probe["source_ir"]["idl_type"] == idl_type
