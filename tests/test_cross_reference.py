@@ -1,4 +1,5 @@
 """Probe/Witness cross-source correlation tests."""
+# ruff: noqa: E402, I001
 
 from __future__ import annotations
 
@@ -72,6 +73,13 @@ _BROWSER_SURFACE_REPORT = {
             "actual": True,
             "result": "pass",
         },
+        {
+            "id": "screen_width_number",
+            "expr": "typeof screen.width === 'number'",
+            "expected": True,
+            "actual": True,
+            "result": "pass",
+        },
     ],
 }
 
@@ -114,7 +122,7 @@ def test_cross_source_report_classifies_one_sided():
     by_surface = {item["surface"]: item for item in report["correlations"]}
     assert by_surface["screen.width.shape"]["classification"] == "one_sided"
     assert by_surface["screen.width.shape"]["probe_status"] == "missing"
-    assert by_surface["screen.width.shape"]["witness_status"] == "missing"
+    assert by_surface["screen.width.shape"]["witness_status"] == "pass"
 
 
 def test_cross_source_report_is_report_only_and_does_not_mutate_inputs():
