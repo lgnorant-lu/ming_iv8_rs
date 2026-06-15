@@ -7,6 +7,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from tools.convergence import (  # noqa: E402
+    build_convergence_snapshot,
+    make_convergence_event,
+)
 from tools.diagnostic_bridge import (  # noqa: E402
     OWNER_ROUTING_SCHEMA,
     OWNER_ROUTING_TABLE,
@@ -137,3 +141,122 @@ def test_bridge_does_not_write_files(tmp_path, monkeypatch):
     project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
     post = set(tmp_path.iterdir())
     assert pre == post
+
+
+# -- v0.8.41 delta contract and candidate ledger gates ---------------------
+
+
+def test_build_delta_contract_produces_valid_contract():
+    from tools.diagnostic_bridge import (
+        build_delta_contract,
+        project_tickets_from_knowledge_index,
+    )
+
+    tickets = project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
+    ticket = tickets[0]
+    subj = {
+        "probe_id": "idl.attr.Navigator.userAgent",
+        "target": "navigator.userAgent",
+        "category": "value",
+    }
+    event_a = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "evt-001"},
+        subject=subj,
+        status="fail", expected="A", actual="B",
+    )
+    event_b = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "evt-001"},
+        subject=subj,
+        status="pass", expected="B", actual="B",
+    )
+    base = build_convergence_snapshot([event_a])
+    current = build_convergence_snapshot([event_b])
+    contract = build_delta_contract(ticket, base, current)
+    assert contract["ticket_id"] == ticket["ticket_id"]
+    assert contract["base_snapshot_id"] == base["snapshot_id"]
+    assert contract["current_snapshot_id"] == current["snapshot_id"]
+    assert "delta_summary" in contract
+    assert contract["writes"] == []
+    assert contract["evidence_ceiling"] == "diagnostic_only"
+
+
+def test_check_gap_resolved_identifies_resolved():
+    from tools.diagnostic_bridge import (
+        check_gap_resolved,
+        project_tickets_from_knowledge_index,
+    )
+
+    tickets = project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
+    ticket = tickets[0]
+    subj = {
+        "probe_id": "idl.attr.Navigator.userAgent",
+        "target": "navigator.userAgent",
+        "category": "value",
+    }
+    event_a = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "evt-001"},
+        subject=subj,
+        status="fail",
+    )
+    event_b = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "evt-001"},
+        subject=subj,
+        status="pass",
+    )
+    base = build_convergence_snapshot([event_a])
+    current = build_convergence_snapshot([event_b])
+    assert check_gap_resolved(ticket, base, current)
+
+
+def test_delta_contract_snapshots_not_mutated():
+    from tools.diagnostic_bridge import (
+        build_delta_contract,
+        project_tickets_from_knowledge_index,
+    )
+
+    tickets = project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
+    ticket = tickets[0]
+    subj = {
+        "probe_id": "idl.attr.Navigator.userAgent",
+        "target": "navigator.userAgent",
+        "category": "value",
+    }
+    event = make_convergence_event(
+        source={"report_schema": "s", "report_kind": "k", "source_id": "evt-001"},
+        subject=subj,
+        status="fail",
+    )
+    base = build_convergence_snapshot([event])
+    current = build_convergence_snapshot([event])
+    base_before = copy.deepcopy(base)
+    current_before = copy.deepcopy(current)
+    build_delta_contract(ticket, base, current)
+    assert base == base_before
+    assert current == current_before
+
+
+def test_build_candidate_ledger_sorts_by_risk():
+    from tools.diagnostic_bridge import (
+        build_candidate_ledger,
+        project_tickets_from_knowledge_index,
+    )
+
+    tickets = project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
+    ledger = build_candidate_ledger(tickets)
+    assert len(ledger) >= 2
+    priorities = [e["priority"] for e in ledger]
+    assert priorities == sorted(priorities)
+
+
+def test_candidate_ledger_lifecycle_starts_open():
+    from tools.diagnostic_bridge import (
+        build_candidate_ledger,
+        project_tickets_from_knowledge_index,
+    )
+
+    tickets = project_tickets_from_knowledge_index(_SAMPLE_KNOWLEDGE_INDEX)
+    ledger = build_candidate_ledger(tickets)
+    for entry in ledger:
+        assert entry["lifecycle"] == "open"
+        assert entry["writes"] == []
+        assert entry["evidence_ceiling"] == "diagnostic_only"
