@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [0.8.42] - 2026-06-15
 
-> Local milestone tag pending. v0.8.42 completes Runtime Repair Harness M1 by
+> Local milestone tagged. v0.8.42 completes Runtime Repair Harness M1 by
 > projecting repair candidates into repair briefs, evidence bundle manifests,
 > validation plans, and readiness classifications. Package metadata remains
 > `0.8.11`.
