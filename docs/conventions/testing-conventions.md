@@ -168,17 +168,21 @@ pub fn assert_js_error(kernel: &mut EmbeddedV8Kernel, js: &str) {
 
 ## 4. Assertion Patterns
 
-**Rule**: Use function encapsulation. No macros. No raw `assert_eq!` with
-manual `to_str` + `eval_to_rust_value` in test bodies.
+**Rule**: Use the shared `common::` harness. No local copies of `make_kernel()`
+or `to_str()` in individual test files.
 
-Rationale:
-- Functions are idiomatic Rust. Macros increase cognitive cost without benefit
-  in this case.
-- Functions are debuggable (breakpoints work). Macros expand to opaque
-  compiler output.
-- `assert_js_str` handles the common case (eval JS → compare string).
-- `assert_js_val` handles structured comparisons (RustValue matching).
-- `assert_js_error` handles error path testing.
+**Preferred**: `common::assert_js_str(k, "expr", "expected")` for simple
+type/value checks.
+
+**Acceptable**: `common::to_str(&k.eval_to_rust_value("expr"))` + `assert_eq!`
+for complex assertions (multi-value comparison, pattern matching, numeric
+ranges). This is the primary pattern in `test_kernel_init.rs` (94 tests, 131
+assertions) where each test checks a specific JS expression against a specific
+expected value — wrapping every one in a helper function would reduce
+readability without adding safety.
+
+**Prohibited**: Local `fn make_kernel()` / `fn to_str()` definitions that duplicate
+`common::`. Raw `use iv8_core::RustValue;` in test files that could use `common::to_str`.
 
 ---
 
