@@ -54,8 +54,8 @@ tests/test_events_timers.rs        → src/events/timers.rs
 tests/test_kernel_init.rs          → src/kernel/embedded_v8.rs (init chain)
 ```
 
-Existing files are renamed to this pattern over time. v0.8.51 starts the
-normalization; later versions complete it.
+Existing files are renamed to this pattern over time. v0.8.51 completed the
+normalization (31/31 files conforming); later versions maintain it.
 
 Test function naming:
 
@@ -81,16 +81,36 @@ tests/
     mod.rs                  ← Shared harness helpers
   test_surface_navigator.rs
   test_surface_location.rs
+  test_surface_location_url.rs
   test_surface_cookie.rs
-  test_dom_element.rs
-  test_dom_event_target.rs
+  test_surface_window_extras.rs
+  test_surface_atob_btoa.rs
+  test_surface_url.rs
+  test_dom_binding.rs
+  test_dom_navigation.rs
+  test_dom_inner_html.rs
+  test_dom_inner_html_setter.rs
+  test_dom_geometry.rs
   test_network_fetch.rs
+  test_network_fetch_netlog.rs
+  test_network_netlog.rs
   test_network_xhr.rs
   test_events_timers.rs
   test_events_event_loop.rs
+  test_events_clock.rs
+  test_events_target.rs
+  test_events_target_dispatch.rs
+  test_events_constructors.rs
+  test_events_document_target.rs
+  test_events_message_channel.rs
+  test_events_page_load.rs
+  test_crypto_basic.rs
   test_crypto_subtle.rs
+  test_canvas_webgl.rs
   test_kernel_init.rs
-  ...
+  test_kernel_edge_cases.rs
+  test_kernel_v8_extra.rs
+  test_kernel_v8_hello.rs
 ```
 
 `tests/common/mod.rs` provides:
@@ -137,10 +157,9 @@ pub fn assert_js_val(kernel: &mut EmbeddedV8Kernel, js: &str, expected: RustValu
     assert_eq!(val, expected, "for expr: {}", js);
 }
 
-/// Assert that a JS expression throws the expected error type.
-pub fn assert_js_error(kernel: &mut EmbeddedV8Kernel, js: &str, _expected_type: &str) {
+/// Assert that a JS expression throws (returns Null on evaluation failure).
+pub fn assert_js_error(kernel: &mut EmbeddedV8Kernel, js: &str) {
     let result = kernel.eval_to_rust_value(js);
-    // The kernel returns Null on eval failure; we check that no value was produced
     assert_eq!(result, RustValue::Null, "expected error for expr: {}, got: {:?}", js, result);
 }
 ```
