@@ -659,8 +659,25 @@ impl EmbeddedV8Kernel {
         self.eval(&chrome_script, crate::kernel::EvalOpts::default())
             .ok();
 
-        // 5. Install native behavior modules (skip when install_browser_surface_init handles them)
-        if !skip_native_behaviors {
+        // 5. Install native behavior modules (skip when install_browser_surface_init handles them).
+        // Tool-object APIs still need a post-creation pass because they attach under __iv8__.
+        if skip_native_behaviors {
+            unsafe {
+                self.isolate.enter();
+            }
+            {
+                v8::scope!(handle_scope, &mut self.isolate);
+                let context = v8::Local::new(handle_scope, &self.context);
+                v8::scope_with_context!(scope, handle_scope, context);
+                let global = context.global(scope);
+                crate::events::binding::install_event_loop_bindings(scope, global);
+                crate::events::page_api::install_page_api(scope, global);
+                crate::events::input_sim::install_input_api(scope, global);
+            }
+            unsafe {
+                self.isolate.exit();
+            }
+        } else {
             unsafe {
                 self.isolate.enter();
             }

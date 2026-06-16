@@ -14,9 +14,11 @@ pub fn install_event_loop_bindings(scope: &v8::PinScope<'_, '_>, global: v8::Loc
     };
 
     let api_key = crate::v8_utils::v8_string(scope, &js_api_name);
-    let api_obj = global.get(scope, api_key.into());
-    let api_obj = match api_obj {
-        Some(v) if v.is_object() => unsafe { v8::Local::<v8::Object>::cast_unchecked(v) },
+    let api_obj = match global.get(scope, api_key.into()) {
+        // __iv8__ is MarkAsUndetectable, so V8 does not report it as a normal object.
+        Some(v) if !v.is_null_or_undefined() => unsafe {
+            v8::Local::<v8::Object>::cast_unchecked(v)
+        },
         _ => return,
     };
 
