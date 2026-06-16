@@ -121,6 +121,7 @@ ctx.set_trace_point("script.js", 100, expression="JSON.stringify({pc:pc})")
 ## Documentation
 
 - **Usage Guide**: [docs/GUIDE.md](docs/GUIDE.md) (comprehensive guide)
+- **Conventions**: [docs/conventions/](docs/conventions/) (execution protocol, naming, commit, testing, harness charter)
 - **Progress**: [docs/PROGRESS.md](docs/PROGRESS.md)
 - **v0.6 Baseline**: [docs/baseline/v0.6-dev-baseline.md](docs/baseline/v0.6-dev-baseline.md)
 - **Architecture Philosophy**: [docs/design/IV8_RUST_ARCHITECTURE_PHILOSOPHY.md](docs/design/IV8_RUST_ARCHITECTURE_PHILOSOPHY.md)
