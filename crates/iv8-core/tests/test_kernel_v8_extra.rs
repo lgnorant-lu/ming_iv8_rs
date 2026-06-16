@@ -5,12 +5,14 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration test for v8_extra bindings (MarkAsUndetectable, SetCallAsFunctionHandler).
-//!
-//! V8 invariant: an ObjectTemplate marked as undetectable MUST also have a
-//! CallAsFunctionHandler (V8 asserts this in debug builds and the object
-//! cannot be instantiated otherwise). The handler can be a no-op.
+
+// Integration test for v8_extra bindings (MarkAsUndetectable, SetCallAsFunctionHandler).
+//
+// V8 invariant: an ObjectTemplate marked as undetectable MUST also have a
+// CallAsFunctionHandler (V8 asserts this in debug builds and the object
+// cannot be instantiated otherwise). The handler can be a no-op.
 
 use iv8_core::v8_extra;
 

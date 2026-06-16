@@ -5,26 +5,23 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for Event/CustomEvent/MouseEvent constructors (Task 68).
-//! Acceptance criteria:
-//! - new Event('click') creates event object
-//! - new Event('x', {bubbles: true}) sets bubbles
-//! - event.type / bubbles / cancelable correct
-//! - event.stopPropagation() works
-//! - event.preventDefault() sets defaultPrevented
+
+// Integration tests for Event/CustomEvent/MouseEvent constructors (Task 68).
+// Acceptance criteria:
+// - new Event('click') creates event object
+// - new Event('x', {bubbles: true}) sets bubbles
+// - event.type / bubbles / cancelable correct
+// - event.stopPropagation() works
+// - event.preventDefault() sets defaultPrevented
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 // ─── Event ──────────────────────────────────────────────────────────────────
 
 #[test]
 fn event_constructor_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof Event"),
         RustValue::String("function".into())
@@ -33,14 +30,14 @@ fn event_constructor_exists() {
 
 #[test]
 fn event_basic_creation() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("new Event('click').type");
     assert_eq!(result, RustValue::String("click".into()));
 }
 
 #[test]
 fn event_bubbles_default_false() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new Event('x').bubbles"),
         RustValue::Bool(false)
@@ -49,7 +46,7 @@ fn event_bubbles_default_false() {
 
 #[test]
 fn event_bubbles_option() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new Event('x', {bubbles: true}).bubbles"),
         RustValue::Bool(true)
@@ -58,7 +55,7 @@ fn event_bubbles_option() {
 
 #[test]
 fn event_cancelable_option() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new Event('x', {cancelable: true}).cancelable"),
         RustValue::Bool(true)
@@ -67,7 +64,7 @@ fn event_cancelable_option() {
 
 #[test]
 fn event_prevent_default() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var e = new Event('x', {cancelable: true});
@@ -80,7 +77,7 @@ fn event_prevent_default() {
 
 #[test]
 fn event_prevent_default_non_cancelable() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var e = new Event('x', {cancelable: false});
@@ -93,7 +90,7 @@ fn event_prevent_default_non_cancelable() {
 
 #[test]
 fn event_stop_propagation() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var e = new Event('x');
@@ -106,14 +103,14 @@ fn event_stop_propagation() {
 
 #[test]
 fn event_timestamp() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("typeof new Event('x').timeStamp === 'number'");
     assert_eq!(result, RustValue::Bool(true));
 }
 
 #[test]
 fn event_instanceof() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new Event('x') instanceof Event"),
         RustValue::Bool(true)
@@ -124,7 +121,7 @@ fn event_instanceof() {
 
 #[test]
 fn custom_event_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof CustomEvent"),
         RustValue::String("function".into())
@@ -133,14 +130,14 @@ fn custom_event_exists() {
 
 #[test]
 fn custom_event_detail() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("new CustomEvent('x', {detail: {foo: 42}}).detail.foo");
     assert_eq!(result, RustValue::Int(42));
 }
 
 #[test]
 fn custom_event_instanceof_event() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new CustomEvent('x') instanceof Event"),
         RustValue::Bool(true)
@@ -151,7 +148,7 @@ fn custom_event_instanceof_event() {
 
 #[test]
 fn mouse_event_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof MouseEvent"),
         RustValue::String("function".into())
@@ -160,7 +157,7 @@ fn mouse_event_exists() {
 
 #[test]
 fn mouse_event_coordinates() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var e = new MouseEvent('click', {clientX: 100, clientY: 200});
@@ -172,7 +169,7 @@ fn mouse_event_coordinates() {
 
 #[test]
 fn mouse_event_button() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new MouseEvent('click', {button: 2}).button"),
         RustValue::Int(2)
@@ -181,7 +178,7 @@ fn mouse_event_button() {
 
 #[test]
 fn mouse_event_instanceof_event() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new MouseEvent('click') instanceof Event"),
         RustValue::Bool(true)
@@ -192,7 +189,7 @@ fn mouse_event_instanceof_event() {
 
 #[test]
 fn keyboard_event_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof KeyboardEvent"),
         RustValue::String("function".into())
@@ -201,7 +198,7 @@ fn keyboard_event_exists() {
 
 #[test]
 fn keyboard_event_key() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new KeyboardEvent('keydown', {key: 'Enter'}).key"),
         RustValue::String("Enter".into())
@@ -212,7 +209,7 @@ fn keyboard_event_key() {
 
 #[test]
 fn pointer_event_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof PointerEvent"),
         RustValue::String("function".into())
@@ -221,7 +218,7 @@ fn pointer_event_exists() {
 
 #[test]
 fn pointer_event_pointer_type() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value(
             "new PointerEvent('pointerdown', {pointerType: 'touch'}).pointerType"
@@ -232,7 +229,7 @@ fn pointer_event_pointer_type() {
 
 #[test]
 fn pointer_event_instanceof_mouse_event() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("new PointerEvent('x') instanceof MouseEvent"),
         RustValue::Bool(true)

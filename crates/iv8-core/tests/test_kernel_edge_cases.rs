@@ -6,8 +6,10 @@
     unused_mut,
     unused_variables
 )]
+mod common;
 
-//! Edge case tests for iv8-core (补丁：覆盖审计中发现的缺口)
+
+// Edge case tests for iv8-core (补丁：覆盖审计中发现的缺口)
 
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};
 

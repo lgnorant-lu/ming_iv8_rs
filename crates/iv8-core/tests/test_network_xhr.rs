@@ -5,18 +5,15 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for XMLHttpRequest (Task 47).
+
+// Integration tests for XMLHttpRequest (Task 47).
 
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn xhr_class_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof XMLHttpRequest"),
         RustValue::String("function".into())
@@ -25,7 +22,7 @@ fn xhr_class_exists() {
 
 #[test]
 fn xhr_sync_get_from_bundle() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/data", b"hello xhr".to_vec(), 200, None);
 
     let result = kernel.eval_to_rust_value(
@@ -41,7 +38,7 @@ fn xhr_sync_get_from_bundle() {
 
 #[test]
 fn xhr_status_code() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/ok", b"".to_vec(), 200, None);
 
     let result = kernel.eval_to_rust_value(
@@ -57,7 +54,7 @@ fn xhr_status_code() {
 
 #[test]
 fn xhr_ready_state_done() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/x", b"x".to_vec(), 200, None);
 
     let result = kernel.eval_to_rust_value(
@@ -73,7 +70,7 @@ fn xhr_ready_state_done() {
 
 #[test]
 fn xhr_onload_fires() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/cb", b"data".to_vec(), 200, None);
 
     let result = kernel.eval_to_rust_value(
@@ -91,7 +88,7 @@ fn xhr_onload_fires() {
 
 #[test]
 fn xhr_onerror_on_missing_resource() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
 
     let result = kernel.eval_to_rust_value(
         r#"
@@ -108,7 +105,7 @@ fn xhr_onerror_on_missing_resource() {
 
 #[test]
 fn xhr_json_response() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource(
         "https://api.com/json",
         br#"{"key":"val"}"#.to_vec(),
@@ -129,7 +126,7 @@ fn xhr_json_response() {
 
 #[test]
 fn xhr_constants() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         XMLHttpRequest.DONE === 4 && XMLHttpRequest.OPENED === 1
@@ -142,7 +139,7 @@ fn xhr_constants() {
 
 #[test]
 fn xhr_async_not_loaded_immediately() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/async", b"async data".to_vec(), 200, None);
 
     let result = kernel.eval_to_rust_value(
@@ -160,7 +157,7 @@ fn xhr_async_not_loaded_immediately() {
 
 #[test]
 fn xhr_async_loads_after_advance() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/async", b"async data".to_vec(), 200, None);
 
     kernel.eval_to_rust_value(
@@ -192,7 +189,7 @@ fn xhr_async_loads_after_advance() {
 
 #[test]
 fn xhr_async_status_zero_before_advance() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/x", b"x".to_vec(), 200, None);
 
     let result = kernel.eval_to_rust_value(
@@ -208,7 +205,7 @@ fn xhr_async_status_zero_before_advance() {
 
 #[test]
 fn xhr_sync_still_works() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/sync", b"sync data".to_vec(), 200, None);
 
     let result = kernel.eval_to_rust_value(
@@ -224,7 +221,7 @@ fn xhr_sync_still_works() {
 
 #[test]
 fn xhr_async_error_after_advance() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     // No resource registered for this URL
 
     kernel.eval_to_rust_value(

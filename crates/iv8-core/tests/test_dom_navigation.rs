@@ -5,14 +5,16 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for DOM navigation properties (Task 65).
-//! Acceptance criteria:
-//! - element.childNodes returns array-like with length + indexing
-//! - element.parentNode returns parent node object
-//! - element.firstChild / lastChild correct
-//! - element.nextSibling / previousSibling correct
-//! - element.children only returns Element children
+
+// Integration tests for DOM navigation properties (Task 65).
+// Acceptance criteria:
+// - element.childNodes returns array-like with length + indexing
+// - element.parentNode returns parent node object
+// - element.firstChild / lastChild correct
+// - element.nextSibling / previousSibling correct
+// - element.children only returns Element children
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
 

@@ -5,23 +5,20 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for atob/btoa (Task 64).
-//! Acceptance criteria:
-//! - btoa('hello') === 'aGVsbG8='
-//! - atob('aGVsbG8=') === 'hello'
-//! - Non-Latin-1 → throws
-//! - Invalid base64 → throws
+
+// Integration tests for atob/btoa (Task 64).
+// Acceptance criteria:
+// - btoa('hello') === 'aGVsbG8='
+// - atob('aGVsbG8=') === 'hello'
+// - Non-Latin-1 → throws
+// - Invalid base64 → throws
 
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn btoa_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof btoa"),
         RustValue::String("function".into())
@@ -30,7 +27,7 @@ fn btoa_exists() {
 
 #[test]
 fn atob_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof atob"),
         RustValue::String("function".into())
@@ -39,7 +36,7 @@ fn atob_exists() {
 
 #[test]
 fn btoa_hello() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("btoa('hello')"),
         RustValue::String("aGVsbG8=".into())
@@ -48,7 +45,7 @@ fn btoa_hello() {
 
 #[test]
 fn atob_hello() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("atob('aGVsbG8=')"),
         RustValue::String("hello".into())
@@ -57,7 +54,7 @@ fn atob_hello() {
 
 #[test]
 fn btoa_empty() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("btoa('')"),
         RustValue::String("".into())
@@ -66,7 +63,7 @@ fn btoa_empty() {
 
 #[test]
 fn atob_empty() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("atob('')"),
         RustValue::String("".into())
@@ -75,7 +72,7 @@ fn atob_empty() {
 
 #[test]
 fn btoa_atob_roundtrip() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("atob(btoa('Hello, World!'))"),
         RustValue::String("Hello, World!".into())
@@ -84,7 +81,7 @@ fn btoa_atob_roundtrip() {
 
 #[test]
 fn btoa_binary_data() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     // String with bytes 0-255
     let result = kernel.eval_to_rust_value(
         r#"
@@ -98,7 +95,7 @@ fn btoa_binary_data() {
 
 #[test]
 fn btoa_non_latin1_throws() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let err = kernel
         .eval("btoa('\\u0100')", EvalOpts::default())
         .unwrap_err();
@@ -116,7 +113,7 @@ fn btoa_non_latin1_throws() {
 
 #[test]
 fn atob_invalid_base64_throws() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let err = kernel
         .eval("atob('not valid base64!@#$')", EvalOpts::default())
         .unwrap_err();
@@ -134,7 +131,7 @@ fn atob_invalid_base64_throws() {
 
 #[test]
 fn btoa_known_vectors() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     // Standard test vectors
     assert_eq!(
         kernel.eval_to_rust_value("btoa('f')"),
@@ -164,7 +161,7 @@ fn btoa_known_vectors() {
 
 #[test]
 fn atob_with_whitespace() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     // atob should ignore whitespace per spec
     assert_eq!(
         kernel.eval_to_rust_value("atob('aGVs bG8=')"),
@@ -174,7 +171,7 @@ fn atob_with_whitespace() {
 
 #[test]
 fn atob_without_padding() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     // Some implementations accept base64 without padding
     assert_eq!(
         kernel.eval_to_rust_value("atob('aGVsbG8')"),

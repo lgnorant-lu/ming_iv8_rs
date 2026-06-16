@@ -5,18 +5,15 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for fetch() JS binding (Task 46).
+
+// Integration tests for fetch() JS binding (Task 46).
 
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn fetch_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof fetch"),
         RustValue::String("function".into())
@@ -25,14 +22,14 @@ fn fetch_exists() {
 
 #[test]
 fn fetch_returns_promise() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("fetch('http://x.com') instanceof Promise");
     assert_eq!(result, RustValue::Bool(true));
 }
 
 #[test]
 fn fetch_resolves_with_resource() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource(
         "https://api.example.com/data",
         b"hello world".to_vec(),
@@ -62,7 +59,7 @@ fn fetch_resolves_with_resource() {
 
 #[test]
 fn fetch_response_ok() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://x.com/ok", b"".to_vec(), 200, None);
 
     kernel
@@ -84,7 +81,7 @@ fn fetch_response_ok() {
 
 #[test]
 fn fetch_response_text() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://x.com/text", b"hello".to_vec(), 200, None);
 
     kernel
@@ -108,7 +105,7 @@ fn fetch_response_text() {
 
 #[test]
 fn fetch_response_json() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource(
         "https://x.com/json",
         br#"{"key":"value"}"#.to_vec(),
@@ -137,7 +134,7 @@ fn fetch_response_json() {
 
 #[test]
 fn fetch_rejects_when_not_in_bundle() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
 
     kernel
         .eval(
@@ -160,7 +157,7 @@ fn fetch_rejects_when_not_in_bundle() {
 
 #[test]
 fn fetch_404_resolves_not_rejects() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://x.com/404", b"not found".to_vec(), 404, None);
 
     kernel

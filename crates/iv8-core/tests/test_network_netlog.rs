@@ -5,22 +5,19 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for __iv8__.netLog (Task 49).
-//! Acceptance criteria:
-//! - __iv8__.netLog.entries is an array
-//! - XHR requests are recorded with method, url, headers, body
-//! - Multiple requests accumulate
+
+// Integration tests for __iv8__.netLog (Task 49).
+// Acceptance criteria:
+// - __iv8__.netLog.entries is an array
+// - XHR requests are recorded with method, url, headers, body
+// - Multiple requests accumulate
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn netlog_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof __iv8__.netLog"),
         RustValue::String("object".into())
@@ -33,7 +30,7 @@ fn netlog_exists() {
 
 #[test]
 fn netlog_initially_empty() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("__iv8__.netLog.entries.length"),
         RustValue::Int(0)
@@ -42,7 +39,7 @@ fn netlog_initially_empty() {
 
 #[test]
 fn netlog_records_xhr() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/test", b"ok".to_vec(), 200, None);
 
     kernel.eval_to_rust_value(
@@ -69,7 +66,7 @@ fn netlog_records_xhr() {
 
 #[test]
 fn netlog_records_headers() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/h", b"".to_vec(), 200, None);
 
     kernel.eval_to_rust_value(
@@ -102,7 +99,7 @@ fn netlog_records_headers() {
 
 #[test]
 fn netlog_multiple_requests() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://a.com/1", b"".to_vec(), 200, None);
     kernel.add_resource("https://a.com/2", b"".to_vec(), 200, None);
 
@@ -133,7 +130,7 @@ fn netlog_multiple_requests() {
 
 #[test]
 fn netlog_async_xhr_recorded_immediately() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/async", b"data".to_vec(), 200, None);
 
     kernel.eval_to_rust_value(

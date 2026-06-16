@@ -1,4 +1,4 @@
-//! v0.8.51 S3: Integration tests for Navigator surface.
+// v0.8.51 S3: Integration tests for Navigator surface.
 mod common;
 
 #[test]

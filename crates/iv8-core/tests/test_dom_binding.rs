@@ -5,9 +5,11 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for DOM V8 bindings (Task 27).
-//! Tests document.getElementById, querySelector, querySelectorAll, getElementsByTagName.
+
+// Integration tests for DOM V8 bindings (Task 27).
+// Tests document.getElementById, querySelector, querySelectorAll, getElementsByTagName.
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
 

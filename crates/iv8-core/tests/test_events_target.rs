@@ -1,4 +1,4 @@
-//! v0.8.51 S3: Integration tests for event dispatch (isTrusted, this binding).
+// v0.8.51 S3: Integration tests for event dispatch (isTrusted, this binding).
 mod common;
 
 #[test]

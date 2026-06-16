@@ -5,18 +5,15 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for setTimeout/setInterval/clearTimeout/rAF/queueMicrotask (Task 31).
+
+// Integration tests for setTimeout/setInterval/clearTimeout/rAF/queueMicrotask (Task 31).
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn set_timeout_returns_id() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("setTimeout(function(){}, 100)");
     match result {
         RustValue::Int(id) => assert!(id > 0, "timer id should be positive"),
@@ -26,7 +23,7 @@ fn set_timeout_returns_id() {
 
 #[test]
 fn set_timeout_fires_on_advance() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -40,7 +37,7 @@ fn set_timeout_fires_on_advance() {
 
 #[test]
 fn set_timeout_does_not_fire_before_deadline() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -54,7 +51,7 @@ fn set_timeout_does_not_fire_before_deadline() {
 
 #[test]
 fn set_timeout_fires_exactly_at_deadline() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -68,7 +65,7 @@ fn set_timeout_fires_exactly_at_deadline() {
 
 #[test]
 fn set_interval_fires_multiple_times() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var count = 0;
@@ -86,7 +83,7 @@ fn set_interval_fires_multiple_times() {
 
 #[test]
 fn clear_timeout_prevents_firing() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -101,7 +98,7 @@ fn clear_timeout_prevents_firing() {
 
 #[test]
 fn clear_interval_stops_firing() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var count = 0;
@@ -121,7 +118,7 @@ fn clear_interval_stops_firing() {
 
 #[test]
 fn request_animation_frame_fires_on_advance() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -135,7 +132,7 @@ fn request_animation_frame_fires_on_advance() {
 
 #[test]
 fn queue_microtask_fires_immediately() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     // queueMicrotask should fire during the same eval (V8 runs microtasks at checkpoint)
     let result = kernel.eval_to_rust_value(
         r#"
@@ -153,7 +150,7 @@ fn queue_microtask_fires_immediately() {
 
 #[test]
 fn queue_microtask_fires_after_eval() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value(
         r#"
         globalThis._mtFired = false;
@@ -168,7 +165,7 @@ fn queue_microtask_fires_after_eval() {
 
 #[test]
 fn multiple_timeouts_fire_in_order() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var order = [];
@@ -191,7 +188,7 @@ fn multiple_timeouts_fire_in_order() {
 
 #[test]
 fn set_timeout_zero_delay() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -205,7 +202,7 @@ fn set_timeout_zero_delay() {
 
 #[test]
 fn timer_globals_exist() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         [

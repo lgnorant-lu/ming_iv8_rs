@@ -5,15 +5,12 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for EventLoop V8 bindings (Task 30).
+
+// Integration tests for EventLoop V8 bindings (Task 30).
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 /// Helper: extract numeric value from RustValue (Int or Float).
 fn as_f64(v: &RustValue) -> f64 {
     match v {
@@ -25,21 +22,21 @@ fn as_f64(v: &RustValue) -> f64 {
 
 #[test]
 fn event_loop_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("typeof __iv8__.eventLoop");
     assert_eq!(result, RustValue::String("object".into()));
 }
 
 #[test]
 fn event_loop_get_time_initial() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("__iv8__.eventLoop.getTime()");
     assert_eq!(as_f64(&result), 0.0);
 }
 
 #[test]
 fn event_loop_advance_updates_time() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value("__iv8__.eventLoop.advance(100)");
     let result = kernel.eval_to_rust_value("__iv8__.eventLoop.getTime()");
     assert_eq!(as_f64(&result), 100.0);
@@ -47,7 +44,7 @@ fn event_loop_advance_updates_time() {
 
 #[test]
 fn event_loop_sleep_updates_time() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value("__iv8__.eventLoop.sleep(50)");
     let result = kernel.eval_to_rust_value("__iv8__.eventLoop.getTime()");
     assert_eq!(as_f64(&result), 50.0);
@@ -55,7 +52,7 @@ fn event_loop_sleep_updates_time() {
 
 #[test]
 fn event_loop_tick_advances_by_step() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     // Default step is 4ms (4000μs)
     kernel.eval_to_rust_value("__iv8__.eventLoop.tick()");
     let result = kernel.eval_to_rust_value("__iv8__.eventLoop.getTime()");
@@ -64,7 +61,7 @@ fn event_loop_tick_advances_by_step() {
 
 #[test]
 fn event_loop_tick_with_explicit_ms() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value("__iv8__.eventLoop.tick(10)");
     let result = kernel.eval_to_rust_value("__iv8__.eventLoop.getTime()");
     assert_eq!(as_f64(&result), 10.0);
@@ -72,7 +69,7 @@ fn event_loop_tick_with_explicit_ms() {
 
 #[test]
 fn event_loop_reset() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value("__iv8__.eventLoop.advance(500)");
     kernel.eval_to_rust_value("__iv8__.eventLoop.reset()");
     let result = kernel.eval_to_rust_value("__iv8__.eventLoop.getTime()");
@@ -81,7 +78,7 @@ fn event_loop_reset() {
 
 #[test]
 fn event_loop_set_auto_advance_step() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value("__iv8__.eventLoop.setAutoAdvanceStep(1000)"); // 1ms = 1000μs
     kernel.eval_to_rust_value("__iv8__.eventLoop.tick()");
     let result = kernel.eval_to_rust_value("__iv8__.eventLoop.getTime()");
@@ -90,7 +87,7 @@ fn event_loop_set_auto_advance_step() {
 
 #[test]
 fn event_loop_advance_cumulative() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value("__iv8__.eventLoop.advance(100)");
     kernel.eval_to_rust_value("__iv8__.eventLoop.advance(200)");
     let result = kernel.eval_to_rust_value("__iv8__.eventLoop.getTime()");
@@ -99,7 +96,7 @@ fn event_loop_advance_cumulative() {
 
 #[test]
 fn event_loop_methods_are_functions() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         [

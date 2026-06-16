@@ -5,25 +5,22 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for WebGL parameter stubs (Task 45).
+
+// Integration tests for WebGL parameter stubs (Task 45).
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn webgl_context_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("typeof __webglContext__");
     assert_eq!(result, RustValue::String("object".into()));
 }
 
 #[test]
 fn webgl_get_parameter_vendor() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("__webglContext__.getParameter(0x9245)"); // UNMASKED_VENDOR
     match result {
         RustValue::String(s) => assert!(
@@ -37,7 +34,7 @@ fn webgl_get_parameter_vendor() {
 
 #[test]
 fn webgl_get_parameter_renderer() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("__webglContext__.getParameter(0x9246)"); // UNMASKED_RENDERER
     match result {
         RustValue::String(s) => assert!(
@@ -51,7 +48,7 @@ fn webgl_get_parameter_renderer() {
 
 #[test]
 fn webgl_get_parameter_version() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("__webglContext__.getParameter(0x1F02)"); // GL_VERSION
     match result {
         RustValue::String(s) => assert!(s.contains("WebGL"), "version: {}", s),
@@ -61,14 +58,14 @@ fn webgl_get_parameter_version() {
 
 #[test]
 fn webgl_get_parameter_max_texture_size() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("__webglContext__.getParameter(0x0D33)"); // MAX_TEXTURE_SIZE
     assert_eq!(result, RustValue::Int(16384));
 }
 
 #[test]
 fn webgl_get_extension_debug_renderer_info() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var ext = __webglContext__.getExtension('WEBGL_debug_renderer_info');
@@ -80,7 +77,7 @@ fn webgl_get_extension_debug_renderer_info() {
 
 #[test]
 fn webgl_get_supported_extensions() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var exts = __webglContext__.getSupportedExtensions();
@@ -92,7 +89,7 @@ fn webgl_get_supported_extensions() {
 
 #[test]
 fn webgl_get_parameter_unknown_returns_null() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("__webglContext__.getParameter(99999)");
     assert_eq!(result, RustValue::Null);
 }

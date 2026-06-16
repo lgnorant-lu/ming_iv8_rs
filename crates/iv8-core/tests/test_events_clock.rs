@@ -5,16 +5,13 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for DateInterceptor (Task 32).
-//! Verifies Date.now() and performance.now() return logical time.
+
+// Integration tests for DateInterceptor (Task 32).
+// Verifies Date.now() and performance.now() return logical time.
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 fn as_f64(v: &RustValue) -> f64 {
     match v {
         RustValue::Int(i) => *i as f64,
@@ -25,7 +22,7 @@ fn as_f64(v: &RustValue) -> f64 {
 
 #[test]
 fn date_now_returns_epoch_at_start() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("Date.now()");
     let now = as_f64(&result);
     // Should be epoch (2024-01-01) since eventLoop time is 0
@@ -39,7 +36,7 @@ fn date_now_returns_epoch_at_start() {
 
 #[test]
 fn date_now_advances_with_event_loop() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let before = as_f64(&kernel.eval_to_rust_value("Date.now()"));
     kernel.eval_to_rust_value("__iv8__.eventLoop.advance(1000)"); // advance 1 second
     let after = as_f64(&kernel.eval_to_rust_value("Date.now()"));
@@ -53,7 +50,7 @@ fn date_now_advances_with_event_loop() {
 
 #[test]
 fn performance_now_starts_at_zero() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("performance.now()");
     let now = as_f64(&result);
     assert!(
@@ -65,7 +62,7 @@ fn performance_now_starts_at_zero() {
 
 #[test]
 fn performance_now_advances_with_event_loop() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value("__iv8__.eventLoop.advance(500)");
     let result = kernel.eval_to_rust_value("performance.now()");
     let now = as_f64(&result);
@@ -78,7 +75,7 @@ fn performance_now_advances_with_event_loop() {
 
 #[test]
 fn new_date_uses_logical_time() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("new Date().getTime()");
     let time = as_f64(&result);
     // Should be epoch (2024-01-01) since eventLoop time is 0
@@ -91,7 +88,7 @@ fn new_date_uses_logical_time() {
 
 #[test]
 fn new_date_with_arg_uses_arg() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("new Date(0).getTime()");
     let time = as_f64(&result);
     assert_eq!(time, 0.0, "new Date(0) should be Unix epoch");
@@ -100,28 +97,28 @@ fn new_date_with_arg_uses_arg() {
 #[test]
 fn date_now_deterministic() {
     // Two calls without advancing should return the same value
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("Date.now() === Date.now()");
     assert_eq!(result, RustValue::Bool(true));
 }
 
 #[test]
 fn performance_now_deterministic() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("performance.now() === performance.now()");
     assert_eq!(result, RustValue::Bool(true));
 }
 
 #[test]
 fn date_now_type_is_number() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("typeof Date.now()");
     assert_eq!(result, RustValue::String("number".into()));
 }
 
 #[test]
 fn performance_now_type_is_number() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("typeof performance.now()");
     assert_eq!(result, RustValue::String("number".into()));
 }

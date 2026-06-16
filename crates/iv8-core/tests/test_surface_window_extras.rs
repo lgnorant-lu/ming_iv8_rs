@@ -1,4 +1,4 @@
-//! v0.8.51: Integration tests for window extras (performance, history).
+// v0.8.51: Integration tests for window extras (performance, history).
 mod common;
 
 // ── performance ──

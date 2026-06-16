@@ -5,27 +5,22 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Test L-03 fix: document is a real EventTarget.
-//!
-//! v0.1: addEventListener/dispatchEvent on document silently no-op'd because
-//! document had no NodeId.
-//!
-//! v0.2: document is bound to the DOM tree's root NodeId, so listeners attach
-//! to the EventListenerRegistry and dispatchEvent fires them.
+
+// Test L-03 fix: document is a real EventTarget.
+//
+// v0.1: addEventListener/dispatchEvent on document silently no-op'd because
+// document had no NodeId.
+//
+// v0.2: document is bound to the DOM tree's root NodeId, so listeners attach
+// to the EventListenerRegistry and dispatchEvent fires them.
 
 use iv8_core::kernel::{EvalOpts, KernelConfig};
 use iv8_core::EmbeddedV8Kernel;
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-    kernel.set_document("<html><body></body></html>", Some("https://example.com/"));
-    kernel
-}
-
 #[test]
 fn document_addeventlistener_is_real_function() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("typeof document.addEventListener");
     // Real function (not the document_props.js stub)
     assert_eq!(
@@ -36,7 +31,7 @@ fn document_addeventlistener_is_real_function() {
 
 #[test]
 fn document_dispatchevent_fires_listener() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = 0;
@@ -50,7 +45,7 @@ fn document_dispatchevent_fires_listener() {
 
 #[test]
 fn document_dispatchevent_string_type_fires_listener() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -64,7 +59,7 @@ fn document_dispatchevent_string_type_fires_listener() {
 
 #[test]
 fn document_removeeventlistener_works() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var count = 0;
@@ -82,7 +77,7 @@ fn document_removeeventlistener_works() {
 
 #[test]
 fn document_event_bubbles_from_child_to_document() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.set_document(
         r#"<html><body><div id="child"></div></body></html>"#,
         Some("https://example.com/"),
@@ -106,7 +101,7 @@ fn document_event_bubbles_from_child_to_document() {
 fn document_dom_content_loaded_pattern() {
     // Common reverse-engineering pattern: anti-bot scripts listen on document
     // for DOMContentLoaded.
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var loaded = false;
@@ -123,7 +118,7 @@ fn document_dom_content_loaded_pattern() {
 
 #[test]
 fn document_multiple_listeners_all_fire() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var calls = [];
@@ -139,7 +134,7 @@ fn document_multiple_listeners_all_fire() {
 
 #[test]
 fn document_once_option_listener_fires_only_once() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var count = 0;
@@ -156,7 +151,7 @@ fn document_once_option_listener_fires_only_once() {
 #[test]
 fn document_no_listener_dispatch_returns_true() {
     // dispatchEvent should return true when no listener prevents default.
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"document.dispatchEvent({ type: 'never-listened' })"#);
     assert_eq!(result, iv8_core::convert::RustValue::Bool(true));
 }

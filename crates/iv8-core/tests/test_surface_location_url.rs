@@ -5,13 +5,15 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for location object (Task 67).
-//! Acceptance criteria:
-//! - location.href returns full URL
-//! - location.origin/protocol/host/hostname/pathname/search/hash correct
-//! - Initialized from environment
-//! - toString() returns href
+
+// Integration tests for location object (Task 67).
+// Acceptance criteria:
+// - location.href returns full URL
+// - location.origin/protocol/host/hostname/pathname/search/hash correct
+// - Initialized from environment
+// - toString() returns href
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
 use std::collections::HashMap;

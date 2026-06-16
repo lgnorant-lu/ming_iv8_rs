@@ -5,18 +5,15 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for SubtleCrypto (Task 40).
+
+// Integration tests for SubtleCrypto (Task 40).
 
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn subtle_crypto_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof crypto.subtle"),
         RustValue::String("object".into())
@@ -29,7 +26,7 @@ fn subtle_crypto_exists() {
 
 #[test]
 fn subtle_digest_sha256() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel
         .eval(
             r#"
@@ -59,7 +56,7 @@ fn subtle_digest_sha256() {
 
 #[test]
 fn subtle_digest_sha1() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel
         .eval(
             r#"
@@ -87,7 +84,7 @@ fn subtle_digest_sha1() {
 
 #[test]
 fn subtle_hmac_sign() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval(r#"
         globalThis.sigHex = null;
         var keyData = new TextEncoder().encode('secret-key');
@@ -117,7 +114,7 @@ fn subtle_hmac_sign() {
 
 #[test]
 fn subtle_hmac_verify() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval(r#"
         globalThis.verified = null;
         var keyData = new TextEncoder().encode('key');
@@ -142,7 +139,7 @@ fn subtle_hmac_verify() {
 
 #[test]
 fn subtle_digest_returns_promise() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         "crypto.subtle.digest('SHA-256', new Uint8Array(0)) instanceof Promise",
     );
@@ -151,7 +148,7 @@ fn subtle_digest_returns_promise() {
 
 #[test]
 fn subtle_import_key_returns_promise() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         "crypto.subtle.importKey('raw', new Uint8Array(16), {name:'HMAC',hash:'SHA-256'}, false, ['sign']) instanceof Promise"
     );
@@ -162,7 +159,7 @@ fn subtle_import_key_returns_promise() {
 
 #[test]
 fn subtle_encrypt_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof crypto.subtle.encrypt"),
         RustValue::String("function".into())
@@ -171,7 +168,7 @@ fn subtle_encrypt_exists() {
 
 #[test]
 fn subtle_decrypt_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof crypto.subtle.decrypt"),
         RustValue::String("function".into())
@@ -180,7 +177,7 @@ fn subtle_decrypt_exists() {
 
 #[test]
 fn subtle_aes_gcm_encrypt_decrypt_roundtrip() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"
         globalThis.decrypted = null;
         var keyData = new Uint8Array(16); // 128-bit key (all zeros for test)
@@ -210,7 +207,7 @@ fn subtle_aes_gcm_encrypt_decrypt_roundtrip() {
 
 #[test]
 fn subtle_aes_gcm_256_roundtrip() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"
         globalThis.result256 = null;
         var keyData = new Uint8Array(32); // 256-bit key
@@ -239,7 +236,7 @@ fn subtle_aes_gcm_256_roundtrip() {
 
 #[test]
 fn subtle_aes_gcm_wrong_key_fails() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"
         globalThis.decryptError = null;
         var key1 = new Uint8Array(16);
@@ -271,7 +268,7 @@ fn subtle_aes_gcm_wrong_key_fails() {
 
 #[test]
 fn subtle_encrypt_returns_promise() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"
         var k = new Uint8Array(16);
         var iv = new Uint8Array(12);
@@ -294,7 +291,7 @@ fn subtle_encrypt_returns_promise() {
 
 #[test]
 fn subtle_derive_bits_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof crypto.subtle.deriveBits"),
         RustValue::String("function".into())
@@ -303,7 +300,7 @@ fn subtle_derive_bits_exists() {
 
 #[test]
 fn subtle_pbkdf2_derive_bits() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         globalThis.derivedLen = null;
@@ -331,7 +328,7 @@ fn subtle_pbkdf2_derive_bits() {
 
 #[test]
 fn subtle_pbkdf2_deterministic() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"
         globalThis.hex1 = null;
         globalThis.hex2 = null;
@@ -368,7 +365,7 @@ fn subtle_pbkdf2_deterministic() {
 
 #[test]
 fn subtle_pbkdf2_sha1() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"
         globalThis.sha1Len = null;
         var pw = new TextEncoder().encode('pass');
@@ -392,7 +389,7 @@ fn subtle_pbkdf2_sha1() {
 
 #[test]
 fn subtle_aes_cbc_roundtrip() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"
         globalThis.cbcResult = null;
         var keyData = new Uint8Array(16);
@@ -423,7 +420,7 @@ fn subtle_aes_cbc_roundtrip() {
 
 #[test]
 fn subtle_generate_key_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof crypto.subtle.generateKey"),
         RustValue::String("function".into())
@@ -432,7 +429,7 @@ fn subtle_generate_key_exists() {
 
 #[test]
 fn subtle_generate_key_aes() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         globalThis.keyType = null;
@@ -457,7 +454,7 @@ fn subtle_generate_key_aes() {
 
 #[test]
 fn subtle_generate_key_then_encrypt() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(r#"
         globalThis.genEncResult = null;
         var iv = new Uint8Array(12);
@@ -485,7 +482,7 @@ fn subtle_generate_key_then_encrypt() {
 
 #[test]
 fn subtle_export_key_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof crypto.subtle.exportKey"),
         RustValue::String("function".into())
@@ -494,7 +491,7 @@ fn subtle_export_key_exists() {
 
 #[test]
 fn subtle_export_key_raw() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         globalThis.exportedLen = null;

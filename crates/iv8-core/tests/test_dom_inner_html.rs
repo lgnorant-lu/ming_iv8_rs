@@ -5,12 +5,14 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for innerHTML/outerHTML/textContent (Task 66).
-//! Acceptance criteria:
-//! - element.innerHTML returns child HTML string
-//! - element.outerHTML includes self tag
-//! - element.textContent = 'x' clears children and sets text
+
+// Integration tests for innerHTML/outerHTML/textContent (Task 66).
+// Acceptance criteria:
+// - element.innerHTML returns child HTML string
+// - element.outerHTML includes self tag
+// - element.textContent = 'x' clears children and sets text
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
 

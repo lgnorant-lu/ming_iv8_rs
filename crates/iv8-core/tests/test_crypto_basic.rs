@@ -5,18 +5,15 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for crypto.getRandomValues + crypto.randomUUID (Task 41).
+
+// Integration tests for crypto.getRandomValues + crypto.randomUUID (Task 41).
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn crypto_get_random_values_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof crypto.getRandomValues"),
         RustValue::String("function".into())
@@ -25,7 +22,7 @@ fn crypto_get_random_values_exists() {
 
 #[test]
 fn crypto_random_uuid_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof crypto.randomUUID"),
         RustValue::String("function".into())
@@ -34,7 +31,7 @@ fn crypto_random_uuid_exists() {
 
 #[test]
 fn crypto_random_uuid_format() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("crypto.randomUUID()");
     match result {
         RustValue::String(s) => {
@@ -59,14 +56,14 @@ fn crypto_random_uuid_format() {
 
 #[test]
 fn crypto_random_uuid_unique() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value("crypto.randomUUID() !== crypto.randomUUID()");
     assert_eq!(result, RustValue::Bool(true));
 }
 
 #[test]
 fn crypto_get_random_values_fills_uint8array() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var arr = new Uint8Array(16);
@@ -79,7 +76,7 @@ fn crypto_get_random_values_fills_uint8array() {
 
 #[test]
 fn crypto_get_random_values_returns_same_array() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var arr = new Uint8Array(4);
@@ -92,7 +89,7 @@ fn crypto_get_random_values_returns_same_array() {
 
 #[test]
 fn crypto_get_random_values_uint32array() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var arr = new Uint32Array(4);
@@ -105,7 +102,7 @@ fn crypto_get_random_values_uint32array() {
 
 #[test]
 fn crypto_get_random_values_quota_exceeded() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let err = kernel
         .eval(
             "crypto.getRandomValues(new Uint8Array(65537))",
@@ -122,7 +119,7 @@ fn crypto_get_random_values_quota_exceeded() {
 
 #[test]
 fn crypto_get_random_values_non_typed_array_throws() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let err = kernel
         .eval(
             "crypto.getRandomValues([1,2,3])",

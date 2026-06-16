@@ -5,19 +5,16 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for page.load (Task 35).
-//! Tests HTML parsing + inline script execution + DOM availability.
+
+// Integration tests for page.load (Task 35).
+// Tests HTML parsing + inline script execution + DOM availability.
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn page_load_basic_html() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load(
         "<html><body><div id=\"app\">Hello</div></body></html>",
         None,
@@ -28,7 +25,7 @@ fn page_load_basic_html() {
 
 #[test]
 fn page_load_executes_inline_script() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load(
         "<html><body><script>globalThis.loaded = true;</script></body></html>",
         None,
@@ -39,7 +36,7 @@ fn page_load_executes_inline_script() {
 
 #[test]
 fn page_load_multiple_scripts_in_order() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load(
         r#"<html><body>
             <script>globalThis.order = [];</script>
@@ -57,7 +54,7 @@ fn page_load_multiple_scripts_in_order() {
 
 #[test]
 fn page_load_script_can_access_dom() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load(
         r#"<html><body>
             <div id="target">original</div>
@@ -74,7 +71,7 @@ fn page_load_script_can_access_dom() {
 
 #[test]
 fn page_load_script_error_does_not_abort() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load(
         r#"<html><body>
             <script>throw new Error('oops');</script>
@@ -89,7 +86,7 @@ fn page_load_script_error_does_not_abort() {
 
 #[test]
 fn page_load_with_base_url() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load("<html></html>", Some("https://example.com/page"));
     // Document should have the base URL (not directly testable from JS in v0.1,
     // but we can verify it doesn't crash)
@@ -99,7 +96,7 @@ fn page_load_with_base_url() {
 
 #[test]
 fn page_load_empty_html() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load("", None);
     // html5ever creates html/head/body even for empty input
     let result = kernel.eval_to_rust_value("document.querySelector('body') !== null");
@@ -108,7 +105,7 @@ fn page_load_empty_html() {
 
 #[test]
 fn page_load_complex_structure() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load(
         r#"<!DOCTYPE html>
         <html>
@@ -142,7 +139,7 @@ fn page_load_complex_structure() {
 
 #[test]
 fn page_load_set_timeout_in_script() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.page_load(
         r#"<html><body><script>
             globalThis.timerFired = false;

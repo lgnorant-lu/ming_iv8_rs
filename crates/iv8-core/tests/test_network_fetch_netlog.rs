@@ -5,23 +5,20 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Test L-04 fix: fetch() requests are recorded to __iv8__.netLog.entries.
-//!
-//! v0.1: only XHR was recorded; fetch was invisible to netLog.
-//! v0.2: fetch() also records, with the same { method, url, headers, body } shape.
+
+// Test L-04 fix: fetch() requests are recorded to __iv8__.netLog.entries.
+//
+// v0.1: only XHR was recorded; fetch was invisible to netLog.
+// v0.2: fetch() also records, with the same { method, url, headers, body } shape.
 
 use iv8_core::convert::RustValue;
 use iv8_core::kernel::{EvalOpts, KernelConfig};
 use iv8_core::EmbeddedV8Kernel;
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn fetch_get_records_url_in_netlog() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/x", b"hello".to_vec(), 200, None);
     kernel
         .eval(
@@ -46,7 +43,7 @@ fn fetch_get_records_url_in_netlog() {
 
 #[test]
 fn fetch_post_records_method_and_body() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/post", b"ok".to_vec(), 200, None);
     kernel
         .eval(
@@ -73,7 +70,7 @@ fn fetch_post_records_method_and_body() {
 
 #[test]
 fn fetch_records_headers_as_lowercase_pairs() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/h", b"".to_vec(), 200, None);
     kernel
         .eval(
@@ -109,7 +106,7 @@ fn fetch_records_headers_as_lowercase_pairs() {
 #[test]
 fn fetch_records_even_on_network_error() {
     // Even when the URL is offline (rejects), the request is still logged.
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let _ = kernel.eval(
         r#"fetch('https://offline.example/missing').catch(() => {})"#,
         EvalOpts::default(),
@@ -126,7 +123,7 @@ fn fetch_records_even_on_network_error() {
 
 #[test]
 fn fetch_and_xhr_share_same_netlog() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/a", b"".to_vec(), 200, None);
     kernel.add_resource("https://api.com/b", b"".to_vec(), 200, None);
 
@@ -160,7 +157,7 @@ fn fetch_and_xhr_share_same_netlog() {
 
 #[test]
 fn fetch_default_method_is_get() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/d", b"".to_vec(), 200, None);
     kernel
         .eval(r#"fetch('https://api.com/d')"#, EvalOpts::default())
@@ -173,7 +170,7 @@ fn fetch_default_method_is_get() {
 
 #[test]
 fn fetch_method_normalized_to_uppercase() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.add_resource("https://api.com/u", b"".to_vec(), 200, None);
     kernel
         .eval(

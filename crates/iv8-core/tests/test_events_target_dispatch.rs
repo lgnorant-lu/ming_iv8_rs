@@ -5,9 +5,11 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for EventTarget (Task 33).
-//! Tests addEventListener, dispatchEvent, and three-phase dispatch.
+
+// Integration tests for EventTarget (Task 33).
+// Tests addEventListener, dispatchEvent, and three-phase dispatch.
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
 

@@ -5,22 +5,19 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for MessageChannel (Task 77).
-//! Acceptance criteria:
-//! - new MessageChannel() creates port1 + port2
-//! - port1.postMessage(data) → port2.onmessage receives {data}
-//! - Communication is async (via setTimeout)
+
+// Integration tests for MessageChannel (Task 77).
+// Acceptance criteria:
+// - new MessageChannel() creates port1 + port2
+// - port1.postMessage(data) → port2.onmessage receives {data}
+// - Communication is async (via setTimeout)
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 #[test]
 fn message_channel_exists() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     assert_eq!(
         kernel.eval_to_rust_value("typeof MessageChannel"),
         RustValue::String("function".into())
@@ -29,7 +26,7 @@ fn message_channel_exists() {
 
 #[test]
 fn message_channel_has_ports() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var mc = new MessageChannel();
@@ -41,7 +38,7 @@ fn message_channel_has_ports() {
 
 #[test]
 fn message_channel_post_message() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value(
         r#"
         var mc = new MessageChannel();
@@ -60,7 +57,7 @@ fn message_channel_post_message() {
 
 #[test]
 fn message_channel_bidirectional() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value(
         r#"
         var mc = new MessageChannel();
@@ -85,7 +82,7 @@ fn message_channel_bidirectional() {
 
 #[test]
 fn message_channel_object_data() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value(
         r#"
         var mc = new MessageChannel();
@@ -107,7 +104,7 @@ fn message_channel_object_data() {
 
 #[test]
 fn message_channel_async_not_immediate() {
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     let result = kernel.eval_to_rust_value(
         r#"
         var mc = new MessageChannel();

@@ -5,20 +5,17 @@
     unused_imports,
     unused_variables
 )]
+mod common;
 
-//! Integration tests for innerHTML setter (Task 79).
-//! Acceptance criteria:
-//! - element.innerHTML = '<p>new</p>' replaces children
-//! - document.documentElement.innerHTML = html (h5st pattern)
-//! - After setting, querySelector finds new elements
-//! - After setting, old elements are gone
+
+// Integration tests for innerHTML setter (Task 79).
+// Acceptance criteria:
+// - element.innerHTML = '<p>new</p>' replaces children
+// - document.documentElement.innerHTML = html (h5st pattern)
+// - After setting, querySelector finds new elements
+// - After setting, old elements are gone
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel() -> EmbeddedV8Kernel {
-    EmbeddedV8Kernel::new(KernelConfig::default()).unwrap()
-}
-
 fn make_kernel_with_doc(html: &str) -> EmbeddedV8Kernel {
     let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
     kernel.set_document(html, None);
@@ -82,7 +79,7 @@ fn inner_html_setter_complex_html() {
 #[test]
 fn inner_html_setter_document_element() {
     // h5st pattern: document.documentElement.innerHTML = full_html
-    let mut kernel = make_kernel();
+    let mut kernel = common::make_kernel();
     kernel.eval_to_rust_value(r#"
         document.querySelector('html').innerHTML = '<head><title>Test</title></head><body><div id="app">loaded</div></body>';
     "#);

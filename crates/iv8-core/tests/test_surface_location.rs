@@ -1,4 +1,4 @@
-//! v0.8.51 S3: Integration tests for location surface.
+// v0.8.51 S3: Integration tests for location surface.
 mod common;
 
 #[test]
