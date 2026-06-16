@@ -7,15 +7,34 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
 (function() {
     if (typeof document === 'undefined') return;
 
-    // document.cookie (read/write string)
-    var _cookie = '';
+    // document.cookie (read/write string, multi-cookie support)
+    var _cookies = {};
     Object.defineProperty(document, 'cookie', {
-        get: function() { return _cookie; },
+        get: function() {
+            var parts = [];
+            for (var k in _cookies) {
+                if (_cookies.hasOwnProperty(k)) parts.push(k + '=' + _cookies[k]);
+            }
+            return parts.join('; ');
+        },
         set: function(val) {
-            // Simple cookie append (real impl would parse name=value;expires=...)
-            if (_cookie) _cookie += '; ';
-            var parts = String(val).split(';');
-            _cookie += parts[0]; // Only keep name=value part
+            var str = String(val);
+            var parts = str.split(';');
+            var kv = parts[0].split('=');
+            if (kv.length >= 2) {
+                var name = kv[0].trim();
+                var value = kv.slice(1).join('=').trim();
+                _cookies[name] = value;
+            }
+            // expires, path, domain, secure, samesite attributes are parsed but
+            // not enforced; expired cookies are removed on next set via Max-Age=0
+            for (var i = 1; i < parts.length; i++) {
+                var attr = parts[i].trim();
+                if (attr.toLowerCase() === 'max-age=0') {
+                    var pkv = parts[0].split('=');
+                    if (pkv.length >= 2) delete _cookies[pkv[0].trim()];
+                }
+            }
         },
         enumerable: true,
         configurable: true,

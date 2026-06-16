@@ -93,14 +93,17 @@ pub const XHR_SHIM_JS: &str = r#"
             if (result) {
                 self.status = result.status;
                 self.statusText = result.status === 200 ? 'OK' : '';
+                self._responseHeaders = result.headers || {};
+                self.readyState = 2; // HEADERS_RECEIVED
+                if (self.onreadystatechange) self.onreadystatechange();
                 self.responseText = result.responseText;
                 self.response = result.responseText;
-                self._responseHeaders = result.headers || {};
+                self.readyState = 3; // LOADING
+                if (self.onreadystatechange) self.onreadystatechange();
                 self.readyState = 4; // DONE
                 if (self.onreadystatechange) self.onreadystatechange();
                 if (self.onload) self.onload();
             } else {
-                // Network error
                 self.status = 0;
                 self.readyState = 4;
                 if (self.onreadystatechange) self.onreadystatechange();

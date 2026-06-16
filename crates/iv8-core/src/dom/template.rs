@@ -234,6 +234,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             Some(inner_html_setter),
         );
         install_proto_accessor(scope, proto, "outerHTML", outer_html_getter, None);
+        install_proto_accessor(scope, proto, "innerText", inner_text_getter, Some(inner_text_setter));
         install_proto_accessor(scope, proto, "children", children_getter, None);
         install_proto_accessor(
             scope,
@@ -812,6 +813,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "statusText", response_status_text_getter, None);
         install_proto_accessor(scope, proto, "url", response_url_getter, None);
         install_proto_accessor(scope, proto, "headers", response_headers_getter, None);
+        install_proto_accessor(scope, proto, "bodyUsed", body_used_getter, None);
         set_to_string_tag(scope, proto, "Response");
     }
 
@@ -1233,6 +1235,16 @@ unsafe extern "C" fn text_content_setter(info: *const v8::FunctionCallbackInfo) 
             }
         }
     });
+}
+
+// ── innerText (delegates to textContent) ────────────────────────────────────────
+
+unsafe extern "C" fn inner_text_getter(info: *const v8::FunctionCallbackInfo) {
+    text_content_getter(info)
+}
+
+unsafe extern "C" fn inner_text_setter(info: *const v8::FunctionCallbackInfo) {
+    text_content_setter(info)
 }
 
 // ── Navigation accessors ──────────────────────────────────────────────────────
@@ -4075,6 +4087,21 @@ unsafe extern "C" fn headers_values_cb(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn body_used_getter(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let key = crate::v8_utils::v8_string(scope, "__consumed__");
+        let val = this.get(scope, key.into())
+            .map(|v| v.is_true())
+            .unwrap_or(false);
+        rv.set(v8::Boolean::new(scope, val).into());
+    }));
+}
+
 unsafe extern "C" fn response_text_cb(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -4084,6 +4111,15 @@ unsafe extern "C" fn response_text_cb(info: *const v8::FunctionCallbackInfo) {
         let this = args.this();
         let resolver = crate::v8_utils::v8_resolver(scope);
         rv.set(resolver.get_promise(scope).into());
+
+        let consumed_key = crate::v8_utils::v8_string(scope, "__consumed__");
+        if this.get(scope, consumed_key.into()).map(|v| v.is_true()).unwrap_or(false) {
+            let err = crate::v8_utils::v8_string(scope, "TypeError: Already read");
+            resolver.reject(scope, err.into());
+            return;
+        }
+        this.define_own_property(scope, consumed_key.into(), v8::Boolean::new(scope, true).into(), v8::PropertyAttribute::DONT_ENUM);
+
         let body_key = crate::v8_utils::v8_string(scope, "__body__");
         if let Some(body) = this.get(scope, body_key.into()) {
             resolver.resolve(scope, body);
@@ -4102,6 +4138,13 @@ unsafe extern "C" fn response_json_cb(info: *const v8::FunctionCallbackInfo) {
         let this = args.this();
         let resolver = crate::v8_utils::v8_resolver(scope);
         rv.set(resolver.get_promise(scope).into());
+        let consumed_key = crate::v8_utils::v8_string(scope, "__consumed__");
+        if this.get(scope, consumed_key.into()).map(|v| v.is_true()).unwrap_or(false) {
+            let err = crate::v8_utils::v8_string(scope, "TypeError: Already read");
+            resolver.reject(scope, err.into());
+            return;
+        }
+        this.define_own_property(scope, consumed_key.into(), v8::Boolean::new(scope, true).into(), v8::PropertyAttribute::DONT_ENUM);
         let body_key = crate::v8_utils::v8_string(scope, "__body__");
         if let Some(body_val) = this.get(scope, body_key.into()) {
             let body_str = body_val.to_rust_string_lossy(scope);
@@ -4139,6 +4182,13 @@ unsafe extern "C" fn response_array_buffer_cb(info: *const v8::FunctionCallbackI
         let this = args.this();
         let resolver = crate::v8_utils::v8_resolver(scope);
         rv.set(resolver.get_promise(scope).into());
+        let consumed_key = crate::v8_utils::v8_string(scope, "__consumed__");
+        if this.get(scope, consumed_key.into()).map(|v| v.is_true()).unwrap_or(false) {
+            let err = crate::v8_utils::v8_string(scope, "TypeError: Already read");
+            resolver.reject(scope, err.into());
+            return;
+        }
+        this.define_own_property(scope, consumed_key.into(), v8::Boolean::new(scope, true).into(), v8::PropertyAttribute::DONT_ENUM);
         let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
         if let Some(ab) = this.get(scope, ab_key.into()) {
             resolver.resolve(scope, ab);

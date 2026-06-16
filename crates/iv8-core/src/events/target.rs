@@ -210,6 +210,11 @@ fn create_event_object<'s>(
 ) -> v8::Local<'s, v8::Object> {
     let obj = v8::Object::new(scope);
 
+    // isTrusted — dispatched events are trusted
+    let trusted_key = crate::v8_utils::v8_string(scope, "isTrusted");
+    let trusted_val = v8::Boolean::new(scope, true);
+    obj.set(scope, trusted_key.into(), trusted_val.into());
+
     let type_key = crate::v8_utils::v8_string(scope, "type");
     let type_val = crate::v8_utils::v8_string(scope, event_type);
     obj.set(scope, type_key.into(), type_val.into());
@@ -310,8 +315,8 @@ fn invoke_listeners(
             break;
         }
         let func = v8::Local::new(scope, &listener.callback);
-        let undefined = v8::undefined(scope);
-        func.call(scope, undefined.into(), &[event_obj.into()]);
+        let global = scope.get_current_context().global(scope);
+        func.call(scope, global.into(), &[event_obj.into()]);
 
         // Check if stopPropagation was called
         let stop_key = crate::v8_utils::v8_string(scope, "__stopped__");

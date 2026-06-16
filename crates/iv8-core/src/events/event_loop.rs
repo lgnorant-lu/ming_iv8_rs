@@ -228,8 +228,8 @@ impl Default for EventLoop {
 /// Execute a collected task's callback. Call this OUTSIDE the EventLoop borrow.
 pub fn execute_task(scope: &v8::PinScope<'_, '_>, task: &TimedTask) {
     let func = v8::Local::new(scope, &task.callback);
-    let undefined = v8::undefined(scope);
-    func.call(scope, undefined.into(), &[]);
+    let global = scope.get_current_context().global(scope);
+    func.call(scope, global.into(), &[]);
 }
 
 /// Execute a batch of tasks and re-enqueue intervals.
