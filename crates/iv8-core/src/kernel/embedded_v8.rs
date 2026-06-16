@@ -1243,6 +1243,7 @@ impl EmbeddedV8Kernel {
 
     #[test]
     fn screen_profile_runtime_batch_v044() {
+        use crate::convert::RustValue;
         let source = iv8_profile::defaults::default_profile_source();
         let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
         let config = KernelConfig::default().with_profile_matrix(&matrix);
@@ -1923,14 +1924,14 @@ mod tests {
     fn kernel_eval_basic_arithmetic() {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
         let result = kernel.eval_to_rust_value("1 + 2");
-        assert_eq!(result, crate::RustValue::Int(3));
+        assert_eq!(result, crate::convert::RustValue::Int(3));
     }
 
     #[test]
     fn kernel_eval_string() {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
         let result = kernel.eval_to_rust_value("'hello' + ' world'");
-        assert_eq!(result, crate::RustValue::String("hello world".into()));
+        assert_eq!(result, crate::convert::RustValue::String("hello world".into()));
     }
 
     #[test]
@@ -1970,7 +1971,7 @@ mod tests {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
         kernel.eval("var x = 42", EvalOpts::default()).unwrap();
         let result = kernel.eval_to_rust_value("x + 1");
-        assert_eq!(result, crate::RustValue::Int(43));
+        assert_eq!(result, crate::convert::RustValue::Int(43));
     }
 
     #[test]
@@ -2018,7 +2019,7 @@ mod tests {
 
     #[test]
     fn profile_matrix_environment_overrides_are_observable_in_js() {
-        use crate::RustValue;
+        use crate::convert::RustValue;
 
         fn assert_number_eq(actual: RustValue, expected: f64) {
             match actual {
@@ -2203,16 +2204,17 @@ mod tests {
         let t0 = kernel.eval_to_rust_value("performance.now()");
         match t0 {
             RustValue::Float(v) => assert!(v >= 0.0, "performance.now() >= 0, got {}", v),
-            other => panic!("expected float from performance.now(), got {:?}", other),
+            RustValue::Int(v) => assert!(v >= 0, "performance.now() >= 0, got {}", v),
+            other => panic!("expected numeric from performance.now(), got {:?}", other),
         }
 
         let t1 = kernel.eval_to_rust_value("performance.now()");
-        match (t0, t1) {
-            (RustValue::Float(a), RustValue::Float(b)) => {
-                assert!(b >= a, "performance.now() monotonic: {} then {}", a, b);
-            }
-            other => panic!("expected two floats from performance.now(), got {:?}", other),
+        fn as_f64(v: &RustValue) -> f64 {
+            match v { RustValue::Float(f) => *f, RustValue::Int(i) => *i as f64, _ => panic!("not numeric") }
         }
+        let a = as_f64(&t0);
+        let b = as_f64(&t1);
+        assert!(b >= a, "performance.now() monotonic: {} then {}", a, b);
     }
 
     #[test]
