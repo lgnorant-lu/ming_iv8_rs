@@ -87,6 +87,14 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("serviceWorker", nav_service_worker);
     nav_getter!("pdfViewerEnabled", nav_pdf_viewer_enabled);
 
+    // javaEnabled: function that returns false (no Java plugin in V8)
+    let java_fn = v8::FunctionTemplate::builder_raw(nav_java_enabled).build(scope);
+    let java_name = crate::v8_utils::v8_string(scope, "javaEnabled");
+    java_fn.set_class_name(java_name);
+    nav_tmpl
+        .prototype_template(scope)
+        .set(java_name.into(), java_fn.into());
+
     // Instantiate via instance_template (bypasses constructor — we don't want
     // illegal_constructor to block Rust-side instance creation).
     // When JS does `new Navigator()`, the constructor throws TypeError.
@@ -423,6 +431,16 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
 }
 
 env_bool_getter!(nav_pdf_viewer_enabled, "navigator.pdfViewerEnabled", true);
+
+// javaEnabled() → always returns false (no Java plugin in V8 context)
+unsafe extern "C" fn nav_java_enabled(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
 
 env_f64_getter!(screen_width, "screen.width", 1920.0);
 env_f64_getter!(screen_height, "screen.height", 1080.0);
