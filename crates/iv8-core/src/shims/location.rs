@@ -174,7 +174,20 @@ unsafe extern "C" fn loc_to_string(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        // Check hidden property first (set by setter), then environment
+        let this = args.this();
+        if this.is_object() {
+            let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(this) };
+            let hidden_key = crate::v8_utils::v8_string(scope, "__loc_location.href");
+            if let Some(hidden_val) = obj.get(scope, hidden_key.into()) {
+                if !hidden_val.is_undefined() {
+                    rv.set(hidden_val);
+                    return;
+                }
+            }
+        }
         let s = env_str(scope, "location.href", "about:blank");
         if let Some(v) = v8::String::new(scope, &s) {
             rv.set(v.into());
