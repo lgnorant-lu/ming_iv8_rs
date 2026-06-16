@@ -6,6 +6,79 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.51] - 2026-06-16
+
+> Local milestone tagged. v0.8.51 builds Rust test infrastructure: fixes
+> broken lib tests, creates shared test harness, adds 85 integration tests
+> across P0/P1/P2 modules, normalizes all 35 test files to
+> `test_<layer>_<module>.rs` convention, and creates the testing conventions
+> document. Package metadata remains `0.8.11`.
+
+### Added
+
+- Shared test harness (`tests/common/mod.rs`) with `make_kernel()`,
+  `make_kernel_seeded()`, `to_str()`, `assert_js_str()`, `assert_js_val()`,
+  `assert_js_error()`.
+- 85 new integration tests across P0 (cookie/location/target/navigator/
+  window_extras), P1 (console/storage/audio_context/canvas2d), and P2
+  (ua_data/navigator_extras/iv8_binding/input_sim) modules.
+- Testing conventions document (`docs/conventions/testing-conventions.md`).
+- Conventions index (`docs/conventions/README.md`).
+- `RustValue` → `convert::RustValue` fix for embedded_v8.rs lib tests.
+
+### Changed
+
+- All 35 integration test files renamed to `test_<layer>_<module>.rs` pattern.
+- All 35 test files migrated to `mod common;` — zero local `make_kernel()`
+  duplicates remain.
+- Execution protocol updated with testing conventions in Governing Documents.
+- `//!` inner doc comments changed to `//` after `mod common;` declarations.
+
+### Fixed
+
+- `cargo test -p iv8-core --lib` now compiles and passes (190/190), was
+  previously broken by API drift.
+- Timing test (`performance_now_boundary_v046`) now accepts both `Int` and
+  `Float` RustValue variants.
+
+### Quality Gates
+
+- 12/13 acceptance gates verified (G10 coverage blocked by Windows toolchain).
+- P0 module coverage: 6/6 (100%). P1: 5/5 (100%). Overall: 33/36 (92%).
+- Cross-version invariants preserved: iv8-surface 30/30, iv8-undetect 42/42.
+
+## [0.8.50] - 2026-06-16
+
+> Local milestone tagged. v0.8.50 delivers L3 experiential robustness:
+> 7-item surface fix batch, RS live-site补環境 verification, and Phase C
+> test expansion. Package metadata remains `0.8.11`.
+
+### Added
+
+- `Navigator.prototype.javaEnabled()` — returns `false` as a native method.
+- `performance.timeOrigin` — numeric property initialized to `0.0`.
+- `install_window_identity_refs()` — defaults `window.top/self/parent === window`.
+- RS补環境 live-site verification: HTTP 200 on `epub.cnipa.gov.cn`.
+- L2 RS diagnostic bridge test (7 tests, test_v0850_l2_rs.py).
+- Phase C test expansion: 84→94 tests (+10).
+
+### Changed
+
+- `Element.prototype.innerText` — delegates to `textContent`.
+- `Response.prototype.bodyUsed` — consumption tracking with Already read guard.
+- XHR `doSend()` — added HEADERS_RECEIVED (2) and LOADING (3) states.
+- Timer callback `this` — changed from `undefined` to `globalThis`.
+- Event dispatch — `isTrusted` set to `true`, listener `this` bound to context.
+- Location object — refactored from plain object to FunctionTemplate with native
+  getter/setter accessors (matching real browser descriptor shapes).
+- `document.cookie` — multi-cookie `; ` splitting with `Max-Age=0` support.
+- OWNER_ROUTING_TABLE: 69→70 entries (V080 added for `performance.timeOrigin`).
+
+### Quality Gates
+- 15/15 acceptance gates verified.
+- RS live-site cookie verified (HTTP 200).
+- cargo test 94/94, pytest 84/84.
+
 ## [0.8.46] - 2026-06-15
 
 > Local milestone accepted. v0.8.46 starts P3 Timing/Performance with a boundary
