@@ -502,6 +502,19 @@ fn install_behavior_via_bcr(
     }
 }
 
+/// Install window.top/self/parent identity references.
+/// In top-level browsing context these must all point to window itself.
+fn install_window_identity_refs(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+) {
+    let keys = ["top", "self", "parent"];
+    for &key in &keys {
+        let key_str = crate::v8_utils::v8_string(scope, key);
+        global.set(scope, key_str.into(), global.into());
+    }
+}
+
 /// Build a BehaviorCallbackRegistry with all 15 installers registered as
 /// hardcoded wrappers around the install_X functions. This is the existing
 /// default path since v0.8.29/30.
@@ -673,6 +686,7 @@ impl EmbeddedV8Kernel {
                 crate::events::binding::install_event_loop_bindings(scope, global);
                 crate::events::page_api::install_page_api(scope, global);
                 crate::events::input_sim::install_input_api(scope, global);
+                install_window_identity_refs(scope, global);
             }
             unsafe {
                 self.isolate.exit();
