@@ -115,6 +115,7 @@ tests/
   test_events_timers.rs
   test_crypto_basic.rs
   test_crypto_subtle.rs
+  test_entry_multi_bundler.rs
   test_kernel_init.rs
   test_kernel_edge_cases.rs
   test_kernel_v8_extra.rs
