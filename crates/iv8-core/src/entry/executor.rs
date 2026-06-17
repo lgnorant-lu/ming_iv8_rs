@@ -398,6 +398,30 @@ fn collect_strategy_evidence(
         result.diagnostic_records.extend(diagnostics);
     }
 
+    if matches!(kind, StrategyKind::RollupBridge) {
+        let (graph, evidence, diagnostics) =
+            crate::entry::rollup::collect_evidence(kernel);
+        result.module_graph = Some(graph);
+        result.observed_evidence.extend(evidence);
+        result.diagnostic_records.extend(diagnostics);
+    }
+
+    if matches!(kind, StrategyKind::ViteBridge) {
+        let (graph, evidence, diagnostics) =
+            crate::entry::vite::collect_evidence(kernel);
+        result.module_graph = Some(graph);
+        result.observed_evidence.extend(evidence);
+        result.diagnostic_records.extend(diagnostics);
+    }
+
+    if matches!(kind, StrategyKind::UmdBridge) {
+        let (graph, evidence, diagnostics) =
+            crate::entry::umd::collect_evidence(kernel);
+        result.module_graph = Some(graph);
+        result.observed_evidence.extend(evidence);
+        result.diagnostic_records.extend(diagnostics);
+    }
+
     if matches!(kind, StrategyKind::Dispatch) {
         let det = crate::entry::dispatch::detect(source);
         result.observed_evidence.extend(det.to_evidence_records());

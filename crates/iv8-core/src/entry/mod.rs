@@ -7,5 +7,8 @@ pub mod executor;
 pub mod hooks;
 pub mod planner;
 pub mod policy;
+pub mod rollup;
 pub mod types;
+pub mod umd;
+pub mod vite;
 pub mod webpack;
