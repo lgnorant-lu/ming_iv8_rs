@@ -6,6 +6,48 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.52] - 2026-06-16
+
+> Local milestone tagged. v0.8.52 adds multi-bundler detection and execution:
+> 8-format classification, Browserify source-text wrap, Rollup/Vite/UMD direct
+> eval bridges, 6 fixtures, and 19 integration tests. Package metadata remains
+> `0.8.11`.
+
+### Added
+
+- Multi-bundler format detection (classification.rs): Browserify strong/weak,
+  Rollup IIFE/UMD, Vite, esbuild, unknown IIFE — 8 formats in total.
+- `SampleKind` variants: `BrowserifyRuntime`, `RollupBundle`, `ViteBundle`,
+  `UmdBundle`, `UnknownIife`.
+- `StrategyKind` variants: `BrowserifyBridge`, `RollupBridge`, `UmdBridge`,
+  `ViteBridge`.
+- `ProbeResult` fields: `has_browserify_runtime`, `has_rollup_bundle`,
+  `has_vite_bundle`.
+- Browserify bridge (browserify/mod.rs): source-text wrap prelude via
+  `Function.prototype.call` interception, `collect_evidence()`.
+- Rollup bridge (rollup/mod.rs): IIFE direct eval, detection + evidence.
+- Vite bridge (vite/mod.rs): IIFE direct eval, deferred ESM to v0.8.53.
+- UMD bridge (umd/mod.rs): branch detection, global dispatch.
+- 6 fixture files for multi-bundler integration tests.
+- 19 integration tests (test_entry_multi_bundler.rs): detection, routing,
+  execution, regression.
+
+### Changed
+
+- Planner routing: 5 new `SampleKind` match arms with `fit_score`/`evidence`.
+- Policy: all 4 new strategies allowed for `Analysis` persona;
+  `BrowserifyBridge` also allowed for `Runtime`.
+- Executor: `apply_strategy_prelude` hooks Browserify; `collect_strategy_evidence`
+  collects evidence for all 4 new bridges.
+
+### Quality Gates
+
+- 13/13 acceptance gates verified.
+- `cargo test -p iv8-core --lib`: 204/204 (+14 detection tests).
+- `cargo test --test test_kernel_init`: 94/94 regression preserved.
+- `cargo test --test test_entry_multi_bundler`: 19/19.
+- WebpackBridge: zero diff (NG-1), 38559 bytes untouched.
+
 ## [0.8.51] - 2026-06-16
 
 > Local milestone tagged. v0.8.51 builds Rust test infrastructure: fixes
