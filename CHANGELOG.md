@@ -6,6 +6,34 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.53] - 2026-06-17
+
+> Local milestone tagged. v0.8.53 supplements the v0.8.52 multi-bundler layer
+> with Browserify AST extraction and Vite ESM module mode. Package metadata
+> remains `0.8.11`.
+
+### Added
+
+- Browserify AST extraction (`extract_modules()`): SWC-based parsing extracts
+  per-module source bodies and dependency maps from browser-pack bundles.
+- `BrowserifyModuleEntry` and `BrowserifyModuleGraph` serializable types.
+- `EmbeddedV8Kernel::eval_module()`: ESM evaluation via `v8::script_compiler::compile_module`,
+  `Module::instantiate_module`, and `Module::evaluate`.
+- Vite ESM fixture (`vite_esm_minimal.js`).
+- 3 new integration tests for eval_module and AST extraction.
+
+### Changed
+
+- `browserify/mod.rs`: expanded from 201 to 395 lines with AST extraction layer.
+
+### Quality Gates
+
+- 12/12 acceptance gates verified (G5-G8 deferred to v0.9+).
+- `cargo test -p iv8-core --lib`: 239/239 (+4 AST extraction tests).
+- `cargo test --test test_kernel_init`: 94/94.
+- `cargo test --test test_entry_multi_bundler`: 25/25 (+3).
+- WebpackBridge untouched (NG-2).
+
 ## [0.8.52] - 2026-06-16
 
 > Local milestone tagged. v0.8.52 adds multi-bundler detection and execution:
