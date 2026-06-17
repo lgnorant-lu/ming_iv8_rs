@@ -256,3 +256,36 @@ fn test_all_format_candidates_have_nonzero_fit_scores() {
         );
     }
 }
+
+#[test]
+fn test_eval_module_vite_esm() {
+    let src = load_fixture("vite_esm_minimal.js");
+    let mut kernel = common::make_kernel();
+    let result = kernel
+        .eval_module(&src, Some("vite-esm-test.js"), iv8_core::kernel::EvalOpts::default())
+        .expect("eval_module should succeed");
+    let ctx = kernel.eval_to_rust_value("typeof hello");
+    match &ctx {
+        iv8_core::convert::RustValue::String(s) => {
+            assert_eq!(s, "undefined", "top-level export should not leak to global scope");
+        }
+        _ => panic!("expected string, got {:?}", ctx),
+    }
+    // Verify the Global value exists (module namespace returned)
+    drop(result);
+}
+
+#[test]
+fn test_browserify_ast_extraction_basics() {
+    let src = r#"(function(modules,cache,entries){function r(id){return id;}return r})({1:[function(require,module,exports){module.exports=42},{}]},{},[1]);"#;
+    let graph = iv8_core::entry::browserify::extract_modules(src)
+        .expect("should extract from browserify source");
+    assert_eq!(graph.module_count, 1);
+    assert_eq!(graph.entry_ids, vec![1]);
+}
+
+#[test]
+fn test_browserify_ast_extraction_non_browserify() {
+    let src = "var x = 1;";
+    assert!(iv8_core::entry::browserify::extract_modules(src).is_none());
+}
