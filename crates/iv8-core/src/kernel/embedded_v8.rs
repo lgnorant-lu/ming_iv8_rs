@@ -1659,6 +1659,77 @@ impl EmbeddedV8Kernel {
         self.global_to_rust_value(&global)
     }
 
+    /// Evaluate a JavaScript module (ESM) using v8::Module API.
+    ///
+    /// Compiles the source as an ES module, instantiates it with a
+    /// minimal resolve callback, evaluates it, and runs microtask
+    /// checkpoint for top-level await support.
+    ///
+    /// Returns the module namespace object.
+    pub fn eval_module(
+        &mut self,
+        source: &str,
+        specifier: Option<&str>,
+        _opts: EvalOpts,
+    ) -> Result<v8::Global<v8::Value>, IV8Error> {
+        self.assert_thread();
+
+        // Enter isolate
+        unsafe { self.isolate.enter(); }
+
+        let result = (|| -> Result<v8::Global<v8::Value>, IV8Error> {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+
+            let name = specifier.unwrap_or("<module>");
+            let source_str = v8::String::new(scope, source).ok_or_else(|| {
+                IV8Error::Internal("failed to create V8 source string".into())
+            })?;
+
+            let origin = v8::ScriptOrigin::new(
+                scope,
+                v8::String::new(scope, name).unwrap_or_else(|| v8::String::empty(scope)).into(),
+                0,
+                0,
+                true,
+                0,
+                None,
+                false,
+                false,
+                true,
+                None,
+            );
+
+            let mut source = v8::script_compiler::Source::new(source_str, Some(&origin));
+
+            let module = v8::script_compiler::compile_module(scope, &mut source)
+                .ok_or_else(|| IV8Error::Internal("module compilation failed".into()))?;
+
+            let instantiated = module.instantiate_module(scope, |_context, _specifier, _referrer, _module| {
+                None
+            });
+
+            if instantiated.is_none() {
+                return Err(IV8Error::Internal("module instantiation failed".into()));
+            }
+
+            let result = module.evaluate(scope).ok_or_else(|| {
+                IV8Error::Internal("module evaluation failed".into())
+            })?;
+
+            Ok(v8::Global::new(scope, result))
+        })();
+
+        // Microtask checkpoint after scope exit (avoids double borrow)
+        self.isolate.perform_microtask_checkpoint();
+
+        // Exit isolate
+        unsafe { self.isolate.exit(); }
+
+        result
+    }
+
     /// Eval and if the result is a Promise, await it by draining the event loop.
     /// Returns the resolved value. Rejections become IV8Error::Js and timeouts
     /// become IV8Error::Terminated.
