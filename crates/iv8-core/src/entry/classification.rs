@@ -336,6 +336,8 @@ fn detect_rollup_umd(source: &str) -> bool {
         || source.contains("})(globalThis,")
         || source.contains("}(global,")
         || source.contains("}(globalThis,")
+        || source.contains("typeof globalThis")
+        || source.contains("typeof global")
         || source.contains("global.");
     has_amd && has_cjs && has_global
 }
@@ -349,12 +351,21 @@ fn detect_vite(source: &str) -> bool {
 }
 
 /// IIFE wrapper detection: self-executing function pattern.
+/// Strips leading `//` comment lines before checking for IIFE prefix.
 fn detect_iife_wrapper(source: &str) -> bool {
-    let trimmed = source.trim_start();
+    let mut trimmed = source.trim_start();
+    while trimmed.starts_with("//") || trimmed.starts_with(' ') || trimmed.starts_with('\n') || trimmed.starts_with('\r') {
+        if let Some(lf) = trimmed.find('\n') {
+            trimmed = trimmed[lf + 1..].trim_start();
+        } else {
+            break;
+        }
+    }
     trimmed.starts_with("(function(")
         || trimmed.starts_with("!function(")
         || trimmed.starts_with("(function(){")
         || trimmed.starts_with("(()=>")
+        || trimmed.starts_with("(() =>")
         || trimmed.starts_with(";(function(")
 }
 
