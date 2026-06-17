@@ -1,4 +1,5 @@
 pub mod ast;
+pub mod browserify;
 pub mod classification;
 pub mod diagnostics;
 pub mod dispatch;

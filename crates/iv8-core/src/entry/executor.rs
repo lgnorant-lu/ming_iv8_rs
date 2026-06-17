@@ -327,7 +327,13 @@ fn apply_strategy_prelude(
             Ok(())
         }
         StrategyKind::CdpProbe => Ok(()),
-        StrategyKind::BrowserifyBridge | StrategyKind::RollupBridge | StrategyKind::ViteBridge | StrategyKind::UmdBridge => {
+        StrategyKind::BrowserifyBridge => {
+            kernel
+                .eval(crate::entry::browserify::bridge_prelude(), EvalOpts::default())
+                .map_err(|e| format!("browserify prelude: {}", e))?;
+            Ok(())
+        }
+        StrategyKind::RollupBridge | StrategyKind::ViteBridge | StrategyKind::UmdBridge => {
             Ok(())
         }
     }
@@ -382,6 +388,14 @@ fn collect_strategy_evidence(
                 }
             }
         }
+    }
+
+    if matches!(kind, StrategyKind::BrowserifyBridge) {
+        let (graph, evidence, diagnostics) =
+            crate::entry::browserify::collect_evidence(kernel);
+        result.module_graph = Some(graph);
+        result.observed_evidence.extend(evidence);
+        result.diagnostic_records.extend(diagnostics);
     }
 
     if matches!(kind, StrategyKind::Dispatch) {
@@ -528,6 +542,9 @@ fn record_strategy_semantics(
         ],
         StrategyKind::SourceAst => &[
             "SourceAst wraps computed member calls; eval/Function source-point capture remains partial.",
+        ],
+        StrategyKind::BrowserifyBridge => &[
+            "BrowserifyBridge uses source-text wrap and Function.prototype.call hook for module factory observation.",
         ],
         _ => &[],
     };
