@@ -158,6 +158,70 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - RS live-site cookie verified (HTTP 200).
 - cargo test 94/94, pytest 84/84.
 
+## [0.8.49] - 2026-06-16
+
+> Local milestone tagged. v0.8.49 is the foundation closeout integration
+> and readiness review: v0.9 foundation-to-finefinish gate declared, P0-P4
+> status matrix normalized, 69-vector rebaseline certified, R-007/R-009
+> deferred, R-008 blocked. Package metadata remains `0.8.11`.
+
+### Added
+
+- v0.9 foundation closeout gate: L3 100% (40 vectors runtime-backed) +
+  L2 usable (Probe+MAPE-K+Bridge) verified.
+- P0-P4 status matrix: 40 runtime-backed, 2 boundary M1, 6 classified
+  deferred, 21 not-yet-audited.
+- Harness V2 evaluation: not required (bridge vocabulary sufficient).
+
+### Quality Gates
+
+- Python: 1523/1523 PASS (1 skipped)
+- Rust: Phase C 81→94 tests
+- Cross-version invariants preserved
+
+## [0.8.48] - 2026-06-15
+
+> Local milestone tagged. v0.8.48 is the first no-write real-sample pilot
+> through the full L2→L3 diagnostic chain: BDMS, h5st, and QQ vendor
+> samples executed, foundation vs fine-finish gaps classified. No runtime
+> mutation. Package metadata remains `0.8.11`.
+
+### Added
+
+- Real-sample Entry Plane execution: BDMS (webpack-like), h5st, QQ vendor
+  all produce structured EntryResult with module_graph + evidence.
+- Gap classification: foundation (API coverage) vs fine-finish (behavioral
+  fidelity) taxonomy established.
+- S5 conditional rerun: no safe generic change identified.
+
+### Quality Gates
+
+- 3 real samples executed under no-write policy
+- Python: 1504/1504 PASS (1 skipped)
+- Owner routing verified on pilot samples
+
+## [0.8.47] - 2026-06-15
+
+> Local milestone tagged. v0.8.47 delivers L3 P4 Descriptor/Native-Code
+> Shape Boundary M1: owner paths for `iv8-undetect/` + `iv8-core/dom/`,
+> native-code toString bridge gate V083. V084-V086 classified deferred.
+> Package metadata remains `0.8.11`.
+
+### Added
+
+- Descriptor owner path: `UNDETECT_OWNER_PATH` + `DOM_OWNER_PATH` with
+  runtime vectors V083 (undetect) + V085 (dom).
+- Native-code toString bridge gate: Function.prototype.toString public-shape
+  constraint via BCR dispatch.
+- Decision D-063: V084 Symbol.toStringTag, V085 prototype chain shape,
+  V086 Object.toString classified deferred.
+
+### Quality Gates
+
+- Focused tests: 95/95 PASS
+- Python: 1504/1504 PASS (1 skipped)
+- No runtime mutation (boundary-only)
+
 ## [0.8.46] - 2026-06-15
 
 > Local milestone accepted. v0.8.46 starts P3 Timing/Performance with a boundary
