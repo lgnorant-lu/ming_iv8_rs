@@ -10,7 +10,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 > Local milestone tagged. v0.8.52 adds multi-bundler detection and execution:
 > 8-format classification, Browserify source-text wrap, Rollup/Vite/UMD direct
-> eval bridges, 6 fixtures, and 19 integration tests. Package metadata remains
+> eval bridges, 6 fixtures, and 22 integration tests. Package metadata remains
 > `0.8.11`.
 
 ### Added
@@ -23,13 +23,13 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   `ViteBridge`.
 - `ProbeResult` fields: `has_browserify_runtime`, `has_rollup_bundle`,
   `has_vite_bundle`.
-- Browserify bridge (browserify/mod.rs): source-text wrap prelude via
-  `Function.prototype.call` interception, `collect_evidence()`.
+- Browserify bridge (browserify/mod.rs): source-text wrap via IIFE capture,
+  exposes `__iv8_b_require` for post-execution analysis.
 - Rollup bridge (rollup/mod.rs): IIFE direct eval, detection + evidence.
 - Vite bridge (vite/mod.rs): IIFE direct eval, deferred ESM to v0.8.53.
 - UMD bridge (umd/mod.rs): branch detection, global dispatch.
 - 6 fixture files for multi-bundler integration tests.
-- 19 integration tests (test_entry_multi_bundler.rs): detection, routing,
+- 22 integration tests (test_entry_multi_bundler.rs): detection, routing,
   execution, regression.
 
 ### Changed
@@ -40,12 +40,21 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - Executor: `apply_strategy_prelude` hooks Browserify; `collect_strategy_evidence`
   collects evidence for all 4 new bridges.
 
+### Fixed
+
+- Browserify bridge: replaced `Function.prototype.call` hook (caused stack overflow
+  via recursive `.apply()`) with source-text wrap approach.
+- Browserify fixture: rewritten as canonical browser-pack format
+  `(function(modules,cache,entries){...})({modules},{},[1])`.
+- Test assertions: all integration tests now use `common::assert_js_str()` per
+  testing-conventions.md §4.
+
 ### Quality Gates
 
 - 13/13 acceptance gates verified.
-- `cargo test -p iv8-core --lib`: 204/204 (+14 detection tests).
+- `cargo test -p iv8-core --lib`: 235/235 (+31 tests: 14 detection + 17 coverage).
 - `cargo test --test test_kernel_init`: 94/94 regression preserved.
-- `cargo test --test test_entry_multi_bundler`: 19/19.
+- `cargo test --test test_entry_multi_bundler`: 22/22.
 - WebpackBridge: zero diff (NG-1), 38559 bytes untouched.
 
 ## [0.8.51] - 2026-06-16
