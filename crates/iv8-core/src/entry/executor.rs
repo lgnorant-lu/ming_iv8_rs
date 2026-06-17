@@ -327,6 +327,9 @@ fn apply_strategy_prelude(
             Ok(())
         }
         StrategyKind::CdpProbe => Ok(()),
+        StrategyKind::BrowserifyBridge | StrategyKind::RollupBridge | StrategyKind::ViteBridge | StrategyKind::UmdBridge => {
+            Ok(())
+        }
     }
 }
 
@@ -635,6 +638,12 @@ fn derive_trace_sources(kind: &StrategyKind) -> Vec<TraceSourceKind> {
         StrategyKind::WebpackBridge => {
             vec![TraceSourceKind::ModuleBridge, TraceSourceKind::RuntimeProxy]
         }
+        StrategyKind::BrowserifyBridge => {
+            vec![TraceSourceKind::ModuleBridge, TraceSourceKind::RuntimeProxy]
+        }
+        StrategyKind::RollupBridge => vec![TraceSourceKind::TransparentHook],
+        StrategyKind::ViteBridge => vec![TraceSourceKind::TransparentHook],
+        StrategyKind::UmdBridge => vec![TraceSourceKind::TransparentHook],
         StrategyKind::RuntimeTransparent => vec![TraceSourceKind::TransparentHook],
         StrategyKind::RuntimeAggressive => vec![TraceSourceKind::RuntimeProxy],
         StrategyKind::SourceAst => vec![TraceSourceKind::SourceAst],

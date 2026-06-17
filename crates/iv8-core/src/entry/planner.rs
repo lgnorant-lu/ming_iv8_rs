@@ -59,6 +59,15 @@ pub fn plan_entry(
     if probe.is_low_obfuscation {
         all_signals.push("probe:low_obfuscation".into());
     }
+    if probe.has_browserify_runtime {
+        all_signals.push("probe:browserify_runtime".into());
+    }
+    if probe.has_rollup_bundle {
+        all_signals.push("probe:rollup_bundle".into());
+    }
+    if probe.has_vite_bundle {
+        all_signals.push("probe:vite_bundle".into());
+    }
 
     // 2. Merge policy
     let effective_policy = persona.merge_policy(explicit_policy);
@@ -143,6 +152,9 @@ pub fn probe_viability(source: &str) -> ProbeResult {
     // Check webpack runtime (reuse webpack::detect)
     let wp_det = webpack::detect(source);
 
+    // Check multi-bundler signals via classification
+    let sigs = classification::extract_signals(source);
+
     // SWC parse check: attempt a silent parse, return true on success
     let can_swc = crate::entry::ast::can_parse(source);
 
@@ -157,6 +169,9 @@ pub fn probe_viability(source: &str) -> ProbeResult {
         has_closure_capture: classification::detect_early_capture(source),
         has_eval_heavy: source.matches("eval(").count() >= 3,
         is_low_obfuscation: is_low_ob,
+        has_browserify_runtime: sigs.iter().any(|s| s == "browserify_strong" || s == "browserify_weak"),
+        has_rollup_bundle: sigs.iter().any(|s| s == "rollup_iife" || s == "rollup_umd"),
+        has_vite_bundle: sigs.iter().any(|s| s == "vite"),
     }
 }
 
@@ -214,6 +229,18 @@ fn adjust_fit_by_probe(candidates: &mut [CandidateStrategy], probe: &ProbeResult
                 c.fit_score = c.fit_score.saturating_sub(20);
                 c.known_limitations
                     .push("probe: closure capture may bypass hook".into());
+            }
+            StrategyKind::BrowserifyBridge if !probe.has_browserify_runtime => {
+                c.fit_score = c.fit_score.saturating_sub(60);
+                c.known_limitations.push("probe: no browserify runtime".into());
+            }
+            StrategyKind::RollupBridge | StrategyKind::UmdBridge if !probe.has_rollup_bundle => {
+                c.fit_score = c.fit_score.saturating_sub(50);
+                c.known_limitations.push("probe: no rollup/umd bundle".into());
+            }
+            StrategyKind::ViteBridge if !probe.has_vite_bundle => {
+                c.fit_score = c.fit_score.saturating_sub(60);
+                c.known_limitations.push("probe: no vite bundle".into());
             }
             _ => {}
         }
@@ -432,6 +459,106 @@ pub fn generate_candidates(
                 None,
             );
         }
+        SampleKind::BrowserifyRuntime => {
+            try_add(
+                StrategyKind::BrowserifyBridge,
+                90,
+                true,
+                false,
+                vec![Evidence::ModuleGraph, Evidence::Trace, Evidence::Diagnostics],
+                vec!["source-text wrap may fail on non-browser-pack prelude"],
+                None,
+            );
+            try_add(
+                StrategyKind::RuntimeTransparent,
+                60,
+                false,
+                true,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["lower module-level evidence quality"],
+                None,
+            );
+        }
+        SampleKind::RollupBundle => {
+            try_add(
+                StrategyKind::RollupBridge,
+                90,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["direct eval of IIFE bundle"],
+                None,
+            );
+            try_add(
+                StrategyKind::RuntimeTransparent,
+                50,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["overkill for single-scope IIFE"],
+                None,
+            );
+        }
+        SampleKind::ViteBundle => {
+            try_add(
+                StrategyKind::ViteBridge,
+                90,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["direct eval of IIFE bundle; ESM not supported"],
+                None,
+            );
+            try_add(
+                StrategyKind::RuntimeTransparent,
+                50,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["overkill for single-scope IIFE"],
+                None,
+            );
+        }
+        SampleKind::UmdBundle => {
+            try_add(
+                StrategyKind::UmdBridge,
+                85,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["branch detection; CJS/global dispatch"],
+                None,
+            );
+            try_add(
+                StrategyKind::RuntimeTransparent,
+                55,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["may not detect active UMD branch"],
+                None,
+            );
+        }
+        SampleKind::UnknownIife => {
+            try_add(
+                StrategyKind::RuntimeTransparent,
+                60,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["unknown IIFE format (esbuild or generic)"],
+                None,
+            );
+            try_add(
+                StrategyKind::CdpProbe,
+                20,
+                false,
+                false,
+                vec![Evidence::Diagnostics],
+                vec!["low evidence for unknown format"],
+                None,
+            );
+        }
     }
 
     // Always add CDP probe as last-resort fallback
@@ -563,6 +690,10 @@ fn determine_expected_evidence(
     let mut evidence = match selected.strategy_kind {
         StrategyKind::Dispatch => vec![Evidence::Trace],
         StrategyKind::WebpackBridge => vec![Evidence::ModuleGraph, Evidence::Trace],
+        StrategyKind::BrowserifyBridge => vec![Evidence::ModuleGraph, Evidence::Trace],
+        StrategyKind::RollupBridge => vec![Evidence::Trace],
+        StrategyKind::ViteBridge => vec![Evidence::Trace],
+        StrategyKind::UmdBridge => vec![Evidence::Trace],
         StrategyKind::RuntimeTransparent => vec![Evidence::Trace],
         StrategyKind::RuntimeAggressive => vec![Evidence::Trace],
         StrategyKind::SourceAst => vec![Evidence::Trace],
@@ -617,6 +748,10 @@ fn kind_to_id(kind: &StrategyKind) -> &'static str {
         StrategyKind::SourceRegex => "source_regex",
         StrategyKind::WebpackBridge => "webpack_bridge",
         StrategyKind::CdpProbe => "cdp_probe",
+        StrategyKind::BrowserifyBridge => "browserify_bridge",
+        StrategyKind::RollupBridge => "rollup_bridge",
+        StrategyKind::UmdBridge => "umd_bridge",
+        StrategyKind::ViteBridge => "vite_bridge",
     }
 }
 

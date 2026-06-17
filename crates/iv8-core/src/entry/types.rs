@@ -29,6 +29,11 @@ pub enum SampleKind {
     WebpackVmHybrid,
     EvalHeavy,
     ClosureCapturedRuntime,
+    BrowserifyRuntime,
+    RollupBundle,
+    ViteBundle,
+    UmdBundle,
+    UnknownIife,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -41,6 +46,10 @@ pub enum StrategyKind {
     SourceRegex,
     WebpackBridge,
     CdpProbe,
+    BrowserifyBridge,
+    RollupBridge,
+    UmdBridge,
+    ViteBridge,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -294,6 +303,12 @@ pub struct ProbeResult {
     pub has_eval_heavy: bool,
     /// Source has minimal obfuscation — AST-based transform is low-risk.
     pub is_low_obfuscation: bool,
+    /// Browserify prelude pattern detected.
+    pub has_browserify_runtime: bool,
+    /// Rollup IIFE/UMD bundle detected.
+    pub has_rollup_bundle: bool,
+    /// Vite IIFE output detected.
+    pub has_vite_bundle: bool,
 }
 
 impl ProbeResult {
@@ -315,6 +330,21 @@ impl ProbeResult {
     /// Whether pre-install hooks are likely to survive closure capture.
     pub fn pre_install_required(&self) -> bool {
         self.has_closure_capture
+    }
+
+    /// Whether a browserify bridge probe is applicable.
+    pub fn browserify_probe_viable(&self) -> bool {
+        self.has_browserify_runtime
+    }
+
+    /// Whether a rollup bridge probe is applicable.
+    pub fn rollup_probe_viable(&self) -> bool {
+        self.has_rollup_bundle
+    }
+
+    /// Whether a vite bridge probe is applicable.
+    pub fn vite_probe_viable(&self) -> bool {
+        self.has_vite_bundle
     }
 }
 

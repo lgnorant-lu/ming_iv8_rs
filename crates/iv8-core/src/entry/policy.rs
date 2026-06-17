@@ -85,7 +85,9 @@ impl Persona {
         match self {
             Persona::Runtime => matches!(
                 kind,
-                super::types::StrategyKind::WebpackBridge | super::types::StrategyKind::CdpProbe
+                super::types::StrategyKind::WebpackBridge
+                    | super::types::StrategyKind::BrowserifyBridge
+                    | super::types::StrategyKind::CdpProbe
             ),
             Persona::Analysis => match policy.hook_level {
                 HookLevel::Transparent => matches!(
@@ -95,12 +97,17 @@ impl Persona {
                         | super::types::StrategyKind::SourceAst
                         | super::types::StrategyKind::SourceRegex
                         | super::types::StrategyKind::WebpackBridge
+                        | super::types::StrategyKind::BrowserifyBridge
+                        | super::types::StrategyKind::RollupBridge
+                        | super::types::StrategyKind::UmdBridge
+                        | super::types::StrategyKind::ViteBridge
                         | super::types::StrategyKind::CdpProbe
                 ),
                 HookLevel::Aggressive => true,
                 HookLevel::None => matches!(
                     kind,
                     super::types::StrategyKind::WebpackBridge
+                        | super::types::StrategyKind::BrowserifyBridge
                         | super::types::StrategyKind::CdpProbe
                 ),
             },
