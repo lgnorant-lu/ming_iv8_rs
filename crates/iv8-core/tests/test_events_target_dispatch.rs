@@ -11,17 +11,11 @@ mod common;
 // Integration tests for EventTarget (Task 33).
 // Tests addEventListener, dispatchEvent, and three-phase dispatch.
 
-use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel_with_doc(html: &str) -> EmbeddedV8Kernel {
-    let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-    kernel.set_document(html, None);
-    kernel
-}
+use iv8_core::RustValue;
 
 #[test]
 fn add_event_listener_and_dispatch() {
-    let mut kernel = make_kernel_with_doc("<div id=\"target\">hello</div>");
+    let mut kernel = common::make_kernel_with_doc("<div id=\"target\">hello</div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -36,7 +30,7 @@ fn add_event_listener_and_dispatch() {
 
 #[test]
 fn event_listener_receives_event_object() {
-    let mut kernel = make_kernel_with_doc("<div id=\"target\"></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id=\"target\"></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var eventType = '';
@@ -51,7 +45,7 @@ fn event_listener_receives_event_object() {
 
 #[test]
 fn multiple_listeners_same_event() {
-    let mut kernel = make_kernel_with_doc("<div id=\"target\"></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id=\"target\"></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var count = 0;
@@ -67,7 +61,7 @@ fn multiple_listeners_same_event() {
 
 #[test]
 fn listener_not_fired_for_different_event() {
-    let mut kernel = make_kernel_with_doc("<div id=\"target\"></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id=\"target\"></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;
@@ -82,7 +76,7 @@ fn listener_not_fired_for_different_event() {
 
 #[test]
 fn once_listener_fires_only_once() {
-    let mut kernel = make_kernel_with_doc("<div id=\"target\"></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id=\"target\"></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var count = 0;
@@ -98,7 +92,7 @@ fn once_listener_fires_only_once() {
 
 #[test]
 fn dispatch_event_returns_true() {
-    let mut kernel = make_kernel_with_doc("<div id=\"target\"></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id=\"target\"></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var el = document.getElementById('target');
@@ -110,7 +104,7 @@ fn dispatch_event_returns_true() {
 
 #[test]
 fn add_event_listener_exists_on_elements() {
-    let mut kernel = make_kernel_with_doc("<div id=\"target\"></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id=\"target\"></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var el = document.getElementById('target');
@@ -122,7 +116,7 @@ fn add_event_listener_exists_on_elements() {
 
 #[test]
 fn dispatch_string_event() {
-    let mut kernel = make_kernel_with_doc("<div id=\"target\"></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id=\"target\"></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var fired = false;

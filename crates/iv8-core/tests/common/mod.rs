@@ -27,6 +27,48 @@ pub fn make_kernel_seeded(seed: u64) -> EmbeddedV8Kernel {
     EmbeddedV8Kernel::new(cfg).unwrap()
 }
 
+/// Create a kernel with a pre-loaded HTML document.
+pub fn make_kernel_with_doc(html: &str) -> EmbeddedV8Kernel {
+    let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+    kernel.set_document(html, None);
+    kernel
+}
+
+/// Create a kernel with location URL overrides for URL parsing tests.
+pub fn make_kernel_with_url() -> EmbeddedV8Kernel {
+    let mut overrides = std::collections::HashMap::new();
+    overrides.insert(
+        "location.href".to_string(),
+        serde_json::json!("https://www.example.com:8080/path/page?q=1&r=2#section"),
+    );
+    overrides.insert(
+        "location.origin".to_string(),
+        serde_json::json!("https://www.example.com:8080"),
+    );
+    overrides.insert("location.protocol".to_string(), serde_json::json!("https:"));
+    overrides.insert(
+        "location.host".to_string(),
+        serde_json::json!("www.example.com:8080"),
+    );
+    overrides.insert(
+        "location.hostname".to_string(),
+        serde_json::json!("www.example.com"),
+    );
+    overrides.insert("location.port".to_string(), serde_json::json!("8080"));
+    overrides.insert(
+        "location.pathname".to_string(),
+        serde_json::json!("/path/page"),
+    );
+    overrides.insert("location.search".to_string(), serde_json::json!("?q=1&r=2"));
+    overrides.insert("location.hash".to_string(), serde_json::json!("#section"));
+
+    let config = KernelConfig {
+        environment_overrides: Some(overrides),
+        ..Default::default()
+    };
+    EmbeddedV8Kernel::new(config).unwrap()
+}
+
 /// Extract a Rust string from a RustValue for assertion comparison.
 pub fn to_str(v: &RustValue) -> String {
     match v {

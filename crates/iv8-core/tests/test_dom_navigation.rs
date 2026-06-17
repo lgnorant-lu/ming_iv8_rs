@@ -16,17 +16,11 @@ mod common;
 // - element.nextSibling / previousSibling correct
 // - element.children only returns Element children
 
-use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel_with_doc(html: &str) -> EmbeddedV8Kernel {
-    let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-    kernel.set_document(html, None);
-    kernel
-}
+use iv8_core::RustValue;
 
 #[test]
 fn parent_node_exists() {
-    let mut kernel = make_kernel_with_doc("<div id='parent'><p id='child'>text</p></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='parent'><p id='child'>text</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var child = document.getElementById('child');
@@ -39,7 +33,7 @@ fn parent_node_exists() {
 
 #[test]
 fn first_child() {
-    let mut kernel = make_kernel_with_doc("<div id='parent'><span>first</span><p>second</p></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='parent'><span>first</span><p>second</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var parent = document.getElementById('parent');
@@ -51,7 +45,7 @@ fn first_child() {
 
 #[test]
 fn last_child() {
-    let mut kernel = make_kernel_with_doc("<div id='parent'><span>first</span><p>second</p></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='parent'><span>first</span><p>second</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var parent = document.getElementById('parent');
@@ -63,7 +57,7 @@ fn last_child() {
 
 #[test]
 fn next_sibling() {
-    let mut kernel = make_kernel_with_doc("<div><span id='a'>1</span><p id='b'>2</p></div>");
+    let mut kernel = common::make_kernel_with_doc("<div><span id='a'>1</span><p id='b'>2</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var a = document.getElementById('a');
@@ -75,7 +69,7 @@ fn next_sibling() {
 
 #[test]
 fn previous_sibling() {
-    let mut kernel = make_kernel_with_doc("<div><span id='a'>1</span><p id='b'>2</p></div>");
+    let mut kernel = common::make_kernel_with_doc("<div><span id='a'>1</span><p id='b'>2</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var b = document.getElementById('b');
@@ -87,7 +81,7 @@ fn previous_sibling() {
 
 #[test]
 fn child_nodes_length() {
-    let mut kernel = make_kernel_with_doc("<ul id='list'><li>1</li><li>2</li><li>3</li></ul>");
+    let mut kernel = common::make_kernel_with_doc("<ul id='list'><li>1</li><li>2</li><li>3</li></ul>");
     let result = kernel.eval_to_rust_value(
         r#"
         var list = document.getElementById('list');
@@ -99,7 +93,7 @@ fn child_nodes_length() {
 
 #[test]
 fn child_nodes_indexing() {
-    let mut kernel = make_kernel_with_doc("<ul id='list'><li>a</li><li>b</li></ul>");
+    let mut kernel = common::make_kernel_with_doc("<ul id='list'><li>a</li><li>b</li></ul>");
     let result = kernel.eval_to_rust_value(
         r#"
         var list = document.getElementById('list');
@@ -111,7 +105,7 @@ fn child_nodes_indexing() {
 
 #[test]
 fn children_only_elements() {
-    let mut kernel = make_kernel_with_doc("<div id='mixed'><span>elem</span></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='mixed'><span>elem</span></div>");
     // html5ever may add text nodes for whitespace, children should only have elements
     let result = kernel.eval_to_rust_value(
         r#"
@@ -129,7 +123,7 @@ fn children_only_elements() {
 
 #[test]
 fn child_element_count() {
-    let mut kernel = make_kernel_with_doc("<div id='parent'><p>1</p><p>2</p><p>3</p></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='parent'><p>1</p><p>2</p><p>3</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         document.getElementById('parent').childElementCount
@@ -140,7 +134,7 @@ fn child_element_count() {
 
 #[test]
 fn parent_node_null_for_root() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     // The html element's parent is the document node (not an element)
     // parentElement should be null for html element
     let result = kernel.eval_to_rust_value(
@@ -154,7 +148,7 @@ fn parent_node_null_for_root() {
 
 #[test]
 fn navigation_chain() {
-    let mut kernel = make_kernel_with_doc("<div id='root'><a id='link'>click</a></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='root'><a id='link'>click</a></div>");
     // Navigate: getElementById → parentNode → firstChild → textContent
     let result = kernel.eval_to_rust_value(
         r#"

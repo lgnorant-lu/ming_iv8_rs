@@ -14,17 +14,11 @@ mod common;
 // - getComputedStyle(element).display returns string
 // - getComputedStyle(element).getPropertyValue('font-size') works
 
-use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-
-fn make_kernel_with_doc(html: &str) -> EmbeddedV8Kernel {
-    let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
-    kernel.set_document(html, None);
-    kernel
-}
+use iv8_core::RustValue;
 
 #[test]
 fn get_bounding_client_rect_exists() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     assert_eq!(
         kernel.eval_to_rust_value("typeof document.getElementById('x').getBoundingClientRect"),
         RustValue::String("function".into())
@@ -33,7 +27,7 @@ fn get_bounding_client_rect_exists() {
 
 #[test]
 fn get_bounding_client_rect_returns_object() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var rect = document.getElementById('x').getBoundingClientRect();
@@ -46,7 +40,7 @@ fn get_bounding_client_rect_returns_object() {
 
 #[test]
 fn get_bounding_client_rect_has_all_props() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var rect = document.getElementById('x').getBoundingClientRect();
@@ -71,7 +65,7 @@ fn dom_rect_constructor() {
 
 #[test]
 fn offset_width_height() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var el = document.getElementById('x');
@@ -92,7 +86,7 @@ fn get_computed_style_exists() {
 
 #[test]
 fn get_computed_style_display() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     let result =
         kernel.eval_to_rust_value("getComputedStyle(document.getElementById('x')).display");
     assert_eq!(result, RustValue::String("block".into()));
@@ -100,7 +94,7 @@ fn get_computed_style_display() {
 
 #[test]
 fn get_computed_style_font_size() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     let result =
         kernel.eval_to_rust_value("getComputedStyle(document.getElementById('x')).fontSize");
     assert_eq!(result, RustValue::String("16px".into()));
@@ -108,7 +102,7 @@ fn get_computed_style_font_size() {
 
 #[test]
 fn get_computed_style_get_property_value() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         getComputedStyle(document.getElementById('x')).getPropertyValue('fontSize')
@@ -119,7 +113,7 @@ fn get_computed_style_get_property_value() {
 
 #[test]
 fn client_width_height() {
-    let mut kernel = make_kernel_with_doc("<div id='x'></div>");
+    let mut kernel = common::make_kernel_with_doc("<div id='x'></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var el = document.getElementById('x');

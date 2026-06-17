@@ -15,46 +15,11 @@ mod common;
 // - Initialized from environment
 // - toString() returns href
 
-use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
-use std::collections::HashMap;
-
-fn make_kernel_with_url() -> EmbeddedV8Kernel {
-    let mut overrides = HashMap::new();
-    overrides.insert(
-        "location.href".to_string(),
-        serde_json::json!("https://www.example.com:8080/path/page?q=1&r=2#section"),
-    );
-    overrides.insert(
-        "location.origin".to_string(),
-        serde_json::json!("https://www.example.com:8080"),
-    );
-    overrides.insert("location.protocol".to_string(), serde_json::json!("https:"));
-    overrides.insert(
-        "location.host".to_string(),
-        serde_json::json!("www.example.com:8080"),
-    );
-    overrides.insert(
-        "location.hostname".to_string(),
-        serde_json::json!("www.example.com"),
-    );
-    overrides.insert("location.port".to_string(), serde_json::json!("8080"));
-    overrides.insert(
-        "location.pathname".to_string(),
-        serde_json::json!("/path/page"),
-    );
-    overrides.insert("location.search".to_string(), serde_json::json!("?q=1&r=2"));
-    overrides.insert("location.hash".to_string(), serde_json::json!("#section"));
-
-    let config = KernelConfig {
-        environment_overrides: Some(overrides),
-        ..Default::default()
-    };
-    EmbeddedV8Kernel::new(config).unwrap()
-}
+use iv8_core::RustValue;
 
 #[test]
 fn location_exists() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("typeof location"),
         RustValue::String("object".into())
@@ -63,7 +28,7 @@ fn location_exists() {
 
 #[test]
 fn location_href() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.href"),
         RustValue::String("https://www.example.com:8080/path/page?q=1&r=2#section".into())
@@ -72,7 +37,7 @@ fn location_href() {
 
 #[test]
 fn location_origin() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.origin"),
         RustValue::String("https://www.example.com:8080".into())
@@ -81,7 +46,7 @@ fn location_origin() {
 
 #[test]
 fn location_protocol() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.protocol"),
         RustValue::String("https:".into())
@@ -90,7 +55,7 @@ fn location_protocol() {
 
 #[test]
 fn location_host() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.host"),
         RustValue::String("www.example.com:8080".into())
@@ -99,7 +64,7 @@ fn location_host() {
 
 #[test]
 fn location_hostname() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.hostname"),
         RustValue::String("www.example.com".into())
@@ -108,7 +73,7 @@ fn location_hostname() {
 
 #[test]
 fn location_port() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.port"),
         RustValue::String("8080".into())
@@ -117,7 +82,7 @@ fn location_port() {
 
 #[test]
 fn location_pathname() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.pathname"),
         RustValue::String("/path/page".into())
@@ -126,7 +91,7 @@ fn location_pathname() {
 
 #[test]
 fn location_search() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.search"),
         RustValue::String("?q=1&r=2".into())
@@ -135,7 +100,7 @@ fn location_search() {
 
 #[test]
 fn location_hash() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.hash"),
         RustValue::String("#section".into())
@@ -144,7 +109,7 @@ fn location_hash() {
 
 #[test]
 fn location_to_string() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("location.toString()"),
         RustValue::String("https://www.example.com:8080/path/page?q=1&r=2#section".into())
@@ -153,7 +118,7 @@ fn location_to_string() {
 
 #[test]
 fn location_assign_no_crash() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     // assign is a no-op in offline mode, should not crash
     kernel.eval_to_rust_value("location.assign('https://other.com')");
 }
@@ -170,7 +135,7 @@ fn location_default_about_blank() {
 
 #[test]
 fn window_location_same_as_location() {
-    let mut kernel = make_kernel_with_url();
+    let mut kernel = common::make_kernel_with_url();
     assert_eq!(
         kernel.eval_to_rust_value("window.location === location"),
         RustValue::Bool(true)
