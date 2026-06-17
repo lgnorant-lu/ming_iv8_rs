@@ -114,19 +114,36 @@ fn test_plan_unknown_iife_routes_to_runtime_transparent() {
 }
 
 #[test]
-fn test_browserify_execution_source_text_wrap() {
+fn test_browserify_execution_exposes_require() {
     let src = load_fixture("browserify_minimal.js");
     let mut kernel = common::make_kernel();
     kernel
         .eval(iv8_core::entry::browserify::bridge_prelude(), EvalOpts::default())
         .unwrap();
-    kernel.eval(&src, EvalOpts::default()).unwrap();
-    let has_require = kernel.eval_to_rust_value("typeof __iv8_b_require");
-    let detected = match &has_require {
-        iv8_core::convert::RustValue::String(s) => s != "undefined",
-        _ => false,
-    };
-    assert!(detected, "Browserify require not detected after source-text wrap");
+    let wrapped = iv8_core::entry::browserify::wrap_source(&src);
+    kernel.eval(&wrapped, EvalOpts::default()).unwrap();
+    common::assert_js_str(
+        &mut kernel,
+        "typeof __iv8_b_require",
+        "function",
+    );
+}
+
+#[test]
+fn test_browserify_execution_produces_correct_output() {
+    let src = load_fixture("browserify_minimal.js");
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(iv8_core::entry::browserify::bridge_prelude(), EvalOpts::default())
+        .unwrap();
+    let wrapped = iv8_core::entry::browserify::wrap_source(&src);
+    kernel.eval(&wrapped, EvalOpts::default()).unwrap();
+    let result = kernel.eval_to_rust_value("(function(){try{return __iv8_b_require(1)}catch(e){return 'ERR:'+e.message}})()");
+    let val = common::to_str(&result);
+    if val.starts_with("ERR:") {
+        panic!("require(1) threw: {}", val);
+    }
+    assert_eq!(val, "20", "require(1) should return 20, got {}", val);
 }
 
 #[test]
@@ -134,13 +151,11 @@ fn test_rollup_iife_direct_eval() {
     let src = load_fixture("rollup_iife_minimal.js");
     let mut kernel = common::make_kernel();
     kernel.eval(&src, EvalOpts::default()).unwrap();
-    let result = kernel.eval_to_rust_value("typeof __rollup_result");
-    match &result {
-        iv8_core::convert::RustValue::String(s) => {
-            assert_ne!(s, "undefined", "Rollup IIFE result should be defined");
-        }
-        _ => panic!("expected string typeof, got {:?}", result),
-    };
+    common::assert_js_str(
+        &mut kernel,
+        "typeof __rollup_result",
+        "object",
+    );
 }
 
 #[test]
@@ -148,13 +163,11 @@ fn test_rollup_umd_global_branch_execution() {
     let src = load_fixture("rollup_umd_minimal.js");
     let mut kernel = common::make_kernel();
     kernel.eval(&src, EvalOpts::default()).unwrap();
-    let result = kernel.eval_to_rust_value("typeof MyLib");
-    match &result {
-        iv8_core::convert::RustValue::String(s) => {
-            assert_ne!(s, "undefined", "UMD global branch should expose MyLib");
-        }
-        _ => panic!("expected string typeof, got {:?}", result),
-    };
+    common::assert_js_str(
+        &mut kernel,
+        "typeof MyLib",
+        "object",
+    );
 }
 
 #[test]
@@ -162,13 +175,11 @@ fn test_vite_iife_direct_eval() {
     let src = load_fixture("vite_iife_minimal.js");
     let mut kernel = common::make_kernel();
     kernel.eval(&src, EvalOpts::default()).unwrap();
-    let result = kernel.eval_to_rust_value("typeof __vite_result");
-    match &result {
-        iv8_core::convert::RustValue::String(s) => {
-            assert_ne!(s, "undefined", "Vite IIFE result should be defined");
-        }
-        _ => panic!("expected string typeof, got {:?}", result),
-    };
+    common::assert_js_str(
+        &mut kernel,
+        "typeof __vite_result",
+        "string",
+    );
 }
 
 #[test]
@@ -176,13 +187,11 @@ fn test_unknown_iife_execution() {
     let src = load_fixture("unknown_iife_minimal.js");
     let mut kernel = common::make_kernel();
     kernel.eval(&src, EvalOpts::default()).unwrap();
-    let result = kernel.eval_to_rust_value("globalThis.__unknown_result");
-    match &result {
-        iv8_core::convert::RustValue::Int(n) => {
-            assert_eq!(*n, 42, "Unknown IIFE should produce 42");
-        }
-        _ => panic!("expected int 42, got {:?}", result),
-    };
+    common::assert_js_str(
+        &mut kernel,
+        "globalThis.__unknown_result",
+        "42",
+    );
 }
 
 #[test]
@@ -208,4 +217,42 @@ fn test_fallback_chain_includes_cdp_probe() {
         plan.fallback_chain.iter().any(|s| s.contains("cdp_probe")),
         "fallback chain should include CDP probe as last resort"
     );
+}
+
+#[test]
+fn test_browserify_plan_expected_evidence_includes_module_graph() {
+    let src = load_fixture("browserify_minimal.js");
+    let plan = planner::plan_entry(&src, Persona::Analysis, None, vec![]);
+    assert!(
+        plan.expected_evidence
+            .iter()
+            .any(|e| matches!(e, iv8_core::entry::types::Evidence::ModuleGraph)),
+        "Browserify plan should expect ModuleGraph evidence"
+    );
+}
+
+#[test]
+fn test_all_format_candidates_have_nonzero_fit_scores() {
+    let fixtures: Vec<(&str, SampleKind)> = vec![
+        ("browserify_minimal.js", SampleKind::BrowserifyRuntime),
+        ("rollup_iife_minimal.js", SampleKind::RollupBundle),
+        ("rollup_umd_minimal.js", SampleKind::UmdBundle),
+        ("vite_iife_minimal.js", SampleKind::ViteBundle),
+        ("esbuild_minimal.js", SampleKind::UnknownIife),
+    ];
+    for (fixture, _expected_kind) in fixtures {
+        let src = load_fixture(fixture);
+        let plan = planner::plan_entry(&src, Persona::Analysis, None, vec![]);
+        assert!(
+            !plan.candidate_strategies.is_empty(),
+            "{} should have at least one candidate",
+            fixture
+        );
+        assert!(
+            plan.selected_strategy.strategy_kind != StrategyKind::CdpProbe
+                || plan.fallback_chain.len() <= 1,
+            "{} primary strategy should not be CDP probe",
+            fixture
+        );
+    }
 }

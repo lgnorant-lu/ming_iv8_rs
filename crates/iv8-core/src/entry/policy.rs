@@ -114,3 +114,47 @@ impl Persona {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::entry::types::StrategyKind;
+
+    #[test]
+    fn test_runtime_allows_webpack_and_browserify() {
+        let runtime = Persona::Runtime;
+        let policy = runtime.default_policy();
+        assert!(runtime.allows_strategy(&policy, &StrategyKind::WebpackBridge));
+        assert!(runtime.allows_strategy(&policy, &StrategyKind::BrowserifyBridge));
+        assert!(runtime.allows_strategy(&policy, &StrategyKind::CdpProbe));
+    }
+
+    #[test]
+    fn test_runtime_denies_rollup_vite_umd() {
+        let runtime = Persona::Runtime;
+        let policy = runtime.default_policy();
+        assert!(!runtime.allows_strategy(&policy, &StrategyKind::RollupBridge));
+        assert!(!runtime.allows_strategy(&policy, &StrategyKind::ViteBridge));
+        assert!(!runtime.allows_strategy(&policy, &StrategyKind::UmdBridge));
+    }
+
+    #[test]
+    fn test_analysis_allows_all_new_strategies() {
+        let analysis = Persona::Analysis;
+        let policy = analysis.default_policy();
+        assert!(analysis.allows_strategy(&policy, &StrategyKind::BrowserifyBridge));
+        assert!(analysis.allows_strategy(&policy, &StrategyKind::RollupBridge));
+        assert!(analysis.allows_strategy(&policy, &StrategyKind::ViteBridge));
+        assert!(analysis.allows_strategy(&policy, &StrategyKind::UmdBridge));
+    }
+
+    #[test]
+    fn test_analysis_none_hook_allows_webpack_and_browserify() {
+        let analysis = Persona::Analysis;
+        let mut policy = analysis.default_policy();
+        policy.hook_level = HookLevel::None;
+        assert!(analysis.allows_strategy(&policy, &StrategyKind::WebpackBridge));
+        assert!(analysis.allows_strategy(&policy, &StrategyKind::BrowserifyBridge));
+        assert!(!analysis.allows_strategy(&policy, &StrategyKind::RollupBridge));
+    }
+}

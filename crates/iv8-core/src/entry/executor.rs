@@ -137,9 +137,10 @@ pub fn run_entry(
                 transformed
             }
             StrategyKind::Dispatch => {
-                // Dispatch: prepend the runtime dispatch hook prelude
-                // (the regex-based dispatch replacement is handled via SourceRegex)
                 source.to_string()
+            }
+            StrategyKind::BrowserifyBridge => {
+                crate::entry::browserify::wrap_source(source)
             }
             StrategyKind::SourceRegex => source.to_string(),
             _ => source.to_string(),

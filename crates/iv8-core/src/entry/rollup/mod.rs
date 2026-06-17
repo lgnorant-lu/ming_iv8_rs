@@ -58,3 +58,42 @@ pub fn collect_evidence(
 
     (graph, evidence, Vec::new())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_detect_iife_with_pure_annotation() {
+        let src = "var a=/*#__PURE__*/function(){return 1}();";
+        let det = detect(src);
+        assert!(det.detected);
+        assert!(det.has_pure_annotations);
+    }
+
+    #[test]
+    fn test_detect_iife_with_interop() {
+        let src = "function _interopNamespace(e){return e;}";
+        let det = detect(src);
+        assert!(det.detected);
+    }
+
+    #[test]
+    fn test_detect_not_detected_when_webpack() {
+        let src = "function _interopNamespace(e){}; __webpack_require__(1);";
+        let det = detect(src);
+        assert!(!det.detected);
+    }
+
+    #[test]
+    fn test_detect_not_detected_plain_script() {
+        let src = "var x = 1;";
+        let det = detect(src);
+        assert!(!det.detected);
+    }
+
+    #[test]
+    fn test_bridge_prelude_is_empty() {
+        assert_eq!(bridge_prelude(), "");
+    }
+}

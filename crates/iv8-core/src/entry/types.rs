@@ -378,3 +378,49 @@ pub struct EntryResult {
     /// Structured evidence collected during execution.
     pub observed_evidence: Vec<diagnostics::EvidenceRecord>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_probe_browserify_viable_when_has_runtime() {
+        let mut probe = ProbeResult::default();
+        assert!(!probe.browserify_probe_viable());
+        probe.has_browserify_runtime = true;
+        assert!(probe.browserify_probe_viable());
+    }
+
+    #[test]
+    fn test_probe_rollup_viable_when_has_bundle() {
+        let mut probe = ProbeResult::default();
+        assert!(!probe.rollup_probe_viable());
+        probe.has_rollup_bundle = true;
+        assert!(probe.rollup_probe_viable());
+    }
+
+    #[test]
+    fn test_probe_vite_viable_when_has_bundle() {
+        let mut probe = ProbeResult::default();
+        assert!(!probe.vite_probe_viable());
+        probe.has_vite_bundle = true;
+        assert!(probe.vite_probe_viable());
+    }
+
+    #[test]
+    fn test_probe_source_rewrite_viable() {
+        let mut probe = ProbeResult::default();
+        assert!(!probe.source_rewrite_viable());
+        probe.can_swc_parse = true;
+        probe.is_low_obfuscation = true;
+        assert!(probe.source_rewrite_viable());
+    }
+
+    #[test]
+    fn test_probe_webpack_viable() {
+        let mut probe = ProbeResult::default();
+        assert!(!probe.webpack_probe_viable());
+        probe.has_webpack_runtime = true;
+        assert!(probe.webpack_probe_viable());
+    }
+}

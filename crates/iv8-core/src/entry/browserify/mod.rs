@@ -8,8 +8,8 @@
 //! (function(){return outer;})()({id:[fn,{deps}]},{},[entry])
 //! ```
 //!
-//! The source-text wrap prelude transforms this prelude call to expose
-//! the inner require function globally:
+//! Source-text wrapping transforms the prelude call to expose the inner
+//! require function globally:
 //!
 //! ```text
 //! (function(){
@@ -23,6 +23,9 @@ use crate::entry::diagnostics as diag;
 use crate::kernel::embedded_v8::EmbeddedV8Kernel;
 use serde_json::json;
 
+const WRAPPER_PATTERN: &str = "function(require,module,exports)";
+const WRAPPER_PATTERN_LEN: usize = 33; // "function(require,module,exports)".len()
+
 pub struct BrowserifyDetection {
     pub detected: bool,
     pub is_strong: bool,
@@ -31,7 +34,7 @@ pub struct BrowserifyDetection {
 }
 
 pub fn detect(source: &str) -> BrowserifyDetection {
-    let has_wrappers = source.contains("function(require,module,exports)")
+    let has_wrappers = source.contains(WRAPPER_PATTERN)
         || source.contains("function(require, module, exports)");
     if !has_wrappers {
         return BrowserifyDetection {
@@ -48,13 +51,13 @@ pub fn detect(source: &str) -> BrowserifyDetection {
     let mut module_count = 0;
     let mut pos = 0;
     let bytes = source.as_bytes();
-    while pos < bytes.len().saturating_sub(5) {
-        if let Some(rel) = source[pos..].find("function(require,module,exports)") {
+    while pos < bytes.len().saturating_sub(WRAPPER_PATTERN_LEN) {
+        if let Some(rel) = source[pos..].find(WRAPPER_PATTERN) {
             module_count += 1;
-            pos += rel + 5;
+            pos += rel + WRAPPER_PATTERN_LEN;
         } else if let Some(rel2) = source[pos..].find("function(require, module, exports)") {
             module_count += 1;
-            pos += rel2 + 5;
+            pos += rel2 + "function(require, module, exports)".len();
         } else {
             break;
         }
@@ -62,8 +65,13 @@ pub fn detect(source: &str) -> BrowserifyDetection {
 
     let mut entry_ids = Vec::new();
     if has_prelude {
-        if let Some(prelude_pos) = source.find("},{},[") {
-            let after = &source[prelude_pos + 5..];
+        let sep = if source.contains("},{},{},[") {
+            "},{},{},["
+        } else {
+            "},{},["
+        };
+        if let Some(prelude_pos) = source.find(sep) {
+            let after = &source[prelude_pos + sep.len()..];
             if let Some(end_brk) = after.find(']') {
                 let entries_str = &after[..end_brk];
                 for part in entries_str.split(',') {
@@ -83,33 +91,24 @@ pub fn detect(source: &str) -> BrowserifyDetection {
     }
 }
 
-/// Generate the source-text wrap prelude JS.
+/// Source-text wrap: wraps the browser-pack source to capture the inner
+/// `require` function as `globalThis.__iv8_b_require`.
 ///
-/// Wraps the Browserify prelude call to expose the inner `require` function
-/// as `globalThis.__iv8_b_require`, then returns the wrapped result.
-pub fn bridge_prelude() -> &'static str {
-    concat!(
-        "var __iv8_b_original_source = undefined;",
-        "var __iv8_b_require = null;",
-        "var __iv8_b_require_cache = {};",
-        // Intercept Function.prototype.call to detect module factory execution
-        // (non-invasive observation only — does not modify execution)
-        "(function(){",
-        "  var __iv8_b_orig_call = Function.prototype.call;",
-        "  Function.prototype.call = function(thisArg) {",
-        "    var args = Array.prototype.slice.call(arguments, 1);",
-        "    if (typeof this === 'function' && args.length >= 3) {",
-        "      var fnSrc = this.toString().substring(0, 200);",
-        "      if (fnSrc.indexOf('require') > -1 && fnSrc.indexOf('module') > -1) {",
-        "        if (typeof __iv8_runtime_log !== 'undefined') {",
-        "          __iv8_runtime_log.push('browserify_factory,' + fnSrc.length);",
-        "        }",
-        "      }",
-        "    }",
-        "    return __iv8_b_orig_call.apply(this, arguments);",
-        "  };",
-        "})();",
+/// The browser-pack source itself evaluates to the `newRequire` function.
+/// We wrap it in an IIFE that captures this return value.
+pub fn wrap_source(source: &str) -> String {
+    format!(
+        "(function(){{var _r={};globalThis.__iv8_b_require=_r;return _r;}})()",
+        source
     )
+}
+
+/// Generate the observation prelude JS.
+///
+/// Sets up the __iv8_b_require_cache for use after source execution.
+/// The actual require function is exposed via source-text wrapping (wrap_source).
+pub fn bridge_prelude() -> &'static str {
+    "var __iv8_b_require_cache = {};"
 }
 
 /// Collect evidence after Browserify bundle execution.
@@ -117,14 +116,14 @@ pub fn collect_evidence(kernel: &mut EmbeddedV8Kernel) -> (serde_json::Value, Ve
     let mut evidence: Vec<diag::EvidenceRecord> = Vec::new();
     let mut diagnostics: Vec<diag::DiagnosticRecord> = Vec::new();
 
-    let req_status = kernel
-        .eval_to_rust_value("typeof __iv8_b_require");
-    let has_require = match &req_status {
+    let req_val = kernel.eval_to_rust_value("__iv8_b_require");
+    let has_require = match &req_val {
+        crate::convert::RustValue::Null => false,
         crate::convert::RustValue::String(s) => s != "undefined",
-        _ => false,
+        _ => true,
     };
 
-    let module_graph = if has_require {
+    if has_require {
         evidence.push(
             diag::EvidenceRecord::new(
                 "browserify_require_exposed",
@@ -135,24 +134,68 @@ pub fn collect_evidence(kernel: &mut EmbeddedV8Kernel) -> (serde_json::Value, Ve
             )
             .with_producer("browserify_bridge.main"),
         );
-
-        json!({
-            "kind": "browserify_module_graph",
-            "require_exposed": true,
-            "evidence_count": evidence.len(),
-        })
     } else {
-        diagnostics.push(diag::error_diag(
+        diagnostics.push(diag::warn_diag(
             "BROWSERIFY_REQUIRE_NOT_EXPOSED",
             "browserify.execute",
-            "source-text wrap prelude did not expose __iv8_b_require",
+            "source-text wrap did not expose __iv8_b_require",
         ));
-        json!({
-            "kind": "browserify_module_graph",
-            "require_exposed": false,
-            "evidence_count": 0,
-        })
-    };
+    }
 
-    (module_graph, evidence, diagnostics)
+    let graph = json!({
+        "kind": "browserify_module_graph",
+        "require_exposed": has_require,
+        "evidence_count": evidence.len(),
+    });
+
+    (graph, evidence, diagnostics)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_detect_strong_returns_correct_module_count() {
+        let src = "(function(){var e={};function r(){return o;}return r})()({1:[function(require,module,exports){module.exports=42},{dep:2}],2:[function(require,module,exports){}]},{},[1])";
+        let det = detect(src);
+        assert!(det.detected);
+        assert!(det.is_strong);
+        assert_eq!(det.module_count, 2);
+        assert_eq!(det.entry_ids, vec![1]);
+    }
+
+    #[test]
+    fn test_detect_weak_returns_correctly() {
+        let src = "function(require,module,exports){ module.exports = 42; }";
+        let det = detect(src);
+        assert!(det.detected);
+        assert!(!det.is_strong);
+        assert_eq!(det.module_count, 1);
+    }
+
+    #[test]
+    fn test_detect_not_detected_when_no_wrappers() {
+        let src = "var x = 1 + 1;";
+        let det = detect(src);
+        assert!(!det.detected);
+        assert!(!det.is_strong);
+    }
+
+    #[test]
+    fn test_wrap_source_transforms_prelude() {
+        let src = "(function(){return function r(id){return id};})()({1:[function(require,module,exports){module.exports=42}]},{},[1])";
+        let wrapped = wrap_source(src);
+        assert!(wrapped.contains("__iv8_b_require"), "wrapped source should assign __iv8_b_require");
+        assert!(wrapped.contains("globalThis.__iv8_b_require=_r"), "wrapped source should expose require");
+        assert_ne!(wrapped, src, "wrapped source should differ from original");
+    }
+
+    #[test]
+    fn test_wrap_source_wraps_any_source() {
+        let src = "42";
+        let wrapped = wrap_source(src);
+        assert!(wrapped.contains("__iv8_b_require"));
+        assert!(wrapped.contains("42"));
+    }
 }

@@ -28,7 +28,10 @@ pub fn detect(source: &str) -> UmdDetection {
         || source.contains("})(global,")
         || source.contains("})(globalThis,")
         || source.contains("}(global,")
-        || source.contains("}(globalThis,");
+        || source.contains("}(globalThis,")
+        || source.contains("typeof globalThis")
+        || source.contains("typeof global")
+        || source.contains("global.");
 
     UmdDetection {
         detected: has_amd && has_cjs && has_global,
@@ -67,4 +70,52 @@ pub fn collect_evidence(
     });
 
     (graph, evidence, Vec::new())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_detect_standard_umd() {
+        let src = "(function(root,factory){if(typeof define==='function'&&define.amd){define([],factory)}else if(typeof module==='object'&&module.exports){module.exports=factory()}else{root.Lib=factory()}})(global,function(){return{version:'1.0'}});";
+        let det = detect(src);
+        assert!(det.detected);
+        assert!(det.has_amd_branch);
+        assert!(det.has_cjs_branch);
+        assert!(det.has_global_branch);
+    }
+
+    #[test]
+    fn test_detect_umd_with_globalthis() {
+        let src = "(function(root,factory){if(typeof define==='function'&&define.amd){define([],factory)}else if(typeof module==='object'){module.exports=factory()}else{root.Lib=factory()}})(typeof globalThis!=='undefined'?globalThis:this,function(){return 1});";
+        let det = detect(src);
+        assert!(det.detected);
+    }
+
+    #[test]
+    fn test_detect_not_detected_plain_script() {
+        let src = "var x = 1;";
+        let det = detect(src);
+        assert!(!det.detected);
+    }
+
+    #[test]
+    fn test_detect_not_detected_only_amd() {
+        let src = "if(typeof define==='function'&&define.amd){define([],function(){return 1})}";
+        let det = detect(src);
+        assert!(!det.detected, "AMD-only should not be detected as UMD");
+    }
+
+    #[test]
+    fn test_detect_not_detected_only_cjs() {
+        let src = "if(typeof module==='object'){module.exports=function(){return 1}}";
+        let det = detect(src);
+        assert!(!det.detected, "CJS-only should not be detected as UMD");
+    }
+
+    #[test]
+    fn test_bridge_prelude_is_empty() {
+        assert_eq!(bridge_prelude(), "");
+    }
 }

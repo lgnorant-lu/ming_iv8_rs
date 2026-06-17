@@ -60,3 +60,50 @@ pub fn collect_evidence(
 
     (graph, evidence, Vec::new())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_detect_with_vite_preload() {
+        let src = "const __vitePreload=function(u,d,a){return Promise.resolve()};";
+        let det = detect(src);
+        assert!(det.detected);
+        assert!(det.has_preload_helpers);
+    }
+
+    #[test]
+    fn test_detect_with_vite_modern() {
+        let src = "const __VITE_IS_MODERN__=true;";
+        let det = detect(src);
+        assert!(det.detected);
+    }
+
+    #[test]
+    fn test_detect_with_map_deps() {
+        let src = "const __vite__mapDeps=[];";
+        let det = detect(src);
+        assert!(det.detected);
+        assert!(det.has_preload_helpers);
+    }
+
+    #[test]
+    fn test_detect_not_detected_when_webpack() {
+        let src = "const __vitePreload=function(){}; __webpack_require__(1);";
+        let det = detect(src);
+        assert!(!det.detected);
+    }
+
+    #[test]
+    fn test_detect_not_detected_plain_script() {
+        let src = "var x = 1;";
+        let det = detect(src);
+        assert!(!det.detected);
+    }
+
+    #[test]
+    fn test_bridge_prelude_is_empty() {
+        assert_eq!(bridge_prelude(), "");
+    }
+}
