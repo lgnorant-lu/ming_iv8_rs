@@ -148,3 +148,6 @@ coverage-summary.txt
 # ── Ad-hoc examples (not core) ─────────────────────────────────────────────────
 crates/iv8-core/examples/
 _ref/rs-reverse/
+
+# Archive/test artifacts
+tests/_archive/

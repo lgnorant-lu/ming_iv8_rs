@@ -6,6 +6,33 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.54] - 2026-06-18
+
+> Local milestone: bug-fix and coverage consolidation sprint
+
+### Added
+- Python coverage: 52% → 93% (1709 tests, 18 files at 100%)
+- New test files: trace.py, diagnostics.py, probe.py, experimental_report.py
+- CdpProbe strategy diagnostic record
+- pytest pythonpath config for iv8_rs import
+
+### Fixed
+- BUG-17: _parse_entry() 3-field D entry corruption (Critical)
+- BUG-5: detect_all() proximity boost cap (High)
+- BUG-3: _extract_trace_values() comma-split gap (High)
+- BUG-11/12/13: cfg.py back-edge/loop/collapse (3x High)
+- BUG-14: taint.py substring false positives (High)
+- BUG-18: compress_trace() data loss (High)
+- BUG-16: vm_diff handler reordering false mismatch (Medium)
+- BUG-19/20/21: Rust executor/planner bugs (3 Medium)
+- 7 doc cross-reference issues (C1-C7)
+- 9 pre-existing test failures (entry/env_toolchain/hypothesis)
+- Test convention compliance: 4 files remediated (importorskip, naming, sys.path)
+
+### Quality Gates
+- `cargo check -p iv8-core`: zero errors
+- `pytest tests/ --ignore=tests/compat`: 1709 passed, 3 failed (pre-existing JSContext issues)
+
 ## [0.8.53] - 2026-06-17
 
 > Local milestone tagged. v0.8.53 supplements the v0.8.52 multi-bundler layer
