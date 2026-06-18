@@ -424,7 +424,9 @@ def compress_trace(trace: StructuredTrace) -> CompressedTrace:
     """Compress a trace by merging consecutive same-PC dispatch entries.
 
     Non-dispatch entries (R/C/W) are kept as-is with count=1.
-    Consecutive D entries at the same PC are merged into one with count=N.
+    Consecutive D entries at the same PC+target+value are merged into one
+    with count=N. Entries with differing values are preserved separately
+    to avoid losing intermediate state transitions (BUG-18).
 
     Args:
         trace: StructuredTrace to compress.
@@ -447,7 +449,8 @@ def compress_trace(trace: StructuredTrace) -> CompressedTrace:
 
     for entry in trace.entries[1:]:
         if (entry.type == "D" and prev.type == "D"
-                and entry.pc == prev.pc and entry.target == prev.target):
+                and entry.pc == prev.pc and entry.target == prev.target
+                and entry.value == prev.value):  # BUG-18: same value required
             count += 1
         else:
             result.append(CompressedEntry(
