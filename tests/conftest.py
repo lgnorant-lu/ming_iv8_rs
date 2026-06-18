@@ -1,9 +1,9 @@
 """Shared pytest fixtures for iv8-rs test suite."""
-
 from __future__ import annotations
 from typing import Iterator
 import pytest
-import iv8_rs
+
+iv8_rs = pytest.importorskip("iv8_rs")
 
 
 @pytest.fixture
@@ -40,5 +40,13 @@ def ctx_custom() -> Iterator[iv8_rs.JSContext]:
             "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 Direct3D11)"
         ),
     })
+    yield c
+    c.close()
+
+
+@pytest.fixture
+def ctx_seeded() -> Iterator[iv8_rs.JSContext]:
+    """JSContext with fixed random seed and frozen time for deterministic tests."""
+    c = iv8_rs.JSContext(random_seed=42, time_freeze=1700000000000)
     yield c
     c.close()
