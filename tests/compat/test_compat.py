@@ -26,15 +26,6 @@ def collect_fixtures():
 FIXTURES = collect_fixtures()
 
 
-@pytest.fixture(scope="module")
-def ctx():
-    """Shared JSContext for all compat tests (state persists but that's OK
-    since each fixture is a standalone expression)."""
-    c = iv8_rs.JSContext()
-    yield c
-    c.close()
-
-
 @pytest.mark.parametrize(
     "js_file,expected_file",
     FIXTURES,

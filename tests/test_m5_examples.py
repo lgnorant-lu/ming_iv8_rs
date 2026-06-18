@@ -14,13 +14,6 @@ import iv8_rs
 import os
 
 
-@pytest.fixture
-def ctx():
-    c = iv8_rs.JSContext()
-    yield c
-    c.close()
-
-
 # ─── abogus 核心模式 ──────────────────────────────────────────────────────────
 
 class TestAbogusPattern:

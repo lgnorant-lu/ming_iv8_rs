@@ -14,13 +14,6 @@ from iv8_rs import Debugger
 
 
 @pytest.fixture
-def ctx():
-    c = iv8_rs.JSContext()
-    yield c
-    c.close()
-
-
-@pytest.fixture
 def dbg(ctx):
     return Debugger(ctx)
 

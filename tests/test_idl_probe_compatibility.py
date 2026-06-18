@@ -21,13 +21,6 @@ def generated_pack_dict():
     return generate_probe_pack()
 
 
-@pytest.fixture
-def ctx():
-    c = iv8_rs.JSContext()
-    yield c
-    c.close()
-
-
 def test_generated_probes_execute_in_js_context(ctx, generated_pack_dict):
     """Value probes for Tier 0 interfaces must evaluate without throwing."""
     errors = []

@@ -13,13 +13,6 @@ import pytest
 import iv8_rs
 
 
-@pytest.fixture
-def ctx():
-    c = iv8_rs.JSContext()
-    yield c
-    c.close()
-
-
 # ============================================================
 # Event listener lifecycle
 # ============================================================
