@@ -829,14 +829,16 @@ def detect_all(
             boost += 0.1  # All three layers agree
 
         # Proximity boost: constants near patterns
+        prox_boost = 0.0
         if consts and pats:
             for c in consts:
                 for p in pats:
                     if abs(c.pc - p.pc_start) <= context_window:
-                        boost += 0.05
+                        prox_boost += 0.05
                         break
-                if boost > 0.15:
+                if prox_boost > 0.15:
                     break
+        boost += prox_boost
 
         # Sequence match is very strong evidence
         if seqs:
