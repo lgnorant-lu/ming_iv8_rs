@@ -83,6 +83,23 @@ class TestExecVmHandler:
     def test_no_stack_input_preserves_existing(self, vm_ctx):
         vm_ctx.eval("g = [100, 200]")
         result = exec_vm_handler(vm_ctx, "A[0]", stack_var="g")
-        # stack_input=None means don't reset stack
         assert result["stack_before"] == [100, 200]
         assert result["stack_after"] == [100, 200, 42]
+
+    def test_mock_env_depth_1_restore(self, vm_ctx):
+        """mock_env at depth 1 restores original after execution."""
+        vm_ctx.eval("var config = {value: 'original'};")
+        result = exec_vm_handler(vm_ctx, "A[0]", stack_var="g",
+                                 stack_input=[], mock_env={"config.value": "mocked"})
+        assert vm_ctx.eval("config.value") == "original"
+
+    def test_zero_operand_handler(self, vm_ctx):
+        """Handler with zero stack operands still produces result."""
+        result = exec_vm_handler(vm_ctx, "A[3]", stack_var="g", stack_input=[55])
+        assert result["return_value"] == 55
+        assert result["stack_popped"] == 1
+
+    def test_null_handler_expr_returns_error(self, vm_ctx):
+        """Invalid handler expression returns error."""
+        result = exec_vm_handler(vm_ctx, "undefinedVar", stack_var="g", stack_input=[])
+        assert result["error"] is not None

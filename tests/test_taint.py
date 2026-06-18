@@ -143,3 +143,37 @@ class TestBasicTaint:
         assert report.stack_hits[report.sources[0].label] == 0
         assert len(report.sinks) == 0
         assert len(report.unreached_sources) == 1
+
+    def test_long_propagation_chain(self):
+        """Value propagates through a long chain of D entries."""
+        entries = [("R", 1, "source", "42")]
+        for i in range(2, 102):
+            entries.append(("D", i, str(i % 10), f"3,42,{i},"))
+        entries.append(("W", 200, "output", "42"))
+        trace = make_trace(entries)
+        engine = TaintEngine(trace, sources={"source": "42"})
+        report = engine.analyze()
+        assert len(report.sinks) == 1
+        assert len(report.flows) == 1
+        assert len(report.flows[0].intermediate_pcs) > 50
+
+    def test_overlapping_values_not_confused(self):
+        """Source '12' should not match value '12345'."""
+        trace = make_trace([
+            ("D", 20, "5", "3,12345,,"),
+            ("W", 30, "output", "12345"),
+        ])
+        engine = TaintEngine(trace, sources={"source": "12"})
+        report = engine.analyze()
+        assert len(report.sinks) == 0
+
+    def test_call_sink_with_value_match(self):
+        """C entry as sink with substring value."""
+        trace = make_trace([
+            ("R", 10, "navigator.userAgent", "Mozilla"),
+            ("C", 40, "someFunction", "prefix-Mozilla-suffix"),
+        ])
+        engine = TaintEngine(trace, sources={"navigator.userAgent": "Mozilla"})
+        report = engine.analyze()
+        assert len(report.sinks) == 1
+        assert report.sinks[0].target == "someFunction"

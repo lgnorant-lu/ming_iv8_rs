@@ -125,3 +125,22 @@ class TestEdgeCases:
         report = compare_vm_versions(src_a, src_b, handler_array="A")
         # 3 unchanged out of 4 = 0.75
         assert report.similarity_score == 0.75
+
+    def test_single_handler_empty_body(self):
+        src_a = "var A = [function(){}];"
+        src_b = "var A = [function(){return 1}];"
+        report = compare_vm_versions(src_a, src_b, handler_array="A")
+        assert report.handler_count_a == 1
+        assert report.modified_handlers == [0]
+
+    def test_large_handler_body(self):
+        body = "var x = 1; " * 50  # ~700 chars
+        src_a = vm_source([body])
+        src_b = vm_source([body])
+        report = compare_vm_versions(src_a, src_b, handler_array="A")
+        assert report.unchanged_count == 1
+
+    def test_nested_array_name(self):
+        src = "var handlers = {A: [function(){ return 42; }]};"
+        report = compare_vm_versions(src, src, handler_array="A")
+        assert report.handler_count_a == 0  # "var A" not found as top-level
