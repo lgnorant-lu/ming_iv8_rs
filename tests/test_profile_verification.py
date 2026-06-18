@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from profile_verification_checker import (
+from helpers.profile_verification_checker import (
     ConvergenceChecker,
     chrome147_win10_overrides,
 )
