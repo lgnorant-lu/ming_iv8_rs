@@ -83,9 +83,38 @@ Do NOT duplicate fixture definitions in individual test files.
 
 ### When to Create New Fixtures
 
+Follow a tiered approach:
+
+```python
+# conftest.py — all shared fixtures live here
+
+@pytest.fixture
+def ctx():
+    """Default environment, function-scoped (fresh per test)."""
+    c = JSContext()
+    yield c
+    c.close()
+
+@pytest.fixture
+def ctx_custom():
+    """Chrome 147 fingerprint profile, function-scoped."""
+    c = JSContext(profile="default")
+    yield c
+    c.close()
+
+@pytest.fixture
+def ctx_seeded():
+    """Fixed random seed + frozen time for deterministic tests."""
+    c = JSContext(random_seed=42, time_freeze=1700000000000)
+    yield c
+    c.close()
+```
+
 Create a fixture when:
 - The setup is used by 3+ test files (→ put in conftest.py)
 - The setup is domain-specific to a single module (→ put in that module's test file)
+
+**Prohibited**: per-file `ctx`/`ctx_custom` duplicates of conftest.py fixtures.
 
 ### Scope
 
@@ -218,6 +247,9 @@ def test_parse_trace_is_idempotent(raw):
 - V8-dependent tests (hypothesis + JSContext is too slow)
 - Tests requiring exact output values (not property-based)
 
+**Priority**: P2 — recommended for parser/converter/graph modules. P0 behavioral
+coverage first, then add hypothesis property tests.
+
 ## 10. Organization
 
 ```text
@@ -234,16 +266,23 @@ tests/
 ### Scripts vs Tests
 
 Files starting with `test_` are collected by pytest. Non-test scripts MUST NOT
-use the `test_` prefix:
+use the `test_` prefix. Use underscore prefix (`_`) for development/audit tools
+that should be invisible to pytest:
 
 ```text
-# Correct
-_audit_full.py              ← Script, not a test
-test_crypto_detection.py    ← Test file
+# Correct — test files
+test_crypto_detection.py       ← pytest collects this
+
+# Correct — non-test scripts (invisible to pytest)
+_verify_rs_env.py              ← audit/diagnostic script
+_run_abogus.py                 ← sample execution script
 
 # Wrong
-test_v0850_rs_verify.py     ← Script with test_ prefix — collected but has zero test functions
+test_v0850_rs_verify.py        ← script with test_ prefix — zero test functions
 ```
+
+Scripts with `test_` prefix but zero `def test_` functions should be renamed
+to `_`-prefixed scripts.
 
 ## 11. Prohibited Patterns
 
@@ -257,19 +296,27 @@ test_v0850_rs_verify.py     ← Script with test_ prefix — collected but has z
 | `import iv8_rs` without `importorskip` at module level | Crashes collection if extension not built |
 | `assert True` / `assert 1 == 1` | Not a test |
 | Manual `ctx.close()` in try/finally | Use fixture with `yield` |
+| Hardcoded fixture file paths | Use `pathlib.Path(__file__).parent / "fixtures"` |
+| `time.sleep()` for async waiting | Use `ctx.eval("__iv8__.eventLoop.advance(n)")` |
+| Cross-test shared mutable state | Each test is independent; no class-level mutable attributes |
+| Version-tagged test names (`test_v0850_*`) | Use capability-based naming per naming-conventions.md |
 
 ## 12. Coverage Targets
 
-Per-module coverage, measured by test file existence + behavioral test presence:
+Per-module coverage, measured by test file existence + behavioral test presence.
+Goal: 100% module coverage.
 
-| Tier | Target | Modules |
+| Tier | Requirement | Modules |
 |---|---|---|
-| P0 (runtime-critical) | ≥ 1 behavioral test file | trace, patterns, cfg, entry |
-| P1 (analysis tools) | ≥ 1 behavioral test file | taint, isolation, vm_diff |
-| P2 (environment) | ≥ 1 behavioral test file | environment, environment_toolchain_*, probe |
-| P3 (reports) | ≥ 1 contract test | deobf_reports, vm_reports, ir_reports, string_array_reports |
+| P0 (runtime-critical) | **Must** have ≥1 behavioral test file | trace, patterns, cfg, entry |
+| P1 (analysis tools) | **Must** have ≥1 behavioral test file | taint, isolation, vm_diff, environment_policy, probe |
+| P2 (environment) | **Should** have ≥1 behavioral test file | environment, environment_toolchain_*, environment_pressure_* |
+| P3 (report schemas) | Contract-only acceptable | deobf_reports, vm_reports, ir_reports, string_array_reports |
+| P4 (diagnostics) | Contract-only acceptable | environment_toolchain_diagnostics, environment_toolchain_models |
 
-Source modules with zero test coverage (currently 4) should be brought to P2+ level.
+Source modules with zero test coverage (currently 4 — entry.py, environment_policy.py,
+environment_toolchain_diagnostics.py, environment_toolchain_models.py) should be
+brought to P0/P1 level.
 
 ## 13. Review Checklist
 
