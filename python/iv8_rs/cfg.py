@@ -191,21 +191,28 @@ class CFG:
         loops: List[Loop] = []
         for header, back_edges in header_back_edges.items():
             # Natural loop body: header + all nodes that can reach back edge
-            # sources without going through header
+            # sources without going through header (Benno 2024 classic).
+            # PC-range constraint prevents unrelated nodes from entering body
+            # when entry-block dominance is ambiguous (BUG-11).
             body: Set[int] = {header}
             stack: List[int] = []
             total_iterations = 0
+            max_body_pc = header  # upper bound for body nodes
 
             for from_pc, _ in back_edges:
                 total_iterations += self._edge_map.get((from_pc, header), CFGEdge(0, 0, 0, False)).count
                 if from_pc not in body:
                     body.add(from_pc)
                     stack.append(from_pc)
+                if from_pc > max_body_pc:
+                    max_body_pc = from_pc
 
             while stack:
                 node = stack.pop()
                 for pred in self._predecessors.get(node, []):
-                    if pred not in body:
+                    if pred == header:
+                        continue  # BUG-12: stop at loop header boundary
+                    if pred not in body and header <= pred <= max_body_pc:  # BUG-11: PC-range guard
                         body.add(pred)
                         stack.append(pred)
 
@@ -403,9 +410,10 @@ class CFG:
             return CFG({}, [])
 
         # Find block boundaries: PCs with in_degree != 1 or out_degree != 1
-        # or that are targets of back edges
+        # or that are targets of non-sequential predecessor edges.
         block_heads: Set[int] = set()
         sorted_pcs = sorted(self.nodes.keys())
+        pc_order = {pc: i for i, pc in enumerate(sorted_pcs)}  # position in sorted PC order
 
         # First PC is always a block head
         if sorted_pcs:
@@ -418,8 +426,10 @@ class CFG:
             if len(preds) != 1 or len(succs) > 1:
                 block_heads.add(pc)
             # Target of a non-sequential edge = block head
+            pc_idx = pc_order.get(pc, 0)
             for pred in preds:
-                if pred + 1 != pc:  # non-sequential predecessor
+                pred_idx = pc_order.get(pred, 0)
+                if pred_idx != pc_idx - 1:  # not immediate predecessor in PC order
                     block_heads.add(pc)
                     break
 
