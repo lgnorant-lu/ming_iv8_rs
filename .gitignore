@@ -63,6 +63,9 @@ htmlcov/
 .cache/
 coverage.xml
 nosetests.xml
+coverage/
+build_rs_cov.profraw
+*.profraw
 
 # ── Benchmark / Profiling ───────────────────────────────────────────────────
 flamegraph.svg
