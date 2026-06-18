@@ -144,3 +144,102 @@ class TestEdgeCases:
         src = "var handlers = {A: [function(){ return 42; }]};"
         report = compare_vm_versions(src, src, handler_array="A")
         assert report.handler_count_a == 0  # "var A" not found as top-level
+
+
+class TestHighSimilarityHandlers:
+    def test_high_similarity_above_threshold_unchanged(self):
+        """Handlers with similarity >= threshold are marked unchanged (lines 186-188)."""
+        body_a = "var x = 100; var y = 200; var z = 300;"
+        body_b = "var x = 100; var y = 200; var z = 301;"  # 1 char diff → sim ~0.98
+        src_a = vm_source([body_a])
+        src_b = vm_source([body_b])
+        report = compare_vm_versions(src_a, src_b, similarity_threshold=0.95)
+        assert report.modified_handlers == []
+        assert report.unchanged_count == 1
+        assert report.details[0].status == "unchanged"
+        assert report.details[0].similarity >= 0.95
+
+    def test_low_similarity_below_threshold_modified(self):
+        """Handlers with similarity below threshold are marked modified."""
+        src_a = vm_source(["return 1;"])
+        src_b = vm_source(["var x = Math.random();"])
+        report = compare_vm_versions(src_a, src_b, similarity_threshold=0.95)
+        assert report.modified_handlers == [0]
+        assert report.details[0].status == "modified"
+        assert report.details[0].similarity < 0.95
+
+
+class TestSwapDetection:
+    def test_two_handlers_swapped(self):
+        """Basic swap: A[0]↔B[1], A[1]↔B[0] (lines 216, 220-232)."""
+        src_a = vm_source([
+            "var a = 1; var b = 2;",
+            "var c = 3; var d = 4;",
+        ])
+        src_b = vm_source([
+            "var c = 3; var d = 4;",
+            "var a = 1; var b = 2;",
+        ])
+        report = compare_vm_versions(src_a, src_b)
+        assert report.modified_handlers == []
+        assert report.unchanged_count == 2
+        assert report.details[0].status == "unchanged"
+        assert report.details[1].status == "unchanged"
+
+    def test_three_handlers_first_two_swapped(self):
+        """Three handlers where first two are swapped (exercises skip already-paired)."""
+        src_a = vm_source([
+            "return 'alpha';",
+            "return 'beta';",
+            "return 'gamma';",
+        ])
+        src_b = vm_source([
+            "return 'beta';",
+            "return 'alpha';",
+            "return 'gamma';",
+        ])
+        report = compare_vm_versions(src_a, src_b)
+        assert report.modified_handlers == []
+        assert report.unchanged_count == 3
+        assert report.similarity_score == 1.0
+
+    def test_swap_with_new_handler_added(self):
+        """Swap detection with a new handler also present."""
+        src_a = vm_source(["var a = 1;", "var b = 2;"])
+        src_b = vm_source(["var b = 2;", "var a = 1;", "var c = 3;"])
+        report = compare_vm_versions(src_a, src_b)
+        assert report.modified_handlers == []
+        assert report.unchanged_count == 2
+        assert report.new_handlers == [2]
+
+    def test_handler_moved_forward(self):
+        """A handler replaced at its original position, same content elsewhere."""
+        src_a = vm_source([
+            "var w = 0;",
+            "var x = 10;",
+            "var y = 20;",
+        ])
+        src_b = vm_source([
+            "var w = 0;",
+            "var x = 999;",
+            "var y = 20;",
+        ])
+        report = compare_vm_versions(src_a, src_b)
+        assert report.modified_handlers == [1]
+        assert report.unchanged_count == 2
+
+    def test_handler_pulled_back(self):
+        """Handler moved backward detected as still unchanged if content identical."""
+        src_a = vm_source([
+            "var x = 10;",
+            "var y = 20;",
+            "var z = 30;",
+        ])
+        src_b = vm_source([
+            "var z = 30;",
+            "var x = 10;",
+            "var y = 20;",
+        ])
+        report = compare_vm_versions(src_a, src_b)
+        assert report.modified_handlers == [0, 1, 2]
+        assert report.unchanged_count == 0

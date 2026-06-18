@@ -24,7 +24,8 @@ breaking existing cross-references), but they are all indexed here.
 | 5 | Testing Conventions | `docs/conventions/testing-conventions.md` | Test layers, naming, assertion patterns, harness design, coverage targets, file organization |
 | 6 | Python Testing Conventions | `docs/conventions/python-testing-conventions.md` | Python test naming, fixtures, pytest patterns, contract tests, hypothesis, import safety |
 | 7 | Harness Charter | `docs/quality-harness/HARNESS-CHARTER.md` | Formal Quality Harness (H<NN>) creation criteria, principles, lifecycle, registration |
-| 8 | TODO Index | `docs/todo/README.md` | Cross-module TODO tracking: Bundler / Environment / Native / Infrastructure / Tools / Deobfuscation |
+| 8 | Tests Directory Conventions | `docs/conventions/tests-directory-conventions.md` | tests/ directory tree, subdirectory thresholds, helper placement, fixture organization, archive policy |
+| 9 | TODO Index | `docs/todo/README.md` | Cross-module TODO tracking: Bundler / Environment / Native / Infrastructure / Tools / Deobfuscation |
 
 ## Convention Hierarchy
 
