@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.53 (Multi-Bundler Supplement) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.54 (Bug-fix + Coverage Consolidation Sprint) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
@@ -173,7 +173,7 @@ iv8-rs/
 │   ├── iv8-undetect/ # Anti-detection (wrapNative / hookNative / window.chrome)
 │   └── iv8-py/       # PyO3 Python binding
 ├── python/iv8_rs/    # Python package (runtime APIs, analysis helpers, report models + type stubs)
-├── tests/            # Python integration tests and v0.6 acceptance tests
+├── tests/            # Python integration tests, environment_toolchain/, helpers/
 └── docs/             # Design docs + research + quality-harness
 ```
 
