@@ -106,12 +106,15 @@ class TaintEngine:
     Tracks specified values through the trace by searching for them in
     D entry stack values and W entry outputs.
 
+    Value matching uses exact token comparison against comma-split entry values
+    to prevent false positives from Python substring matching (BUG-14).
+
     Args:
         trace: StructuredTrace to analyze (should have stack values in D entries
-               for propagation tracking; works without but only finds R→W direct).
+               for propagation tracking; works without but only finds R\u2192W direct).
         sources: Dict mapping target path to value string, e.g.
                  {"screen.width": "1920", "navigator.userAgent": "Mozilla..."}.
-                 Values are matched as substrings in trace entry values.
+                 Values are matched as exact tokens in comma-split entry values.
 
     Example::
 
@@ -136,6 +139,20 @@ class TaintEngine:
                 i += 1
             self._labels[target] = label
 
+    @staticmethod
+    def _value_matches(src_val: str, entry_val: str) -> bool:
+        """Exact or token match: prevents substring false positives (BUG-14).
+
+        For comma-separated entry values (D/W stack values), split and check
+        each token. For plain entry values (R reads), do exact match.
+        """
+        if not src_val or not entry_val:
+            return False
+        if "," in entry_val:
+            tokens = [t.strip() for t in entry_val.split(",")]
+            return src_val in tokens
+        return src_val == entry_val
+
     def analyze(self) -> TaintReport:
         """Run taint analysis: find where source values appear and reach sinks.
 
@@ -149,7 +166,7 @@ class TaintEngine:
             pc = -1
             for entry in self.trace.reads:
                 if entry.target == target or target in entry.target:
-                    if value in entry.value or entry.value in value:
+                    if self._value_matches(value, entry.value):
                         pc = entry.pc
                         break
             taint_sources.append(TaintSource(
@@ -170,7 +187,7 @@ class TaintEngine:
             if not entry_val:
                 continue
             for src in taint_sources:
-                if src.value and src.value in entry_val:
+                if self._value_matches(src.value, entry_val):
                     stack_hits[src.label] += 1
                     intermediates[src.label].append(entry.pc)
 
@@ -178,7 +195,7 @@ class TaintEngine:
         sinks: List[TaintSink] = []
         for entry in self.trace.writes:
             for src in taint_sources:
-                if src.value and src.value in entry.value:
+                if self._value_matches(src.value, entry.value):
                     sinks.append(TaintSink(
                         label=src.label,
                         target=entry.target,
@@ -189,7 +206,7 @@ class TaintEngine:
         # Also check C entries as potential sinks (function calls with tainted args)
         for entry in self.trace.calls:
             for src in taint_sources:
-                if src.value and src.value in entry.value:
+                if self._value_matches(src.value, entry.value):
                     sinks.append(TaintSink(
                         label=src.label,
                         target=entry.target,
