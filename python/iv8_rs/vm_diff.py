@@ -14,7 +14,7 @@ Usage::
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Dict, List, Optional, Set
 from difflib import SequenceMatcher
 
 
@@ -121,7 +121,9 @@ def compare_vm_versions(
     """Compare two versions of a JS VM by diffing their handler arrays.
 
     Extracts handler function sources from both versions and compares them
-    using text similarity (difflib.SequenceMatcher).
+    using text similarity (difflib.SequenceMatcher). Comparison is
+    position-by-position; when adjacent handlers are reordered (swap), they
+    are detected and reported as unchanged (BUG-16).
 
     Args:
         source_a: JS source of version A (older).
@@ -148,62 +150,97 @@ def compare_vm_versions(
     count_b = len(handlers_b)
     max_count = max(count_a, count_b)
 
+    # Phase 1: position-by-position match
     details: List[HandlerDiff] = []
     new_handlers: List[int] = []
     removed_handlers: List[int] = []
     modified_handlers: List[int] = []
     unchanged_count = 0
+    # Track which B indices are already matched
+    matched_b: Set[int] = set()
+    # Store per-position pair sim for Phase 2 swap detection
+    pair_sim: Dict[int, float] = {}
 
     for i in range(max_count):
         src_a = handlers_a[i] if i < count_a else ""
         src_b = handlers_b[i] if i < count_b else ""
 
-        if i >= count_a:
-            # Only in B (new)
+        if not src_a and src_b:
             new_handlers.append(i)
-            details.append(HandlerDiff(
-                index=i, status="new", similarity=0.0,
-                source_a="", source_b=src_b,
-            ))
-        elif i >= count_b:
-            # Only in A (removed)
+            matched_b.add(i)
+            details.append(HandlerDiff(index=i, status="new", similarity=0.0,
+                                       source_a="", source_b=src_b))
+        elif src_a and not src_b:
             removed_handlers.append(i)
-            details.append(HandlerDiff(
-                index=i, status="removed", similarity=0.0,
-                source_a=src_a, source_b="",
-            ))
+            details.append(HandlerDiff(index=i, status="removed", similarity=0.0,
+                                       source_a=src_a, source_b=""))
+        elif src_a == src_b:
+            matched_b.add(i)
+            unchanged_count += 1
+            details.append(HandlerDiff(index=i, status="unchanged", similarity=1.0,
+                                       source_a=src_a, source_b=src_b))
         else:
-            # Both exist: compare
-            if src_a == src_b:
+            sim = SequenceMatcher(None, src_a, src_b).ratio()
+            pair_sim[i] = sim
+            if sim >= similarity_threshold:
+                matched_b.add(i)
                 unchanged_count += 1
-                details.append(HandlerDiff(
-                    index=i, status="unchanged", similarity=1.0,
-                    source_a=src_a, source_b=src_b,
-                ))
+                details.append(HandlerDiff(index=i, status="unchanged",
+                                           similarity=round(sim, 4),
+                                           source_a=src_a, source_b=src_b))
             else:
-                sim = SequenceMatcher(None, src_a, src_b).ratio()
-                if sim >= similarity_threshold:
-                    # Close enough to be "unchanged" (formatting diff)
-                    unchanged_count += 1
-                    details.append(HandlerDiff(
-                        index=i, status="unchanged", similarity=sim,
-                        source_a=src_a, source_b=src_b,
-                    ))
-                else:
-                    modified_handlers.append(i)
-                    details.append(HandlerDiff(
-                        index=i, status="modified", similarity=round(sim, 4),
-                        source_a=src_a, source_b=src_b,
-                    ))
+                modified_handlers.append(i)
+                details.append(HandlerDiff(index=i, status="modified",
+                                           similarity=round(sim, 4),
+                                           source_a=src_a, source_b=src_b))
+
+    # Phase 2: detect reorderings (swap) among modified positions
+    # If A[i] ≈ B[j] and A[j] ≈ B[i] above threshold, it's a swap, not a modification
+    swap_pairs: Set[Tuple[int, int]] = set()
+    for i in modified_handlers[:]:
+        if i >= count_a or i >= count_b:
+            continue
+        src_ai = handlers_a[i]
+        src_bi = handlers_b[i]
+        for j in modified_handlers:
+            if j >= count_a or j >= count_b or j == i:
+                continue
+            if (i, j) in swap_pairs or (j, i) in swap_pairs:
+                continue
+            src_aj = handlers_a[j]
+            src_bj = handlers_b[j]
+            # Check if A[i] matches B[j] AND A[j] matches B[i]
+            sim_aj_bi = SequenceMatcher(None, src_aj, src_bi).ratio()
+            sim_ai_bj = SequenceMatcher(None, src_ai, src_bj).ratio()
+            if sim_aj_bi >= similarity_threshold and sim_ai_bj >= similarity_threshold:
+                swap_pairs.add((i, j))
+
+    # Apply swaps: mark both positions as unchanged
+    for i, j in swap_pairs:
+        if i in modified_handlers:
+            modified_handlers.remove(i)
+            unchanged_count += 1
+            # Update detail for position i
+            sim = pair_sim.get(i, 0.0)
+            details[i] = HandlerDiff(index=i, status="unchanged",
+                                     similarity=round(sim, 4),
+                                     source_a=handlers_a[i], source_b=handlers_b[i])
+        if j in modified_handlers:
+            modified_handlers.remove(j)
+            unchanged_count += 1
+            sim = pair_sim.get(j, 0.0)
+            details[j] = HandlerDiff(index=j, status="unchanged",
+                                     similarity=round(sim, 4),
+                                     source_a=handlers_a[j], source_b=handlers_b[j])
 
     overall_sim = unchanged_count / max_count if max_count > 0 else 1.0
 
     return DiffReport(
         handler_count_a=count_a,
         handler_count_b=count_b,
-        new_handlers=new_handlers,
-        removed_handlers=removed_handlers,
-        modified_handlers=modified_handlers,
+        new_handlers=sorted(new_handlers),
+        removed_handlers=sorted(removed_handlers),
+        modified_handlers=sorted(modified_handlers),
         unchanged_count=unchanged_count,
         similarity_score=round(overall_sim, 4),
         details=details,
