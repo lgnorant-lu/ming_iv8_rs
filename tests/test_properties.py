@@ -253,3 +253,43 @@ def test_taint_empty_engine(lines):
     report = engine.analyze()
     assert len(report.sources) == 0
     assert len(report.flows) == 0
+
+
+@given(st.lists(trace_line_4field, min_size=1, max_size=200))
+@settings(max_examples=300)
+def test_cfg_edge_count_bounded(lines):
+    """CFG edge count should never exceed N*N for N nodes."""
+    trace = parse_trace(lines)
+    cfg = CFG.from_trace(trace)
+    n = len(cfg.nodes)
+    assert len(cfg.edges) <= n * n
+
+
+@given(st.lists(trace_line_4field, min_size=3, max_size=200))
+@settings(max_examples=200)
+def test_compress_trace_reduces_or_preserves_count(lines):
+    """compress_trace should not increase entry count vs original."""
+    trace = parse_trace(lines)
+    compressed = compress_trace(trace)
+    assert compressed.total_dispatches <= len(trace.entries)
+
+
+@given(st.lists(trace_line_4field, min_size=1, max_size=300))
+@settings(max_examples=200)
+def test_detect_loops_pc_range(lines):
+    """detect_loops should only report PCs that exist in the trace."""
+    trace = parse_trace(lines)
+    loops = detect_loops(trace, min_iterations=3)
+    trace_pcs = {e.pc for e in trace.entries if e.pc >= 0}
+    for loop in loops:
+        assert loop.pc in trace_pcs, f"loop PC {loop.pc} not in trace"
+
+
+@given(st.lists(trace_line_4field, min_size=1, max_size=200))
+@settings(max_examples=200)
+def test_detect_hotspots_no_overflow(lines):
+    """detect_hotspots should never return more hotspots than unique PCs."""
+    trace = parse_trace(lines)
+    hotspots = detect_hotspots(trace, top_n=50)
+    unique_pcs = len({e.pc for e in trace.entries if e.pc >= 0})
+    assert len(hotspots) <= unique_pcs
