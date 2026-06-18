@@ -2,7 +2,7 @@
 
 > Created: 2026-06-07
 > Status: accepted
-> Scope: post-v0.6 planning, runtime skeletons, tests, and docs
+> Scope: v0.8 planning, runtime skeletons, tests, and docs
 
 ## Purpose
 

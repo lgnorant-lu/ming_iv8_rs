@@ -289,7 +289,7 @@
     "description": "Camellia block cipher (ISO/IEC 18033-3)",
     "category": "symmetric_feistel",
     "behavior_pattern": ["xor", "sub_bytes", "permute", "xor", "rot"],
-    "constants": ["0xA09E667F", "0xB67AE858", "0x3C6EF372", "0xA54FF53A"],
+    "constants": ["0xA09E667F", "0xB67AE858", "0xC6EF372F", "0x54FF53A5"],
     "rounds_options": [18, 24],
     "block_size": 128,
     "notes": "Feistel with FL/FL^-1 layers. Sigma constants derived from SHA-256 IV. Japanese/EU standard (CRYPTREC/NESSIE).",
