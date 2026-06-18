@@ -29,6 +29,7 @@ profile = "release"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["python"]
 markers = [
     "e2e: end-to-end tests (slow)",
     "bench: benchmark tests",
