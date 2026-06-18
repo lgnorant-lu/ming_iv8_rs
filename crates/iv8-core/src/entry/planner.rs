@@ -658,6 +658,13 @@ fn determine_phase_requirements(
             requires_invoke_expr: true,
             requires_post_collection_cleanup: true,
         },
+        StrategyKind::BrowserifyBridge => PhaseRequirements {
+            requires_pre_init_install: false,
+            requires_init_observation: true,
+            requires_armed_transition: false,
+            requires_invoke_expr: true,
+            requires_post_collection_cleanup: true,
+        },
         StrategyKind::RuntimeTransparent => PhaseRequirements {
             requires_pre_init_install: true,
             requires_init_observation: false,

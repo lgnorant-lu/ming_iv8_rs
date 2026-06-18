@@ -280,6 +280,12 @@ fn apply_strategy_prelude(
                             .eval(&prelude, EvalOpts::default())
                             .map_err(|e| format!("dispatch switch prelude: {}", e))?;
                     }
+                    crate::entry::dispatch::DispatchFlavor::ClosureScoped => {
+                        // ClosureScoped dispatch: hook installed after closure capture.
+                        // No prelude to evaluate — runtime proxy cannot observe all calls
+                        // via the standard handler_array_prelude path. This is a known
+                        // limitation; the detection record already warns about it.
+                    }
                     _ => {}
                 }
             }
@@ -658,8 +664,11 @@ fn evidence_satisfied(result: &EntryResult, expected: &[Evidence]) -> bool {
             Evidence::ChunkEvents => result.trace.iter().any(|t| t.starts_with("chunk_")),
             Evidence::EnvReport => result.environment_report.is_some(),
             Evidence::Diagnostics => {
-                !result.diagnostics.sample_signals.is_empty()
-                    || result.diagnostics.selected_strategy_reason.is_some()
+                !result.diagnostics.fallback_attempts.is_empty()
+                    || result.diagnostics.activation_timing.is_some()
+                    || !result.diagnostics.policy_constraints.is_empty()
+                    || result.diagnostics.reload_reason.is_some()
+                    || !result.diagnostic_records.is_empty()  // runtime diagnostic output
             }
             Evidence::EvalSources => result
                 .trace
