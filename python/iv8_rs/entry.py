@@ -102,6 +102,9 @@ class Diagnostics:
 
     @classmethod
     def from_dict(cls, d: dict) -> Diagnostics:
+        # Accept pre-constructed Diagnostics object from Rust (not a dict)
+        if not isinstance(d, dict):
+            return d
         return cls(
             sample_signals=d.get("sample_signals", []),
             selected_strategy_reason=d.get("selected_strategy_reason"),
