@@ -53,7 +53,7 @@ def _parse_entry(raw: str) -> Optional[TraceEntry]:
     Handles two formats:
       4-field (instrument_source / get_unified_trace): "TYPE,pc,target,value"
       3-field (start_recording / stop_recording):       "TYPE,target,value"
-    The 3-field form has no PC; it is detected when the 2nd field is not an int.
+    Detection: after split with maxsplit=3, if there are 4 fields, it's 4-field.
     """
     if not raw or len(raw) < 3:
         return None
@@ -64,24 +64,19 @@ def _parse_entry(raw: str) -> Optional[TraceEntry]:
     if entry_type not in ("D", "R", "C", "W"):
         return None
 
-    # Distinguish 4-field (has integer PC) from 3-field (no PC) format.
-    second = parts[1]
-    is_int_pc = False
-    try:
-        pc = int(second)
-        is_int_pc = True
-    except ValueError:
-        pc = -1
-
-    if is_int_pc:
+    if len(parts) >= 4:
         # 4-field: TYPE,pc,target,value
-        target = parts[2] if len(parts) > 2 else ""
-        value = parts[3] if len(parts) > 3 else ""
+        try:
+            pc = int(parts[1])
+        except ValueError:
+            pc = -1
+        target = parts[2]
+        value = parts[3]
     else:
-        # 3-field: TYPE,target,value  -> re-split with maxsplit=2
-        p3 = raw.split(",", 2)
-        target = p3[1] if len(p3) > 1 else ""
-        value = p3[2] if len(p3) > 2 else ""
+        # 3-field: TYPE,target,value  (no PC; for D entries, second field is opcode)
+        pc = -1
+        target = parts[1]
+        value = parts[2]
 
     return TraceEntry(type=entry_type, pc=pc, target=target, value=value, raw=raw)
 
