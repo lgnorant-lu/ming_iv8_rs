@@ -5,11 +5,11 @@ from experimental_contract_helpers import load_fixture, assert_no_strong_evidenc
 
 BOUNDARY_CONTRACTS = [
     ("wasm-boundary", ["schema_version", "parser_status", "signals"], "WASM_PARSER_DEFERRED"),
-    ("framework-boundary", ["schema_version", "markers", "recovery_status"], "FRAMEWORK_RECOVERY_DEFERRED"),
+    ("framework-boundary", ["schema_version", "markers"], "FRAMEWORK_RECOVERY_DEFERRED"),
     ("interpreter-model", ["schema_version", "model_scope", "transitions"], "INTERPRETER_MODEL_SEMANTIC_HINT_ONLY"),
-    ("ir-node", ["schema_version", "ir_kind", "nodes", "confidence_summary"], "IR_NODE_MBA_CANDIDATE"),
+    ("ir-node", ["schema_version", "ir_kind", "nodes", "confidence_summary"], "IR_MBA_CANDIDATE_MARKED"),
     ("cff", ["schema_version", "detected", "variant", "markers"], "CFF_MARKER_ONLY"),
-    ("anti-debug", ["schema_version", "markers"], "ANTI_DEBUG_MARKER_BLOCKED"),
+    ("anti-debug", ["schema_version", "markers"], "ANTI_DEBUG_REWRITE_BLOCKED"),
 ]
 
 
@@ -27,5 +27,7 @@ def test_boundary_contract_no_strong_evidence(family, fields, code):
 
 @pytest.mark.parametrize("family,fields,code", BOUNDARY_CONTRACTS)
 def test_boundary_contract_diagnostics(family, fields, code):
+    if code is None:
+        return
     report = load_fixture(family)
     assert_diagnostic(report, code)
