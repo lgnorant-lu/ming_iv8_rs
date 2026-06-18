@@ -577,6 +577,9 @@ fn record_strategy_semantics(
         StrategyKind::BrowserifyBridge => &[
             "BrowserifyBridge uses source-text wrap and Function.prototype.call hook for module factory observation.",
         ],
+        StrategyKind::CdpProbe => &[
+            "CdpProbe is a placeholder — Chrome DevTools Protocol remote debugging integration is not yet implemented.",
+        ],
         _ => &[],
     };
 

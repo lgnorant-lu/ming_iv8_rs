@@ -177,3 +177,91 @@ class TestBasicTaint:
         report = engine.analyze()
         assert len(report.sinks) == 1
         assert report.sinks[0].target == "someFunction"
+
+
+class TestIndirectAssignment:
+    """BUG-10: Indirect assignment behavior is a design limitation, not a code bug.
+
+    The taint engine uses value-string matching, not dataflow analysis. Indirect
+    variable assignments (b = a) don't generate trace entries unless the value
+    eventually reaches a proxied property write (W) or call return (C).
+    """
+
+    def test_value_on_stack_but_no_sink(self):
+        """Indirect assignment (b=a): value persists on stack but no W/C → no sink.
+
+        b = a is a JS variable assignment — no Proxy recording entry is generated.
+        The value "Mozilla" stays on the V8 stack (visible in D entries) but
+        without a W or C entry with the matching value, no sink is detected.
+        This is by design: value-matching is not dataflow analysis.
+        """
+        trace = make_trace([
+            ("R", 10, "navigator.userAgent", "Mozilla"),
+            ("D", 20, "5", "3,Mozilla,,"),
+            ("D", 21, "7", "4,Mozilla,42,"),
+        ])
+        engine = TaintEngine(trace, sources={"navigator.userAgent": "Mozilla"})
+        report = engine.analyze()
+
+        assert len(report.sources) == 1
+        assert report.sources[0].value == "Mozilla"
+        assert report.stack_hits["USERAG"] == 2
+        assert len(report.sinks) == 0
+        assert "USERAG" in report.unreached_sources
+
+    def test_indirect_then_write_detected(self):
+        """b = a; c[b] → value reaches W entry → detected.
+
+        If the indirectly-assigned value is eventually written to a proxied
+        property (W entry), the taint engine detects it because the W entry's
+        value string matches the source value.
+        """
+        trace = make_trace([
+            ("R", 10, "navigator.userAgent", "Mozilla/5.0"),
+            ("D", 20, "5", "3,Mozilla/5.0,,"),
+            ("D", 21, "7", "4,Mozilla/5.0,42,"),
+            ("W", 30, "cd[42]", "Mozilla/5.0"),
+        ])
+        engine = TaintEngine(trace, sources={"navigator.userAgent": "Mozilla/5.0"})
+        report = engine.analyze()
+
+        assert len(report.sinks) == 1
+        assert report.sinks[0].target == "cd[42]"
+        assert len(report.flows) == 1
+        assert "USERAG" not in report.unreached_sources
+
+    def test_indirect_then_call_return_match(self):
+        """b = a; sink(b) where sink returns the same value → C entry match.
+
+        The Proxy recording captures the return value of proxied function calls.
+        If a proxied function returns the same value it received, the C entry
+        matches. This is a narrow case — most functions transform their input.
+        """
+        trace = make_trace([
+            ("R", 10, "navigator.userAgent", "Mozilla"),
+            ("D", 20, "5", "3,Mozilla,,"),
+            ("C", 40, "identity", "Mozilla"),
+        ])
+        engine = TaintEngine(trace, sources={"navigator.userAgent": "Mozilla"})
+        report = engine.analyze()
+
+        assert len(report.sinks) == 1
+        assert report.sinks[0].target == "identity"
+
+    def test_indirect_call_return_mismatch(self):
+        """b = a; sink(b) where sink returns something else → NOT detected.
+
+        The C entry records the return value of the proxied call, not the
+        argument. Most functions transform their input, so the C entry value
+        won't match the source value.
+        """
+        trace = make_trace([
+            ("R", 10, "navigator.userAgent", "Mozilla"),
+            ("D", 20, "5", "3,Mozilla,,"),
+            ("C", 40, "sink", "ok"),
+        ])
+        engine = TaintEngine(trace, sources={"navigator.userAgent": "Mozilla"})
+        report = engine.analyze()
+
+        assert len(report.sinks) == 0
+        assert "USERAG" in report.unreached_sources

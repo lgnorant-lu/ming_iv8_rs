@@ -183,6 +183,9 @@ pub mod codes {
     // SourceRegex
     pub const SOURCE_REGEX_PASS_THROUGH: &str = "SOURCE_REGEX_PASS_THROUGH";
 
+    // CdpProbe
+    pub const CDP_PROBE_NOT_IMPLEMENTED: &str = "CDP_PROBE_NOT_IMPLEMENTED";
+
     // SwitchVM
     pub const SWITCHVM_MARKER_ONLY: &str = "SWITCHVM_MARKER_ONLY";
 
@@ -312,6 +315,7 @@ fn rust_diagnostic_codes() -> Vec<String> {
         codes::FALLBACK_USED,
         codes::FALLBACK_EXHAUSTED,
         codes::SOURCE_REGEX_PASS_THROUGH,
+        codes::CDP_PROBE_NOT_IMPLEMENTED,
         codes::SWITCHVM_MARKER_ONLY,
         codes::ENVIRONMENT_GAP_OBSERVED,
         codes::ENVIRONMENT_PATCH_REJECTED,
