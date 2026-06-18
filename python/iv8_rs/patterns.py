@@ -514,20 +514,28 @@ def _extract_trace_values(trace: StructuredTrace) -> Tuple[List[int], List[int],
         val_str = entry.value.strip()
         if not val_str:
             continue
-        try:
-            if val_str.startswith("0x") or val_str.startswith("0X"):
-                v = int(val_str, 16)
-            elif val_str.lstrip("-").isdigit():
-                v = int(val_str)
-                if v < 0:
-                    v = v & 0xFFFFFFFF  # unsigned interpretation
-            else:
+
+        # Handle comma-separated compound values (e.g. D-entry stack values)
+        if "," in val_str:
+            candidates = [p.strip() for p in val_str.split(",") if p.strip()]
+        else:
+            candidates = [val_str]
+
+        for candidate in candidates:
+            try:
+                if candidate.startswith("0x") or candidate.startswith("0X"):
+                    v = int(candidate, 16)
+                elif candidate.lstrip("-").isdigit():
+                    v = int(candidate)
+                    if v < 0:
+                        v = v & 0xFFFFFFFF  # unsigned interpretation
+                else:
+                    continue
+                values.append(v)
+                pcs.append(entry.pc)
+                indices.append(idx)
+            except (ValueError, OverflowError):
                 continue
-            values.append(v)
-            pcs.append(entry.pc)
-            indices.append(idx)
-        except (ValueError, OverflowError):
-            continue
 
     return values, pcs, indices
 
