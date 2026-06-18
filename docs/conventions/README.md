@@ -22,8 +22,9 @@ breaking existing cross-references), but they are all indexed here.
 | 3 | Docs Conventions | `docs/conventions/docs-conventions.md` | docs/ directory structure, file naming, active-vs-legacy policy, cross-reference format |
 | 4 | Commit Conventions | `CONTRIBUTING.md` | Subject format (English, ≤72 chars, scoped), body structure (实施内容/本提交不授权/已执行审阅), scope prefixes |
 | 5 | Testing Conventions | `docs/conventions/testing-conventions.md` | Test layers, naming, assertion patterns, harness design, coverage targets, file organization |
-| 6 | Harness Charter | `docs/quality-harness/HARNESS-CHARTER.md` | Formal Quality Harness (H<NN>) creation criteria, principles, lifecycle, registration |
-| 7 | TODO Index | `docs/todo/README.md` | Cross-module TODO tracking: Bundler / Environment / Native / Infrastructure / Tools / Deobfuscation |
+| 6 | Python Testing Conventions | `docs/conventions/python-testing-conventions.md` | Python test naming, fixtures, pytest patterns, contract tests, hypothesis, import safety |
+| 7 | Harness Charter | `docs/quality-harness/HARNESS-CHARTER.md` | Formal Quality Harness (H<NN>) creation criteria, principles, lifecycle, registration |
+| 8 | TODO Index | `docs/todo/README.md` | Cross-module TODO tracking: Bundler / Environment / Native / Infrastructure / Tools / Deobfuscation |
 
 ## Convention Hierarchy
 

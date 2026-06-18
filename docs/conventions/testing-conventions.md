@@ -281,14 +281,19 @@ must use `eventLoop.advance()` with explicit millisecond values.
 
 ## 8. Python Tests
 
-Python tests (pytest) have their own mature conventions and are not
-restructured in this pass. Rust test conventions do not apply to Python.
+Python tests (pytest) have their own dedicated conventions document:
+`docs/conventions/python-testing-conventions.md`.
 
-The Python test layer is referenced here for completeness:
-- Layer: End-to-End (cross-layer validation)
-- Framework: pytest + hypothesis
-- Location: `tests/*.py`
-- Naming: `test_<capability>.py` (per naming-conventions.md)
+Key rules (see that document for details):
+- File naming: `test_<module>.py`, not version-tagged
+- Import safety: `pytest.importorskip("iv8_rs")` at module level
+- Fixtures: use `conftest.py`, no per-file `ctx` duplication
+- Contract tests: parametrize, merge thin files
+- No `unittest.TestCase`, no `sys.path.insert`
+- Hypothesis: use for invariant testing
+
+The Python test layer is referenced here for completeness. Rust test
+conventions in sections 1-7 and 9-10 do not apply to Python.
 
 ---
 
