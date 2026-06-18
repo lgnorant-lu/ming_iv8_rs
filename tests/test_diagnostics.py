@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import pytest
 
+pytest.importorskip("iv8_rs")
+
 from iv8_rs.diagnostics import (
     EVIDENCE_STRENGTHS,
     DIAGNOSTIC_SEVERITIES,

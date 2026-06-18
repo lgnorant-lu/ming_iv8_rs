@@ -8,6 +8,8 @@ from unittest.mock import patch
 
 import pytest
 
+pytest.importorskip("iv8_rs")
+
 from iv8_rs.trace import (
     CompressedEntry,
     CompressedTrace,
@@ -24,7 +26,7 @@ from iv8_rs.trace import (
 
 
 class TestTraceEntry:
-    def test_construct(self) -> None:
+    def test_construct_minimal_trace_entry(self) -> None:
         e = TraceEntry(type="D", pc=42, target="5", value="3", raw="D,42,5,3")
         assert e.type == "D"
         assert e.pc == 42
@@ -32,28 +34,28 @@ class TestTraceEntry:
         assert e.value == "3"
         assert e.raw == "D,42,5,3"
 
-    def test_is_dispatch(self) -> None:
+    def test_is_dispatch_returns_true_for_d_entry(self) -> None:
         e = TraceEntry(type="D", pc=42, target="5", value="3", raw="D,42,5,3")
         assert e.is_dispatch is True
         assert e.is_read is False
         assert e.is_call is False
         assert e.is_write is False
 
-    def test_is_read(self) -> None:
+    def test_is_read_returns_true_for_r_entry(self) -> None:
         e = TraceEntry(type="R", pc=100, target="x", value="1", raw="R,100,x,1")
         assert e.is_dispatch is False
         assert e.is_read is True
         assert e.is_call is False
         assert e.is_write is False
 
-    def test_is_call(self) -> None:
+    def test_is_call_returns_true_for_c_entry(self) -> None:
         e = TraceEntry(type="C", pc=200, target="fn", value="ok", raw="C,200,fn,ok")
         assert e.is_dispatch is False
         assert e.is_read is False
         assert e.is_call is True
         assert e.is_write is False
 
-    def test_is_write(self) -> None:
+    def test_is_write_returns_true_for_w_entry(self) -> None:
         e = TraceEntry(type="W", pc=300, target="y", value="42", raw="W,300,y,42")
         assert e.is_dispatch is False
         assert e.is_read is False
@@ -65,13 +67,13 @@ class TestTraceEntry:
 
 
 class TestParseEntry:
-    def test_empty_string(self) -> None:
+    def test_parse_entry_empty_string_returns_none(self) -> None:
         assert _parse_entry("") is None
 
-    def test_too_short(self) -> None:
+    def test_parse_entry_too_short_returns_none(self) -> None:
         assert _parse_entry("ab") is None
 
-    def test_less_than_3_parts(self) -> None:
+    def test_parse_entry_less_than_3_parts_returns_none(self) -> None:
         assert _parse_entry("D,1") is None
 
     def test_invalid_type(self) -> None:
@@ -149,7 +151,7 @@ class TestStructuredTrace:
         ])
         assert len(t) == 2
 
-    def test_iter(self) -> None:
+    def test_structured_trace_iter_yields_entries(self) -> None:
         entries = [
             TraceEntry("D", 1, "2", "0", "D,1,2,0"),
             TraceEntry("R", 1, "x", "1", "R,1,x,1"),
