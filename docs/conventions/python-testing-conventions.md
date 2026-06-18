@@ -29,7 +29,7 @@ Examples:
 tests/test_cfg.py                      → python/iv8_rs/cfg.py
 tests/test_taint.py                    → python/iv8_rs/taint.py
 tests/test_isolation.py                → python/iv8_rs/isolation.py
-tests/test_environment_toolchain_candidates.py → python/iv8_rs/environment_toolchain_candidate_mapping.py
+tests/test_environment_toolchain_candidates.py → tests/environment_toolchain/test_environment_toolchain_candidates.py → python/iv8_rs/environment_toolchain_candidate_mapping.py
 tests/test_crypto_detection.py         → python/iv8_rs/patterns.py (crypto detection engine)
 ```
 

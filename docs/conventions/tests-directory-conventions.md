@@ -22,20 +22,22 @@ tests/
   conftest.py                        ← Shared pytest fixtures
   experimental_contract_helpers.py   ← Contract test helpers (schema.json loader)
 
-  # --- Test Files (pytest-collected) ---
+  # --- Subdirectories ---
+  environment_toolchain/             ← 31 environment test files (≥6 threshold)
+  helpers/                           ← 5 shared helper modules (with __init__.py)
+  compat/                            ← Compatibility suite (self-contained)
+  fixtures/                          ← JSON/JS fixture data
+  _archive/                          ← Historical comparison results (gitignored)
+
+  # --- Test Files (pytest-collected, root) ---
   test_smoke.py                      ← M0: basic eval, context lifecycle
   test_api_contract.py               ← API surface behavioral contracts
-  test_cfg.py                        ← Per-module behavioral tests
-  test_taint.py
-  test_isolation.py
-  test_trace.py
+  test_cfg.py, test_taint.py         ← Per-module behavioral tests
+  test_isolation.py, test_trace.py
   test_crypto_detection.py
-  test_crypto_full.py
-  test_cdp.py
-  test_expose.py
-  test_feedback_loop.py
-  test_probe.py
-  test_properties.py                 ← Hypothesis property-based tests
+  test_crypto_full.py, test_cdp.py
+  test_expose.py, test_feedback_loop.py
+  test_probe.py, test_properties.py
   test_typed_array.py
   test_strict_compat_false.py
   test_fingerprint.py
@@ -52,38 +54,6 @@ tests/
   test_witness_reports.py
   test_e2e_pipeline.py
   test_entry_plane.py
-  test_environment_plane.py
-  test_environment_plane_automation.py
-  test_environment_policy.py
-  test_environment_patch_policy.py
-  test_environment_controlled_adaptation.py
-  test_environment_pressure_manifest_smoke.py
-
-  # --- Environment Toolchain (grouped tests) ---
-  test_environment_toolchain_core.py
-  test_environment_toolchain_candidates.py
-  test_environment_toolchain_boundary.py
-  test_environment_toolchain_bridge_contract.py
-  test_environment_toolchain_assets.py
-  test_environment_toolchain_pressure.py
-  test_environment_toolchain_pressure_adaptation.py
-  test_environment_toolchain_pressure_to_plan.py
-  test_environment_toolchain_family_pressure.py
-  test_environment_toolchain_diagnostic.py
-  test_environment_toolchain_dry_run_planning.py
-  test_environment_toolchain_iterative_adaptation.py
-  test_environment_toolchain_native_review.py
-  test_environment_toolchain_probe_packs.py
-  test_environment_toolchain_probe_taxonomy.py
-  test_environment_toolchain_profile_coherence.py
-  test_environment_toolchain_profile_suggestions.py
-  test_environment_toolchain_report_only_runner.py
-  test_environment_toolchain_rollback_diagnostics.py
-  test_environment_toolchain_runner.py
-  test_environment_toolchain_runtime.py
-  test_environment_toolchain_runtime_safe_rerun.py
-  test_environment_toolchain_scaffold_gaps.py
-  test_environment_toolchain_substrate_coverage.py
 
   # --- Parametrized Contract Tests ---
   test_contracts_boundary.py         ← wasm, framework, interpreter, ir, cff, anti-debug
@@ -100,8 +70,7 @@ tests/
   test_string_array_reports_runtime.py
 
   # --- Milestone/Feature Area Tests ---
-  test_m2_features.py
-  test_m2_dom_events.py
+  test_m2_features.py, test_m2_dom_events.py
   test_m4_debugger.py
   test_m5_examples.py
 
@@ -109,11 +78,14 @@ tests/
   test_acceptance_v06.py
   test_acceptance_v07.py
   test_acceptance_v07_real_samples.py
-  test_environment_pilot.py
 
   # --- IDL Probe Tests ---
   test_idl_probe_compatibility.py
   test_idl_probe_generation.py
+
+  # --- Analysis / Entry Plane ---
+  test_analysis.py
+  test_corpus_runner_contract.py
 
   # --- Non-Test Helpers (not pytest-collected) ---
   experimental_contract_helpers.py   ← load_fixture, assert_fields, etc.
