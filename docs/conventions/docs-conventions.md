@@ -19,12 +19,8 @@ docs/
     docs-conventions.md    ← 本文档 (docs/ 自身结构规范)
 
   roadmap/                 ← 路线规划 (按版本组织)
-    README.md              ← 路线图索引
-    CAPABILITY_INDEX.md    ← 能力矩阵
-    EXECUTION_ORDER.md     ← 执行阶段
-    VERSION_SCOPE_MAP.md   ← 版本边界
     v0.8/                  ← v0.8 阶段所有文档
-      shared/              ← 跨轨道 (决策登记/执行协议/治理)
+      shared/              ← 跨轨道: 能力矩阵/执行阶段/版本边界/决策登记/执行协议/治理
       environment/         ← 补環境轨道 (v0.8.0-v0.8.16)
       native-substrate/    ← 原生基板轨道 (v0.8.17-v0.8.53)
       bundles/             ← 多打包轨道 (v0.8.52-v0.8.53)

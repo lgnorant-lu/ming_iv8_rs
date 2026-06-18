@@ -1943,7 +1943,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 - `docs/PROGRESS.md` — 新增 v0.6.x/v0.7.0 章节
 - `docs/roadmap/post-v0.6/CAPABILITY_INDEX.md` — webpack/dispatch/source-ast 三项 accepted
-- `docs/roadmap/post-v0.6/V0.7_ENTRY_SOLIDIFICATION.md` — v0.7 exit gates 定义
+- `docs/roadmap/v0.8/shared/v0.7-entry-solidification.md` — v0.7 exit gates 定义
 - `docs/acceptance/v0.7-real-sample-manifest.md` — 18 fixture 条目
 
 ### Quality Gates
