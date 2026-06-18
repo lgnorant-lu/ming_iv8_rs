@@ -18,11 +18,12 @@ breaking existing cross-references), but they are all indexed here.
 | # | Document | Location | Scope |
 |---|---|---|---|
 | 1 | Execution Protocol | `docs/roadmap/post-v0.6/v0.8-continuous-execution-protocol.md` | Version lifecycle, planning set requirements, commit discipline, review flow, closeout process, cross-version invariants |
-| 2 | Naming Conventions | `docs/roadmap/post-v0.6/naming-conventions.md` | Python module/class/function names, test file names, schema version strings, documentation file names |
-| 3 | Commit Conventions | `CONTRIBUTING.md` | Subject format (English, ≤72 chars, scoped), body structure (实施内容/本提交不授权/已执行审阅), scope prefixes |
-| 4 | Testing Conventions | `docs/conventions/testing-conventions.md` | Test layers, naming, assertion patterns, harness design, coverage targets, file organization |
-| 5 | Harness Charter | `docs/quality-harness/HARNESS-CHARTER.md` | Formal Quality Harness (H<NN>) creation criteria, principles, lifecycle, registration |
-| 6 | TODO Index | `docs/todo/README.md` | Cross-module TODO tracking: Bundler / Environment / Native / Infrastructure / Tools / Deobfuscation |
+| 2 | Naming Conventions | `docs/conventions/naming-conventions.md` | Python module/class/function names, test file names, schema version strings, documentation file names |
+| 3 | Docs Conventions | `docs/conventions/docs-conventions.md` | docs/ directory structure, file naming, active-vs-legacy policy, cross-reference format |
+| 4 | Commit Conventions | `CONTRIBUTING.md` | Subject format (English, ≤72 chars, scoped), body structure (实施内容/本提交不授权/已执行审阅), scope prefixes |
+| 5 | Testing Conventions | `docs/conventions/testing-conventions.md` | Test layers, naming, assertion patterns, harness design, coverage targets, file organization |
+| 6 | Harness Charter | `docs/quality-harness/HARNESS-CHARTER.md` | Formal Quality Harness (H<NN>) creation criteria, principles, lifecycle, registration |
+| 7 | TODO Index | `docs/todo/README.md` | Cross-module TODO tracking: Bundler / Environment / Native / Infrastructure / Tools / Deobfuscation |
 
 ## Convention Hierarchy
 
