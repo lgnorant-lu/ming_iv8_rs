@@ -95,6 +95,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     let java_fn = v8::FunctionTemplate::builder_raw(nav_java_enabled).build(scope);
     let java_name = crate::v8_utils::v8_string(scope, "javaEnabled");
     java_fn.set_class_name(java_name);
+    java_fn.remove_prototype();
     nav_tmpl
         .prototype_template(scope)
         .set(java_name.into(), java_fn.into());
