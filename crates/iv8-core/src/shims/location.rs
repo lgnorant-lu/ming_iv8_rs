@@ -21,7 +21,8 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
                 name.into(),
                 Some(getter),
                 Some(setter),
-                v8::PropertyAttribute::DONT_DELETE,
+                v8::PropertyAttribute::DONT_DELETE
+                    | v8::PropertyAttribute::DONT_ENUM,
             );
         };
         ($name:literal, $getter:ident) => {
@@ -32,7 +33,8 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
                 name.into(),
                 Some(getter),
                 None,
-                v8::PropertyAttribute::DONT_DELETE,
+                v8::PropertyAttribute::DONT_DELETE
+                    | v8::PropertyAttribute::DONT_ENUM,
             );
         };
     }

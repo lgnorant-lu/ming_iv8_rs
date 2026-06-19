@@ -63,7 +63,7 @@ pub fn install_user_agent_data(scope: &v8::PinScope<'_, '_>, navigator: v8::Loca
         scope,
         uad_key.into(),
         uad_obj.into(),
-        v8::PropertyAttribute::DONT_DELETE | v8::PropertyAttribute::READ_ONLY,
+        v8::PropertyAttribute::DONT_DELETE | v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::READ_ONLY,
     );
 }
 
@@ -81,7 +81,7 @@ fn install_getter(
     let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
     let conf_key = crate::v8_utils::v8_string(scope, "configurable");
     desc.set(scope, get_key.into(), getter_fn.into());
-    desc.set(scope, enum_key.into(), v8::Boolean::new(scope, true).into());
+    desc.set(scope, enum_key.into(), v8::Boolean::new(scope, false).into());
     desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
 
     // Call Object.defineProperty(obj, name, desc)

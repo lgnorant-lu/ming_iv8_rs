@@ -59,7 +59,8 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                 name.into(),
                 Some(getter),
                 None,
-                v8::PropertyAttribute::DONT_DELETE,
+                v8::PropertyAttribute::DONT_DELETE
+                    | v8::PropertyAttribute::DONT_ENUM,
             );
         };
     }
@@ -391,7 +392,8 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
                 name.into(),
                 Some(getter),
                 None,
-                v8::PropertyAttribute::DONT_DELETE,
+                v8::PropertyAttribute::DONT_DELETE
+                    | v8::PropertyAttribute::DONT_ENUM,
             );
         };
     }
