@@ -91,6 +91,10 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("serviceWorker", nav_service_worker);
     nav_getter!("pdfViewerEnabled", nav_pdf_viewer_enabled);
 
+    // plugins + mimeTypes: native getters so length is configurable
+    nav_getter!("plugins", nav_plugins);
+    nav_getter!("mimeTypes", nav_mime_types);
+
     // javaEnabled: function that returns false (no Java plugin in V8)
     let java_fn = v8::FunctionTemplate::builder_raw(nav_java_enabled).build(scope);
     let java_name = crate::v8_utils::v8_string(scope, "javaEnabled");
@@ -376,6 +380,83 @@ unsafe extern "C" fn nav_do_not_track(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::null(scope).into());
+    }));
+}
+
+// ─── navigator.plugins / navigator.mimeTypes ──────────────────────────────────
+
+unsafe extern "C" fn nav_mime_types(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let arr = v8::Array::new(scope, 2);
+        let ts = v8::Symbol::get_to_string_tag(scope);
+        let st = |k: &str| crate::v8_utils::v8_string(scope, k);
+
+        let mut make_mt = |typ: &str, suffixes: &str, desc: &str| {
+            let obj = v8::Object::new(scope);
+            obj.set(scope, st("type").into(), st(typ).into());
+            obj.set(scope, st("suffixes").into(), st(suffixes).into());
+            obj.set(scope, st("description").into(), st(desc).into());
+            obj.set(scope, st("enabledPlugin").into(), v8::null(scope).into());
+            obj.set(scope, ts.into(), st("MimeType").into());
+            obj
+        };
+
+        let m1 = make_mt("application/pdf", "pdf", "Portable Document Format");
+        let m2 = make_mt("text/pdf", "pdf", "Portable Document Format");
+        arr.set_index(scope, 0, m1.into());
+        arr.set_index(scope, 1, m2.into());
+        arr.set(scope, ts.into(), st("MimeTypeArray").into());
+        rv.set(arr.into());
+    }));
+}
+
+unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let arr = v8::Array::new(scope, 5);
+        let ts = v8::Symbol::get_to_string_tag(scope);
+
+        let make_mt = |typ: &str, suffixes: &str, desc: &str| {
+            let obj = v8::Object::new(scope);
+            let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+            obj.set(scope, s("type").into(), s(typ).into());
+            obj.set(scope, s("suffixes").into(), s(suffixes).into());
+            obj.set(scope, s("description").into(), s(desc).into());
+            obj.set(scope, s("enabledPlugin").into(), v8::null(scope).into());
+            obj.set(scope, ts.into(), s("MimeType").into());
+            obj
+        };
+
+        let m1 = make_mt("application/pdf", "pdf", "Portable Document Format");
+        let m2 = make_mt("text/pdf", "pdf", "Portable Document Format");
+
+        let plugin_names = [
+            "PDF Viewer",
+            "Chrome PDF Viewer",
+            "Chromium PDF Viewer",
+            "Microsoft Edge PDF Viewer",
+            "WebKit built-in PDF",
+        ];
+
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        for (i, name) in plugin_names.iter().enumerate() {
+            let p = v8::Object::new(scope);
+            p.set(scope, s("name").into(), s(name).into());
+            p.set(scope, s("filename").into(), s("internal-pdf-viewer").into());
+            p.set(scope, s("description").into(), s("Portable Document Format").into());
+            p.set(scope, s("length").into(), v8::Number::new(scope, 2.0).into());
+            p.set(scope, v8::Integer::new(scope, 0).into(), m1.into());
+            p.set(scope, v8::Integer::new(scope, 1).into(), m2.into());
+            p.set(scope, ts.into(), s("Plugin").into());
+            arr.set_index(scope, i as u32, p.into());
+        }
+        arr.set(scope, ts.into(), s("PluginArray").into());
+        rv.set(arr.into());
     }));
 }
 

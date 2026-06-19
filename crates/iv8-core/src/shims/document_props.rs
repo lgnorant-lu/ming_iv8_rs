@@ -8,7 +8,8 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     if (typeof document === 'undefined') return;
 
     // document.cookie (read/write string, multi-cookie support)
-    var _cookies = {};
+    // Store on window to survive page.load() re-evaluation of this IIFE
+    var _cookies = window._iv8CookieStore || (window._iv8CookieStore = {});
     Object.defineProperty(document, 'cookie', {
         get: function() {
             var parts = [];
@@ -307,12 +308,21 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     }
 
     // video.canPlayType / audio.canPlayType: return "probably" for H.264/AAC
+    // Must override on all prototypes that shadow HTMLMediaElement.prototype
+    // (codegen creates HTMLAudioElement/HTMLVideoElement with own canPlayType)
     try {
-        var _origCanPlay = HTMLMediaElement.prototype.canPlayType;
-        HTMLMediaElement.prototype.canPlayType = function(type) {
+        var _mediaCanPlay = HTMLMediaElement.prototype.canPlayType;
+        var _canPlayOverride = function(type) {
             if (/avc1|mp4a|aac|h\.264|h264/i.test(type)) return 'probably';
-            return _origCanPlay.call(this, type);
+            return _mediaCanPlay.call(this, type);
         };
+        HTMLMediaElement.prototype.canPlayType = _canPlayOverride;
+        if (typeof HTMLAudioElement !== 'undefined' && HTMLAudioElement.prototype.canPlayType !== _canPlayOverride) {
+            HTMLAudioElement.prototype.canPlayType = _canPlayOverride;
+        }
+        if (typeof HTMLVideoElement !== 'undefined' && HTMLVideoElement.prototype.canPlayType !== _canPlayOverride) {
+            HTMLVideoElement.prototype.canPlayType = _canPlayOverride;
+        }
     } catch(e) {}
 
     // window.Image constructor (standard DOM API)

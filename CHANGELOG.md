@@ -4,7 +4,24 @@ All notable changes to iv8-rs are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/) and
 [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [0.8.55] - 2026-06-20
+
+> Local milestone: critical detection surface fixes — plugins/mimeTypes native getter, canPlayType override
+
+### Fixed
+- fix(shims): migrate navigator.plugins/mimeTypes from JS to native Rust getters (native_env.rs)
+  - Pre-populated PluginArray (5 PDF plugin entries) + MimeTypeArray (2 MimeType entries)
+  - Symbol.toStringTag: 'PluginArray' / 'MimeTypeArray' set on native Arrays
+  - Bypasses JS-level `Object.defineProperty(length)` failure on non-configurable Array.length
+  - Fixes b24 (mimeTypes tag) + closes the universal test gap across 11 test suites
+- fix(shims): HTMLMediaElement.canPlayType override also applies to HTMLAudioElement/HTMLVideoElement
+  - codegen creates AudioElement/VideoElement with own canPlayType shadowing MediaElement.prototype
+  - Applied override to all 3 prototypes; returns 'probably' for H.264/AAC codecs
+  - Fixes b26 (audio/mp4 canPlayType) in fingerprint_js 62-check suite
+
+### Changed
+- docs(PROGRESS.md): updated to 2026-06-20
+- docs(TODO-native.md): R11 audit, plugins/mimeTypes marked done, canPlayType added
 
 ## [0.8.54] - 2026-06-19
 
