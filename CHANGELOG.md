@@ -6,30 +6,39 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
-## [0.8.54] - 2026-06-18
+## [0.8.54] - 2026-06-19
 
-> Local milestone: bug-fix, coverage consolidation, v0.9 research incubation
+> Local milestone: bug-fix, coverage consolidation, v0.9 research incubation, environment gap diagnosis
 
 ### Added
 - Python coverage: 52% → 97% (1787 tests, 19 files at 100%)
 - New test files: trace.py, diagnostics.py, probe.py, experimental_report.py, analysis/
 - CdpProbe strategy diagnostic record
 - pytest pythonpath config for iv8_rs import
-- v0.9 research documents (15 files, docs/roadmap/v0.9/):
+- v0.9 research documents (16 files, docs/roadmap/v0.9/):
   - dynamic-analysis-research-map.md: capability map, evidence matrix, fit matrix, deep-dives
   - dynamic/ dossier index + 11 per-module anti-hardening dossiers
   - dynamic/ evaluation-standards.md + _TEMPLATE.md
   - v0.9 stage README
+  - detection-surface-taxonomy.md: 11 Category + 2 Meta detection surface classification
 - TODO-dynamic-analysis.md: Branch B dynamic-analysis track (unscheduled)
 - VERSION_SCOPE_MAP.md: extended with v0.9+ scope, capability placement table
-- Workbench compliance: TODO-tools-maintenance R6 (scaffolding remnants + codegen template fix)
-- Workbench compliance: TODO-native R7 (L3 dead code inventory, 11 items)
+- TODO-native.md R8-R10: Navigator prototype chain gap + codegen skeleton audit + cross-layer coupling + CreepJS lie detection matrix + VFT-01~05 verification + document.cookie lifecycle gap
+- TODO-tools-maintenance.md R10: sccache 0.15.0 compilation cache + version numbering
+- MimeTypeArray/PluginArray Symbol.toStringTag + window.Image constructor (document_props.rs)
 
 ### Changed
 - Toolchain: rustc 1.95.0 → 1.96.0
-- PROGRESS.md: v0.8.54 milestone expanded with v0.9 research + workspace audit
+- PROGRESS.md: v0.8.54 milestone expanded with v0.9 research + workspace audit + environment fixes
+- Workbench compliance: TODO-tools-maintenance R6 (scaffolding remnants + codegen template fix)
+- Workbench compliance: TODO-native R7 (L3 dead code inventory, 11 items)
+- CHANGELOG.md: v0.8.54 date bumped to 2026-06-19
 
 ### Fixed
+- Navigator/Screen/Location prototype getter enumerable=false (PropertyAttribute DONT_DELETE → DONT_DELETE|DONT_ENUM)
+- FunctionTemplate getter prototype property removal via remove_prototype() (CreepJS: 33→3 lies)
+- javaEnabled FunctionTemplate remove_prototype()
+- user_agent_data getter enumerable=false + remove_prototype
 - BUG-17: _parse_entry() 3-field D entry corruption (Critical)
 - BUG-5: detect_all() proximity boost cap (High)
 - BUG-3: _extract_trace_values() comma-split gap (High)
@@ -46,6 +55,9 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 ### Quality Gates
 - `cargo check --workspace --jobs 1`: zero errors (rustc 1.96.0)
 - `maturin develop`: ok (iv8-rs 0.8.11, Python 3.13)
+- VFT-01~05: 5/5 PASS
+- CreepJS lie detection: 3/33 Navigator+Screen lies (setTimeout/setInterval V8 built-in, javaEnabled fixed)
+- fingerprint_js (VexTrio): 36/38 PASS (2 engine-level limitations)
 - `pytest tests/`: 1787 passed, 3 failed (pre-existing JSContext issues)
 
 ## [0.8.53] - 2026-06-17
