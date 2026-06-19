@@ -280,6 +280,41 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         } catch(e) {}
     }
 
+    // Inject PDF Plugin items if plugins/mimeTypes exist but are empty
+    if (typeof navigator !== 'undefined' && navigator.plugins && navigator.plugins.length === 0) {
+        try {
+            var _m1 = { type: 'application/pdf', suffixes: 'pdf', description: 'Portable Document Format', enabledPlugin: null };
+            Object.defineProperty(_m1, Symbol.toStringTag, { value: 'MimeType', configurable: true });
+            var _m2 = { type: 'text/pdf', suffixes: 'pdf', description: 'Portable Document Format', enabledPlugin: null };
+            Object.defineProperty(_m2, Symbol.toStringTag, { value: 'MimeType', configurable: true });
+            if (navigator.mimeTypes && navigator.mimeTypes.length === 0) {
+                navigator.mimeTypes[0] = _m1; navigator.mimeTypes[1] = _m2;
+                Object.defineProperty(navigator.mimeTypes, 'length', { value: 2, writable: true, configurable: true });
+            }
+            var _pls = [
+                { name: 'PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
+                { name: 'Chrome PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
+                { name: 'Chromium PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
+                { name: 'Microsoft Edge PDF Viewer', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
+                { name: 'WebKit built-in PDF', filename: 'internal-pdf-viewer', description: 'Portable Document Format', 0: _m1, 1: _m2, length: 2 },
+            ];
+            for (var i = 0; i < _pls.length; i++) {
+                navigator.plugins[i] = _pls[i];
+                Object.defineProperty(_pls[i], Symbol.toStringTag, { value: 'Plugin', configurable: true });
+            }
+            Object.defineProperty(navigator.plugins, 'length', { value: 5, writable: true, configurable: true });
+        } catch(e) {}
+    }
+
+    // video.canPlayType / audio.canPlayType: return "probably" for H.264/AAC
+    try {
+        var _origCanPlay = HTMLMediaElement.prototype.canPlayType;
+        HTMLMediaElement.prototype.canPlayType = function(type) {
+            if (/avc1|mp4a|aac|h\.264|h264/i.test(type)) return 'probably';
+            return _origCanPlay.call(this, type);
+        };
+    } catch(e) {}
+
     // window.Image constructor (standard DOM API)
     if (typeof Image === 'undefined') {
         window.Image = function Image(width, height) {
