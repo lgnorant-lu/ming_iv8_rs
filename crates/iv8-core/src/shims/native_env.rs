@@ -55,6 +55,9 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
             let name = crate::v8_utils::v8_string(scope, $name);
             // Set the getter's name so toString() returns "function <name>() { [native code] }"
             getter.set_class_name(name);
+            // Remove prototype so the getter is not constructible
+            // (matches real Chrome: navigator.userAgent getter has no prototype)
+            getter.remove_prototype();
             nav_tmpl.prototype_template(scope).set_accessor_property(
                 name.into(),
                 Some(getter),
@@ -388,6 +391,7 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
             let getter = v8::FunctionTemplate::builder_raw($cb).build(scope);
             let name = crate::v8_utils::v8_string(scope, $name);
             getter.set_class_name(name);
+            getter.remove_prototype();
             screen_tmpl.prototype_template(scope).set_accessor_property(
                 name.into(),
                 Some(getter),

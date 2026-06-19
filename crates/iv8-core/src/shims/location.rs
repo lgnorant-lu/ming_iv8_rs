@@ -14,8 +14,10 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
         ($name:literal, $getter:ident, $setter:ident) => {
             let getter = v8::FunctionTemplate::builder_raw($getter).build(scope);
             getter.set_class_name(crate::v8_utils::v8_string(scope, $name));
+            getter.remove_prototype();
             let setter = v8::FunctionTemplate::builder_raw($setter).build(scope);
             setter.set_class_name(crate::v8_utils::v8_string(scope, $name));
+            setter.remove_prototype();
             let name = crate::v8_utils::v8_string(scope, $name);
             loc_tmpl.prototype_template(scope).set_accessor_property(
                 name.into(),
@@ -28,6 +30,7 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
         ($name:literal, $getter:ident) => {
             let getter = v8::FunctionTemplate::builder_raw($getter).build(scope);
             getter.set_class_name(crate::v8_utils::v8_string(scope, $name));
+            getter.remove_prototype();
             let name = crate::v8_utils::v8_string(scope, $name);
             loc_tmpl.prototype_template(scope).set_accessor_property(
                 name.into(),

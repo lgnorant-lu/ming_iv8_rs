@@ -21,16 +21,19 @@ pub fn install_user_agent_data(scope: &v8::PinScope<'_, '_>, navigator: v8::Loca
     let brands_tmpl = v8::FunctionTemplate::builder_raw(uad_brands_getter).build(scope);
     let brands_name = crate::v8_utils::v8_string(scope, "brands");
     brands_tmpl.set_class_name(brands_name);
+    brands_tmpl.remove_prototype();
 
     // mobile getter
     let mobile_tmpl = v8::FunctionTemplate::builder_raw(uad_mobile_getter).build(scope);
     let mobile_name = crate::v8_utils::v8_string(scope, "mobile");
     mobile_tmpl.set_class_name(mobile_name);
+    mobile_tmpl.remove_prototype();
 
     // platform getter
     let platform_tmpl = v8::FunctionTemplate::builder_raw(uad_platform_getter).build(scope);
     let platform_name = crate::v8_utils::v8_string(scope, "platform");
     platform_tmpl.set_class_name(platform_name);
+    platform_tmpl.remove_prototype();
 
     // Install as accessor properties on uad_obj
     // Use defineProperty with getter descriptor
@@ -42,6 +45,7 @@ pub fn install_user_agent_data(scope: &v8::PinScope<'_, '_>, navigator: v8::Loca
     let ghev_tmpl = v8::FunctionTemplate::builder_raw(uad_get_high_entropy_values).build(scope);
     let ghev_name = crate::v8_utils::v8_string(scope, "getHighEntropyValues");
     ghev_tmpl.set_class_name(ghev_name);
+    ghev_tmpl.remove_prototype();
     let ghev_fn = crate::v8_utils::v8_fn(scope, &ghev_tmpl);
     uad_obj.set(scope, ghev_name.into(), ghev_fn.into());
 
@@ -49,6 +53,7 @@ pub fn install_user_agent_data(scope: &v8::PinScope<'_, '_>, navigator: v8::Loca
     let to_json_tmpl = v8::FunctionTemplate::builder_raw(uad_to_json).build(scope);
     let to_json_name = crate::v8_utils::v8_string(scope, "toJSON");
     to_json_tmpl.set_class_name(to_json_name);
+    to_json_tmpl.remove_prototype();
     let to_json_fn = crate::v8_utils::v8_fn(scope, &to_json_tmpl);
     uad_obj.set(scope, to_json_name.into(), to_json_fn.into());
 
