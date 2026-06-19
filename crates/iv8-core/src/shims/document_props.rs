@@ -252,6 +252,44 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         } catch(e) {}
     }
 
+    // MimeTypeArray / PluginArray prototype tags
+    // Real Chrome: Object.prototype.toString.call(mimeTypes) === '[object MimeTypeArray]'
+    if (typeof navigator !== 'undefined' && navigator.mimeTypes) {
+        try {
+            var mta = navigator.mimeTypes;
+            Object.defineProperty(mta, Symbol.toStringTag, {value: 'MimeTypeArray', configurable: true});
+            if (!mta.item) mta.item = function(i) { return this[i] || null; };
+            if (!mta.namedItem) mta.namedItem = function(n) { for (var i=0;i<this.length;i++) if (this[i].type===n) return this[i]; return null; };
+        } catch(e) {}
+    }
+    if (typeof navigator !== 'undefined' && navigator.plugins) {
+        try {
+            var pa = navigator.plugins;
+            Object.defineProperty(pa, Symbol.toStringTag, {value: 'PluginArray', configurable: true});
+            if (!pa.item) pa.item = function(i) { return this[i] || null; };
+            if (!pa.namedItem) pa.namedItem = function(n) { for (var i=0;i<this.length;i++) if (this[i].name===n) return this[i]; return null; };
+            if (!pa.refresh) pa.refresh = function() {};
+            for (var i = 0; i < pa.length; i++) {
+                if (pa[i] && typeof pa[i] === 'object') {
+                    try {
+                        Object.defineProperty(pa[i], Symbol.toStringTag, {value: 'Plugin', configurable: true});
+                        if (!pa[i].item) pa[i].item = function(j) { return this[j] || null; };
+                    } catch(e) {}
+                }
+            }
+        } catch(e) {}
+    }
+
+    // window.Image constructor (standard DOM API)
+    if (typeof Image === 'undefined') {
+        window.Image = function Image(width, height) {
+            var img = document.createElement('img');
+            if (width !== undefined) img.width = width;
+            if (height !== undefined) img.height = height;
+            return img;
+        };
+    }
+
     // requestIdleCallback / cancelIdleCallback
     if (typeof requestIdleCallback === 'undefined') {
         globalThis.requestIdleCallback = function requestIdleCallback(callback, options) {
