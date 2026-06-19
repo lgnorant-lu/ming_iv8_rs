@@ -8,13 +8,26 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [0.8.54] - 2026-06-18
 
-> Local milestone: bug-fix and coverage consolidation sprint
+> Local milestone: bug-fix, coverage consolidation, v0.9 research incubation
 
 ### Added
-- Python coverage: 52% → 93% (1709 tests, 18 files at 100%)
-- New test files: trace.py, diagnostics.py, probe.py, experimental_report.py
+- Python coverage: 52% → 97% (1787 tests, 19 files at 100%)
+- New test files: trace.py, diagnostics.py, probe.py, experimental_report.py, analysis/
 - CdpProbe strategy diagnostic record
 - pytest pythonpath config for iv8_rs import
+- v0.9 research documents (15 files, docs/roadmap/v0.9/):
+  - dynamic-analysis-research-map.md: capability map, evidence matrix, fit matrix, deep-dives
+  - dynamic/ dossier index + 11 per-module anti-hardening dossiers
+  - dynamic/ evaluation-standards.md + _TEMPLATE.md
+  - v0.9 stage README
+- TODO-dynamic-analysis.md: Branch B dynamic-analysis track (unscheduled)
+- VERSION_SCOPE_MAP.md: extended with v0.9+ scope, capability placement table
+- Workbench compliance: TODO-tools-maintenance R6 (scaffolding remnants + codegen template fix)
+- Workbench compliance: TODO-native R7 (L3 dead code inventory, 11 items)
+
+### Changed
+- Toolchain: rustc 1.95.0 → 1.96.0
+- PROGRESS.md: v0.8.54 milestone expanded with v0.9 research + workspace audit
 
 ### Fixed
 - BUG-17: _parse_entry() 3-field D entry corruption (Critical)
@@ -28,10 +41,12 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - 7 doc cross-reference issues (C1-C7)
 - 9 pre-existing test failures (entry/env_toolchain/hypothesis)
 - Test convention compliance: 4 files remediated (importorskip, naming, sys.path)
+- Broken toolchain recovery after partial rustup update (rustc 1.95→1.96 with sysroot corruption)
 
 ### Quality Gates
-- `cargo check -p iv8-core`: zero errors
-- `pytest tests/ --ignore=tests/compat`: 1709 passed, 3 failed (pre-existing JSContext issues)
+- `cargo check --workspace --jobs 1`: zero errors (rustc 1.96.0)
+- `maturin develop`: ok (iv8-rs 0.8.11, Python 3.13)
+- `pytest tests/`: 1787 passed, 3 failed (pre-existing JSContext issues)
 
 ## [0.8.53] - 2026-06-17
 
