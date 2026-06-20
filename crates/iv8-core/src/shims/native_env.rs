@@ -193,7 +193,10 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
 }
 
 // v0.8.62: conditionally hide platform-dependent Navigator properties
-// based on BrowserProfile flags (mobile_profile, chrome_version).
+// based on BrowserProfile flags (mobile_profile).
+// NOTE: webkitGetUserMedia was in original scope but is a global constructor
+// (chrome_extensions.rs), not a Navigator property. Removed from conditional set.
+// chrome_version flag retained in BrowserProfile for future use.
 fn conditionally_hide_properties(
     scope: &v8::PinScope<'_, '_>,
     nav_obj: v8::Local<v8::Object>,
@@ -216,18 +219,6 @@ fn conditionally_hide_properties(
                 v8::PropertyAttribute::DONT_ENUM,
             );
         }
-    }
-
-    // Chrome > 90: hide legacy webkit-prefixed API
-    if profile.chrome_version > 90 {
-        let undef = v8::undefined(scope);
-        let key = crate::v8_utils::v8_string(scope, "webkitGetUserMedia");
-        nav_obj.define_own_property(
-            scope,
-            key.into(),
-            undef.into(),
-            v8::PropertyAttribute::DONT_ENUM,
-        );
     }
 }
 

@@ -264,13 +264,7 @@ fn test_conditional_vibrate_hidden_on_desktop() {
     common::assert_js_str(&mut k, "typeof navigator.vibrate", "undefined");
 }
 
-#[test]
-fn test_conditional_webkit_get_user_media_hidden_chrome_131() {
-    let mut k = common::make_kernel();
-    common::assert_js_str(&mut k, "typeof navigator.webkitGetUserMedia", "undefined");
-}
-
-// Mobile profile: share/canShare/vibrate visible
+// Mobile profile: share/canShare visible
 #[test]
 fn test_conditional_share_visible_on_mobile() {
     use iv8_core::shims::browser_profile::BrowserProfile;
@@ -283,3 +277,4 @@ fn test_conditional_share_visible_on_mobile() {
     common::assert_js_str(&mut k, "typeof navigator.share", "function");
     common::assert_js_str(&mut k, "typeof navigator.canShare", "function");
 }
+
