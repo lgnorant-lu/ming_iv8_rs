@@ -200,13 +200,13 @@ fn test_navigator_default_profile_equivalence() {
     assert!(!lang.is_empty(), "default language is empty");
 }
 
-// v0.8.58 generated skeletons: codegen output verification.
-// These properties are generated with Object::new but not yet installed
-// because native_env replaces the generated Navigator. v0.8.59 will
-// expose them via augment mode.
+// v0.8.59: generated Navigator merge deferred.
+// Generated properties (bluetooth, hid, usb, gpu) are still "undefined"
+// because env_inject replaces the generated Navigator before install_native_env
+// runs. Proper augment requires init chain restructuring — deferred to v0.8.60.
 
 #[test]
-fn test_navigator_generated_skeleton_not_installed_yet() {
+fn test_navigator_generated_skeleton_not_yet_visible() {
     let mut k = common::make_kernel();
     common::assert_js_str(&mut k, "typeof navigator.bluetooth", "undefined");
     common::assert_js_str(&mut k, "typeof navigator.hid", "undefined");
