@@ -53,20 +53,14 @@ const DOCUMENT_WRITE_SHIM: &str = r#"
 /// Minimal TextEncoder/TextDecoder polyfill for V8.
 ///
 /// The generated IDL surface (iv8-surface) installs `TextEncoder`/`TextDecoder`
-/// constructors with the correct class name + Symbol.toStringTag for
-/// fingerprint fidelity, but their `encode`/`decode` methods are non-functional
-/// skeletons that return `null`. We therefore (a) define the constructors if
-/// they are entirely absent, and (b) ALWAYS install working `encode`/`decode`
-/// prototype methods so they produce real Uint8Array / string results.
+/// constructors with correct class name + toStringTag for fingerprint fidelity,
+/// but their `encode`/`decode` methods are non-functional skeletons (returned
+/// `v8::null` via `default_value_for_type` before the v0.8.63 type_conv fix).
+/// This shim overrides the prototype methods unconditionally so they produce
+/// real Uint8Array / string results regardless of which constructor is in use.
 const TEXT_ENCODER_SHIM: &str = r#"
 (function() {
-    if (typeof TextEncoder === 'undefined') {
-        globalThis.TextEncoder = function TextEncoder() {};
-    }
-    if (typeof TextDecoder === 'undefined') {
-        globalThis.TextDecoder = function TextDecoder() {};
-    }
-    // Always override the (possibly skeleton) prototype methods with working ones.
+    // Override the (possibly skeleton) prototype methods with working ones.
     TextEncoder.prototype.encode = function(str) {
         str = str === undefined ? '' : String(str);
         var arr = [];

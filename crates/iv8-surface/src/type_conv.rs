@@ -34,6 +34,36 @@ pub fn default_value_for_type<'s>(
             .map(|s| s.into())
             .unwrap_or_else(|| v8::undefined(scope).into()),
         "undefined" | "void" => v8::undefined(scope).into(),
+        // Typed array / buffer-source types: return empty typed arrays instead
+        // of null. The generated IDL surface uses these for getters/methods
+        // that return typed arrays; a null return would break any call chain
+        // that expects a real typed-array instance (e.g. TextEncoder.encode
+        // feeding into crypto.subtle.digest).
+        "ArrayBuffer" => {
+            let store = v8::ArrayBuffer::new_backing_store_from_vec(vec![]);
+            v8::ArrayBuffer::with_backing_store(scope, &store.into()).into()
+        }
+        "Int8Array" | "Uint8Array" | "Uint8ClampedArray" | "Int16Array"
+        | "Uint16Array" | "Int32Array" | "Uint32Array" | "Float32Array"
+        | "Float64Array" | "BigInt64Array" | "BigUint64Array" | "DataView" => {
+            // Construct an empty typed array via the global constructor.
+            // new <Type>(0) gives a zero-length instance of the right class.
+            let global = scope.get_current_context().global(scope);
+            if let Some(name) = v8::String::new(scope, type_name) {
+                if let Some(ctor) = global.get(scope, name.into()) {
+                    if ctor.is_function() {
+                        let ctor_fn: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(ctor) };
+                        if let Some(result) =
+                            ctor_fn.new_instance(scope, &[v8::Integer::new(scope, 0).into()])
+                        {
+                            return result.into();
+                        }
+                    }
+                }
+            }
+            v8::null(scope).into()
+        }
         _ => v8::null(scope).into(),
     }
 }
