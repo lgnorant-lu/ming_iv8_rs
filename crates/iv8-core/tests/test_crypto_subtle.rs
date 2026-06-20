@@ -566,3 +566,216 @@ fn subtle_digest_sha256_roundtrip() {
         RustValue::Bool(true)
     );
 }
+
+// ─── ECDSA sign/verify ──────────────────────────────────────────────────────
+
+#[test]
+fn subtle_ecdsa_sign_verify_roundtrip() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.ecdsaOk = null;
+        globalThis.ecdsaErr = null;
+        var data = new TextEncoder().encode('ECDSA test data');
+        crypto.subtle.generateKey({name: 'ECDSA', namedCurve: 'P-256'}, false, ['sign', 'verify'])
+            .then(function(keyPair) {
+                return crypto.subtle.sign({name: 'ECDSA', hash: 'SHA-256'}, keyPair.privateKey, data)
+                    .then(function(sig) {
+                        return crypto.subtle.verify({name: 'ECDSA', hash: 'SHA-256'}, keyPair.publicKey, sig, data);
+                    });
+            })
+            .then(function(valid) {
+                globalThis.ecdsaOk = valid;
+            })
+            .catch(function(e) {
+                globalThis.ecdsaErr = e.message || String(e);
+            });
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.ecdsaOk"),
+        RustValue::Bool(true)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.ecdsaErr"),
+        RustValue::Null
+    );
+}
+
+#[test]
+fn subtle_ecdsa_generate_key_returns_crypto_key_pair() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.ecdsaKeyPairOk = null;
+        crypto.subtle.generateKey({name: 'ECDSA', namedCurve: 'P-256'}, false, ['sign', 'verify'])
+            .then(function(keyPair) {
+                globalThis.ecdsaKeyPairOk = keyPair.publicKey.type === 'public'
+                    && keyPair.privateKey.type === 'private';
+            });
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.ecdsaKeyPairOk"),
+        RustValue::Bool(true)
+    );
+}
+
+#[test]
+fn subtle_ecdsa_generate_key_returns_promise() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        "crypto.subtle.generateKey({name:'ECDSA',namedCurve:'P-256'}, false, ['sign','verify']) instanceof Promise",
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
+
+// ─── ECDH deriveBits ────────────────────────────────────────────────────────
+
+#[test]
+fn subtle_ecdh_derive_bits() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.ecdhLen = null;
+        globalThis.ecdhErr = null;
+        crypto.subtle.generateKey({name: 'ECDH', namedCurve: 'P-256'}, true, ['deriveBits'])
+            .then(function(keyPair1) {
+                return crypto.subtle.generateKey({name: 'ECDH', namedCurve: 'P-256'}, true, ['deriveBits'])
+                    .then(function(keyPair2) {
+                        return crypto.subtle.deriveBits(
+                            {name: 'ECDH', public: keyPair2.publicKey},
+                            keyPair1.privateKey,
+                            256
+                        );
+                    });
+            })
+            .then(function(derived) {
+                globalThis.ecdhLen = new Uint8Array(derived).length;
+            })
+            .catch(function(e) {
+                globalThis.ecdhErr = e.message || String(e);
+            });
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.ecdhLen"),
+        RustValue::Int(32)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.ecdhErr"),
+        RustValue::Null
+    );
+}
+
+#[test]
+fn subtle_ecdh_generate_key_returns_promise() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        "crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'}, false, ['deriveBits']) instanceof Promise",
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
+
+#[test]
+fn subtle_ecdh_derive_bits_returns_promise() {
+    let mut kernel = common::make_kernel();
+    // deriveBits should return a Promise even with minimal arguments
+    let result = kernel.eval_to_rust_value(
+        "crypto.subtle.deriveBits({name:'ECDH'}, null, 256) instanceof Promise",
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
+
+// ─── RSA-OAEP encrypt/decrypt ───────────────────────────────────────────────
+
+#[test]
+fn subtle_rsa_oaep_encrypt_decrypt_roundtrip() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.rsaResult = null;
+        globalThis.rsaErr = null;
+        crypto.subtle.generateKey({name: 'RSA-OAEP', modulusLength: 2048, hash: 'SHA-256'}, true, ['encrypt', 'decrypt'])
+            .then(function(keyPair) {
+                var data = new TextEncoder().encode('RSA-OAEP test');
+                return crypto.subtle.encrypt({name: 'RSA-OAEP'}, keyPair.publicKey, data)
+                    .then(function(ct) {
+                        return crypto.subtle.decrypt({name: 'RSA-OAEP'}, keyPair.privateKey, ct)
+                            .then(function(pt) {
+                                globalThis.rsaResult = new TextDecoder().decode(new Uint8Array(pt));
+                            });
+                    });
+            })
+            .catch(function(e) {
+                globalThis.rsaErr = e.message || String(e);
+            });
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.rsaResult"),
+        RustValue::String("RSA-OAEP test".into())
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.rsaErr"),
+        RustValue::Null
+    );
+}
+
+#[test]
+fn subtle_rsa_oaep_generate_key_returns_crypto_key_pair() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.rsaKeyPairOk = null;
+        crypto.subtle.generateKey({name: 'RSA-OAEP', modulusLength: 2048, hash: 'SHA-256'}, false, ['encrypt', 'decrypt'])
+            .then(function(keyPair) {
+                globalThis.rsaKeyPairOk = keyPair.publicKey.type === 'public'
+                    && keyPair.privateKey.type === 'private';
+            });
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.rsaKeyPairOk"),
+        RustValue::Bool(true)
+    );
+}
+
+#[test]
+fn subtle_rsa_oaep_generate_key_returns_promise() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        "crypto.subtle.generateKey({name:'RSA-OAEP',modulusLength:2048,hash:'SHA-256'}, false, ['encrypt','decrypt']) instanceof Promise",
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
+
+#[test]
+fn subtle_rsa_oaep_encrypt_returns_promise() {
+    let mut kernel = common::make_kernel();
+    // encrypt with null key should still return a Promise (may reject)
+    let result = kernel.eval_to_rust_value(
+        "crypto.subtle.encrypt({name:'RSA-OAEP'}, null, new Uint8Array(0)) instanceof Promise",
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
