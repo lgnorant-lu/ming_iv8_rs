@@ -96,6 +96,32 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("plugins", nav_plugins);
     nav_getter!("mimeTypes", nav_mime_types);
 
+    // connection — NetworkInformation-like accessor getter
+    nav_getter!("connection", nav_connection);
+
+    // getBattery: function returning Promise<BatteryManager>
+    let battery_fn = v8::FunctionTemplate::builder_raw(nav_get_battery).build(scope);
+    let battery_name = crate::v8_utils::v8_string(scope, "getBattery");
+    battery_fn.set_class_name(battery_name);
+    battery_fn.remove_prototype();
+    nav_tmpl.prototype_template(scope).set(battery_name.into(), battery_fn.into());
+
+    // sendBeacon: function returning true
+    let beacon_fn = v8::FunctionTemplate::builder_raw(nav_send_beacon).build(scope);
+    let beacon_name = crate::v8_utils::v8_string(scope, "sendBeacon");
+    beacon_fn.set_class_name(beacon_name);
+    beacon_fn.remove_prototype();
+    nav_tmpl.prototype_template(scope).set(beacon_name.into(), beacon_fn.into());
+
+    // geolocation — accessor getter returning object with stub methods
+    nav_getter!("geolocation", nav_geolocation);
+
+    // clipboard — accessor getter returning object with stub methods
+    nav_getter!("clipboard", nav_clipboard);
+
+    // credentials — accessor getter returning object with stub methods
+    nav_getter!("credentials", nav_credentials);
+
     // javaEnabled: function that returns false (no Java plugin in V8)
     let java_fn = v8::FunctionTemplate::builder_raw(nav_java_enabled).build(scope);
     let java_name = crate::v8_utils::v8_string(scope, "javaEnabled");
@@ -380,6 +406,126 @@ unsafe extern "C" fn nav_do_not_track(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::null(scope).into());
+    }));
+}
+
+// navigator.connection → NetworkInformation-like accessor getter
+unsafe extern "C" fn nav_connection(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        obj.set(scope, s("effectiveType").into(), s("4g").into());
+        obj.set(scope, s("downlink").into(), v8::Number::new(scope, 10.0).into());
+        obj.set(scope, s("rtt").into(), v8::Number::new(scope, 50.0).into());
+        obj.set(scope, s("saveData").into(), v8::Boolean::new(scope, false).into());
+        obj.set(scope, s("type").into(), s("wifi").into());
+        let ts = v8::Symbol::get_to_string_tag(scope);
+        obj.set(scope, ts.into(), s("NetworkInformation").into());
+        rv.set(obj.into());
+    }));
+}
+
+// navigator.getBattery() → Promise<{charging, chargingTime, dischargingTime, level}>
+unsafe extern "C" fn nav_get_battery(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let result = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        result.set(scope, s("charging").into(), v8::Boolean::new(scope, true).into());
+        result.set(scope, s("chargingTime").into(), v8::Number::new(scope, 0.0).into());
+        result.set(scope, s("dischargingTime").into(), v8::Number::new(scope, f64::INFINITY).into());
+        result.set(scope, s("level").into(), v8::Number::new(scope, 1.0).into());
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        resolver.resolve(scope, result.into());
+        rv.set(resolver.get_promise(scope).into());
+    }));
+}
+
+// navigator.sendBeacon(url, data) → true
+unsafe extern "C" fn nav_send_beacon(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, true).into());
+    }));
+}
+
+// Single no-op callback shared by stub methods (geolocation, clipboard, credentials)
+unsafe extern "C" fn stub_noop(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        // intentionally empty — stub method, returns undefined
+    }));
+}
+
+// navigator.geolocation → object with stub methods
+unsafe extern "C" fn nav_geolocation(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let build_stub = |name: &str| {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+            let name_str = crate::v8_utils::v8_string(scope, name);
+            tmpl.set_class_name(name_str);
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("getCurrentPosition").into(), build_stub("getCurrentPosition").into());
+        obj.set(scope, s("watchPosition").into(), build_stub("watchPosition").into());
+        obj.set(scope, s("clearWatch").into(), build_stub("clearWatch").into());
+        rv.set(obj.into());
+    }));
+}
+
+// navigator.clipboard → object with stub methods
+unsafe extern "C" fn nav_clipboard(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let build_stub = |name: &str| {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+            let name_str = crate::v8_utils::v8_string(scope, name);
+            tmpl.set_class_name(name_str);
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("readText").into(), build_stub("readText").into());
+        obj.set(scope, s("writeText").into(), build_stub("writeText").into());
+        rv.set(obj.into());
+    }));
+}
+
+// navigator.credentials → object with stub methods
+unsafe extern "C" fn nav_credentials(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let build_stub = |name: &str| {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+            let name_str = crate::v8_utils::v8_string(scope, name);
+            tmpl.set_class_name(name_str);
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("get").into(), build_stub("get").into());
+        obj.set(scope, s("create").into(), build_stub("create").into());
+        obj.set(scope, s("store").into(), build_stub("store").into());
+        obj.set(scope, s("preventSilentAccess").into(), build_stub("preventSilentAccess").into());
+        rv.set(obj.into());
     }));
 }
 
