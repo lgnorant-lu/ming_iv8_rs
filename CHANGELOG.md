@@ -6,6 +6,31 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.60] - 2026-06-20
+
+> Local milestone: Native Augment Mode M1 — unify native Navigator with generated BrowserSurface template via FunctionTemplate::inherit()
+
+### Added
+- feat(shims): `install_native_navigator` uses `create_navigator_template` + `inherit()` to chain native Navigator from generated template (46 skeleton properties)
+- Generated skeleton properties (bluetooth, hid, usb) now visible in JS runtime (typeof "object")
+- test(surface): `test_navigator_generated_skeleton_visible` verifies skeleton visibility + native getter precedence
+
+### Changed
+- refactor(shims): native Navigator template inherits from generated Navigator template via `FunctionTemplate::inherit()`
+  - Native getters/methods shadow generated skeletons via prototype chain (native proto → generated proto)
+  - Accessor getters override generated `Object::new` skeletons; methods (getBattery/sendBeacon/javaEnabled) properly override generated skeleton methods
+  - Navigator constructor uses native `illegal_constructor` (re-registered)
+  - No init chain changes, no `Object.defineProperty`, no JS shim changes, no codegen changes
+
+### Quality Gates
+- `cargo check --workspace`: zero errors
+- `cargo test -p iv8-core --lib`: 247 PASS
+- `cargo test --test test_surface_*`: 43 PASS (21+8+7+7)
+- `maturin develop`: build timeout (V8 library size, pre-existing, not a regression)
+- Deferred smoke: fingerprint_js / VFT (build required, not yet verified)
+- No JS shim additions; no package metadata bumps
+- Known: `navigator.gpu` is WorkerNavigator-only (not in W3C WebIDL webref Navigator interface)
+
 ## [0.8.59] - 2026-06-20
 
 > Local milestone: Native Augment Mode M1 — init chain audit, augment route identified as blocked by env_inject replacement
