@@ -46,3 +46,68 @@ pub fn extract_panic_msg(payload: &(dyn std::any::Any + Send)) -> String {
         "panic (non-string payload)".to_string()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn js_error_display() {
+        let e = IV8Error::Js {
+            name: "TypeError".into(),
+            message: "foo is not a function".into(),
+            stack: "at <anonymous>:1:5".into(),
+            value: None,
+        };
+        let s = e.to_string();
+        assert!(s.contains("TypeError"), "display should contain name");
+        assert!(s.contains("foo is not a function"), "display should contain message");
+    }
+
+    #[test]
+    fn compile_error_display() {
+        let e = IV8Error::Compile {
+            message: "unexpected token".into(),
+            line: 3,
+            column: 8,
+        };
+        let s = e.to_string();
+        assert!(s.contains("compile error"), "compile error prefix");
+        assert!(s.contains("unexpected token"), "message in display");
+        assert!(s.contains("3:8"), "line:column in display");
+    }
+
+    #[test]
+    fn terminated_display() {
+        let e = IV8Error::Terminated;
+        assert_eq!(e.to_string(), "script terminated");
+    }
+
+    #[test]
+    fn out_of_memory_display() {
+        let e = IV8Error::OutOfMemory {
+            details: "heap exhausted".into(),
+        };
+        let s = e.to_string();
+        assert!(s.contains("out of memory"), "OOM prefix");
+        assert!(s.contains("heap exhausted"), "details in display");
+    }
+
+    #[test]
+    fn internal_error_display() {
+        let e = IV8Error::Internal("logic error: bad state".into());
+        let s = e.to_string();
+        assert!(s.contains("internal error"), "internal prefix");
+        assert!(s.contains("logic error: bad state"), "message in display");
+    }
+
+    #[test]
+    fn extract_panic_msg_non_string() {
+        let result = std::panic::catch_unwind(|| {
+            panic!("{:?}", vec![1, 2, 3]);
+        });
+        let err = result.unwrap_err();
+        let msg = extract_panic_msg(&err);
+        assert!(!msg.is_empty(), "should produce non-empty fallback");
+    }
+}
