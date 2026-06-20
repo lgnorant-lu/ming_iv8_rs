@@ -6,6 +6,28 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.59] - 2026-06-20
+
+> Local milestone: Native Augment Mode M1 — init chain audit, augment route identified as blocked by env_inject replacement
+
+### Added
+- docs: v0.8.59 6-plan-set (scope/foundation-audit/runtime-design/negative-gate-plan/task-plan/acceptance)
+- test(surface): skeleton test updated with blocker documentation
+
+### Changed
+- Design route refined: augment/merge blocked by env_inject replacing generated Navigator before install_native_env runs
+  - `env_inject::install_environment` at embedded_v8.rs:921 creates flat navigator objects, overwriting the generated BrowserSurface Navigator
+  - Proper augment requires init chain restructuring → deferred to v0.8.60
+- design: runtime-design updated to record the blocker
+
+### Quality Gates
+- `cargo check --workspace`: zero errors
+- `cargo test`: 247 lib + 43 surface = 290 PASS (unchanged)
+- `maturin develop --release`: PASS
+- `fingerprint_js`: 37/37 PASS
+- `VFT-02`: ALL PASS
+- No runtime code changes (native_env.rs unchanged from v0.8.58)
+
 ## [0.8.58] - 2026-06-20
 
 > Local milestone: Generated Surface Skeleton Repair M1 — fix codegen to return Object::new instead of null for interface-typed getters
