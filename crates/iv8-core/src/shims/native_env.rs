@@ -163,7 +163,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
 // ─── navigator getter callbacks ───────────────────────────────────────────────
 
 macro_rules! env_str_getter {
-    ($name:ident, $path:literal, $default:expr) => {
+    ($name:ident, $path:literal, $field:ident, $default:expr) => {
         unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
             let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 let info_ref = unsafe { &*info };
@@ -171,7 +171,10 @@ macro_rules! env_str_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
-                let val = state.environment.get_str($path).unwrap_or($default);
+                let val = match state.profile {
+                    Some(p) => p.$field,
+                    None => state.environment.get_str($path).unwrap_or($default),
+                };
                 if let Some(s) = v8::String::new(scope, val) {
                     rv.set(s.into());
                 }
@@ -181,7 +184,7 @@ macro_rules! env_str_getter {
 }
 
 macro_rules! env_f64_getter {
-    ($name:ident, $path:literal, $default:expr) => {
+    ($name:ident, $path:literal, $field:ident, $default:expr) => {
         unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
             let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 let info_ref = unsafe { &*info };
@@ -189,7 +192,10 @@ macro_rules! env_f64_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
-                let val = state.environment.get_f64($path).unwrap_or($default);
+                let val = match state.profile {
+                    Some(p) => p.$field,
+                    None => state.environment.get_f64($path).unwrap_or($default),
+                };
                 rv.set(v8::Number::new(scope, val).into());
             }));
         }
@@ -197,7 +203,7 @@ macro_rules! env_f64_getter {
 }
 
 macro_rules! env_bool_getter {
-    ($name:ident, $path:literal, $default:expr) => {
+    ($name:ident, $path:literal, $field:ident, $default:expr) => {
         unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
             let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 let info_ref = unsafe { &*info };
@@ -205,32 +211,36 @@ macro_rules! env_bool_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
-                let val = state.environment.get_bool($path).unwrap_or($default);
+                let val = match state.profile {
+                    Some(p) => p.$field,
+                    None => state.environment.get_bool($path).unwrap_or($default),
+                };
                 rv.set(v8::Boolean::new(scope, val).into());
             }));
         }
     };
 }
 
-env_str_getter!(nav_user_agent, "navigator.userAgent", DEFAULT_PROFILE.user_agent);
-env_str_getter!(nav_app_version, "navigator.appVersion", DEFAULT_PROFILE.app_version);
-env_str_getter!(nav_platform, "navigator.platform", DEFAULT_PROFILE.platform);
-env_str_getter!(nav_vendor, "navigator.vendor", DEFAULT_PROFILE.vendor);
-env_str_getter!(nav_vendor_sub, "navigator.vendorSub", DEFAULT_PROFILE.vendor_sub);
-env_str_getter!(nav_product, "navigator.product", DEFAULT_PROFILE.product);
-env_str_getter!(nav_product_sub, "navigator.productSub", DEFAULT_PROFILE.product_sub);
-env_str_getter!(nav_language, "navigator.language", DEFAULT_PROFILE.language);
-env_str_getter!(nav_app_name, "navigator.appName", DEFAULT_PROFILE.app_name);
-env_str_getter!(nav_app_code_name, "navigator.appCodeName", DEFAULT_PROFILE.app_code_name);
+env_str_getter!(nav_user_agent, "navigator.userAgent", user_agent, DEFAULT_PROFILE.user_agent);
+env_str_getter!(nav_app_version, "navigator.appVersion", app_version, DEFAULT_PROFILE.app_version);
+env_str_getter!(nav_platform, "navigator.platform", platform, DEFAULT_PROFILE.platform);
+env_str_getter!(nav_vendor, "navigator.vendor", vendor, DEFAULT_PROFILE.vendor);
+env_str_getter!(nav_vendor_sub, "navigator.vendorSub", vendor_sub, DEFAULT_PROFILE.vendor_sub);
+env_str_getter!(nav_product, "navigator.product", product, DEFAULT_PROFILE.product);
+env_str_getter!(nav_product_sub, "navigator.productSub", product_sub, DEFAULT_PROFILE.product_sub);
+env_str_getter!(nav_language, "navigator.language", language, DEFAULT_PROFILE.language);
+env_str_getter!(nav_app_name, "navigator.appName", app_name, DEFAULT_PROFILE.app_name);
+env_str_getter!(nav_app_code_name, "navigator.appCodeName", app_code_name, DEFAULT_PROFILE.app_code_name);
 env_f64_getter!(
     nav_hardware_concurrency,
     "navigator.hardwareConcurrency",
+    hardware_concurrency,
     DEFAULT_PROFILE.hardware_concurrency
 );
-env_f64_getter!(nav_device_memory, "navigator.deviceMemory", DEFAULT_PROFILE.device_memory);
-env_f64_getter!(nav_max_touch_points, "navigator.maxTouchPoints", DEFAULT_PROFILE.max_touch_points);
-env_bool_getter!(nav_cookie_enabled, "navigator.cookieEnabled", DEFAULT_PROFILE.cookie_enabled);
-env_bool_getter!(nav_online, "navigator.onLine", DEFAULT_PROFILE.on_line);
+env_f64_getter!(nav_device_memory, "navigator.deviceMemory", device_memory, DEFAULT_PROFILE.device_memory);
+env_f64_getter!(nav_max_touch_points, "navigator.maxTouchPoints", max_touch_points, DEFAULT_PROFILE.max_touch_points);
+env_bool_getter!(nav_cookie_enabled, "navigator.cookieEnabled", cookie_enabled, DEFAULT_PROFILE.cookie_enabled);
+env_bool_getter!(nav_online, "navigator.onLine", on_line, DEFAULT_PROFILE.on_line);
 
 // navigator.languages → array from environment
 unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
@@ -242,7 +252,9 @@ unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
         let state = RuntimeState::get(isolate);
 
         // Try to get languages array from environment
-        let langs: Vec<String> = if let Some(val) = state.environment.get("navigator.languages") {
+        let langs: Vec<String> = if let Some(p) = &state.profile {
+            p.languages.iter().map(|s| s.to_string()).collect()
+        } else if let Some(val) = state.environment.get("navigator.languages") {
             if let Some(arr) = val.as_array() {
                 arr.iter()
                     .filter_map(|v| v.as_str().map(|s| s.to_string()))
@@ -399,12 +411,28 @@ unsafe extern "C" fn nav_webdriver(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-// navigator.doNotTrack → null (standard default)
+// navigator.doNotTrack → null (standard default), profile-injectable
 unsafe extern "C" fn nav_do_not_track(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let val = state
+            .profile
+            .and_then(|p| p.do_not_track)
+            .or_else(|| {
+                state
+                    .environment
+                    .get_str("navigator.doNotTrack")
+            });
+        if let Some(s) = val {
+            if let Some(v) = v8::String::new(scope, s) {
+                rv.set(v.into());
+                return;
+            }
+        }
         rv.set(v8::null(scope).into());
     }));
 }
@@ -664,7 +692,7 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     }
 }
 
-env_bool_getter!(nav_pdf_viewer_enabled, "navigator.pdfViewerEnabled", DEFAULT_PROFILE.pdf_viewer_enabled);
+env_bool_getter!(nav_pdf_viewer_enabled, "navigator.pdfViewerEnabled", pdf_viewer_enabled, DEFAULT_PROFILE.pdf_viewer_enabled);
 
 // javaEnabled() → always returns false (no Java plugin in V8 context)
 unsafe extern "C" fn nav_java_enabled(info: *const v8::FunctionCallbackInfo) {
@@ -676,11 +704,11 @@ unsafe extern "C" fn nav_java_enabled(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-env_f64_getter!(screen_width, "screen.width", DEFAULT_PROFILE.screen_width);
-env_f64_getter!(screen_height, "screen.height", DEFAULT_PROFILE.screen_height);
-env_f64_getter!(screen_avail_width, "screen.availWidth", DEFAULT_PROFILE.screen_avail_width);
-env_f64_getter!(screen_avail_height, "screen.availHeight", DEFAULT_PROFILE.screen_avail_height);
-env_f64_getter!(screen_color_depth, "screen.colorDepth", DEFAULT_PROFILE.screen_color_depth);
-env_f64_getter!(screen_pixel_depth, "screen.pixelDepth", DEFAULT_PROFILE.screen_pixel_depth);
-env_f64_getter!(screen_avail_left, "screen.availLeft", DEFAULT_PROFILE.screen_avail_left);
-env_f64_getter!(screen_avail_top, "screen.availTop", DEFAULT_PROFILE.screen_avail_top);
+env_f64_getter!(screen_width, "screen.width", screen_width, DEFAULT_PROFILE.screen_width);
+env_f64_getter!(screen_height, "screen.height", screen_height, DEFAULT_PROFILE.screen_height);
+env_f64_getter!(screen_avail_width, "screen.availWidth", screen_avail_width, DEFAULT_PROFILE.screen_avail_width);
+env_f64_getter!(screen_avail_height, "screen.availHeight", screen_avail_height, DEFAULT_PROFILE.screen_avail_height);
+env_f64_getter!(screen_color_depth, "screen.colorDepth", screen_color_depth, DEFAULT_PROFILE.screen_color_depth);
+env_f64_getter!(screen_pixel_depth, "screen.pixelDepth", screen_pixel_depth, DEFAULT_PROFILE.screen_pixel_depth);
+env_f64_getter!(screen_avail_left, "screen.availLeft", screen_avail_left, DEFAULT_PROFILE.screen_avail_left);
+env_f64_getter!(screen_avail_top, "screen.availTop", screen_avail_top, DEFAULT_PROFILE.screen_avail_top);
