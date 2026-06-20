@@ -8,7 +8,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 ## Features
 
 - **Broad browser-like surface**: navigator / screen / window / document / location / history / performance
-- **BrowserProfile**: 41-field centralized browser identity struct with runtime injection (v0.8.55/0.8.57)
+- **BrowserProfile**: 40-field centralized browser identity struct with runtime injection (v0.8.55/0.8.57)
 - **Generated Navigator skeletons**: 46 IDL properties via codegen + native template unification (v0.8.58/0.8.60)
 - **Native Navigator stubs**: connection, getBattery, sendBeacon, geolocation, clipboard, credentials (v0.8.55); getGamepads, requestMediaKeySystemAccess, requestMIDIAccess (v0.8.61)
 - **DOM**: html5ever parsing + ego-tree + selectors CSS Level 4 + EventTarget 3-phase dispatch

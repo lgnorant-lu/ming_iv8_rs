@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for MessageChannel (Task 77).
 // Acceptance criteria:
 // - new MessageChannel() creates port1 + port2

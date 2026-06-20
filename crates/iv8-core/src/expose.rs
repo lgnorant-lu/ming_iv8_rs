@@ -95,9 +95,9 @@ unsafe extern "C" fn exposed_fn_trampoline(info: *const v8::FunctionCallbackInfo
 
 #[cfg(test)]
 mod tests {
-    use crate::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};
-    use super::{ExposedFnData, expose_function};
+    use super::{expose_function, ExposedFnData};
     use crate::state::RuntimeState;
+    use crate::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};
     use std::ffi::c_void;
 
     #[test]

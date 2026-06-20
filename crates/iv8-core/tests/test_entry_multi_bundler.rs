@@ -118,15 +118,14 @@ fn test_browserify_execution_exposes_require() {
     let src = load_fixture("browserify_minimal.js");
     let mut kernel = common::make_kernel();
     kernel
-        .eval(iv8_core::entry::browserify::bridge_prelude(), EvalOpts::default())
+        .eval(
+            iv8_core::entry::browserify::bridge_prelude(),
+            EvalOpts::default(),
+        )
         .unwrap();
     let wrapped = iv8_core::entry::browserify::wrap_source(&src);
     kernel.eval(&wrapped, EvalOpts::default()).unwrap();
-    common::assert_js_str(
-        &mut kernel,
-        "typeof __iv8_b_require",
-        "function",
-    );
+    common::assert_js_str(&mut kernel, "typeof __iv8_b_require", "function");
 }
 
 #[test]
@@ -134,11 +133,16 @@ fn test_browserify_execution_produces_correct_output() {
     let src = load_fixture("browserify_minimal.js");
     let mut kernel = common::make_kernel();
     kernel
-        .eval(iv8_core::entry::browserify::bridge_prelude(), EvalOpts::default())
+        .eval(
+            iv8_core::entry::browserify::bridge_prelude(),
+            EvalOpts::default(),
+        )
         .unwrap();
     let wrapped = iv8_core::entry::browserify::wrap_source(&src);
     kernel.eval(&wrapped, EvalOpts::default()).unwrap();
-    let result = kernel.eval_to_rust_value("(function(){try{return __iv8_b_require(1)}catch(e){return 'ERR:'+e.message}})()");
+    let result = kernel.eval_to_rust_value(
+        "(function(){try{return __iv8_b_require(1)}catch(e){return 'ERR:'+e.message}})()",
+    );
     let val = common::to_str(&result);
     if val.starts_with("ERR:") {
         panic!("require(1) threw: {}", val);
@@ -151,11 +155,7 @@ fn test_rollup_iife_direct_eval() {
     let src = load_fixture("rollup_iife_minimal.js");
     let mut kernel = common::make_kernel();
     kernel.eval(&src, EvalOpts::default()).unwrap();
-    common::assert_js_str(
-        &mut kernel,
-        "typeof __rollup_result",
-        "object",
-    );
+    common::assert_js_str(&mut kernel, "typeof __rollup_result", "object");
 }
 
 #[test]
@@ -163,11 +163,7 @@ fn test_rollup_umd_global_branch_execution() {
     let src = load_fixture("rollup_umd_minimal.js");
     let mut kernel = common::make_kernel();
     kernel.eval(&src, EvalOpts::default()).unwrap();
-    common::assert_js_str(
-        &mut kernel,
-        "typeof MyLib",
-        "object",
-    );
+    common::assert_js_str(&mut kernel, "typeof MyLib", "object");
 }
 
 #[test]
@@ -175,11 +171,7 @@ fn test_vite_iife_direct_eval() {
     let src = load_fixture("vite_iife_minimal.js");
     let mut kernel = common::make_kernel();
     kernel.eval(&src, EvalOpts::default()).unwrap();
-    common::assert_js_str(
-        &mut kernel,
-        "typeof __vite_result",
-        "string",
-    );
+    common::assert_js_str(&mut kernel, "typeof __vite_result", "string");
 }
 
 #[test]
@@ -187,11 +179,7 @@ fn test_unknown_iife_execution() {
     let src = load_fixture("unknown_iife_minimal.js");
     let mut kernel = common::make_kernel();
     kernel.eval(&src, EvalOpts::default()).unwrap();
-    common::assert_js_str(
-        &mut kernel,
-        "globalThis.__unknown_result",
-        "42",
-    );
+    common::assert_js_str(&mut kernel, "globalThis.__unknown_result", "42");
 }
 
 #[test]
@@ -262,12 +250,19 @@ fn test_eval_module_vite_esm() {
     let src = load_fixture("vite_esm_minimal.js");
     let mut kernel = common::make_kernel();
     let result = kernel
-        .eval_module(&src, Some("vite-esm-test.js"), iv8_core::kernel::EvalOpts::default())
+        .eval_module(
+            &src,
+            Some("vite-esm-test.js"),
+            iv8_core::kernel::EvalOpts::default(),
+        )
         .expect("eval_module should succeed");
     let ctx = kernel.eval_to_rust_value("typeof hello");
     match &ctx {
         iv8_core::convert::RustValue::String(s) => {
-            assert_eq!(s, "undefined", "top-level export should not leak to global scope");
+            assert_eq!(
+                s, "undefined",
+                "top-level export should not leak to global scope"
+            );
         }
         _ => panic!("expected string, got {:?}", ctx),
     }

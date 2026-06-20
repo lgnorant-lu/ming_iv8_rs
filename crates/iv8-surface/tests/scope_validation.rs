@@ -1,8 +1,8 @@
 //! v0.8.26 T-1: Validate v8::scope! macro for nested HandleScope creation.
 //! Proves: nested scope (via v8::scope!) + Global survival across scope drops.
 
-use std::sync::Once;
 use std::collections::HashMap;
+use std::sync::Once;
 
 static V8_INIT: Once = Once::new();
 
@@ -54,8 +54,7 @@ fn test_500_templates_5_batches_with_inherit() {
     ensure_v8();
     // Use heap_limits matching the default init chain (EmbeddedV8Kernel::new)
     let mut isolate = v8::Isolate::new(
-        v8::CreateParams::default()
-            .heap_limits(512 * 1024 * 1024, 4usize * 1024 * 1024 * 1024),
+        v8::CreateParams::default().heap_limits(512 * 1024 * 1024, 4usize * 1024 * 1024 * 1024),
     );
     v8::scope!(outer_scope, &mut isolate);
 
@@ -86,8 +85,7 @@ fn test_500_templates_5_batches_with_inherit() {
 fn test_inherit_chain_across_batches() {
     ensure_v8();
     let mut isolate = v8::Isolate::new(
-        v8::CreateParams::default()
-            .heap_limits(512 * 1024 * 1024, 4usize * 1024 * 1024 * 1024),
+        v8::CreateParams::default().heap_limits(512 * 1024 * 1024, 4usize * 1024 * 1024 * 1024),
     );
     v8::scope!(outer_scope, &mut isolate);
 
@@ -104,7 +102,8 @@ fn test_inherit_chain_across_batches() {
     // Batch 2: Node inherits EventTarget (cross-batch parent lookup)
     {
         v8::scope!(let inner, outer_scope);
-        let parent = reg.get("EventTarget")
+        let parent = reg
+            .get("EventTarget")
             .map(|g| v8::Local::new(inner, g))
             .expect("parent should survive batch boundary");
         let node = v8::FunctionTemplate::builder_raw(empty_constructor).build(inner);
@@ -116,7 +115,8 @@ fn test_inherit_chain_across_batches() {
     // Batch 3: Element inherits Node
     {
         v8::scope!(let inner, outer_scope);
-        let parent = reg.get("Node")
+        let parent = reg
+            .get("Node")
             .map(|g| v8::Local::new(inner, g))
             .expect("Node should survive batch boundary");
         let elem = v8::FunctionTemplate::builder_raw(empty_constructor).build(inner);
@@ -128,7 +128,8 @@ fn test_inherit_chain_across_batches() {
     // Batch 4: HTMLElement inherits Element
     {
         v8::scope!(let inner, outer_scope);
-        let parent = reg.get("Element")
+        let parent = reg
+            .get("Element")
             .map(|g| v8::Local::new(inner, g))
             .expect("Element should survive batch boundary");
         let html = v8::FunctionTemplate::builder_raw(empty_constructor).build(inner);
@@ -140,7 +141,8 @@ fn test_inherit_chain_across_batches() {
     // Batch 5: HTMLDivElement inherits HTMLElement
     {
         v8::scope!(let inner, outer_scope);
-        let parent = reg.get("HTMLElement")
+        let parent = reg
+            .get("HTMLElement")
             .map(|g| v8::Local::new(inner, g))
             .expect("HTMLElement should survive batch boundary");
         let div = v8::FunctionTemplate::builder_raw(empty_constructor).build(inner);
@@ -149,7 +151,11 @@ fn test_inherit_chain_across_batches() {
         reg.insert("HTMLDivElement".into(), v8::Global::new(inner, div));
     }
 
-    assert_eq!(reg.len(), 5, "all 5 templates survive across 5 batch boundaries");
+    assert_eq!(
+        reg.len(),
+        5,
+        "all 5 templates survive across 5 batch boundaries"
+    );
     assert!(reg.contains_key("EventTarget"));
     assert!(reg.contains_key("HTMLDivElement"));
 }

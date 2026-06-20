@@ -13,10 +13,7 @@ use crate::behavior::{
 /// Register Canvas 2D factory callback into BehaviorCallbackRegistry.
 /// The factory creates CanvasRenderingContext2D instances when
 /// HTMLCanvasElement.getContext('2d') is called in JS.
-pub fn register_canvas_2d_callbacks(
-    factory: &CanvasContextFactory,
-    gradient: &GradientFactory,
-) {
+pub fn register_canvas_2d_callbacks(factory: &CanvasContextFactory, gradient: &GradientFactory) {
     *factory.borrow_mut() = Some(Box::new(
         |scope: &v8::PinScope<'_, '_>, _canvas_element: v8::Local<v8::Object>| {
             match canvas2d::create_canvas_2d_context_instance(scope) {
@@ -26,24 +23,22 @@ pub fn register_canvas_2d_callbacks(
         },
     ));
 
-    *gradient.borrow_mut() = Some(Box::new(
-        |scope, x0, y0, x1, y1| {
-            let obj = v8::Object::new(scope);
-            // CanvasGradient stub with addColorStop method
-            let key = v8::String::new(scope, "addColorStop").unwrap();
-            let tmpl = v8::FunctionTemplate::builder_raw(empty_add_color_stop).build(scope);
-            obj.set(scope, key.into(), tmpl.get_function(scope).unwrap().into());
-            let key_x0 = v8::String::new(scope, "x0").unwrap();
-            let key_y0 = v8::String::new(scope, "y0").unwrap();
-            let key_x1 = v8::String::new(scope, "x1").unwrap();
-            let key_y1 = v8::String::new(scope, "y1").unwrap();
-            obj.set(scope, key_x0.into(), v8::Number::new(scope, x0).into());
-            obj.set(scope, key_y0.into(), v8::Number::new(scope, y0).into());
-            obj.set(scope, key_x1.into(), v8::Number::new(scope, x1).into());
-            obj.set(scope, key_y1.into(), v8::Number::new(scope, y1).into());
-            obj
-        },
-    ));
+    *gradient.borrow_mut() = Some(Box::new(|scope, x0, y0, x1, y1| {
+        let obj = v8::Object::new(scope);
+        // CanvasGradient stub with addColorStop method
+        let key = v8::String::new(scope, "addColorStop").unwrap();
+        let tmpl = v8::FunctionTemplate::builder_raw(empty_add_color_stop).build(scope);
+        obj.set(scope, key.into(), tmpl.get_function(scope).unwrap().into());
+        let key_x0 = v8::String::new(scope, "x0").unwrap();
+        let key_y0 = v8::String::new(scope, "y0").unwrap();
+        let key_x1 = v8::String::new(scope, "x1").unwrap();
+        let key_y1 = v8::String::new(scope, "y1").unwrap();
+        obj.set(scope, key_x0.into(), v8::Number::new(scope, x0).into());
+        obj.set(scope, key_y0.into(), v8::Number::new(scope, y0).into());
+        obj.set(scope, key_x1.into(), v8::Number::new(scope, x1).into());
+        obj.set(scope, key_y1.into(), v8::Number::new(scope, y1).into());
+        obj
+    }));
 }
 
 unsafe extern "C" fn empty_add_color_stop(_info: *const v8::FunctionCallbackInfo) {}
@@ -127,14 +122,20 @@ pub fn register_canvas_send_safe_callbacks(
         // Return RGBA pixel values as JSON array: [[r,g,b,a], ...]
         let pixels: Vec<String> = pixmap_bytes
             .chunks(4)
-            .map(|c| format!("[{},{},{},{}]", c[0], c[1], c[2], c.get(3).copied().unwrap_or(255)))
+            .map(|c| {
+                format!(
+                    "[{},{},{},{}]",
+                    c[0],
+                    c[1],
+                    c[2],
+                    c.get(3).copied().unwrap_or(255)
+                )
+            })
             .collect();
         Ok(format!("[{}]", pixels.join(",")))
     }));
 
-    *set_size.borrow_mut() = Some(Box::new(|_pixmap_bytes: Vec<u8>| {
-        Ok("ok".to_string())
-    }));
+    *set_size.borrow_mut() = Some(Box::new(|_pixmap_bytes: Vec<u8>| Ok("ok".to_string())));
 }
 
 /// Default property values for CanvasRenderingContext2D.
@@ -167,19 +168,48 @@ pub const CANVAS_2D_DEFAULTS: &[(&str, &str)] = &[
 
 /// Canvas 2D method names (stub implementations).
 pub const CANVAS_2D_METHODS: &[&str] = &[
-    "fillRect", "strokeRect", "clearRect",
-    "fillText", "strokeText", "measureText",
-    "beginPath", "closePath", "moveTo", "lineTo",
-    "arc", "arcTo", "bezierCurveTo", "quadraticCurveTo",
-    "rect", "ellipse", "roundRect",
-    "fill", "stroke", "clip",
-    "save", "restore",
-    "scale", "rotate", "translate", "transform", "setTransform", "resetTransform",
-    "createLinearGradient", "createRadialGradient", "createConicGradient",
-    "createPattern", "createImageData", "getImageData", "putImageData",
-    "drawImage", "drawFocusIfNeeded", "scrollPathIntoView",
-    "getTransform", "getContextAttributes",
-    "isPointInPath", "isPointInStroke",
+    "fillRect",
+    "strokeRect",
+    "clearRect",
+    "fillText",
+    "strokeText",
+    "measureText",
+    "beginPath",
+    "closePath",
+    "moveTo",
+    "lineTo",
+    "arc",
+    "arcTo",
+    "bezierCurveTo",
+    "quadraticCurveTo",
+    "rect",
+    "ellipse",
+    "roundRect",
+    "fill",
+    "stroke",
+    "clip",
+    "save",
+    "restore",
+    "scale",
+    "rotate",
+    "translate",
+    "transform",
+    "setTransform",
+    "resetTransform",
+    "createLinearGradient",
+    "createRadialGradient",
+    "createConicGradient",
+    "createPattern",
+    "createImageData",
+    "getImageData",
+    "putImageData",
+    "drawImage",
+    "drawFocusIfNeeded",
+    "scrollPathIntoView",
+    "getTransform",
+    "getContextAttributes",
+    "isPointInPath",
+    "isPointInStroke",
 ];
 
 pub mod canvas2d;

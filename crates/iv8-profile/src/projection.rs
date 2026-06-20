@@ -55,7 +55,9 @@ mod tests {
         let projection = EnvironmentProjection::from_matrix(&matrix);
         assert_eq!(projection.len(), matrix.flat_env.len());
         assert_eq!(
-            projection.get("navigator.userAgent").and_then(|v| v.as_str()),
+            projection
+                .get("navigator.userAgent")
+                .and_then(|v| v.as_str()),
             Some(source.navigator.user_agent.as_str())
         );
     }

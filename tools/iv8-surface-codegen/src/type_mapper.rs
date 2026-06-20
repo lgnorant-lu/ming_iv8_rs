@@ -22,8 +22,8 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
             default_value: "v8::Boolean::new(scope, false).into()".into(),
             needs_scope: true,
         },
-        "byte" | "octet" | "short" | "unsigned short" |
-        "long" | "unsigned long" | "long long" | "unsigned long long" => TypeMap {
+        "byte" | "octet" | "short" | "unsigned short" | "long" | "unsigned long" | "long long"
+        | "unsigned long long" => TypeMap {
             rust_type: "i64".into(),
             default_value: "v8::Integer::new(scope, 0).into()".into(),
             needs_scope: true,
@@ -71,7 +71,10 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
         },
         name if is_buffer_source(name) => TypeMap {
             rust_type: "v8::Local<'s, v8::Value>".into(),
-            default_value: format!("crate::type_conv::default_value_for_type(scope, \"{}\")", name),
+            default_value: format!(
+                "crate::type_conv::default_value_for_type(scope, \"{}\")",
+                name
+            ),
             needs_scope: true,
         },
 
@@ -85,10 +88,20 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
 }
 
 fn is_buffer_source(name: &str) -> bool {
-    matches!(name,
-        "DataView" | "Int8Array" | "Uint8Array" | "Uint8ClampedArray" |
-        "Int16Array" | "Uint16Array" | "Int32Array" | "Uint32Array" |
-        "Float32Array" | "Float64Array" | "BigInt64Array" | "BigUint64Array"
+    matches!(
+        name,
+        "DataView"
+            | "Int8Array"
+            | "Uint8Array"
+            | "Uint8ClampedArray"
+            | "Int16Array"
+            | "Uint16Array"
+            | "Int32Array"
+            | "Uint32Array"
+            | "Float32Array"
+            | "Float64Array"
+            | "BigInt64Array"
+            | "BigUint64Array"
     )
 }
 
@@ -124,14 +137,12 @@ pub fn idl_name_to_rust(name: &str) -> String {
 /// Rust keywords that need raw identifier escaping.
 pub fn escape_rust_keyword(name: &str) -> String {
     match name {
-        "type" | "match" | "impl" | "mod" | "crate" | "self" | "super" |
-        "where" | "for" | "loop" | "while" | "if" | "else" | "struct" |
-        "enum" | "fn" | "const" | "static" | "let" | "mut" | "ref" |
-        "return" | "async" | "await" | "move" | "use" | "pub" | "box" |
-        "dyn" | "unsafe" | "extern" | "true" | "false" | "abstract" |
-        "become" | "do" | "final" | "macro" | "override" | "priv" |
-        "typeof" | "unsized" | "virtual" | "yield" | "in" | "as" |
-        "try" | "union" | "trait" => format!("r#{}", name),
+        "type" | "match" | "impl" | "mod" | "crate" | "self" | "super" | "where" | "for"
+        | "loop" | "while" | "if" | "else" | "struct" | "enum" | "fn" | "const" | "static"
+        | "let" | "mut" | "ref" | "return" | "async" | "await" | "move" | "use" | "pub" | "box"
+        | "dyn" | "unsafe" | "extern" | "true" | "false" | "abstract" | "become" | "do"
+        | "final" | "macro" | "override" | "priv" | "typeof" | "unsized" | "virtual" | "yield"
+        | "in" | "as" | "try" | "union" | "trait" => format!("r#{}", name),
         _ => name.to_string(),
     }
 }
@@ -174,8 +185,10 @@ mod tests {
 
     #[test]
     fn test_unknown_mapping() {
+        // v0.8.58: interface references return an empty object skeleton
+        // (was v8::null prior to the skeleton-repair change).
         let m = map_idl_type("MyInterface");
-        assert_eq!(m.default_value, "v8::null(scope).into()");
+        assert_eq!(m.default_value, "v8::Object::new(scope).into()");
     }
 
     #[test]

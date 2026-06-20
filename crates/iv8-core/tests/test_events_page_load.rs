@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for page.load (Task 35).
 // Tests HTML parsing + inline script execution + DOM availability.
 

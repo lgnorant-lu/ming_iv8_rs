@@ -22,7 +22,11 @@ fn test_user_agent_data_mobile() {
 #[test]
 fn test_user_agent_data_brands() {
     let mut k = common::make_kernel();
-    common::assert_js_str(&mut k, "Array.isArray(navigator.userAgentData.brands)", "true");
+    common::assert_js_str(
+        &mut k,
+        "Array.isArray(navigator.userAgentData.brands)",
+        "true",
+    );
     let len = common::to_str(&k.eval_to_rust_value("navigator.userAgentData.brands.length"));
     assert!(len != "0", "brands should not be empty, got {}", len);
 }

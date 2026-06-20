@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for Event/CustomEvent/MouseEvent constructors (Task 68).
 // Acceptance criteria:
 // - new Event('click') creates event object

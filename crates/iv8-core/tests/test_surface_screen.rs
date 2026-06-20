@@ -36,8 +36,18 @@ fn test_screen_avail_dimensions_not_exceed_full() {
     let aw_val: i64 = common::to_str(&aw).parse().unwrap();
     let h_val: i64 = common::to_str(&h).parse().unwrap();
     let ah_val: i64 = common::to_str(&ah).parse().unwrap();
-    assert!(aw_val <= w_val, "availWidth > width: {} > {}", aw_val, w_val);
-    assert!(ah_val <= h_val, "availHeight > height: {} > {}", ah_val, h_val);
+    assert!(
+        aw_val <= w_val,
+        "availWidth > width: {} > {}",
+        aw_val,
+        w_val
+    );
+    assert!(
+        ah_val <= h_val,
+        "availHeight > height: {} > {}",
+        ah_val,
+        h_val
+    );
 }
 
 #[test]

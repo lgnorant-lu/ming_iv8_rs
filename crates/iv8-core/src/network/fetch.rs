@@ -256,7 +256,11 @@ fn build_response_object<'s>(
             // Fallback: plain object (no DomTemplates available)
             let obj = v8::Object::new(scope);
             let sk = crate::v8_utils::v8_string(scope, "status");
-            obj.set(scope, sk.into(), v8::Integer::new(scope, resource.status as i32).into());
+            obj.set(
+                scope,
+                sk.into(),
+                v8::Integer::new(scope, resource.status as i32).into(),
+            );
             return obj;
         }
     };
@@ -271,39 +275,75 @@ fn build_response_object<'s>(
         None => return v8::Object::new(scope),
     };
 
-    // Set properties on instance
-    let status_key = crate::v8_utils::v8_string(scope, "status");
-    obj.set(scope, status_key.into(), v8::Integer::new(scope, resource.status as i32).into());
+    // Set backing values under hidden keys. The Response prototype installs
+    // accessor properties (status/ok/statusText/url/headers) with no setter,
+    // so a plain `obj.set("status", …)` would silently fail and the getter
+    // would recurse into itself. Store under "__name__" keys that the getters
+    // read from instead.
+    let status_key = crate::v8_utils::v8_string(scope, "__status__");
+    obj.set(
+        scope,
+        status_key.into(),
+        v8::Integer::new(scope, resource.status as i32).into(),
+    );
 
-    let ok_key = crate::v8_utils::v8_string(scope, "ok");
-    obj.set(scope, ok_key.into(), v8::Boolean::new(scope, resource.status >= 200 && resource.status < 300).into());
+    let ok_key = crate::v8_utils::v8_string(scope, "__ok__");
+    obj.set(
+        scope,
+        ok_key.into(),
+        v8::Boolean::new(scope, resource.status >= 200 && resource.status < 300).into(),
+    );
 
-    let st_key = crate::v8_utils::v8_string(scope, "statusText");
-    obj.set(scope, st_key.into(), crate::v8_utils::v8_string(scope, if resource.status == 200 { "OK" } else { "" }).into());
+    let st_key = crate::v8_utils::v8_string(scope, "__statusText__");
+    obj.set(
+        scope,
+        st_key.into(),
+        crate::v8_utils::v8_string(scope, if resource.status == 200 { "OK" } else { "" }).into(),
+    );
 
-    let url_key = crate::v8_utils::v8_string(scope, "url");
-    obj.set(scope, url_key.into(), crate::v8_utils::v8_string(scope, "").into());
+    let url_key = crate::v8_utils::v8_string(scope, "__url__");
+    obj.set(
+        scope,
+        url_key.into(),
+        crate::v8_utils::v8_string(scope, "").into(),
+    );
 
     // Build Headers object using Headers FunctionTemplate
-    let header_pairs: Vec<(String, String)> = resource.headers.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
-    let headers_obj = if let Some(ho) = crate::dom::template::create_headers_instance(scope, state, templates, header_pairs) {
+    let header_pairs: Vec<(String, String)> = resource
+        .headers
+        .iter()
+        .map(|(k, v)| (k.clone(), v.clone()))
+        .collect();
+    let headers_obj = if let Some(ho) =
+        crate::dom::template::create_headers_instance(scope, state, templates, header_pairs)
+    {
         ho
     } else {
         v8::Object::new(scope)
     };
-    let headers_key = crate::v8_utils::v8_string(scope, "headers");
+    let headers_key = crate::v8_utils::v8_string(scope, "__headers__");
     obj.set(scope, headers_key.into(), headers_obj.into());
 
     // Store body as hidden property
     let body_str = String::from_utf8_lossy(&resource.body);
     let body_key = crate::v8_utils::v8_string(scope, "__body__");
-    obj.define_own_property(scope, body_key.into(), crate::v8_utils::v8_string(scope, &body_str).into(), v8::PropertyAttribute::DONT_ENUM);
+    obj.define_own_property(
+        scope,
+        body_key.into(),
+        crate::v8_utils::v8_string(scope, &body_str).into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     // Store raw bytes for arrayBuffer
     let store = v8::ArrayBuffer::new_backing_store_from_vec(resource.body.clone());
     let ab = v8::ArrayBuffer::with_backing_store(scope, &store.into());
     let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
-    obj.define_own_property(scope, ab_key.into(), ab.into(), v8::PropertyAttribute::DONT_ENUM);
+    obj.define_own_property(
+        scope,
+        ab_key.into(),
+        ab.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     obj
 }

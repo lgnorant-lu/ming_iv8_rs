@@ -168,9 +168,7 @@ pub fn validate(source: &ProfileSource) -> ValidationResult {
             "navigator.platform",
             format!(
                 "expected '{}' for OS '{}', got '{}'",
-                expected_platform,
-                source.identity.os,
-                source.navigator.platform
+                expected_platform, source.identity.os, source.navigator.platform
             ),
         ));
     }
@@ -209,7 +207,8 @@ pub fn validate(source: &ProfileSource) -> ValidationResult {
             ),
         ));
     }
-    if !source.navigator.languages.is_empty() && source.navigator.languages[0] != source.locale.language
+    if !source.navigator.languages.is_empty()
+        && source.navigator.languages[0] != source.locale.language
     {
         r = r.warn(ValidationIssue::new(
             "locale.language",
@@ -264,10 +263,7 @@ pub fn validate(source: &ProfileSource) -> ValidationResult {
         r = r.error(ValidationIssue::new("display.screen.width", "must be > 0"));
     }
     if scr.height == 0 {
-        r = r.error(ValidationIssue::new(
-            "display.screen.height",
-            "must be > 0",
-        ));
+        r = r.error(ValidationIssue::new("display.screen.height", "must be > 0"));
     }
     if win.device_pixel_ratio <= 0.0 {
         r = r.error(ValidationIssue::new(
@@ -276,16 +272,10 @@ pub fn validate(source: &ProfileSource) -> ValidationResult {
         ));
     }
     if source.identity.cpu_cores == 0 {
-        r = r.error(ValidationIssue::new(
-            "identity.cpu_cores",
-            "must be > 0",
-        ));
+        r = r.error(ValidationIssue::new("identity.cpu_cores", "must be > 0"));
     }
     if source.identity.memory_gb == 0 {
-        r = r.error(ValidationIssue::new(
-            "identity.memory_gb",
-            "must be > 0",
-        ));
+        r = r.error(ValidationIssue::new("identity.memory_gb", "must be > 0"));
     }
 
     if source.timing.fps == 0 {
@@ -360,11 +350,20 @@ pub fn validate(source: &ProfileSource) -> ValidationResult {
     let valid_states = ["granted", "denied", "prompt"];
     for (field, val) in [
         ("permissions.geolocation", &source.permissions.geolocation),
-        ("permissions.notifications", &source.permissions.notifications),
+        (
+            "permissions.notifications",
+            &source.permissions.notifications,
+        ),
         ("permissions.camera", &source.permissions.camera),
         ("permissions.microphone", &source.permissions.microphone),
-        ("permissions.clipboard-read", &source.permissions.clipboard_read),
-        ("permissions.clipboard-write", &source.permissions.clipboard_write),
+        (
+            "permissions.clipboard-read",
+            &source.permissions.clipboard_read,
+        ),
+        (
+            "permissions.clipboard-write",
+            &source.permissions.clipboard_write,
+        ),
         ("permissions.local-fonts", &source.permissions.local_fonts),
     ] {
         if !valid_states.contains(&val.as_str()) {

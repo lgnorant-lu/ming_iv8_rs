@@ -69,7 +69,9 @@ pub fn install_user_agent_data(scope: &v8::PinScope<'_, '_>, navigator: v8::Loca
         scope,
         uad_key.into(),
         uad_obj.into(),
-        v8::PropertyAttribute::DONT_DELETE | v8::PropertyAttribute::DONT_ENUM | v8::PropertyAttribute::READ_ONLY,
+        v8::PropertyAttribute::DONT_DELETE
+            | v8::PropertyAttribute::DONT_ENUM
+            | v8::PropertyAttribute::READ_ONLY,
     );
 }
 
@@ -87,7 +89,11 @@ fn install_getter(
     let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
     let conf_key = crate::v8_utils::v8_string(scope, "configurable");
     desc.set(scope, get_key.into(), getter_fn.into());
-    desc.set(scope, enum_key.into(), v8::Boolean::new(scope, false).into());
+    desc.set(
+        scope,
+        enum_key.into(),
+        v8::Boolean::new(scope, false).into(),
+    );
     desc.set(scope, conf_key.into(), v8::Boolean::new(scope, true).into());
 
     // Call Object.defineProperty(obj, name, desc)
@@ -184,7 +190,11 @@ unsafe extern "C" fn uad_platform_getter(info: *const v8::FunctionCallbackInfo) 
         let platform = state
             .profile
             .map(|p| p.ua_platform)
-            .or_else(|| state.environment.get_str("navigator.userAgentData.platform"))
+            .or_else(|| {
+                state
+                    .environment
+                    .get_str("navigator.userAgentData.platform")
+            })
             .unwrap_or(DEFAULT_PROFILE.ua_platform);
         if let Some(s) = v8::String::new(scope, platform) {
             rv.set(s.into());
@@ -207,7 +217,8 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
 
         // Always include brands, mobile, platform (low entropy)
         // Parse brands
-        let brands_json = state.profile
+        let brands_json = state
+            .profile
             .map(|p| p.ua_brands_json)
             .or_else(|| state.environment.get_str("navigator.userAgentData.brands"))
             .unwrap_or(DEFAULT_PROFILE.ua_brands_json);
@@ -266,7 +277,11 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
                                 let val = state
                                     .profile
                                     .map(|p| p.ua_architecture)
-                                    .or_else(|| state.environment.get_str("navigator.userAgentData.architecture"))
+                                    .or_else(|| {
+                                        state
+                                            .environment
+                                            .get_str("navigator.userAgentData.architecture")
+                                    })
                                     .unwrap_or(DEFAULT_PROFILE.ua_architecture);
                                 let k = crate::v8_utils::v8_string(scope, "architecture");
                                 let v = crate::v8_utils::v8_string(scope, val);
@@ -276,7 +291,9 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
                                 let val = state
                                     .profile
                                     .map(|p| p.ua_bitness)
-                                    .or_else(|| state.environment.get_str("navigator.userAgentData.bitness"))
+                                    .or_else(|| {
+                                        state.environment.get_str("navigator.userAgentData.bitness")
+                                    })
                                     .unwrap_or(DEFAULT_PROFILE.ua_bitness);
                                 let k = crate::v8_utils::v8_string(scope, "bitness");
                                 let v = crate::v8_utils::v8_string(scope, val);
@@ -286,7 +303,9 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
                                 let val = state
                                     .profile
                                     .map(|p| p.ua_model)
-                                    .or_else(|| state.environment.get_str("navigator.userAgentData.model"))
+                                    .or_else(|| {
+                                        state.environment.get_str("navigator.userAgentData.model")
+                                    })
                                     .unwrap_or(DEFAULT_PROFILE.ua_model);
                                 let k = crate::v8_utils::v8_string(scope, "model");
                                 let v = crate::v8_utils::v8_string(scope, val);
@@ -296,7 +315,11 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
                                 let val = state
                                     .profile
                                     .map(|p| p.ua_platform_version)
-                                    .or_else(|| state.environment.get_str("navigator.userAgentData.platformVersion"))
+                                    .or_else(|| {
+                                        state
+                                            .environment
+                                            .get_str("navigator.userAgentData.platformVersion")
+                                    })
                                     .unwrap_or(DEFAULT_PROFILE.ua_platform_version);
                                 let k = crate::v8_utils::v8_string(scope, "platformVersion");
                                 let v = crate::v8_utils::v8_string(scope, val);
@@ -306,16 +329,23 @@ unsafe extern "C" fn uad_get_high_entropy_values(info: *const v8::FunctionCallba
                                 let val = state
                                     .profile
                                     .map(|p| p.ua_wow64)
-                                    .or_else(|| state.environment.get_bool("navigator.userAgentData.wow64"))
+                                    .or_else(|| {
+                                        state.environment.get_bool("navigator.userAgentData.wow64")
+                                    })
                                     .unwrap_or(DEFAULT_PROFILE.ua_wow64);
                                 let k = crate::v8_utils::v8_string(scope, "wow64");
                                 result.set(scope, k.into(), v8::Boolean::new(scope, val).into());
                             }
                             "fullVersionList" => {
                                 // Same format as brands but with full version numbers
-                                let fvl_json = state.profile
+                                let fvl_json = state
+                                    .profile
                                     .map(|p| p.ua_full_version_list_json)
-                                    .or_else(|| state.environment.get_str("navigator.userAgentData.fullVersionList"))
+                                    .or_else(|| {
+                                        state
+                                            .environment
+                                            .get_str("navigator.userAgentData.fullVersionList")
+                                    })
                                     .unwrap_or(DEFAULT_PROFILE.ua_full_version_list_json);
                                 if let Ok(parsed) =
                                     serde_json::from_str::<Vec<serde_json::Value>>(fvl_json)
@@ -369,7 +399,8 @@ unsafe extern "C" fn uad_to_json(info: *const v8::FunctionCallbackInfo) {
         let result = v8::Object::new(scope);
 
         // brands
-        let brands_json = state.profile
+        let brands_json = state
+            .profile
             .map(|p| p.ua_brands_json)
             .or_else(|| state.environment.get_str("navigator.userAgentData.brands"))
             .unwrap_or(DEFAULT_PROFILE.ua_brands_json);

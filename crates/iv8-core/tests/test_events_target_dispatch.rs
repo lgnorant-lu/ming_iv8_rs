@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for EventTarget (Task 33).
 // Tests addEventListener, dispatchEvent, and three-phase dispatch.
 

@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for crypto.getRandomValues + crypto.randomUUID (Task 41).
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};

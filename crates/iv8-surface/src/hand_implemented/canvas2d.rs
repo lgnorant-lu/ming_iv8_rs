@@ -53,10 +53,7 @@ pub fn create_canvas_2d_context_instance<'s>(
 }
 
 /// After instantiating the template, set default property values on the instance.
-pub fn install_default_values<'s>(
-    scope: &v8::PinScope<'s, '_>,
-    obj: v8::Local<'s, v8::Object>,
-) {
+pub fn install_default_values<'s>(scope: &v8::PinScope<'s, '_>, obj: v8::Local<'s, v8::Object>) {
     for (name, value) in CANVAS_2D_DEFAULTS {
         let key = v8::String::new(scope, name).unwrap();
 
@@ -69,7 +66,9 @@ pub fn install_default_values<'s>(
         } else {
             // String value — strip surrounding quotes
             let s = value.trim_matches('"');
-            v8::String::new(scope, s).map(|v| v.into()).unwrap_or_else(|| v8::undefined(scope).into())
+            v8::String::new(scope, s)
+                .map(|v| v.into())
+                .unwrap_or_else(|| v8::undefined(scope).into())
         };
 
         obj.set(scope, key.into(), val);
@@ -116,11 +115,7 @@ unsafe extern "C" fn property_setter(info: *const v8::FunctionCallbackInfo) {
 }
 
 /// Install a method stub on the prototype template.
-fn install_method_stub(
-    scope: &v8::PinScope<'_, '_>,
-    proto: Local<v8::ObjectTemplate>,
-    name: &str,
-) {
+fn install_method_stub(scope: &v8::PinScope<'_, '_>, proto: Local<v8::ObjectTemplate>, name: &str) {
     let fn_tmpl = FunctionTemplate::builder_raw(method_stub).build(scope);
     let key = v8::String::new(scope, name).unwrap();
     fn_tmpl.set_class_name(key);

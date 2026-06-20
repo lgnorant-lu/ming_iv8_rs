@@ -44,10 +44,20 @@ pub struct ValidationReport {
 
 impl ValidationReport {
     pub fn new() -> Self {
-        Self { total_definitions: 0, interfaces: 0, dictionaries: 0,
-            enums: 0, typedefs: 0, callbacks: 0, namespaces: 0, errors: Vec::new() }
+        Self {
+            total_definitions: 0,
+            interfaces: 0,
+            dictionaries: 0,
+            enums: 0,
+            typedefs: 0,
+            callbacks: 0,
+            namespaces: 0,
+            errors: Vec::new(),
+        }
     }
-    pub fn is_valid(&self) -> bool { self.errors.is_empty() }
+    pub fn is_valid(&self) -> bool {
+        self.errors.is_empty()
+    }
 }
 
 /// Extract the type name from an IDL type JSON value (recursive).
@@ -68,7 +78,9 @@ fn extract_type_name(val: &serde_json::Value) -> Option<String> {
                 return extract_type_name(inner);
             }
             // Union type: take first type
-            if let Some(serde_json::Value::Array(types)) = map.get("idType").or_else(|| map.get("types")) {
+            if let Some(serde_json::Value::Array(types)) =
+                map.get("idType").or_else(|| map.get("types"))
+            {
                 if let Some(first) = types.first() {
                     return extract_type_name(first);
                 }
@@ -89,12 +101,13 @@ fn extract_type_name(val: &serde_json::Value) -> Option<String> {
 
 /// Load and parse unified_ir.json, extracting structured definitions.
 pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
-    let content = std::fs::read_to_string(path)
-        .map_err(|e| format!("Failed to read {}: {}", path, e))?;
-    let root: serde_json::Value = serde_json::from_str(&content)
-        .map_err(|e| format!("Failed to parse {}: {}", path, e))?;
+    let content =
+        std::fs::read_to_string(path).map_err(|e| format!("Failed to read {}: {}", path, e))?;
+    let root: serde_json::Value =
+        serde_json::from_str(&content).map_err(|e| format!("Failed to parse {}: {}", path, e))?;
 
-    let defs_raw = root.get("definitions")
+    let defs_raw = root
+        .get("definitions")
         .and_then(|d| d.as_array())
         .ok_or("Missing 'definitions' array")?;
 
@@ -107,55 +120,128 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
             None => continue,
         };
 
-        let kind = obj.get("kind").and_then(|v| v.as_str()).unwrap_or("").to_string();
+        let kind = obj
+            .get("kind")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .to_string();
         *counts.entry(kind.clone()).or_insert(0) += 1;
 
-        let name = obj.get("name").and_then(|v| v.as_str()).map(|s| s.to_string());
-        let source = obj.get("source").and_then(|v| v.as_str()).map(|s| s.to_string());
-        let inheritance = obj.get("inheritance").and_then(|v| v.as_str()).map(|s| s.to_string());
-        let partial = obj.get("partial").and_then(|v| v.as_bool()).unwrap_or(false);
+        let name = obj
+            .get("name")
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string());
+        let source = obj
+            .get("source")
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string());
+        let inheritance = obj
+            .get("inheritance")
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string());
+        let partial = obj
+            .get("partial")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false);
 
         // Ext attrs: extract name strings
-        let ext_attrs: Vec<String> = obj.get("ext_attrs")
+        let ext_attrs: Vec<String> = obj
+            .get("ext_attrs")
             .and_then(|v| v.as_array())
-            .map(|arr| arr.iter()
-                .filter_map(|ea| ea.get("name").and_then(|n| n.as_str()).map(|s| s.to_string()))
-                .collect())
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|ea| {
+                        ea.get("name")
+                            .and_then(|n| n.as_str())
+                            .map(|s| s.to_string())
+                    })
+                    .collect()
+            })
             .unwrap_or_default();
 
         // Members
-        let members: Vec<MemberData> = obj.get("members")
+        let members: Vec<MemberData> = obj
+            .get("members")
             .and_then(|v| v.as_array())
-            .map(|arr| arr.iter().map(|m| {
-                let mobj = m.as_object();
-                let kind = mobj.and_then(|o| o.get("kind")).and_then(|v| v.as_str()).unwrap_or("").to_string();
-                let mname = mobj.and_then(|o| o.get("name")).and_then(|v| v.as_str()).map(|s| s.to_string());
-                let idl_type = mobj.and_then(|o| o.get("type")).and_then(extract_type_name);
-                let readonly = mobj.and_then(|o| o.get("readonly")).and_then(|v| v.as_bool()).unwrap_or(false);
-                let return_type = mobj.and_then(|o| o.get("return_type")).and_then(extract_type_name);
-                let args: Vec<String> = mobj.and_then(|o| o.get("arguments"))
-                    .and_then(|v| v.as_array())
-                    .map(|arr| arr.iter()
-                        .filter_map(|a| a.get("name").and_then(|n| n.as_str()).map(|s| s.to_string()))
-                        .collect())
-                    .unwrap_or_default();
+            .map(|arr| {
+                arr.iter()
+                    .map(|m| {
+                        let mobj = m.as_object();
+                        let kind = mobj
+                            .and_then(|o| o.get("kind"))
+                            .and_then(|v| v.as_str())
+                            .unwrap_or("")
+                            .to_string();
+                        let mname = mobj
+                            .and_then(|o| o.get("name"))
+                            .and_then(|v| v.as_str())
+                            .map(|s| s.to_string());
+                        let idl_type = mobj.and_then(|o| o.get("type")).and_then(extract_type_name);
+                        let readonly = mobj
+                            .and_then(|o| o.get("readonly"))
+                            .and_then(|v| v.as_bool())
+                            .unwrap_or(false);
+                        let return_type = mobj
+                            .and_then(|o| o.get("return_type"))
+                            .and_then(extract_type_name);
+                        let args: Vec<String> = mobj
+                            .and_then(|o| o.get("arguments"))
+                            .and_then(|v| v.as_array())
+                            .map(|arr| {
+                                arr.iter()
+                                    .filter_map(|a| {
+                                        a.get("name")
+                                            .and_then(|n| n.as_str())
+                                            .map(|s| s.to_string())
+                                    })
+                                    .collect()
+                            })
+                            .unwrap_or_default();
 
-                MemberData { kind, name: mname, idl_type, readonly, return_type, arguments: args }
-            }).collect())
+                        MemberData {
+                            kind,
+                            name: mname,
+                            idl_type,
+                            readonly,
+                            return_type,
+                            arguments: args,
+                        }
+                    })
+                    .collect()
+            })
             .unwrap_or_default();
 
         // Enum values
-        let values: Vec<String> = obj.get("values")
+        let values: Vec<String> = obj
+            .get("values")
             .and_then(|v| v.as_array())
-            .map(|arr| arr.iter().filter_map(|x| x.as_str().map(|s| s.to_string())).collect())
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|x| x.as_str().map(|s| s.to_string()))
+                    .collect()
+            })
             .unwrap_or_default();
 
-        let target = obj.get("target").and_then(|v| v.as_str()).map(|s| s.to_string());
-        let includes = obj.get("includes").and_then(|v| v.as_str()).map(|s| s.to_string());
+        let target = obj
+            .get("target")
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string());
+        let includes = obj
+            .get("includes")
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string());
 
         definitions.push(Definition {
-            kind, name, source, inheritance, ext_attrs, members,
-            partial, values, target, includes,
+            kind,
+            name,
+            source,
+            inheritance,
+            ext_attrs,
+            members,
+            partial,
+            values,
+            target,
+            includes,
         });
     }
 
@@ -165,7 +251,8 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
         dictionaries: *counts.get("dictionary").unwrap_or(&0),
         enums: *counts.get("enum").unwrap_or(&0),
         typedefs: *counts.get("typedef").unwrap_or(&0),
-        callbacks: *counts.get("callback").unwrap_or(&0) + *counts.get("callback_interface").unwrap_or(&0),
+        callbacks: *counts.get("callback").unwrap_or(&0)
+            + *counts.get("callback_interface").unwrap_or(&0),
         namespaces: *counts.get("namespace").unwrap_or(&0),
     };
 

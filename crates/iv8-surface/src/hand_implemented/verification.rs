@@ -9,9 +9,9 @@
 
 #[cfg(test)]
 mod tests {
-    use super::super::{CANVAS_2D_DEFAULTS, CANVAS_2D_METHODS};
     use super::super::navigator::*;
     use super::super::webgl::*;
+    use super::super::{CANVAS_2D_DEFAULTS, CANVAS_2D_METHODS};
 
     // ── Canvas 2D descriptor tests ───────────────────────────────────────
 

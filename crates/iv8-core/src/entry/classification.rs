@@ -300,8 +300,7 @@ fn detect_browserify_strong(source: &str) -> bool {
     if !has_require_wrapper {
         return false;
     }
-    let has_prelude_separator = source.contains("},{},[")
-        || source.contains("},{},{},[");
+    let has_prelude_separator = source.contains("},{},[") || source.contains("},{},{},[");
     has_prelude_separator
 }
 
@@ -354,7 +353,11 @@ fn detect_vite(source: &str) -> bool {
 /// Strips leading `//` comment lines before checking for IIFE prefix.
 fn detect_iife_wrapper(source: &str) -> bool {
     let mut trimmed = source.trim_start();
-    while trimmed.starts_with("//") || trimmed.starts_with(' ') || trimmed.starts_with('\n') || trimmed.starts_with('\r') {
+    while trimmed.starts_with("//")
+        || trimmed.starts_with(' ')
+        || trimmed.starts_with('\n')
+        || trimmed.starts_with('\r')
+    {
         if let Some(lf) = trimmed.find('\n') {
             trimmed = trimmed[lf + 1..].trim_start();
         } else {
@@ -491,7 +494,9 @@ mod tests {
 
     #[test]
     fn test_extract_signals_browserify() {
-        let s = extract_signals(r#"(function(){var e={};function r(){return o;}return r})()({1:[function(require,module,exports){module.exports=42}]},{},[1])"#);
+        let s = extract_signals(
+            r#"(function(){var e={};function r(){return o;}return r})()({1:[function(require,module,exports){module.exports=42}]},{},[1])"#,
+        );
         assert!(s.contains(&"browserify_strong".into()));
     }
 

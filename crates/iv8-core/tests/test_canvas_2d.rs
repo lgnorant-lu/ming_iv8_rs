@@ -4,18 +4,16 @@ mod common;
 #[test]
 fn test_canvas_create_element() {
     let mut k = common::make_kernel();
-    let val = common::to_str(&k.eval_to_rust_value(
-        "typeof document.createElement('canvas')",
-    ));
+    let val = common::to_str(&k.eval_to_rust_value("typeof document.createElement('canvas')"));
     assert_eq!(val, "object");
 }
 
 #[test]
 fn test_canvas_get_context_2d() {
     let mut k = common::make_kernel();
-    let val = common::to_str(&k.eval_to_rust_value(
-        "typeof document.createElement('canvas').getContext('2d')",
-    ));
+    let val = common::to_str(
+        &k.eval_to_rust_value("typeof document.createElement('canvas').getContext('2d')"),
+    );
     assert!(val == "object" || val.contains("Canvas"), "got {}", val);
 }
 
@@ -32,9 +30,7 @@ fn test_canvas_2d_fill_rect() {
 #[test]
 fn test_canvas_2d_fill_style() {
     let mut k = common::make_kernel();
-    let ctx = k.eval_to_rust_value(
-        "document.createElement('canvas').getContext('2d').fillStyle",
-    );
+    let ctx = k.eval_to_rust_value("document.createElement('canvas').getContext('2d').fillStyle");
     assert!(!common::to_str(&ctx).is_empty(), "fillStyle empty");
 }
 

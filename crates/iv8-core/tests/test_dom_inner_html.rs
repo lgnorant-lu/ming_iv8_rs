@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for innerHTML/outerHTML/textContent (Task 66).
 // Acceptance criteria:
 // - element.innerHTML returns child HTML string
@@ -25,7 +24,8 @@ fn inner_html_basic() {
 
 #[test]
 fn inner_html_nested() {
-    let mut kernel = common::make_kernel_with_doc("<div id='x'><ul><li>1</li><li>2</li></ul></div>");
+    let mut kernel =
+        common::make_kernel_with_doc("<div id='x'><ul><li>1</li><li>2</li></ul></div>");
     let result = kernel.eval_to_rust_value("document.getElementById('x').innerHTML");
     assert_eq!(
         result,
@@ -76,7 +76,8 @@ fn text_content_setter() {
 
 #[test]
 fn text_content_setter_clears_children() {
-    let mut kernel = common::make_kernel_with_doc("<ul id='list'><li>1</li><li>2</li><li>3</li></ul>");
+    let mut kernel =
+        common::make_kernel_with_doc("<ul id='list'><li>1</li><li>2</li><li>3</li></ul>");
     kernel.eval_to_rust_value("document.getElementById('list').textContent = 'cleared'");
     let result = kernel.eval_to_rust_value("document.querySelectorAll('li').length");
     assert_eq!(result, RustValue::Int(0));

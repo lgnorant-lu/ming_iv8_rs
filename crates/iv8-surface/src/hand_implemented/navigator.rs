@@ -7,11 +7,28 @@
 
 /// List of all 22 Navigator properties with native getters.
 pub const NAVIGATOR_PROPERTIES: &[&str] = &[
-    "userAgent", "appVersion", "platform", "vendor", "vendorSub",
-    "product", "productSub", "language", "languages", "hardwareConcurrency",
-    "deviceMemory", "maxTouchPoints", "cookieEnabled", "onLine",
-    "doNotTrack", "webdriver", "appName", "appCodeName",
-    "permissions", "mediaDevices", "serviceWorker", "pdfViewerEnabled",
+    "userAgent",
+    "appVersion",
+    "platform",
+    "vendor",
+    "vendorSub",
+    "product",
+    "productSub",
+    "language",
+    "languages",
+    "hardwareConcurrency",
+    "deviceMemory",
+    "maxTouchPoints",
+    "cookieEnabled",
+    "onLine",
+    "doNotTrack",
+    "webdriver",
+    "appName",
+    "appCodeName",
+    "permissions",
+    "mediaDevices",
+    "serviceWorker",
+    "pdfViewerEnabled",
 ];
 
 /// Verify a Navigator property getter returns a non-null value.

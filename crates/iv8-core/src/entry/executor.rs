@@ -136,12 +136,8 @@ pub fn run_entry(
                 result.diagnostic_records.extend(report.diagnostics);
                 transformed
             }
-            StrategyKind::Dispatch => {
-                source.to_string()
-            }
-            StrategyKind::BrowserifyBridge => {
-                crate::entry::browserify::wrap_source(source)
-            }
+            StrategyKind::Dispatch => source.to_string(),
+            StrategyKind::BrowserifyBridge => crate::entry::browserify::wrap_source(source),
             StrategyKind::SourceRegex => source.to_string(),
             _ => source.to_string(),
         };
@@ -336,13 +332,14 @@ fn apply_strategy_prelude(
         StrategyKind::CdpProbe => Ok(()),
         StrategyKind::BrowserifyBridge => {
             kernel
-                .eval(crate::entry::browserify::bridge_prelude(), EvalOpts::default())
+                .eval(
+                    crate::entry::browserify::bridge_prelude(),
+                    EvalOpts::default(),
+                )
                 .map_err(|e| format!("browserify prelude: {}", e))?;
             Ok(())
         }
-        StrategyKind::RollupBridge | StrategyKind::ViteBridge | StrategyKind::UmdBridge => {
-            Ok(())
-        }
+        StrategyKind::RollupBridge | StrategyKind::ViteBridge | StrategyKind::UmdBridge => Ok(()),
     }
 }
 
@@ -398,32 +395,28 @@ fn collect_strategy_evidence(
     }
 
     if matches!(kind, StrategyKind::BrowserifyBridge) {
-        let (graph, evidence, diagnostics) =
-            crate::entry::browserify::collect_evidence(kernel);
+        let (graph, evidence, diagnostics) = crate::entry::browserify::collect_evidence(kernel);
         result.module_graph = Some(graph);
         result.observed_evidence.extend(evidence);
         result.diagnostic_records.extend(diagnostics);
     }
 
     if matches!(kind, StrategyKind::RollupBridge) {
-        let (graph, evidence, diagnostics) =
-            crate::entry::rollup::collect_evidence(kernel);
+        let (graph, evidence, diagnostics) = crate::entry::rollup::collect_evidence(kernel);
         result.module_graph = Some(graph);
         result.observed_evidence.extend(evidence);
         result.diagnostic_records.extend(diagnostics);
     }
 
     if matches!(kind, StrategyKind::ViteBridge) {
-        let (graph, evidence, diagnostics) =
-            crate::entry::vite::collect_evidence(kernel);
+        let (graph, evidence, diagnostics) = crate::entry::vite::collect_evidence(kernel);
         result.module_graph = Some(graph);
         result.observed_evidence.extend(evidence);
         result.diagnostic_records.extend(diagnostics);
     }
 
     if matches!(kind, StrategyKind::UmdBridge) {
-        let (graph, evidence, diagnostics) =
-            crate::entry::umd::collect_evidence(kernel);
+        let (graph, evidence, diagnostics) = crate::entry::umd::collect_evidence(kernel);
         result.module_graph = Some(graph);
         result.observed_evidence.extend(evidence);
         result.diagnostic_records.extend(diagnostics);
@@ -671,7 +664,7 @@ fn evidence_satisfied(result: &EntryResult, expected: &[Evidence]) -> bool {
                     || result.diagnostics.activation_timing.is_some()
                     || !result.diagnostics.policy_constraints.is_empty()
                     || result.diagnostics.reload_reason.is_some()
-                    || !result.diagnostic_records.is_empty()  // runtime diagnostic output
+                    || !result.diagnostic_records.is_empty() // runtime diagnostic output
             }
             Evidence::EvalSources => result
                 .trace

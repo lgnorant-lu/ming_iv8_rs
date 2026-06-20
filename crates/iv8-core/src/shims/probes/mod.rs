@@ -25,9 +25,7 @@ pub enum ProbeResult {
         actual: String,
     },
     /// Probe was skipped (e.g., feature not applicable).
-    Skip {
-        reason: String,
-    },
+    Skip { reason: String },
 }
 
 /// A behavior probe that validates a specific browser API shape.

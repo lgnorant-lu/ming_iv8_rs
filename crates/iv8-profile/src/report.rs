@@ -139,10 +139,7 @@ impl ProfileReport {
             certification: CertificationInfo {
                 level: "deterministic_v8_surface_equivalence".into(),
                 browser_zero_diff: false,
-                certifies: vec![
-                    "profile_loaded".into(),
-                    "static_js_values".into(),
-                ],
+                certifies: vec!["profile_loaded".into(), "static_js_values".into()],
                 does_not_certify: vec![
                     "chromium_layout_parity".into(),
                     "network_stack_parity".into(),
@@ -174,12 +171,12 @@ impl ProfileReport {
             }
             _ => {}
         }
-        let denom = self.summary.total.saturating_sub(
-            self.summary.expected_divergences as u32,
-        );
+        let denom = self
+            .summary
+            .total
+            .saturating_sub(self.summary.expected_divergences as u32);
         if denom > 0 {
-            self.summary.pass_pct =
-                (self.summary.passed as f64 / denom as f64) * 100.0;
+            self.summary.pass_pct = (self.summary.passed as f64 / denom as f64) * 100.0;
         } else {
             self.summary.pass_pct = 100.0;
         }
@@ -190,9 +187,7 @@ impl ProfileReport {
     pub fn finalize(&mut self) {
         if self.summary.total == 0 {
             self.verdict = "no_data".into();
-        } else if self.summary.material_failures > 0
-            || self.summary.unexpected_divergences > 0
-        {
+        } else if self.summary.material_failures > 0 || self.summary.unexpected_divergences > 0 {
             self.verdict = "failed".into();
         } else if self.summary.pass_pct >= 100.0 {
             self.verdict = "equivalent".into();

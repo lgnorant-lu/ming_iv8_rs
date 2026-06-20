@@ -1,8 +1,8 @@
+mod codegen;
+mod ea_handler;
 mod ir;
 mod topo;
 mod type_mapper;
-mod ea_handler;
-mod codegen;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -28,15 +28,24 @@ fn main() {
     eprintln!("Loading {} ...", input_path);
     let (definitions, stats) = match ir::load_ir(&input_path) {
         Ok(v) => v,
-        Err(e) => { eprintln!("Error: {}", e); std::process::exit(1); }
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            std::process::exit(1);
+        }
     };
-    eprintln!("Loaded {} definitions ({} interfaces, {} dicts, {} enums)",
-        stats.definitions, stats.interfaces, stats.dictionaries, stats.enums);
+    eprintln!(
+        "Loaded {} definitions ({} interfaces, {} dicts, {} enums)",
+        stats.definitions, stats.interfaces, stats.dictionaries, stats.enums
+    );
 
     // Run topological sort
     let (merged, topo_result) = topo::merge_and_sort(&definitions);
-    eprintln!("Topo: {} sorted, {} cycles, {} merged",
-        topo_result.sorted.len(), topo_result.cycles.len(), merged.len());
+    eprintln!(
+        "Topo: {} sorted, {} cycles, {} merged",
+        topo_result.sorted.len(),
+        topo_result.cycles.len(),
+        merged.len()
+    );
     if !topo_result.cycles.is_empty() {
         eprintln!("WARNING: {} cycles detected!", topo_result.cycles.len());
     }
@@ -60,7 +69,10 @@ fn main() {
 
         let file_path = format!("{}/{}.rs", output_dir, mod_name);
         std::fs::write(&file_path, &file.content).unwrap();
-        eprintln!("  {}: {} interfaces -> {}.rs", file.domain, file.interface_count, mod_name);
+        eprintln!(
+            "  {}: {} interfaces -> {}.rs",
+            file.domain, file.interface_count, mod_name
+        );
     }
 
     // Generate mod.rs
@@ -68,17 +80,28 @@ fn main() {
     std::fs::write(format!("{}/mod.rs", output_dir), &mod_content).unwrap();
 
     // Generate install_all.rs
-    let install_content = codegen::generate_install_all(&merged, &topo_result.sorted, &install_info.domain_of);
+    let install_content =
+        codegen::generate_install_all(&merged, &topo_result.sorted, &install_info.domain_of);
     std::fs::write(format!("{}/install_all.rs", output_dir), &install_content).unwrap();
-    eprintln!("  install_all.rs: {} interfaces in topological order", install_info.sorted.len());
-    eprintln!("\nGenerated {} interfaces across {} files.", total_ifaces, files.len());
+    eprintln!(
+        "  install_all.rs: {} interfaces in topological order",
+        install_info.sorted.len()
+    );
+    eprintln!(
+        "\nGenerated {} interfaces across {} files.",
+        total_ifaces,
+        files.len()
+    );
     eprintln!("Done.");
 }
 
 fn print_stats(path: &str) {
     let (_, stats) = match ir::load_ir(path) {
         Ok(v) => v,
-        Err(e) => { eprintln!("Error: {}", e); return; }
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            return;
+        }
     };
     println!("Total definitions: {}", stats.definitions);
     println!("Interfaces:        {}", stats.interfaces);
@@ -90,5 +113,7 @@ fn print_stats(path: &str) {
 }
 
 fn get_arg(args: &[String], flag: &str) -> Option<String> {
-    args.iter().position(|a| a == flag).and_then(|i| args.get(i + 1).cloned())
+    args.iter()
+        .position(|a| a == flag)
+        .and_then(|i| args.get(i + 1).cloned())
 }

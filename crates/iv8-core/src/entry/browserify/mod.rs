@@ -41,8 +41,8 @@ pub struct BrowserifyDetection {
 }
 
 pub fn detect(source: &str) -> BrowserifyDetection {
-    let has_wrappers = source.contains(WRAPPER_PATTERN)
-        || source.contains("function(require, module, exports)");
+    let has_wrappers =
+        source.contains(WRAPPER_PATTERN) || source.contains("function(require, module, exports)");
     if !has_wrappers {
         return BrowserifyDetection {
             detected: false,
@@ -52,8 +52,7 @@ pub fn detect(source: &str) -> BrowserifyDetection {
         };
     }
 
-    let has_prelude = source.contains("},{},[")
-        || source.contains("},{},{},[");
+    let has_prelude = source.contains("},{},[") || source.contains("},{},{},[");
 
     let mut module_count = 0;
     let mut pos = 0;
@@ -119,7 +118,13 @@ pub fn bridge_prelude() -> &'static str {
 }
 
 /// Collect evidence after Browserify bundle execution.
-pub fn collect_evidence(kernel: &mut EmbeddedV8Kernel) -> (serde_json::Value, Vec<diag::EvidenceRecord>, Vec<diag::DiagnosticRecord>) {
+pub fn collect_evidence(
+    kernel: &mut EmbeddedV8Kernel,
+) -> (
+    serde_json::Value,
+    Vec<diag::EvidenceRecord>,
+    Vec<diag::DiagnosticRecord>,
+) {
     let mut evidence: Vec<diag::EvidenceRecord> = Vec::new();
     let mut diagnostics: Vec<diag::DiagnosticRecord> = Vec::new();
 
@@ -271,8 +276,13 @@ fn walk_entries(table: &ObjectLit, source: &str) -> Vec<BrowserifyModuleEntry> {
 
 fn extract_deps_ast(val: &Expr) -> std::collections::HashMap<String, usize> {
     let mut deps = std::collections::HashMap::new();
-    let arr = match val { Expr::Array(a) => a, _ => return deps };
-    if arr.elems.len() < 2 { return deps; }
+    let arr = match val {
+        Expr::Array(a) => a,
+        _ => return deps,
+    };
+    if arr.elems.len() < 2 {
+        return deps;
+    }
     if let Some(ExprOrSpread { expr, .. }) = &arr.elems[1] {
         if let Expr::Object(obj) = &**expr {
             for prop in &obj.props {
@@ -296,8 +306,13 @@ fn extract_deps_ast(val: &Expr) -> std::collections::HashMap<String, usize> {
 }
 
 fn extract_body_span(val: &Expr, source: &str) -> String {
-    let arr = match val { Expr::Array(a) => a, _ => return String::new() };
-    if arr.elems.is_empty() { return String::new(); }
+    let arr = match val {
+        Expr::Array(a) => a,
+        _ => return String::new(),
+    };
+    if arr.elems.is_empty() {
+        return String::new();
+    }
     if let Some(ExprOrSpread { expr, .. }) = &arr.elems[0] {
         let lo = expr.span().lo.0 as usize;
         let hi = expr.span().hi.0 as usize;
@@ -346,8 +361,14 @@ mod tests {
     fn test_wrap_source_transforms_prelude() {
         let src = "(function(){return function r(id){return id};})()({1:[function(require,module,exports){module.exports=42}]},{},[1])";
         let wrapped = wrap_source(src);
-        assert!(wrapped.contains("__iv8_b_require"), "wrapped source should assign __iv8_b_require");
-        assert!(wrapped.contains("globalThis.__iv8_b_require=_r"), "wrapped source should expose require");
+        assert!(
+            wrapped.contains("__iv8_b_require"),
+            "wrapped source should assign __iv8_b_require"
+        );
+        assert!(
+            wrapped.contains("globalThis.__iv8_b_require=_r"),
+            "wrapped source should expose require"
+        );
         assert_ne!(wrapped, src, "wrapped source should differ from original");
     }
 

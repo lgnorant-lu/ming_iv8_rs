@@ -74,7 +74,10 @@ fn test_prototype_set_does_not_override() {
     let i2 = func.new_instance(scope, &[]).unwrap();
     let v2 = get_bool_from_method(scope, i2, &key);
     // FINDING: override does NOT take effect — still returns false
-    assert!(!v2, "override should be silently ignored: expected false, got true");
+    assert!(
+        !v2,
+        "override should be silently ignored: expected false, got true"
+    );
 }
 
 #[test]

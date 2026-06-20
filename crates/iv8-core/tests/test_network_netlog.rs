@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for __iv8__.netLog (Task 49).
 // Acceptance criteria:
 // - __iv8__.netLog.entries is an array

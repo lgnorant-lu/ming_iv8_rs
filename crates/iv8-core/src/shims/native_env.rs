@@ -54,8 +54,7 @@ unsafe extern "C" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) 
 fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Create native Navigator template — inherits generated template's prototype
     let gen_tmpl = create_navigator_template(scope, None);
-    let nav_tmpl =
-        v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+    let nav_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     nav_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Navigator"));
     nav_tmpl.inherit(gen_tmpl);
 
@@ -73,8 +72,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                 name.into(),
                 Some(getter),
                 None,
-                v8::PropertyAttribute::DONT_DELETE
-                    | v8::PropertyAttribute::DONT_ENUM,
+                v8::PropertyAttribute::DONT_DELETE | v8::PropertyAttribute::DONT_ENUM,
             );
         };
     }
@@ -147,7 +145,8 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     proto.set(gamepads_name.into(), gamepads_fn.into());
 
     // requestMediaKeySystemAccess: function returning rejected Promise (v0.8.61)
-    let eme_fn = v8::FunctionTemplate::builder_raw(nav_request_media_key_system_access).build(scope);
+    let eme_fn =
+        v8::FunctionTemplate::builder_raw(nav_request_media_key_system_access).build(scope);
     let eme_name = crate::v8_utils::v8_string(scope, "requestMediaKeySystemAccess");
     eme_fn.set_class_name(eme_name);
     eme_fn.remove_prototype();
@@ -197,10 +196,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
 // NOTE: webkitGetUserMedia was in original scope but is a global constructor
 // (chrome_extensions.rs), not a Navigator property. Removed from conditional set.
 // chrome_version flag retained in BrowserProfile for future use.
-fn conditionally_hide_properties(
-    scope: &v8::PinScope<'_, '_>,
-    nav_obj: v8::Local<v8::Object>,
-) {
+fn conditionally_hide_properties(scope: &v8::PinScope<'_, '_>, nav_obj: v8::Local<v8::Object>) {
     let isolate: &v8::Isolate = scope;
     let state = RuntimeState::get(isolate);
     let profile = state.profile.unwrap_or(&DEFAULT_PROFILE);
@@ -283,26 +279,96 @@ macro_rules! env_bool_getter {
     };
 }
 
-env_str_getter!(nav_user_agent, "navigator.userAgent", user_agent, DEFAULT_PROFILE.user_agent);
-env_str_getter!(nav_app_version, "navigator.appVersion", app_version, DEFAULT_PROFILE.app_version);
-env_str_getter!(nav_platform, "navigator.platform", platform, DEFAULT_PROFILE.platform);
-env_str_getter!(nav_vendor, "navigator.vendor", vendor, DEFAULT_PROFILE.vendor);
-env_str_getter!(nav_vendor_sub, "navigator.vendorSub", vendor_sub, DEFAULT_PROFILE.vendor_sub);
-env_str_getter!(nav_product, "navigator.product", product, DEFAULT_PROFILE.product);
-env_str_getter!(nav_product_sub, "navigator.productSub", product_sub, DEFAULT_PROFILE.product_sub);
-env_str_getter!(nav_language, "navigator.language", language, DEFAULT_PROFILE.language);
-env_str_getter!(nav_app_name, "navigator.appName", app_name, DEFAULT_PROFILE.app_name);
-env_str_getter!(nav_app_code_name, "navigator.appCodeName", app_code_name, DEFAULT_PROFILE.app_code_name);
+env_str_getter!(
+    nav_user_agent,
+    "navigator.userAgent",
+    user_agent,
+    DEFAULT_PROFILE.user_agent
+);
+env_str_getter!(
+    nav_app_version,
+    "navigator.appVersion",
+    app_version,
+    DEFAULT_PROFILE.app_version
+);
+env_str_getter!(
+    nav_platform,
+    "navigator.platform",
+    platform,
+    DEFAULT_PROFILE.platform
+);
+env_str_getter!(
+    nav_vendor,
+    "navigator.vendor",
+    vendor,
+    DEFAULT_PROFILE.vendor
+);
+env_str_getter!(
+    nav_vendor_sub,
+    "navigator.vendorSub",
+    vendor_sub,
+    DEFAULT_PROFILE.vendor_sub
+);
+env_str_getter!(
+    nav_product,
+    "navigator.product",
+    product,
+    DEFAULT_PROFILE.product
+);
+env_str_getter!(
+    nav_product_sub,
+    "navigator.productSub",
+    product_sub,
+    DEFAULT_PROFILE.product_sub
+);
+env_str_getter!(
+    nav_language,
+    "navigator.language",
+    language,
+    DEFAULT_PROFILE.language
+);
+env_str_getter!(
+    nav_app_name,
+    "navigator.appName",
+    app_name,
+    DEFAULT_PROFILE.app_name
+);
+env_str_getter!(
+    nav_app_code_name,
+    "navigator.appCodeName",
+    app_code_name,
+    DEFAULT_PROFILE.app_code_name
+);
 env_f64_getter!(
     nav_hardware_concurrency,
     "navigator.hardwareConcurrency",
     hardware_concurrency,
     DEFAULT_PROFILE.hardware_concurrency
 );
-env_f64_getter!(nav_device_memory, "navigator.deviceMemory", device_memory, DEFAULT_PROFILE.device_memory);
-env_f64_getter!(nav_max_touch_points, "navigator.maxTouchPoints", max_touch_points, DEFAULT_PROFILE.max_touch_points);
-env_bool_getter!(nav_cookie_enabled, "navigator.cookieEnabled", cookie_enabled, DEFAULT_PROFILE.cookie_enabled);
-env_bool_getter!(nav_online, "navigator.onLine", on_line, DEFAULT_PROFILE.on_line);
+env_f64_getter!(
+    nav_device_memory,
+    "navigator.deviceMemory",
+    device_memory,
+    DEFAULT_PROFILE.device_memory
+);
+env_f64_getter!(
+    nav_max_touch_points,
+    "navigator.maxTouchPoints",
+    max_touch_points,
+    DEFAULT_PROFILE.max_touch_points
+);
+env_bool_getter!(
+    nav_cookie_enabled,
+    "navigator.cookieEnabled",
+    cookie_enabled,
+    DEFAULT_PROFILE.cookie_enabled
+);
+env_bool_getter!(
+    nav_online,
+    "navigator.onLine",
+    on_line,
+    DEFAULT_PROFILE.on_line
+);
 
 // navigator.languages → array from environment
 unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
@@ -322,7 +388,11 @@ unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
                     .filter_map(|v| v.as_str().map(|s| s.to_string()))
                     .collect()
             } else {
-                DEFAULT_PROFILE.languages.iter().map(|s| s.to_string()).collect()
+                DEFAULT_PROFILE
+                    .languages
+                    .iter()
+                    .map(|s| s.to_string())
+                    .collect()
             }
         } else {
             let lang = state
@@ -484,11 +554,7 @@ unsafe extern "C" fn nav_do_not_track(info: *const v8::FunctionCallbackInfo) {
         let val = state
             .profile
             .and_then(|p| p.do_not_track)
-            .or_else(|| {
-                state
-                    .environment
-                    .get_str("navigator.doNotTrack")
-            });
+            .or_else(|| state.environment.get_str("navigator.doNotTrack"));
         if let Some(s) = val {
             if let Some(v) = v8::String::new(scope, s) {
                 rv.set(v.into());
@@ -508,9 +574,17 @@ unsafe extern "C" fn nav_connection(info: *const v8::FunctionCallbackInfo) {
         let obj = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
         obj.set(scope, s("effectiveType").into(), s("4g").into());
-        obj.set(scope, s("downlink").into(), v8::Number::new(scope, 10.0).into());
+        obj.set(
+            scope,
+            s("downlink").into(),
+            v8::Number::new(scope, 10.0).into(),
+        );
         obj.set(scope, s("rtt").into(), v8::Number::new(scope, 50.0).into());
-        obj.set(scope, s("saveData").into(), v8::Boolean::new(scope, false).into());
+        obj.set(
+            scope,
+            s("saveData").into(),
+            v8::Boolean::new(scope, false).into(),
+        );
         obj.set(scope, s("type").into(), s("wifi").into());
         let ts = v8::Symbol::get_to_string_tag(scope);
         obj.set(scope, ts.into(), s("NetworkInformation").into());
@@ -526,9 +600,21 @@ unsafe extern "C" fn nav_get_battery(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let result = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
-        result.set(scope, s("charging").into(), v8::Boolean::new(scope, true).into());
-        result.set(scope, s("chargingTime").into(), v8::Number::new(scope, 0.0).into());
-        result.set(scope, s("dischargingTime").into(), v8::Number::new(scope, f64::INFINITY).into());
+        result.set(
+            scope,
+            s("charging").into(),
+            v8::Boolean::new(scope, true).into(),
+        );
+        result.set(
+            scope,
+            s("chargingTime").into(),
+            v8::Number::new(scope, 0.0).into(),
+        );
+        result.set(
+            scope,
+            s("dischargingTime").into(),
+            v8::Number::new(scope, f64::INFINITY).into(),
+        );
         result.set(scope, s("level").into(), v8::Number::new(scope, 1.0).into());
         let resolver = crate::v8_utils::v8_resolver(scope);
         resolver.resolve(scope, result.into());
@@ -568,9 +654,21 @@ unsafe extern "C" fn nav_geolocation(info: *const v8::FunctionCallbackInfo) {
             tmpl.remove_prototype();
             crate::v8_utils::v8_fn(scope, &tmpl)
         };
-        obj.set(scope, s("getCurrentPosition").into(), build_stub("getCurrentPosition").into());
-        obj.set(scope, s("watchPosition").into(), build_stub("watchPosition").into());
-        obj.set(scope, s("clearWatch").into(), build_stub("clearWatch").into());
+        obj.set(
+            scope,
+            s("getCurrentPosition").into(),
+            build_stub("getCurrentPosition").into(),
+        );
+        obj.set(
+            scope,
+            s("watchPosition").into(),
+            build_stub("watchPosition").into(),
+        );
+        obj.set(
+            scope,
+            s("clearWatch").into(),
+            build_stub("clearWatch").into(),
+        );
         rv.set(obj.into());
     }));
 }
@@ -614,7 +712,11 @@ unsafe extern "C" fn nav_credentials(info: *const v8::FunctionCallbackInfo) {
         obj.set(scope, s("get").into(), build_stub("get").into());
         obj.set(scope, s("create").into(), build_stub("create").into());
         obj.set(scope, s("store").into(), build_stub("store").into());
-        obj.set(scope, s("preventSilentAccess").into(), build_stub("preventSilentAccess").into());
+        obj.set(
+            scope,
+            s("preventSilentAccess").into(),
+            build_stub("preventSilentAccess").into(),
+        );
         rv.set(obj.into());
     }));
 }
@@ -684,8 +786,16 @@ unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
             let p = v8::Object::new(scope);
             p.set(scope, s("name").into(), s(name).into());
             p.set(scope, s("filename").into(), s("internal-pdf-viewer").into());
-            p.set(scope, s("description").into(), s("Portable Document Format").into());
-            p.set(scope, s("length").into(), v8::Number::new(scope, 2.0).into());
+            p.set(
+                scope,
+                s("description").into(),
+                s("Portable Document Format").into(),
+            );
+            p.set(
+                scope,
+                s("length").into(),
+                v8::Number::new(scope, 2.0).into(),
+            );
             p.set(scope, v8::Integer::new(scope, 0).into(), m1.into());
             p.set(scope, v8::Integer::new(scope, 1).into(), m2.into());
             p.set(scope, ts.into(), s("Plugin").into());
@@ -701,8 +811,7 @@ unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
 fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // v0.8.61: inherit from generated Screen template (9 skeleton properties)
     let gen_tmpl = create_screen_template(scope, None);
-    let screen_tmpl =
-        v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+    let screen_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     screen_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Screen"));
     screen_tmpl.inherit(gen_tmpl);
 
@@ -718,8 +827,7 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
                 name.into(),
                 Some(getter),
                 None,
-                v8::PropertyAttribute::DONT_DELETE
-                    | v8::PropertyAttribute::DONT_ENUM,
+                v8::PropertyAttribute::DONT_DELETE | v8::PropertyAttribute::DONT_ENUM,
             );
         };
     }
@@ -758,7 +866,12 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     }
 }
 
-env_bool_getter!(nav_pdf_viewer_enabled, "navigator.pdfViewerEnabled", pdf_viewer_enabled, DEFAULT_PROFILE.pdf_viewer_enabled);
+env_bool_getter!(
+    nav_pdf_viewer_enabled,
+    "navigator.pdfViewerEnabled",
+    pdf_viewer_enabled,
+    DEFAULT_PROFILE.pdf_viewer_enabled
+);
 
 // javaEnabled() → always returns false (no Java plugin in V8 context)
 unsafe extern "C" fn nav_java_enabled(info: *const v8::FunctionCallbackInfo) {
@@ -800,9 +913,7 @@ unsafe extern "C" fn nav_request_media_key_system_access(info: *const v8::Functi
                         let reject: v8::Local<v8::Function> =
                             unsafe { v8::Local::cast_unchecked(reject_fn) };
                         let err_obj = v8::Exception::type_error(scope, v8_str(scope, ""));
-                        if let Some(promise) =
-                            reject.call(scope, ctor.into(), &[err_obj.into()])
-                        {
+                        if let Some(promise) = reject.call(scope, ctor.into(), &[err_obj.into()]) {
                             rv.set(promise);
                             return;
                         }
@@ -831,9 +942,7 @@ unsafe extern "C" fn nav_request_midi_access(info: *const v8::FunctionCallbackIn
                         let reject: v8::Local<v8::Function> =
                             unsafe { v8::Local::cast_unchecked(reject_fn) };
                         let err_obj = v8::Exception::type_error(scope, v8_str(scope, ""));
-                        if let Some(promise) =
-                            reject.call(scope, ctor.into(), &[err_obj.into()])
-                        {
+                        if let Some(promise) = reject.call(scope, ctor.into(), &[err_obj.into()]) {
                             rv.set(promise);
                             return;
                         }
@@ -849,11 +958,51 @@ fn v8_str<'s>(scope: &'s v8::PinScope<'s, '_>, s: &str) -> v8::Local<'s, v8::Str
     crate::v8_utils::v8_string(scope, s)
 }
 
-env_f64_getter!(screen_width, "screen.width", screen_width, DEFAULT_PROFILE.screen_width);
-env_f64_getter!(screen_height, "screen.height", screen_height, DEFAULT_PROFILE.screen_height);
-env_f64_getter!(screen_avail_width, "screen.availWidth", screen_avail_width, DEFAULT_PROFILE.screen_avail_width);
-env_f64_getter!(screen_avail_height, "screen.availHeight", screen_avail_height, DEFAULT_PROFILE.screen_avail_height);
-env_f64_getter!(screen_color_depth, "screen.colorDepth", screen_color_depth, DEFAULT_PROFILE.screen_color_depth);
-env_f64_getter!(screen_pixel_depth, "screen.pixelDepth", screen_pixel_depth, DEFAULT_PROFILE.screen_pixel_depth);
-env_f64_getter!(screen_avail_left, "screen.availLeft", screen_avail_left, DEFAULT_PROFILE.screen_avail_left);
-env_f64_getter!(screen_avail_top, "screen.availTop", screen_avail_top, DEFAULT_PROFILE.screen_avail_top);
+env_f64_getter!(
+    screen_width,
+    "screen.width",
+    screen_width,
+    DEFAULT_PROFILE.screen_width
+);
+env_f64_getter!(
+    screen_height,
+    "screen.height",
+    screen_height,
+    DEFAULT_PROFILE.screen_height
+);
+env_f64_getter!(
+    screen_avail_width,
+    "screen.availWidth",
+    screen_avail_width,
+    DEFAULT_PROFILE.screen_avail_width
+);
+env_f64_getter!(
+    screen_avail_height,
+    "screen.availHeight",
+    screen_avail_height,
+    DEFAULT_PROFILE.screen_avail_height
+);
+env_f64_getter!(
+    screen_color_depth,
+    "screen.colorDepth",
+    screen_color_depth,
+    DEFAULT_PROFILE.screen_color_depth
+);
+env_f64_getter!(
+    screen_pixel_depth,
+    "screen.pixelDepth",
+    screen_pixel_depth,
+    DEFAULT_PROFILE.screen_pixel_depth
+);
+env_f64_getter!(
+    screen_avail_left,
+    "screen.availLeft",
+    screen_avail_left,
+    DEFAULT_PROFILE.screen_avail_left
+);
+env_f64_getter!(
+    screen_avail_top,
+    "screen.availTop",
+    screen_avail_top,
+    DEFAULT_PROFILE.screen_avail_top
+);

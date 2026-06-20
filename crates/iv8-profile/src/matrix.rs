@@ -47,23 +47,43 @@ impl ProfileMatrix {
         let mut seeds = HashMap::new();
         seeds.insert(
             "canvas".into(),
-            source.rendering.canvas_2d.sub_seed.unwrap_or(seed ^ DOMAIN_CANVAS),
+            source
+                .rendering
+                .canvas_2d
+                .sub_seed
+                .unwrap_or(seed ^ DOMAIN_CANVAS),
         );
         seeds.insert(
             "webgl1".into(),
-            source.rendering.webgl_1.sub_seed.unwrap_or(seed ^ DOMAIN_WEBGL1),
+            source
+                .rendering
+                .webgl_1
+                .sub_seed
+                .unwrap_or(seed ^ DOMAIN_WEBGL1),
         );
         seeds.insert(
             "webgl2".into(),
-            source.rendering.webgl_2.sub_seed.unwrap_or(seed ^ DOMAIN_WEBGL2),
+            source
+                .rendering
+                .webgl_2
+                .sub_seed
+                .unwrap_or(seed ^ DOMAIN_WEBGL2),
         );
         seeds.insert(
             "audio".into(),
-            source.rendering.audio_context.sub_seed.unwrap_or(seed ^ DOMAIN_AUDIO),
+            source
+                .rendering
+                .audio_context
+                .sub_seed
+                .unwrap_or(seed ^ DOMAIN_AUDIO),
         );
         seeds.insert(
             "client_rects".into(),
-            source.rendering.client_rects.sub_seed.unwrap_or(seed ^ DOMAIN_CLIENT_RECTS),
+            source
+                .rendering
+                .client_rects
+                .sub_seed
+                .unwrap_or(seed ^ DOMAIN_CLIENT_RECTS),
         );
 
         let flat_env = build_flat_env(source);
@@ -191,10 +211,7 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
     );
     env.insert("navigator.vendorSub".into(), serde_json::json!(""));
     env.insert("navigator.product".into(), serde_json::json!("Gecko"));
-    env.insert(
-        "navigator.productSub".into(),
-        serde_json::json!("20030107"),
-    );
+    env.insert("navigator.productSub".into(), serde_json::json!("20030107"));
     env.insert(
         "navigator.language".into(),
         serde_json::Value::String(source.navigator.language.clone()),
@@ -211,24 +228,15 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         "navigator.maxTouchPoints".into(),
         serde_json::json!(source.navigator.max_touch_points),
     );
-    env.insert(
-        "navigator.cookieEnabled".into(),
-        serde_json::json!(true),
-    );
+    env.insert("navigator.cookieEnabled".into(), serde_json::json!(true));
     env.insert("navigator.onLine".into(), serde_json::json!(true));
-    env.insert(
-        "navigator.doNotTrack".into(),
-        serde_json::Value::Null,
-    );
+    env.insert("navigator.doNotTrack".into(), serde_json::Value::Null);
     env.insert(
         "navigator.webdriver".into(),
         serde_json::json!(source.navigator.webdriver),
     );
     env.insert("navigator.appName".into(), serde_json::json!("Netscape"));
-    env.insert(
-        "navigator.appCodeName".into(),
-        serde_json::json!("Mozilla"),
-    );
+    env.insert("navigator.appCodeName".into(), serde_json::json!("Mozilla"));
     env.insert(
         "navigator.pdfViewerEnabled".into(),
         serde_json::json!(source.navigator.pdf_viewer_enabled),
@@ -265,9 +273,7 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
     );
     env.insert(
         "navigator.userAgentData.platformVersion".into(),
-        serde_json::Value::String(
-            source.navigator.user_agent_data.platform_version.clone(),
-        ),
+        serde_json::Value::String(source.navigator.user_agent_data.platform_version.clone()),
     );
     env.insert(
         "navigator.userAgentData.wow64".into(),
@@ -328,10 +334,7 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
     env.insert("location.host".into(), serde_json::json!(""));
     env.insert("location.hostname".into(), serde_json::json!(""));
     env.insert("location.port".into(), serde_json::json!(""));
-    env.insert(
-        "location.pathname".into(),
-        serde_json::json!("blank"),
-    );
+    env.insert("location.pathname".into(), serde_json::json!("blank"));
     env.insert("location.search".into(), serde_json::json!(""));
     env.insert("location.hash".into(), serde_json::json!(""));
 
@@ -373,10 +376,7 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         "timers.raf_interval_ms".into(),
         serde_json::json!(raf_interval_ms),
     );
-    env.insert(
-        "timers.min_interval_ms".into(),
-        serde_json::json!(1.0),
-    );
+    env.insert("timers.min_interval_ms".into(), serde_json::json!(1.0));
 
     // === compat overrides ===
     for (k, v) in &source.compat.flat_env_overrides {
@@ -410,11 +410,16 @@ mod tests {
             matrix.flat_env.len()
         );
         assert_eq!(
-            matrix.flat_env.get("navigator.userAgent").and_then(|v| v.as_str()),
+            matrix
+                .flat_env
+                .get("navigator.userAgent")
+                .and_then(|v| v.as_str()),
             Some(source.navigator.user_agent.as_str())
         );
         // Verify critical expanded keys exist
-        assert!(matrix.flat_env.contains_key("navigator.userAgentData.brands"));
+        assert!(matrix
+            .flat_env
+            .contains_key("navigator.userAgentData.brands"));
         assert!(matrix.flat_env.contains_key("webgl.UNMASKED_VENDOR_WEBGL"));
         assert!(matrix.flat_env.contains_key("screen.availLeft"));
         assert!(matrix.flat_env.contains_key("timers.raf_interval_ms"));
@@ -426,10 +431,7 @@ mod tests {
         let (matrix, _) = ProfileMatrix::from_source(&source);
         assert_eq!(matrix.seeds.len(), 5);
         assert_ne!(matrix.seeds["canvas"], matrix.seeds["webgl1"]);
-        assert_eq!(
-            matrix.rendering.canvas_seed,
-            matrix.seeds["canvas"]
-        );
+        assert_eq!(matrix.rendering.canvas_seed, matrix.seeds["canvas"]);
     }
 
     #[test]

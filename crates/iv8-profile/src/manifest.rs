@@ -79,13 +79,25 @@ pub struct ProbeExpectation {
 
 impl ProbeExpectation {
     pub fn equals(value: serde_json::Value) -> Self {
-        Self { op: "equals".into(), value, path: String::new() }
+        Self {
+            op: "equals".into(),
+            value,
+            path: String::new(),
+        }
     }
     pub fn equals_profile_path(path: &str) -> Self {
-        Self { op: "equals_profile_path".into(), value: serde_json::Value::Null, path: path.into() }
+        Self {
+            op: "equals_profile_path".into(),
+            value: serde_json::Value::Null,
+            path: path.into(),
+        }
     }
     pub fn json_superset(value: serde_json::Value) -> Self {
-        Self { op: "json_superset".into(), value, path: String::new() }
+        Self {
+            op: "json_superset".into(),
+            value,
+            path: String::new(),
+        }
     }
 }
 
@@ -123,10 +135,7 @@ impl Default for NormalizationRules {
     fn default() -> Self {
         Self {
             stable_sort_paths: Vec::new(),
-            volatile_paths: vec![
-                "$.run.started_at".into(),
-                "$.run.duration_ms".into(),
-            ],
+            volatile_paths: vec!["$.run.started_at".into(), "$.run.duration_ms".into()],
             ignore_paths: Vec::new(),
         }
     }
@@ -191,7 +200,13 @@ fn simple_value_probe(id: &str, category: &str, surface: &str, js_expr: &str) ->
     }
 }
 
-fn simple_boolean_probe(id: &str, category: &str, surface: &str, js_expr: &str, expected: bool) -> ProbeDef {
+fn simple_boolean_probe(
+    id: &str,
+    category: &str,
+    surface: &str,
+    js_expr: &str,
+    expected: bool,
+) -> ProbeDef {
     ProbeDef {
         probe_id: id.into(),
         target: js_expr.into(),

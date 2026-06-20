@@ -8,7 +8,9 @@ use crate::state::RuntimeState;
 pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     let loc_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     loc_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Location"));
-    loc_tmpl.instance_template(scope).set_internal_field_count(1);
+    loc_tmpl
+        .instance_template(scope)
+        .set_internal_field_count(1);
 
     macro_rules! loc_accessor {
         ($name:literal, $getter:ident, $setter:ident) => {
@@ -23,8 +25,7 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
                 name.into(),
                 Some(getter),
                 Some(setter),
-                v8::PropertyAttribute::DONT_DELETE
-                    | v8::PropertyAttribute::DONT_ENUM,
+                v8::PropertyAttribute::DONT_DELETE | v8::PropertyAttribute::DONT_ENUM,
             );
         };
         ($name:literal, $getter:ident) => {
@@ -36,8 +37,7 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
                 name.into(),
                 Some(getter),
                 None,
-                v8::PropertyAttribute::DONT_DELETE
-                    | v8::PropertyAttribute::DONT_ENUM,
+                v8::PropertyAttribute::DONT_DELETE | v8::PropertyAttribute::DONT_ENUM,
             );
         };
     }
@@ -67,10 +67,9 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
     // assign/replace/reload → no-op
     for name in &["assign", "replace", "reload"] {
         let noop = v8::FunctionTemplate::builder_raw(noop_callback).build(scope);
-        loc_tmpl.prototype_template(scope).set(
-            crate::v8_utils::v8_string(scope, name).into(),
-            noop.into(),
-        );
+        loc_tmpl
+            .prototype_template(scope)
+            .set(crate::v8_utils::v8_string(scope, name).into(), noop.into());
     }
 
     let obj = loc_tmpl
@@ -79,7 +78,11 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
         .new_instance(scope, &[])
         .expect("Location instance");
 
-    global.set(scope, crate::v8_utils::v8_string(scope, "location").into(), obj.into());
+    global.set(
+        scope,
+        crate::v8_utils::v8_string(scope, "location").into(),
+        obj.into(),
+    );
 }
 
 unsafe extern "C" fn illegal_constructor(_info: *const v8::FunctionCallbackInfo) {}
@@ -89,7 +92,11 @@ unsafe extern "C" fn illegal_constructor(_info: *const v8::FunctionCallbackInfo)
 fn env_str(scope: &v8::PinScope<'_, '_>, key: &str, default: &str) -> String {
     let isolate: &v8::Isolate = scope;
     if let Some(state) = isolate.get_slot::<RuntimeState>() {
-        state.environment.get_str(key).unwrap_or(default).to_string()
+        state
+            .environment
+            .get_str(key)
+            .unwrap_or(default)
+            .to_string()
     } else {
         default.to_string()
     }

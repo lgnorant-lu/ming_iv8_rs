@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for WebGL parameter stubs (Task 45).
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};

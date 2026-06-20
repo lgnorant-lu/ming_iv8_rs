@@ -7,8 +7,8 @@
 //! v0.8.19: stub — registry is instantiated but not populated with callbacks.
 
 use std::collections::HashMap;
-use v8::Global;
 use v8::FunctionTemplate;
+use v8::Global;
 
 /// Tracks generated FunctionTemplate instances by interface name.
 pub struct SurfaceRegistry {
@@ -49,7 +49,11 @@ impl SurfaceRegistry {
 
     /// Return the number of registered templates (interface count).
     pub fn interface_count(&self) -> usize {
-        if self.count > 0 { self.count } else { self.templates.len() }
+        if self.count > 0 {
+            self.count
+        } else {
+            self.templates.len()
+        }
     }
 }
 

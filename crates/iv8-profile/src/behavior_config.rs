@@ -183,12 +183,14 @@ impl Default for ConfigWebGl {
             renderer: concat!(
                 "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) ",
                 "Direct3D11 vs_5_0 ps_5_0, D3D11)"
-            ).into(),
+            )
+            .into(),
             unmasked_vendor: "Google Inc. (NVIDIA)".into(),
             unmasked_renderer: concat!(
                 "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) ",
                 "Direct3D11 vs_5_0 ps_5_0, D3D11)"
-            ).into(),
+            )
+            .into(),
         }
     }
 }

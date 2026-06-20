@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for innerHTML setter (Task 79).
 // Acceptance criteria:
 // - element.innerHTML = '<p>new</p>' replaces children

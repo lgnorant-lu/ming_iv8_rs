@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for setTimeout/setInterval/clearTimeout/rAF/queueMicrotask (Task 31).
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};

@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for DOM V8 bindings (Task 27).
 // Tests document.getElementById, querySelector, querySelectorAll, getElementsByTagName.
 
@@ -78,8 +77,9 @@ fn get_elements_by_tag_name() {
 
 #[test]
 fn get_elements_by_class_name() {
-    let mut kernel =
-        common::make_kernel_with_doc("<div class=\"a\"><p class=\"b\">1</p><p class=\"b\">2</p></div>");
+    let mut kernel = common::make_kernel_with_doc(
+        "<div class=\"a\"><p class=\"b\">1</p><p class=\"b\">2</p></div>",
+    );
     let result = kernel.eval_to_rust_value("document.getElementsByClassName('b').length");
     assert_eq!(result, RustValue::Int(2));
 }
@@ -153,7 +153,8 @@ fn append_child_adds_to_dom() {
 
 #[test]
 fn remove_child_removes_from_dom() {
-    let mut kernel = common::make_kernel_with_doc("<div id=\"parent\"><p id=\"child\">text</p></div>");
+    let mut kernel =
+        common::make_kernel_with_doc("<div id=\"parent\"><p id=\"child\">text</p></div>");
     kernel.eval_to_rust_value(
         r#"
         var parent = document.getElementById('parent');

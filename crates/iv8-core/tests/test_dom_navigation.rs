@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for DOM navigation properties (Task 65).
 // Acceptance criteria:
 // - element.childNodes returns array-like with length + indexing
@@ -33,7 +32,8 @@ fn parent_node_exists() {
 
 #[test]
 fn first_child() {
-    let mut kernel = common::make_kernel_with_doc("<div id='parent'><span>first</span><p>second</p></div>");
+    let mut kernel =
+        common::make_kernel_with_doc("<div id='parent'><span>first</span><p>second</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var parent = document.getElementById('parent');
@@ -45,7 +45,8 @@ fn first_child() {
 
 #[test]
 fn last_child() {
-    let mut kernel = common::make_kernel_with_doc("<div id='parent'><span>first</span><p>second</p></div>");
+    let mut kernel =
+        common::make_kernel_with_doc("<div id='parent'><span>first</span><p>second</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var parent = document.getElementById('parent');
@@ -57,7 +58,8 @@ fn last_child() {
 
 #[test]
 fn next_sibling() {
-    let mut kernel = common::make_kernel_with_doc("<div><span id='a'>1</span><p id='b'>2</p></div>");
+    let mut kernel =
+        common::make_kernel_with_doc("<div><span id='a'>1</span><p id='b'>2</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var a = document.getElementById('a');
@@ -69,7 +71,8 @@ fn next_sibling() {
 
 #[test]
 fn previous_sibling() {
-    let mut kernel = common::make_kernel_with_doc("<div><span id='a'>1</span><p id='b'>2</p></div>");
+    let mut kernel =
+        common::make_kernel_with_doc("<div><span id='a'>1</span><p id='b'>2</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         var b = document.getElementById('b');
@@ -81,7 +84,8 @@ fn previous_sibling() {
 
 #[test]
 fn child_nodes_length() {
-    let mut kernel = common::make_kernel_with_doc("<ul id='list'><li>1</li><li>2</li><li>3</li></ul>");
+    let mut kernel =
+        common::make_kernel_with_doc("<ul id='list'><li>1</li><li>2</li><li>3</li></ul>");
     let result = kernel.eval_to_rust_value(
         r#"
         var list = document.getElementById('list');
@@ -123,7 +127,8 @@ fn children_only_elements() {
 
 #[test]
 fn child_element_count() {
-    let mut kernel = common::make_kernel_with_doc("<div id='parent'><p>1</p><p>2</p><p>3</p></div>");
+    let mut kernel =
+        common::make_kernel_with_doc("<div id='parent'><p>1</p><p>2</p><p>3</p></div>");
     let result = kernel.eval_to_rust_value(
         r#"
         document.getElementById('parent').childElementCount

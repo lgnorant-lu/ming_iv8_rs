@@ -10,8 +10,12 @@ fn test_get_battery_probe_passes() {
     let mut k = common::make_kernel();
     let probe = GetBatteryProbe;
     let result = probe.probe(&mut k);
-    assert_eq!(result, ProbeResult::Pass,
-        "getBattery probe failed: {:?}", result);
+    assert_eq!(
+        result,
+        ProbeResult::Pass,
+        "getBattery probe failed: {:?}",
+        result
+    );
 }
 
 #[test]
@@ -19,8 +23,12 @@ fn test_send_beacon_probe_passes() {
     let mut k = common::make_kernel();
     let probe = SendBeaconProbe;
     let result = probe.probe(&mut k);
-    assert_eq!(result, ProbeResult::Pass,
-        "sendBeacon probe failed: {:?}", result);
+    assert_eq!(
+        result,
+        ProbeResult::Pass,
+        "sendBeacon probe failed: {:?}",
+        result
+    );
 }
 
 #[test]

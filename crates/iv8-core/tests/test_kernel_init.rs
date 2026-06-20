@@ -37,49 +37,70 @@ fn test_typeof_window() {
 fn test_typeof_document() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof document"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof document'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof document'"
+    );
 }
 
 #[test]
 fn test_typeof_navigator() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof navigator"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof navigator'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof navigator'"
+    );
 }
 
 #[test]
 fn test_typeof_html_element() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof HTMLDivElement"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof HTMLDivElement'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof HTMLDivElement'"
+    );
 }
 
 #[test]
 fn test_typeof_html_element_proto() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof HTMLDivElement.prototype"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof HTMLDivElement.prototype'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof HTMLDivElement.prototype'"
+    );
 }
 
 #[test]
 fn test_typeof_webgl() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof WebGLRenderingContext"));
-    assert_eq!(val, "function", "kernel should expose WebGLRenderingContext");
+    assert_eq!(
+        val, "function",
+        "kernel should expose WebGLRenderingContext"
+    );
 }
 
 #[test]
 fn test_typeof_canvas_context() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof CanvasRenderingContext2D"));
-    assert_eq!(val, "function", "kernel should expose CanvasRenderingContext2D");
+    assert_eq!(
+        val, "function",
+        "kernel should expose CanvasRenderingContext2D"
+    );
 }
 
 #[test]
 fn test_typeof_audio() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof AudioContext"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof AudioContext'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof AudioContext'"
+    );
 }
 
 // —— Value checks ——————————————————————————————————
@@ -95,14 +116,20 @@ fn test_navigator_useragent() {
 fn test_screen_width() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("String(screen.width)"));
-    assert!(!val.is_empty(), "kernel returned empty on 'String(screen.width)'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'String(screen.width)'"
+    );
 }
 
 #[test]
 fn test_screen_height() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("String(screen.height)"));
-    assert!(!val.is_empty(), "kernel returned empty on 'String(screen.height)'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'String(screen.height)'"
+    );
 }
 
 // —— DOM checks ————————————————————————————————————
@@ -111,58 +138,84 @@ fn test_screen_height() {
 fn test_create_element_tagname() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("document.createElement('div').tagName"));
-    assert!(!val.is_empty(), "kernel returned empty on 'document.createElement('div').tagName'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'document.createElement('div').tagName'"
+    );
 }
 
 #[test]
 fn test_create_element_span() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("document.createElement('span').tagName"));
-    assert!(!val.is_empty(), "kernel returned empty on 'document.createElement('span').tagName'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'document.createElement('span').tagName'"
+    );
 }
 
 #[test]
 fn test_div_instanceof_element() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("String(document.createElement('div') instanceof Element)"));
+    let val = common::to_str(
+        &kernel.eval_to_rust_value("String(document.createElement('div') instanceof Element)"),
+    );
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
 #[test]
 fn test_div_instanceof_htmlelement() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("String(document.createElement('div') instanceof HTMLElement)"));
+    let val = common::to_str(
+        &kernel.eval_to_rust_value("String(document.createElement('div') instanceof HTMLElement)"),
+    );
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
 #[test]
 fn test_div_instanceof_html_divelement() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("document.createElement('div') instanceof HTMLDivElement"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    let val = common::to_str(
+        &kernel.eval_to_rust_value("document.createElement('div') instanceof HTMLDivElement"),
+    );
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_span_instanceof_html_spanelement() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("document.createElement('span') instanceof HTMLSpanElement"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    let val = common::to_str(
+        &kernel.eval_to_rust_value("document.createElement('span') instanceof HTMLSpanElement"),
+    );
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_document_getelementbyid() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof document.getElementById"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof document.getElementById'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof document.getElementById'"
+    );
 }
 
 #[test]
 fn test_document_queryselector() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof document.querySelectorAll"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof document.querySelectorAll'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof document.querySelectorAll'"
+    );
 }
 
 #[test]
@@ -178,119 +231,164 @@ fn test_document_body() {
 fn test_settimeout() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof setTimeout"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_fetch() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof fetch"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_xmlhttprequest() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof XMLHttpRequest"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_crypto_subtle() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof crypto.subtle"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_url() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof URL"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_localstorage() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof localStorage"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_sessionstorage() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof sessionStorage"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_message_channel() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof MessageChannel"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_event() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof Event"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_customevent() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof CustomEvent"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_mouseevent() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof MouseEvent"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_keyboardevent() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof KeyboardEvent"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_promise() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof Promise"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_date_now() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof Date.now"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof Date.now'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof Date.now'"
+    );
 }
 
 #[test]
 fn test_performance() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof performance"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
@@ -311,32 +409,44 @@ fn test_performance_now_returns_number() {
 fn test_console() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof console"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_atob() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof atob"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_btoa() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof btoa"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_requestanimationframe() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof requestAnimationFrame"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
@@ -352,38 +462,54 @@ fn test_location() {
 fn test_navigator_plugins() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof navigator.plugins"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_navigator_mimetypes() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof navigator.mimeTypes"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_navigator_java_enabled_method() {
     let mut kernel = make_new_chain_kernel();
     let typeof_method = common::to_str(&kernel.eval_to_rust_value("typeof navigator.javaEnabled"));
-    assert_eq!(typeof_method, "function", "navigator.javaEnabled should be a function");
+    assert_eq!(
+        typeof_method, "function",
+        "navigator.javaEnabled should be a function"
+    );
     let value = common::to_str(&kernel.eval_to_rust_value("String(navigator.javaEnabled())"));
-    assert_eq!(value, "false", "navigator.javaEnabled() should return false");
+    assert_eq!(
+        value, "false",
+        "navigator.javaEnabled() should return false"
+    );
 }
 
 #[test]
 fn test_navigator_language() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof navigator.language"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof navigator.language'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof navigator.language'"
+    );
 }
 
 #[test]
 fn test_navigator_hardware_concurrency() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("String(typeof navigator.hardwareConcurrency)"));
+    let val =
+        common::to_str(&kernel.eval_to_rust_value("String(typeof navigator.hardwareConcurrency)"));
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
@@ -392,7 +518,9 @@ fn test_navigator_hardware_concurrency() {
 #[test]
 fn test_canvas_create() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("String(document.createElement('canvas') instanceof HTMLCanvasElement)"));
+    let val = common::to_str(&kernel.eval_to_rust_value(
+        "String(document.createElement('canvas') instanceof HTMLCanvasElement)",
+    ));
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
@@ -400,7 +528,7 @@ fn test_canvas_create() {
 fn test_canvas_getcontext_2d() {
     let mut kernel = make_new_chain_kernel();
     let ctx = common::to_str(&kernel.eval_to_rust_value(
-        "var c=document.createElement('canvas'); String(c.getContext('2d') !== null)"
+        "var c=document.createElement('canvas'); String(c.getContext('2d') !== null)",
     ));
     assert_eq!(ctx, "true");
 }
@@ -418,7 +546,7 @@ fn test_webgl_get_parameter_vendor() {
 fn test_to_data_url() {
     let mut kernel = make_new_chain_kernel();
     let _ = kernel.eval_to_rust_value(
-        "var c=document.createElement('canvas'); var ctx=c.getContext('2d'); typeof ctx.canvas"
+        "var c=document.createElement('canvas'); var ctx=c.getContext('2d'); typeof ctx.canvas",
     );
 }
 
@@ -427,7 +555,9 @@ fn test_to_data_url() {
 #[test]
 fn test_to_string_native_code() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("String(Function.prototype.toString.call(Array).includes('[native code]'))"));
+    let val = common::to_str(&kernel.eval_to_rust_value(
+        "String(Function.prototype.toString.call(Array).includes('[native code]'))",
+    ));
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
@@ -437,7 +567,10 @@ fn test_to_string_native_code() {
 fn test_date_now_function() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof Date.now"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof Date.now'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof Date.now'"
+    );
 }
 
 // —— Intl ———————————————————————————————————————
@@ -446,8 +579,11 @@ fn test_date_now_function() {
 fn test_intl_exists() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof Intl"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 // —— Blob / ArrayBuffer ——————————————————————————
@@ -456,16 +592,22 @@ fn test_intl_exists() {
 fn test_blob_exists() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof Blob"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 #[test]
 fn test_uint8array() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof Uint8Array"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 // —— Error types ————————————————————————————————
@@ -474,16 +616,25 @@ fn test_error_types() {
     let mut kernel = make_new_chain_kernel();
 
     let val = common::to_str(&kernel.eval_to_rust_value("typeof TypeError"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty on 'typeof TypeError': {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty on 'typeof TypeError': {:?}",
+        val
+    );
 
     let val = common::to_str(&kernel.eval_to_rust_value("typeof SyntaxError"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty on 'typeof SyntaxError': {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty on 'typeof SyntaxError': {:?}",
+        val
+    );
 
     let val = common::to_str(&kernel.eval_to_rust_value("typeof ReferenceError"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty on 'typeof ReferenceError': {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty on 'typeof ReferenceError': {:?}",
+        val
+    );
 }
 
 // —— RegExp —————————————————————————————————————
@@ -491,7 +642,10 @@ fn test_error_types() {
 fn test_regexp() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("String(typeof RegExp)"));
-    assert!(!val.is_empty(), "kernel returned empty on 'String(typeof RegExp)'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'String(typeof RegExp)'"
+    );
 }
 
 // —— JSON ——————————————————————————————————————
@@ -499,8 +653,11 @@ fn test_regexp() {
 fn test_json() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof JSON"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 // —— Math ——————————————————————————————————————
@@ -508,7 +665,10 @@ fn test_json() {
 fn test_math() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof Math.random"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof Math.random'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof Math.random'"
+    );
 }
 
 // —— Window chrome shim ———————————————————————
@@ -516,8 +676,11 @@ fn test_math() {
 fn test_window_chrome() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof window.chrome"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 // —— Navigator connection ————————————————————
@@ -525,7 +688,10 @@ fn test_window_chrome() {
 fn test_navigator_connection() {
     let mut kernel = make_new_chain_kernel();
     let conn = common::to_str(&kernel.eval_to_rust_value("typeof navigator.connection"));
-    assert!(conn != "undefined", "kernel navigator.connection is undefined");
+    assert!(
+        conn != "undefined",
+        "kernel navigator.connection is undefined"
+    );
 }
 
 // —— Document properties —————————————————————
@@ -533,22 +699,29 @@ fn test_navigator_connection() {
 fn test_document_cookie() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof document.cookie"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof document.cookie'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof document.cookie'"
+    );
 }
 
 #[test]
 fn test_document_referrer() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof document.referrer"));
-    assert!(!val.is_empty(), "kernel returned empty on 'typeof document.referrer'");
+    assert!(
+        !val.is_empty(),
+        "kernel returned empty on 'typeof document.referrer'"
+    );
 }
 
 // —— Window property count ——————————————————
 #[test]
 fn test_window_prop_count_new_ge_old() {
     let mut kernel = make_new_chain_kernel();
-    let count = common::to_str(&kernel
-        .eval_to_rust_value("String(Object.getOwnPropertyNames(window).length)"));
+    let count = common::to_str(
+        &kernel.eval_to_rust_value("String(Object.getOwnPropertyNames(window).length)"),
+    );
     let n: usize = count.parse().unwrap();
     assert!(n > 0, "kernel has no window properties");
 }
@@ -562,8 +735,9 @@ fn test_coverage_gate_window_props_vs_chrome147() {
     const MIN_RATIO: f64 = 0.95;
 
     let mut kernel = make_new_chain_kernel();
-    let count_str = common::to_str(&kernel
-        .eval_to_rust_value("String(Object.getOwnPropertyNames(window).length)"));
+    let count_str = common::to_str(
+        &kernel.eval_to_rust_value("String(Object.getOwnPropertyNames(window).length)"),
+    );
     let count: usize = count_str.parse().unwrap();
 
     let ratio = count as f64 / CHROME_147_BASELINE as f64;
@@ -581,9 +755,9 @@ fn test_coverage_gate_window_props_vs_chrome147() {
 #[test]
 fn test_url_parsing() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value(
-        "String((new URL('https://example.com/path?q=1')).pathname)"
-    ));
+    let val = common::to_str(
+        &kernel.eval_to_rust_value("String((new URL('https://example.com/path?q=1')).pathname)"),
+    );
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
@@ -600,8 +774,11 @@ fn test_blob_constructor() {
 fn test_structuredclone() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof structuredClone"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 // —— Navigator.sendBeacon —————————————————
@@ -609,17 +786,17 @@ fn test_structuredclone() {
 fn test_sendbeacon() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof navigator.sendBeacon"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 // —— Multiple kernels —————————————————————
 #[test]
 fn test_multiple_kernels_same_result() {
-    let expressions = [
-        "typeof window",
-        "document.createElement('div').tagName",
-    ];
+    let expressions = ["typeof window", "document.createElement('div').tagName"];
 
     for expr in &expressions {
         let mut results = Vec::new();
@@ -646,8 +823,11 @@ fn test_css_escape() {
 fn test_history() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof history"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 // —— navigator.onLine —————————————————
@@ -670,8 +850,11 @@ fn test_navigator_geolocation() {
 fn test_crypto_subtle_digest() {
     let mut kernel = make_new_chain_kernel();
     let val = common::to_str(&kernel.eval_to_rust_value("typeof crypto.subtle.digest"));
-    assert!(val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
-        "kernel returned falsy/empty: {:?}", val);
+    assert!(
+        val != "false" && val != "null" && val != "undefined" && !val.is_empty(),
+        "kernel returned falsy/empty: {:?}",
+        val
+    );
 }
 
 // —— Worker ——————————————————————————
@@ -695,9 +878,9 @@ fn test_canvas_getimagedata() {
 #[test]
 fn test_element_style() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value(
-        "String(typeof document.createElement('div').style)"
-    ));
+    let val = common::to_str(
+        &kernel.eval_to_rust_value("String(typeof document.createElement('div').style)"),
+    );
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
@@ -705,9 +888,9 @@ fn test_element_style() {
 #[test]
 fn test_element_classlist() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value(
-        "String(typeof document.createElement('div').classList)"
-    ));
+    let val = common::to_str(
+        &kernel.eval_to_rust_value("String(typeof document.createElement('div').classList)"),
+    );
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
@@ -715,7 +898,8 @@ fn test_element_classlist() {
 #[test]
 fn test_settimeout_returns_number() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value("String(typeof setTimeout(function(){}, 0))"));
+    let val =
+        common::to_str(&kernel.eval_to_rust_value("String(typeof setTimeout(function(){}, 0))"));
     assert!(!val.is_empty(), "kernel returned empty");
 }
 
@@ -740,11 +924,18 @@ fn test_symbol_tostringtag() {
     let mut kernel = make_new_chain_kernel();
 
     let tag_exists = common::to_str(&kernel.eval_to_rust_value("typeof Symbol.toStringTag"));
-    assert!(tag_exists != "false" && tag_exists != "null" && tag_exists != "undefined" && !tag_exists.is_empty(),
-        "Symbol.toStringTag falsy: {:?}", tag_exists);
+    assert!(
+        tag_exists != "false"
+            && tag_exists != "null"
+            && tag_exists != "undefined"
+            && !tag_exists.is_empty(),
+        "Symbol.toStringTag falsy: {:?}",
+        tag_exists
+    );
 
-    let tag = common::to_str(&kernel
-        .eval_to_rust_value("String(HTMLDivElement.prototype[Symbol.toStringTag])"));
+    let tag = common::to_str(
+        &kernel.eval_to_rust_value("String(HTMLDivElement.prototype[Symbol.toStringTag])"),
+    );
     assert!(!tag.is_empty(), "toStringTag empty for HTMLDivElement");
 }
 
@@ -753,34 +944,25 @@ fn test_symbol_tostringtag() {
 #[test]
 fn test_inner_text_exists() {
     let mut kernel = make_new_chain_kernel();
-    kernel.eval_to_rust_value(
-        "document.body.innerHTML = '<div id=x>hello</div>'",
-    );
-    let kind = common::to_str(&kernel.eval_to_rust_value(
-        "typeof document.getElementById('x').innerText",
-    ));
+    kernel.eval_to_rust_value("document.body.innerHTML = '<div id=x>hello</div>'");
+    let kind =
+        common::to_str(&kernel.eval_to_rust_value("typeof document.getElementById('x').innerText"));
     assert_eq!(kind, "string");
-    let val = common::to_str(&kernel.eval_to_rust_value(
-        "document.getElementById('x').innerText",
-    ));
+    let val = common::to_str(&kernel.eval_to_rust_value("document.getElementById('x').innerText"));
     assert_eq!(val, "hello");
 }
 
 #[test]
 fn test_body_used_on_response() {
     let mut kernel = make_new_chain_kernel();
-    let exists = common::to_str(&kernel.eval_to_rust_value(
-        "'bodyUsed' in Response.prototype",
-    ));
+    let exists = common::to_str(&kernel.eval_to_rust_value("'bodyUsed' in Response.prototype"));
     assert_eq!(exists, "true");
 }
 
 #[test]
 fn test_body_used_default_false() {
     let mut kernel = make_new_chain_kernel();
-    let val = common::to_str(&kernel.eval_to_rust_value(
-        "new Response('test').bodyUsed",
-    ));
+    let val = common::to_str(&kernel.eval_to_rust_value("new Response('test').bodyUsed"));
     assert_eq!(val, "false");
 }
 

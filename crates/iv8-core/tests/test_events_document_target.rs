@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Test L-03 fix: document is a real EventTarget.
 //
 // v0.1: addEventListener/dispatchEvent on document silently no-op'd because

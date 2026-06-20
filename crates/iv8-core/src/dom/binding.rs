@@ -564,7 +564,10 @@ fn node_to_v8_object_plain<'s>(
 
     // Store in identity cache as Weak reference
     let global_obj = v8::Global::new(scope, obj);
-    let weak = v8::Weak::new(crate::dom::template::isolate_mut_from_scope(scope), &global_obj);
+    let weak = v8::Weak::new(
+        crate::dom::template::isolate_mut_from_scope(scope),
+        &global_obj,
+    );
     state.node_cache.borrow_mut().insert(node_id, weak);
 
     Some(obj.into())

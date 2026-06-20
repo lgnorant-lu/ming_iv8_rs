@@ -7,14 +7,13 @@
 )]
 mod common;
 
-
 // Integration tests for getBoundingClientRect + getComputedStyle (Task 70+71).
 // Acceptance criteria:
 // - element.getBoundingClientRect() returns {x, y, width, height, top, right, bottom, left}
 // - getComputedStyle(element).display returns string
 // - getComputedStyle(element).getPropertyValue('font-size') works
 
-use iv8_core::RustValue;
+use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
 
 #[test]
 fn get_bounding_client_rect_exists() {

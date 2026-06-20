@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Test L-04 fix: fetch() requests are recorded to __iv8__.netLog.entries.
 //
 // v0.1: only XHR was recorded; fetch was invisible to netLog.

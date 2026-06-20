@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Task 2: Verify v8 crate integration — create isolate, eval "1+1", get 2.
 
 #[test]

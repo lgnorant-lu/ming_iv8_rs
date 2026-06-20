@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for XMLHttpRequest (Task 47).
 
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};

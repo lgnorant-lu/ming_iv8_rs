@@ -61,7 +61,11 @@ fn test_navigator_language() {
 fn test_navigator_connection_getter() {
     let mut k = common::make_kernel();
     common::assert_js_str(&mut k, "typeof navigator.connection", "object");
-    common::assert_js_str(&mut k, "typeof navigator.connection.effectiveType", "string");
+    common::assert_js_str(
+        &mut k,
+        "typeof navigator.connection.effectiveType",
+        "string",
+    );
     common::assert_js_str(&mut k, "typeof navigator.connection.downlink", "number");
     common::assert_js_str(&mut k, "typeof navigator.connection.rtt", "number");
     common::assert_js_str(&mut k, "typeof navigator.connection.saveData", "boolean");
@@ -71,9 +75,7 @@ fn test_navigator_connection_getter() {
 #[test]
 fn test_navigator_connection_descriptor_on_prototype() {
     let mut k = common::make_kernel();
-    let own = k.eval_to_rust_value(
-        "Object.getOwnPropertyDescriptor(navigator, 'connection')"
-    );
+    let own = k.eval_to_rust_value("Object.getOwnPropertyDescriptor(navigator, 'connection')");
     let own_str = common::to_str(&own);
     assert!(
         own_str == "undefined" || own_str == "null",
@@ -81,9 +83,7 @@ fn test_navigator_connection_descriptor_on_prototype() {
         own_str
     );
 
-    let has = k.eval_to_rust_value(
-        "'connection' in navigator"
-    );
+    let has = k.eval_to_rust_value("'connection' in navigator");
     assert_eq!(
         common::to_str(&has),
         "true",
@@ -100,9 +100,7 @@ fn test_navigator_get_battery_method() {
 #[test]
 fn test_navigator_get_battery_descriptor_on_prototype() {
     let mut k = common::make_kernel();
-    let proto_check = k.eval_to_rust_value(
-        "'prototype' in navigator.getBattery"
-    );
+    let proto_check = k.eval_to_rust_value("'prototype' in navigator.getBattery");
     assert_eq!(
         common::to_str(&proto_check),
         "false",
@@ -122,9 +120,21 @@ fn test_navigator_send_beacon_method() {
 fn test_navigator_geolocation_getter() {
     let mut k = common::make_kernel();
     common::assert_js_str(&mut k, "typeof navigator.geolocation", "object");
-    common::assert_js_str(&mut k, "typeof navigator.geolocation.getCurrentPosition", "function");
-    common::assert_js_str(&mut k, "typeof navigator.geolocation.watchPosition", "function");
-    common::assert_js_str(&mut k, "typeof navigator.geolocation.clearWatch", "function");
+    common::assert_js_str(
+        &mut k,
+        "typeof navigator.geolocation.getCurrentPosition",
+        "function",
+    );
+    common::assert_js_str(
+        &mut k,
+        "typeof navigator.geolocation.watchPosition",
+        "function",
+    );
+    common::assert_js_str(
+        &mut k,
+        "typeof navigator.geolocation.clearWatch",
+        "function",
+    );
 }
 
 #[test]
@@ -142,18 +152,22 @@ fn test_navigator_credentials_getter() {
     common::assert_js_str(&mut k, "typeof navigator.credentials.get", "function");
     common::assert_js_str(&mut k, "typeof navigator.credentials.create", "function");
     common::assert_js_str(&mut k, "typeof navigator.credentials.store", "function");
-    common::assert_js_str(&mut k, "typeof navigator.credentials.preventSilentAccess", "function");
+    common::assert_js_str(
+        &mut k,
+        "typeof navigator.credentials.preventSilentAccess",
+        "function",
+    );
 }
 
 #[test]
 fn test_navigator_new_properties_not_enumerable() {
     let mut k = common::make_kernel();
-    let checks = [
-        "connection",
-        "geolocation",
-    ];
+    let checks = ["connection", "geolocation"];
     for prop in &checks {
-        let js = format!("Object.prototype.propertyIsEnumerable.call(navigator, '{}')", prop);
+        let js = format!(
+            "Object.prototype.propertyIsEnumerable.call(navigator, '{}')",
+            prop
+        );
         common::assert_js_str(&mut k, &js, "false");
     }
 }
@@ -181,11 +195,7 @@ fn test_navigator_custom_profile() {
     common::assert_js_str(&mut k, "navigator.userAgent", "TestAgent/9.9");
     common::assert_js_str(&mut k, "navigator.platform", "TestOS");
     common::assert_js_str(&mut k, "navigator.language", "test-LANG");
-    common::assert_js_str(
-        &mut k,
-        "navigator.appVersion",
-        DEFAULT_PROFILE.app_version,
-    );
+    common::assert_js_str(&mut k, "navigator.appVersion", DEFAULT_PROFILE.app_version);
 }
 
 #[test]
@@ -230,10 +240,15 @@ fn test_navigator_get_gamepads_returns_empty_array() {
 #[test]
 fn test_navigator_request_media_key_system_access_returns_promise() {
     let mut k = common::make_kernel();
-    common::assert_js_str(&mut k, "typeof navigator.requestMediaKeySystemAccess", "function");
-    common::assert_js_str(&mut k,
+    common::assert_js_str(
+        &mut k,
+        "typeof navigator.requestMediaKeySystemAccess",
+        "function",
+    );
+    common::assert_js_str(
+        &mut k,
         "navigator.requestMediaKeySystemAccess('com.widevine.alpha').constructor.name",
-        "Promise"
+        "Promise",
     );
 }
 
@@ -241,9 +256,10 @@ fn test_navigator_request_media_key_system_access_returns_promise() {
 fn test_navigator_request_midi_access_returns_promise() {
     let mut k = common::make_kernel();
     common::assert_js_str(&mut k, "typeof navigator.requestMIDIAccess", "function");
-    common::assert_js_str(&mut k,
+    common::assert_js_str(
+        &mut k,
         "navigator.requestMIDIAccess().constructor.name",
-        "Promise"
+        "Promise",
     );
 }
 
@@ -277,4 +293,3 @@ fn test_conditional_share_visible_on_mobile() {
     common::assert_js_str(&mut k, "typeof navigator.share", "function");
     common::assert_js_str(&mut k, "typeof navigator.canShare", "function");
 }
-

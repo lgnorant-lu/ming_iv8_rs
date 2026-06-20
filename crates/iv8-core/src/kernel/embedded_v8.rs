@@ -50,31 +50,41 @@ const DOCUMENT_WRITE_SHIM: &str = r#"
 })();
 "#;
 
-/// Minimal TextEncoder/TextDecoder polyfill for V8 (not included by default).
+/// Minimal TextEncoder/TextDecoder polyfill for V8.
+///
+/// The generated IDL surface (iv8-surface) installs `TextEncoder`/`TextDecoder`
+/// constructors with the correct class name + Symbol.toStringTag for
+/// fingerprint fidelity, but their `encode`/`decode` methods are non-functional
+/// skeletons that return `null`. We therefore (a) define the constructors if
+/// they are entirely absent, and (b) ALWAYS install working `encode`/`decode`
+/// prototype methods so they produce real Uint8Array / string results.
 const TEXT_ENCODER_SHIM: &str = r#"
 (function() {
     if (typeof TextEncoder === 'undefined') {
         globalThis.TextEncoder = function TextEncoder() {};
-        TextEncoder.prototype.encode = function(str) {
-            var arr = [];
-            for (var i = 0; i < str.length; i++) {
-                var c = str.charCodeAt(i);
-                if (c < 128) { arr.push(c); }
-                else if (c < 2048) { arr.push((c >> 6) | 192); arr.push((c & 63) | 128); }
-                else { arr.push((c >> 12) | 224); arr.push(((c >> 6) & 63) | 128); arr.push((c & 63) | 128); }
-            }
-            return new Uint8Array(arr);
-        };
     }
     if (typeof TextDecoder === 'undefined') {
         globalThis.TextDecoder = function TextDecoder() {};
-        TextDecoder.prototype.decode = function(buf) {
-            var arr = new Uint8Array(buf);
-            var str = '';
-            for (var i = 0; i < arr.length; i++) { str += String.fromCharCode(arr[i]); }
-            return str;
-        };
     }
+    // Always override the (possibly skeleton) prototype methods with working ones.
+    TextEncoder.prototype.encode = function(str) {
+        str = str === undefined ? '' : String(str);
+        var arr = [];
+        for (var i = 0; i < str.length; i++) {
+            var c = str.charCodeAt(i);
+            if (c < 128) { arr.push(c); }
+            else if (c < 2048) { arr.push((c >> 6) | 192); arr.push((c & 63) | 128); }
+            else { arr.push((c >> 12) | 224); arr.push(((c >> 6) & 63) | 128); arr.push((c & 63) | 128); }
+        }
+        return new Uint8Array(arr);
+    };
+    TextDecoder.prototype.decode = function(buf) {
+        if (buf === undefined || buf === null) { return ''; }
+        var arr = new Uint8Array(buf.buffer ? buf.buffer : buf);
+        var str = '';
+        for (var i = 0; i < arr.length; i++) { str += String.fromCharCode(arr[i]); }
+        return str;
+    };
 })();
 "#;
 
@@ -120,8 +130,7 @@ impl EmbeddedV8Kernel {
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
 
         let mut isolate = v8::Isolate::new(
-            v8::CreateParams::default()
-                .heap_limits(512 * 1024 * 1024, 4 * 1024 * 1024 * 1024),
+            v8::CreateParams::default().heap_limits(512 * 1024 * 1024, 4 * 1024 * 1024 * 1024),
         );
 
         // Set microtask policy to Explicit (we drive microtasks manually)
@@ -173,7 +182,9 @@ impl EmbeddedV8Kernel {
 
         // Step 8: Install user-defined property overrides (highest priority).
         if !user_overrides.is_empty() {
-            unsafe { kernel.isolate.enter(); }
+            unsafe {
+                kernel.isolate.enter();
+            }
             {
                 v8::scope!(handle_scope, &mut kernel.isolate);
                 let context = v8::Local::new(handle_scope, &kernel.context);
@@ -181,7 +192,9 @@ impl EmbeddedV8Kernel {
                 let global = context.global(scope);
                 crate::user_overrides::install_user_overrides(scope, global, &user_overrides);
             }
-            unsafe { kernel.isolate.exit(); }
+            unsafe {
+                kernel.isolate.exit();
+            }
         }
 
         // Exit the isolate so it's not "entered" at rest.
@@ -507,10 +520,7 @@ fn install_behavior_via_bcr(
 
 /// Install window.top/self/parent identity references.
 /// In top-level browsing context these must all point to window itself.
-fn install_window_identity_refs(
-    scope: &v8::PinScope<'_, '_>,
-    global: v8::Local<v8::Object>,
-) {
+fn install_window_identity_refs(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     let keys = ["top", "self", "parent"];
     for &key in &keys {
         let key_str = crate::v8_utils::v8_string(scope, key);
@@ -524,84 +534,82 @@ fn install_window_identity_refs(
 fn build_hardcoded_bcr() -> iv8_surface::BehaviorCallbackRegistry {
     let callbacks = iv8_surface::BehaviorCallbackRegistry::new();
 
-    *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(
-        |scope, global| crate::shims::atob_btoa::install_atob_btoa(scope, global),
-    ));
-    *callbacks.install_fetch.borrow_mut() = Some(Box::new(
-        |scope, global| crate::network::fetch::install_fetch(scope, global),
-    ));
-    *callbacks.install_timers.borrow_mut() = Some(Box::new(
-        |scope, global| crate::events::timers::install_timer_globals(scope, global),
-    ));
-    *callbacks.install_console.borrow_mut() = Some(Box::new(
-        |scope, global| crate::shims::console::install_console(scope, global),
-    ));
-    *callbacks.install_location.borrow_mut() = Some(Box::new(
-        |scope, global| crate::shims::location::install_location(scope, global),
-    ));
-    *callbacks.install_event_loop.borrow_mut() = Some(Box::new(
-        |scope, global| crate::events::binding::install_event_loop_bindings(scope, global),
-    ));
-    *callbacks.install_page_api.borrow_mut() = Some(Box::new(
-        |scope, global| crate::events::page_api::install_page_api(scope, global),
-    ));
-    *callbacks.install_input_api.borrow_mut() = Some(Box::new(
-        |scope, global| crate::events::input_sim::install_input_api(scope, global),
-    ));
-    *callbacks.install_crypto_random.borrow_mut() = Some(Box::new(
-        |scope, global| crate::crypto::random::install_crypto_random(scope, global),
-    ));
-    *callbacks.install_subtle_crypto.borrow_mut() = Some(Box::new(
-        |scope, global| crate::crypto::subtle::install_subtle_crypto(scope, global),
-    ));
-    *callbacks.install_canvas_bindings.borrow_mut() = Some(Box::new(
-        |scope, global| crate::canvas::binding::install_canvas_bindings(scope, global),
-    ));
-    *callbacks.install_webgl_stubs.borrow_mut() = Some(Box::new(
-        |scope, global| crate::canvas::webgl::install_webgl_stubs(scope, global),
-    ));
-    *callbacks.install_xhr.borrow_mut() = Some(Box::new(
-        |scope, global| crate::network::xhr::install_xhr(scope, global),
-    ));
-    *callbacks.install_date_interceptor.borrow_mut() = Some(Box::new(
-        |scope, global| crate::events::date_interceptor::install_date_interceptor(scope, global),
-    ));
-    *callbacks.install_native_env.borrow_mut() = Some(Box::new(
-        |scope, global| crate::shims::native_env::install_native_env(scope, global),
-    ));
+    *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::shims::atob_btoa::install_atob_btoa(scope, global)
+    }));
+    *callbacks.install_fetch.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::network::fetch::install_fetch(scope, global)
+    }));
+    *callbacks.install_timers.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::events::timers::install_timer_globals(scope, global)
+    }));
+    *callbacks.install_console.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::shims::console::install_console(scope, global)
+    }));
+    *callbacks.install_location.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::shims::location::install_location(scope, global)
+    }));
+    *callbacks.install_event_loop.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::events::binding::install_event_loop_bindings(scope, global)
+    }));
+    *callbacks.install_page_api.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::events::page_api::install_page_api(scope, global)
+    }));
+    *callbacks.install_input_api.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::events::input_sim::install_input_api(scope, global)
+    }));
+    *callbacks.install_crypto_random.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::crypto::random::install_crypto_random(scope, global)
+    }));
+    *callbacks.install_subtle_crypto.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::crypto::subtle::install_subtle_crypto(scope, global)
+    }));
+    *callbacks.install_canvas_bindings.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::canvas::binding::install_canvas_bindings(scope, global)
+    }));
+    *callbacks.install_webgl_stubs.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::canvas::webgl::install_webgl_stubs(scope, global)
+    }));
+    *callbacks.install_xhr.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::network::xhr::install_xhr(scope, global)
+    }));
+    *callbacks.install_date_interceptor.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::events::date_interceptor::install_date_interceptor(scope, global)
+    }));
+    *callbacks.install_native_env.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::shims::native_env::install_native_env(scope, global)
+    }));
 
     callbacks
 }
 
 /// Fill the 8 non-parameterized installer slots with hardcoded wrappers.
 /// Called after `build_registry` which sets the 7 parameterized slots.
-fn fill_hardcoded_remaining(
-    callbacks: &mut iv8_surface::BehaviorCallbackRegistry,
-) {
-    *callbacks.install_event_loop.borrow_mut() = Some(Box::new(
-        |scope, global| crate::events::binding::install_event_loop_bindings(scope, global),
-    ));
-    *callbacks.install_page_api.borrow_mut() = Some(Box::new(
-        |scope, global| crate::events::page_api::install_page_api(scope, global),
-    ));
-    *callbacks.install_input_api.borrow_mut() = Some(Box::new(
-        |scope, global| crate::events::input_sim::install_input_api(scope, global),
-    ));
-    *callbacks.install_subtle_crypto.borrow_mut() = Some(Box::new(
-        |scope, global| crate::crypto::subtle::install_subtle_crypto(scope, global),
-    ));
-    *callbacks.install_fetch.borrow_mut() = Some(Box::new(
-        |scope, global| crate::network::fetch::install_fetch(scope, global),
-    ));
-    *callbacks.install_xhr.borrow_mut() = Some(Box::new(
-        |scope, global| crate::network::xhr::install_xhr(scope, global),
-    ));
-    *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(
-        |scope, global| crate::shims::atob_btoa::install_atob_btoa(scope, global),
-    ));
-    *callbacks.install_console.borrow_mut() = Some(Box::new(
-        |scope, global| crate::shims::console::install_console(scope, global),
-    ));
+fn fill_hardcoded_remaining(callbacks: &mut iv8_surface::BehaviorCallbackRegistry) {
+    *callbacks.install_event_loop.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::events::binding::install_event_loop_bindings(scope, global)
+    }));
+    *callbacks.install_page_api.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::events::page_api::install_page_api(scope, global)
+    }));
+    *callbacks.install_input_api.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::events::input_sim::install_input_api(scope, global)
+    }));
+    *callbacks.install_subtle_crypto.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::crypto::subtle::install_subtle_crypto(scope, global)
+    }));
+    *callbacks.install_fetch.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::network::fetch::install_fetch(scope, global)
+    }));
+    *callbacks.install_xhr.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::network::xhr::install_xhr(scope, global)
+    }));
+    *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::shims::atob_btoa::install_atob_btoa(scope, global)
+    }));
+    *callbacks.install_console.borrow_mut() = Some(Box::new(|scope, global| {
+        crate::shims::console::install_console(scope, global)
+    }));
 }
 
 /// No-op call-as-function handler for the undetectable __iv8__ tool object.
@@ -911,7 +919,9 @@ impl EmbeddedV8Kernel {
     /// Phase 1: static value injection (all 393 entries via env_inject)
     /// Phase 2: native getter override for key objects (navigator, screen)
     pub fn install_environment(&mut self) {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -924,7 +934,9 @@ impl EmbeddedV8Kernel {
             // return a native getter instead of a plain value descriptor.
             crate::shims::native_env::install_native_env(scope, global);
         }
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
     }
 
     /// Dispose the kernel (explicit cleanup before drop).
@@ -958,7 +970,9 @@ impl EmbeddedV8Kernel {
         &mut self,
         callbacks: iv8_surface::BehaviorCallbackRegistry,
     ) {
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
         {
             v8::scope!(handle_scope, &mut self.isolate);
             let context = v8::Local::new(handle_scope, &self.context);
@@ -970,87 +984,115 @@ impl EmbeddedV8Kernel {
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
                     let state = RuntimeState::get(&*scope);
-                    crate::dom::template::install_dom_constructors(
-                        scope, global, &dom_templates,
-                    );
+                    crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
 
                     // Event system
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_event_loop,
                         crate::events::binding::install_event_loop_bindings,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_timers,
                         crate::events::timers::install_timer_globals,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_page_api,
                         crate::events::page_api::install_page_api,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_input_api,
                         crate::events::input_sim::install_input_api,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_date_interceptor,
                         crate::events::date_interceptor::install_date_interceptor,
                     );
                     // Crypto
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_crypto_random,
                         crate::crypto::random::install_crypto_random,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_subtle_crypto,
                         crate::crypto::subtle::install_subtle_crypto,
                     );
                     // Canvas + WebGL
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_canvas_bindings,
                         crate::canvas::binding::install_canvas_bindings,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_webgl_stubs,
                         crate::canvas::webgl::install_webgl_stubs,
                     );
                     // Network
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_fetch,
                         crate::network::fetch::install_fetch,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_xhr,
                         crate::network::xhr::install_xhr,
                     );
                     // Shims
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_atob_btoa,
                         crate::shims::atob_btoa::install_atob_btoa,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_location,
                         crate::shims::location::install_location,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_console,
                         crate::shims::console::install_console,
                     );
                     install_behavior_via_bcr(
-                        scope, global, &callbacks,
+                        scope,
+                        global,
+                        &callbacks,
                         &callbacks.install_native_env,
                         crate::shims::native_env::install_native_env,
                     );
@@ -1066,7 +1108,9 @@ impl EmbeddedV8Kernel {
                 }
             }
         }
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
     }
 
     /// Load an HTML document into the context, making DOM query APIs available.
@@ -1241,50 +1285,54 @@ impl EmbeddedV8Kernel {
                     };
                     if let Err(e) = self.eval(&src_code, opts) {
                         tracing::warn!("external script {} error: {:?}", i, e);
-        }
-    }
+                    }
+                }
 
-    #[test]
-    fn screen_profile_runtime_batch_v044() {
-        use crate::convert::RustValue;
-        let source = iv8_profile::defaults::default_profile_source();
-        let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
-        let config = KernelConfig::default().with_profile_matrix(&matrix);
-        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+                #[test]
+                fn screen_profile_runtime_batch_v044() {
+                    use crate::convert::RustValue;
+                    let source = iv8_profile::defaults::default_profile_source();
+                    let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
+                    let config = KernelConfig::default().with_profile_matrix(&matrix);
+                    let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
 
-        assert_eq!(
-            kernel.eval_to_rust_value("screen.width"),
-            RustValue::Int(source.display.screen.width as i64)
-        );
-        assert_eq!(
-            kernel.eval_to_rust_value("screen.height"),
-            RustValue::Int(source.display.screen.height as i64)
-        );
-        assert_eq!(
-            kernel.eval_to_rust_value("screen.availWidth"),
-            RustValue::Int(source.display.screen.avail_width as i64)
-        );
-        assert_eq!(
-            kernel.eval_to_rust_value("screen.availHeight"),
-            RustValue::Int(source.display.screen.avail_height as i64)
-        );
-        assert_eq!(
-            kernel.eval_to_rust_value("screen.colorDepth"),
-            RustValue::Int(source.display.screen.color_depth as i64)
-        );
-        assert_eq!(
-            kernel.eval_to_rust_value("screen.pixelDepth"),
-            RustValue::Int(source.display.screen.color_depth as i64)
-        );
+                    assert_eq!(
+                        kernel.eval_to_rust_value("screen.width"),
+                        RustValue::Int(source.display.screen.width as i64)
+                    );
+                    assert_eq!(
+                        kernel.eval_to_rust_value("screen.height"),
+                        RustValue::Int(source.display.screen.height as i64)
+                    );
+                    assert_eq!(
+                        kernel.eval_to_rust_value("screen.availWidth"),
+                        RustValue::Int(source.display.screen.avail_width as i64)
+                    );
+                    assert_eq!(
+                        kernel.eval_to_rust_value("screen.availHeight"),
+                        RustValue::Int(source.display.screen.avail_height as i64)
+                    );
+                    assert_eq!(
+                        kernel.eval_to_rust_value("screen.colorDepth"),
+                        RustValue::Int(source.display.screen.color_depth as i64)
+                    );
+                    assert_eq!(
+                        kernel.eval_to_rust_value("screen.pixelDepth"),
+                        RustValue::Int(source.display.screen.color_depth as i64)
+                    );
 
-        let dpr = kernel.eval_to_rust_value("window.devicePixelRatio");
-        match dpr {
-            RustValue::Int(v) => assert_eq!(v as f64, source.display.window.device_pixel_ratio),
-            RustValue::Float(v) => assert!((v - source.display.window.device_pixel_ratio).abs() < f64::EPSILON),
-            other => panic!("expected numeric devicePixelRatio, got {:?}", other),
-        }
-    }
-}
+                    let dpr = kernel.eval_to_rust_value("window.devicePixelRatio");
+                    match dpr {
+                        RustValue::Int(v) => {
+                            assert_eq!(v as f64, source.display.window.device_pixel_ratio)
+                        }
+                        RustValue::Float(v) => assert!(
+                            (v - source.display.window.device_pixel_ratio).abs() < f64::EPSILON
+                        ),
+                        other => panic!("expected numeric devicePixelRatio, got {:?}", other),
+                    }
+                }
+            }
 
             // Handle inline script
             if let Some(ref inline_src) = script.inline {
@@ -1678,7 +1726,9 @@ impl EmbeddedV8Kernel {
         self.assert_thread();
 
         // Enter isolate
-        unsafe { self.isolate.enter(); }
+        unsafe {
+            self.isolate.enter();
+        }
 
         let result = (|| -> Result<v8::Global<v8::Value>, IV8Error> {
             v8::scope!(handle_scope, &mut self.isolate);
@@ -1686,13 +1736,14 @@ impl EmbeddedV8Kernel {
             v8::scope_with_context!(scope, handle_scope, context);
 
             let name = specifier.unwrap_or("<module>");
-            let source_str = v8::String::new(scope, source).ok_or_else(|| {
-                IV8Error::Internal("failed to create V8 source string".into())
-            })?;
+            let source_str = v8::String::new(scope, source)
+                .ok_or_else(|| IV8Error::Internal("failed to create V8 source string".into()))?;
 
             let origin = v8::ScriptOrigin::new(
                 scope,
-                v8::String::new(scope, name).unwrap_or_else(|| v8::String::empty(scope)).into(),
+                v8::String::new(scope, name)
+                    .unwrap_or_else(|| v8::String::empty(scope))
+                    .into(),
                 0,
                 0,
                 true,
@@ -1709,17 +1760,16 @@ impl EmbeddedV8Kernel {
             let module = v8::script_compiler::compile_module(scope, &mut source)
                 .ok_or_else(|| IV8Error::Internal("module compilation failed".into()))?;
 
-            let instantiated = module.instantiate_module(scope, |_context, _specifier, _referrer, _module| {
-                None
-            });
+            let instantiated =
+                module.instantiate_module(scope, |_context, _specifier, _referrer, _module| None);
 
             if instantiated.is_none() {
                 return Err(IV8Error::Internal("module instantiation failed".into()));
             }
 
-            let result = module.evaluate(scope).ok_or_else(|| {
-                IV8Error::Internal("module evaluation failed".into())
-            })?;
+            let result = module
+                .evaluate(scope)
+                .ok_or_else(|| IV8Error::Internal("module evaluation failed".into()))?;
 
             Ok(v8::Global::new(scope, result))
         })();
@@ -1728,7 +1778,9 @@ impl EmbeddedV8Kernel {
         self.isolate.perform_microtask_checkpoint();
 
         // Exit isolate
-        unsafe { self.isolate.exit(); }
+        unsafe {
+            self.isolate.exit();
+        }
 
         result
     }
@@ -2005,7 +2057,10 @@ mod tests {
     fn kernel_eval_string() {
         let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
         let result = kernel.eval_to_rust_value("'hello' + ' world'");
-        assert_eq!(result, crate::convert::RustValue::String("hello world".into()));
+        assert_eq!(
+            result,
+            crate::convert::RustValue::String("hello world".into())
+        );
     }
 
     #[test]
@@ -2105,7 +2160,11 @@ mod tests {
 
         let source = iv8_profile::defaults::default_profile_source();
         let (matrix, validation) = iv8_profile::ProfileMatrix::from_source(&source);
-        assert!(validation.is_valid(), "default profile should validate: {}", validation);
+        assert!(
+            validation.is_valid(),
+            "default profile should validate: {}",
+            validation
+        );
 
         let config = KernelConfig::default().with_profile_matrix(&matrix);
         let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
@@ -2162,21 +2221,25 @@ mod tests {
             kernel.eval_to_rust_value("navigator.userAgentData.mobile"),
             RustValue::Bool(source.navigator.user_agent_data.mobile)
         );
-        assert!((
-            kernel
+        assert!(
+            (kernel
                 .environment()
                 .get_f64("timers.raf_interval_ms")
                 .expect("timer projection should be present")
-                - (1000.0 / source.timing.fps as f64)
-        )
-            .abs()
-            < f64::EPSILON);
+                - (1000.0 / source.timing.fps as f64))
+                .abs()
+                < f64::EPSILON
+        );
         assert_eq!(
-            kernel.eval_to_rust_value("document.createElement('canvas').getContext('webgl').getParameter(0x1F00)"),
+            kernel.eval_to_rust_value(
+                "document.createElement('canvas').getContext('webgl').getParameter(0x1F00)"
+            ),
             RustValue::String(source.identity.gpu.vendor)
         );
         assert_eq!(
-            kernel.eval_to_rust_value("document.createElement('canvas').getContext('webgl').getParameter(0x9246)"),
+            kernel.eval_to_rust_value(
+                "document.createElement('canvas').getContext('webgl').getParameter(0x9246)"
+            ),
             RustValue::String(source.identity.gpu.webgl_unmasked_renderer)
         );
     }
@@ -2210,14 +2273,18 @@ mod tests {
         let hw = kernel.eval_to_rust_value("navigator.hardwareConcurrency");
         match hw {
             RustValue::Int(v) => assert_eq!(v as f64, source.navigator.hardware_concurrency as f64),
-            RustValue::Float(v) => assert!((v - source.navigator.hardware_concurrency as f64).abs() < f64::EPSILON),
+            RustValue::Float(v) => {
+                assert!((v - source.navigator.hardware_concurrency as f64).abs() < f64::EPSILON)
+            }
             other => panic!("expected numeric hardwareConcurrency, got {:?}", other),
         }
 
         let dm = kernel.eval_to_rust_value("navigator.deviceMemory");
         match dm {
             RustValue::Int(v) => assert_eq!(v as f64, source.navigator.device_memory as f64),
-            RustValue::Float(v) => assert!((v - source.navigator.device_memory as f64).abs() < f64::EPSILON),
+            RustValue::Float(v) => {
+                assert!((v - source.navigator.device_memory as f64).abs() < f64::EPSILON)
+            }
             other => panic!("expected numeric deviceMemory, got {:?}", other),
         }
     }
@@ -2284,7 +2351,11 @@ mod tests {
 
         let t1 = kernel.eval_to_rust_value("performance.now()");
         fn as_f64(v: &RustValue) -> f64 {
-            match v { RustValue::Float(f) => *f, RustValue::Int(i) => *i as f64, _ => panic!("not numeric") }
+            match v {
+                RustValue::Float(f) => *f,
+                RustValue::Int(i) => *i as f64,
+                _ => panic!("not numeric"),
+            }
         }
         let a = as_f64(&t0);
         let b = as_f64(&t1);

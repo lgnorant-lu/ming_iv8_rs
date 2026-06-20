@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for URL/URLSearchParams (Task 72).
 // Acceptance criteria:
 // - new URL('https://example.com/path?a=1') correctly parses

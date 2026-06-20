@@ -33,47 +33,227 @@ pub struct GlParamSpec {
 pub fn build_gl_param_map() -> HashMap<u32, GlParamSpec> {
     let specs = vec![
         // String parameters
-        GlParamSpec { pname: 0x1F00, name: "VENDOR", param_type: GlParamType::String, default: r#""WebKit""# },
-        GlParamSpec { pname: 0x1F01, name: "RENDERER", param_type: GlParamType::String, default: r#""WebKit WebGL"# },
-        GlParamSpec { pname: 0x1F02, name: "VERSION", param_type: GlParamType::String, default: r#""WebGL 1.0 (OpenGL ES 2.0 Chromium)"# },
-        GlParamSpec { pname: 0x8B8C, name: "SHADING_LANGUAGE_VERSION", param_type: GlParamType::String, default: r#""WebGL GLSL ES 1.0 (OpenGL ES GLSL ES 1.0 Chromium)"# },
+        GlParamSpec {
+            pname: 0x1F00,
+            name: "VENDOR",
+            param_type: GlParamType::String,
+            default: r#""WebKit""#,
+        },
+        GlParamSpec {
+            pname: 0x1F01,
+            name: "RENDERER",
+            param_type: GlParamType::String,
+            default: r#""WebKit WebGL"#,
+        },
+        GlParamSpec {
+            pname: 0x1F02,
+            name: "VERSION",
+            param_type: GlParamType::String,
+            default: r#""WebGL 1.0 (OpenGL ES 2.0 Chromium)"#,
+        },
+        GlParamSpec {
+            pname: 0x8B8C,
+            name: "SHADING_LANGUAGE_VERSION",
+            param_type: GlParamType::String,
+            default: r#""WebGL GLSL ES 1.0 (OpenGL ES GLSL ES 1.0 Chromium)"#,
+        },
         // WEBGL_debug_renderer_info extension params
-        GlParamSpec { pname: 0x9245, name: "UNMASKED_VENDOR_WEBGL", param_type: GlParamType::String, default: r#""Google Inc. (NVIDIA)"# },
-        GlParamSpec { pname: 0x9246, name: "UNMASKED_RENDERER_WEBGL", param_type: GlParamType::String, default: r#""ANGLE (NVIDIA, NVIDIA GeForce RTX 3060 Direct3D11 vs_5_0 ps_5_0)"# },
+        GlParamSpec {
+            pname: 0x9245,
+            name: "UNMASKED_VENDOR_WEBGL",
+            param_type: GlParamType::String,
+            default: r#""Google Inc. (NVIDIA)"#,
+        },
+        GlParamSpec {
+            pname: 0x9246,
+            name: "UNMASKED_RENDERER_WEBGL",
+            param_type: GlParamType::String,
+            default: r#""ANGLE (NVIDIA, NVIDIA GeForce RTX 3060 Direct3D11 vs_5_0 ps_5_0)"#,
+        },
         // Integer parameters
-        GlParamSpec { pname: 0x0D33, name: "MAX_TEXTURE_SIZE", param_type: GlParamType::Int, default: "16384" },
-        GlParamSpec { pname: 0x84E8, name: "MAX_RENDERBUFFER_SIZE", param_type: GlParamType::Int, default: "16384" },
-        GlParamSpec { pname: 0x8869, name: "MAX_VERTEX_ATTRIBS", param_type: GlParamType::Int, default: "16" },
-        GlParamSpec { pname: 0x8DFB, name: "MAX_VERTEX_UNIFORM_VECTORS", param_type: GlParamType::Int, default: "4096" },
-        GlParamSpec { pname: 0x8B49, name: "MAX_FRAGMENT_UNIFORM_VECTORS", param_type: GlParamType::Int, default: "1024" },
-        GlParamSpec { pname: 0x8B4A, name: "MAX_VARYING_VECTORS", param_type: GlParamType::Int, default: "32" },
-        GlParamSpec { pname: 0x8DFC, name: "MAX_COMBINED_TEXTURE_IMAGE_UNITS", param_type: GlParamType::Int, default: "80" },
-        GlParamSpec { pname: 0x8872, name: "MAX_TEXTURE_IMAGE_UNITS", param_type: GlParamType::Int, default: "16" },
-        GlParamSpec { pname: 0x8DFD, name: "MAX_VERTEX_TEXTURE_IMAGE_UNITS", param_type: GlParamType::Int, default: "16" },
-        GlParamSpec { pname: 0x8508, name: "MAX_CUBE_MAP_TEXTURE_SIZE", param_type: GlParamType::Int, default: "16384" },
-        GlParamSpec { pname: 0x8DFA, name: "MAX_FRAGMENT_UNIFORM_COMPONENTS", param_type: GlParamType::Int, default: "4096" },
-        GlParamSpec { pname: 0x8B4B, name: "MAX_VERTEX_UNIFORM_COMPONENTS", param_type: GlParamType::Int, default: "4096" },
-        GlParamSpec { pname: 0x8DF9, name: "MAX_DRAW_BUFFERS", param_type: GlParamType::Int, default: "4" },
-        GlParamSpec { pname: 0x886A, name: "MAX_COLOR_ATTACHMENTS", param_type: GlParamType::Int, default: "8" },
-        GlParamSpec { pname: 0x80E8, name: "MAX_ELEMENTS_INDICES", param_type: GlParamType::Int, default: "0" },
-        GlParamSpec { pname: 0x80E9, name: "MAX_ELEMENTS_VERTICES", param_type: GlParamType::Int, default: "0" },
+        GlParamSpec {
+            pname: 0x0D33,
+            name: "MAX_TEXTURE_SIZE",
+            param_type: GlParamType::Int,
+            default: "16384",
+        },
+        GlParamSpec {
+            pname: 0x84E8,
+            name: "MAX_RENDERBUFFER_SIZE",
+            param_type: GlParamType::Int,
+            default: "16384",
+        },
+        GlParamSpec {
+            pname: 0x8869,
+            name: "MAX_VERTEX_ATTRIBS",
+            param_type: GlParamType::Int,
+            default: "16",
+        },
+        GlParamSpec {
+            pname: 0x8DFB,
+            name: "MAX_VERTEX_UNIFORM_VECTORS",
+            param_type: GlParamType::Int,
+            default: "4096",
+        },
+        GlParamSpec {
+            pname: 0x8B49,
+            name: "MAX_FRAGMENT_UNIFORM_VECTORS",
+            param_type: GlParamType::Int,
+            default: "1024",
+        },
+        GlParamSpec {
+            pname: 0x8B4A,
+            name: "MAX_VARYING_VECTORS",
+            param_type: GlParamType::Int,
+            default: "32",
+        },
+        GlParamSpec {
+            pname: 0x8DFC,
+            name: "MAX_COMBINED_TEXTURE_IMAGE_UNITS",
+            param_type: GlParamType::Int,
+            default: "80",
+        },
+        GlParamSpec {
+            pname: 0x8872,
+            name: "MAX_TEXTURE_IMAGE_UNITS",
+            param_type: GlParamType::Int,
+            default: "16",
+        },
+        GlParamSpec {
+            pname: 0x8DFD,
+            name: "MAX_VERTEX_TEXTURE_IMAGE_UNITS",
+            param_type: GlParamType::Int,
+            default: "16",
+        },
+        GlParamSpec {
+            pname: 0x8508,
+            name: "MAX_CUBE_MAP_TEXTURE_SIZE",
+            param_type: GlParamType::Int,
+            default: "16384",
+        },
+        GlParamSpec {
+            pname: 0x8DFA,
+            name: "MAX_FRAGMENT_UNIFORM_COMPONENTS",
+            param_type: GlParamType::Int,
+            default: "4096",
+        },
+        GlParamSpec {
+            pname: 0x8B4B,
+            name: "MAX_VERTEX_UNIFORM_COMPONENTS",
+            param_type: GlParamType::Int,
+            default: "4096",
+        },
+        GlParamSpec {
+            pname: 0x8DF9,
+            name: "MAX_DRAW_BUFFERS",
+            param_type: GlParamType::Int,
+            default: "4",
+        },
+        GlParamSpec {
+            pname: 0x886A,
+            name: "MAX_COLOR_ATTACHMENTS",
+            param_type: GlParamType::Int,
+            default: "8",
+        },
+        GlParamSpec {
+            pname: 0x80E8,
+            name: "MAX_ELEMENTS_INDICES",
+            param_type: GlParamType::Int,
+            default: "0",
+        },
+        GlParamSpec {
+            pname: 0x80E9,
+            name: "MAX_ELEMENTS_VERTICES",
+            param_type: GlParamType::Int,
+            default: "0",
+        },
         // Int array parameters
-        GlParamSpec { pname: 0x0D31, name: "MAX_VIEWPORT_DIMS", param_type: GlParamType::IntArray, default: "[32767, 32767]" },
-        GlParamSpec { pname: 0x0D54, name: "ALIASED_POINT_SIZE_RANGE", param_type: GlParamType::IntArray, default: "[1, 1024]" },
-        GlParamSpec { pname: 0x846E, name: "ALIASED_LINE_WIDTH_RANGE", param_type: GlParamType::IntArray, default: "[1, 1]" },
-        GlParamSpec { pname: 0x0D55, name: "SAMPLE_BUFFERS", param_type: GlParamType::Int, default: "0" },
-        GlParamSpec { pname: 0x0D56, name: "SAMPLES", param_type: GlParamType::Int, default: "0" },
-        GlParamSpec { pname: 0x8B9A, name: "STENCIL_BITS", param_type: GlParamType::Int, default: "0" },
-        GlParamSpec { pname: 0x0D52, name: "DEPTH_BITS", param_type: GlParamType::Int, default: "24" },
-        GlParamSpec { pname: 0x8B9B, name: "ALPHA_BITS", param_type: GlParamType::Int, default: "8" },
-        GlParamSpec { pname: 0x0D57, name: "RED_BITS", param_type: GlParamType::Int, default: "8" },
-        GlParamSpec { pname: 0x0D58, name: "GREEN_BITS", param_type: GlParamType::Int, default: "8" },
-        GlParamSpec { pname: 0x0D59, name: "BLUE_BITS", param_type: GlParamType::Int, default: "8" },
+        GlParamSpec {
+            pname: 0x0D31,
+            name: "MAX_VIEWPORT_DIMS",
+            param_type: GlParamType::IntArray,
+            default: "[32767, 32767]",
+        },
+        GlParamSpec {
+            pname: 0x0D54,
+            name: "ALIASED_POINT_SIZE_RANGE",
+            param_type: GlParamType::IntArray,
+            default: "[1, 1024]",
+        },
+        GlParamSpec {
+            pname: 0x846E,
+            name: "ALIASED_LINE_WIDTH_RANGE",
+            param_type: GlParamType::IntArray,
+            default: "[1, 1]",
+        },
+        GlParamSpec {
+            pname: 0x0D55,
+            name: "SAMPLE_BUFFERS",
+            param_type: GlParamType::Int,
+            default: "0",
+        },
+        GlParamSpec {
+            pname: 0x0D56,
+            name: "SAMPLES",
+            param_type: GlParamType::Int,
+            default: "0",
+        },
+        GlParamSpec {
+            pname: 0x8B9A,
+            name: "STENCIL_BITS",
+            param_type: GlParamType::Int,
+            default: "0",
+        },
+        GlParamSpec {
+            pname: 0x0D52,
+            name: "DEPTH_BITS",
+            param_type: GlParamType::Int,
+            default: "24",
+        },
+        GlParamSpec {
+            pname: 0x8B9B,
+            name: "ALPHA_BITS",
+            param_type: GlParamType::Int,
+            default: "8",
+        },
+        GlParamSpec {
+            pname: 0x0D57,
+            name: "RED_BITS",
+            param_type: GlParamType::Int,
+            default: "8",
+        },
+        GlParamSpec {
+            pname: 0x0D58,
+            name: "GREEN_BITS",
+            param_type: GlParamType::Int,
+            default: "8",
+        },
+        GlParamSpec {
+            pname: 0x0D59,
+            name: "BLUE_BITS",
+            param_type: GlParamType::Int,
+            default: "8",
+        },
         // Boolean parameters
-        GlParamSpec { pname: 0x9240, name: "UNPACK_FLIP_Y_WEBGL", param_type: GlParamType::Boolean, default: "false" },
-        GlParamSpec { pname: 0x9241, name: "UNPACK_PREMULTIPLY_ALPHA_WEBGL", param_type: GlParamType::Boolean, default: "false" },
+        GlParamSpec {
+            pname: 0x9240,
+            name: "UNPACK_FLIP_Y_WEBGL",
+            param_type: GlParamType::Boolean,
+            default: "false",
+        },
+        GlParamSpec {
+            pname: 0x9241,
+            name: "UNPACK_PREMULTIPLY_ALPHA_WEBGL",
+            param_type: GlParamType::Boolean,
+            default: "false",
+        },
         // Float
-        GlParamSpec { pname: 0x84FF, name: "MAX_FRAGMENT_SHADER_DERIVATIVE", param_type: GlParamType::Float, default: "1.0" },
+        GlParamSpec {
+            pname: 0x84FF,
+            name: "MAX_FRAGMENT_SHADER_DERIVATIVE",
+            param_type: GlParamType::Float,
+            default: "1.0",
+        },
     ];
 
     let mut map = HashMap::with_capacity(specs.len());
@@ -309,9 +489,7 @@ pub fn gl_get_parameter_value<'s>(
                     v8::Number::new(scope, 0.0).into()
                 }
             }
-            GlParamType::Boolean => {
-                v8::Boolean::new(scope, spec.default == "true").into()
-            }
+            GlParamType::Boolean => v8::Boolean::new(scope, spec.default == "true").into(),
             GlParamType::IntArray | GlParamType::FloatArray => {
                 // Parse JSON array "[1, 2, 3]" → Float32Array/Int32Array
                 let default = spec.default.trim_matches(|c| c == '[' || c == ']');
@@ -325,7 +503,10 @@ pub fn gl_get_parameter_value<'s>(
                 if spec.param_type == GlParamType::FloatArray {
                     crate::type_conv::make_float32_array(scope, &values)
                 } else {
-                    crate::type_conv::make_int32_array(scope, &values.iter().map(|&v| v as i32).collect::<Vec<_>>())
+                    crate::type_conv::make_int32_array(
+                        scope,
+                        &values.iter().map(|&v| v as i32).collect::<Vec<_>>(),
+                    )
                 }
             }
             GlParamType::Null => v8::null(scope).into(),
@@ -372,7 +553,10 @@ mod tests {
 
     #[test]
     fn test_extensions_count() {
-        assert!(WEBGL_EXTENSIONS.len() >= 21, "should include all known extensions");
+        assert!(
+            WEBGL_EXTENSIONS.len() >= 21,
+            "should include all known extensions"
+        );
     }
 
     #[test]

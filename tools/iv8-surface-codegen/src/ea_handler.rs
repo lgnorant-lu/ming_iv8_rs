@@ -71,7 +71,11 @@ pub fn process_interface_ea(def: &Definition) -> EaResult {
                 result.is_global = true;
             }
             a if a.starts_with("NamedConstructor") => {
-                result.named_constructor = Some(a.replace("NamedConstructor=", "").trim_matches('"').to_string());
+                result.named_constructor = Some(
+                    a.replace("NamedConstructor=", "")
+                        .trim_matches('"')
+                        .to_string(),
+                );
             }
             _ => {}
         }

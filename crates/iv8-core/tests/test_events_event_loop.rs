@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for EventLoop V8 bindings (Task 30).
 
 use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};

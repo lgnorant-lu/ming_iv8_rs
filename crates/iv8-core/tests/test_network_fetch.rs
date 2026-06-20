@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for fetch() JS binding (Task 46).
 
 use iv8_core::{EmbeddedV8Kernel, EvalOpts, KernelConfig, RustValue};

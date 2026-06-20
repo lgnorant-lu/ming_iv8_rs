@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration test for v8_extra bindings (MarkAsUndetectable, SetCallAsFunctionHandler).
 //
 // V8 invariant: an ObjectTemplate marked as undetectable MUST also have a

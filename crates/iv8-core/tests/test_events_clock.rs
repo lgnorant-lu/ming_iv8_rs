@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for DateInterceptor (Task 32).
 // Verifies Date.now() and performance.now() return logical time.
 

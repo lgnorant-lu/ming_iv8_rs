@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for location object (Task 67).
 // Acceptance criteria:
 // - location.href returns full URL
@@ -15,7 +14,7 @@ mod common;
 // - Initialized from environment
 // - toString() returns href
 
-use iv8_core::RustValue;
+use iv8_core::{EmbeddedV8Kernel, KernelConfig, RustValue};
 
 #[test]
 fn location_exists() {

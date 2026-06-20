@@ -26,9 +26,8 @@ impl LocationState {
     /// Create LocationState from an href string.
     /// Falls back to "about:blank" on parse failure.
     pub fn from_href(href: &str) -> Self {
-        let url = Url::parse(href).unwrap_or_else(|_| {
-            Url::parse("about:blank").expect("about:blank must parse")
-        });
+        let url = Url::parse(href)
+            .unwrap_or_else(|_| Url::parse("about:blank").expect("about:blank must parse"));
         Self {
             href: url.to_string(),
             origin: url.origin().ascii_serialization(),
@@ -45,13 +44,20 @@ impl LocationState {
             port: url.port().map(|p| p.to_string()).unwrap_or_default(),
             pathname: {
                 let p = url.path();
-                if p.is_empty() { "/".to_string() } else { p.to_string() }
+                if p.is_empty() {
+                    "/".to_string()
+                } else {
+                    p.to_string()
+                }
             },
             search: {
                 let q = url.query();
                 q.map(|s| format!("?{}", s)).unwrap_or_default()
             },
-            hash: url.fragment().map(|s| format!("#{}", s)).unwrap_or_default(),
+            hash: url
+                .fragment()
+                .map(|s| format!("#{}", s))
+                .unwrap_or_default(),
         }
     }
 
@@ -108,7 +114,10 @@ mod tests {
     fn test_ipv6_full() {
         let loc = LocationState::from_href("http://[::1]:8080/test");
         // url crate may or may not preserve brackets; test what we get
-        assert!(!loc.hostname.is_empty(), "hostname must not be empty for IPv6 URL");
+        assert!(
+            !loc.hostname.is_empty(),
+            "hostname must not be empty for IPv6 URL"
+        );
         assert!(!loc.href.is_empty(), "href must not be empty");
     }
 
@@ -118,7 +127,10 @@ mod tests {
         loc.hash = "#new".to_string();
         loc.rebuild_href();
         assert_eq!(loc.hash, "#new");
-        assert!(loc.href.ends_with("#new"), "href should end with updated hash");
+        assert!(
+            loc.href.ends_with("#new"),
+            "href should end with updated hash"
+        );
     }
 
     #[test]

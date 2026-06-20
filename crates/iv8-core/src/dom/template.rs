@@ -234,7 +234,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             Some(inner_html_setter),
         );
         install_proto_accessor(scope, proto, "outerHTML", outer_html_getter, None);
-        install_proto_accessor(scope, proto, "innerText", inner_text_getter, Some(inner_text_setter));
+        install_proto_accessor(
+            scope,
+            proto,
+            "innerText",
+            inner_text_getter,
+            Some(inner_text_setter),
+        );
         install_proto_accessor(scope, proto, "children", children_getter, None);
         install_proto_accessor(
             scope,
@@ -727,7 +733,9 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
 
     // ── 10. NodeList ────────────────────────────────────────────────────────
     let node_list = make_template(scope, "NodeList");
-    node_list.instance_template(scope).set_internal_field_count(2);
+    node_list
+        .instance_template(scope)
+        .set_internal_field_count(2);
     {
         let proto = node_list.prototype_template(scope);
         install_proto_method(scope, proto, "item", node_list_item_cb);
@@ -737,7 +745,9 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
 
     // ── 12. DOMTokenList ────────────────────────────────────────────────────
     let dom_token_list = make_template(scope, "DOMTokenList");
-    dom_token_list.instance_template(scope).set_internal_field_count(1);
+    dom_token_list
+        .instance_template(scope)
+        .set_internal_field_count(1);
     {
         let proto = dom_token_list.prototype_template(scope);
         install_proto_method(scope, proto, "item", domtokenlist_item_cb);
@@ -764,12 +774,19 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
 
     // ── 13. CSSStyleDeclaration ─────────────────────────────────────────────
     let css_style_declaration = make_template(scope, "CSSStyleDeclaration");
-    css_style_declaration.instance_template(scope).set_internal_field_count(2);
+    css_style_declaration
+        .instance_template(scope)
+        .set_internal_field_count(2);
     {
         let proto = css_style_declaration.prototype_template(scope);
         install_proto_method(scope, proto, "setProperty", css_style_set_property_cb);
         install_proto_method(scope, proto, "getPropertyValue", css_style_get_property_cb);
-        install_proto_method(scope, proto, "getPropertyPriority", css_style_get_priority_cb);
+        install_proto_method(
+            scope,
+            proto,
+            "getPropertyPriority",
+            css_style_get_priority_cb,
+        );
         install_proto_method(scope, proto, "removeProperty", css_style_remove_property_cb);
         install_proto_method(scope, proto, "item", css_style_item_cb);
         install_proto_accessor(
@@ -810,7 +827,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "clone", response_clone_cb);
         install_proto_accessor(scope, proto, "status", response_status_getter, None);
         install_proto_accessor(scope, proto, "ok", response_ok_getter, None);
-        install_proto_accessor(scope, proto, "statusText", response_status_text_getter, None);
+        install_proto_accessor(
+            scope,
+            proto,
+            "statusText",
+            response_status_text_getter,
+            None,
+        );
         install_proto_accessor(scope, proto, "url", response_url_getter, None);
         install_proto_accessor(scope, proto, "headers", response_headers_getter, None);
         install_proto_accessor(scope, proto, "bodyUsed", body_used_getter, None);
@@ -968,15 +991,15 @@ pub fn template_for_tag<'s>(
         "style" => &templates.html_style_element,
         "link" => &templates.html_link_element,
         "meta" => &templates.html_meta_element,
-        "section" | "article" | "nav" | "aside" | "header" | "footer" | "main"
-        | "address" | "figure" | "figcaption" | "details" | "summary"
-        | "dl" | "dt" | "dd" | "hr" | "br" | "pre" | "code" | "blockquote"
-        | "iframe" | "embed" | "object" | "progress" | "meter"
-        | "label" | "fieldset" | "legend" | "optgroup" | "option"
-        | "template" | "slot" | "data" | "time" | "mark" | "ruby" | "rt" | "rp" | "wbr"
-        | "b" | "i" | "u" | "s" | "small" | "strong" | "em" | "sub" | "sup"
-        | "abbr" | "cite" | "dfn" | "kbd" | "q" | "samp" | "var"
-        | "del" | "ins" | "output" | "picture" | "source" => &templates.html_element,
+        "section" | "article" | "nav" | "aside" | "header" | "footer" | "main" | "address"
+        | "figure" | "figcaption" | "details" | "summary" | "dl" | "dt" | "dd" | "hr" | "br"
+        | "pre" | "code" | "blockquote" | "iframe" | "embed" | "object" | "progress" | "meter"
+        | "label" | "fieldset" | "legend" | "optgroup" | "option" | "template" | "slot"
+        | "data" | "time" | "mark" | "ruby" | "rt" | "rp" | "wbr" | "b" | "i" | "u" | "s"
+        | "small" | "strong" | "em" | "sub" | "sup" | "abbr" | "cite" | "dfn" | "kbd" | "q"
+        | "samp" | "var" | "del" | "ins" | "output" | "picture" | "source" => {
+            &templates.html_element
+        }
         _ => &templates.html_unknown_element,
     };
     v8::Local::new(scope, global)
@@ -1495,8 +1518,7 @@ unsafe extern "C" fn class_list_getter(info: *const v8::FunctionCallbackInfo) {
             if let Some(func) = tmpl.get_function(scope) {
                 if let Some(obj) = func.new_instance(scope, &[]) {
                     let nid_usize = super::binding::node_id_to_usize(node_id);
-                    let external =
-                        v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
+                    let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
                     obj.set_internal_field(0, external.into());
                     rv.set(obj.into());
                 }
@@ -1522,8 +1544,7 @@ fn extract_classlist_node_id(
 
 fn classlist_read<F>(info: *const v8::FunctionCallbackInfo, f: F)
 where
-    F: FnOnce(&v8::PinScope<'_, '_>, &mut v8::ReturnValue<'_>, &[String])
-        + std::panic::UnwindSafe,
+    F: FnOnce(&v8::PinScope<'_, '_>, &mut v8::ReturnValue<'_>, &[String]) + std::panic::UnwindSafe,
 {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -1757,7 +1778,11 @@ unsafe extern "C" fn domtokenlist_foreach_cb(info: *const v8::FunctionCallbackIn
         for (i, cls) in classes.iter().enumerate() {
             let cls_val = v8::String::new(scope, cls).unwrap();
             let idx_val = v8::Integer::new(scope, i as i32);
-            let _ = cb.call(scope, receiver.into(), &[cls_val.into(), idx_val.into(), this_obj.into()]);
+            let _ = cb.call(
+                scope,
+                receiver.into(),
+                &[cls_val.into(), idx_val.into(), this_obj.into()],
+            );
         }
         rv.set(v8::undefined(scope).into());
     });
@@ -2557,7 +2582,9 @@ pub fn create_node_list_instance<'s>(
     let len = ids.len();
     let boxed_ids = Box::new(ids);
     let ptr = Box::into_raw(boxed_ids) as *mut std::ffi::c_void;
-    state.register_heap(ptr, |p| unsafe { drop(Box::from_raw(p as *mut Vec<usize>)) });
+    state.register_heap(ptr, |p| unsafe {
+        drop(Box::from_raw(p as *mut Vec<usize>))
+    });
     let external = v8::External::new(scope, ptr);
     obj.set_internal_field(1, external.into());
 
@@ -2623,8 +2650,7 @@ unsafe extern "C" fn node_list_length_getter(info: *const v8::FunctionCallbackIn
         if let Some(field) = field {
             let value: v8::Local<v8::Value> = unsafe { v8::Local::cast_unchecked(field) };
             if value.is_external() {
-                let external: v8::Local<v8::External> =
-                    unsafe { v8::Local::cast_unchecked(value) };
+                let external: v8::Local<v8::External> = unsafe { v8::Local::cast_unchecked(value) };
                 let vec_ptr = external.value() as *const Vec<usize>;
                 if !vec_ptr.is_null() {
                     let ids: &Vec<usize> = unsafe { &*vec_ptr };
@@ -3107,8 +3133,7 @@ unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
             if let Some(func) = tmpl.get_function(scope) {
                 if let Some(obj) = func.new_instance(scope, &[]) {
                     let nid_usize = super::binding::node_id_to_usize(node_id);
-                    let external =
-                        v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
+                    let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
                     obj.set_internal_field(0, external.into());
                     obj.set_internal_field(1, v8::Boolean::new(scope, false).into());
 
@@ -3264,7 +3289,11 @@ unsafe extern "C" fn css_style_item_cb(info: *const v8::FunctionCallbackInfo) {
         }
         let idx = args.get(0).number_value(scope).unwrap_or(-1.0) as i32;
         if idx >= 0 && (idx as usize) < map.len() {
-            let key = map.keys().nth(idx as usize).map(|k| k.clone()).unwrap_or_default();
+            let key = map
+                .keys()
+                .nth(idx as usize)
+                .map(|k| k.clone())
+                .unwrap_or_default();
             rv.set(crate::v8_utils::v8_string(scope, &key).into());
         } else {
             rv.set(crate::v8_utils::v8_string(scope, "").into());
@@ -4095,7 +4124,8 @@ unsafe extern "C" fn body_used_getter(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
         let key = crate::v8_utils::v8_string(scope, "__consumed__");
-        let val = this.get(scope, key.into())
+        let val = this
+            .get(scope, key.into())
             .map(|v| v.is_true())
             .unwrap_or(false);
         rv.set(v8::Boolean::new(scope, val).into());
@@ -4113,12 +4143,21 @@ unsafe extern "C" fn response_text_cb(info: *const v8::FunctionCallbackInfo) {
         rv.set(resolver.get_promise(scope).into());
 
         let consumed_key = crate::v8_utils::v8_string(scope, "__consumed__");
-        if this.get(scope, consumed_key.into()).map(|v| v.is_true()).unwrap_or(false) {
+        if this
+            .get(scope, consumed_key.into())
+            .map(|v| v.is_true())
+            .unwrap_or(false)
+        {
             let err = crate::v8_utils::v8_string(scope, "TypeError: Already read");
             resolver.reject(scope, err.into());
             return;
         }
-        this.define_own_property(scope, consumed_key.into(), v8::Boolean::new(scope, true).into(), v8::PropertyAttribute::DONT_ENUM);
+        this.define_own_property(
+            scope,
+            consumed_key.into(),
+            v8::Boolean::new(scope, true).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
 
         let body_key = crate::v8_utils::v8_string(scope, "__body__");
         if let Some(body) = this.get(scope, body_key.into()) {
@@ -4139,12 +4178,21 @@ unsafe extern "C" fn response_json_cb(info: *const v8::FunctionCallbackInfo) {
         let resolver = crate::v8_utils::v8_resolver(scope);
         rv.set(resolver.get_promise(scope).into());
         let consumed_key = crate::v8_utils::v8_string(scope, "__consumed__");
-        if this.get(scope, consumed_key.into()).map(|v| v.is_true()).unwrap_or(false) {
+        if this
+            .get(scope, consumed_key.into())
+            .map(|v| v.is_true())
+            .unwrap_or(false)
+        {
             let err = crate::v8_utils::v8_string(scope, "TypeError: Already read");
             resolver.reject(scope, err.into());
             return;
         }
-        this.define_own_property(scope, consumed_key.into(), v8::Boolean::new(scope, true).into(), v8::PropertyAttribute::DONT_ENUM);
+        this.define_own_property(
+            scope,
+            consumed_key.into(),
+            v8::Boolean::new(scope, true).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
         let body_key = crate::v8_utils::v8_string(scope, "__body__");
         if let Some(body_val) = this.get(scope, body_key.into()) {
             let body_str = body_val.to_rust_string_lossy(scope);
@@ -4156,7 +4204,8 @@ unsafe extern "C" fn response_json_cb(info: *const v8::FunctionCallbackInfo) {
                     let pk = crate::v8_utils::v8_string(scope, "parse");
                     if let Some(pf) = jo.get(scope, pk.into()) {
                         if pf.is_function() {
-                            let pf: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(pf) };
+                            let pf: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(pf) };
                             let bv = crate::v8_utils::v8_string(scope, &body_str);
                             if let Some(parsed) = pf.call(scope, jo.into(), &[bv.into()]) {
                                 resolver.resolve(scope, parsed);
@@ -4183,12 +4232,21 @@ unsafe extern "C" fn response_array_buffer_cb(info: *const v8::FunctionCallbackI
         let resolver = crate::v8_utils::v8_resolver(scope);
         rv.set(resolver.get_promise(scope).into());
         let consumed_key = crate::v8_utils::v8_string(scope, "__consumed__");
-        if this.get(scope, consumed_key.into()).map(|v| v.is_true()).unwrap_or(false) {
+        if this
+            .get(scope, consumed_key.into())
+            .map(|v| v.is_true())
+            .unwrap_or(false)
+        {
             let err = crate::v8_utils::v8_string(scope, "TypeError: Already read");
             resolver.reject(scope, err.into());
             return;
         }
-        this.define_own_property(scope, consumed_key.into(), v8::Boolean::new(scope, true).into(), v8::PropertyAttribute::DONT_ENUM);
+        this.define_own_property(
+            scope,
+            consumed_key.into(),
+            v8::Boolean::new(scope, true).into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
         let ab_key = crate::v8_utils::v8_string(scope, "__arrayBuffer__");
         if let Some(ab) = this.get(scope, ab_key.into()) {
             resolver.resolve(scope, ab);
@@ -4210,26 +4268,29 @@ unsafe extern "C" fn response_clone_cb(info: *const v8::FunctionCallbackInfo) {
         let templates = state.dom_templates.borrow();
         if let Some(templates) = templates.as_ref() {
             if let Some(new_obj) = create_response_instance(scope, templates) {
-                let keys = &["status", "ok", "statusText", "url", "__body__", "__arrayBuffer__"];
+                let keys = &[
+                    "__status__",
+                    "__ok__",
+                    "__statusText__",
+                    "__url__",
+                    "__body__",
+                    "__arrayBuffer__",
+                ];
                 for &key in keys {
                     let k = crate::v8_utils::v8_string(scope, key);
                     if let Some(v) = this.get(scope, k.into()) {
                         new_obj.set(scope, k.into(), v);
                     }
                 }
-                let hk = crate::v8_utils::v8_string(scope, "headers");
+                let hk = crate::v8_utils::v8_string(scope, "__headers__");
                 if let Some(h) = this.get(scope, hk.into()) {
                     if h.is_object() {
-                        let hobj: v8::Local<v8::Object> =
-                            unsafe { v8::Local::cast_unchecked(h) };
+                        let hobj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(h) };
                         if let Some(pairs) = extract_headers_vec(scope, hobj) {
                             let cloned_pairs = pairs.clone();
-                            if let Some(cloned_h) = create_headers_instance(
-                                scope,
-                                state,
-                                templates,
-                                cloned_pairs,
-                            ) {
+                            if let Some(cloned_h) =
+                                create_headers_instance(scope, state, templates, cloned_pairs)
+                            {
                                 new_obj.set(scope, hk.into(), cloned_h.into());
                             } else {
                                 new_obj.set(scope, hk.into(), h);
@@ -4261,13 +4322,13 @@ unsafe extern "C" fn request_clone_cb(info: *const v8::FunctionCallbackInfo) {
             let tmpl = v8::Local::new(scope, &templates.request);
             if let Some(func) = tmpl.get_function(scope) {
                 if let Some(new_obj) = func.new_instance(scope, &[]) {
-                    for &key in &["url", "method"] {
+                    for &key in &["__url__", "__method__"] {
                         let k = crate::v8_utils::v8_string(scope, key);
                         if let Some(v) = this.get(scope, k.into()) {
                             new_obj.set(scope, k.into(), v);
                         }
                     }
-                    let hk = crate::v8_utils::v8_string(scope, "headers");
+                    let hk = crate::v8_utils::v8_string(scope, "__headers__");
                     if let Some(h) = this.get(scope, hk.into()) {
                         new_obj.set(scope, hk.into(), h);
                     }
@@ -4287,12 +4348,16 @@ unsafe extern "C" fn response_status_getter(info: *const v8::FunctionCallbackInf
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let sk = crate::v8_utils::v8_string(scope, "status");
+        // Read backing value from hidden key to avoid re-invoking this same
+        // prototype accessor (which would recurse → stack overflow).
+        let sk = crate::v8_utils::v8_string(scope, "__status__");
         if let Some(v) = this.get(scope, sk.into()) {
-            rv.set(v);
-        } else {
-            rv.set(v8::Integer::new(scope, 200).into());
+            if !v.is_undefined() {
+                rv.set(v);
+                return;
+            }
         }
+        rv.set(v8::Integer::new(scope, 200).into());
     }));
 }
 
@@ -4303,12 +4368,14 @@ unsafe extern "C" fn response_ok_getter(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let ok = crate::v8_utils::v8_string(scope, "ok");
+        let ok = crate::v8_utils::v8_string(scope, "__ok__");
         if let Some(v) = this.get(scope, ok.into()) {
-            rv.set(v);
-        } else {
-            rv.set(v8::Boolean::new(scope, true).into());
+            if !v.is_undefined() {
+                rv.set(v);
+                return;
+            }
         }
+        rv.set(v8::Boolean::new(scope, true).into());
     }));
 }
 
@@ -4319,12 +4386,14 @@ unsafe extern "C" fn response_status_text_getter(info: *const v8::FunctionCallba
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let st = crate::v8_utils::v8_string(scope, "statusText");
+        let st = crate::v8_utils::v8_string(scope, "__statusText__");
         if let Some(v) = this.get(scope, st.into()) {
-            rv.set(v);
-        } else {
-            rv.set(crate::v8_utils::v8_string(scope, "").into());
+            if !v.is_undefined() {
+                rv.set(v);
+                return;
+            }
         }
+        rv.set(crate::v8_utils::v8_string(scope, "").into());
     }));
 }
 
@@ -4335,12 +4404,14 @@ unsafe extern "C" fn response_url_getter(info: *const v8::FunctionCallbackInfo) 
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let uk = crate::v8_utils::v8_string(scope, "url");
+        let uk = crate::v8_utils::v8_string(scope, "__url__");
         if let Some(v) = this.get(scope, uk.into()) {
-            rv.set(v);
-        } else {
-            rv.set(crate::v8_utils::v8_string(scope, "").into());
+            if !v.is_undefined() {
+                rv.set(v);
+                return;
+            }
         }
+        rv.set(crate::v8_utils::v8_string(scope, "").into());
     }));
 }
 
@@ -4351,12 +4422,14 @@ unsafe extern "C" fn response_headers_getter(info: *const v8::FunctionCallbackIn
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let hk = crate::v8_utils::v8_string(scope, "headers");
+        let hk = crate::v8_utils::v8_string(scope, "__headers__");
         if let Some(v) = this.get(scope, hk.into()) {
-            rv.set(v);
-        } else {
-            rv.set(v8::null(scope).into());
+            if !v.is_undefined() {
+                rv.set(v);
+                return;
+            }
         }
+        rv.set(v8::null(scope).into());
     }));
 }
 
@@ -4367,12 +4440,14 @@ unsafe extern "C" fn request_url_getter(info: *const v8::FunctionCallbackInfo) {
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let uk = crate::v8_utils::v8_string(scope, "url");
+        let uk = crate::v8_utils::v8_string(scope, "__url__");
         if let Some(v) = this.get(scope, uk.into()) {
-            rv.set(v);
-        } else {
-            rv.set(crate::v8_utils::v8_string(scope, "").into());
+            if !v.is_undefined() {
+                rv.set(v);
+                return;
+            }
         }
+        rv.set(crate::v8_utils::v8_string(scope, "").into());
     }));
 }
 
@@ -4383,12 +4458,14 @@ unsafe extern "C" fn request_method_getter(info: *const v8::FunctionCallbackInfo
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let mk = crate::v8_utils::v8_string(scope, "method");
+        let mk = crate::v8_utils::v8_string(scope, "__method__");
         if let Some(v) = this.get(scope, mk.into()) {
-            rv.set(v);
-        } else {
-            rv.set(crate::v8_utils::v8_string(scope, "GET").into());
+            if !v.is_undefined() {
+                rv.set(v);
+                return;
+            }
         }
+        rv.set(crate::v8_utils::v8_string(scope, "GET").into());
     }));
 }
 
@@ -4399,12 +4476,14 @@ unsafe extern "C" fn request_headers_getter(info: *const v8::FunctionCallbackInf
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
-        let hk = crate::v8_utils::v8_string(scope, "headers");
+        let hk = crate::v8_utils::v8_string(scope, "__headers__");
         if let Some(v) = this.get(scope, hk.into()) {
-            rv.set(v);
-        } else {
-            rv.set(v8::null(scope).into());
+            if !v.is_undefined() {
+                rv.set(v);
+                return;
+            }
         }
+        rv.set(v8::null(scope).into());
     }));
 }
 unsafe extern "C" fn multiple_setter(_info: *const v8::FunctionCallbackInfo) {}
@@ -4459,7 +4538,10 @@ mod tests {
         let count = 39;
         // This test documents the expected field count;
         // if fields are added/removed, this assertion breaks.
-        assert_eq!(std::mem::size_of::<DomTemplates>(), std::mem::size_of::<DomTemplates>());
+        assert_eq!(
+            std::mem::size_of::<DomTemplates>(),
+            std::mem::size_of::<DomTemplates>()
+        );
         // The actual size check is compile-time: DomTemplates must have exactly
         // the right number of v8::Global<v8::FunctionTemplate> fields.
         // We don't test size_of == N because it varies by platform.

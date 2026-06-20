@@ -28,7 +28,11 @@ fn test_navigator_connection_exists() {
 #[test]
 fn test_navigator_connection_effective_type() {
     let mut k = common::make_kernel();
-    common::assert_js_str(&mut k, "typeof navigator.connection.effectiveType", "string");
+    common::assert_js_str(
+        &mut k,
+        "typeof navigator.connection.effectiveType",
+        "string",
+    );
 }
 
 #[test]
@@ -40,9 +44,7 @@ fn test_navigator_send_beacon_exists() {
 #[test]
 fn test_navigator_connection_no_own_data_descriptor() {
     let mut k = common::make_kernel();
-    let desc = k.eval_to_rust_value(
-        "Object.getOwnPropertyDescriptor(navigator, 'connection')"
-    );
+    let desc = k.eval_to_rust_value("Object.getOwnPropertyDescriptor(navigator, 'connection')");
     let desc_str = common::to_str(&desc);
     assert!(
         desc_str == "undefined" || desc_str == "null",
@@ -54,9 +56,7 @@ fn test_navigator_connection_no_own_data_descriptor() {
 #[test]
 fn test_navigator_send_beacon_no_own_data_descriptor() {
     let mut k = common::make_kernel();
-    let desc = k.eval_to_rust_value(
-        "Object.getOwnPropertyDescriptor(navigator, 'sendBeacon')"
-    );
+    let desc = k.eval_to_rust_value("Object.getOwnPropertyDescriptor(navigator, 'sendBeacon')");
     let desc_str = common::to_str(&desc);
     assert!(
         desc_str == "undefined" || desc_str == "null",
@@ -68,9 +68,7 @@ fn test_navigator_send_beacon_no_own_data_descriptor() {
 #[test]
 fn test_navigator_get_battery_no_own_data_descriptor() {
     let mut k = common::make_kernel();
-    let desc = k.eval_to_rust_value(
-        "Object.getOwnPropertyDescriptor(navigator, 'getBattery')"
-    );
+    let desc = k.eval_to_rust_value("Object.getOwnPropertyDescriptor(navigator, 'getBattery')");
     let desc_str = common::to_str(&desc);
     assert!(
         desc_str == "undefined" || desc_str == "null",

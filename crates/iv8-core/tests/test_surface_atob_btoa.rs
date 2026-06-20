@@ -7,7 +7,6 @@
 )]
 mod common;
 
-
 // Integration tests for atob/btoa (Task 64).
 // Acceptance criteria:
 // - btoa('hello') === 'aGVsbG8='

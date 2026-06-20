@@ -247,9 +247,7 @@ mod tests {
         kernel.install_environment();
         // navigator.userAgent lives on Navigator.prototype (not own property),
         // so delete on the instance is a no-op that returns true — matching Chrome.
-        let result = kernel.eval_to_rust_value(
-            "'use strict'; delete navigator.userAgent",
-        );
+        let result = kernel.eval_to_rust_value("'use strict'; delete navigator.userAgent");
         assert_eq!(result, RustValue::Bool(true));
     }
 

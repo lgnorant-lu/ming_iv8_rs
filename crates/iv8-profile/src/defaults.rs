@@ -1,7 +1,6 @@
 use crate::source::*;
 
-const CHROME_147_WIN10_UA: &str =
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \
+const CHROME_147_WIN10_UA: &str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \
      (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36";
 
 pub fn default_profile_source() -> ProfileSource {
@@ -9,7 +8,8 @@ pub fn default_profile_source() -> ProfileSource {
         meta: MetaSection {
             schema_version: "0.8.32".into(),
             name: "chrome147_win10_default".into(),
-            description: "Default profile derived from iv8-rs Chrome 147/Windows 10 env defaults".into(),
+            description: "Default profile derived from iv8-rs Chrome 147/Windows 10 env defaults"
+                .into(),
             profile_version: "1".into(),
             provenance: "derived_from_iv8_defaults".into(),
         },
@@ -27,7 +27,8 @@ pub fn default_profile_source() -> ProfileSource {
                 webgl_unmasked_renderer: concat!(
                     "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) ",
                     "Direct3D11 vs_5_0 ps_5_0, D3D11)"
-                ).into(),
+                )
+                .into(),
             },
             noise_seed: 514829086,
         },

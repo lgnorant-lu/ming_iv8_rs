@@ -196,11 +196,7 @@ impl RuntimeState {
 
     /// Register a heap allocation for cleanup when RuntimeState drops.
     /// Used for Box-allocated data stored in V8 External pointers.
-    pub fn register_heap(
-        &self,
-        ptr: *mut std::ffi::c_void,
-        free_fn: fn(*mut std::ffi::c_void),
-    ) {
+    pub fn register_heap(&self, ptr: *mut std::ffi::c_void, free_fn: fn(*mut std::ffi::c_void)) {
         self.heap_registry.borrow_mut().push((ptr, free_fn));
     }
 }

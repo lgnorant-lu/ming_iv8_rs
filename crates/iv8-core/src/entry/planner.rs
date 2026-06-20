@@ -169,7 +169,9 @@ pub fn probe_viability(source: &str) -> ProbeResult {
         has_closure_capture: classification::detect_early_capture(source),
         has_eval_heavy: source.matches("eval(").count() >= 3,
         is_low_obfuscation: is_low_ob,
-        has_browserify_runtime: sigs.iter().any(|s| s == "browserify_strong" || s == "browserify_weak"),
+        has_browserify_runtime: sigs
+            .iter()
+            .any(|s| s == "browserify_strong" || s == "browserify_weak"),
         has_rollup_bundle: sigs.iter().any(|s| s == "rollup_iife" || s == "rollup_umd"),
         has_vite_bundle: sigs.iter().any(|s| s == "vite"),
     }
@@ -232,11 +234,13 @@ fn adjust_fit_by_probe(candidates: &mut [CandidateStrategy], probe: &ProbeResult
             }
             StrategyKind::BrowserifyBridge if !probe.has_browserify_runtime => {
                 c.fit_score = c.fit_score.saturating_sub(60);
-                c.known_limitations.push("probe: no browserify runtime".into());
+                c.known_limitations
+                    .push("probe: no browserify runtime".into());
             }
             StrategyKind::RollupBridge | StrategyKind::UmdBridge if !probe.has_rollup_bundle => {
                 c.fit_score = c.fit_score.saturating_sub(50);
-                c.known_limitations.push("probe: no rollup/umd bundle".into());
+                c.known_limitations
+                    .push("probe: no rollup/umd bundle".into());
             }
             StrategyKind::ViteBridge if !probe.has_vite_bundle => {
                 c.fit_score = c.fit_score.saturating_sub(60);
@@ -465,7 +469,11 @@ pub fn generate_candidates(
                 90,
                 true,
                 false,
-                vec![Evidence::ModuleGraph, Evidence::Trace, Evidence::Diagnostics],
+                vec![
+                    Evidence::ModuleGraph,
+                    Evidence::Trace,
+                    Evidence::Diagnostics,
+                ],
                 vec!["source-text wrap may fail on non-browser-pack prelude"],
                 None,
             );

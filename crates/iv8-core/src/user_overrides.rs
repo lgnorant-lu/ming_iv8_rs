@@ -70,16 +70,12 @@ fn json_to_override(value: &JsonValue) -> OverrideValue {
             }
         }
         JsonValue::Bool(b) => OverrideValue::Boolean(*b),
-        JsonValue::Array(arr) => {
-            OverrideValue::Array(arr.iter().map(json_to_override).collect())
-        }
-        JsonValue::Object(obj) => {
-            OverrideValue::Object(
-                obj.iter()
-                    .map(|(k, v)| (k.clone(), json_to_override(v)))
-                    .collect(),
-            )
-        }
+        JsonValue::Array(arr) => OverrideValue::Array(arr.iter().map(json_to_override).collect()),
+        JsonValue::Object(obj) => OverrideValue::Object(
+            obj.iter()
+                .map(|(k, v)| (k.clone(), json_to_override(v)))
+                .collect(),
+        ),
         JsonValue::Null => OverrideValue::Null,
     }
 }
@@ -111,9 +107,10 @@ pub fn install_user_overrides(
         if segments.iter().any(|s| s.is_empty()) {
             continue;
         }
-        if segments.iter().any(|s| {
-            *s == "__proto__" || *s == "constructor" || *s == "prototype"
-        }) {
+        if segments
+            .iter()
+            .any(|s| *s == "__proto__" || *s == "constructor" || *s == "prototype")
+        {
             continue;
         }
 
@@ -184,10 +181,24 @@ mod tests {
 
     #[test]
     fn test_override_value_conversions() {
-        assert!(matches!(json_to_override(&JsonValue::String("hi".into())), OverrideValue::String(_)));
-        assert!(matches!(json_to_override(&JsonValue::Number(serde_json::Number::from_f64(42.0).unwrap())), OverrideValue::Number(_)));
-        assert!(matches!(json_to_override(&JsonValue::Bool(true)), OverrideValue::Boolean(_)));
-        assert!(matches!(json_to_override(&JsonValue::Null), OverrideValue::Null));
+        assert!(matches!(
+            json_to_override(&JsonValue::String("hi".into())),
+            OverrideValue::String(_)
+        ));
+        assert!(matches!(
+            json_to_override(&JsonValue::Number(
+                serde_json::Number::from_f64(42.0).unwrap()
+            )),
+            OverrideValue::Number(_)
+        ));
+        assert!(matches!(
+            json_to_override(&JsonValue::Bool(true)),
+            OverrideValue::Boolean(_)
+        ));
+        assert!(matches!(
+            json_to_override(&JsonValue::Null),
+            OverrideValue::Null
+        ));
     }
 
     #[test]
