@@ -6,6 +6,32 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.62] - 2026-06-20
+
+> Local milestone: Behavior Probe + Conditional Exposure + Cross-Layer Contract — v0.8.x series close
+
+### Added
+- feat(shims): `ProbeResult` enum + `BehaviorProbe` trait in `shims/probes/`
+- feat(shims): `GetBatteryProbe` — Promise constructor chain, then-ability, native descriptor (5 checks)
+- feat(shims): `SendBeaconProbe` — URL/body acceptance, return value, no-throw
+- feat(shims): BrowserProfile conditional flags (`mobile_profile`, `chrome_version`, `platform_webview`)
+- feat(shims): `conditionally_hide_properties()` — masks share/canShare/vibrate on desktop, webkitGetUserMedia when chrome_version > 90
+- docs: cross-layer-contract.md — 6 surface pairs documented (UA/CH-UA/CH-UA-Platform/Accept-Language/TLS JA4/IP-Geo)
+- test(shims): probe harness integration tests + conditional exposure tests
+- docs: GUIDE section 95 (v0.8.62) + final v0.8.x README + CAPABILITY_INDEX + decision-register + tag-governance
+
+### Changed
+- refactor(shims): BrowserProfile struct extended with 3 conditional flags; DEFAULT_PROFILE updated
+- refactor(shims): `install_native_navigator` calls `conditionally_hide_properties` after instantiation
+
+### Quality Gates
+- `cargo check --workspace`: zero errors
+- `cargo test -p iv8-core --lib`: 249 PASS (+2 L1 probe tests)
+- `cargo test --test test_surface_*`: 55 PASS (28+8+9+7+3)
+- No JS shim additions; no package metadata bumps
+- No init chain, codegen, or existing native stub changes
+- Remaining 16 behavior/conditional/contract items deferred to v0.9+
+
 ## [0.8.61] - 2026-06-20
 
 > Local milestone: Screen M1 + Native Stubs + Multi-Version Doc Sync
