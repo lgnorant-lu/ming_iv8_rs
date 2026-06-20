@@ -6,6 +6,33 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.57] - 2026-06-20
+
+> Local milestone: BrowserProfile Runtime Injection M1 — connect BrowserProfile struct to RuntimeState for dynamic value injection
+
+### Added
+- feat(state): `RuntimeState.profile: Option<&'static BrowserProfile>` field
+- feat(kernel): `KernelConfig::with_browser_profile()` builder method
+- feat(shims): getter macros upgraded to read profile before EnvironmentMap
+- feat(shims): UAData getters profile read path
+- test(surface): +4 profile injection tests (custom profile + default equivalence)
+
+### Changed
+- All 26 Navigator/Screen getters read order: profile → EnvironmentMap → DEFAULT_PROFILE
+- All 9 UAData getters read order: profile → EnvironmentMap → DEFAULT_PROFILE
+- `nav_do_not_track` and `nav_languages` callbacks profile-aware
+
+### Quality Gates
+- `cargo check --workspace`: zero errors (5.83s)
+- `cargo test -p iv8-core --lib`: 247 passed
+- `cargo test --test test_surface_*`: 42 passed (20+7+7+8)
+- `maturin develop --release`: PASS
+- `fingerprint_js`: 37/37 PASS (a14 engine-limit unchanged)
+- `VFT-02`: ALL PASS (no regression)
+- Default behavior unchanged when no profile set
+- Custom BrowserProfile injection verified
+- 14/14 negative gates verified
+
 ## [0.8.56] - 2026-06-20
 
 > Local milestone: surface coverage routing governance — documentation/ledger closeout, no runtime changes
