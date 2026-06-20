@@ -114,6 +114,8 @@ impl EmbeddedV8Kernel {
         let crypto_seed = config.crypto_seed;
         let time_freeze = config.time_freeze;
         let user_overrides = config.user_overrides;
+        let browser_profile: Option<&'static crate::shims::browser_profile::BrowserProfile> =
+            config.browser_profile.map(|bp| &*Box::leak(bp));
 
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
 
@@ -133,7 +135,7 @@ impl EmbeddedV8Kernel {
                 config.time_mode,
                 config.js_api_name,
                 environment.clone(),
-                None,
+                browser_profile,
             ),
         );
 

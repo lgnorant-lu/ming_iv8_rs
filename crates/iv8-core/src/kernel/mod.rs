@@ -14,7 +14,6 @@ pub struct EvalOpts {
 }
 
 /// Configuration for creating a kernel.
-#[derive(Debug, Clone)]
 pub struct KernelConfig {
     pub strict_compat: bool,
     pub time_mode: crate::state::TimeMode,
@@ -28,6 +27,9 @@ pub struct KernelConfig {
     pub time_freeze: Option<f64>,
     /// User-defined property overrides applied after all system initialization.
     pub user_overrides: crate::user_overrides::UserOverrides,
+    /// Browser identity profile. Leaked to `&'static` at kernel construction.
+    /// Not cloned — each config produces a single kernel.
+    pub browser_profile: Option<Box<crate::shims::browser_profile::BrowserProfile>>,
 }
 
 impl Default for KernelConfig {
@@ -41,6 +43,7 @@ impl Default for KernelConfig {
             crypto_seed: None,
             time_freeze: None,
             user_overrides: crate::user_overrides::UserOverrides::new(),
+            browser_profile: None,
         }
     }
 }
@@ -54,6 +57,20 @@ impl KernelConfig {
     /// for later native installer specialization.
     pub fn with_profile_matrix(mut self, matrix: &iv8_profile::ProfileMatrix) -> Self {
         self.environment_overrides = Some(matrix.to_environment_overrides());
+        self
+    }
+
+    /// Set a custom BrowserProfile as the active identity profile.
+    ///
+    /// The profile is stored as a `Box` in the config. At kernel construction,
+    /// it is leaked to a `&'static` reference and installed in `RuntimeState`,
+    /// where native getters read it before falling back to EnvironmentMap or
+    /// DEFAULT_PROFILE.
+    pub fn with_browser_profile(
+        mut self,
+        profile: crate::shims::browser_profile::BrowserProfile,
+    ) -> Self {
+        self.browser_profile = Some(Box::new(profile));
         self
     }
 }
