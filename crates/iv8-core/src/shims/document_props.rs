@@ -227,32 +227,6 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         Object.defineProperty(document, 'pictureInPictureEnabled', { get: function() { return false; }, configurable: true });
     }
 
-    // navigator.sendBeacon stub
-    if (typeof navigator !== 'undefined' && !navigator.sendBeacon) {
-        try {
-            Object.defineProperty(navigator, 'sendBeacon', {
-                value: function sendBeacon(url, data) { return true; },
-                writable: true, configurable: true, enumerable: true,
-            });
-        } catch(e) {}
-    }
-
-    // navigator.getBattery stub
-    if (typeof navigator !== 'undefined' && !navigator.getBattery) {
-        try {
-            Object.defineProperty(navigator, 'getBattery', {
-                value: function getBattery() {
-                    return Promise.resolve({
-                        charging: true, chargingTime: 0,
-                        dischargingTime: Infinity, level: 1.0,
-                        addEventListener: function() {}, removeEventListener: function() {},
-                    });
-                },
-                writable: true, configurable: true, enumerable: true,
-            });
-        } catch(e) {}
-    }
-
     // MimeTypeArray / PluginArray prototype tags
     // Real Chrome: Object.prototype.toString.call(mimeTypes) === '[object MimeTypeArray]'
     if (typeof navigator !== 'undefined' && navigator.mimeTypes) {
