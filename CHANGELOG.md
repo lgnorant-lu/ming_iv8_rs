@@ -12,7 +12,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ### Changed
 - fix(codegen): type_mapper.rs fallback `v8::null(scope)` → `v8::Object::new(scope)`
-  - One-line change regenerates 1284 interfaces across 31 files (2354 lines)
+  - One-line change regenerates 1284 interfaces across 30 generated files (2354 lines)
   - All interface-typed getters now return empty object skeletons instead of null
   - Resolves secondary-access crashes for `navigator.bluetooth.getAvailability` etc.
   - Nullable interface refinement deferred to v0.8.59+
