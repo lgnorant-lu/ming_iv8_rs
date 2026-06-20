@@ -231,9 +231,6 @@ fn test_navigator_get_gamepads_returns_empty_array() {
 fn test_navigator_request_media_key_system_access_returns_promise() {
     let mut k = common::make_kernel();
     common::assert_js_str(&mut k, "typeof navigator.requestMediaKeySystemAccess", "function");
-    let result = k.eval_to_rust_value(
-        "navigator.requestMediaKeySystemAccess('com.widevine.alpha').constructor.name"
-    );
     common::assert_js_str(&mut k,
         "navigator.requestMediaKeySystemAccess('com.widevine.alpha').constructor.name",
         "Promise"
