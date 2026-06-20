@@ -509,3 +509,60 @@ fn subtle_export_key_raw() {
         RustValue::Int(32)
     ); // 256 bits = 32 bytes
 }
+
+#[test]
+fn text_encoder_encode_returns_uint8array() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.encOk = false;
+        globalThis.encLen = -1;
+        globalThis.encErr = null;
+        try {
+            var u = new TextEncoder().encode('hello');
+            globalThis.encOk = u instanceof Uint8Array;
+            globalThis.encLen = u.length;
+        } catch(e) {
+            globalThis.encErr = String(e);
+        }
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.encOk"),
+        RustValue::Bool(true)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.encLen"),
+        RustValue::Int(5)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.encErr"),
+        RustValue::Null
+    );
+}
+
+#[test]
+fn subtle_digest_sha256_roundtrip() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval(
+            r#"
+        globalThis.digestOk = null;
+        crypto.subtle.digest('SHA-256', new TextEncoder().encode('roundtrip-test'))
+            .then(function(buf) {
+                var arr = new Uint8Array(buf);
+                globalThis.digestOk = arr.length === 32;
+            });
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.digestOk"),
+        RustValue::Bool(true)
+    );
+}

@@ -177,3 +177,59 @@ fn fetch_404_resolves_not_rejects() {
         RustValue::Bool(true)
     );
 }
+
+#[test]
+fn fetch_response_ok_status_no_recursion() {
+    let mut kernel = common::make_kernel();
+    kernel.add_resource("https://x.com/regr", b"body".to_vec(), 200, None);
+    kernel
+        .eval(
+            r#"
+        globalThis.regrOk = null;
+        globalThis.regrStatus = -1;
+        fetch('https://x.com/regr').then(function(r) {
+            globalThis.regrOk = r.ok;
+            globalThis.regrStatus = r.status;
+        });
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.regrOk"),
+        RustValue::Bool(true)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.regrStatus"),
+        RustValue::Int(200)
+    );
+}
+
+#[test]
+fn fetch_response_404_ok_status_no_recursion() {
+    let mut kernel = common::make_kernel();
+    kernel.add_resource("https://x.com/nope", b"not found".to_vec(), 404, None);
+    kernel
+        .eval(
+            r#"
+        globalThis.r4ok = null;
+        globalThis.r4st = -1;
+        fetch('https://x.com/nope').then(function(r) {
+            globalThis.r4ok = r.ok;
+            globalThis.r4st = r.status;
+        });
+        "#,
+            EvalOpts::default(),
+        )
+        .unwrap();
+    kernel.drain_microtasks();
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.r4ok"),
+        RustValue::Bool(false)
+    );
+    assert_eq!(
+        kernel.eval_to_rust_value("globalThis.r4st"),
+        RustValue::Int(404)
+    );
+}
