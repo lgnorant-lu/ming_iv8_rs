@@ -199,3 +199,17 @@ fn test_navigator_default_profile_equivalence() {
     let lang = common::to_str(&k.eval_to_rust_value("navigator.language"));
     assert!(!lang.is_empty(), "default language is empty");
 }
+
+// v0.8.58 generated skeletons: codegen output verification.
+// These properties are generated with Object::new but not yet installed
+// because native_env replaces the generated Navigator. v0.8.59 will
+// expose them via augment mode.
+
+#[test]
+fn test_navigator_generated_skeleton_not_installed_yet() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.bluetooth", "undefined");
+    common::assert_js_str(&mut k, "typeof navigator.hid", "undefined");
+    common::assert_js_str(&mut k, "typeof navigator.usb", "undefined");
+    common::assert_js_str(&mut k, "typeof navigator.gpu", "undefined");
+}

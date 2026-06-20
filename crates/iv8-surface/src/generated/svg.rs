@@ -135,7 +135,7 @@ unsafe extern "C" fn svg_animated_angle_get_1(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -144,7 +144,7 @@ unsafe extern "C" fn svg_animated_angle_get_2(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -342,7 +342,7 @@ unsafe extern "C" fn svg_animated_length_get_1(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -351,7 +351,7 @@ unsafe extern "C" fn svg_animated_length_get_2(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -390,7 +390,7 @@ unsafe extern "C" fn svg_animated_length_list_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -399,7 +399,7 @@ unsafe extern "C" fn svg_animated_length_list_get_2(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -491,7 +491,7 @@ unsafe extern "C" fn svg_animated_number_list_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -500,7 +500,7 @@ unsafe extern "C" fn svg_animated_number_list_get_2(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -539,7 +539,7 @@ unsafe extern "C" fn svg_animated_preserve_aspect_ratio_get_1(info: *const v8::F
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -548,7 +548,7 @@ unsafe extern "C" fn svg_animated_preserve_aspect_ratio_get_2(info: *const v8::F
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -587,7 +587,7 @@ unsafe extern "C" fn svg_animated_rect_get_1(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -596,7 +596,7 @@ unsafe extern "C" fn svg_animated_rect_get_2(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -688,7 +688,7 @@ unsafe extern "C" fn svg_animated_transform_list_get_1(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -697,7 +697,7 @@ unsafe extern "C" fn svg_animated_transform_list_get_2(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -888,7 +888,7 @@ unsafe extern "C" fn svg_length_list_op_4(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -897,7 +897,7 @@ unsafe extern "C" fn svg_length_list_op_5(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -906,7 +906,7 @@ unsafe extern "C" fn svg_length_list_op_6(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -915,7 +915,7 @@ unsafe extern "C" fn svg_length_list_op_7(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -924,7 +924,7 @@ unsafe extern "C" fn svg_length_list_op_8(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -933,7 +933,7 @@ unsafe extern "C" fn svg_length_list_op_9(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1102,7 +1102,7 @@ unsafe extern "C" fn svg_number_list_op_4(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1111,7 +1111,7 @@ unsafe extern "C" fn svg_number_list_op_5(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1120,7 +1120,7 @@ unsafe extern "C" fn svg_number_list_op_6(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1129,7 +1129,7 @@ unsafe extern "C" fn svg_number_list_op_7(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1138,7 +1138,7 @@ unsafe extern "C" fn svg_number_list_op_8(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1147,7 +1147,7 @@ unsafe extern "C" fn svg_number_list_op_9(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1336,7 +1336,7 @@ unsafe extern "C" fn svg_point_list_op_4(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1345,7 +1345,7 @@ unsafe extern "C" fn svg_point_list_op_5(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1354,7 +1354,7 @@ unsafe extern "C" fn svg_point_list_op_6(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1363,7 +1363,7 @@ unsafe extern "C" fn svg_point_list_op_7(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1372,7 +1372,7 @@ unsafe extern "C" fn svg_point_list_op_8(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1381,7 +1381,7 @@ unsafe extern "C" fn svg_point_list_op_9(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1728,7 +1728,7 @@ unsafe extern "C" fn svg_transform_get_2(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1905,7 +1905,7 @@ unsafe extern "C" fn svg_transform_list_op_4(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1914,7 +1914,7 @@ unsafe extern "C" fn svg_transform_list_op_5(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1923,7 +1923,7 @@ unsafe extern "C" fn svg_transform_list_op_6(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1932,7 +1932,7 @@ unsafe extern "C" fn svg_transform_list_op_7(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1941,7 +1941,7 @@ unsafe extern "C" fn svg_transform_list_op_8(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1950,7 +1950,7 @@ unsafe extern "C" fn svg_transform_list_op_9(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1968,7 +1968,7 @@ unsafe extern "C" fn svg_transform_list_op_11(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1977,7 +1977,7 @@ unsafe extern "C" fn svg_transform_list_op_12(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2104,7 +2104,7 @@ unsafe extern "C" fn svg_element_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2113,7 +2113,7 @@ unsafe extern "C" fn svg_element_get_2(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2122,7 +2122,7 @@ unsafe extern "C" fn svg_element_get_3(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2191,7 +2191,7 @@ unsafe extern "C" fn svg_animation_element_get_1(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2200,7 +2200,7 @@ unsafe extern "C" fn svg_animation_element_get_2(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2213,7 +2213,7 @@ unsafe extern "C" fn svg_animation_element_get_3(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2226,7 +2226,7 @@ unsafe extern "C" fn svg_animation_element_get_4(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2399,7 +2399,7 @@ unsafe extern "C" fn svg_clip_path_element_get_1(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2408,7 +2408,7 @@ unsafe extern "C" fn svg_clip_path_element_get_2(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2450,7 +2450,7 @@ unsafe extern "C" fn svg_component_transfer_function_element_get_1(info: *const 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2459,7 +2459,7 @@ unsafe extern "C" fn svg_component_transfer_function_element_get_2(info: *const 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2468,7 +2468,7 @@ unsafe extern "C" fn svg_component_transfer_function_element_get_3(info: *const 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2477,7 +2477,7 @@ unsafe extern "C" fn svg_component_transfer_function_element_get_4(info: *const 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2486,7 +2486,7 @@ unsafe extern "C" fn svg_component_transfer_function_element_get_5(info: *const 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2495,7 +2495,7 @@ unsafe extern "C" fn svg_component_transfer_function_element_get_6(info: *const 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2504,7 +2504,7 @@ unsafe extern "C" fn svg_component_transfer_function_element_get_7(info: *const 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2597,7 +2597,7 @@ unsafe extern "C" fn svgfe_blend_element_get_1(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2606,7 +2606,7 @@ unsafe extern "C" fn svgfe_blend_element_get_2(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2615,7 +2615,7 @@ unsafe extern "C" fn svgfe_blend_element_get_3(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2663,7 +2663,7 @@ unsafe extern "C" fn svgfe_color_matrix_element_get_1(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2672,7 +2672,7 @@ unsafe extern "C" fn svgfe_color_matrix_element_get_2(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2681,7 +2681,7 @@ unsafe extern "C" fn svgfe_color_matrix_element_get_3(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2729,7 +2729,7 @@ unsafe extern "C" fn svgfe_component_transfer_element_get_1(info: *const v8::Fun
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2765,7 +2765,7 @@ unsafe extern "C" fn svgfe_composite_element_get_1(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2774,7 +2774,7 @@ unsafe extern "C" fn svgfe_composite_element_get_2(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2783,7 +2783,7 @@ unsafe extern "C" fn svgfe_composite_element_get_3(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2792,7 +2792,7 @@ unsafe extern "C" fn svgfe_composite_element_get_4(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2801,7 +2801,7 @@ unsafe extern "C" fn svgfe_composite_element_get_5(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2810,7 +2810,7 @@ unsafe extern "C" fn svgfe_composite_element_get_6(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2819,7 +2819,7 @@ unsafe extern "C" fn svgfe_composite_element_get_7(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2891,7 +2891,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_1(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2900,7 +2900,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_2(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2909,7 +2909,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_3(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2918,7 +2918,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_4(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2927,7 +2927,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_5(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2936,7 +2936,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_6(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2945,7 +2945,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_7(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2954,7 +2954,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_8(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2963,7 +2963,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_9(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2972,7 +2972,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_10(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2981,7 +2981,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_11(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2990,7 +2990,7 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_12(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3092,7 +3092,7 @@ unsafe extern "C" fn svgfe_diffuse_lighting_element_get_1(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3101,7 +3101,7 @@ unsafe extern "C" fn svgfe_diffuse_lighting_element_get_2(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3110,7 +3110,7 @@ unsafe extern "C" fn svgfe_diffuse_lighting_element_get_3(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3119,7 +3119,7 @@ unsafe extern "C" fn svgfe_diffuse_lighting_element_get_4(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3128,7 +3128,7 @@ unsafe extern "C" fn svgfe_diffuse_lighting_element_get_5(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3188,7 +3188,7 @@ unsafe extern "C" fn svgfe_displacement_map_element_get_1(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3197,7 +3197,7 @@ unsafe extern "C" fn svgfe_displacement_map_element_get_2(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3206,7 +3206,7 @@ unsafe extern "C" fn svgfe_displacement_map_element_get_3(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3215,7 +3215,7 @@ unsafe extern "C" fn svgfe_displacement_map_element_get_4(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3224,7 +3224,7 @@ unsafe extern "C" fn svgfe_displacement_map_element_get_5(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3284,7 +3284,7 @@ unsafe extern "C" fn svgfe_distant_light_element_get_1(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3293,7 +3293,7 @@ unsafe extern "C" fn svgfe_distant_light_element_get_2(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3335,7 +3335,7 @@ unsafe extern "C" fn svgfe_drop_shadow_element_get_1(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3344,7 +3344,7 @@ unsafe extern "C" fn svgfe_drop_shadow_element_get_2(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3353,7 +3353,7 @@ unsafe extern "C" fn svgfe_drop_shadow_element_get_3(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3362,7 +3362,7 @@ unsafe extern "C" fn svgfe_drop_shadow_element_get_4(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3371,7 +3371,7 @@ unsafe extern "C" fn svgfe_drop_shadow_element_get_5(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3468,7 +3468,7 @@ unsafe extern "C" fn svgfe_gaussian_blur_element_get_1(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3477,7 +3477,7 @@ unsafe extern "C" fn svgfe_gaussian_blur_element_get_2(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3486,7 +3486,7 @@ unsafe extern "C" fn svgfe_gaussian_blur_element_get_3(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3495,7 +3495,7 @@ unsafe extern "C" fn svgfe_gaussian_blur_element_get_4(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3565,7 +3565,7 @@ unsafe extern "C" fn svgfe_image_element_get_1(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3574,7 +3574,7 @@ unsafe extern "C" fn svgfe_image_element_get_2(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3637,7 +3637,7 @@ unsafe extern "C" fn svgfe_merge_node_element_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3673,7 +3673,7 @@ unsafe extern "C" fn svgfe_morphology_element_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3682,7 +3682,7 @@ unsafe extern "C" fn svgfe_morphology_element_get_2(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3691,7 +3691,7 @@ unsafe extern "C" fn svgfe_morphology_element_get_3(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3700,7 +3700,7 @@ unsafe extern "C" fn svgfe_morphology_element_get_4(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3754,7 +3754,7 @@ unsafe extern "C" fn svgfe_offset_element_get_1(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3763,7 +3763,7 @@ unsafe extern "C" fn svgfe_offset_element_get_2(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3772,7 +3772,7 @@ unsafe extern "C" fn svgfe_offset_element_get_3(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3820,7 +3820,7 @@ unsafe extern "C" fn svgfe_point_light_element_get_1(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3829,7 +3829,7 @@ unsafe extern "C" fn svgfe_point_light_element_get_2(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3838,7 +3838,7 @@ unsafe extern "C" fn svgfe_point_light_element_get_3(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3886,7 +3886,7 @@ unsafe extern "C" fn svgfe_specular_lighting_element_get_1(info: *const v8::Func
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3895,7 +3895,7 @@ unsafe extern "C" fn svgfe_specular_lighting_element_get_2(info: *const v8::Func
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3904,7 +3904,7 @@ unsafe extern "C" fn svgfe_specular_lighting_element_get_3(info: *const v8::Func
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3913,7 +3913,7 @@ unsafe extern "C" fn svgfe_specular_lighting_element_get_4(info: *const v8::Func
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3922,7 +3922,7 @@ unsafe extern "C" fn svgfe_specular_lighting_element_get_5(info: *const v8::Func
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3931,7 +3931,7 @@ unsafe extern "C" fn svgfe_specular_lighting_element_get_6(info: *const v8::Func
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3997,7 +3997,7 @@ unsafe extern "C" fn svgfe_spot_light_element_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4006,7 +4006,7 @@ unsafe extern "C" fn svgfe_spot_light_element_get_2(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4015,7 +4015,7 @@ unsafe extern "C" fn svgfe_spot_light_element_get_3(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4024,7 +4024,7 @@ unsafe extern "C" fn svgfe_spot_light_element_get_4(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4033,7 +4033,7 @@ unsafe extern "C" fn svgfe_spot_light_element_get_5(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4042,7 +4042,7 @@ unsafe extern "C" fn svgfe_spot_light_element_get_6(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4051,7 +4051,7 @@ unsafe extern "C" fn svgfe_spot_light_element_get_7(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4060,7 +4060,7 @@ unsafe extern "C" fn svgfe_spot_light_element_get_8(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4138,7 +4138,7 @@ unsafe extern "C" fn svgfe_tile_element_get_1(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4174,7 +4174,7 @@ unsafe extern "C" fn svgfe_turbulence_element_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4183,7 +4183,7 @@ unsafe extern "C" fn svgfe_turbulence_element_get_2(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4192,7 +4192,7 @@ unsafe extern "C" fn svgfe_turbulence_element_get_3(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4201,7 +4201,7 @@ unsafe extern "C" fn svgfe_turbulence_element_get_4(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4210,7 +4210,7 @@ unsafe extern "C" fn svgfe_turbulence_element_get_5(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4219,7 +4219,7 @@ unsafe extern "C" fn svgfe_turbulence_element_get_6(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4285,7 +4285,7 @@ unsafe extern "C" fn svg_filter_element_get_1(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4294,7 +4294,7 @@ unsafe extern "C" fn svg_filter_element_get_2(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4303,7 +4303,7 @@ unsafe extern "C" fn svg_filter_element_get_3(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4312,7 +4312,7 @@ unsafe extern "C" fn svg_filter_element_get_4(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4321,7 +4321,7 @@ unsafe extern "C" fn svg_filter_element_get_5(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4330,7 +4330,7 @@ unsafe extern "C" fn svg_filter_element_get_6(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4396,7 +4396,7 @@ unsafe extern "C" fn svg_gradient_element_get_1(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4405,7 +4405,7 @@ unsafe extern "C" fn svg_gradient_element_get_2(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4414,7 +4414,7 @@ unsafe extern "C" fn svg_gradient_element_get_3(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4462,7 +4462,7 @@ unsafe extern "C" fn svg_graphics_element_get_1(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4471,7 +4471,7 @@ unsafe extern "C" fn svg_graphics_element_op_2(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4480,7 +4480,7 @@ unsafe extern "C" fn svg_graphics_element_op_3(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4489,7 +4489,7 @@ unsafe extern "C" fn svg_graphics_element_op_4(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4567,7 +4567,7 @@ unsafe extern "C" fn svg_marker_element_get_1(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4576,7 +4576,7 @@ unsafe extern "C" fn svg_marker_element_get_2(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4585,7 +4585,7 @@ unsafe extern "C" fn svg_marker_element_get_3(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4594,7 +4594,7 @@ unsafe extern "C" fn svg_marker_element_get_4(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4603,7 +4603,7 @@ unsafe extern "C" fn svg_marker_element_get_5(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4612,7 +4612,7 @@ unsafe extern "C" fn svg_marker_element_get_6(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4621,7 +4621,7 @@ unsafe extern "C" fn svg_marker_element_get_7(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4745,7 +4745,7 @@ unsafe extern "C" fn svg_mask_element_get_1(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4754,7 +4754,7 @@ unsafe extern "C" fn svg_mask_element_get_2(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4763,7 +4763,7 @@ unsafe extern "C" fn svg_mask_element_get_3(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4772,7 +4772,7 @@ unsafe extern "C" fn svg_mask_element_get_4(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4781,7 +4781,7 @@ unsafe extern "C" fn svg_mask_element_get_5(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4790,7 +4790,7 @@ unsafe extern "C" fn svg_mask_element_get_6(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4877,7 +4877,7 @@ unsafe extern "C" fn svg_pattern_element_get_1(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4886,7 +4886,7 @@ unsafe extern "C" fn svg_pattern_element_get_2(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4895,7 +4895,7 @@ unsafe extern "C" fn svg_pattern_element_get_3(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4904,7 +4904,7 @@ unsafe extern "C" fn svg_pattern_element_get_4(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4913,7 +4913,7 @@ unsafe extern "C" fn svg_pattern_element_get_5(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4922,7 +4922,7 @@ unsafe extern "C" fn svg_pattern_element_get_6(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4931,7 +4931,7 @@ unsafe extern "C" fn svg_pattern_element_get_7(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5064,7 +5064,7 @@ unsafe extern "C" fn svg_stop_element_get_1(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5411,7 +5411,7 @@ unsafe extern "C" fn svg_linear_gradient_element_get_1(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5420,7 +5420,7 @@ unsafe extern "C" fn svg_linear_gradient_element_get_2(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5429,7 +5429,7 @@ unsafe extern "C" fn svg_linear_gradient_element_get_3(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5438,7 +5438,7 @@ unsafe extern "C" fn svg_linear_gradient_element_get_4(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5492,7 +5492,7 @@ unsafe extern "C" fn svg_radial_gradient_element_get_1(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5501,7 +5501,7 @@ unsafe extern "C" fn svg_radial_gradient_element_get_2(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5510,7 +5510,7 @@ unsafe extern "C" fn svg_radial_gradient_element_get_3(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5519,7 +5519,7 @@ unsafe extern "C" fn svg_radial_gradient_element_get_4(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5528,7 +5528,7 @@ unsafe extern "C" fn svg_radial_gradient_element_get_5(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5537,7 +5537,7 @@ unsafe extern "C" fn svg_radial_gradient_element_get_6(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5603,7 +5603,7 @@ unsafe extern "C" fn svga_element_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5651,7 +5651,7 @@ unsafe extern "C" fn svga_element_get_5(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5990,7 +5990,7 @@ unsafe extern "C" fn svg_foreign_object_element_get_1(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5999,7 +5999,7 @@ unsafe extern "C" fn svg_foreign_object_element_get_2(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6008,7 +6008,7 @@ unsafe extern "C" fn svg_foreign_object_element_get_3(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6017,7 +6017,7 @@ unsafe extern "C" fn svg_foreign_object_element_get_4(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6092,7 +6092,7 @@ unsafe extern "C" fn svg_geometry_element_get_1(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6128,7 +6128,7 @@ unsafe extern "C" fn svg_geometry_element_op_5(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6192,7 +6192,7 @@ unsafe extern "C" fn svg_image_element_get_1(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6201,7 +6201,7 @@ unsafe extern "C" fn svg_image_element_get_2(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6210,7 +6210,7 @@ unsafe extern "C" fn svg_image_element_get_3(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6219,7 +6219,7 @@ unsafe extern "C" fn svg_image_element_get_4(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6228,7 +6228,7 @@ unsafe extern "C" fn svg_image_element_get_5(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6308,7 +6308,7 @@ unsafe extern "C" fn svgsvg_element_get_1(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6317,7 +6317,7 @@ unsafe extern "C" fn svgsvg_element_get_2(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6326,7 +6326,7 @@ unsafe extern "C" fn svgsvg_element_get_3(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6335,7 +6335,7 @@ unsafe extern "C" fn svgsvg_element_get_4(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6357,7 +6357,7 @@ unsafe extern "C" fn svgsvg_element_get_6(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6366,7 +6366,7 @@ unsafe extern "C" fn svgsvg_element_op_7(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6375,7 +6375,7 @@ unsafe extern "C" fn svgsvg_element_op_8(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6411,7 +6411,7 @@ unsafe extern "C" fn svgsvg_element_op_12(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6420,7 +6420,7 @@ unsafe extern "C" fn svgsvg_element_op_13(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6429,7 +6429,7 @@ unsafe extern "C" fn svgsvg_element_op_14(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6438,7 +6438,7 @@ unsafe extern "C" fn svgsvg_element_op_15(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6447,7 +6447,7 @@ unsafe extern "C" fn svgsvg_element_op_16(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6456,7 +6456,7 @@ unsafe extern "C" fn svgsvg_element_op_17(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6465,7 +6465,7 @@ unsafe extern "C" fn svgsvg_element_op_18(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6474,7 +6474,7 @@ unsafe extern "C" fn svgsvg_element_op_19(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6483,7 +6483,7 @@ unsafe extern "C" fn svgsvg_element_op_20(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6834,7 +6834,7 @@ unsafe extern "C" fn svg_text_content_element_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6843,7 +6843,7 @@ unsafe extern "C" fn svg_text_content_element_get_2(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6879,7 +6879,7 @@ unsafe extern "C" fn svg_text_content_element_op_6(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6888,7 +6888,7 @@ unsafe extern "C" fn svg_text_content_element_op_7(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6897,7 +6897,7 @@ unsafe extern "C" fn svg_text_content_element_op_8(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7029,7 +7029,7 @@ unsafe extern "C" fn svg_use_element_get_1(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7038,7 +7038,7 @@ unsafe extern "C" fn svg_use_element_get_2(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7047,7 +7047,7 @@ unsafe extern "C" fn svg_use_element_get_3(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7056,7 +7056,7 @@ unsafe extern "C" fn svg_use_element_get_4(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7065,7 +7065,7 @@ unsafe extern "C" fn svg_use_element_get_5(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7074,7 +7074,7 @@ unsafe extern "C" fn svg_use_element_get_6(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7140,7 +7140,7 @@ unsafe extern "C" fn svg_circle_element_get_1(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7149,7 +7149,7 @@ unsafe extern "C" fn svg_circle_element_get_2(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7158,7 +7158,7 @@ unsafe extern "C" fn svg_circle_element_get_3(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7206,7 +7206,7 @@ unsafe extern "C" fn svg_ellipse_element_get_1(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7215,7 +7215,7 @@ unsafe extern "C" fn svg_ellipse_element_get_2(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7224,7 +7224,7 @@ unsafe extern "C" fn svg_ellipse_element_get_3(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7233,7 +7233,7 @@ unsafe extern "C" fn svg_ellipse_element_get_4(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7287,7 +7287,7 @@ unsafe extern "C" fn svg_line_element_get_1(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7296,7 +7296,7 @@ unsafe extern "C" fn svg_line_element_get_2(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7305,7 +7305,7 @@ unsafe extern "C" fn svg_line_element_get_3(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7314,7 +7314,7 @@ unsafe extern "C" fn svg_line_element_get_4(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7368,7 +7368,7 @@ unsafe extern "C" fn svg_path_element_get_1(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7386,7 +7386,7 @@ unsafe extern "C" fn svg_path_element_op_3(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7395,7 +7395,7 @@ unsafe extern "C" fn svg_path_element_op_4(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7494,7 +7494,7 @@ unsafe extern "C" fn svg_rect_element_get_1(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7503,7 +7503,7 @@ unsafe extern "C" fn svg_rect_element_get_2(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7512,7 +7512,7 @@ unsafe extern "C" fn svg_rect_element_get_3(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7521,7 +7521,7 @@ unsafe extern "C" fn svg_rect_element_get_4(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7530,7 +7530,7 @@ unsafe extern "C" fn svg_rect_element_get_5(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7539,7 +7539,7 @@ unsafe extern "C" fn svg_rect_element_get_6(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7605,7 +7605,7 @@ unsafe extern "C" fn svg_text_path_element_get_1(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7614,7 +7614,7 @@ unsafe extern "C" fn svg_text_path_element_get_2(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7623,7 +7623,7 @@ unsafe extern "C" fn svg_text_path_element_get_3(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7671,7 +7671,7 @@ unsafe extern "C" fn svg_text_positioning_element_get_1(info: *const v8::Functio
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7680,7 +7680,7 @@ unsafe extern "C" fn svg_text_positioning_element_get_2(info: *const v8::Functio
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7689,7 +7689,7 @@ unsafe extern "C" fn svg_text_positioning_element_get_3(info: *const v8::Functio
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7698,7 +7698,7 @@ unsafe extern "C" fn svg_text_positioning_element_get_4(info: *const v8::Functio
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7707,7 +7707,7 @@ unsafe extern "C" fn svg_text_positioning_element_get_5(info: *const v8::Functio
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 

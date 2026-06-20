@@ -10,7 +10,7 @@ unsafe extern "C" fn presentation_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -23,7 +23,7 @@ unsafe extern "C" fn presentation_get_2(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -105,7 +105,7 @@ unsafe extern "C" fn presentation_availability_get_2(info: *const v8::FunctionCa
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -170,7 +170,7 @@ unsafe extern "C" fn presentation_connection_get_3(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -197,7 +197,7 @@ unsafe extern "C" fn presentation_connection_get_6(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -210,7 +210,7 @@ unsafe extern "C" fn presentation_connection_get_7(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -223,7 +223,7 @@ unsafe extern "C" fn presentation_connection_get_8(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -236,7 +236,7 @@ unsafe extern "C" fn presentation_connection_get_9(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -249,7 +249,7 @@ unsafe extern "C" fn presentation_connection_get_10(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -423,7 +423,7 @@ unsafe extern "C" fn presentation_connection_list_get_2(info: *const v8::Functio
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -497,7 +497,7 @@ unsafe extern "C" fn presentation_request_get_4(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 

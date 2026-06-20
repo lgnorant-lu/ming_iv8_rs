@@ -28,7 +28,7 @@ unsafe extern "C" fn web_gl_active_info_get_1(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -37,7 +37,7 @@ unsafe extern "C" fn web_gl_active_info_get_2(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -147,7 +147,7 @@ unsafe extern "C" fn web_gl_shader_precision_format_get_1(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -156,7 +156,7 @@ unsafe extern "C" fn web_gl_shader_precision_format_get_2(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -165,7 +165,7 @@ unsafe extern "C" fn web_gl_shader_precision_format_get_3(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 

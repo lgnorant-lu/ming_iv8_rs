@@ -133,7 +133,7 @@ unsafe extern "C" fn event_get_2(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -142,7 +142,7 @@ unsafe extern "C" fn event_get_3(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -151,7 +151,7 @@ unsafe extern "C" fn event_get_4(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -276,7 +276,7 @@ unsafe extern "C" fn event_get_17(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -463,7 +463,7 @@ unsafe extern "C" fn animation_event_get_1(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -481,7 +481,7 @@ unsafe extern "C" fn animation_event_get_3(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -490,7 +490,7 @@ unsafe extern "C" fn animation_event_get_4(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -544,7 +544,7 @@ unsafe extern "C" fn animation_playback_event_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -553,7 +553,7 @@ unsafe extern "C" fn animation_playback_event_get_2(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -604,7 +604,7 @@ unsafe extern "C" fn audio_processing_event_get_2(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -613,7 +613,7 @@ unsafe extern "C" fn audio_processing_event_get_3(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -670,7 +670,7 @@ unsafe extern "C" fn autofill_event_get_2(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -790,7 +790,7 @@ unsafe extern "C" fn blob_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -799,7 +799,7 @@ unsafe extern "C" fn blob_event_get_2(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -841,7 +841,7 @@ unsafe extern "C" fn bluetooth_advertising_event_get_1(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -895,7 +895,7 @@ unsafe extern "C" fn bluetooth_advertising_event_get_7(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -904,7 +904,7 @@ unsafe extern "C" fn bluetooth_advertising_event_get_8(info: *const v8::Function
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -982,7 +982,7 @@ unsafe extern "C" fn buffered_change_event_get_1(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -991,7 +991,7 @@ unsafe extern "C" fn buffered_change_event_get_2(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1033,7 +1033,7 @@ unsafe extern "C" fn capture_action_event_get_1(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1180,7 +1180,7 @@ unsafe extern "C" fn clipboard_change_event_get_2(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1222,7 +1222,7 @@ unsafe extern "C" fn clipboard_event_get_1(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1324,7 +1324,7 @@ unsafe extern "C" fn command_event_get_1(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1565,7 +1565,7 @@ unsafe extern "C" fn device_motion_event_get_1(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1574,7 +1574,7 @@ unsafe extern "C" fn device_motion_event_get_2(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1583,7 +1583,7 @@ unsafe extern "C" fn device_motion_event_get_3(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1759,7 +1759,7 @@ unsafe extern "C" fn document_picture_in_picture_event_get_1(info: *const v8::Fu
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -1964,7 +1964,7 @@ unsafe extern "C" fn form_data_event_get_1(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2000,7 +2000,7 @@ unsafe extern "C" fn gpu_uncaptured_error_event_get_1(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2036,7 +2036,7 @@ unsafe extern "C" fn gamepad_event_get_1(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2072,7 +2072,7 @@ unsafe extern "C" fn hid_connection_event_get_1(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2108,7 +2108,7 @@ unsafe extern "C" fn hid_input_report_event_get_1(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2312,7 +2312,7 @@ unsafe extern "C" fn midi_connection_event_get_1(info: *const v8::FunctionCallba
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2435,7 +2435,7 @@ unsafe extern "C" fn media_key_message_event_get_1(info: *const v8::FunctionCall
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2486,7 +2486,7 @@ unsafe extern "C" fn media_query_list_event_get_1(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2537,7 +2537,7 @@ unsafe extern "C" fn media_stream_track_event_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2600,7 +2600,7 @@ unsafe extern "C" fn message_event_get_4(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2694,7 +2694,7 @@ unsafe extern "C" fn ndef_reading_event_get_2(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2736,7 +2736,7 @@ unsafe extern "C" fn navigate_event_get_1(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2745,7 +2745,7 @@ unsafe extern "C" fn navigate_event_get_2(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2781,7 +2781,7 @@ unsafe extern "C" fn navigate_event_get_6(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2790,7 +2790,7 @@ unsafe extern "C" fn navigate_event_get_7(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2826,7 +2826,7 @@ unsafe extern "C" fn navigate_event_get_11(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2954,7 +2954,7 @@ unsafe extern "C" fn navigation_current_entry_change_event_get_1(info: *const v8
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -2963,7 +2963,7 @@ unsafe extern "C" fn navigation_current_entry_change_event_get_2(info: *const v8
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3005,7 +3005,7 @@ unsafe extern "C" fn offline_audio_completion_event_get_1(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3041,7 +3041,7 @@ unsafe extern "C" fn page_reveal_event_get_1(info: *const v8::FunctionCallbackIn
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3077,7 +3077,7 @@ unsafe extern "C" fn page_swap_event_get_1(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3086,7 +3086,7 @@ unsafe extern "C" fn page_swap_event_get_2(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3201,7 +3201,7 @@ unsafe extern "C" fn picture_in_picture_event_get_1(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3297,7 +3297,7 @@ unsafe extern "C" fn portal_activate_event_op_2(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3340,7 +3340,7 @@ unsafe extern "C" fn presentation_connection_available_event_get_1(info: *const 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3376,7 +3376,7 @@ unsafe extern "C" fn presentation_connection_close_event_get_1(info: *const v8::
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3580,7 +3580,7 @@ unsafe extern "C" fn rtc_data_channel_event_get_1(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3616,7 +3616,7 @@ unsafe extern "C" fn rtc_error_event_get_1(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3748,7 +3748,7 @@ unsafe extern "C" fn rtc_peer_connection_ice_event_get_1(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3799,7 +3799,7 @@ unsafe extern "C" fn rtc_track_event_get_1(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3808,7 +3808,7 @@ unsafe extern "C" fn rtc_track_event_get_2(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3826,7 +3826,7 @@ unsafe extern "C" fn rtc_track_event_get_4(info: *const v8::FunctionCallbackInfo
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3880,7 +3880,7 @@ unsafe extern "C" fn rtc_transform_event_get_1(info: *const v8::FunctionCallback
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3916,7 +3916,7 @@ unsafe extern "C" fn s_frame_transform_error_event_get_1(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -3925,7 +3925,7 @@ unsafe extern "C" fn s_frame_transform_error_event_get_2(info: *const v8::Functi
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4054,7 +4054,7 @@ unsafe extern "C" fn security_policy_violation_event_get_9(info: *const v8::Func
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4183,7 +4183,7 @@ unsafe extern "C" fn sensor_error_event_get_1(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4219,7 +4219,7 @@ unsafe extern "C" fn snap_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4228,7 +4228,7 @@ unsafe extern "C" fn snap_event_get_2(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4270,7 +4270,7 @@ unsafe extern "C" fn speech_recognition_error_event_get_1(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4330,7 +4330,7 @@ unsafe extern "C" fn speech_recognition_event_get_2(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4372,7 +4372,7 @@ unsafe extern "C" fn speech_synthesis_event_get_1(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4504,7 +4504,7 @@ unsafe extern "C" fn storage_event_get_5(info: *const v8::FunctionCallbackInfo) 
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4580,7 +4580,7 @@ unsafe extern "C" fn submit_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4616,7 +4616,7 @@ unsafe extern "C" fn task_priority_change_event_get_1(info: *const v8::FunctionC
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4785,7 +4785,7 @@ unsafe extern "C" fn time_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4870,7 +4870,7 @@ unsafe extern "C" fn toggle_event_get_3(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4918,7 +4918,7 @@ unsafe extern "C" fn track_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4954,7 +4954,7 @@ unsafe extern "C" fn transition_event_get_1(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4972,7 +4972,7 @@ unsafe extern "C" fn transition_event_get_3(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4981,7 +4981,7 @@ unsafe extern "C" fn transition_event_get_4(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5035,7 +5035,7 @@ unsafe extern "C" fn ui_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5053,7 +5053,7 @@ unsafe extern "C" fn ui_event_get_3(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5132,7 +5132,7 @@ unsafe extern "C" fn usb_connection_event_get_1(info: *const v8::FunctionCallbac
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5240,7 +5240,7 @@ unsafe extern "C" fn window_controls_overlay_geometry_change_event_get_1(info: *
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5318,7 +5318,7 @@ unsafe extern "C" fn event_source_get_4(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5331,7 +5331,7 @@ unsafe extern "C" fn event_source_get_5(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5344,7 +5344,7 @@ unsafe extern "C" fn event_source_get_6(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5433,7 +5433,7 @@ unsafe extern "C" fn background_fetch_event_get_1(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5620,7 +5620,7 @@ unsafe extern "C" fn extendable_message_event_get_4(info: *const v8::FunctionCal
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5689,7 +5689,7 @@ unsafe extern "C" fn fetch_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5853,7 +5853,7 @@ unsafe extern "C" fn notification_event_get_1(info: *const v8::FunctionCallbackI
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6161,7 +6161,7 @@ unsafe extern "C" fn push_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6170,7 +6170,7 @@ unsafe extern "C" fn push_event_get_2(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6212,7 +6212,7 @@ unsafe extern "C" fn push_subscription_change_event_get_1(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6221,7 +6221,7 @@ unsafe extern "C" fn push_subscription_change_event_get_2(info: *const v8::Funct
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6365,7 +6365,7 @@ unsafe extern "C" fn speech_synthesis_error_event_get_1(info: *const v8::Functio
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6453,7 +6453,7 @@ unsafe extern "C" fn focus_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6516,7 +6516,7 @@ unsafe extern "C" fn input_event_get_4(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -6912,7 +6912,7 @@ unsafe extern "C" fn mouse_event_get_13(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7172,7 +7172,7 @@ unsafe extern "C" fn navigation_event_get_1(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7181,7 +7181,7 @@ unsafe extern "C" fn navigation_event_get_2(info: *const v8::FunctionCallbackInf
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7275,7 +7275,7 @@ unsafe extern "C" fn touch_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7284,7 +7284,7 @@ unsafe extern "C" fn touch_event_get_2(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7293,7 +7293,7 @@ unsafe extern "C" fn touch_event_get_3(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -7454,7 +7454,7 @@ unsafe extern "C" fn drag_event_get_1(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::null(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 

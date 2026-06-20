@@ -75,10 +75,10 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
             needs_scope: true,
         },
 
-        // Interface references — return null stub
+        // Interface references — return empty object skeleton
         _ => TypeMap {
             rust_type: "v8::Local<'s, v8::Object>".into(),
-            default_value: "v8::null(scope).into()".into(),
+            default_value: "v8::Object::new(scope).into()".into(),
             needs_scope: true,
         },
     }
