@@ -20,6 +20,7 @@
 
 use crate::shims::browser_profile::DEFAULT_PROFILE;
 use crate::state::RuntimeState;
+use iv8_surface::generated::web_apis::create_navigator_template;
 
 /// Install native-getter versions of navigator and screen on the global.
 /// Must be called AFTER env_inject (so the base objects exist) but BEFORE
@@ -42,24 +43,32 @@ unsafe extern "C" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) 
 }
 
 /// Build a native navigator object with accessor properties.
+/// v0.8.60: creates a native Navigator template that inherits from the
+/// generated create_navigator_template (46 skeleton properties). Native
+/// getters are added to the native template's prototype, shadowing
+/// generated skeleton properties via the prototype chain.
+/// This unifies BrowserSurface-generated skeleton properties
+/// (bluetooth, hid, usb, gpu, etc.) with native profile-backed
+/// getters in a single Navigator object.
 fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    // Create a FunctionTemplate for Navigator (replaces flat ObjectTemplate)
+    // Create native Navigator template — inherits generated template's prototype
+    let gen_tmpl = create_navigator_template(scope, None);
     let nav_tmpl =
         v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     nav_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Navigator"));
+    nav_tmpl.inherit(gen_tmpl);
 
-    // Install native getters on Navigator.prototype (not on the instance template).
-    // Each getter reads from RuntimeState.environment at call time.
+    // Install native getters on Navigator.prototype template.
+    // These shadow generated skeleton getters for overlapping names
+    // via prototype chain (native proto → generated proto).
+    let proto = nav_tmpl.prototype_template(scope);
     macro_rules! nav_getter {
         ($name:literal, $cb:ident) => {
             let getter = v8::FunctionTemplate::builder_raw($cb).build(scope);
             let name = crate::v8_utils::v8_string(scope, $name);
-            // Set the getter's name so toString() returns "function <name>() { [native code] }"
             getter.set_class_name(name);
-            // Remove prototype so the getter is not constructible
-            // (matches real Chrome: navigator.userAgent getter has no prototype)
             getter.remove_prototype();
-            nav_tmpl.prototype_template(scope).set_accessor_property(
+            proto.set_accessor_property(
                 name.into(),
                 Some(getter),
                 None,
@@ -104,14 +113,14 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     let battery_name = crate::v8_utils::v8_string(scope, "getBattery");
     battery_fn.set_class_name(battery_name);
     battery_fn.remove_prototype();
-    nav_tmpl.prototype_template(scope).set(battery_name.into(), battery_fn.into());
+    proto.set(battery_name.into(), battery_fn.into());
 
     // sendBeacon: function returning true
     let beacon_fn = v8::FunctionTemplate::builder_raw(nav_send_beacon).build(scope);
     let beacon_name = crate::v8_utils::v8_string(scope, "sendBeacon");
     beacon_fn.set_class_name(beacon_name);
     beacon_fn.remove_prototype();
-    nav_tmpl.prototype_template(scope).set(beacon_name.into(), beacon_fn.into());
+    proto.set(beacon_name.into(), beacon_fn.into());
 
     // geolocation — accessor getter returning object with stub methods
     nav_getter!("geolocation", nav_geolocation);
@@ -127,9 +136,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     let java_name = crate::v8_utils::v8_string(scope, "javaEnabled");
     java_fn.set_class_name(java_name);
     java_fn.remove_prototype();
-    nav_tmpl
-        .prototype_template(scope)
-        .set(java_name.into(), java_fn.into());
+    proto.set(java_name.into(), java_fn.into());
 
     // Instantiate via instance_template (bypasses constructor — we don't want
     // illegal_constructor to block Rust-side instance creation).

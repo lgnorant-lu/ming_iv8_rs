@@ -200,16 +200,19 @@ fn test_navigator_default_profile_equivalence() {
     assert!(!lang.is_empty(), "default language is empty");
 }
 
-// v0.8.59: generated Navigator merge deferred.
-// Generated properties (bluetooth, hid, usb, gpu) are still "undefined"
-// because env_inject replaces the generated Navigator before install_native_env
-// runs. Proper augment requires init chain restructuring — deferred to v0.8.60.
+// v0.8.60: generated Navigator template unification.
+// Generated skeleton properties (bluetooth, hid, usb) are now
+// visible in JS runtime — native Navigator inherits from generated
+// create_navigator_template via FunctionTemplate::inherit().
+// Note: gpu is not a Navigator attribute in W3C WebIDL webref;
+// it is on WorkerNavigator (not yet generated).
 
 #[test]
-fn test_navigator_generated_skeleton_not_yet_visible() {
+fn test_navigator_generated_skeleton_visible() {
     let mut k = common::make_kernel();
-    common::assert_js_str(&mut k, "typeof navigator.bluetooth", "undefined");
-    common::assert_js_str(&mut k, "typeof navigator.hid", "undefined");
-    common::assert_js_str(&mut k, "typeof navigator.usb", "undefined");
-    common::assert_js_str(&mut k, "typeof navigator.gpu", "undefined");
+    common::assert_js_str(&mut k, "typeof navigator.bluetooth", "object");
+    common::assert_js_str(&mut k, "typeof navigator.hid", "object");
+    common::assert_js_str(&mut k, "typeof navigator.usb", "object");
+    // Native getters still take precedence over generated skeletons
+    common::assert_js_str(&mut k, "typeof navigator.userAgent", "string");
 }
