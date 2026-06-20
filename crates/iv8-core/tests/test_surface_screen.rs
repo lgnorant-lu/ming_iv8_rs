@@ -74,3 +74,28 @@ fn test_screen_custom_profile() {
     common::assert_js_str(&mut k, "screen.colorDepth", "30");
     common::assert_js_str(&mut k, "screen.pixelDepth", "30");
 }
+
+// v0.8.61: generated Screen template unification.
+// Generated skeleton properties (orientation, isExtended, onchange)
+// now visible via Screen template inherit().
+
+#[test]
+fn test_screen_generated_skeleton_visible() {
+    let mut k = common::make_kernel();
+    // Generated skeleton properties visible
+    common::assert_js_str(&mut k, "typeof screen.orientation", "object");
+    // isExtended is generated as boolean (codegen maps correctly)
+    common::assert_js_str(&mut k, "typeof screen.isExtended", "boolean");
+    // Native getters still override generated skeletons
+    common::assert_js_str(&mut k, "typeof screen.width", "number");
+    common::assert_js_str(&mut k, "typeof screen.colorDepth", "number");
+}
+
+// v0.8.61: Screen constructor still throws TypeError
+#[test]
+fn test_screen_constructor_throws() {
+    let mut k = common::make_kernel();
+    common::assert_js_error(&mut k, "new Screen()");
+    // Verify constructor exists and is callable with new
+    common::assert_js_str(&mut k, "typeof Screen", "function");
+}

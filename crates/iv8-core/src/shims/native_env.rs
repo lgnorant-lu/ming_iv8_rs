@@ -20,6 +20,7 @@
 
 use crate::shims::browser_profile::DEFAULT_PROFILE;
 use crate::state::RuntimeState;
+use iv8_surface::generated::css_om::create_screen_template;
 use iv8_surface::generated::web_apis::create_navigator_template;
 
 /// Install native-getter versions of navigator and screen on the global.
@@ -137,6 +138,27 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     java_fn.set_class_name(java_name);
     java_fn.remove_prototype();
     proto.set(java_name.into(), java_fn.into());
+
+    // getGamepads: function returning empty array (v0.8.61)
+    let gamepads_fn = v8::FunctionTemplate::builder_raw(nav_get_gamepads).build(scope);
+    let gamepads_name = crate::v8_utils::v8_string(scope, "getGamepads");
+    gamepads_fn.set_class_name(gamepads_name);
+    gamepads_fn.remove_prototype();
+    proto.set(gamepads_name.into(), gamepads_fn.into());
+
+    // requestMediaKeySystemAccess: function returning rejected Promise (v0.8.61)
+    let eme_fn = v8::FunctionTemplate::builder_raw(nav_request_media_key_system_access).build(scope);
+    let eme_name = crate::v8_utils::v8_string(scope, "requestMediaKeySystemAccess");
+    eme_fn.set_class_name(eme_name);
+    eme_fn.remove_prototype();
+    proto.set(eme_name.into(), eme_fn.into());
+
+    // requestMIDIAccess: function returning rejected Promise (v0.8.61)
+    let midi_fn = v8::FunctionTemplate::builder_raw(nav_request_midi_access).build(scope);
+    let midi_name = crate::v8_utils::v8_string(scope, "requestMIDIAccess");
+    midi_fn.set_class_name(midi_name);
+    midi_fn.remove_prototype();
+    proto.set(midi_name.into(), midi_fn.into());
 
     // Instantiate via instance_template (bypasses constructor — we don't want
     // illegal_constructor to block Rust-side instance creation).
@@ -644,10 +666,14 @@ unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
 // ─── screen ───────────────────────────────────────────────────────────────────
 
 fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    // Create a FunctionTemplate for Screen (replaces flat ObjectTemplate)
+    // v0.8.61: inherit from generated Screen template (9 skeleton properties)
+    let gen_tmpl = create_screen_template(scope, None);
     let screen_tmpl =
         v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     screen_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Screen"));
+    screen_tmpl.inherit(gen_tmpl);
+
+    let proto = screen_tmpl.prototype_template(scope);
 
     macro_rules! screen_getter {
         ($name:literal, $cb:ident) => {
@@ -655,7 +681,7 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
             let name = crate::v8_utils::v8_string(scope, $name);
             getter.set_class_name(name);
             getter.remove_prototype();
-            screen_tmpl.prototype_template(scope).set_accessor_property(
+            proto.set_accessor_property(
                 name.into(),
                 Some(getter),
                 None,
@@ -709,6 +735,85 @@ unsafe extern "C" fn nav_java_enabled(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
+}
+
+// ─── v0.8.61 native stubs ────────────────────────────────────────────────────────
+
+// navigator.getGamepads() → empty array []
+unsafe extern "C" fn nav_get_gamepads(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let arr = v8::Array::new(scope, 0);
+        rv.set(arr.into());
+    }));
+}
+
+// navigator.requestMediaKeySystemAccess() → Promise.reject(NotSupportedError)
+unsafe extern "C" fn nav_request_media_key_system_access(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let global = scope.get_current_context().global(scope);
+        if let Some(promise_ctor) = global.get(scope, v8_str(scope, "Promise").into()) {
+            if promise_ctor.is_function() {
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(promise_ctor) };
+                let reject_key = v8_str(scope, "reject");
+                if let Some(reject_fn) = ctor.get(scope, reject_key.into()) {
+                    if reject_fn.is_function() {
+                        let reject: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(reject_fn) };
+                        let err_obj = v8::Exception::type_error(scope, v8_str(scope, ""));
+                        if let Some(promise) =
+                            reject.call(scope, ctor.into(), &[err_obj.into()])
+                        {
+                            rv.set(promise);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+// navigator.requestMIDIAccess() → Promise.reject(NotSupportedError)
+unsafe extern "C" fn nav_request_midi_access(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let global = scope.get_current_context().global(scope);
+        if let Some(promise_ctor) = global.get(scope, v8_str(scope, "Promise").into()) {
+            if promise_ctor.is_function() {
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(promise_ctor) };
+                let reject_key = v8_str(scope, "reject");
+                if let Some(reject_fn) = ctor.get(scope, reject_key.into()) {
+                    if reject_fn.is_function() {
+                        let reject: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(reject_fn) };
+                        let err_obj = v8::Exception::type_error(scope, v8_str(scope, ""));
+                        if let Some(promise) =
+                            reject.call(scope, ctor.into(), &[err_obj.into()])
+                        {
+                            rv.set(promise);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+fn v8_str<'s>(scope: &'s v8::PinScope<'s, '_>, s: &str) -> v8::Local<'s, v8::String> {
+    crate::v8_utils::v8_string(scope, s)
 }
 
 env_f64_getter!(screen_width, "screen.width", screen_width, DEFAULT_PROFILE.screen_width);

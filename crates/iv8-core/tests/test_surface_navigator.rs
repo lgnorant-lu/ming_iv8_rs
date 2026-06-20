@@ -216,3 +216,36 @@ fn test_navigator_generated_skeleton_visible() {
     // Native getters still take precedence over generated skeletons
     common::assert_js_str(&mut k, "typeof navigator.userAgent", "string");
 }
+
+// v0.8.61: native stubs for high-signal Navigator methods.
+
+#[test]
+fn test_navigator_get_gamepads_returns_empty_array() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.getGamepads", "function");
+    common::assert_js_str(&mut k, "navigator.getGamepads().length", "0");
+    common::assert_js_str(&mut k, "Array.isArray(navigator.getGamepads())", "true");
+}
+
+#[test]
+fn test_navigator_request_media_key_system_access_returns_promise() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.requestMediaKeySystemAccess", "function");
+    let result = k.eval_to_rust_value(
+        "navigator.requestMediaKeySystemAccess('com.widevine.alpha').constructor.name"
+    );
+    common::assert_js_str(&mut k,
+        "navigator.requestMediaKeySystemAccess('com.widevine.alpha').constructor.name",
+        "Promise"
+    );
+}
+
+#[test]
+fn test_navigator_request_midi_access_returns_promise() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.requestMIDIAccess", "function");
+    common::assert_js_str(&mut k,
+        "navigator.requestMIDIAccess().constructor.name",
+        "Promise"
+    );
+}
