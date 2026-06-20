@@ -4,6 +4,26 @@ All notable changes to iv8-rs are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/) and
 [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+## [0.8.56] - 2026-06-20
+
+> Local milestone: R12 governance baseline — warning cleanup, surface gap classification, v0.8.54 formal freeze
+
+### Changed
+- fix(shims): remove unused `mut` from native_env.rs:397 `make_mt` and embedded_v8.rs:522 `callbacks`
+- docs(TODO-native): R12 Navigator property governance classification (tested 24 / likely 6 / completeness 22 / engine-limit 2)
+- docs(TODO-native): add engine-level limitation declaration (console.debug CDP signal, setTimeout/setInterval CreepJS lie)
+- docs(PROGRESS.md): v0.8.54 tag record + v0.8.55 tag record + v0.8.56 dev milestone
+
+### Added
+- docs(roadmap): v0.8.54 freeze record (freeze.md) — formal boundary documentation of 54 commits from v0.8.53 → v0.8.54
+- docs(roadmap): Browser Profile Contract design document (profile-contract.md) — centralized BrowserProfile struct + cross-layer consistency contract (C1)
+
+### Quality Gates
+- `cargo check -p iv8-core`: zero warnings (2 unused mut fixed)
+- `cargo check --workspace`: zero errors
+
 ## [0.8.55] - 2026-06-20
 
 > Local milestone: critical detection surface fixes — plugins/mimeTypes native getter, canPlayType override

@@ -519,7 +519,7 @@ fn install_window_identity_refs(
 /// hardcoded wrappers around the install_X functions. This is the existing
 /// default path since v0.8.29/30.
 fn build_hardcoded_bcr() -> iv8_surface::BehaviorCallbackRegistry {
-    let mut callbacks = iv8_surface::BehaviorCallbackRegistry::new();
+    let callbacks = iv8_surface::BehaviorCallbackRegistry::new();
 
     *callbacks.install_atob_btoa.borrow_mut() = Some(Box::new(
         |scope, global| crate::shims::atob_btoa::install_atob_btoa(scope, global),

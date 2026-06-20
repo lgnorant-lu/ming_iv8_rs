@@ -394,7 +394,7 @@ unsafe extern "C" fn nav_mime_types(info: *const v8::FunctionCallbackInfo) {
         let ts = v8::Symbol::get_to_string_tag(scope);
         let st = |k: &str| crate::v8_utils::v8_string(scope, k);
 
-        let mut make_mt = |typ: &str, suffixes: &str, desc: &str| {
+        let make_mt = |typ: &str, suffixes: &str, desc: &str| {
             let obj = v8::Object::new(scope);
             obj.set(scope, st("type").into(), st(typ).into());
             obj.set(scope, st("suffixes").into(), st(suffixes).into());
