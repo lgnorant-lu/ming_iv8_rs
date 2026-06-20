@@ -1,7 +1,12 @@
 //! v0.8.62: Integration tests for behavior probe harness.
+//! v0.8.63: M2 probes — connection, geolocation, clipboard, credentials.
 mod common;
 
 use iv8_core::shims::probes::probe_battery::GetBatteryProbe;
+use iv8_core::shims::probes::probe_clipboard::ClipboardProbe;
+use iv8_core::shims::probes::probe_connection::ConnectionProbe;
+use iv8_core::shims::probes::probe_credentials::CredentialsProbe;
+use iv8_core::shims::probes::probe_geolocation::GeolocationProbe;
 use iv8_core::shims::probes::probe_send_beacon::SendBeaconProbe;
 use iv8_core::shims::probes::{BehaviorProbe, ProbeResult};
 
@@ -40,4 +45,36 @@ fn test_probe_trait_structure() {
     let beacon = SendBeaconProbe;
     assert!(!beacon.name().is_empty());
     assert!(!beacon.description().is_empty());
+}
+
+#[test]
+fn test_connection_probe_passes() {
+    let mut k = common::make_kernel();
+    let probe = ConnectionProbe;
+    let result = probe.probe(&mut k);
+    assert_eq!(result, ProbeResult::Pass, "connection probe failed: {:?}", result);
+}
+
+#[test]
+fn test_geolocation_probe_passes() {
+    let mut k = common::make_kernel();
+    let probe = GeolocationProbe;
+    let result = probe.probe(&mut k);
+    assert_eq!(result, ProbeResult::Pass, "geolocation probe failed: {:?}", result);
+}
+
+#[test]
+fn test_clipboard_probe_passes() {
+    let mut k = common::make_kernel();
+    let probe = ClipboardProbe;
+    let result = probe.probe(&mut k);
+    assert_eq!(result, ProbeResult::Pass, "clipboard probe failed: {:?}", result);
+}
+
+#[test]
+fn test_credentials_probe_passes() {
+    let mut k = common::make_kernel();
+    let probe = CredentialsProbe;
+    let result = probe.probe(&mut k);
+    assert_eq!(result, ProbeResult::Pass, "credentials probe failed: {:?}", result);
 }
