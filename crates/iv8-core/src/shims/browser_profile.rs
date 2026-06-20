@@ -54,6 +54,17 @@ pub struct BrowserProfile {
     pub ua_full_version_list_json: &'static str,
 
     pub device_pixel_ratio: f64,
+
+    // ─── v0.8.62: conditional exposure flags ───────────────────────────
+    /// True if the profile represents a mobile device (phone/tablet).
+    /// Controls visibility of share/canShare/vibrate.
+    pub mobile_profile: bool,
+    /// Chrome major version number (e.g., 131).
+    /// Controls visibility of legacy APIs (e.g., webkitGetUserMedia for version ≤ 90).
+    pub chrome_version: u32,
+    /// True if the profile represents an embedded WebView.
+    /// Reserved for future conditional exposure (unused in v0.8.62).
+    pub platform_webview: bool,
 }
 
 pub const DEFAULT_PROFILE: BrowserProfile = BrowserProfile {
@@ -99,6 +110,11 @@ pub const DEFAULT_PROFILE: BrowserProfile = BrowserProfile {
     ua_full_version_list_json: r#"[{"brand":"Google Chrome","version":"131.0.6778.86"},{"brand":"Chromium","version":"131.0.6778.86"}]"#,
 
     device_pixel_ratio: 1.0,
+
+    // v0.8.62 conditional exposure defaults
+    mobile_profile: false,       // desktop profile
+    chrome_version: 131,         // Chrome 131
+    platform_webview: false,     // standalone browser (not WebView)
 };
 
 #[cfg(test)]

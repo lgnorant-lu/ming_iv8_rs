@@ -13,6 +13,7 @@ pub mod location;
 pub mod message_channel;
 pub mod native_env;
 pub mod navigator_extras;
+pub mod probes;
 pub mod storage;
 pub mod url;
 pub mod user_agent_data;

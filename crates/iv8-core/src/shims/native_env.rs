@@ -168,6 +168,9 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
         // Install userAgentData sub-object on navigator instance
         crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
 
+        // v0.8.62: conditionally hide platform-dependent properties
+        conditionally_hide_properties(scope, nav_obj);
+
         let key = crate::v8_utils::v8_string(scope, "navigator");
         global.define_own_property(
             scope,
@@ -186,6 +189,31 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
             func.into(),
             v8::PropertyAttribute::DONT_ENUM,
         );
+    }
+}
+
+// v0.8.62: conditionally hide platform-dependent Navigator properties
+// based on BrowserProfile flags (mobile_profile, chrome_version).
+fn conditionally_hide_properties(
+    scope: &v8::PinScope<'_, '_>,
+    nav_obj: v8::Local<v8::Object>,
+) {
+    let isolate: &v8::Isolate = scope;
+    let state = RuntimeState::get(isolate);
+    let profile = state.profile.unwrap_or(&DEFAULT_PROFILE);
+
+    // Desktop profile: hide mobile-only properties
+    if !profile.mobile_profile {
+        for prop in &["share", "canShare", "vibrate"] {
+            let key = crate::v8_utils::v8_string(scope, prop);
+            nav_obj.delete(scope, key.into());
+        }
+    }
+
+    // Chrome > 90: hide legacy webkit-prefixed API
+    if profile.chrome_version > 90 {
+        let key = crate::v8_utils::v8_string(scope, "webkitGetUserMedia");
+        nav_obj.delete(scope, key.into());
     }
 }
 
