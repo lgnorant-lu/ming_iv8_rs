@@ -6,6 +6,32 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.61] - 2026-06-20
+
+> Local milestone: Screen M1 + Native Stubs + Multi-Version Doc Sync
+
+### Added
+- feat(shims): Screen template unification — `install_native_screen` uses generated `create_screen_template` + `inherit()` (same pattern as v0.8.60 Navigator)
+- feat(shims): 3 native-high-signal-stub additions
+  - `navigator.getGamepads()` → empty array `[]`
+  - `navigator.requestMediaKeySystemAccess()` → rejected Promise (TypeError)
+  - `navigator.requestMIDIAccess()` → rejected Promise (TypeError)
+- docs: multi-version sync — GUIDE.md sections 88-93 (v0.8.55-0.8.60), README.md, CAPABILITY_INDEX.md (5 entries), v0.8-decision-register.md (6 decisions), v0.8-release-and-tag-governance-closeout.md (6 tag rows)
+
+### Changed
+- refactor(shims): Screen template inherits from generated `create_screen_template` (9 properties)
+  - Native getters shadow generated Object::new skeletons via prototype chain
+  - Generated `orientation`/`isExtended` now visible in JS runtime
+  - Screen constructor uses `illegal_constructor`
+
+### Quality Gates
+- `cargo check --workspace`: zero errors
+- `cargo test -p iv8-core --lib`: 247 PASS
+- `cargo test --test test_surface_*`: 48 PASS (24+8+9+7)
+- `maturin develop`: pre-existing build timeout (V8 library size)
+- No JS shim additions; no package metadata bumps
+- No init chain, codegen, or BrowserProfile changes
+
 ## [0.8.60] - 2026-06-20
 
 > Local milestone: Native Augment Mode M1 — unify native Navigator with generated BrowserSurface template via FunctionTemplate::inherit()
