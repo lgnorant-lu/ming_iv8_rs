@@ -18,6 +18,7 @@
 //! - env_inject.rs still runs first for the full 393-entry set; we then
 //!   OVERRIDE the key objects with native-getter versions.
 
+use crate::shims::browser_profile::DEFAULT_PROFILE;
 use crate::state::RuntimeState;
 
 /// Install native-getter versions of navigator and screen on the global.
@@ -136,7 +137,7 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
 // ─── navigator getter callbacks ───────────────────────────────────────────────
 
 macro_rules! env_str_getter {
-    ($name:ident, $path:literal, $default:literal) => {
+    ($name:ident, $path:literal, $default:expr) => {
         unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
             let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 let info_ref = unsafe { &*info };
@@ -185,25 +186,25 @@ macro_rules! env_bool_getter {
     };
 }
 
-env_str_getter!(nav_user_agent, "navigator.userAgent", "Mozilla/5.0");
-env_str_getter!(nav_app_version, "navigator.appVersion", "5.0");
-env_str_getter!(nav_platform, "navigator.platform", "Win32");
-env_str_getter!(nav_vendor, "navigator.vendor", "Google Inc.");
-env_str_getter!(nav_vendor_sub, "navigator.vendorSub", "");
-env_str_getter!(nav_product, "navigator.product", "Gecko");
-env_str_getter!(nav_product_sub, "navigator.productSub", "20030107");
-env_str_getter!(nav_language, "navigator.language", "en-US");
-env_str_getter!(nav_app_name, "navigator.appName", "Netscape");
-env_str_getter!(nav_app_code_name, "navigator.appCodeName", "Mozilla");
+env_str_getter!(nav_user_agent, "navigator.userAgent", DEFAULT_PROFILE.user_agent);
+env_str_getter!(nav_app_version, "navigator.appVersion", DEFAULT_PROFILE.app_version);
+env_str_getter!(nav_platform, "navigator.platform", DEFAULT_PROFILE.platform);
+env_str_getter!(nav_vendor, "navigator.vendor", DEFAULT_PROFILE.vendor);
+env_str_getter!(nav_vendor_sub, "navigator.vendorSub", DEFAULT_PROFILE.vendor_sub);
+env_str_getter!(nav_product, "navigator.product", DEFAULT_PROFILE.product);
+env_str_getter!(nav_product_sub, "navigator.productSub", DEFAULT_PROFILE.product_sub);
+env_str_getter!(nav_language, "navigator.language", DEFAULT_PROFILE.language);
+env_str_getter!(nav_app_name, "navigator.appName", DEFAULT_PROFILE.app_name);
+env_str_getter!(nav_app_code_name, "navigator.appCodeName", DEFAULT_PROFILE.app_code_name);
 env_f64_getter!(
     nav_hardware_concurrency,
     "navigator.hardwareConcurrency",
-    8.0
+    DEFAULT_PROFILE.hardware_concurrency
 );
-env_f64_getter!(nav_device_memory, "navigator.deviceMemory", 8.0);
-env_f64_getter!(nav_max_touch_points, "navigator.maxTouchPoints", 0.0);
-env_bool_getter!(nav_cookie_enabled, "navigator.cookieEnabled", true);
-env_bool_getter!(nav_online, "navigator.onLine", true);
+env_f64_getter!(nav_device_memory, "navigator.deviceMemory", DEFAULT_PROFILE.device_memory);
+env_f64_getter!(nav_max_touch_points, "navigator.maxTouchPoints", DEFAULT_PROFILE.max_touch_points);
+env_bool_getter!(nav_cookie_enabled, "navigator.cookieEnabled", DEFAULT_PROFILE.cookie_enabled);
+env_bool_getter!(nav_online, "navigator.onLine", DEFAULT_PROFILE.on_line);
 
 // navigator.languages → array from environment
 unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
@@ -221,14 +222,13 @@ unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
                     .filter_map(|v| v.as_str().map(|s| s.to_string()))
                     .collect()
             } else {
-                vec!["en-US".to_string(), "en".to_string()]
+                DEFAULT_PROFILE.languages.iter().map(|s| s.to_string()).collect()
             }
         } else {
-            // Fall back to single language
             let lang = state
                 .environment
                 .get_str("navigator.language")
-                .unwrap_or("en-US");
+                .unwrap_or(DEFAULT_PROFILE.language);
             vec![lang.to_string()]
         };
 
@@ -518,7 +518,7 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     }
 }
 
-env_bool_getter!(nav_pdf_viewer_enabled, "navigator.pdfViewerEnabled", true);
+env_bool_getter!(nav_pdf_viewer_enabled, "navigator.pdfViewerEnabled", DEFAULT_PROFILE.pdf_viewer_enabled);
 
 // javaEnabled() → always returns false (no Java plugin in V8 context)
 unsafe extern "C" fn nav_java_enabled(info: *const v8::FunctionCallbackInfo) {
@@ -530,11 +530,11 @@ unsafe extern "C" fn nav_java_enabled(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-env_f64_getter!(screen_width, "screen.width", 1920.0);
-env_f64_getter!(screen_height, "screen.height", 1080.0);
-env_f64_getter!(screen_avail_width, "screen.availWidth", 1920.0);
-env_f64_getter!(screen_avail_height, "screen.availHeight", 1040.0);
-env_f64_getter!(screen_color_depth, "screen.colorDepth", 24.0);
-env_f64_getter!(screen_pixel_depth, "screen.pixelDepth", 24.0);
-env_f64_getter!(screen_avail_left, "screen.availLeft", 0.0);
-env_f64_getter!(screen_avail_top, "screen.availTop", 0.0);
+env_f64_getter!(screen_width, "screen.width", DEFAULT_PROFILE.screen_width);
+env_f64_getter!(screen_height, "screen.height", DEFAULT_PROFILE.screen_height);
+env_f64_getter!(screen_avail_width, "screen.availWidth", DEFAULT_PROFILE.screen_avail_width);
+env_f64_getter!(screen_avail_height, "screen.availHeight", DEFAULT_PROFILE.screen_avail_height);
+env_f64_getter!(screen_color_depth, "screen.colorDepth", DEFAULT_PROFILE.screen_color_depth);
+env_f64_getter!(screen_pixel_depth, "screen.pixelDepth", DEFAULT_PROFILE.screen_pixel_depth);
+env_f64_getter!(screen_avail_left, "screen.availLeft", DEFAULT_PROFILE.screen_avail_left);
+env_f64_getter!(screen_avail_top, "screen.availTop", DEFAULT_PROFILE.screen_avail_top);
