@@ -246,3 +246,40 @@ fn test_navigator_request_midi_access_returns_promise() {
         "Promise"
     );
 }
+
+// v0.8.62: conditional Navigator property exposure
+// Desktop profile (mobile_profile=false, chrome_version=131)
+// hides mobile-only and legacy properties.
+
+#[test]
+fn test_conditional_share_hidden_on_desktop() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.share", "undefined");
+    common::assert_js_str(&mut k, "typeof navigator.canShare", "undefined");
+}
+
+#[test]
+fn test_conditional_vibrate_hidden_on_desktop() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.vibrate", "undefined");
+}
+
+#[test]
+fn test_conditional_webkit_get_user_media_hidden_chrome_131() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.webkitGetUserMedia", "undefined");
+}
+
+// Mobile profile: share/canShare/vibrate visible
+#[test]
+fn test_conditional_share_visible_on_mobile() {
+    use iv8_core::shims::browser_profile::BrowserProfile;
+    let profile = BrowserProfile {
+        mobile_profile: true,
+        ..iv8_core::shims::browser_profile::DEFAULT_PROFILE.clone()
+    };
+    let mut k = common::make_kernel_with_profile(profile);
+    // share/canShare are generated as methods (typeof "function")
+    common::assert_js_str(&mut k, "typeof navigator.share", "function");
+    common::assert_js_str(&mut k, "typeof navigator.canShare", "function");
+}

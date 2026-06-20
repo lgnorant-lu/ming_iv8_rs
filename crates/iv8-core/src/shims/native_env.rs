@@ -202,18 +202,32 @@ fn conditionally_hide_properties(
     let state = RuntimeState::get(isolate);
     let profile = state.profile.unwrap_or(&DEFAULT_PROFILE);
 
-    // Desktop profile: hide mobile-only properties
+    // Desktop profile: hide mobile-only properties by masking with undefined.
+    // Proto-level accessor properties can't be deleted from the instance,
+    // so we set own data properties with undefined value to shadow them.
     if !profile.mobile_profile {
+        let undef = v8::undefined(scope);
         for prop in &["share", "canShare", "vibrate"] {
             let key = crate::v8_utils::v8_string(scope, prop);
-            nav_obj.delete(scope, key.into());
+            nav_obj.define_own_property(
+                scope,
+                key.into(),
+                undef.into(),
+                v8::PropertyAttribute::DONT_ENUM,
+            );
         }
     }
 
     // Chrome > 90: hide legacy webkit-prefixed API
     if profile.chrome_version > 90 {
+        let undef = v8::undefined(scope);
         let key = crate::v8_utils::v8_string(scope, "webkitGetUserMedia");
-        nav_obj.delete(scope, key.into());
+        nav_obj.define_own_property(
+            scope,
+            key.into(),
+            undef.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
     }
 }
 
