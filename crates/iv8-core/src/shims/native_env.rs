@@ -750,7 +750,7 @@ unsafe extern "C" fn nav_get_gamepads(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-// navigator.requestMediaKeySystemAccess() → Promise.reject(NotSupportedError)
+// navigator.requestMediaKeySystemAccess() → Promise.reject(TypeError) (M1 approximation)
 unsafe extern "C" fn nav_request_media_key_system_access(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -781,7 +781,7 @@ unsafe extern "C" fn nav_request_media_key_system_access(info: *const v8::Functi
     }));
 }
 
-// navigator.requestMIDIAccess() → Promise.reject(NotSupportedError)
+// navigator.requestMIDIAccess() → Promise.reject(TypeError) (M1 approximation)
 unsafe extern "C" fn nav_request_midi_access(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };

@@ -10,7 +10,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Broad browser-like surface**: navigator / screen / window / document / location / history / performance
 - **BrowserProfile**: 41-field centralized browser identity struct with runtime injection (v0.8.55/0.8.57)
 - **Generated Navigator skeletons**: 46 IDL properties via codegen + native template unification (v0.8.58/0.8.60)
-- **Native Navigator stubs**: connection, getBattery, sendBeacon, geolocation, clipboard, credentials (v0.8.55/0.8.61)
+- **Native Navigator stubs**: connection, getBattery, sendBeacon, geolocation, clipboard, credentials (v0.8.55); getGamepads, requestMediaKeySystemAccess, requestMIDIAccess (v0.8.61)
 - **DOM**: html5ever parsing + ego-tree + selectors CSS Level 4 + EventTarget 3-phase dispatch
 - **SubtleCrypto**: AES-GCM/CBC, RSA-OAEP/PSS, ECDSA/ECDH(P-256/P-384), HMAC, HKDF, PBKDF2
 - **Canvas 2D**: tiny-skia real rendering + deterministic noise + fixed fingerprint fallback
