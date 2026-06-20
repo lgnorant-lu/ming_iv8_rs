@@ -36,7 +36,13 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
   - All now serve from native FunctionTemplate (accessor descriptor matches real Chrome)
 
 ### Quality Gates
-- `cargo check -p iv8-core`: zero errors (10 pre-existing dead code warnings)
+- `cargo check -p iv8-core`: zero errors
+- `cargo test -p iv8-core --lib`: 247 passed
+- `cargo test` focused surface targets: 38 passed (`test_surface_navigator`, `test_surface_navigator_extras`, `test_surface_screen`, `test_surface_user_agent_data`)
+- `.venv\Scripts\maturin.exe develop --release`: PASS
+- `fingerprint_js`: 37/37 PASS (a14 console.debug engine-limit remains known)
+- `VFT-02`: ALL PASS including 6 new Navigator properties
+- Post-freeze remediation: test coverage commit `278b14e`; final tag target includes docs update `5acb8ac`
 
 ## [0.8.54] - 2026-06-19
 
