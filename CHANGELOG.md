@@ -6,6 +6,32 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.56] - 2026-06-20
+
+> Local milestone: surface coverage routing governance — documentation/ledger closeout, no runtime changes
+
+### Added
+- docs(post-v0.8.55): surface coverage routing audit with route taxonomy and native stub admission criteria
+- docs(TODO-surface-coverage): cross-domain route ledger for Navigator/Screen/Window/Device/Cross-layer debt
+- docs(v0.8.56): standard 5-plan-set (scope/foundation-audit/negative-gate-plan/implementation-task-plan/acceptance)
+- docs(conventions): smoke test L0-L3 tier blocking policy and VFT method/getter split policy formalized
+
+### Changed
+- docs(TODO-native): broad Navigator completeness paragraph replaced with route-linked tables
+- docs(TODO-infrastructure): Last Audit date updated
+- docs(v0.8.55-freeze): tag commit reference corrected to 5acb8ac
+- docs(v0.8-continuous-execution-protocol): Stage Route Audit Decision section added
+
+### Cross-Checked
+- Navigator completeness count: WebIDL W3C webref Navigator = 46 members (29 attrs + 17 ops)
+  - Previously listed 20-name set is reasonable subset; 12 newly-identified surfaces added to ledger
+  - registerProtocolHandler/unregisterProtocolHandler confirmed not in W3C webref Navigator
+
+### Quality Gates
+- `cargo check --workspace`: zero errors (no compilation regression)
+- Zero runtime code, JS shim, native stub, or package metadata changes
+- 12/12 negative gates verified
+
 ## [0.8.55] - 2026-06-20
 
 > Local milestone: Browser Profile Contract — centralized identity struct, getter migration, 6 high-signal Navigator stubs
