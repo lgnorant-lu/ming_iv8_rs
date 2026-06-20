@@ -100,3 +100,63 @@ pub const DEFAULT_PROFILE: BrowserProfile = BrowserProfile {
 
     device_pixel_ratio: 1.0,
 };
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_default_profile_user_agent_contains_chrome() {
+        assert!(DEFAULT_PROFILE.user_agent.contains("Chrome/131"));
+        assert!(DEFAULT_PROFILE.user_agent.contains("Windows NT 10.0"));
+    }
+
+    #[test]
+    fn test_default_profile_platform_is_windows() {
+        assert_eq!(DEFAULT_PROFILE.platform, "Win32");
+        assert_eq!(DEFAULT_PROFILE.ua_platform, "Windows");
+    }
+
+    #[test]
+    fn test_default_profile_language_is_zh_cn() {
+        assert_eq!(DEFAULT_PROFILE.language, "zh-CN");
+        assert_eq!(DEFAULT_PROFILE.languages.len(), 2);
+        assert_eq!(DEFAULT_PROFILE.languages[0], "zh-CN");
+    }
+
+    #[test]
+    fn test_default_profile_brands_has_two_entries() {
+        assert!(DEFAULT_PROFILE.ua_brands_json.contains("Google Chrome"));
+        assert!(DEFAULT_PROFILE.ua_brands_json.contains("Chromium"));
+        assert!(!DEFAULT_PROFILE.ua_brands_json.contains("Not/A)Brand"));
+    }
+
+    #[test]
+    fn test_default_profile_screen_dimensions() {
+        assert_eq!(DEFAULT_PROFILE.screen_width, 1920.0);
+        assert_eq!(DEFAULT_PROFILE.screen_height, 1080.0);
+        assert!(DEFAULT_PROFILE.screen_avail_width <= DEFAULT_PROFILE.screen_width);
+    }
+
+    #[test]
+    fn test_default_profile_hardware_values_in_range() {
+        assert!(DEFAULT_PROFILE.hardware_concurrency >= 1.0);
+        assert!(DEFAULT_PROFILE.hardware_concurrency <= 128.0);
+        assert!(DEFAULT_PROFILE.device_memory >= 0.5);
+        assert!(DEFAULT_PROFILE.device_memory <= 64.0);
+    }
+
+    #[test]
+    fn test_default_profile_static_strings_not_empty() {
+        assert!(!DEFAULT_PROFILE.vendor.is_empty());
+        assert!(!DEFAULT_PROFILE.product.is_empty());
+        assert!(!DEFAULT_PROFILE.app_name.is_empty());
+    }
+
+    #[test]
+    fn test_default_profile_uadata_architecture() {
+        assert_eq!(DEFAULT_PROFILE.ua_architecture, "x86");
+        assert_eq!(DEFAULT_PROFILE.ua_bitness, "64");
+        assert!(!DEFAULT_PROFILE.ua_mobile);
+    }
+}
