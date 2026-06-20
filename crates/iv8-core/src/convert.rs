@@ -561,33 +561,6 @@ fn call_object_to_string(scope: &v8::PinScope<'_, '_>, value: v8::Local<v8::Valu
     "[object Object]".to_string()
 }
 
-/// Handle circular reference: convert object but truncate at depth limit.
-/// For the circular fixture, iv8 returns {'self': '[object Object]'} at depth 1.
-#[allow(dead_code)]
-fn convert_circular_object(
-    scope: &v8::PinScope<'_, '_>,
-    obj: v8::Local<v8::Object>,
-    depth: u32,
-) -> RustValue {
-    let keys = obj.get_own_property_names(scope, Default::default());
-    if let Some(keys) = keys {
-        let len = keys.length();
-        let mut map = std::collections::HashMap::with_capacity(len as usize);
-        for i in 0..len {
-            if let Some(key) = keys.get_index(scope, i) {
-                let key_str = key.to_rust_string_lossy(scope);
-                let val = obj
-                    .get(scope, key)
-                    .unwrap_or_else(|| v8::undefined(scope).into());
-                map.insert(key_str, v8_to_rust_impl(scope, val, depth + 1));
-            }
-        }
-        RustValue::Object(map)
-    } else {
-        RustValue::Object(std::collections::HashMap::new())
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;

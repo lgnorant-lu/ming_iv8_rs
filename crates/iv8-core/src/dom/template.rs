@@ -3096,25 +3096,6 @@ fn camel_to_kebab(s: &str) -> String {
     result
 }
 
-fn kebab_to_camel(s: &str) -> String {
-    if s.starts_with("--") || !s.contains('-') {
-        return s.to_string();
-    }
-    let mut result = String::with_capacity(s.len());
-    let mut cap = false;
-    for c in s.chars() {
-        if c == '-' {
-            cap = true;
-        } else if cap {
-            result.push(c.to_uppercase().next().unwrap());
-            cap = false;
-        } else {
-            result.push(c);
-        }
-    }
-    result
-}
-
 unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, state, node_id| {
         // Check per-node cache first
@@ -3336,10 +3317,7 @@ unsafe extern "C" fn css_style_length_getter(info: *const v8::FunctionCallbackIn
 }
 
 unsafe extern "C" fn css_style_get_priority_cb(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn css_style_named_getter(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn css_style_named_setter(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn css_style_named_query(_info: *const v8::FunctionCallbackInfo) {}
-unsafe extern "C" fn css_style_named_enumerator(_info: *const v8::FunctionCallbackInfo) {}
+
 
 unsafe extern "C" fn dataset_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _state, _node_id| {
