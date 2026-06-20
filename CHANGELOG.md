@@ -6,32 +6,37 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
-> Current stage: post-v0.8.54 candidate work. v0.8.55 is not formally opened, frozen, or tagged yet.
+## [0.8.55] - 2026-06-20
 
-### Candidate Fixed
-- fix(shims): migrate navigator.plugins/mimeTypes from JS to native Rust getters (native_env.rs)
-  - Pre-populated PluginArray (5 PDF plugin entries) + MimeTypeArray (2 MimeType entries)
-  - Symbol.toStringTag: 'PluginArray' / 'MimeTypeArray' set on native Arrays
-  - Bypasses JS-level `Object.defineProperty(length)` failure on non-configurable Array.length
-  - Fixes b24 (mimeTypes tag) + closes the universal test gap across 11 test suites
-- fix(shims): HTMLMediaElement.canPlayType override also applies to HTMLAudioElement/HTMLVideoElement
-  - codegen creates AudioElement/VideoElement with own canPlayType shadowing MediaElement.prototype
-  - Applied override to all 3 prototypes; returns 'probably' for H.264/AAC codecs
-  - Fixes b26 (audio/mp4 canPlayType) in fingerprint_js 62-check suite
-
-### Changed
-- fix(shims): remove unused `mut` from native_env.rs:397 `make_mt` and embedded_v8.rs:522 `callbacks`
-- docs(TODO-native): R12 Navigator property governance classification (tested 24 / likely 6 / completeness 22 / engine-limit 2)
-- docs(TODO-native): add engine-level limitation declaration (console.debug CDP signal, setTimeout/setInterval CreepJS lie)
-- docs(PROGRESS.md): v0.8.54 tag record + v0.8.55 candidate status correction
+> Local milestone: Browser Profile Contract — centralized identity struct, getter migration, 6 high-signal Navigator stubs
 
 ### Added
-- docs(roadmap): v0.8.54 freeze record (freeze.md) — formal boundary documentation of 54 commits from v0.8.53 → v0.8.54
-- docs(roadmap): Browser Profile Contract design document (profile-contract.md) — centralized BrowserProfile struct + cross-layer consistency contract (C1)
+- feat(surface): BrowserProfile struct (41 fields) + DEFAULT_PROFILE const (Chrome 131/Windows/zh-CN)
+  - browser_profile.rs: single source of truth for all browser identity values
+- feat(shims): 6 high-signal Navigator capability stubs
+  - `navigator.connection`: NetworkInformation-like accessor getter (effectiveType/downlink/rtt/saveData/type)
+  - `navigator.getBattery()`: Promise method returning BatteryManager object
+  - `navigator.sendBeacon()`: method returning true
+  - `navigator.geolocation`: accessor getter with 3 stub methods (getCurrentPosition/watchPosition/clearWatch)
+  - `navigator.clipboard`: accessor getter with 2 stub methods (readText/writeText)
+  - `navigator.credentials`: accessor getter with 4 stub methods (get/create/store/preventSilentAccess)
+
+### Changed
+- refactor(surface): 26 Navigator/Screen getter fallback defaults migrated from hardcoded to DEFAULT_PROFILE
+  - native_env.rs: env_str_getter! macro upgraded to accept expr (not just literal)
+  - user_agent_data.rs: 9 UAData getter defaults migrated to BrowserProfile
+  - Fix language drift: en-US → zh-CN
+  - Fix brands drift: 3 entries (incl Not/A)Brand) → 2 entries (Google Chrome + Chromium)
+
+### Removed
+- fix(shims): remove JS-level Object.defineProperty overrides for 3 properties
+  - navigator.connection (navigator_extras.rs)
+  - navigator.getBattery (document_props.rs)
+  - navigator.sendBeacon (document_props.rs)
+  - All now serve from native FunctionTemplate (accessor descriptor matches real Chrome)
 
 ### Quality Gates
-- `cargo check -p iv8-core`: zero warnings (2 unused mut fixed)
-- `cargo check --workspace`: zero errors
+- `cargo check -p iv8-core`: zero errors (10 pre-existing dead code warnings)
 
 ## [0.8.54] - 2026-06-19
 
