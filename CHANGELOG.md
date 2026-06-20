@@ -6,6 +6,29 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.58] - 2026-06-20
+
+> Local milestone: Generated Surface Skeleton Repair M1 — fix codegen to return Object::new instead of null for interface-typed getters
+
+### Changed
+- fix(codegen): type_mapper.rs fallback `v8::null(scope)` → `v8::Object::new(scope)`
+  - One-line change regenerates 1284 interfaces across 31 files (2354 lines)
+  - All interface-typed getters now return empty object skeletons instead of null
+  - Resolves secondary-access crashes for `navigator.bluetooth.getAvailability` etc.
+  - Nullable interface refinement deferred to v0.8.59+
+
+### Added
+- test(surface): `test_navigator_generated_skeleton_not_installed_yet` — verifies current state;
+  runtime exposure deferred to v0.8.59 Native Augment Mode
+
+### Quality Gates
+- `cargo check --workspace`: zero errors
+- `cargo test -p iv8-core --lib`: 247 passed
+- `cargo test --test test_surface_*`: 43 passed (21+7+7+8)
+- `maturin develop --release`: PASS
+- `fingerprint_js`: 37/37 PASS
+- `VFT-02`: ALL PASS
+
 ## [0.8.57] - 2026-06-20
 
 > Local milestone: BrowserProfile Runtime Injection M1 — connect BrowserProfile struct to RuntimeState for dynamic value injection
