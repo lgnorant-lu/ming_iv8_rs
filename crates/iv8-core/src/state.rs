@@ -32,6 +32,11 @@ pub struct RuntimeState {
     /// Browser environment (navigator.*, screen.*, etc.) — accessible from V8 callbacks
     pub environment: Arc<EnvironmentMap>,
 
+    /// Active browser identity profile. When set, native getters read from this
+    /// before falling back to EnvironmentMap and DEFAULT_PROFILE.
+    /// Injected via KernelConfig::with_browser_profile().
+    pub profile: Option<&'static crate::shims::browser_profile::BrowserProfile>,
+
     /// Mutable subsystems (RefCell for interior mutability in single-threaded V8)
     pub eval_count: RefCell<u64>,
     pub disposed: RefCell<bool>,
@@ -111,6 +116,7 @@ impl RuntimeState {
         time_mode: TimeMode,
         js_api_name: String,
         environment: Arc<EnvironmentMap>,
+        profile: Option<&'static crate::shims::browser_profile::BrowserProfile>,
     ) -> Self {
         tracing::info!(
             %strict_compat,
@@ -124,6 +130,7 @@ impl RuntimeState {
             time_mode,
             js_api_name,
             environment,
+            profile,
             eval_count: RefCell::new(0),
             disposed: RefCell::new(false),
             document: RefCell::new(None),
@@ -229,6 +236,7 @@ mod tests {
                 TimeMode::Logical,
                 "__iv8__".to_string(),
                 std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+                None,
             ),
         );
 
@@ -263,6 +271,7 @@ mod tests {
                     TimeMode::System,
                     "__test__".to_string(),
                     std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+                    None,
                 ),
             );
             let state = RuntimeState::get(&isolate);

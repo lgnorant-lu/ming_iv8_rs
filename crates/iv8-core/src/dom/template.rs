@@ -4421,6 +4421,7 @@ mod tests {
             crate::state::TimeMode::Logical,
             "__test__".to_string(),
             std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+            None,
         );
         // Verify extract_style_node_id returns None for a V8 object without
         // internal fields (would panic if the function dereferenced null).
@@ -4444,6 +4445,7 @@ mod tests {
             crate::state::TimeMode::Logical,
             "__test__".to_string(),
             std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+            None,
         );
         assert!(state.style_cache.borrow().is_empty());
     }

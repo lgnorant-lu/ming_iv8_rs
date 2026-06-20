@@ -133,6 +133,7 @@ impl EmbeddedV8Kernel {
                 config.time_mode,
                 config.js_api_name,
                 environment.clone(),
+                None,
             ),
         );
 

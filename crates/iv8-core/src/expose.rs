@@ -186,6 +186,7 @@ mod tests {
             crate::state::TimeMode::Logical,
             "__test__".to_string(),
             std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+            None,
         );
         let before = state.heap_registry.borrow().len();
 
