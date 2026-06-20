@@ -105,3 +105,10 @@ pub fn assert_js_error(kernel: &mut EmbeddedV8Kernel, js: &str) {
         result
     );
 }
+
+/// Create a kernel with a custom BrowserProfile (for profile injection tests).
+pub fn make_kernel_with_profile(
+    profile: iv8_core::shims::browser_profile::BrowserProfile,
+) -> EmbeddedV8Kernel {
+    EmbeddedV8Kernel::new(KernelConfig::default().with_browser_profile(profile)).unwrap()
+}

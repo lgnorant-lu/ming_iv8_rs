@@ -53,3 +53,24 @@ fn test_screen_avail_left_top() {
     common::assert_js_str(&mut k, "typeof screen.availLeft", "number");
     common::assert_js_str(&mut k, "typeof screen.availTop", "number");
 }
+
+#[test]
+fn test_screen_custom_profile() {
+    use iv8_core::shims::browser_profile::{BrowserProfile, DEFAULT_PROFILE};
+    let profile = BrowserProfile {
+        screen_width: 1280.0,
+        screen_height: 720.0,
+        screen_avail_width: 1280.0,
+        screen_avail_height: 680.0,
+        screen_color_depth: 30.0,
+        screen_pixel_depth: 30.0,
+        ..DEFAULT_PROFILE
+    };
+    let mut k = common::make_kernel_with_profile(profile);
+    common::assert_js_str(&mut k, "screen.width", "1280");
+    common::assert_js_str(&mut k, "screen.height", "720");
+    common::assert_js_str(&mut k, "screen.availWidth", "1280");
+    common::assert_js_str(&mut k, "screen.availHeight", "680");
+    common::assert_js_str(&mut k, "screen.colorDepth", "30");
+    common::assert_js_str(&mut k, "screen.pixelDepth", "30");
+}

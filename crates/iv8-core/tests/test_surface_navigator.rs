@@ -167,3 +167,35 @@ fn test_navigator_new_properties_tostring_native_code() {
         common::assert_js_str(&mut k, &js, "true");
     }
 }
+
+#[test]
+fn test_navigator_custom_profile() {
+    use iv8_core::shims::browser_profile::{BrowserProfile, DEFAULT_PROFILE};
+    let profile = BrowserProfile {
+        user_agent: &*Box::leak("TestAgent/9.9".to_string().into_boxed_str()),
+        platform: &*Box::leak("TestOS".to_string().into_boxed_str()),
+        language: &*Box::leak("test-LANG".to_string().into_boxed_str()),
+        ..DEFAULT_PROFILE
+    };
+    let mut k = common::make_kernel_with_profile(profile);
+    common::assert_js_str(&mut k, "navigator.userAgent", "TestAgent/9.9");
+    common::assert_js_str(&mut k, "navigator.platform", "TestOS");
+    common::assert_js_str(&mut k, "navigator.language", "test-LANG");
+    common::assert_js_str(
+        &mut k,
+        "navigator.appVersion",
+        DEFAULT_PROFILE.app_version,
+    );
+}
+
+#[test]
+fn test_navigator_default_profile_equivalence() {
+    let mut k = common::make_kernel();
+    let ua = common::to_str(&k.eval_to_rust_value("navigator.userAgent"));
+    assert!(ua.contains("Chrome"), "default UA missing Chrome: {}", ua);
+    assert!(ua.contains("Windows"), "default UA missing Windows: {}", ua);
+    let plat = common::to_str(&k.eval_to_rust_value("navigator.platform"));
+    assert!(!plat.is_empty(), "default platform is empty");
+    let lang = common::to_str(&k.eval_to_rust_value("navigator.language"));
+    assert!(!lang.is_empty(), "default language is empty");
+}

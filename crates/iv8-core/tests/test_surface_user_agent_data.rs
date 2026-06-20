@@ -45,3 +45,19 @@ fn test_user_agent_data_get_high_entropy_values_exists() {
         "function",
     );
 }
+
+#[test]
+fn test_uadata_custom_profile() {
+    use iv8_core::shims::browser_profile::{BrowserProfile, DEFAULT_PROFILE};
+    let profile = BrowserProfile {
+        ua_platform: &*Box::leak("Android".to_string().into_boxed_str()),
+        ua_mobile: true,
+        ua_architecture: &*Box::leak("arm".to_string().into_boxed_str()),
+        ua_bitness: &*Box::leak("32".to_string().into_boxed_str()),
+        ua_model: &*Box::leak("Pixel 9".to_string().into_boxed_str()),
+        ..DEFAULT_PROFILE
+    };
+    let mut k = common::make_kernel_with_profile(profile);
+    common::assert_js_str(&mut k, "navigator.userAgentData.platform", "Android");
+    common::assert_js_str(&mut k, "navigator.userAgentData.mobile", "true");
+}
