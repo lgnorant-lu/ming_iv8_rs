@@ -390,3 +390,119 @@ fn rust_diagnostic_codes() -> Vec<String> {
     ]);
     codes.into_iter().map(String::from).collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_evidence_strength_as_str_returns_snake_case() {
+        assert_eq!(EvidenceStrength::Strong.as_str(), "strong");
+        assert_eq!(EvidenceStrength::Weak.as_str(), "weak");
+        assert_eq!(EvidenceStrength::MarkerOnly.as_str(), "marker_only");
+        assert_eq!(EvidenceStrength::DiagnosticOnly.as_str(), "diagnostic_only");
+    }
+
+    #[test]
+    fn test_evidence_strength_can_satisfy_pass_only_strong() {
+        assert!(EvidenceStrength::Strong.can_satisfy_pass());
+        assert!(!EvidenceStrength::Weak.can_satisfy_pass());
+        assert!(!EvidenceStrength::MarkerOnly.can_satisfy_pass());
+        assert!(!EvidenceStrength::DiagnosticOnly.can_satisfy_pass());
+    }
+
+    #[test]
+    fn test_evidence_record_new_sets_required_fields() {
+        let record = EvidenceRecord::new("TYPE", EvidenceStrength::Weak, "src", "stage", "summary text");
+        assert_eq!(record.kind, "TYPE");
+        assert_eq!(record.strength, EvidenceStrength::Weak);
+        assert_eq!(record.source, "src");
+        assert_eq!(record.stage, "stage");
+        assert_eq!(record.summary, "summary text");
+        assert!(record.producer.is_none());
+        assert!(record.sample_kind.is_none());
+        assert!(record.payload.is_none());
+    }
+
+    #[test]
+    fn test_evidence_record_builder_chains_producer_and_payload() {
+        let payload = serde_json::json!({"key": "val"});
+        let record = EvidenceRecord::new("TYPE", EvidenceStrength::Strong, "s", "t", "m")
+            .with_producer("test_producer")
+            .with_payload(payload.clone());
+        assert_eq!(record.producer.as_deref(), Some("test_producer"));
+        assert_eq!(record.payload, Some(payload));
+        assert!(record.sample_kind.is_none());
+    }
+
+    #[test]
+    fn test_diagnostic_severity_as_str_returns_snake_case() {
+        assert_eq!(DiagnosticSeverity::Error.as_str(), "error");
+        assert_eq!(DiagnosticSeverity::Warn.as_str(), "warn");
+        assert_eq!(DiagnosticSeverity::Info.as_str(), "info");
+    }
+
+    #[test]
+    fn test_diagnostic_record_new_sets_required_fields() {
+        let record = DiagnosticRecord::new("CODE", DiagnosticSeverity::Error, "s1", "msg");
+        assert_eq!(record.code, "CODE");
+        assert_eq!(record.severity, DiagnosticSeverity::Error);
+        assert_eq!(record.stage, "s1");
+        assert_eq!(record.message, "msg");
+        assert!(record.strategy_id.is_none());
+        assert!(record.recovery_hint.is_none());
+        assert!(record.payload.is_none());
+    }
+
+    #[test]
+    fn test_diag_helpers_create_correct_severity() {
+        let info = info_diag("C1", "s", "m");
+        let warn = warn_diag("C2", "s", "m");
+        let error = error_diag("C3", "s", "m");
+        assert_eq!(info.severity, DiagnosticSeverity::Info);
+        assert_eq!(warn.severity, DiagnosticSeverity::Warn);
+        assert_eq!(error.severity, DiagnosticSeverity::Error);
+        assert_eq!(info.code, "C1");
+        assert_eq!(warn.code, "C2");
+        assert_eq!(error.code, "C3");
+    }
+
+    #[test]
+    fn test_fallback_attempt_structure() {
+        let diags = vec![DiagnosticRecord::new("C1", DiagnosticSeverity::Info, "s1", "m1")];
+        let evidence = vec![EvidenceRecord::new("T", EvidenceStrength::Weak, "s2", "s3", "m2")];
+        let attempt = FallbackAttempt {
+            strategy_id: "strat_1".into(),
+            status: FallbackStatus::Fail,
+            reason: "no candidates".into(),
+            next_strategy: Some("strat_2".into()),
+            diagnostics: diags.clone(),
+            evidence: evidence.clone(),
+        };
+        assert_eq!(attempt.strategy_id, "strat_1");
+        assert_eq!(attempt.status, FallbackStatus::Fail);
+        assert_eq!(attempt.reason, "no candidates");
+        assert_eq!(attempt.next_strategy.as_deref(), Some("strat_2"));
+        assert_eq!(attempt.diagnostics.len(), 1);
+        assert_eq!(attempt.evidence.len(), 1);
+    }
+
+    #[test]
+    fn test_verify_catalog_returns_missing_codes() {
+        let partial: Vec<String> = vec!["TRACE_EMPTY".into(), "FALLBACK_USED".into()];
+        let missing = verify_diagnostic_catalog(&partial);
+        assert!(!missing.is_empty(), "should have missing codes");
+        assert!(!missing.contains(&"TRACE_EMPTY".to_string()));
+        assert!(!missing.contains(&"FALLBACK_USED".to_string()));
+        // spot-check a few expected codes are in the missing list
+        assert!(missing.contains(&"TRACE_PREFIX_UNKNOWN".to_string()));
+        assert!(missing.contains(&"EVIDENCE_EXPECTED_MISSING".to_string()));
+    }
+
+    #[test]
+    fn test_verify_catalog_empty_when_all_codes_present() {
+        let all_codes = rust_diagnostic_codes();
+        let missing = verify_diagnostic_catalog(&all_codes);
+        assert!(missing.is_empty(), "should have no missing codes when all present");
+    }
+}
