@@ -1437,8 +1437,57 @@ impl EmbeddedV8Kernel {
         )
         .ok();
 
-        // 7. Fire DOMContentLoaded on document (simplified: dispatch on root)
-        // In v0.1, we just advance the event loop slightly to process any pending microtasks
+        // 7. Dispatch DOMContentLoaded event on document root
+        self.with_global_scope(|scope, _global| {
+            let state = RuntimeState::get(&*scope);
+            let doc = state.document.borrow();
+            if let Some(ref document) = *doc {
+                let root_id = document.root_id();
+                let registry = &state.event_listeners;
+                crate::events::target::dispatch_event(
+                    scope,
+                    registry,
+                    document,
+                    root_id,
+                    "DOMContentLoaded",
+                    false,
+                );
+            }
+        });
+
+        // 8. Set readyState to complete (Rust + JS side)
+        {
+            let state = RuntimeState::get(&self.isolate);
+            let doc = state.document.borrow();
+            if let Some(ref doc) = *doc {
+                doc.set_ready_state(crate::dom::node::DocumentReadyState::Complete);
+            }
+        }
+        self.eval(
+            "try { document.readyState = 'complete'; } catch(e) {}",
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
+
+        // 9. Dispatch load event on document root
+        self.with_global_scope(|scope, _global| {
+            let state = RuntimeState::get(&*scope);
+            let doc = state.document.borrow();
+            if let Some(ref document) = *doc {
+                let root_id = document.root_id();
+                let registry = &state.event_listeners;
+                crate::events::target::dispatch_event(
+                    scope,
+                    registry,
+                    document,
+                    root_id,
+                    "load",
+                    false,
+                );
+            }
+        });
+
+        // 10. Drain microtasks
         self.drain_microtasks();
     }
 

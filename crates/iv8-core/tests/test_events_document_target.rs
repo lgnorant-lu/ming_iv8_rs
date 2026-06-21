@@ -154,3 +154,81 @@ fn document_no_listener_dispatch_returns_true() {
     let result = kernel.eval_to_rust_value(r#"document.dispatchEvent({ type: 'never-listened' })"#);
     assert_eq!(result, iv8_core::convert::RustValue::Bool(true));
 }
+
+// ─── v0.8.66 (M3): DOMContentLoaded/load automatic dispatch during page_load ─────────
+
+#[test]
+fn page_load_dispatches_dom_content_loaded() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval_to_rust_value(
+            r#"
+        window.__dclFired = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            window.__dclFired = true;
+        });
+    "#,
+        );
+    kernel.page_load("<html></html>", None);
+    let result = kernel.eval_to_rust_value("window.__dclFired");
+    assert_eq!(result, iv8_core::convert::RustValue::Bool(true));
+}
+
+#[test]
+fn page_load_dispatches_load_after_dom_content_loaded() {
+    let mut kernel = common::make_kernel();
+    kernel.eval_to_rust_value(
+        r#"
+        window.__order = [];
+        document.addEventListener('DOMContentLoaded', function() {
+            window.__order.push('dcl');
+        });
+        document.addEventListener('load', function() {
+            window.__order.push('load');
+        });
+    "#,
+    );
+    kernel.page_load("<html></html>", None);
+    let result = kernel.eval_to_rust_value("window.__order");
+    assert_eq!(
+        result,
+        iv8_core::convert::RustValue::Array(vec![
+            iv8_core::convert::RustValue::String("dcl".into()),
+            iv8_core::convert::RustValue::String("load".into()),
+        ])
+    );
+}
+
+#[test]
+fn page_load_sets_ready_state_complete() {
+    let mut kernel = common::make_kernel();
+    kernel.page_load("<html></html>", None);
+    let result = kernel.eval_to_rust_value("document.readyState");
+    assert_eq!(
+        result,
+        iv8_core::convert::RustValue::String("complete".into())
+    );
+}
+
+#[test]
+fn page_load_dom_content_loaded_event_properties() {
+    let mut kernel = common::make_kernel();
+    kernel.eval_to_rust_value(
+        r#"
+        window.__evtType = null;
+        window.__evtTrusted = null;
+        document.addEventListener('DOMContentLoaded', function(e) {
+            window.__evtType = e.type;
+            window.__evtTrusted = e.isTrusted;
+        });
+    "#,
+    );
+    kernel.page_load("<html></html>", None);
+    let evt_type = kernel.eval_to_rust_value("window.__evtType");
+    let evt_trusted = kernel.eval_to_rust_value("window.__evtTrusted");
+    assert_eq!(
+        evt_type,
+        iv8_core::convert::RustValue::String("DOMContentLoaded".into())
+    );
+    assert_eq!(evt_trusted, iv8_core::convert::RustValue::Bool(true));
+}
