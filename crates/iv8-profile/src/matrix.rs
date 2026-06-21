@@ -326,6 +326,14 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         "window.devicePixelRatio".into(),
         serde_json::json!(source.display.window.device_pixel_ratio),
     );
+    env.insert(
+        "window.outerWidth".into(),
+        serde_json::json!(source.display.window.outer_width),
+    );
+    env.insert(
+        "window.outerHeight".into(),
+        serde_json::json!(source.display.window.outer_height),
+    );
 
     // === location.* (location.rs) ===
     env.insert("location.href".into(), serde_json::json!("about:blank"));
