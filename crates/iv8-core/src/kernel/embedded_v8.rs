@@ -8,6 +8,7 @@ use crate::kernel::{EvalOpts, KernelConfig};
 use crate::state::RuntimeState;
 
 type ExposedCallback = Box<dyn Fn(&[String]) -> Result<String, String> + Send + 'static>;
+use crate::shims::browser_profile::DEFAULT_PROFILE;
 use crate::v8_init::ensure_v8_initialized;
 use iv8_profile::BehaviorConfig;
 use std::sync::Arc;
@@ -101,6 +102,33 @@ pub struct EmbeddedV8Kernel {
     creator_thread: std::thread::ThreadId,
 }
 
+// ─── Window dimension native getter callbacks ─────────────────────
+// Defined locally per v0.8.65 design: keep window getters in
+// embedded_v8.rs to avoid expanding native_env.rs API surface.
+macro_rules! window_f64_getter_cb {
+    ($name:ident, $path:literal, $field:ident, $default:expr) => {
+        unsafe extern "C" fn $name(info: *const v8::FunctionCallbackInfo) {
+            let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                let info_ref = unsafe { &*info };
+                v8::callback_scope!(unsafe scope, info_ref);
+                let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+                let isolate: &v8::Isolate = &*scope;
+                let state = crate::state::RuntimeState::get(isolate);
+                let val = match state.profile {
+                    Some(p) => p.$field,
+                    None => state.environment.get_f64($path).unwrap_or($default),
+                };
+                rv.set(v8::Number::new(scope, val).into());
+            }));
+        }
+    };
+}
+window_f64_getter_cb!(window_inner_width_cb, "window.innerWidth", window_inner_width, DEFAULT_PROFILE.window_inner_width);
+window_f64_getter_cb!(window_inner_height_cb, "window.innerHeight", window_inner_height, DEFAULT_PROFILE.window_inner_height);
+window_f64_getter_cb!(window_outer_width_cb, "window.outerWidth", window_outer_width, DEFAULT_PROFILE.window_outer_width);
+window_f64_getter_cb!(window_outer_height_cb, "window.outerHeight", window_outer_height, DEFAULT_PROFILE.window_outer_height);
+window_f64_getter_cb!(window_device_pixel_ratio_cb, "window.devicePixelRatio", device_pixel_ratio, DEFAULT_PROFILE.device_pixel_ratio);
+
 impl EmbeddedV8Kernel {
     /// Create a new embedded V8 kernel with the given configuration.
     pub fn new(config: KernelConfig) -> Result<Self, IV8Error> {
@@ -142,10 +170,35 @@ impl EmbeddedV8Kernel {
             ),
         );
 
-        // Create the main context
+        // Create the main context with global_template for native window accessors
         let context = {
             v8::scope!(handle_scope, &mut isolate);
-            let context = v8::Context::new(handle_scope, Default::default());
+
+            let global_tmpl = v8::ObjectTemplate::new(handle_scope);
+            macro_rules! window_f64_getter {
+                ($name:literal, $cb:ident) => {
+                    let getter = v8::FunctionTemplate::builder_raw($cb).build(handle_scope);
+                    let key = v8::String::new(handle_scope, $name).unwrap();
+                    getter.set_class_name(key);
+                    getter.remove_prototype();
+                    global_tmpl.set_accessor_property(
+                        key.into(),
+                        Some(getter),
+                        None,
+                        v8::PropertyAttribute::DONT_DELETE,
+                    );
+                };
+            }
+            window_f64_getter!("innerWidth", window_inner_width_cb);
+            window_f64_getter!("innerHeight", window_inner_height_cb);
+            window_f64_getter!("outerWidth", window_outer_width_cb);
+            window_f64_getter!("outerHeight", window_outer_height_cb);
+            window_f64_getter!("devicePixelRatio", window_device_pixel_ratio_cb);
+
+            let context = v8::Context::new(handle_scope, v8::ContextOptions {
+                global_template: Some(global_tmpl),
+                ..Default::default()
+            });
             v8::Global::new(handle_scope, context)
         };
 
