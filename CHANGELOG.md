@@ -6,6 +6,31 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.64] - 2026-06-21
+
+> Local milestone: M1 回归测试网 — 纯测试交付, 不引入新运行时 capability。
+
+### Added
+- `diagnostics.rs` inline tests: 10 tests 覆盖全部 12 pub fn (EvidenceStrength/EvidenceRecord/DiagnosticSeverity/DiagnosticRecord/FallbackAttempt/diag helpers/verify_catalog)
+- `v8_init`/`v8_utils`/`v8_extra` smoke tests: 3 tests (ensure_v8_initialized idempotence, v8_string roundtrip, mark_as_undetectable non-crash)
+- `test_inspector_channel.rs`: 10 集成测试 — ChannelState 数据结构, InspectorSession 创建, InspectorMessage 枚举, CdpClient 构造
+- `docs/PYTHON_TEST_INVENTORY.md`: 2059 collected tests, 55 文件 per-file 统计, 命名/标记缺口标注
+
+### Changed
+- `docs/conventions/testing-conventions.md`: layer 列表补齐 canvas/entry/inspector
+- `docs/todo/TODO-cicd.md`: 全量重写 (现状→已投产), toolchain @stable 策略文档化
+- `docs/roadmap/v0.8/native-substrate/v0.8.64-*.md`: 5 文档规划集 — scope/foundation-audit/negative-gate-plan/task-plan/acceptance
+
+### Quality Gates
+- `cargo test -p iv8-core --lib`: 272 passed (+23 from v0.8.63 baseline 249)
+- `cargo test -p iv8-surface --lib`: 30 passed (unchanged)
+- `cargo test --test test_inspector_channel`: 10 passed
+- `cargo check --workspace`: 0 errors
+
+### Known Limitations
+- CDP 协议往返测试未实现: `start_inspector` 触发 pre-existing V8 STATUS_STACK_BUFFER_OVERRUN 崩溃
+- Scope 文档初始函数名不精确 (create_v8_platform/v8_string_from_str 不存在) — 已在 post-implementation review 修正
+
 ## [0.8.63] - 2026-06-21
 
 > Local milestone: 补丁聚合 + TODO 全量真实性审计。收束 v0.8.62 之后

@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.63 (Patch aggregation + TODO truth-up audit) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.64 (M1 regression test net) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
@@ -48,7 +48,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Diagnostic-to-Substrate Bridge M2 (v0.8.41)**: before/after delta contract and repair candidate ledger; 1469 Python PASS.
 - **Runtime Repair Harness M1 (v0.8.42)**: repair brief, evidence bundle manifest, validation plan, and readiness classification; 1481 Python PASS.
 - **L3 P0 Navigator/Profile Runtime Batch M1 (v0.8.43)**: first evidence-driven Rust runtime mutation; Navigator value projection from v0.8.42 repair briefs with before/after delta validation; 1490 Python PASS.
-Current `0.8.11` package release scope. v0.8.12-v0.8.43 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
+Current `0.8.11` package release scope. v0.8.12-v0.8.64 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked.
 
 ## Install
 
