@@ -257,3 +257,83 @@ fn raf_callback_timestamp_is_number() {
     );
     assert_eq!(result, RustValue::String("number".into()));
 }
+
+// ─── v0.8.66 (M3): setTimeout/setInterval extra args + this binding ─────────
+
+#[test]
+fn set_timeout_forwards_single_extra_arg() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var received = null;
+        setTimeout(function(val) { received = val; }, 0, "hello");
+        __iv8__.eventLoop.advance(20);
+        received
+    "#,
+    );
+    assert_eq!(result, RustValue::String("hello".into()));
+}
+
+#[test]
+fn set_timeout_forwards_multiple_extra_args() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var a = null, b = null, c = null;
+        setTimeout(function(x, y, z) { a = x; b = y; c = z; }, 0, "one", 2, true);
+        __iv8__.eventLoop.advance(20);
+        JSON.stringify([a, b, c])
+    "#,
+    );
+    assert_eq!(
+        result,
+        RustValue::String(r#"["one",2,true]"#.into())
+    );
+}
+
+#[test]
+fn set_interval_forwards_extra_args() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var vals = [];
+        var id = setInterval(function(v) { vals.push(v); }, 5, "b");
+        __iv8__.eventLoop.advance(30);
+        clearInterval(id);
+        vals.join(',')
+    "#,
+    );
+    // Interval fires at 5, 10, 15, 20, 25, 30 = ~6 times, each with "b"
+    assert_eq!(
+        result,
+        RustValue::String("b,b,b,b,b,b".into())
+    );
+}
+
+#[test]
+fn set_timeout_this_is_global_this() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var thisIsGlobal = null;
+        setTimeout(function() { thisIsGlobal = this === globalThis; }, 0);
+        __iv8__.eventLoop.advance(20);
+        thisIsGlobal
+    "#,
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
+
+#[test]
+fn set_interval_this_is_global_this() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var thisIsGlobal = null;
+        var id = setInterval(function() { thisIsGlobal = this === globalThis; clearInterval(id); }, 5);
+        __iv8__.eventLoop.advance(20);
+        thisIsGlobal
+    "#,
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}

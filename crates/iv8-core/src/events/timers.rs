@@ -56,12 +56,16 @@ unsafe extern "C" fn set_timeout(info: *const v8::FunctionCallbackInfo) {
 
         let global_fn = v8::Global::new(scope, func);
 
+        let extra_args: Vec<v8::Global<v8::Value>> = (2..args.length())
+            .map(|i| v8::Global::new(scope, args.get(i)))
+            .collect();
+
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let id = state
             .event_loop
             .borrow_mut()
-            .add_timer(global_fn, delay_ms, TaskKind::Timeout);
+            .add_timer(global_fn, delay_ms, TaskKind::Timeout, extra_args);
 
         rv.set(v8::Integer::new(scope, id as i32).into());
     }));
@@ -89,6 +93,10 @@ unsafe extern "C" fn set_interval(info: *const v8::FunctionCallbackInfo) {
 
         let global_fn = v8::Global::new(scope, func);
 
+        let extra_args: Vec<v8::Global<v8::Value>> = (2..args.length())
+            .map(|i| v8::Global::new(scope, args.get(i)))
+            .collect();
+
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         // min interval from environment, default 1ms
@@ -104,6 +112,7 @@ unsafe extern "C" fn set_interval(info: *const v8::FunctionCallbackInfo) {
             TaskKind::Interval {
                 period_us: period_us.max(min_interval_us),
             },
+            extra_args,
         );
 
         rv.set(v8::Integer::new(scope, id as i32).into());
@@ -155,7 +164,7 @@ unsafe extern "C" fn request_animation_frame(info: *const v8::FunctionCallbackIn
         let id = state
             .event_loop
             .borrow_mut()
-            .add_timer(global_fn, raf_ms, TaskKind::Raf { deadline_ms });
+            .add_timer(global_fn, raf_ms, TaskKind::Raf { deadline_ms }, vec![]);
 
         rv.set(v8::Integer::new(scope, id as i32).into());
     }));

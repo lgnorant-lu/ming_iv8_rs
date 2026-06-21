@@ -42,6 +42,8 @@ pub struct TimedTask {
     pub callback: v8::Global<v8::Function>,
     /// What kind of task.
     pub kind: TaskKind,
+    /// Extra arguments to pass to callback (setTimeout/setInterval args after delay).
+    pub extra_args: Vec<v8::Global<v8::Value>>,
 }
 
 /// Task kind — determines behavior after execution.
@@ -122,6 +124,7 @@ impl EventLoop {
         callback: v8::Global<v8::Function>,
         delay_ms: f64,
         kind: TaskKind,
+        extra_args: Vec<v8::Global<v8::Value>>,
     ) -> u32 {
         let id = self.next_id;
         self.next_id += 1;
@@ -134,6 +137,7 @@ impl EventLoop {
             id,
             callback,
             kind,
+            extra_args,
         }));
 
         id
@@ -215,6 +219,7 @@ impl EventLoop {
             id: task.id,
             callback: task.callback.clone(),
             kind: task.kind,
+            extra_args: task.extra_args.clone(),
         }));
     }
 }
@@ -229,13 +234,14 @@ impl Default for EventLoop {
 pub fn execute_task(scope: &v8::PinScope<'_, '_>, task: &TimedTask) {
     let func = v8::Local::new(scope, &task.callback);
     let global = scope.get_current_context().global(scope);
-    let args: Vec<v8::Local<v8::Value>> = match task.kind {
-        TaskKind::Raf { deadline_ms } => {
-            let ts = v8::Number::new(scope, deadline_ms);
-            vec![ts.into()]
-        }
-        _ => vec![],
-    };
+    let mut args: Vec<v8::Local<v8::Value>> = Vec::new();
+    if let TaskKind::Raf { deadline_ms } = task.kind {
+        let ts = v8::Number::new(scope, deadline_ms);
+        args.push(ts.into());
+    }
+    for g in &task.extra_args {
+        args.push(v8::Local::new(scope, g));
+    }
     func.call(scope, global.into(), &args);
 }
 
