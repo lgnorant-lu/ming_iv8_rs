@@ -37,8 +37,11 @@ fn test_device_pixel_ratio_is_native_getter() {
     let desc = k.eval_to_rust_value(
         "(function(){var d=Object.getOwnPropertyDescriptor(window,'devicePixelRatio');return typeof d.get==='function'&&d.set===undefined})()"
     );
-    assert_eq!(desc, iv8_core::convert::RustValue::Bool(true),
-        "devicePixelRatio must be a native getter with undefined setter");
+    assert_eq!(
+        desc,
+        iv8_core::convert::RustValue::Bool(true),
+        "devicePixelRatio must be a native getter with undefined setter"
+    );
 }
 
 #[test]
@@ -98,12 +101,7 @@ fn test_screen_avail_not_exceed_screen() {
     let aw = k.eval_to_rust_value("screen.availWidth");
     let w_val: f64 = common::to_str(&w).parse().unwrap_or(0.0);
     let aw_val: f64 = common::to_str(&aw).parse().unwrap_or(0.0);
-    assert!(
-        aw_val <= w_val,
-        "availWidth {} > width {}",
-        aw_val,
-        w_val
-    );
+    assert!(aw_val <= w_val, "availWidth {} > width {}", aw_val, w_val);
 }
 
 #[test]
@@ -134,10 +132,38 @@ fn test_window_custom_profile() {
 }
 
 #[test]
+fn test_window_profile_matrix_values_are_env_fallback() {
+    use iv8_core::kernel::KernelConfig;
+
+    let mut source = iv8_profile::defaults::default_profile_source();
+    source.display.window.inner_width = 1366;
+    source.display.window.inner_height = 721;
+    source.display.window.outer_width = 1366;
+    source.display.window.outer_height = 768;
+    source.display.window.device_pixel_ratio = 1.25;
+
+    let (matrix, validation) = iv8_profile::ProfileMatrix::from_source(&source);
+    assert!(
+        validation.is_valid(),
+        "profile matrix should validate: {}",
+        validation
+    );
+
+    let config = KernelConfig::default().with_profile_matrix(&matrix);
+    let mut k = iv8_core::kernel::embedded_v8::EmbeddedV8Kernel::new(config).unwrap();
+
+    common::assert_js_str(&mut k, "window.innerWidth", "1366");
+    common::assert_js_str(&mut k, "window.innerHeight", "721");
+    common::assert_js_str(&mut k, "window.outerWidth", "1366");
+    common::assert_js_str(&mut k, "window.outerHeight", "768");
+    common::assert_js_str(&mut k, "window.devicePixelRatio", "1.25");
+}
+
+#[test]
 fn test_window_device_pixel_ratio_native_string() {
     let mut k = common::make_kernel();
     let ts = k.eval_to_rust_value(
-        "Object.getOwnPropertyDescriptor(window,'devicePixelRatio').get.toString()"
+        "Object.getOwnPropertyDescriptor(window,'devicePixelRatio').get.toString()",
     );
     match ts {
         iv8_core::convert::RustValue::String(s) => {
@@ -155,11 +181,21 @@ fn test_window_device_pixel_ratio_native_string() {
 fn test_window_default_values_match_profile_defaults() {
     use iv8_core::shims::browser_profile::DEFAULT_PROFILE;
     let mut k = common::make_kernel();
-    let iw: f64 = common::to_str(&k.eval_to_rust_value("window.innerWidth")).parse().unwrap();
-    let ih: f64 = common::to_str(&k.eval_to_rust_value("window.innerHeight")).parse().unwrap();
-    let ow: f64 = common::to_str(&k.eval_to_rust_value("window.outerWidth")).parse().unwrap();
-    let oh: f64 = common::to_str(&k.eval_to_rust_value("window.outerHeight")).parse().unwrap();
-    let dpr: f64 = common::to_str(&k.eval_to_rust_value("window.devicePixelRatio")).parse().unwrap();
+    let iw: f64 = common::to_str(&k.eval_to_rust_value("window.innerWidth"))
+        .parse()
+        .unwrap();
+    let ih: f64 = common::to_str(&k.eval_to_rust_value("window.innerHeight"))
+        .parse()
+        .unwrap();
+    let ow: f64 = common::to_str(&k.eval_to_rust_value("window.outerWidth"))
+        .parse()
+        .unwrap();
+    let oh: f64 = common::to_str(&k.eval_to_rust_value("window.outerHeight"))
+        .parse()
+        .unwrap();
+    let dpr: f64 = common::to_str(&k.eval_to_rust_value("window.devicePixelRatio"))
+        .parse()
+        .unwrap();
     assert_eq!(iw, DEFAULT_PROFILE.window_inner_width);
     assert_eq!(ih, DEFAULT_PROFILE.window_inner_height);
     assert_eq!(ow, DEFAULT_PROFILE.window_outer_width);
@@ -173,10 +209,13 @@ fn test_window_dimensions_not_writable_in_strict() {
     // Native getters without setter should silently ignore writes in non-strict,
     // throw TypeError in strict mode.
     let result = k.eval_to_rust_value(
-        "'use strict'; try { window.innerWidth = 999; 'written' } catch(e) { 'protected' }"
+        "'use strict'; try { window.innerWidth = 999; 'written' } catch(e) { 'protected' }",
     );
-    assert_eq!(result, iv8_core::convert::RustValue::String("protected".into()),
-        "innerWidth must be non-writable in strict mode");
+    assert_eq!(
+        result,
+        iv8_core::convert::RustValue::String("protected".into()),
+        "innerWidth must be non-writable in strict mode"
+    );
 }
 
 #[test]
@@ -184,11 +223,12 @@ fn test_window_dimensions_deletable() {
     let mut k = common::make_kernel();
     // Chrome native accessors are configurable: true — delete succeeds
     // (unlike env_inject DONT_DELETE own data properties)
-    let result = k.eval_to_rust_value(
-        "'use strict'; delete window.innerWidth"
+    let result = k.eval_to_rust_value("'use strict'; delete window.innerWidth");
+    assert_eq!(
+        result,
+        iv8_core::convert::RustValue::Bool(true),
+        "innerWidth accessor must be configurable (deletable) in Chrome-compatible mode"
     );
-    assert_eq!(result, iv8_core::convert::RustValue::Bool(true),
-        "innerWidth accessor must be configurable (deletable) in Chrome-compatible mode");
 }
 
 #[test]

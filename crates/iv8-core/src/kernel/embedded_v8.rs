@@ -123,11 +123,36 @@ macro_rules! window_f64_getter_cb {
         }
     };
 }
-window_f64_getter_cb!(window_inner_width_cb, "window.innerWidth", window_inner_width, DEFAULT_PROFILE.window_inner_width);
-window_f64_getter_cb!(window_inner_height_cb, "window.innerHeight", window_inner_height, DEFAULT_PROFILE.window_inner_height);
-window_f64_getter_cb!(window_outer_width_cb, "window.outerWidth", window_outer_width, DEFAULT_PROFILE.window_outer_width);
-window_f64_getter_cb!(window_outer_height_cb, "window.outerHeight", window_outer_height, DEFAULT_PROFILE.window_outer_height);
-window_f64_getter_cb!(window_device_pixel_ratio_cb, "window.devicePixelRatio", device_pixel_ratio, DEFAULT_PROFILE.device_pixel_ratio);
+window_f64_getter_cb!(
+    window_inner_width_cb,
+    "window.innerWidth",
+    window_inner_width,
+    DEFAULT_PROFILE.window_inner_width
+);
+window_f64_getter_cb!(
+    window_inner_height_cb,
+    "window.innerHeight",
+    window_inner_height,
+    DEFAULT_PROFILE.window_inner_height
+);
+window_f64_getter_cb!(
+    window_outer_width_cb,
+    "window.outerWidth",
+    window_outer_width,
+    DEFAULT_PROFILE.window_outer_width
+);
+window_f64_getter_cb!(
+    window_outer_height_cb,
+    "window.outerHeight",
+    window_outer_height,
+    DEFAULT_PROFILE.window_outer_height
+);
+window_f64_getter_cb!(
+    window_device_pixel_ratio_cb,
+    "window.devicePixelRatio",
+    device_pixel_ratio,
+    DEFAULT_PROFILE.device_pixel_ratio
+);
 
 impl EmbeddedV8Kernel {
     /// Create a new embedded V8 kernel with the given configuration.
@@ -195,10 +220,13 @@ impl EmbeddedV8Kernel {
             window_f64_getter!("outerHeight", window_outer_height_cb);
             window_f64_getter!("devicePixelRatio", window_device_pixel_ratio_cb);
 
-            let context = v8::Context::new(handle_scope, v8::ContextOptions {
-                global_template: Some(global_tmpl),
-                ..Default::default()
-            });
+            let context = v8::Context::new(
+                handle_scope,
+                v8::ContextOptions {
+                    global_template: Some(global_tmpl),
+                    ..Default::default()
+                },
+            );
             v8::Global::new(handle_scope, context)
         };
 
