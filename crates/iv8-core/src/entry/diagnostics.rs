@@ -413,7 +413,13 @@ mod tests {
 
     #[test]
     fn test_evidence_record_new_sets_required_fields() {
-        let record = EvidenceRecord::new("TYPE", EvidenceStrength::Weak, "src", "stage", "summary text");
+        let record = EvidenceRecord::new(
+            "TYPE",
+            EvidenceStrength::Weak,
+            "src",
+            "stage",
+            "summary text",
+        );
         assert_eq!(record.kind, "TYPE");
         assert_eq!(record.strength, EvidenceStrength::Weak);
         assert_eq!(record.source, "src");
@@ -469,8 +475,19 @@ mod tests {
 
     #[test]
     fn test_fallback_attempt_structure() {
-        let diags = vec![DiagnosticRecord::new("C1", DiagnosticSeverity::Info, "s1", "m1")];
-        let evidence = vec![EvidenceRecord::new("T", EvidenceStrength::Weak, "s2", "s3", "m2")];
+        let diags = vec![DiagnosticRecord::new(
+            "C1",
+            DiagnosticSeverity::Info,
+            "s1",
+            "m1",
+        )];
+        let evidence = vec![EvidenceRecord::new(
+            "T",
+            EvidenceStrength::Weak,
+            "s2",
+            "s3",
+            "m2",
+        )];
         let attempt = FallbackAttempt {
             strategy_id: "strat_1".into(),
             status: FallbackStatus::Fail,
@@ -503,6 +520,9 @@ mod tests {
     fn test_verify_catalog_empty_when_all_codes_present() {
         let all_codes = rust_diagnostic_codes();
         let missing = verify_diagnostic_catalog(&all_codes);
-        assert!(missing.is_empty(), "should have no missing codes when all present");
+        assert!(
+            missing.is_empty(),
+            "should have no missing codes when all present"
+        );
     }
 }
