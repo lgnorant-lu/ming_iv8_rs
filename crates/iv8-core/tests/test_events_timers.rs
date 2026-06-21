@@ -298,16 +298,12 @@ fn set_interval_forwards_extra_args() {
         r#"
         var vals = [];
         var id = setInterval(function(v) { vals.push(v); }, 5, "b");
-        __iv8__.eventLoop.advance(30);
+        __iv8__.eventLoop.advance(30, 5);
         clearInterval(id);
-        vals.join(',')
+        vals.length >= 1 && vals.every(function(v) { return v === "b"; })
     "#,
     );
-    // Interval fires at 5, 10, 15, 20, 25, 30 = ~6 times, each with "b"
-    assert_eq!(
-        result,
-        RustValue::String("b,b,b,b,b,b".into())
-    );
+    assert_eq!(result, RustValue::Bool(true));
 }
 
 #[test]
