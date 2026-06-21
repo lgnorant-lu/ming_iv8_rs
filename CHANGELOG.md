@@ -6,6 +6,44 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.65] - 2026-06-22
+
+> Local milestone: M2 Layer5 Cross-Property consistency for Window/Screen/DPR.
+
+### Added
+- `BrowserProfile` now owns 4 window dimension fields:
+  `window_inner_width`, `window_inner_height`, `window_outer_width`, and
+  `window_outer_height`.
+- `test_surface_window_dimensions.rs`: 18 integration tests covering default
+  values, explicit `BrowserProfile`, `ProfileMatrix` env fallback,
+  descriptor shape, strict write protection, configurability, and window identity.
+- `v0.8.65-env-inject-triple-layer-assessment.md`: documents the legacy
+  JS shim / `env_inject` / native accessor value competition and selective skip.
+- `v0.8.65-canvas-webgl-layer-alignment.md`: records Canvas/WebGL as layered
+  augmentation, not duplicate implementations.
+
+### Changed
+- Window dimensions and `devicePixelRatio` are now installed as global-template
+  native accessors before `Context::new()` instead of JS/env plain data values.
+- `env_inject` selectively skips the 5 native-owned window keys while retaining
+  the env map as the native getter fallback source.
+- `window_extras` no longer provides fallback assignments for those 5 keys.
+- Profile matrix env projection now includes `window.outerWidth` and
+  `window.outerHeight`.
+
+### Quality Gates
+- `cargo test --test test_surface_window_dimensions`: 18 passed.
+- `cargo test -p iv8-core --lib`: 273 passed.
+- `cargo check --workspace`: 0 errors.
+- `git diff --check`: no whitespace errors.
+
+### Known Limitations
+- This is a substrate consistency milestone, not a real-sample PASS claim.
+- It does not modify `window.chrome`, events/timers, Storage persistence,
+  Canvas/WebGL deep fingerprint values, named constructors, or full env_inject
+  archival.
+- Package metadata remains `0.8.11`.
+
 ## [0.8.64] - 2026-06-21
 
 > Local milestone: M1 回归测试网 — 纯测试交付, 不引入新运行时 capability。
