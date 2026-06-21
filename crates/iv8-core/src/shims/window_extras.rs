@@ -55,11 +55,6 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             loadEventEnd: _navStart + 710,
         };
     }
-    if (!window.devicePixelRatio) { window.devicePixelRatio = 1; }
-    if (!window.innerWidth) { window.innerWidth = 1920; }
-    if (!window.innerHeight) { window.innerHeight = 1080; }
-    if (!window.outerWidth) { window.outerWidth = 1920; }
-    if (!window.outerHeight) { window.outerHeight = 1080; }
     if (!window.screenX) { window.screenX = 0; }
     if (!window.screenY) { window.screenY = 0; }
     if (window.pageXOffset === undefined) { window.pageXOffset = 0; }
