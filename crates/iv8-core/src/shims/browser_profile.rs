@@ -55,6 +55,11 @@ pub struct BrowserProfile {
 
     pub device_pixel_ratio: f64,
 
+    pub window_inner_width: f64,
+    pub window_inner_height: f64,
+    pub window_outer_width: f64,
+    pub window_outer_height: f64,
+
     // ─── v0.8.62: conditional exposure flags ───────────────────────────
     /// True if the profile represents a mobile device (phone/tablet).
     /// Controls visibility of share/canShare/vibrate.
@@ -110,6 +115,11 @@ pub const DEFAULT_PROFILE: BrowserProfile = BrowserProfile {
     ua_full_version_list_json: r#"[{"brand":"Google Chrome","version":"131.0.6778.86"},{"brand":"Chromium","version":"131.0.6778.86"}]"#,
 
     device_pixel_ratio: 1.0,
+
+    window_inner_width: 1920.0,
+    window_inner_height: 969.0,
+    window_outer_width: 1920.0,
+    window_outer_height: 1040.0,
 
     // v0.8.62 conditional exposure defaults
     mobile_profile: false,       // desktop profile
@@ -167,6 +177,14 @@ mod tests {
         assert!(!DEFAULT_PROFILE.vendor.is_empty());
         assert!(!DEFAULT_PROFILE.product.is_empty());
         assert!(!DEFAULT_PROFILE.app_name.is_empty());
+    }
+
+    #[test]
+    fn test_default_profile_window_dimensions() {
+        assert_eq!(DEFAULT_PROFILE.window_inner_width, 1920.0);
+        assert_eq!(DEFAULT_PROFILE.window_inner_height, 969.0);
+        assert_eq!(DEFAULT_PROFILE.window_outer_width, 1920.0);
+        assert_eq!(DEFAULT_PROFILE.window_outer_height, 1040.0);
     }
 
     #[test]
