@@ -6,6 +6,17 @@
 use crate::state::RuntimeState;
 use std::collections::HashMap;
 
+/// Keys owned by native window getters (installed via global_template).
+/// env_inject must skip these to avoid READ_ONLY own data property
+/// shadowing the native accessor installed in embedded_v8.rs.
+const NATIVE_WINDOW_KEYS: &[&str] = &[
+    "innerWidth",
+    "innerHeight",
+    "outerWidth",
+    "outerHeight",
+    "devicePixelRatio",
+];
+
 /// Install all environment fields into the V8 global object.
 /// Called once during JSContext creation, after RuntimeState is installed.
 pub fn install_environment(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
@@ -98,6 +109,11 @@ fn install_fields_on_object(
 
     // Set direct fields with ReadOnly + DontDelete (prevents JS from modifying/deleting)
     for (field_name, value) in &direct {
+        // Skip native-owned window keys — they get native accessors via
+        // global_template in embedded_v8.rs instead.
+        if prefix == "window" && NATIVE_WINDOW_KEYS.contains(field_name) {
+            continue;
+        }
         let key = crate::v8_utils::v8_string(scope, field_name);
         let v8_value = json_to_v8(scope, value);
         obj.define_own_property(
