@@ -61,7 +61,10 @@ mod tests {
         };
         let s = e.to_string();
         assert!(s.contains("TypeError"), "display should contain name");
-        assert!(s.contains("foo is not a function"), "display should contain message");
+        assert!(
+            s.contains("foo is not a function"),
+            "display should contain message"
+        );
     }
 
     #[test]

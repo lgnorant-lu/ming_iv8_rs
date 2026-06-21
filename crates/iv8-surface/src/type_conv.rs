@@ -43,9 +43,9 @@ pub fn default_value_for_type<'s>(
             let store = v8::ArrayBuffer::new_backing_store_from_vec(vec![]);
             v8::ArrayBuffer::with_backing_store(scope, &store.into()).into()
         }
-        "Int8Array" | "Uint8Array" | "Uint8ClampedArray" | "Int16Array"
-        | "Uint16Array" | "Int32Array" | "Uint32Array" | "Float32Array"
-        | "Float64Array" | "BigInt64Array" | "BigUint64Array" | "DataView" => {
+        "Int8Array" | "Uint8Array" | "Uint8ClampedArray" | "Int16Array" | "Uint16Array"
+        | "Int32Array" | "Uint32Array" | "Float32Array" | "Float64Array" | "BigInt64Array"
+        | "BigUint64Array" | "DataView" => {
             // Construct an empty typed array via the global constructor.
             // new <Type>(0) gives a zero-length instance of the right class.
             let global = scope.get_current_context().global(scope);

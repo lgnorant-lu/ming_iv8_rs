@@ -3318,7 +3318,6 @@ unsafe extern "C" fn css_style_length_getter(info: *const v8::FunctionCallbackIn
 
 unsafe extern "C" fn css_style_get_priority_cb(_info: *const v8::FunctionCallbackInfo) {}
 
-
 unsafe extern "C" fn dataset_getter(info: *const v8::FunctionCallbackInfo) {
     run_accessor(info, |scope, rv, _state, _node_id| {
         rv.set(v8::Object::new(scope).into());

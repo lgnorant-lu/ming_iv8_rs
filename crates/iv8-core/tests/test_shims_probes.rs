@@ -52,7 +52,12 @@ fn test_connection_probe_passes() {
     let mut k = common::make_kernel();
     let probe = ConnectionProbe;
     let result = probe.probe(&mut k);
-    assert_eq!(result, ProbeResult::Pass, "connection probe failed: {:?}", result);
+    assert_eq!(
+        result,
+        ProbeResult::Pass,
+        "connection probe failed: {:?}",
+        result
+    );
 }
 
 #[test]
@@ -60,7 +65,12 @@ fn test_geolocation_probe_passes() {
     let mut k = common::make_kernel();
     let probe = GeolocationProbe;
     let result = probe.probe(&mut k);
-    assert_eq!(result, ProbeResult::Pass, "geolocation probe failed: {:?}", result);
+    assert_eq!(
+        result,
+        ProbeResult::Pass,
+        "geolocation probe failed: {:?}",
+        result
+    );
 }
 
 #[test]
@@ -68,7 +78,12 @@ fn test_clipboard_probe_passes() {
     let mut k = common::make_kernel();
     let probe = ClipboardProbe;
     let result = probe.probe(&mut k);
-    assert_eq!(result, ProbeResult::Pass, "clipboard probe failed: {:?}", result);
+    assert_eq!(
+        result,
+        ProbeResult::Pass,
+        "clipboard probe failed: {:?}",
+        result
+    );
 }
 
 #[test]
@@ -76,5 +91,10 @@ fn test_credentials_probe_passes() {
     let mut k = common::make_kernel();
     let probe = CredentialsProbe;
     let result = probe.probe(&mut k);
-    assert_eq!(result, ProbeResult::Pass, "credentials probe failed: {:?}", result);
+    assert_eq!(
+        result,
+        ProbeResult::Pass,
+        "credentials probe failed: {:?}",
+        result
+    );
 }

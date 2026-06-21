@@ -79,11 +79,15 @@ impl BehaviorProbe for ConnectionProbe {
             }
         }
 
-        match eval_bool(kernel, "'prototype' in Object.getOwnPropertyDescriptor(Navigator.prototype, 'connection').get") {
+        match eval_bool(
+            kernel,
+            "'prototype' in Object.getOwnPropertyDescriptor(Navigator.prototype, 'connection').get",
+        ) {
             Some(false) => {}
             v => {
                 return ProbeResult::Fail {
-                    reason: "navigator.connection getter has prototype (not native code shape)".into(),
+                    reason: "navigator.connection getter has prototype (not native code shape)"
+                        .into(),
                     expected: "false".into(),
                     actual: format!("{:?}", v),
                 };

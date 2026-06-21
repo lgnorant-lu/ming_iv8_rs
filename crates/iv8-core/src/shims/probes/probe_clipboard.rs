@@ -60,11 +60,15 @@ impl BehaviorProbe for ClipboardProbe {
             }
         }
 
-        match eval_bool(kernel, "'prototype' in Object.getOwnPropertyDescriptor(Navigator.prototype, 'clipboard').get") {
+        match eval_bool(
+            kernel,
+            "'prototype' in Object.getOwnPropertyDescriptor(Navigator.prototype, 'clipboard').get",
+        ) {
             Some(false) => {}
             v => {
                 return ProbeResult::Fail {
-                    reason: "navigator.clipboard getter has prototype (not native code shape)".into(),
+                    reason: "navigator.clipboard getter has prototype (not native code shape)"
+                        .into(),
                     expected: "false".into(),
                     actual: format!("{:?}", v),
                 };
