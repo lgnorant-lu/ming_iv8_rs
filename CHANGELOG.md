@@ -6,6 +6,45 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.66] - 2026-06-22
+
+> Local milestone: M3 Events/Timers behavior depth (bounded browser-like baseline).
+
+### Added
+- `page_load()` now dispatches `DOMContentLoaded` (before readyState=complete)
+  and `load` (after) events on the document root via the existing `dispatch_event`
+  3-phase model. Previously only a comment placeheld.
+- `requestAnimationFrame(cb)` now passes a `DOMHighResTimeStamp` (Number, >=0)
+  sourced from logical event-loop time, stored as `TaskKind::Raf { deadline_ms }`.
+- `setTimeout(fn, delay, ...extraArgs)` and `setInterval(fn, delay, ...extraArgs)`
+  now capture and forward extra arguments to the callback. Non-arrow callbacks
+  receive `this === globalThis` (unchanged, already correct).
+- `test_events_document_target.rs`: +4 tests for automatic event dispatch during
+  `page_load` (DOMContentLoaded firing, load ordering, readyState=complete,
+  event type/isTrusted).
+- `test_events_timers.rs`: +7 tests covering rAF timestamp presence/type,
+  setTimeout single/multiple extra args, setInterval extra args forwarding,
+  and this===globalThis for both timeout and interval.
+
+### Changed
+- `TaskKind::Raf` changed to `TaskKind::Raf { deadline_ms }` (removed `Eq` derive
+  due to `f64` incompatibility).
+- `TimedTask` gained `extra_args: Vec<v8::Global<v8::Value>>` field.
+- `add_timer()` signature gained `extra_args` parameter; all callers updated.
+- `re_enqueue_interval()` clones `extra_args` to preserve them across repeat calls.
+
+### Quality Gates
+- `cargo test --test test_events_document_target`: 13/13 passed
+- `cargo test --test test_events_timers`: 20/20 passed
+- `cargo test -p iv8-core --lib`: 273/273 passed
+- `cargo check --workspace`: 0 errors
+
+### Known Limitations (not claimed by M3)
+- Full page lifecycle (async/defer, resource blocking, iframe/image load events).
+- Real frame pipeline / compositor timing / rAF throttling.
+- Nested timeout clamping, background timer throttling, task-source priority model.
+- These remain v0.9+ per `post-v0.8.63-branch-a-convergence-post.md`.
+
 ## [0.8.65] - 2026-06-22
 
 > Local milestone: M2 Layer5 Cross-Property consistency for Window/Screen/DPR.
