@@ -13,3 +13,15 @@ pub fn ensure_v8_initialized() {
         v8::V8::initialize();
     });
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ensure_v8_initialized_is_idempotent() {
+        ensure_v8_initialized();
+        ensure_v8_initialized();
+        ensure_v8_initialized();
+    }
+}

@@ -66,3 +66,23 @@ pub fn set_call_as_function_handler(
         v8__ObjectTemplate__SetCallAsFunctionHandler(template, callback, data_ptr);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    unsafe extern "C" fn test_cb(_: *const v8::FunctionCallbackInfo) {}
+
+    #[test]
+    fn test_mark_as_undetectable_completes_without_panic() {
+        crate::v8_init::ensure_v8_initialized();
+        let mut isolate = v8::Isolate::new(v8::CreateParams::default());
+        v8::scope!(let hs, &mut isolate);
+        let ctx = v8::Context::new(hs, Default::default());
+        let scope = &mut v8::ContextScope::new(hs, ctx);
+        let tmpl = v8::ObjectTemplate::new(scope);
+        set_call_as_function_handler(&tmpl, test_cb, None);
+        mark_as_undetectable(&tmpl);
+        let _obj = tmpl.new_instance(scope);
+    }
+}
