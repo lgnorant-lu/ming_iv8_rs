@@ -6,6 +6,39 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.63] - 2026-06-21
+
+> Local milestone: 补丁聚合 + TODO 全量真实性审计。收束 v0.8.62 之后
+> 18 个增量 commit, 不引入新能力域规划。
+
+### Added
+- 行为探针扩展: connection/geolocation/clipboard/credentials 4 个
+  BehaviorProbe 实现 (probe 总数 2 -> 6, test_shims_probes 7 checks)。
+- ECDSA/ECDH/RSA-OAEP 加密集成测试 (test_crypto_subtle 35/35)。
+- IV8Error 类型 6 个 inline 测试。
+- TextEncoder + Response getter 回归测试。
+- docs/todo/TODO-inspector.md: inspector/ (CDP 调试面) 模块追踪,
+  此前从未被任何 TODO 模块章节 own。
+- TODO-surface-coverage.md 新增 Window Surfaces 章节
+  (window.chrome / named constructors / outerWidth / identity chain)。
+
+### Changed
+- TODO 全量真实性审计: 修正 Coverage/行数/Last Audit 失实记账;
+  README 统计表改为 rg 实测 (Environment 43->20, Native 48->32)。
+- window.chrome 状态修正: 精装级一致性 -> 简装级 codegen-skeleton
+  缺失 (实测确认为孤儿模板未组装)。
+- 记账 NamedConstructor codegen 消费缺失 (Layer 4 约 0%)。
+
+### Fixed
+- TextEncoder shim shadowing + Response/Request getter 递归崩溃。
+- default_value_for_type 返回空 typed array 而非 null。
+
+### Removed
+- 10 个确认死函数 (5 dom/template + 5 network/fetch 影子副本)。
+
+### Quality Gates
+- cargo test 304/304 (249 lib + 55 surface); cargo check zero errors。
+
 ## [0.8.62] - 2026-06-20
 
 > Local milestone: Behavior Probe + Conditional Exposure + Cross-Layer Contract — v0.8.x series close
