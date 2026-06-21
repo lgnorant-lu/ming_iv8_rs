@@ -180,12 +180,24 @@ fn test_window_dimensions_not_writable_in_strict() {
 }
 
 #[test]
-fn test_window_dimensions_not_deletable() {
+fn test_window_dimensions_deletable() {
     let mut k = common::make_kernel();
-    // DONT_DELETE on native accessor
+    // Chrome native accessors are configurable: true — delete succeeds
+    // (unlike env_inject DONT_DELETE own data properties)
     let result = k.eval_to_rust_value(
-        "'use strict'; try { delete window.innerWidth; 'deleted' } catch(e) { 'protected' }"
+        "'use strict'; delete window.innerWidth"
     );
-    assert_eq!(result, iv8_core::convert::RustValue::String("protected".into()),
-        "innerWidth must be non-deletable");
+    assert_eq!(result, iv8_core::convert::RustValue::Bool(true),
+        "innerWidth accessor must be configurable (deletable) in Chrome-compatible mode");
+}
+
+#[test]
+fn test_window_dimensions_descriptor_shape_matches_chrome() {
+    let mut k = common::make_kernel();
+    // Chrome: {get: f, set: undefined, enumerable: true, configurable: true}
+    let desc = k.eval_to_rust_value(
+        "JSON.stringify(Object.getOwnPropertyDescriptor(window, 'innerWidth'), ['enumerable','configurable'])"
+    );
+    assert_eq!(desc, iv8_core::convert::RustValue::String("{\"enumerable\":true,\"configurable\":true}".into()),
+        "innerWidth accessor must match Chrome descriptor shape (enumerable:true, configurable:true)");
 }

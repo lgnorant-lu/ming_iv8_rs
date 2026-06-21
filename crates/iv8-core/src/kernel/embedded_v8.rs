@@ -185,7 +185,7 @@ impl EmbeddedV8Kernel {
                         key.into(),
                         Some(getter),
                         None,
-                        v8::PropertyAttribute::DONT_DELETE,
+                        v8::PropertyAttribute::NONE,
                     );
                 };
             }
