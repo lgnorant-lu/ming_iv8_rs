@@ -38,7 +38,7 @@ Integration test files follow the pattern:
 ```text
 tests/test_<layer>_<module>.rs
 
-<layer>:   surface | dom | network | events | crypto | shims | kernel
+<layer>:   surface | dom | network | events | crypto | shims | canvas | entry | kernel | inspector
 <module>:  navigator | element | fetch | timers | subtle | location | embedded_v8
 ```
 
