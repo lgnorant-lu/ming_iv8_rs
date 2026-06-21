@@ -216,3 +216,44 @@ fn timer_globals_exist() {
     );
     assert_eq!(result, RustValue::Bool(true));
 }
+
+// ─── v0.8.66 (M3): rAF callback receives DOMHighResTimeStamp ─────────
+
+#[test]
+fn raf_callback_receives_timestamp() {
+    let mut kernel = common::make_kernel();
+    kernel
+        .eval_to_rust_value(
+            r#"
+        window.__rafTs = null;
+        window.__rafArgCount = 0;
+        requestAnimationFrame(function(ts) {
+            window.__rafTs = ts;
+            window.__rafArgCount = arguments.length;
+        });
+        __iv8__.eventLoop.advance(20);
+    "#,
+        );
+    let ts = kernel.eval_to_rust_value("window.__rafTs");
+    let arg_count = kernel.eval_to_rust_value("window.__rafArgCount");
+    assert_eq!(arg_count, RustValue::Int(1));
+    match ts {
+        RustValue::Float(v) => assert!(v >= 0.0, "rAF timestamp should be >= 0, got {}", v),
+        RustValue::Int(v) => assert!(v >= 0, "rAF timestamp should be >= 0, got {}", v),
+        other => panic!("expected numeric raf timestamp, got {:?}", other),
+    }
+}
+
+#[test]
+fn raf_callback_timestamp_is_number() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var tsType = null;
+        requestAnimationFrame(function(ts) { tsType = typeof ts; });
+        __iv8__.eventLoop.advance(20);
+        tsType
+    "#,
+    );
+    assert_eq!(result, RustValue::String("number".into()));
+}

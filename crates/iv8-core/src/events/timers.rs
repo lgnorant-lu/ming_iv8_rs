@@ -151,10 +151,11 @@ unsafe extern "C" fn request_animation_frame(info: *const v8::FunctionCallbackIn
             .environment
             .get_f64("timers.raf_interval_ms")
             .unwrap_or(16.67);
+        let deadline_ms = state.event_loop.borrow().get_time_ms() + raf_ms;
         let id = state
             .event_loop
             .borrow_mut()
-            .add_timer(global_fn, raf_ms, TaskKind::Raf);
+            .add_timer(global_fn, raf_ms, TaskKind::Raf { deadline_ms });
 
         rv.set(v8::Integer::new(scope, id as i32).into());
     }));

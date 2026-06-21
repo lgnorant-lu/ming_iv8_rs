@@ -45,14 +45,14 @@ pub struct TimedTask {
 }
 
 /// Task kind — determines behavior after execution.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TaskKind {
     /// setTimeout: fires once, then removed.
     Timeout,
     /// setInterval: fires, then re-enqueued with period offset.
     Interval { period_us: i64 },
-    /// requestAnimationFrame: fires once per advance step.
-    Raf,
+    /// requestAnimationFrame: fires once per advance step, callback receives DOMHighResTimeStamp.
+    Raf { deadline_ms: f64 },
 }
 
 // Ordering for BinaryHeap (min-heap via Reverse): compare by due_us, then id.
@@ -229,7 +229,14 @@ impl Default for EventLoop {
 pub fn execute_task(scope: &v8::PinScope<'_, '_>, task: &TimedTask) {
     let func = v8::Local::new(scope, &task.callback);
     let global = scope.get_current_context().global(scope);
-    func.call(scope, global.into(), &[]);
+    let args: Vec<v8::Local<v8::Value>> = match task.kind {
+        TaskKind::Raf { deadline_ms } => {
+            let ts = v8::Number::new(scope, deadline_ms);
+            vec![ts.into()]
+        }
+        _ => vec![],
+    };
+    func.call(scope, global.into(), &args);
 }
 
 /// Execute a batch of tasks and re-enqueue intervals.
