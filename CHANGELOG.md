@@ -6,6 +6,46 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.69] - 2026-06-22
+
+> Local milestone: Infrastructure convergence (CI toolchain pin + env_inject native key skip).
+
+### Changed
+- CI toolchain pinned from `dtolnay/rust-toolchain@stable` (floating) to
+  `@master` with explicit `toolchain: "1.96.0"` across all 6 Rust install
+  steps in `ci.yml` (lint, rust-test, 3x python-test, build-wheels).
+- `env_inject.rs` now skips 26 direct own-data-property injections for
+  keys already covered by native accessors (18 navigator + 8 screen).
+  Nested keys (e.g. `navigator.connection.*`) are not affected.
+- `NATIVE_NAVIGATOR_KEYS` (28 entries) and `NATIVE_SCREEN_KEYS` (8 entries)
+  const skip lists added to `env_inject.rs`.
+- `install_fields_on_object()` gains navigator/screen skip branches before
+  the existing `NATIVE_WINDOW_KEYS` guard.
+- `TODO-infrastructure.md`: CI toolchain pin item marked [x];
+  env_inject archival item marked [~] (partial: 26 direct keys skipped,
+  ~365 remain).
+
+### Added
+- `docs/ci-toolchain-pin-policy.md`: pin rationale, update procedure,
+  rollback plan, and rationale for not using `rust-toolchain.toml`.
+- `v0.8.69-env-inject-key-classification.md`: classification of all 396
+  `iv8-defaults.json` keys against native accessor coverage.
+- 3 regression tests using `hasOwnProperty` strict assertions:
+  `navigator_user_agent_not_own_property`,
+  `screen_width_not_own_property`,
+  `document_ready_state_still_own_property`.
+
+### Quality Gates
+- `cargo test -p iv8-core --lib`: 290/290 passed (+3 from baseline 287).
+- `cargo test --test test_entry_multi_bundler`: 34/34 passed.
+- `cargo test --test test_kernel_init`: 94/94 passed.
+- `cargo check --workspace`: 0 errors.
+
+### Known Limitations
+- ~365 env_inject keys still injected as own data properties.
+- `env_inject.rs` not removed — only reduced.
+- Package metadata still at 0.8.11.
+
 ## [0.8.68] - 2026-06-22
 
 > Local milestone: M5 Bundler 精装 (Parcel bridge + Vite ESM G5-G8 + bridge quality).

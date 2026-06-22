@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.68 (M5 Bundler + M6 gate audit — v0.9 blocked pending 精装及以下≈100%) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.69 (Infrastructure convergence — CI pin + env_inject native key skip) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
@@ -12,6 +12,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Layer5 Window/Screen/DPR consistency**: native `global_template` accessors for window dimensions and `devicePixelRatio`, profile/env fallback, and Chrome-compatible descriptors (v0.8.65)
 - **Codegen stability and bounded surface audit**: `iv8-surface-codegen` golden snapshots, 1284/1284 current IR templates generated+installed, Image/Option/Audio named constructor aliases, and explicit non-claim boundary for Chrome/Web Platform parity (v0.8.67)
 - **Bundler refinement (M5)**: Parcel detection + bridge (`$parcel$`/`parcelRequire`); Vite ESM G5-G8 minimal support (import.meta, dynamic import, TLA); Browserify bridge quality fixes (string-key deps, span fallback) (v0.8.68)
+- **Infrastructure convergence**: CI Rust toolchain pinned to 1.96.0; env_inject skips 26 direct keys already covered by native accessors (v0.8.69)
 - **Generated Navigator skeletons**: 46 IDL properties via codegen + native template unification (v0.8.58/0.8.60)
 - **Native Navigator stubs**: connection, getBattery, sendBeacon, geolocation, clipboard, credentials (v0.8.55); getGamepads, requestMediaKeySystemAccess, requestMIDIAccess (v0.8.61)
 - **DOM**: html5ever parsing + ego-tree + selectors CSS Level 4 + EventTarget 3-phase dispatch
