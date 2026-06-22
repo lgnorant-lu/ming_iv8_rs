@@ -430,3 +430,106 @@ pub fn classify_domain(name: &str) -> &'static str {
     // Final catch-all — should ideally be empty
     "web_apis"
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn make_def(kind: &str, name: &str, parent: Option<&str>) -> Definition {
+        Definition {
+            kind: kind.into(),
+            name: Some(name.into()),
+            source: Some("w3c".into()),
+            inheritance: parent.map(|s| s.into()),
+            ext_attrs: vec![],
+            members: vec![],
+            partial: false,
+            values: vec![],
+            target: None,
+            includes: None,
+        }
+    }
+
+    #[test]
+    fn test_linear_dag() {
+        // A → B → C (C inherits from B, B inherits from A)
+        let defs = vec![
+            make_def("interface", "A", None),
+            make_def("interface", "B", Some("A")),
+            make_def("interface", "C", Some("B")),
+        ];
+        let (_, result) = merge_and_sort(&defs);
+        assert_eq!(result.cycles.len(), 0, "should have no cycles");
+        assert_eq!(result.sorted, vec!["A", "B", "C"]);
+    }
+
+    #[test]
+    fn test_no_inheritance() {
+        let defs = vec![
+            make_def("interface", "Foo", None),
+            make_def("interface", "Bar", None),
+        ];
+        let (_, result) = merge_and_sort(&defs);
+        assert_eq!(result.cycles.len(), 0);
+        assert!(result.sorted.contains(&"Foo".into()));
+        assert!(result.sorted.contains(&"Bar".into()));
+        // Both should come before any children, and alphabetically since no deps
+    }
+
+    #[test]
+    fn test_cycle_detection() {
+        let defs = vec![
+            make_def("interface", "X", Some("Y")),
+            make_def("interface", "Y", Some("X")),
+        ];
+        let (_, result) = merge_and_sort(&defs);
+        assert!(!result.cycles.is_empty(), "should detect cycle");
+    }
+
+    #[test]
+    fn test_domain_classification() {
+        assert_eq!(classify_domain("HTMLDivElement"), "html_elements");
+        assert_eq!(classify_domain("EventTarget"), "dom_core");
+        assert_eq!(classify_domain("SVGPathElement"), "svg");
+        assert_eq!(classify_domain("XRSystem"), "webxr");
+        assert_eq!(classify_domain("UnknownInterface"), "web_apis");
+    }
+
+    #[test]
+    fn test_empty_input() {
+        let defs: Vec<Definition> = vec![];
+        let (merged, result) = merge_and_sort(&defs);
+        assert!(merged.is_empty());
+        assert!(result.sorted.is_empty());
+        assert!(result.cycles.is_empty());
+    }
+
+    #[test]
+    fn test_missing_parent() {
+        let defs = vec![make_def("interface", "Child", Some("NonExistentParent"))];
+        let (_, result) = merge_and_sort(&defs);
+        assert_eq!(result.missing_parents.len(), 1);
+    }
+
+    #[test]
+    fn test_branching_dag() {
+        // Diamond: A ← B, A ← C, (B,C) ← D
+        let defs = vec![
+            make_def("interface", "A", None),
+            make_def("interface", "B", Some("A")),
+            make_def("interface", "C", Some("A")),
+            make_def("interface", "D", Some("B")), // D inherits B, B inherits A
+        ];
+        let (_, result) = merge_and_sort(&defs);
+        assert_eq!(result.cycles.len(), 0);
+        // C and D are both children of A, sorted alphabetically
+        let pos_a = result.sorted.iter().position(|n| n == "A").unwrap();
+        let pos_b = result.sorted.iter().position(|n| n == "B").unwrap();
+        let pos_c = result.sorted.iter().position(|n| n == "C").unwrap();
+        let pos_d = result.sorted.iter().position(|n| n == "D").unwrap();
+        assert!(pos_a < pos_b);
+        assert!(pos_a < pos_c);
+        assert!(pos_b < pos_d);
+        assert!(pos_c < pos_d);
+    }
+}

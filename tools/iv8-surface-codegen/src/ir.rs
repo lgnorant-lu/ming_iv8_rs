@@ -274,3 +274,28 @@ pub struct JsonStats {
     pub callbacks: usize,
     pub namespaces: usize,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_extract_type_name_primitive() {
+        let v = serde_json::Value::String("DOMString".into());
+        assert_eq!(extract_type_name(&v), Some("DOMString".into()));
+    }
+
+    #[test]
+    fn test_extract_type_name_object_name() {
+        let mut map = serde_json::Map::new();
+        map.insert("name".into(), serde_json::Value::String("Node".into()));
+        let v = serde_json::Value::Object(map);
+        assert_eq!(extract_type_name(&v), Some("Node".into()));
+    }
+
+    #[test]
+    fn test_extract_type_name_none() {
+        let v = serde_json::Value::Bool(true);
+        assert_eq!(extract_type_name(&v), None);
+    }
+}
