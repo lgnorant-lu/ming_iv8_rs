@@ -6,6 +6,44 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.68] - 2026-06-22
+
+> Local milestone: M5 Bundler 精装 (Parcel bridge + Vite ESM G5-G8 + bridge quality).
+
+### Added
+- Parcel bundle detection and bridge: `$parcel$` + `parcelRequire` co-occurrence
+  detection at classification priority 3; new `entry/parcel/mod.rs` bridge
+  module (120 lines) with inline tests (5); `ParcelBridge` StrategyKind and
+  `ParcelBundle` SampleKind; integration tests (4).
+- Vite ESM G5-G8 minimal support: ESM import/export detection; `esm_prelude()`
+  injecting `import.meta` shim (G6), dynamic import hook (G7), and synthetic
+  module registry (G5); `eval_module()` + `drain_microtasks()` for TLA (G8);
+  classification routes pure-ESM sources to `ViteBundle`.
+  Vite inline tests (10 total: 6 existing + 4 new ESM); integration tests (5).
+- Bridge quality fixes: `extract_deps_ast()` now handles `PropName::Str` string
+  keys (previously silently dropped); `extract_body_span()` includes outer-span
+  fallback when inner span is empty/zero-length.
+
+### Changed
+- `Persona::Analysis` policy allowlist now includes `ParcelBridge`.
+- `ViteDetection` struct gains `is_esm` field; `collect_evidence()` reports
+  per-gate ESM status.
+- `ViteBridge` executor path now uses `eval_module()` for ESM, `eval()` for IIFE.
+- Classification priority reordered: Parcel at 3 (before Browserify), ESM at 6.
+
+### Quality Gates
+- `cargo test -p iv8-core --lib`: 286/286 passed (+13 from baseline 273).
+- `cargo test --test test_entry_multi_bundler`: 34/34 passed (+9 from baseline 25).
+- `cargo test --test test_kernel_init`: 94/94 passed.
+- `cargo check --workspace`: 0 errors.
+
+### Known Limitations
+- Parcel deep module graph extraction is v0.9+; only marker detection + direct eval.
+- Vite ESM: multi-module is inline/shimm-only (up to 3 deps); no external resolution.
+- Vite ESM: dynamic `import()` always returns rejected Promise (bounded).
+- Vite ESM: TLA uses microtask drain only; no module graph/ordered completion guarantees.
+- `Function.prototype.call` hook in `safe_bridge_prelude` remains deferred (low priority).
+
 ## [0.8.67] - 2026-06-22
 
 > Local milestone: M4 Tools/Codegen closeout and bounded surface coverage audit.
