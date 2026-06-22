@@ -347,7 +347,7 @@ fn test_vite_esm_detection_in_plan() {
 }
 
 #[test]
-fn test_vite_g8_tla_does_not_hang() {
+fn test_vite_tla_does_not_hang() {
     let src = "const x = await Promise.resolve(42); export { x };";
     let mut kernel = common::make_kernel();
     kernel.eval(iv8_core::entry::vite::esm_prelude(), EvalOpts::default()).unwrap();
@@ -357,7 +357,7 @@ fn test_vite_g8_tla_does_not_hang() {
 }
 
 #[test]
-fn test_vite_g6_import_meta_shim() {
+fn test_vite_import_meta_url_shim() {
     let src = "export const url = import.meta.url;";
     let mut kernel = common::make_kernel();
     kernel.eval(iv8_core::entry::vite::esm_prelude(), EvalOpts::default()).unwrap();
@@ -367,7 +367,7 @@ fn test_vite_g6_import_meta_shim() {
 }
 
 #[test]
-fn test_vite_g7_dynamic_import_rejected() {
+fn test_vite_dynamic_import_returns_rejected_promise() {
     let src = r#"
         export async function load() {
             try { await globalThis.__iv8_dynamic_import('./dep'); return 'resolved'; }
