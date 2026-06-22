@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.68 (M5 Bundler — Parcel + Vite ESM G5-G8 + bridge quality) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.68 (M5 Bundler + M6 gate audit — v0.9 blocked pending 精装及以下≈100%) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
