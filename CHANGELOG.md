@@ -6,6 +6,50 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.71] - 2026-06-23
+
+> Local milestone: browser surface coverage baseline + performance.timeOrigin fix
+> (家具收束 — replaces M6 gate audit §5.5 "Environment P2-P4 filling" with
+> curated priority coverage baseline)
+
+### Added
+- `test_surface_coverage.rs` (30 tests): curated priority probe matrix covering
+  9 dimensions — Navigator core (18), NavigatorUAData (7), WorkerNavigator (5),
+  Screen (10), Window (7), Performance (6), high-signal stubs (9), descriptor
+  shape (12), global constructors (7). T1 coverage 95%, T2+ 54%.
+- 3 new behavior probes: `GetGamepadsProbe`, `RequestMediaKeySystemAccessProbe`,
+  `RequestMidiAccessProbe` in `crates/iv8-core/src/shims/probes/`.
+- 3 new probe integration tests in `test_shims_probes.rs` (10 total).
+- 3 new timeOrigin coherence tests in `test_events_clock.rs` (13 total).
+- `v0.8.71-coverage-baseline.md`: tiered T1-T5 coverage statistics.
+
+### Fixed
+- `performance.timeOrigin` no longer hardcoded to `0` (`date_interceptor.rs`).
+  Logical mode: `1704067200000` (IV8 epoch). System mode: system wall-clock at
+  context creation. Coherence invariant `Date.now() - timeOrigin ≈ performance.now()`
+  verified.
+
+### Quality Gates
+- `cargo test -p iv8-core --lib`: 293/293 passed (+3 probe unit tests).
+- `cargo test --test test_surface_coverage`: 30/30 passed (NEW).
+- `cargo test --test test_events_clock`: 13/13 passed (+3).
+- `cargo test --test test_shims_probes`: 10/10 passed (+3).
+- `cargo test --test test_surface_navigator`: 37/37 passed.
+- `cargo test --test test_kernel_init`: 94/94 passed.
+- `cargo test --test test_entry_multi_bundler`: 34/34 passed.
+- `cargo check --workspace`: 0 errors.
+
+### Known Limitations
+- Coverage baseline is curated priority (84 items), not full 1284 interfaces.
+- Performance.timing/navigation are JS shim placeholders (stub-only, not real
+  Navigation Timing).
+- getGamepads/EME/MIDI probes verify T1-T2 basic shape; full GamepadList, EME
+  config, MIDI options behavior → v0.9+.
+- Many Navigator properties (cookieEnabled, onLine, doNotTrack, pdfViewerEnabled,
+  javaEnabled) are T1 type-verified only; value correctness not verified.
+- Deep parity (PerformanceObserver, Navigation Timing L2, sub-ms precision, UAData
+  brands coordination, full descriptor/prototype parity) → v0.9+.
+
 ## [0.8.70] - 2026-06-23
 
 > Local milestone: Navigator profile consistency + WorkerNavigator

@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.70 (Navigator consistency + WorkerNavigator) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.71 (browser surface coverage baseline + performance.timeOrigin fix) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
@@ -13,6 +13,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Codegen stability and bounded surface audit**: `iv8-surface-codegen` golden snapshots, 1284/1284 current IR templates generated+installed, Image/Option/Audio named constructor aliases, and explicit non-claim boundary for Chrome/Web Platform parity (v0.8.67)
 - **Bundler refinement (M5)**: Parcel detection + bridge (`$parcel$`/`parcelRequire`); Vite ESM G5-G8 minimal support (import.meta, dynamic import, TLA); Browserify bridge quality fixes (string-key deps, span fallback) (v0.8.68)
 - **Infrastructure convergence**: CI Rust toolchain pinned to 1.96.0; env_inject skips 26 direct keys already covered by native accessors (v0.8.69)
+- **Browser surface coverage baseline**: curated priority probe matrix (30 tests, 9 dimensions); tiered T1-T5 coverage statistics; timeOrigin fix (no longer hardcoded 0) (v0.8.71)
 - **Navigator consistency + WorkerNavigator**: 10 new integration tests for Navigator cross-property coherence and WorkerNavigator runtime shape; WorkerNavigator illegal_constructor fix (v0.8.70)
 - **Generated Navigator skeletons**: 46 IDL properties via codegen + native template unification (v0.8.58/0.8.60)
 - **Native Navigator stubs**: connection, getBattery, sendBeacon, geolocation, clipboard, credentials (v0.8.55); getGamepads, requestMediaKeySystemAccess, requestMIDIAccess (v0.8.61)
