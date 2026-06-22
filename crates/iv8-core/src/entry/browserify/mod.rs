@@ -290,6 +290,7 @@ fn extract_deps_ast(val: &Expr) -> std::collections::HashMap<String, usize> {
                     if let Prop::KeyValue(kv) = &**p {
                         let name = match &kv.key {
                             PropName::Ident(i) => i.sym.to_string(),
+                            PropName::Str(s) => s.value.as_str().unwrap_or_default().to_string(),
                             _ => continue,
                         };
                         let dep_id = match &*kv.value {
@@ -317,13 +318,19 @@ fn extract_body_span(val: &Expr, source: &str) -> String {
         let lo = expr.span().lo.0 as usize;
         let hi = expr.span().hi.0 as usize;
         if lo < hi && hi <= source.len() {
-            source[lo..hi].to_string()
-        } else {
-            String::new()
+            let body = &source[lo..hi];
+            if !body.trim().is_empty() {
+                return body.to_string();
+            }
         }
-    } else {
-        String::new()
+        // Fallback: use outer value span when inner span is empty/zero-length
+        let lo = val.span().lo.0 as usize;
+        let hi = val.span().hi.0 as usize;
+        if lo < hi && hi <= source.len() {
+            return source[lo..hi].to_string();
+        }
     }
+    String::new()
 }
 
 #[cfg(test)]
@@ -412,5 +419,16 @@ mod tests {
     fn test_extract_modules_non_browserify_returns_none() {
         let src = "var x = 1 + 1;";
         assert!(extract_modules(src).is_none());
+    }
+
+    #[test]
+    fn test_extract_deps_with_string_keys() {
+        let src = r#"(function(modules,cache,entries){function r(id){return id;}return r})({1:[function(require,module,exports){var react=require('./react');var lodash=require('./lodash')},{"react":2,"lodash":3}]},{},[1]);"#;
+        let graph = extract_modules(src).expect("should parse");
+        assert_eq!(graph.module_count, 1);
+        // Module 1 depends on module 2 (react) and module 3 (lodash)
+        let m = &graph.modules[0];
+        assert!(m.dependencies.contains_key("react"));
+        assert!(m.dependencies.contains_key("lodash"));
     }
 }
