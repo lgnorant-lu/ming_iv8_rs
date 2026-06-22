@@ -6,6 +6,41 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.70] - 2026-06-23
+
+> Local milestone: Navigator profile consistency + WorkerNavigator
+> (精装收束 per M6 gate audit §5.5).
+
+### Added
+- WorkerNavigator runtime preflight audit: 4 tests verifying
+  typeof === "function", prototype exists, DONT_ENUM,
+  constructor throws TypeError.
+- Navigator profile consistency tests (6): UA platform family
+  coherence (family mapping, not equality), uadata platform
+  coherence, uadata mobile vs BrowserProfile.ua_mobile,
+  hardwareConcurrency > 0, deviceMemory > 0, override UA.
+- `install_worker_navigator()` in `native_env.rs`: native
+  WorkerNavigator template with `illegal_constructor`,
+  inheriting from generated `create_worker_navigator_template`.
+  Fixes gap where `new WorkerNavigator()` did not throw.
+
+### Changed
+- `install_native_env()` now calls `install_worker_navigator()`
+  after Navigator and Screen installation.
+
+### Quality Gates
+- `cargo test -p iv8-core --lib`: 290/290 passed.
+- `cargo test --test test_surface_navigator`: 37/37 passed
+  (27 existing + 10 new).
+- `cargo test --test test_entry_multi_bundler`: 34/34 passed.
+- `cargo test --test test_kernel_init`: 94/94 passed.
+- `cargo check --workspace`: 0 errors.
+
+### Known Limitations
+- No real Worker execution context.
+- No worker-specific properties (importScripts, close).
+- `self.navigator` still returns Navigator.
+
 ## [0.8.69] - 2026-06-22
 
 > Local milestone: Infrastructure convergence (CI toolchain pin + env_inject native key skip).
