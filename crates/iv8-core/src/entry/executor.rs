@@ -339,7 +339,8 @@ fn apply_strategy_prelude(
                 .map_err(|e| format!("browserify prelude: {}", e))?;
             Ok(())
         }
-        StrategyKind::RollupBridge | StrategyKind::ViteBridge | StrategyKind::UmdBridge => Ok(()),
+        StrategyKind::RollupBridge | StrategyKind::ViteBridge | StrategyKind::UmdBridge
+            | StrategyKind::ParcelBridge => Ok(()),
     }
 }
 
@@ -417,6 +418,13 @@ fn collect_strategy_evidence(
 
     if matches!(kind, StrategyKind::UmdBridge) {
         let (graph, evidence, diagnostics) = crate::entry::umd::collect_evidence(kernel);
+        result.module_graph = Some(graph);
+        result.observed_evidence.extend(evidence);
+        result.diagnostic_records.extend(diagnostics);
+    }
+
+    if matches!(kind, StrategyKind::ParcelBridge) {
+        let (graph, evidence, diagnostics) = crate::entry::parcel::collect_evidence(kernel);
         result.module_graph = Some(graph);
         result.observed_evidence.extend(evidence);
         result.diagnostic_records.extend(diagnostics);
@@ -696,6 +704,7 @@ fn derive_trace_sources(kind: &StrategyKind) -> Vec<TraceSourceKind> {
         StrategyKind::SourceAst => vec![TraceSourceKind::SourceAst],
         StrategyKind::SourceRegex => vec![TraceSourceKind::SourceAst],
         StrategyKind::CdpProbe => vec![TraceSourceKind::Cdp],
+        StrategyKind::ParcelBridge => vec![TraceSourceKind::TransparentHook],
     }
 }
 

@@ -547,6 +547,26 @@ pub fn generate_candidates(
                 None,
             );
         }
+        SampleKind::ParcelBundle => {
+            try_add(
+                StrategyKind::ParcelBridge,
+                85,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["direct eval of Parcel bundle; parcelRequire is self-executing"],
+                None,
+            );
+            try_add(
+                StrategyKind::RuntimeTransparent,
+                50,
+                false,
+                false,
+                vec![Evidence::Trace, Evidence::Diagnostics],
+                vec!["overkill for single-scope parcel"],
+                None,
+            );
+        }
         SampleKind::UnknownIife => {
             try_add(
                 StrategyKind::RuntimeTransparent,
@@ -714,6 +734,7 @@ fn determine_expected_evidence(
         StrategyKind::SourceAst => vec![Evidence::Trace],
         StrategyKind::SourceRegex => vec![Evidence::Trace],
         StrategyKind::CdpProbe => vec![Evidence::Diagnostics],
+        StrategyKind::ParcelBridge => vec![Evidence::Trace],
     };
 
     // Add category-specific augmentation
@@ -767,6 +788,7 @@ fn kind_to_id(kind: &StrategyKind) -> &'static str {
         StrategyKind::RollupBridge => "rollup_bridge",
         StrategyKind::UmdBridge => "umd_bridge",
         StrategyKind::ViteBridge => "vite_bridge",
+        StrategyKind::ParcelBridge => "parcel_bridge",
     }
 }
 

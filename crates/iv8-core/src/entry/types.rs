@@ -34,6 +34,7 @@ pub enum SampleKind {
     ViteBundle,
     UmdBundle,
     UnknownIife,
+    ParcelBundle,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -50,6 +51,7 @@ pub enum StrategyKind {
     RollupBridge,
     UmdBridge,
     ViteBridge,
+    ParcelBridge,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

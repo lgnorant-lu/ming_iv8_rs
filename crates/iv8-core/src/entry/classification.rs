@@ -37,42 +37,48 @@ pub fn classify(source: &str, _signals: &[String]) -> SampleKind {
         return SampleKind::WebpackRuntime;
     }
 
-    // Priority 3: Browserify strong (prelude call shape)
+    // Priority 3: Parcel bundle ($parcel$ markers — take precedence over Browserify
+    // because parcel bundles can contain function(require,module,exports) wrappers)
+    if raw_signals.has_parcel {
+        return SampleKind::ParcelBundle;
+    }
+
+    // Priority 4: Browserify strong (prelude call shape)
     if raw_signals.has_browserify_strong {
         return SampleKind::BrowserifyRuntime;
     }
 
-    // Priority 4: Vite IIFE bundle
+    // Priority 5: Vite IIFE bundle
     if raw_signals.has_vite {
         return SampleKind::ViteBundle;
     }
 
-    // Priority 5: Rollup IIFE bundle (PURE annotations, interop helpers)
+    // Priority 6: Rollup IIFE bundle (PURE annotations, interop helpers)
     if raw_signals.has_rollup_iife {
         return SampleKind::RollupBundle;
     }
 
-    // Priority 6: UMD bundle (AMD/CJS/global branch chain)
+    // Priority 7: UMD bundle (AMD/CJS/global branch chain)
     if raw_signals.has_rollup_umd {
         return SampleKind::UmdBundle;
     }
 
-    // Priority 7: Browserify weak (CommonJS wrappers, no prelude)
+    // Priority 8: Browserify weak (CommonJS wrappers, no prelude)
     if raw_signals.has_browserify_weak {
         return SampleKind::BrowserifyRuntime;
     }
 
-    // Priority 8: Eval-heavy
+    // Priority 9: Eval-heavy
     if raw_signals.eval_call_count >= 3 {
         return SampleKind::EvalHeavy;
     }
 
-    // Priority 9: Closure-captured runtime (heuristic)
+    // Priority 10: Closure-captured runtime (heuristic)
     if raw_signals.has_early_reference_capture {
         return SampleKind::ClosureCapturedRuntime;
     }
 
-    // Priority 10: Unknown IIFE wrapper
+    // Priority 11: Unknown IIFE wrapper
     if raw_signals.has_iife_wrapper {
         return SampleKind::UnknownIife;
     }
@@ -122,6 +128,9 @@ pub fn extract_signals(source: &str) -> Vec<String> {
     if set.has_iife_wrapper {
         signals.push("iife_wrapper".into());
     }
+    if set.has_parcel {
+        signals.push("parcel".into());
+    }
 
     signals
 }
@@ -143,6 +152,7 @@ struct SignalSet {
     has_rollup_umd: bool,
     has_vite: bool,
     has_iife_wrapper: bool,
+    has_parcel: bool,
 }
 
 impl SignalSet {
@@ -161,6 +171,7 @@ impl SignalSet {
         let has_rollup_umd = detect_rollup_umd(source);
         let has_vite = detect_vite(source);
         let has_iife_wrapper = detect_iife_wrapper(source);
+        let has_parcel = detect_parcel(source);
 
         SignalSet {
             has_webpack_require,
@@ -175,6 +186,7 @@ impl SignalSet {
             has_rollup_umd,
             has_vite,
             has_iife_wrapper,
+            has_parcel,
         }
     }
 }
@@ -349,6 +361,14 @@ fn detect_vite(source: &str) -> bool {
     has_vite && !source.contains("__webpack_require__")
 }
 
+/// Parcel signal: $parcel$ scope prefix and/or parcelRequire function.
+fn detect_parcel(source: &str) -> bool {
+    let has_parcel_marker = source.contains("$parcel$");
+    let has_parcel_require = source.contains("parcelRequire");
+    // Require co-occurrence to avoid false-positive on generic variable names
+    has_parcel_marker && has_parcel_require
+}
+
 /// IIFE wrapper detection: self-executing function pattern.
 /// Strips leading `//` comment lines before checking for IIFE prefix.
 fn detect_iife_wrapper(source: &str) -> bool {
@@ -513,9 +533,21 @@ mod tests {
     }
 
     #[test]
+    fn test_extract_signals_parcel() {
+        let s = extract_signals("var $parcel$global={};function parcelRequire(id){return{}};");
+        assert!(s.contains(&"parcel".into()));
+    }
+
+    #[test]
     fn test_extract_signals_iife() {
         let s = extract_signals("(function(){return 42;})()");
         assert!(s.contains(&"iife_wrapper".into()));
+    }
+
+    #[test]
+    fn test_parcel_bundle_classification() {
+        let src = "var $parcel$global={}; function parcelRequire(id){return{}};";
+        assert_eq!(classify(src, &[]), SampleKind::ParcelBundle);
     }
 
     #[test]

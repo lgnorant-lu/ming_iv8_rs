@@ -284,3 +284,53 @@ fn test_browserify_ast_extraction_non_browserify() {
     let src = "var x = 1;";
     assert!(iv8_core::entry::browserify::extract_modules(src).is_none());
 }
+
+#[test]
+fn test_parcel_detect_basic() {
+    let src = "var $parcel$global={};function parcelRequire(id){return{}};";
+    let kind = classification::classify(src, &[]);
+    assert_eq!(kind, SampleKind::ParcelBundle);
+}
+
+#[test]
+fn test_parcel_classification_with_plan() {
+    let src = "var $parcel$global={};function parcelRequire(id){return{}};";
+    let plan = planner::plan_entry(src, Persona::Analysis, None, vec![]);
+    let has_parcel = plan
+        .candidate_strategies
+        .iter()
+        .any(|c| matches!(c.strategy_kind, StrategyKind::ParcelBridge));
+    assert!(has_parcel);
+}
+
+#[test]
+fn test_parcel_not_detected_plain_cjs() {
+    let src = "var require = function(id) { return {}; }; module.exports = 42;";
+    let plan = planner::plan_entry(src, Persona::Analysis, None, vec![]);
+    let has_parcel = plan
+        .candidate_strategies
+        .iter()
+        .any(|c| matches!(c.strategy_kind, StrategyKind::ParcelBridge));
+    assert!(!has_parcel);
+}
+
+#[test]
+fn test_parcel_execution_direct_eval() {
+    let src = r#"
+        var $parcel$global = {};
+        function parcelRequire(id) {
+            var modules = {1: [function(require,module,exports){
+                module.exports = 42;
+            },{}]};
+            var mod = {exports:{}};
+            modules[id][0](parcelRequire, mod, mod.exports);
+            return mod.exports;
+        }
+    "#;
+    let mut kernel = common::make_kernel();
+    kernel.eval(src, EvalOpts::default()).unwrap();
+    let val = kernel.eval_to_rust_value(
+        "(function(){try{return parcelRequire(1)}catch(e){return 'ERR:'+e.message}})()",
+    );
+    assert_eq!(val, iv8_core::convert::RustValue::Int(42));
+}

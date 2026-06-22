@@ -101,6 +101,7 @@ impl Persona {
                         | super::types::StrategyKind::RollupBridge
                         | super::types::StrategyKind::UmdBridge
                         | super::types::StrategyKind::ViteBridge
+                        | super::types::StrategyKind::ParcelBridge
                         | super::types::StrategyKind::CdpProbe
                 ),
                 HookLevel::Aggressive => true,
@@ -108,6 +109,7 @@ impl Persona {
                     kind,
                     super::types::StrategyKind::WebpackBridge
                         | super::types::StrategyKind::BrowserifyBridge
+                        | super::types::StrategyKind::ParcelBridge
                         | super::types::StrategyKind::CdpProbe
                 ),
             },

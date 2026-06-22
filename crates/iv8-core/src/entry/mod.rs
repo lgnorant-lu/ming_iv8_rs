@@ -5,6 +5,7 @@ pub mod diagnostics;
 pub mod dispatch;
 pub mod executor;
 pub mod hooks;
+pub mod parcel;
 pub mod planner;
 pub mod policy;
 pub mod rollup;
