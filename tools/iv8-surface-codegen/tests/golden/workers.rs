@@ -5,18 +5,18 @@ use super::empty_constructor;
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn message_channel_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn message_channel_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn message_channel_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn message_channel_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -26,7 +26,7 @@ unsafe extern "C" fn message_channel_get_2(info: *const v8::FunctionCallbackInfo
 /// Create FunctionTemplate for MessageChannel.
 pub fn create_message_channel_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "MessageChannel").unwrap());
@@ -53,81 +53,81 @@ pub fn create_message_channel_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn worker_location_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn worker_location_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn worker_location_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn worker_location_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn worker_location_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn worker_location_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn worker_location_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn worker_location_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn worker_location_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_location_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
@@ -137,7 +137,7 @@ unsafe extern "C" fn worker_location_get_9(info: *const v8::FunctionCallbackInfo
 /// Create FunctionTemplate for WorkerLocation.
 pub fn create_worker_location_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "WorkerLocation").unwrap());
@@ -206,54 +206,54 @@ pub fn create_worker_location_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn worker_navigator_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_navigator_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_navigator_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_navigator_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_navigator_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_navigator_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_navigator_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_navigator_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_navigator_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_navigator_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_navigator_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_navigator_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -263,7 +263,7 @@ unsafe extern "C" fn worker_navigator_get_6(info: *const v8::FunctionCallbackInf
 /// Create FunctionTemplate for WorkerNavigator.
 pub fn create_worker_navigator_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "WorkerNavigator").unwrap());
@@ -314,63 +314,63 @@ pub fn create_worker_navigator_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn message_port_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn message_port_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn message_port_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn message_port_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn message_port_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn message_port_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn message_port_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn message_port_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn message_port_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn message_port_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn message_port_set_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn message_port_set_5(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for MessagePort.
 pub fn create_message_port_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "MessagePort").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -419,63 +419,63 @@ pub fn create_message_port_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn service_worker_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn service_worker_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_set_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_set_5(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for ServiceWorker.
 pub fn create_service_worker_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ServiceWorker").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -522,107 +522,107 @@ pub fn create_service_worker_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn service_worker_container_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_set_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_container_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_container_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_container_set_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_container_set_9(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for ServiceWorkerContainer.
 pub fn create_service_worker_container_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ServiceWorkerContainer").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -697,157 +697,157 @@ pub fn create_service_worker_container_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn service_worker_registration_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_set_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_set_9(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_registration_get_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_op_14(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_op_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_op_15(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_op_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_16(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_16(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_registration_get_17(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_registration_get_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -857,11 +857,11 @@ unsafe extern "C" fn service_worker_registration_get_17(info: *const v8::Functio
 /// Create FunctionTemplate for ServiceWorkerRegistration.
 pub fn create_service_worker_registration_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ServiceWorkerRegistration").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -982,27 +982,27 @@ pub fn create_service_worker_registration_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn worker_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -1012,11 +1012,11 @@ unsafe extern "C" fn worker_op_3(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for Worker.
 pub fn create_worker_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "Worker").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -1051,128 +1051,128 @@ pub fn create_worker_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn worker_global_scope_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_set_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_set_5(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn worker_global_scope_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn worker_global_scope_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_set_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn worker_global_scope_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn worker_global_scope_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_set_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_set_9(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn worker_global_scope_get_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn worker_global_scope_set_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn worker_global_scope_set_10(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for WorkerGlobalScope.
 pub fn create_worker_global_scope_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "WorkerGlobalScope").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -1253,306 +1253,306 @@ pub fn create_worker_global_scope_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_5(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_9(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_10(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_11(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_12(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_13(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_14(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_14(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_14(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_15(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_15(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_15(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_16(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_16(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_17(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_17(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_17(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_18(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_18(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_18(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_18(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_19(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_19(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_19(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_19(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_20(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_20(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_20(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_20(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_21(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_21(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_21(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_21(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_22(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_22(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_22(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_22(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_23(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_23(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_23(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_23(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn service_worker_global_scope_get_24(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_get_24(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn service_worker_global_scope_set_24(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn service_worker_global_scope_set_24(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for ServiceWorkerGlobalScope.
 pub fn create_service_worker_global_scope_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ServiceWorkerGlobalScope").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 

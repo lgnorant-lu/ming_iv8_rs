@@ -5,66 +5,66 @@ use super::empty_constructor;
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn svg_angle_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_angle_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_angle_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_angle_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_angle_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_angle_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_angle_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_angle_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_angle_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_angle_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -74,7 +74,7 @@ unsafe extern "C" fn svg_angle_op_6(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for SVGAngle.
 pub fn create_svg_angle_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAngle").unwrap());
@@ -130,18 +130,18 @@ pub fn create_svg_angle_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_angle_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_angle_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_angle_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_angle_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -151,7 +151,7 @@ unsafe extern "C" fn svg_animated_angle_get_2(info: *const v8::FunctionCallbackI
 /// Create FunctionTemplate for SVGAnimatedAngle.
 pub fn create_svg_animated_angle_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedAngle").unwrap());
@@ -178,22 +178,22 @@ pub fn create_svg_animated_angle_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_boolean_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_boolean_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_boolean_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_boolean_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_animated_boolean_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_boolean_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
@@ -203,7 +203,7 @@ unsafe extern "C" fn svg_animated_boolean_get_2(info: *const v8::FunctionCallbac
 /// Create FunctionTemplate for SVGAnimatedBoolean.
 pub fn create_svg_animated_boolean_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedBoolean").unwrap());
@@ -231,22 +231,22 @@ pub fn create_svg_animated_boolean_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_enumeration_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_enumeration_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_enumeration_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_enumeration_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_animated_enumeration_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_enumeration_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
@@ -256,7 +256,7 @@ unsafe extern "C" fn svg_animated_enumeration_get_2(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGAnimatedEnumeration.
 pub fn create_svg_animated_enumeration_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedEnumeration").unwrap());
@@ -284,22 +284,22 @@ pub fn create_svg_animated_enumeration_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_integer_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_integer_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_integer_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_integer_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_animated_integer_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_integer_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
@@ -309,7 +309,7 @@ unsafe extern "C" fn svg_animated_integer_get_2(info: *const v8::FunctionCallbac
 /// Create FunctionTemplate for SVGAnimatedInteger.
 pub fn create_svg_animated_integer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedInteger").unwrap());
@@ -337,18 +337,18 @@ pub fn create_svg_animated_integer_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_length_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_length_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_length_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_length_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -358,7 +358,7 @@ unsafe extern "C" fn svg_animated_length_get_2(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGAnimatedLength.
 pub fn create_svg_animated_length_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedLength").unwrap());
@@ -385,18 +385,18 @@ pub fn create_svg_animated_length_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_length_list_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_length_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_length_list_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_length_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -406,7 +406,7 @@ unsafe extern "C" fn svg_animated_length_list_get_2(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGAnimatedLengthList.
 pub fn create_svg_animated_length_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedLengthList").unwrap());
@@ -433,22 +433,22 @@ pub fn create_svg_animated_length_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_number_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_number_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_number_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_number_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_animated_number_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_number_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
@@ -458,7 +458,7 @@ unsafe extern "C" fn svg_animated_number_get_2(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGAnimatedNumber.
 pub fn create_svg_animated_number_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedNumber").unwrap());
@@ -486,18 +486,18 @@ pub fn create_svg_animated_number_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_number_list_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_number_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_number_list_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_number_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -507,7 +507,7 @@ unsafe extern "C" fn svg_animated_number_list_get_2(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGAnimatedNumberList.
 pub fn create_svg_animated_number_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedNumberList").unwrap());
@@ -534,18 +534,18 @@ pub fn create_svg_animated_number_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_preserve_aspect_ratio_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_preserve_aspect_ratio_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_preserve_aspect_ratio_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_preserve_aspect_ratio_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -555,7 +555,7 @@ unsafe extern "C" fn svg_animated_preserve_aspect_ratio_get_2(info: *const v8::F
 /// Create FunctionTemplate for SVGAnimatedPreserveAspectRatio.
 pub fn create_svg_animated_preserve_aspect_ratio_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedPreserveAspectRatio").unwrap());
@@ -582,18 +582,18 @@ pub fn create_svg_animated_preserve_aspect_ratio_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_rect_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_rect_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_rect_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_rect_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -603,7 +603,7 @@ unsafe extern "C" fn svg_animated_rect_get_2(info: *const v8::FunctionCallbackIn
 /// Create FunctionTemplate for SVGAnimatedRect.
 pub fn create_svg_animated_rect_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedRect").unwrap());
@@ -630,22 +630,22 @@ pub fn create_svg_animated_rect_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_string_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_string_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_animated_string_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_string_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_animated_string_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_string_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
@@ -655,7 +655,7 @@ unsafe extern "C" fn svg_animated_string_get_2(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGAnimatedString.
 pub fn create_svg_animated_string_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedString").unwrap());
@@ -683,18 +683,18 @@ pub fn create_svg_animated_string_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animated_transform_list_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_transform_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animated_transform_list_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animated_transform_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -704,7 +704,7 @@ unsafe extern "C" fn svg_animated_transform_list_get_2(info: *const v8::Function
 /// Create FunctionTemplate for SVGAnimatedTransformList.
 pub fn create_svg_animated_transform_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedTransformList").unwrap());
@@ -731,66 +731,66 @@ pub fn create_svg_animated_transform_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_length_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_length_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_length_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_length_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_length_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -800,7 +800,7 @@ unsafe extern "C" fn svg_length_op_6(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for SVGLength.
 pub fn create_svg_length_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGLength").unwrap());
@@ -856,90 +856,90 @@ pub fn create_svg_length_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_length_list_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_length_list_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_length_list_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -949,7 +949,7 @@ unsafe extern "C" fn svg_length_list_op_10(info: *const v8::FunctionCallbackInfo
 /// Create FunctionTemplate for SVGLengthList.
 pub fn create_svg_length_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGLengthList").unwrap());
@@ -1032,23 +1032,23 @@ pub fn create_svg_length_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_number_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for SVGNumber.
 pub fn create_svg_number_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGNumber").unwrap());
@@ -1070,90 +1070,90 @@ pub fn create_svg_number_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_number_list_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_number_list_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_number_list_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -1163,7 +1163,7 @@ unsafe extern "C" fn svg_number_list_op_10(info: *const v8::FunctionCallbackInfo
 /// Create FunctionTemplate for SVGNumberList.
 pub fn create_svg_number_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGNumberList").unwrap());
@@ -1246,36 +1246,36 @@ pub fn create_svg_number_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_path_segment_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_path_segment_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_path_segment_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_path_segment_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_path_segment_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_path_segment_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_path_segment_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_path_segment_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for SVGPathSegment.
 pub fn create_svg_path_segment_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGPathSegment").unwrap());
@@ -1304,90 +1304,90 @@ pub fn create_svg_path_segment_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_point_list_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_point_list_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_point_list_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -1397,7 +1397,7 @@ unsafe extern "C" fn svg_point_list_op_10(info: *const v8::FunctionCallbackInfo)
 /// Create FunctionTemplate for SVGPointList.
 pub fn create_svg_point_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGPointList").unwrap());
@@ -1480,36 +1480,36 @@ pub fn create_svg_point_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_preserve_aspect_ratio_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_preserve_aspect_ratio_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_preserve_aspect_ratio_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_preserve_aspect_ratio_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_preserve_aspect_ratio_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_preserve_aspect_ratio_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_preserve_aspect_ratio_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_preserve_aspect_ratio_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for SVGPreserveAspectRatio.
 pub fn create_svg_preserve_aspect_ratio_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGPreserveAspectRatio").unwrap());
@@ -1538,90 +1538,90 @@ pub fn create_svg_preserve_aspect_ratio_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_string_list_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_string_list_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_string_list_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_string_list_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_string_list_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_string_list_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_string_list_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_string_list_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_string_list_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_string_list_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_string_list_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -1631,7 +1631,7 @@ unsafe extern "C" fn svg_string_list_op_10(info: *const v8::FunctionCallbackInfo
 /// Create FunctionTemplate for SVGStringList.
 pub fn create_svg_string_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGStringList").unwrap());
@@ -1714,81 +1714,81 @@ pub fn create_svg_string_list_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_transform_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -1798,7 +1798,7 @@ unsafe extern "C" fn svg_transform_op_9(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for SVGTransform.
 pub fn create_svg_transform_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGTransform").unwrap());
@@ -1873,108 +1873,108 @@ pub fn create_svg_transform_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_transform_list_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_transform_list_op_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_transform_list_op_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -1984,7 +1984,7 @@ unsafe extern "C" fn svg_transform_list_op_12(info: *const v8::FunctionCallbackI
 /// Create FunctionTemplate for SVGTransformList.
 pub fn create_svg_transform_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGTransformList").unwrap());
@@ -2084,7 +2084,7 @@ pub fn create_svg_transform_list_template<'s>(
 /// Create FunctionTemplate for SVGUnitTypes.
 pub fn create_svg_unit_types_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGUnitTypes").unwrap());
@@ -2099,27 +2099,27 @@ pub fn create_svg_unit_types_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -2129,11 +2129,11 @@ unsafe extern "C" fn svg_element_get_3(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for SVGElement.
 pub fn create_svg_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2168,11 +2168,11 @@ pub fn create_svg_element_template<'s>(
 /// Create FunctionTemplate for SVGUseElementShadowRoot.
 pub fn create_svg_use_element_shadow_root_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGUseElementShadowRoot").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2186,111 +2186,111 @@ pub fn create_svg_use_element_shadow_root_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_animation_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_animation_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_animation_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_animation_element_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_animation_element_op_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_animation_element_op_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -2300,11 +2300,11 @@ unsafe extern "C" fn svg_animation_element_op_11(info: *const v8::FunctionCallba
 /// Create FunctionTemplate for SVGAnimationElement.
 pub fn create_svg_animation_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimationElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2394,18 +2394,18 @@ pub fn create_svg_animation_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_clip_path_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_clip_path_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_clip_path_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_clip_path_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -2415,11 +2415,11 @@ unsafe extern "C" fn svg_clip_path_element_get_2(info: *const v8::FunctionCallba
 /// Create FunctionTemplate for SVGClipPathElement.
 pub fn create_svg_clip_path_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGClipPathElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2445,63 +2445,63 @@ pub fn create_svg_clip_path_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_component_transfer_function_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_component_transfer_function_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_component_transfer_function_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_component_transfer_function_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_component_transfer_function_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_component_transfer_function_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_component_transfer_function_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_component_transfer_function_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_component_transfer_function_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_component_transfer_function_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_component_transfer_function_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_component_transfer_function_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_component_transfer_function_element_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_component_transfer_function_element_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -2511,11 +2511,11 @@ unsafe extern "C" fn svg_component_transfer_function_element_get_7(info: *const 
 /// Create FunctionTemplate for SVGComponentTransferFunctionElement.
 pub fn create_svg_component_transfer_function_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGComponentTransferFunctionElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2574,11 +2574,11 @@ pub fn create_svg_component_transfer_function_element_template<'s>(
 /// Create FunctionTemplate for SVGDescElement.
 pub fn create_svg_desc_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGDescElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2592,27 +2592,27 @@ pub fn create_svg_desc_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_blend_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_blend_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_blend_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_blend_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_blend_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_blend_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -2622,11 +2622,11 @@ unsafe extern "C" fn svgfe_blend_element_get_3(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGFEBlendElement.
 pub fn create_svgfe_blend_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEBlendElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2658,27 +2658,27 @@ pub fn create_svgfe_blend_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_color_matrix_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_color_matrix_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_color_matrix_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_color_matrix_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_color_matrix_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_color_matrix_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -2688,11 +2688,11 @@ unsafe extern "C" fn svgfe_color_matrix_element_get_3(info: *const v8::FunctionC
 /// Create FunctionTemplate for SVGFEColorMatrixElement.
 pub fn create_svgfe_color_matrix_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEColorMatrixElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2724,9 +2724,9 @@ pub fn create_svgfe_color_matrix_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_component_transfer_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_component_transfer_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -2736,11 +2736,11 @@ unsafe extern "C" fn svgfe_component_transfer_element_get_1(info: *const v8::Fun
 /// Create FunctionTemplate for SVGFEComponentTransferElement.
 pub fn create_svgfe_component_transfer_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEComponentTransferElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2760,63 +2760,63 @@ pub fn create_svgfe_component_transfer_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_composite_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_composite_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_composite_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_composite_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_composite_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_composite_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_composite_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_composite_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_composite_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_composite_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_composite_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_composite_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_composite_element_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_composite_element_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -2826,11 +2826,11 @@ unsafe extern "C" fn svgfe_composite_element_get_7(info: *const v8::FunctionCall
 /// Create FunctionTemplate for SVGFECompositeElement.
 pub fn create_svgfe_composite_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFECompositeElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -2886,108 +2886,108 @@ pub fn create_svgfe_composite_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_convolve_matrix_element_get_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -2997,11 +2997,11 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_12(info: *const v8::Funct
 /// Create FunctionTemplate for SVGFEConvolveMatrixElement.
 pub fn create_svgfe_convolve_matrix_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEConvolveMatrixElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3087,45 +3087,45 @@ pub fn create_svgfe_convolve_matrix_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_diffuse_lighting_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_diffuse_lighting_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_diffuse_lighting_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_diffuse_lighting_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_diffuse_lighting_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3135,11 +3135,11 @@ unsafe extern "C" fn svgfe_diffuse_lighting_element_get_5(info: *const v8::Funct
 /// Create FunctionTemplate for SVGFEDiffuseLightingElement.
 pub fn create_svgfe_diffuse_lighting_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEDiffuseLightingElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3183,45 +3183,45 @@ pub fn create_svgfe_diffuse_lighting_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_displacement_map_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_displacement_map_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_displacement_map_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_displacement_map_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_displacement_map_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_displacement_map_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_displacement_map_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_displacement_map_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_displacement_map_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_displacement_map_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3231,11 +3231,11 @@ unsafe extern "C" fn svgfe_displacement_map_element_get_5(info: *const v8::Funct
 /// Create FunctionTemplate for SVGFEDisplacementMapElement.
 pub fn create_svgfe_displacement_map_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEDisplacementMapElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3279,18 +3279,18 @@ pub fn create_svgfe_displacement_map_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_distant_light_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_distant_light_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_distant_light_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_distant_light_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3300,11 +3300,11 @@ unsafe extern "C" fn svgfe_distant_light_element_get_2(info: *const v8::Function
 /// Create FunctionTemplate for SVGFEDistantLightElement.
 pub fn create_svgfe_distant_light_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEDistantLightElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3330,54 +3330,54 @@ pub fn create_svgfe_distant_light_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_drop_shadow_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_drop_shadow_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_drop_shadow_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_drop_shadow_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_drop_shadow_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_drop_shadow_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_drop_shadow_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_drop_shadow_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_drop_shadow_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_drop_shadow_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_drop_shadow_element_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_drop_shadow_element_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -3387,11 +3387,11 @@ unsafe extern "C" fn svgfe_drop_shadow_element_op_6(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGFEDropShadowElement.
 pub fn create_svgfe_drop_shadow_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEDropShadowElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3445,11 +3445,11 @@ pub fn create_svgfe_drop_shadow_element_template<'s>(
 /// Create FunctionTemplate for SVGFEFloodElement.
 pub fn create_svgfe_flood_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEFloodElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3463,45 +3463,45 @@ pub fn create_svgfe_flood_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_gaussian_blur_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_gaussian_blur_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_gaussian_blur_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_gaussian_blur_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_gaussian_blur_element_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_gaussian_blur_element_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -3511,11 +3511,11 @@ unsafe extern "C" fn svgfe_gaussian_blur_element_op_5(info: *const v8::FunctionC
 /// Create FunctionTemplate for SVGFEGaussianBlurElement.
 pub fn create_svgfe_gaussian_blur_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEGaussianBlurElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3560,18 +3560,18 @@ pub fn create_svgfe_gaussian_blur_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_image_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_image_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_image_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_image_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3581,11 +3581,11 @@ unsafe extern "C" fn svgfe_image_element_get_2(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGFEImageElement.
 pub fn create_svgfe_image_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEImageElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3614,11 +3614,11 @@ pub fn create_svgfe_image_element_template<'s>(
 /// Create FunctionTemplate for SVGFEMergeElement.
 pub fn create_svgfe_merge_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEMergeElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3632,9 +3632,9 @@ pub fn create_svgfe_merge_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_merge_node_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_merge_node_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3644,11 +3644,11 @@ unsafe extern "C" fn svgfe_merge_node_element_get_1(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGFEMergeNodeElement.
 pub fn create_svgfe_merge_node_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEMergeNodeElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3668,36 +3668,36 @@ pub fn create_svgfe_merge_node_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_morphology_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_morphology_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_morphology_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_morphology_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_morphology_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_morphology_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_morphology_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_morphology_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3707,11 +3707,11 @@ unsafe extern "C" fn svgfe_morphology_element_get_4(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGFEMorphologyElement.
 pub fn create_svgfe_morphology_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEMorphologyElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3749,27 +3749,27 @@ pub fn create_svgfe_morphology_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_offset_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_offset_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_offset_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_offset_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_offset_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_offset_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3779,11 +3779,11 @@ unsafe extern "C" fn svgfe_offset_element_get_3(info: *const v8::FunctionCallbac
 /// Create FunctionTemplate for SVGFEOffsetElement.
 pub fn create_svgfe_offset_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEOffsetElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3815,27 +3815,27 @@ pub fn create_svgfe_offset_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_point_light_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_point_light_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_point_light_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_point_light_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_point_light_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_point_light_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3845,11 +3845,11 @@ unsafe extern "C" fn svgfe_point_light_element_get_3(info: *const v8::FunctionCa
 /// Create FunctionTemplate for SVGFEPointLightElement.
 pub fn create_svgfe_point_light_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEPointLightElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3881,54 +3881,54 @@ pub fn create_svgfe_point_light_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_specular_lighting_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_specular_lighting_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_specular_lighting_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_specular_lighting_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_specular_lighting_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_specular_lighting_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_specular_lighting_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_specular_lighting_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_specular_lighting_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_specular_lighting_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_specular_lighting_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_specular_lighting_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -3938,11 +3938,11 @@ unsafe extern "C" fn svgfe_specular_lighting_element_get_6(info: *const v8::Func
 /// Create FunctionTemplate for SVGFESpecularLightingElement.
 pub fn create_svgfe_specular_lighting_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFESpecularLightingElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -3992,72 +3992,72 @@ pub fn create_svgfe_specular_lighting_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_spot_light_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_spot_light_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_spot_light_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_spot_light_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_spot_light_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_spot_light_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_spot_light_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_spot_light_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_spot_light_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_spot_light_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_spot_light_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_spot_light_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_spot_light_element_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_spot_light_element_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_spot_light_element_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_spot_light_element_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -4067,11 +4067,11 @@ unsafe extern "C" fn svgfe_spot_light_element_get_8(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGFESpotLightElement.
 pub fn create_svgfe_spot_light_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFESpotLightElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4133,9 +4133,9 @@ pub fn create_svgfe_spot_light_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_tile_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_tile_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -4145,11 +4145,11 @@ unsafe extern "C" fn svgfe_tile_element_get_1(info: *const v8::FunctionCallbackI
 /// Create FunctionTemplate for SVGFETileElement.
 pub fn create_svgfe_tile_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFETileElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4169,54 +4169,54 @@ pub fn create_svgfe_tile_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgfe_turbulence_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_turbulence_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_turbulence_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_turbulence_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_turbulence_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_turbulence_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_turbulence_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_turbulence_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_turbulence_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_turbulence_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgfe_turbulence_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgfe_turbulence_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -4226,11 +4226,11 @@ unsafe extern "C" fn svgfe_turbulence_element_get_6(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGFETurbulenceElement.
 pub fn create_svgfe_turbulence_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFETurbulenceElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4280,54 +4280,54 @@ pub fn create_svgfe_turbulence_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_filter_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_filter_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_filter_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_filter_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_filter_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_filter_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_filter_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_filter_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_filter_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_filter_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_filter_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_filter_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -4337,11 +4337,11 @@ unsafe extern "C" fn svg_filter_element_get_6(info: *const v8::FunctionCallbackI
 /// Create FunctionTemplate for SVGFilterElement.
 pub fn create_svg_filter_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFilterElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4391,27 +4391,27 @@ pub fn create_svg_filter_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_gradient_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_gradient_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_gradient_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_gradient_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_gradient_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_gradient_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -4421,11 +4421,11 @@ unsafe extern "C" fn svg_gradient_element_get_3(info: *const v8::FunctionCallbac
 /// Create FunctionTemplate for SVGGradientElement.
 pub fn create_svg_gradient_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGGradientElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4457,36 +4457,36 @@ pub fn create_svg_gradient_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_graphics_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_graphics_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_graphics_element_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_graphics_element_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_graphics_element_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_graphics_element_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_graphics_element_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_graphics_element_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -4496,11 +4496,11 @@ unsafe extern "C" fn svg_graphics_element_op_4(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGGraphicsElement.
 pub fn create_svg_graphics_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGGraphicsElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4544,11 +4544,11 @@ pub fn create_svg_graphics_element_template<'s>(
 /// Create FunctionTemplate for SVGMPathElement.
 pub fn create_svgm_path_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGMPathElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4562,94 +4562,94 @@ pub fn create_svgm_path_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_marker_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_marker_element_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_marker_element_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_marker_element_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -4659,11 +4659,11 @@ unsafe extern "C" fn svg_marker_element_op_10(info: *const v8::FunctionCallbackI
 /// Create FunctionTemplate for SVGMarkerElement.
 pub fn create_svg_marker_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGMarkerElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4740,54 +4740,54 @@ pub fn create_svg_marker_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_mask_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_mask_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_mask_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_mask_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_mask_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_mask_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_mask_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_mask_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_mask_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_mask_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_mask_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_mask_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -4797,11 +4797,11 @@ unsafe extern "C" fn svg_mask_element_get_6(info: *const v8::FunctionCallbackInf
 /// Create FunctionTemplate for SVGMaskElement.
 pub fn create_svg_mask_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGMaskElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4854,11 +4854,11 @@ pub fn create_svg_mask_element_template<'s>(
 /// Create FunctionTemplate for SVGMetadataElement.
 pub fn create_svg_metadata_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGMetadataElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4872,63 +4872,63 @@ pub fn create_svg_metadata_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_pattern_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_pattern_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_pattern_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_pattern_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_pattern_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_pattern_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_pattern_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_pattern_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_pattern_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_pattern_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_pattern_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_pattern_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_pattern_element_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_pattern_element_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -4938,11 +4938,11 @@ unsafe extern "C" fn svg_pattern_element_get_7(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGPatternElement.
 pub fn create_svg_pattern_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGPatternElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -4998,40 +4998,40 @@ pub fn create_svg_pattern_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_script_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_script_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_script_element_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_script_element_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_script_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_script_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_script_element_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_script_element_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for SVGScriptElement.
 pub fn create_svg_script_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGScriptElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5059,9 +5059,9 @@ pub fn create_svg_script_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_stop_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_stop_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -5071,11 +5071,11 @@ unsafe extern "C" fn svg_stop_element_get_1(info: *const v8::FunctionCallbackInf
 /// Create FunctionTemplate for SVGStopElement.
 pub fn create_svg_stop_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGStopElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5095,66 +5095,66 @@ pub fn create_svg_stop_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_style_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_style_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_style_element_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_style_element_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_style_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_style_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_style_element_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_style_element_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_style_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_style_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_style_element_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_style_element_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svg_style_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_style_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn svg_style_element_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_style_element_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for SVGStyleElement.
 pub fn create_svg_style_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGStyleElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5199,11 +5199,11 @@ pub fn create_svg_style_element_template<'s>(
 /// Create FunctionTemplate for SVGTitleElement.
 pub fn create_svg_title_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGTitleElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5220,11 +5220,11 @@ pub fn create_svg_title_element_template<'s>(
 /// Create FunctionTemplate for SVGViewElement.
 pub fn create_svg_view_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGViewElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5241,11 +5241,11 @@ pub fn create_svg_view_element_template<'s>(
 /// Create FunctionTemplate for SVGAnimateElement.
 pub fn create_svg_animate_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimateElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5262,11 +5262,11 @@ pub fn create_svg_animate_element_template<'s>(
 /// Create FunctionTemplate for SVGAnimateMotionElement.
 pub fn create_svg_animate_motion_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimateMotionElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5283,11 +5283,11 @@ pub fn create_svg_animate_motion_element_template<'s>(
 /// Create FunctionTemplate for SVGAnimateTransformElement.
 pub fn create_svg_animate_transform_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimateTransformElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5304,11 +5304,11 @@ pub fn create_svg_animate_transform_element_template<'s>(
 /// Create FunctionTemplate for SVGSetElement.
 pub fn create_svg_set_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGSetElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5325,11 +5325,11 @@ pub fn create_svg_set_element_template<'s>(
 /// Create FunctionTemplate for SVGFEFuncAElement.
 pub fn create_svgfe_func_a_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEFuncAElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5346,11 +5346,11 @@ pub fn create_svgfe_func_a_element_template<'s>(
 /// Create FunctionTemplate for SVGFEFuncBElement.
 pub fn create_svgfe_func_b_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEFuncBElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5367,11 +5367,11 @@ pub fn create_svgfe_func_b_element_template<'s>(
 /// Create FunctionTemplate for SVGFEFuncGElement.
 pub fn create_svgfe_func_g_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEFuncGElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5388,11 +5388,11 @@ pub fn create_svgfe_func_g_element_template<'s>(
 /// Create FunctionTemplate for SVGFEFuncRElement.
 pub fn create_svgfe_func_r_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGFEFuncRElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5406,36 +5406,36 @@ pub fn create_svgfe_func_r_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_linear_gradient_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_linear_gradient_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_linear_gradient_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_linear_gradient_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_linear_gradient_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_linear_gradient_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_linear_gradient_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_linear_gradient_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -5445,11 +5445,11 @@ unsafe extern "C" fn svg_linear_gradient_element_get_4(info: *const v8::Function
 /// Create FunctionTemplate for SVGLinearGradientElement.
 pub fn create_svg_linear_gradient_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGLinearGradientElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5487,54 +5487,54 @@ pub fn create_svg_linear_gradient_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_radial_gradient_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_radial_gradient_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_radial_gradient_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_radial_gradient_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_radial_gradient_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_radial_gradient_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_radial_gradient_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_radial_gradient_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_radial_gradient_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_radial_gradient_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_radial_gradient_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_radial_gradient_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -5544,11 +5544,11 @@ unsafe extern "C" fn svg_radial_gradient_element_get_6(info: *const v8::Function
 /// Create FunctionTemplate for SVGRadialGradientElement.
 pub fn create_svg_radial_gradient_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGRadialGradientElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5598,236 +5598,236 @@ pub fn create_svg_radial_gradient_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svga_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svga_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svga_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_get_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_10(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_11(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_12(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_13(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_14(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_14(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_14(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_15(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_15(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_15(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_16(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_16(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_16(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_16(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_17(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_17(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_17(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svga_element_get_18(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_get_18(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svga_element_set_18(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svga_element_set_18(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for SVGAElement.
 pub fn create_svga_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGAElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5967,11 +5967,11 @@ pub fn create_svga_element_template<'s>(
 /// Create FunctionTemplate for SVGDefsElement.
 pub fn create_svg_defs_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGDefsElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -5985,36 +5985,36 @@ pub fn create_svg_defs_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_foreign_object_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_foreign_object_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_foreign_object_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_foreign_object_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_foreign_object_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_foreign_object_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_foreign_object_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_foreign_object_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -6024,11 +6024,11 @@ unsafe extern "C" fn svg_foreign_object_element_get_4(info: *const v8::FunctionC
 /// Create FunctionTemplate for SVGForeignObjectElement.
 pub fn create_svg_foreign_object_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGForeignObjectElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -6069,11 +6069,11 @@ pub fn create_svg_foreign_object_element_template<'s>(
 /// Create FunctionTemplate for SVGGElement.
 pub fn create_svgg_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGGElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -6087,45 +6087,45 @@ pub fn create_svgg_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_geometry_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_geometry_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_geometry_element_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_geometry_element_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn svg_geometry_element_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_geometry_element_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn svg_geometry_element_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_geometry_element_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_geometry_element_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_geometry_element_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -6135,11 +6135,11 @@ unsafe extern "C" fn svg_geometry_element_op_5(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGGeometryElement.
 pub fn create_svg_geometry_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGGeometryElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -6187,72 +6187,72 @@ pub fn create_svg_geometry_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_image_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_image_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_image_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_image_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_image_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_image_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_image_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_image_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_image_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_image_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_image_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_image_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn svg_image_element_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_image_element_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for SVGImageElement.
 pub fn create_svg_image_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGImageElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -6303,265 +6303,265 @@ pub fn create_svg_image_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svgsvg_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_set_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_set_5(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn svgsvg_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_14(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_15(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_16(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_16(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_17(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_18(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_18(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_19(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_19(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_20(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_20(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_21(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_21(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_22(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_22(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_23(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_23(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_24(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_24(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_25(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_25(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_26(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_26(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_27(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_27(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_28(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_28(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svgsvg_element_op_29(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svgsvg_element_op_29(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -6571,11 +6571,11 @@ unsafe extern "C" fn svgsvg_element_op_29(info: *const v8::FunctionCallbackInfo)
 /// Create FunctionTemplate for SVGSVGElement.
 pub fn create_svgsvg_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGSVGElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -6790,11 +6790,11 @@ pub fn create_svgsvg_element_template<'s>(
 /// Create FunctionTemplate for SVGSwitchElement.
 pub fn create_svg_switch_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGSwitchElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -6811,11 +6811,11 @@ pub fn create_svg_switch_element_template<'s>(
 /// Create FunctionTemplate for SVGSymbolElement.
 pub fn create_svg_symbol_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGSymbolElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -6829,99 +6829,99 @@ pub fn create_svg_symbol_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_text_content_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_content_element_op_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_content_element_op_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -6931,11 +6931,11 @@ unsafe extern "C" fn svg_text_content_element_op_11(info: *const v8::FunctionCal
 /// Create FunctionTemplate for SVGTextContentElement.
 pub fn create_svg_text_content_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGTextContentElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7024,54 +7024,54 @@ pub fn create_svg_text_content_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_use_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_use_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_use_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_use_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_use_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_use_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_use_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_use_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_use_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_use_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_use_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_use_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -7081,11 +7081,11 @@ unsafe extern "C" fn svg_use_element_get_6(info: *const v8::FunctionCallbackInfo
 /// Create FunctionTemplate for SVGUseElement.
 pub fn create_svg_use_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGUseElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7135,27 +7135,27 @@ pub fn create_svg_use_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_circle_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_circle_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_circle_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_circle_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_circle_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_circle_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -7165,11 +7165,11 @@ unsafe extern "C" fn svg_circle_element_get_3(info: *const v8::FunctionCallbackI
 /// Create FunctionTemplate for SVGCircleElement.
 pub fn create_svg_circle_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGCircleElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7201,36 +7201,36 @@ pub fn create_svg_circle_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_ellipse_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_ellipse_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_ellipse_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_ellipse_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_ellipse_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_ellipse_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_ellipse_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_ellipse_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -7240,11 +7240,11 @@ unsafe extern "C" fn svg_ellipse_element_get_4(info: *const v8::FunctionCallback
 /// Create FunctionTemplate for SVGEllipseElement.
 pub fn create_svg_ellipse_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGEllipseElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7282,36 +7282,36 @@ pub fn create_svg_ellipse_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_line_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_line_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_line_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_line_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_line_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_line_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_line_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_line_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -7321,11 +7321,11 @@ unsafe extern "C" fn svg_line_element_get_4(info: *const v8::FunctionCallbackInf
 /// Create FunctionTemplate for SVGLineElement.
 pub fn create_svg_line_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGLineElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7363,36 +7363,36 @@ pub fn create_svg_line_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_path_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_path_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_path_element_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_path_element_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn svg_path_element_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_path_element_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_path_element_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_path_element_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -7402,11 +7402,11 @@ unsafe extern "C" fn svg_path_element_op_4(info: *const v8::FunctionCallbackInfo
 /// Create FunctionTemplate for SVGPathElement.
 pub fn create_svg_path_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGPathElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7450,11 +7450,11 @@ pub fn create_svg_path_element_template<'s>(
 /// Create FunctionTemplate for SVGPolygonElement.
 pub fn create_svg_polygon_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGPolygonElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7471,11 +7471,11 @@ pub fn create_svg_polygon_element_template<'s>(
 /// Create FunctionTemplate for SVGPolylineElement.
 pub fn create_svg_polyline_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGPolylineElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7489,54 +7489,54 @@ pub fn create_svg_polyline_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_rect_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_rect_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_rect_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_rect_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_rect_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_rect_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_rect_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_rect_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_rect_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_rect_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_rect_element_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_rect_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -7546,11 +7546,11 @@ unsafe extern "C" fn svg_rect_element_get_6(info: *const v8::FunctionCallbackInf
 /// Create FunctionTemplate for SVGRectElement.
 pub fn create_svg_rect_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGRectElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7600,27 +7600,27 @@ pub fn create_svg_rect_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_text_path_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_path_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_path_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_path_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_path_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_path_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -7630,11 +7630,11 @@ unsafe extern "C" fn svg_text_path_element_get_3(info: *const v8::FunctionCallba
 /// Create FunctionTemplate for SVGTextPathElement.
 pub fn create_svg_text_path_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGTextPathElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7666,45 +7666,45 @@ pub fn create_svg_text_path_element_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn svg_text_positioning_element_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_positioning_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_positioning_element_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_positioning_element_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_positioning_element_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_positioning_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_positioning_element_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_positioning_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn svg_text_positioning_element_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn svg_text_positioning_element_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -7714,11 +7714,11 @@ unsafe extern "C" fn svg_text_positioning_element_get_5(info: *const v8::Functio
 /// Create FunctionTemplate for SVGTextPositioningElement.
 pub fn create_svg_text_positioning_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGTextPositioningElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7765,11 +7765,11 @@ pub fn create_svg_text_positioning_element_template<'s>(
 /// Create FunctionTemplate for SVGTSpanElement.
 pub fn create_svgt_span_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGTSpanElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -7786,11 +7786,11 @@ pub fn create_svgt_span_element_template<'s>(
 /// Create FunctionTemplate for SVGTextElement.
 pub fn create_svg_text_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "SVGTextElement").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 

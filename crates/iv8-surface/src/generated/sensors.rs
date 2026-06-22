@@ -5,98 +5,98 @@ use super::empty_constructor;
 use v8::Local;
 use v8::FunctionTemplate;
 
-unsafe extern "C" fn sensor_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn sensor_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn sensor_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn sensor_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn sensor_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn sensor_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn sensor_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn sensor_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn sensor_set_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn sensor_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn sensor_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn sensor_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for Sensor.
 pub fn create_sensor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "Sensor").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -163,27 +163,27 @@ pub fn create_sensor_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn accelerometer_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn accelerometer_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn accelerometer_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn accelerometer_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn accelerometer_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn accelerometer_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
@@ -193,11 +193,11 @@ unsafe extern "C" fn accelerometer_get_3(info: *const v8::FunctionCallbackInfo) 
 /// Create FunctionTemplate for Accelerometer.
 pub fn create_accelerometer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "Accelerometer").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -229,9 +229,9 @@ pub fn create_accelerometer_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn ambient_light_sensor_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn ambient_light_sensor_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
@@ -241,11 +241,11 @@ unsafe extern "C" fn ambient_light_sensor_get_1(info: *const v8::FunctionCallbac
 /// Create FunctionTemplate for AmbientLightSensor.
 pub fn create_ambient_light_sensor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "AmbientLightSensor").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -265,27 +265,27 @@ pub fn create_ambient_light_sensor_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn gyroscope_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn gyroscope_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn gyroscope_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn gyroscope_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn gyroscope_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn gyroscope_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
@@ -295,11 +295,11 @@ unsafe extern "C" fn gyroscope_get_3(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for Gyroscope.
 pub fn create_gyroscope_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "Gyroscope").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -331,27 +331,27 @@ pub fn create_gyroscope_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn magnetometer_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn magnetometer_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn magnetometer_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn magnetometer_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn magnetometer_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn magnetometer_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
@@ -361,11 +361,11 @@ unsafe extern "C" fn magnetometer_get_3(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for Magnetometer.
 pub fn create_magnetometer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "Magnetometer").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -397,18 +397,18 @@ pub fn create_magnetometer_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn orientation_sensor_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn orientation_sensor_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn orientation_sensor_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn orientation_sensor_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -418,11 +418,11 @@ unsafe extern "C" fn orientation_sensor_op_2(info: *const v8::FunctionCallbackIn
 /// Create FunctionTemplate for OrientationSensor.
 pub fn create_orientation_sensor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "OrientationSensor").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -449,27 +449,27 @@ pub fn create_orientation_sensor_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn proximity_sensor_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn proximity_sensor_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn proximity_sensor_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn proximity_sensor_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn proximity_sensor_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn proximity_sensor_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
@@ -479,11 +479,11 @@ unsafe extern "C" fn proximity_sensor_get_3(info: *const v8::FunctionCallbackInf
 /// Create FunctionTemplate for ProximitySensor.
 pub fn create_proximity_sensor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ProximitySensor").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -518,11 +518,11 @@ pub fn create_proximity_sensor_template<'s>(
 /// Create FunctionTemplate for GravitySensor.
 pub fn create_gravity_sensor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "GravitySensor").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -539,11 +539,11 @@ pub fn create_gravity_sensor_template<'s>(
 /// Create FunctionTemplate for LinearAccelerationSensor.
 pub fn create_linear_acceleration_sensor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "LinearAccelerationSensor").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -560,11 +560,11 @@ pub fn create_linear_acceleration_sensor_template<'s>(
 /// Create FunctionTemplate for AbsoluteOrientationSensor.
 pub fn create_absolute_orientation_sensor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "AbsoluteOrientationSensor").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -581,11 +581,11 @@ pub fn create_absolute_orientation_sensor_template<'s>(
 /// Create FunctionTemplate for RelativeOrientationSensor.
 pub fn create_relative_orientation_sensor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "RelativeOrientationSensor").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 

@@ -8,7 +8,7 @@ use v8::FunctionTemplate;
 /// Create FunctionTemplate for MIDIInputMap.
 pub fn create_midi_input_map_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "MIDIInputMap").unwrap());
@@ -26,7 +26,7 @@ pub fn create_midi_input_map_template<'s>(
 /// Create FunctionTemplate for MIDIOutputMap.
 pub fn create_midi_output_map_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "MIDIOutputMap").unwrap());
@@ -41,40 +41,40 @@ pub fn create_midi_output_map_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn midi_access_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_access_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_access_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_access_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_access_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_access_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_access_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_access_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn midi_access_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_access_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
@@ -84,11 +84,11 @@ unsafe extern "C" fn midi_access_get_4(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for MIDIAccess.
 pub fn create_midi_access_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "MIDIAccess").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -127,94 +127,94 @@ pub fn create_midi_access_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn midi_port_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn midi_port_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn midi_port_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn midi_port_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_port_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn midi_port_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_port_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_port_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_port_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn midi_port_op_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_op_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_port_op_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_port_op_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -224,11 +224,11 @@ unsafe extern "C" fn midi_port_op_10(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for MIDIPort.
 pub fn create_midi_port_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "MIDIPort").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -305,27 +305,27 @@ pub fn create_midi_port_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn midi_input_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_input_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_input_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_input_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for MIDIInput.
 pub fn create_midi_input_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "MIDIInput").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 
@@ -346,18 +346,18 @@ pub fn create_midi_input_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn midi_output_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_output_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn midi_output_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn midi_output_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -367,11 +367,11 @@ unsafe extern "C" fn midi_output_op_2(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for MIDIOutput.
 pub fn create_midi_output_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "MIDIOutput").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 

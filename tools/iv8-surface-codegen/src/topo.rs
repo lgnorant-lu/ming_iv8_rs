@@ -3,8 +3,6 @@
 use crate::ir::Definition;
 use std::collections::{HashMap, HashSet, VecDeque};
 
-pub type DomainMap = HashMap<String, String>;
-
 pub struct TopoResult {
     pub sorted: Vec<String>,
     pub cycles: Vec<String>,

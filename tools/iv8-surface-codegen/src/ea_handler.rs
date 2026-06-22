@@ -16,9 +16,7 @@ pub struct EaResult {
     pub no_interface_object: bool,
     /// Whether the interface has [LegacyUnforgeable] — properties on instance
     pub legacy_unforgeable: bool,
-    /// Whether attributes are [Replaceable] — needs special setter
-    pub has_replaceable: Vec<String>,
-    /// Constructor alias name (from [NamedConstructor])
+    /// Constructor alias name (from [NamedConstructor] or [LegacyFactoryFunction])
     pub named_constructor: Option<String>,
     /// Whether to mark as secure-context-only
     pub secure_context: bool,
@@ -37,7 +35,6 @@ impl EaResult {
             exposed_worker: false,
             no_interface_object: false,
             legacy_unforgeable: false,
-            has_replaceable: Vec::new(),
             named_constructor: None,
             secure_context: false,
             cross_origin_accessible: false,
@@ -97,19 +94,6 @@ pub fn process_interface_ea(def: &Definition) -> EaResult {
     // Per-member Replaceable detection deferred to v0.8.20.
 
     result
-}
-
-/// Generate the Exposed guard code for an interface.
-/// Returns a Rust expression that evaluates to true if the interface
-/// should be registered in the current execution context.
-pub fn exposed_guard(ea: &EaResult) -> String {
-    if ea.exposed_window && ea.exposed_worker {
-        "// Exposed=(Window,Worker): always register".to_string()
-    } else if ea.exposed_worker && !ea.exposed_window {
-        "// Exposed=Worker only: skip Window registration".to_string()
-    } else {
-        "// Exposed=Window: register on Window global".to_string()
-    }
 }
 
 #[cfg(test)]

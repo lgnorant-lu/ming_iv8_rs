@@ -8,7 +8,7 @@ use v8::FunctionTemplate;
 /// Create FunctionTemplate for ChromeAccessibilityFeatures.
 pub fn create_chrome_accessibility_features_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeAccessibilityFeatures").unwrap());
@@ -26,7 +26,7 @@ pub fn create_chrome_accessibility_features_template<'s>(
 /// Create FunctionTemplate for ChromeAction.
 pub fn create_chrome_action_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeAction").unwrap());
@@ -44,7 +44,7 @@ pub fn create_chrome_action_template<'s>(
 /// Create FunctionTemplate for ChromeAlarms.
 pub fn create_chrome_alarms_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeAlarms").unwrap());
@@ -59,45 +59,45 @@ pub fn create_chrome_alarms_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_app_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_app_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn chrome_app_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_app_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_app_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_app_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_app_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_app_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_app_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_app_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
@@ -107,7 +107,7 @@ unsafe extern "C" fn chrome_app_op_5(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for ChromeApp.
 pub fn create_chrome_app_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeApp").unwrap());
@@ -160,7 +160,7 @@ pub fn create_chrome_app_template<'s>(
 /// Create FunctionTemplate for ChromeAppRuntime.
 pub fn create_chrome_app_runtime_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeAppRuntime").unwrap());
@@ -178,7 +178,7 @@ pub fn create_chrome_app_runtime_template<'s>(
 /// Create FunctionTemplate for ChromeAppWindow.
 pub fn create_chrome_app_window_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeAppWindow").unwrap());
@@ -196,7 +196,7 @@ pub fn create_chrome_app_window_template<'s>(
 /// Create FunctionTemplate for ChromeAudio.
 pub fn create_chrome_audio_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeAudio").unwrap());
@@ -214,7 +214,7 @@ pub fn create_chrome_audio_template<'s>(
 /// Create FunctionTemplate for ChromeAutofillPrivate.
 pub fn create_chrome_autofill_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeAutofillPrivate").unwrap());
@@ -232,7 +232,7 @@ pub fn create_chrome_autofill_private_template<'s>(
 /// Create FunctionTemplate for ChromeBluetooth.
 pub fn create_chrome_bluetooth_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeBluetooth").unwrap());
@@ -250,7 +250,7 @@ pub fn create_chrome_bluetooth_template<'s>(
 /// Create FunctionTemplate for ChromeBluetoothLowEnergy.
 pub fn create_chrome_bluetooth_low_energy_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeBluetoothLowEnergy").unwrap());
@@ -268,7 +268,7 @@ pub fn create_chrome_bluetooth_low_energy_template<'s>(
 /// Create FunctionTemplate for ChromeBluetoothSocket.
 pub fn create_chrome_bluetooth_socket_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeBluetoothSocket").unwrap());
@@ -286,7 +286,7 @@ pub fn create_chrome_bluetooth_socket_template<'s>(
 /// Create FunctionTemplate for ChromeBookmarks.
 pub fn create_chrome_bookmarks_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeBookmarks").unwrap());
@@ -304,7 +304,7 @@ pub fn create_chrome_bookmarks_template<'s>(
 /// Create FunctionTemplate for ChromeBrailleDisplayPrivate.
 pub fn create_chrome_braille_display_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeBrailleDisplayPrivate").unwrap());
@@ -322,7 +322,7 @@ pub fn create_chrome_braille_display_private_template<'s>(
 /// Create FunctionTemplate for ChromeBrowsingData.
 pub fn create_chrome_browsing_data_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeBrowsingData").unwrap());
@@ -337,110 +337,110 @@ pub fn create_chrome_browsing_data_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_csi_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_csi_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_csi_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_csi_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_csi_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_csi_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_csi_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_csi_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_csi_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_csi_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_csi_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_csi_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_csi_set_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_csi_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Integer::new(scope, 0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_csi_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_csi_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for ChromeCSI.
 pub fn create_chrome_csi_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeCSI").unwrap());
@@ -514,7 +514,7 @@ pub fn create_chrome_csi_template<'s>(
 /// Create FunctionTemplate for ChromeCast.
 pub fn create_chrome_cast_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeCast").unwrap());
@@ -532,7 +532,7 @@ pub fn create_chrome_cast_template<'s>(
 /// Create FunctionTemplate for ChromeCastStreaming.
 pub fn create_chrome_cast_streaming_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeCastStreaming").unwrap());
@@ -550,7 +550,7 @@ pub fn create_chrome_cast_streaming_template<'s>(
 /// Create FunctionTemplate for ChromeCertificateProvider.
 pub fn create_chrome_certificate_provider_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeCertificateProvider").unwrap());
@@ -568,7 +568,7 @@ pub fn create_chrome_certificate_provider_template<'s>(
 /// Create FunctionTemplate for ChromeClipboard.
 pub fn create_chrome_clipboard_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeClipboard").unwrap());
@@ -586,7 +586,7 @@ pub fn create_chrome_clipboard_template<'s>(
 /// Create FunctionTemplate for ChromeCommandLinePrivate.
 pub fn create_chrome_command_line_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeCommandLinePrivate").unwrap());
@@ -604,7 +604,7 @@ pub fn create_chrome_command_line_private_template<'s>(
 /// Create FunctionTemplate for ChromeCommands.
 pub fn create_chrome_commands_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeCommands").unwrap());
@@ -622,7 +622,7 @@ pub fn create_chrome_commands_template<'s>(
 /// Create FunctionTemplate for ChromeContentSettings.
 pub fn create_chrome_content_settings_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeContentSettings").unwrap());
@@ -640,7 +640,7 @@ pub fn create_chrome_content_settings_template<'s>(
 /// Create FunctionTemplate for ChromeContextMenus.
 pub fn create_chrome_context_menus_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeContextMenus").unwrap());
@@ -658,7 +658,7 @@ pub fn create_chrome_context_menus_template<'s>(
 /// Create FunctionTemplate for ChromeCookies.
 pub fn create_chrome_cookies_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeCookies").unwrap());
@@ -676,7 +676,7 @@ pub fn create_chrome_cookies_template<'s>(
 /// Create FunctionTemplate for ChromeDOM.
 pub fn create_chrome_dom_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDOM").unwrap());
@@ -694,7 +694,7 @@ pub fn create_chrome_dom_template<'s>(
 /// Create FunctionTemplate for ChromeDebugger.
 pub fn create_chrome_debugger_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDebugger").unwrap());
@@ -712,7 +712,7 @@ pub fn create_chrome_debugger_template<'s>(
 /// Create FunctionTemplate for ChromeDeclarativeContent.
 pub fn create_chrome_declarative_content_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDeclarativeContent").unwrap());
@@ -730,7 +730,7 @@ pub fn create_chrome_declarative_content_template<'s>(
 /// Create FunctionTemplate for ChromeDeclarativeNetRequest.
 pub fn create_chrome_declarative_net_request_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDeclarativeNetRequest").unwrap());
@@ -748,7 +748,7 @@ pub fn create_chrome_declarative_net_request_template<'s>(
 /// Create FunctionTemplate for ChromeDeskCapture.
 pub fn create_chrome_desk_capture_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDeskCapture").unwrap());
@@ -766,7 +766,7 @@ pub fn create_chrome_desk_capture_template<'s>(
 /// Create FunctionTemplate for ChromeDesktopCapture.
 pub fn create_chrome_desktop_capture_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDesktopCapture").unwrap());
@@ -784,7 +784,7 @@ pub fn create_chrome_desktop_capture_template<'s>(
 /// Create FunctionTemplate for ChromeDevtoolsNamespace.
 pub fn create_chrome_devtools_namespace_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDevtoolsNamespace").unwrap());
@@ -802,7 +802,7 @@ pub fn create_chrome_devtools_namespace_template<'s>(
 /// Create FunctionTemplate for ChromeDiagnostics.
 pub fn create_chrome_diagnostics_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDiagnostics").unwrap());
@@ -820,7 +820,7 @@ pub fn create_chrome_diagnostics_template<'s>(
 /// Create FunctionTemplate for ChromeDisplaySource.
 pub fn create_chrome_display_source_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDisplaySource").unwrap());
@@ -838,7 +838,7 @@ pub fn create_chrome_display_source_template<'s>(
 /// Create FunctionTemplate for ChromeDns.
 pub fn create_chrome_dns_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDns").unwrap());
@@ -856,7 +856,7 @@ pub fn create_chrome_dns_template<'s>(
 /// Create FunctionTemplate for ChromeDocumentScan.
 pub fn create_chrome_document_scan_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDocumentScan").unwrap());
@@ -874,7 +874,7 @@ pub fn create_chrome_document_scan_template<'s>(
 /// Create FunctionTemplate for ChromeDownloads.
 pub fn create_chrome_downloads_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeDownloads").unwrap());
@@ -892,7 +892,7 @@ pub fn create_chrome_downloads_template<'s>(
 /// Create FunctionTemplate for ChromeEchoPrivate.
 pub fn create_chrome_echo_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeEchoPrivate").unwrap());
@@ -910,7 +910,7 @@ pub fn create_chrome_echo_private_template<'s>(
 /// Create FunctionTemplate for ChromeEnterpriseHardwarePlatform.
 pub fn create_chrome_enterprise_hardware_platform_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeEnterpriseHardwarePlatform").unwrap());
@@ -928,7 +928,7 @@ pub fn create_chrome_enterprise_hardware_platform_template<'s>(
 /// Create FunctionTemplate for ChromeEnterpriseNS.
 pub fn create_chrome_enterprise_ns_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeEnterpriseNS").unwrap());
@@ -946,7 +946,7 @@ pub fn create_chrome_enterprise_ns_template<'s>(
 /// Create FunctionTemplate for ChromeEnterprisePlatformKeys.
 pub fn create_chrome_enterprise_platform_keys_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeEnterprisePlatformKeys").unwrap());
@@ -964,7 +964,7 @@ pub fn create_chrome_enterprise_platform_keys_template<'s>(
 /// Create FunctionTemplate for ChromeEvents.
 pub fn create_chrome_events_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeEvents").unwrap());
@@ -982,7 +982,7 @@ pub fn create_chrome_events_template<'s>(
 /// Create FunctionTemplate for ChromeExperienceSamplingPrivate.
 pub fn create_chrome_experience_sampling_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeExperienceSamplingPrivate").unwrap());
@@ -1000,7 +1000,7 @@ pub fn create_chrome_experience_sampling_private_template<'s>(
 /// Create FunctionTemplate for ChromeExtension.
 pub fn create_chrome_extension_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeExtension").unwrap());
@@ -1018,7 +1018,7 @@ pub fn create_chrome_extension_template<'s>(
 /// Create FunctionTemplate for ChromeFeedbackPrivate.
 pub fn create_chrome_feedback_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeFeedbackPrivate").unwrap());
@@ -1036,7 +1036,7 @@ pub fn create_chrome_feedback_private_template<'s>(
 /// Create FunctionTemplate for ChromeFileBrowserHandler.
 pub fn create_chrome_file_browser_handler_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeFileBrowserHandler").unwrap());
@@ -1054,7 +1054,7 @@ pub fn create_chrome_file_browser_handler_template<'s>(
 /// Create FunctionTemplate for ChromeFileSystemProvider.
 pub fn create_chrome_file_system_provider_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeFileSystemProvider").unwrap());
@@ -1072,7 +1072,7 @@ pub fn create_chrome_file_system_provider_template<'s>(
 /// Create FunctionTemplate for ChromeFirstRunPrivate.
 pub fn create_chrome_first_run_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeFirstRunPrivate").unwrap());
@@ -1090,7 +1090,7 @@ pub fn create_chrome_first_run_private_template<'s>(
 /// Create FunctionTemplate for ChromeFontSettings.
 pub fn create_chrome_font_settings_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeFontSettings").unwrap());
@@ -1108,7 +1108,7 @@ pub fn create_chrome_font_settings_template<'s>(
 /// Create FunctionTemplate for ChromeGcm.
 pub fn create_chrome_gcm_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeGcm").unwrap());
@@ -1126,7 +1126,7 @@ pub fn create_chrome_gcm_template<'s>(
 /// Create FunctionTemplate for ChromeHid.
 pub fn create_chrome_hid_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeHid").unwrap());
@@ -1144,7 +1144,7 @@ pub fn create_chrome_hid_template<'s>(
 /// Create FunctionTemplate for ChromeHistory.
 pub fn create_chrome_history_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeHistory").unwrap());
@@ -1162,7 +1162,7 @@ pub fn create_chrome_history_template<'s>(
 /// Create FunctionTemplate for ChromeHotwordPrivate.
 pub fn create_chrome_hotword_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeHotwordPrivate").unwrap());
@@ -1177,36 +1177,36 @@ pub fn create_chrome_hotword_private_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_i18n_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_i18n_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_i18n_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_i18n_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_i18n_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_i18n_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_i18n_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_i18n_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
@@ -1216,7 +1216,7 @@ unsafe extern "C" fn chrome_i18n_op_4(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for ChromeI18n.
 pub fn create_chrome_i18n_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeI18n").unwrap());
@@ -1262,7 +1262,7 @@ pub fn create_chrome_i18n_template<'s>(
 /// Create FunctionTemplate for ChromeIdentity.
 pub fn create_chrome_identity_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdentity").unwrap());
@@ -1280,7 +1280,7 @@ pub fn create_chrome_identity_template<'s>(
 /// Create FunctionTemplate for ChromeIdentityPrivate.
 pub fn create_chrome_identity_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdentityPrivate").unwrap());
@@ -1298,7 +1298,7 @@ pub fn create_chrome_identity_private_template<'s>(
 /// Create FunctionTemplate for ChromeIdentityPrivateAPI.
 pub fn create_chrome_identity_private_api_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdentityPrivateAPI").unwrap());
@@ -1316,7 +1316,7 @@ pub fn create_chrome_identity_private_api_template<'s>(
 /// Create FunctionTemplate for ChromeIdle.
 pub fn create_chrome_idle_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdle").unwrap());
@@ -1334,7 +1334,7 @@ pub fn create_chrome_idle_template<'s>(
 /// Create FunctionTemplate for ChromeIdlePrivate.
 pub fn create_chrome_idle_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdlePrivate").unwrap());
@@ -1352,7 +1352,7 @@ pub fn create_chrome_idle_private_template<'s>(
 /// Create FunctionTemplate for ChromeInputIme.
 pub fn create_chrome_input_ime_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeInputIme").unwrap());
@@ -1370,7 +1370,7 @@ pub fn create_chrome_input_ime_template<'s>(
 /// Create FunctionTemplate for ChromeInputMethodPrivate.
 pub fn create_chrome_input_method_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeInputMethodPrivate").unwrap());
@@ -1388,7 +1388,7 @@ pub fn create_chrome_input_method_private_template<'s>(
 /// Create FunctionTemplate for ChromeInstanceID.
 pub fn create_chrome_instance_id_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeInstanceID").unwrap());
@@ -1406,7 +1406,7 @@ pub fn create_chrome_instance_id_template<'s>(
 /// Create FunctionTemplate for ChromeLanguageSettingsPrivate.
 pub fn create_chrome_language_settings_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeLanguageSettingsPrivate").unwrap());
@@ -1421,179 +1421,179 @@ pub fn create_chrome_language_settings_private_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_load_times_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_5(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Number::new(scope, 0.0).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_9(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_10(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_11(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Boolean::new(scope, false).into());
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_12(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_load_times_get_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_get_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_load_times_set_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_load_times_set_13(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for ChromeLoadTimes.
 pub fn create_chrome_load_times_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeLoadTimes").unwrap());
@@ -1702,7 +1702,7 @@ pub fn create_chrome_load_times_template<'s>(
 /// Create FunctionTemplate for ChromeLocation.
 pub fn create_chrome_location_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeLocation").unwrap());
@@ -1720,7 +1720,7 @@ pub fn create_chrome_location_template<'s>(
 /// Create FunctionTemplate for ChromeLogPrivate.
 pub fn create_chrome_log_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeLogPrivate").unwrap());
@@ -1738,7 +1738,7 @@ pub fn create_chrome_log_private_template<'s>(
 /// Create FunctionTemplate for ChromeLoginState.
 pub fn create_chrome_login_state_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeLoginState").unwrap());
@@ -1756,7 +1756,7 @@ pub fn create_chrome_login_state_template<'s>(
 /// Create FunctionTemplate for ChromeManagement.
 pub fn create_chrome_management_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeManagement").unwrap());
@@ -1774,7 +1774,7 @@ pub fn create_chrome_management_template<'s>(
 /// Create FunctionTemplate for ChromeMdns.
 pub fn create_chrome_mdns_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeMdns").unwrap());
@@ -1792,7 +1792,7 @@ pub fn create_chrome_mdns_template<'s>(
 /// Create FunctionTemplate for ChromeMediaGalleries.
 pub fn create_chrome_media_galleries_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeMediaGalleries").unwrap());
@@ -1810,7 +1810,7 @@ pub fn create_chrome_media_galleries_template<'s>(
 /// Create FunctionTemplate for ChromeMediaPerceptionPrivate.
 pub fn create_chrome_media_perception_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeMediaPerceptionPrivate").unwrap());
@@ -1828,7 +1828,7 @@ pub fn create_chrome_media_perception_private_template<'s>(
 /// Create FunctionTemplate for ChromeMidi.
 pub fn create_chrome_midi_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeMidi").unwrap());
@@ -1846,7 +1846,7 @@ pub fn create_chrome_midi_template<'s>(
 /// Create FunctionTemplate for ChromeMusicManagerPrivate.
 pub fn create_chrome_music_manager_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeMusicManagerPrivate").unwrap());
@@ -1864,7 +1864,7 @@ pub fn create_chrome_music_manager_private_template<'s>(
 /// Create FunctionTemplate for ChromeNetworkingConfig.
 pub fn create_chrome_networking_config_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeNetworkingConfig").unwrap());
@@ -1882,7 +1882,7 @@ pub fn create_chrome_networking_config_template<'s>(
 /// Create FunctionTemplate for ChromeNetworkingOnc.
 pub fn create_chrome_networking_onc_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeNetworkingOnc").unwrap());
@@ -1900,7 +1900,7 @@ pub fn create_chrome_networking_onc_template<'s>(
 /// Create FunctionTemplate for ChromeNetworkingPrivate.
 pub fn create_chrome_networking_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeNetworkingPrivate").unwrap());
@@ -1918,7 +1918,7 @@ pub fn create_chrome_networking_private_template<'s>(
 /// Create FunctionTemplate for ChromeNotifications.
 pub fn create_chrome_notifications_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeNotifications").unwrap());
@@ -1936,7 +1936,7 @@ pub fn create_chrome_notifications_template<'s>(
 /// Create FunctionTemplate for ChromeOffscreen.
 pub fn create_chrome_offscreen_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeOffscreen").unwrap());
@@ -1954,7 +1954,7 @@ pub fn create_chrome_offscreen_template<'s>(
 /// Create FunctionTemplate for ChromeOmnibox.
 pub fn create_chrome_omnibox_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeOmnibox").unwrap());
@@ -1972,7 +1972,7 @@ pub fn create_chrome_omnibox_template<'s>(
 /// Create FunctionTemplate for ChromePageCapture.
 pub fn create_chrome_page_capture_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePageCapture").unwrap());
@@ -1990,7 +1990,7 @@ pub fn create_chrome_page_capture_template<'s>(
 /// Create FunctionTemplate for ChromePasswordsPrivate.
 pub fn create_chrome_passwords_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePasswordsPrivate").unwrap());
@@ -2008,7 +2008,7 @@ pub fn create_chrome_passwords_private_template<'s>(
 /// Create FunctionTemplate for ChromePermissions.
 pub fn create_chrome_permissions_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePermissions").unwrap());
@@ -2026,7 +2026,7 @@ pub fn create_chrome_permissions_template<'s>(
 /// Create FunctionTemplate for ChromePlatformKeys.
 pub fn create_chrome_platform_keys_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePlatformKeys").unwrap());
@@ -2041,57 +2041,57 @@ pub fn create_chrome_platform_keys_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_port_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_port_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_port_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_port_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_port_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_port_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_port_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_port_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_port_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_port_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_port_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_port_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_port_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_port_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_port_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_port_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -2101,7 +2101,7 @@ unsafe extern "C" fn chrome_port_op_5(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for ChromePort.
 pub fn create_chrome_port_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePort").unwrap());
@@ -2154,7 +2154,7 @@ pub fn create_chrome_port_template<'s>(
 /// Create FunctionTemplate for ChromePower.
 pub fn create_chrome_power_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePower").unwrap());
@@ -2172,7 +2172,7 @@ pub fn create_chrome_power_template<'s>(
 /// Create FunctionTemplate for ChromePrinterProvider.
 pub fn create_chrome_printer_provider_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePrinterProvider").unwrap());
@@ -2190,7 +2190,7 @@ pub fn create_chrome_printer_provider_template<'s>(
 /// Create FunctionTemplate for ChromePrintingAPI.
 pub fn create_chrome_printing_api_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePrintingAPI").unwrap());
@@ -2208,7 +2208,7 @@ pub fn create_chrome_printing_api_template<'s>(
 /// Create FunctionTemplate for ChromePrintingMetrics.
 pub fn create_chrome_printing_metrics_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePrintingMetrics").unwrap());
@@ -2226,7 +2226,7 @@ pub fn create_chrome_printing_metrics_template<'s>(
 /// Create FunctionTemplate for ChromePrivacy.
 pub fn create_chrome_privacy_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromePrivacy").unwrap());
@@ -2244,7 +2244,7 @@ pub fn create_chrome_privacy_template<'s>(
 /// Create FunctionTemplate for ChromeProcesses.
 pub fn create_chrome_processes_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeProcesses").unwrap());
@@ -2262,7 +2262,7 @@ pub fn create_chrome_processes_template<'s>(
 /// Create FunctionTemplate for ChromeProxy.
 pub fn create_chrome_proxy_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeProxy").unwrap());
@@ -2280,7 +2280,7 @@ pub fn create_chrome_proxy_template<'s>(
 /// Create FunctionTemplate for ChromeQuickUnlockPrivate.
 pub fn create_chrome_quick_unlock_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeQuickUnlockPrivate").unwrap());
@@ -2298,7 +2298,7 @@ pub fn create_chrome_quick_unlock_private_template<'s>(
 /// Create FunctionTemplate for ChromeReadingList.
 pub fn create_chrome_reading_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeReadingList").unwrap());
@@ -2316,7 +2316,7 @@ pub fn create_chrome_reading_list_template<'s>(
 /// Create FunctionTemplate for ChromeResourcePrivate.
 pub fn create_chrome_resource_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeResourcePrivate").unwrap());
@@ -2331,247 +2331,247 @@ pub fn create_chrome_resource_private_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_runtime_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_5(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_7(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_8(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_8(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_9(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_9(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_9(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_get_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_set_10(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_set_10(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_runtime_op_11(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_12(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_13(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_13(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_14(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_14(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_15(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_15(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_16(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_16(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_17(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_18(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_18(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_19(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_19(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_20(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_20(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_21(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_21(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_22(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_22(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_runtime_op_23(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_runtime_op_23(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -2581,7 +2581,7 @@ unsafe extern "C" fn chrome_runtime_op_23(info: *const v8::FunctionCallbackInfo)
 /// Create FunctionTemplate for ChromeRuntime.
 pub fn create_chrome_runtime_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeRuntime").unwrap());
@@ -2760,7 +2760,7 @@ pub fn create_chrome_runtime_template<'s>(
 /// Create FunctionTemplate for ChromeRuntimeOnInstalled.
 pub fn create_chrome_runtime_on_installed_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeRuntimeOnInstalled").unwrap());
@@ -2778,7 +2778,7 @@ pub fn create_chrome_runtime_on_installed_template<'s>(
 /// Create FunctionTemplate for ChromeRuntimePrivate.
 pub fn create_chrome_runtime_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeRuntimePrivate").unwrap());
@@ -2796,7 +2796,7 @@ pub fn create_chrome_runtime_private_template<'s>(
 /// Create FunctionTemplate for ChromeSafeBrowsingPrivate.
 pub fn create_chrome_safe_browsing_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSafeBrowsingPrivate").unwrap());
@@ -2814,7 +2814,7 @@ pub fn create_chrome_safe_browsing_private_template<'s>(
 /// Create FunctionTemplate for ChromeScripting.
 pub fn create_chrome_scripting_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeScripting").unwrap());
@@ -2832,7 +2832,7 @@ pub fn create_chrome_scripting_template<'s>(
 /// Create FunctionTemplate for ChromeSearch.
 pub fn create_chrome_search_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSearch").unwrap());
@@ -2850,7 +2850,7 @@ pub fn create_chrome_search_template<'s>(
 /// Create FunctionTemplate for ChromeSerial.
 pub fn create_chrome_serial_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSerial").unwrap());
@@ -2868,7 +2868,7 @@ pub fn create_chrome_serial_template<'s>(
 /// Create FunctionTemplate for ChromeSessions.
 pub fn create_chrome_sessions_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSessions").unwrap());
@@ -2886,7 +2886,7 @@ pub fn create_chrome_sessions_template<'s>(
 /// Create FunctionTemplate for ChromeSettingsPrivate.
 pub fn create_chrome_settings_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSettingsPrivate").unwrap());
@@ -2904,7 +2904,7 @@ pub fn create_chrome_settings_private_template<'s>(
 /// Create FunctionTemplate for ChromeSidePanel.
 pub fn create_chrome_side_panel_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSidePanel").unwrap());
@@ -2922,7 +2922,7 @@ pub fn create_chrome_side_panel_template<'s>(
 /// Create FunctionTemplate for ChromeSignedInDevices.
 pub fn create_chrome_signed_in_devices_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSignedInDevices").unwrap());
@@ -2940,7 +2940,7 @@ pub fn create_chrome_signed_in_devices_template<'s>(
 /// Create FunctionTemplate for ChromeSocket.
 pub fn create_chrome_socket_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSocket").unwrap());
@@ -2958,7 +2958,7 @@ pub fn create_chrome_socket_template<'s>(
 /// Create FunctionTemplate for ChromeSpeechRecognitionPrivate.
 pub fn create_chrome_speech_recognition_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSpeechRecognitionPrivate").unwrap());
@@ -2973,62 +2973,62 @@ pub fn create_chrome_speech_recognition_private_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_storage_get_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_set_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_set_1(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_storage_get_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_set_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_storage_get_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_set_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_set_3(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
-unsafe extern "C" fn chrome_storage_get_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_set_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_set_4(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for ChromeStorage.
 pub fn create_chrome_storage_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeStorage").unwrap());
@@ -3071,68 +3071,68 @@ pub fn create_chrome_storage_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_storage_area_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_area_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_area_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_area_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_area_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_area_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_area_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_area_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_area_op_5(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_area_op_5(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_area_get_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_area_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
     }));
 }
 
-unsafe extern "C" fn chrome_storage_area_set_6(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_storage_area_set_6(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
 /// Create FunctionTemplate for ChromeStorageArea.
 pub fn create_chrome_storage_area_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeStorageArea").unwrap());
@@ -3192,7 +3192,7 @@ pub fn create_chrome_storage_area_template<'s>(
 /// Create FunctionTemplate for ChromeStorageManaged.
 pub fn create_chrome_storage_managed_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeStorageManaged").unwrap());
@@ -3210,7 +3210,7 @@ pub fn create_chrome_storage_managed_template<'s>(
 /// Create FunctionTemplate for ChromeSyncFileSystem.
 pub fn create_chrome_sync_file_system_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSyncFileSystem").unwrap());
@@ -3228,7 +3228,7 @@ pub fn create_chrome_sync_file_system_template<'s>(
 /// Create FunctionTemplate for ChromeSystemCpu.
 pub fn create_chrome_system_cpu_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemCpu").unwrap());
@@ -3246,7 +3246,7 @@ pub fn create_chrome_system_cpu_template<'s>(
 /// Create FunctionTemplate for ChromeSystemDisplay.
 pub fn create_chrome_system_display_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemDisplay").unwrap());
@@ -3264,7 +3264,7 @@ pub fn create_chrome_system_display_template<'s>(
 /// Create FunctionTemplate for ChromeSystemMemory.
 pub fn create_chrome_system_memory_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemMemory").unwrap());
@@ -3282,7 +3282,7 @@ pub fn create_chrome_system_memory_template<'s>(
 /// Create FunctionTemplate for ChromeSystemNS.
 pub fn create_chrome_system_ns_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemNS").unwrap());
@@ -3300,7 +3300,7 @@ pub fn create_chrome_system_ns_template<'s>(
 /// Create FunctionTemplate for ChromeSystemNetwork.
 pub fn create_chrome_system_network_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemNetwork").unwrap());
@@ -3318,7 +3318,7 @@ pub fn create_chrome_system_network_template<'s>(
 /// Create FunctionTemplate for ChromeSystemStorage.
 pub fn create_chrome_system_storage_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemStorage").unwrap());
@@ -3336,7 +3336,7 @@ pub fn create_chrome_system_storage_template<'s>(
 /// Create FunctionTemplate for ChromeTabCapture.
 pub fn create_chrome_tab_capture_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeTabCapture").unwrap());
@@ -3354,7 +3354,7 @@ pub fn create_chrome_tab_capture_template<'s>(
 /// Create FunctionTemplate for ChromeTabGroups.
 pub fn create_chrome_tab_groups_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeTabGroups").unwrap());
@@ -3372,7 +3372,7 @@ pub fn create_chrome_tab_groups_template<'s>(
 /// Create FunctionTemplate for ChromeTabs.
 pub fn create_chrome_tabs_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeTabs").unwrap());
@@ -3390,7 +3390,7 @@ pub fn create_chrome_tabs_template<'s>(
 /// Create FunctionTemplate for ChromeTopSites.
 pub fn create_chrome_top_sites_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeTopSites").unwrap());
@@ -3408,7 +3408,7 @@ pub fn create_chrome_top_sites_template<'s>(
 /// Create FunctionTemplate for ChromeTts.
 pub fn create_chrome_tts_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeTts").unwrap());
@@ -3426,7 +3426,7 @@ pub fn create_chrome_tts_template<'s>(
 /// Create FunctionTemplate for ChromeTtsEngine.
 pub fn create_chrome_tts_engine_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeTtsEngine").unwrap());
@@ -3444,7 +3444,7 @@ pub fn create_chrome_tts_engine_template<'s>(
 /// Create FunctionTemplate for ChromeTypes.
 pub fn create_chrome_types_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeTypes").unwrap());
@@ -3462,7 +3462,7 @@ pub fn create_chrome_types_template<'s>(
 /// Create FunctionTemplate for ChromeUsb.
 pub fn create_chrome_usb_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeUsb").unwrap());
@@ -3480,7 +3480,7 @@ pub fn create_chrome_usb_template<'s>(
 /// Create FunctionTemplate for ChromeUserScripts.
 pub fn create_chrome_user_scripts_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeUserScripts").unwrap());
@@ -3498,7 +3498,7 @@ pub fn create_chrome_user_scripts_template<'s>(
 /// Create FunctionTemplate for ChromeVirtualKeyboardPrivate.
 pub fn create_chrome_virtual_keyboard_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeVirtualKeyboardPrivate").unwrap());
@@ -3516,7 +3516,7 @@ pub fn create_chrome_virtual_keyboard_private_template<'s>(
 /// Create FunctionTemplate for ChromeVpnProvider.
 pub fn create_chrome_vpn_provider_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeVpnProvider").unwrap());
@@ -3534,7 +3534,7 @@ pub fn create_chrome_vpn_provider_template<'s>(
 /// Create FunctionTemplate for ChromeWallpaper.
 pub fn create_chrome_wallpaper_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWallpaper").unwrap());
@@ -3552,7 +3552,7 @@ pub fn create_chrome_wallpaper_template<'s>(
 /// Create FunctionTemplate for ChromeWebAuthenticationProxy.
 pub fn create_chrome_web_authentication_proxy_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebAuthenticationProxy").unwrap());
@@ -3570,7 +3570,7 @@ pub fn create_chrome_web_authentication_proxy_template<'s>(
 /// Create FunctionTemplate for ChromeWebNavigation.
 pub fn create_chrome_web_navigation_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebNavigation").unwrap());
@@ -3588,7 +3588,7 @@ pub fn create_chrome_web_navigation_template<'s>(
 /// Create FunctionTemplate for ChromeWebRequest.
 pub fn create_chrome_web_request_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebRequest").unwrap());
@@ -3606,7 +3606,7 @@ pub fn create_chrome_web_request_template<'s>(
 /// Create FunctionTemplate for ChromeWebView.
 pub fn create_chrome_web_view_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebView").unwrap());
@@ -3624,7 +3624,7 @@ pub fn create_chrome_web_view_template<'s>(
 /// Create FunctionTemplate for ChromeWebrtcAudioPrivate.
 pub fn create_chrome_webrtc_audio_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebrtcAudioPrivate").unwrap());
@@ -3642,7 +3642,7 @@ pub fn create_chrome_webrtc_audio_private_template<'s>(
 /// Create FunctionTemplate for ChromeWebrtcDesktopCapturePrivate.
 pub fn create_chrome_webrtc_desktop_capture_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebrtcDesktopCapturePrivate").unwrap());
@@ -3660,7 +3660,7 @@ pub fn create_chrome_webrtc_desktop_capture_private_template<'s>(
 /// Create FunctionTemplate for ChromeWebrtcLoggingPrivate.
 pub fn create_chrome_webrtc_logging_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebrtcLoggingPrivate").unwrap());
@@ -3675,9 +3675,9 @@ pub fn create_chrome_webrtc_logging_private_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn chrome_webstore_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn chrome_webstore_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -3687,7 +3687,7 @@ unsafe extern "C" fn chrome_webstore_op_1(info: *const v8::FunctionCallbackInfo)
 /// Create FunctionTemplate for ChromeWebstore.
 pub fn create_chrome_webstore_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebstore").unwrap());
@@ -3712,7 +3712,7 @@ pub fn create_chrome_webstore_template<'s>(
 /// Create FunctionTemplate for ChromeWebstorePrivate.
 pub fn create_chrome_webstore_private_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebstorePrivate").unwrap());
@@ -3730,7 +3730,7 @@ pub fn create_chrome_webstore_private_template<'s>(
 /// Create FunctionTemplate for ChromeWindows.
 pub fn create_chrome_windows_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "ChromeWindows").unwrap());
@@ -3745,36 +3745,36 @@ pub fn create_chrome_windows_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn external_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn external_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn external_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn external_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn external_op_3(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn external_op_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
 }
 
-unsafe extern "C" fn external_op_4(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn external_op_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -3784,7 +3784,7 @@ unsafe extern "C" fn external_op_4(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for External.
 pub fn create_external_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "External").unwrap());
@@ -3830,7 +3830,7 @@ pub fn create_external_template<'s>(
 /// Create FunctionTemplate for webkitCancelAnimationFrame.
 pub fn create_webkit_cancel_animation_frame_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitCancelAnimationFrame").unwrap());
@@ -3848,7 +3848,7 @@ pub fn create_webkit_cancel_animation_frame_template<'s>(
 /// Create FunctionTemplate for webkitConvertPointFromNodeToPage.
 pub fn create_webkit_convert_point_from_node_to_page_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitConvertPointFromNodeToPage").unwrap());
@@ -3866,7 +3866,7 @@ pub fn create_webkit_convert_point_from_node_to_page_template<'s>(
 /// Create FunctionTemplate for webkitConvertPointFromPageToNode.
 pub fn create_webkit_convert_point_from_page_to_node_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitConvertPointFromPageToNode").unwrap());
@@ -3884,7 +3884,7 @@ pub fn create_webkit_convert_point_from_page_to_node_template<'s>(
 /// Create FunctionTemplate for webkitGetGamepads.
 pub fn create_webkit_get_gamepads_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitGetGamepads").unwrap());
@@ -3902,7 +3902,7 @@ pub fn create_webkit_get_gamepads_template<'s>(
 /// Create FunctionTemplate for webkitGetUserMedia.
 pub fn create_webkit_get_user_media_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitGetUserMedia").unwrap());
@@ -3920,7 +3920,7 @@ pub fn create_webkit_get_user_media_template<'s>(
 /// Create FunctionTemplate for webkitIDBKeyRange.
 pub fn create_webkit_idb_key_range_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitIDBKeyRange").unwrap());
@@ -3938,7 +3938,7 @@ pub fn create_webkit_idb_key_range_template<'s>(
 /// Create FunctionTemplate for webkitIndexedDB.
 pub fn create_webkit_indexed_db_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitIndexedDB").unwrap());
@@ -3956,7 +3956,7 @@ pub fn create_webkit_indexed_db_template<'s>(
 /// Create FunctionTemplate for webkitMatchMedia.
 pub fn create_webkit_match_media_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitMatchMedia").unwrap());
@@ -3974,7 +3974,7 @@ pub fn create_webkit_match_media_template<'s>(
 /// Create FunctionTemplate for webkitMediaStream.
 pub fn create_webkit_media_stream_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitMediaStream").unwrap());
@@ -3992,7 +3992,7 @@ pub fn create_webkit_media_stream_template<'s>(
 /// Create FunctionTemplate for webkitNotifications.
 pub fn create_webkit_notifications_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitNotifications").unwrap());
@@ -4010,7 +4010,7 @@ pub fn create_webkit_notifications_template<'s>(
 /// Create FunctionTemplate for webkitPerformance.
 pub fn create_webkit_performance_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitPerformance").unwrap());
@@ -4028,7 +4028,7 @@ pub fn create_webkit_performance_template<'s>(
 /// Create FunctionTemplate for webkitRTCPeerConnection.
 pub fn create_webkit_rtc_peer_connection_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitRTCPeerConnection").unwrap());
@@ -4046,7 +4046,7 @@ pub fn create_webkit_rtc_peer_connection_template<'s>(
 /// Create FunctionTemplate for webkitRequestAnimationFrame.
 pub fn create_webkit_request_animation_frame_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitRequestAnimationFrame").unwrap());
@@ -4064,7 +4064,7 @@ pub fn create_webkit_request_animation_frame_template<'s>(
 /// Create FunctionTemplate for webkitRequestFileSystem.
 pub fn create_webkit_request_file_system_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitRequestFileSystem").unwrap());
@@ -4082,7 +4082,7 @@ pub fn create_webkit_request_file_system_template<'s>(
 /// Create FunctionTemplate for webkitResolveLocalFileSystemURL.
 pub fn create_webkit_resolve_local_file_system_url_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitResolveLocalFileSystemURL").unwrap());
@@ -4100,7 +4100,7 @@ pub fn create_webkit_resolve_local_file_system_url_template<'s>(
 /// Create FunctionTemplate for webkitSpeechGrammarList.
 pub fn create_webkit_speech_grammar_list_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitSpeechGrammarList").unwrap());
@@ -4118,7 +4118,7 @@ pub fn create_webkit_speech_grammar_list_template<'s>(
 /// Create FunctionTemplate for webkitSpeechRecognition.
 pub fn create_webkit_speech_recognition_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitSpeechRecognition").unwrap());
@@ -4136,7 +4136,7 @@ pub fn create_webkit_speech_recognition_template<'s>(
 /// Create FunctionTemplate for webkitSpeechRecognitionError.
 pub fn create_webkit_speech_recognition_error_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitSpeechRecognitionError").unwrap());
@@ -4154,7 +4154,7 @@ pub fn create_webkit_speech_recognition_error_template<'s>(
 /// Create FunctionTemplate for webkitStorageInfo.
 pub fn create_webkit_storage_info_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitStorageInfo").unwrap());
@@ -4169,18 +4169,18 @@ pub fn create_webkit_storage_info_template<'s>(
     tmpl
 }
 
-unsafe extern "C" fn webkit_url_op_1(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn webkit_url_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
-unsafe extern "C" fn webkit_url_op_2(info: *const v8::FunctionCallbackInfo) {
+unsafe extern "C" fn webkit_url_op_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-        let info_ref = unsafe { &*info };
+        let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
@@ -4190,7 +4190,7 @@ unsafe extern "C" fn webkit_url_op_2(info: *const v8::FunctionCallbackInfo) {
 /// Create FunctionTemplate for webkitURL.
 pub fn create_webkit_url_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitURL").unwrap());
@@ -4222,11 +4222,11 @@ pub fn create_webkit_url_template<'s>(
 /// Create FunctionTemplate for webkitAudioContext.
 pub fn create_webkit_audio_context_template<'s>(
     scope: &v8::PinScope<'s, '_>,
-    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
+    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "webkitAudioContext").unwrap());
-    if let Some(p) = parent {
+    if let Some(p) = _parent {
         tmpl.inherit(p);
     }
 

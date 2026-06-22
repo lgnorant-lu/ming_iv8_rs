@@ -1,7 +1,7 @@
 //! Code generation engine — generates Rust source for FunctionTemplate stubs.
 
 use crate::ea_handler::{process_interface_ea, EaResult};
-use crate::ir::{Definition, MemberData};
+use crate::ir::Definition;
 use crate::type_mapper;
 use std::collections::BTreeMap;
 
@@ -9,7 +9,6 @@ pub struct GeneratedFile {
     pub domain: String,
     pub content: String,
     pub interface_count: usize,
-    pub member_count: usize,
 }
 
 pub struct InstallInfo {
@@ -51,7 +50,6 @@ pub fn generate_all(
             domain: domain.clone(),
             content,
             interface_count: defs.len(),
-            member_count: defs.iter().map(|d| d.members.len()).sum(),
         });
     }
     files.sort_by(|a, b| a.domain.cmp(&b.domain));
@@ -74,7 +72,7 @@ pub fn generate_all(
 fn generate_domain_file(
     domain: &str,
     defs: &[&Definition],
-    all: &BTreeMap<String, &Definition>,
+    _all: &BTreeMap<String, &Definition>,
 ) -> String {
     let mut out = String::new();
     out.push_str(&format!("//! Generated stubs: {}\n", domain));
@@ -115,13 +113,13 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
 
             // Getter
             out.push_str(&format!(
-                "unsafe extern \"C\" fn {}_get_{}(info: *const v8::FunctionCallbackInfo) {{\n",
+                "unsafe extern \"C\" fn {}_get_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                 fn_name, idx
             ));
             out.push_str(
                 "    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {\n",
             );
-            out.push_str("        let info_ref = unsafe { &*info };\n");
+            out.push_str("        let info_ref = unsafe { &*_info };\n");
             out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
             out.push_str(
                 "        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
@@ -133,7 +131,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             // Setter for non-readonly attributes
             if !m.readonly {
                 out.push_str(&format!(
-                    "unsafe extern \"C\" fn {}_set_{}(info: *const v8::FunctionCallbackInfo) {{\n",
+                    "unsafe extern \"C\" fn {}_set_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                     fn_name, idx
                 ));
                 out.push_str("    // no-op setter stub\n");
@@ -146,13 +144,13 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             let ret_name = m.return_type.as_deref().unwrap_or("undefined");
             let tm = type_mapper::map_idl_type(ret_name);
             out.push_str(&format!(
-                "unsafe extern \"C\" fn {}_op_{}(info: *const v8::FunctionCallbackInfo) {{\n",
+                "unsafe extern \"C\" fn {}_op_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                 fn_name, idx
             ));
             out.push_str(
                 "    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {\n",
             );
-            out.push_str("        let info_ref = unsafe { &*info };\n");
+            out.push_str("        let info_ref = unsafe { &*_info };\n");
             out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
             out.push_str(
                 "        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
@@ -170,7 +168,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     let mut out = String::new();
 
     // Determine parent create function name for cross-referencing
-    let parent_fn = def.inheritance.as_ref().map(|p| {
+    let _parent_fn = def.inheritance.as_ref().map(|p| {
         format!(
             "{}::create_{}_template",
             crate::topo::classify_domain(p).replace('-', "_"),
@@ -181,7 +179,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     out.push_str(&format!("/// Create FunctionTemplate for {}.\n", name));
     out.push_str(&format!("pub fn create_{}_template<'s>(\n", fn_name));
     out.push_str("    scope: &v8::PinScope<'s, '_>,\n");
-    out.push_str("    parent: Option<v8::Local<'s, v8::FunctionTemplate>>,\n");
+    out.push_str("    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,\n");
     out.push_str(") -> v8::Local<'s, v8::FunctionTemplate> {\n");
     out.push_str(
         "    let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);\n",
@@ -193,13 +191,13 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
 
     // Inheritance
     if def.inheritance.is_some() {
-        out.push_str("    if let Some(p) = parent {\n");
+        out.push_str("    if let Some(p) = _parent {\n");
         out.push_str("        tmpl.inherit(p);\n");
         out.push_str("    }\n");
     }
 
     // Prototype setup
-    let has_members = !def.members.is_empty();
+    let _has_members = !def.members.is_empty();
     out.push_str("\n    let proto = tmpl.prototype_template(scope);\n");
 
     // Symbol.toStringTag

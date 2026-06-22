@@ -30,36 +30,6 @@ pub struct MemberData {
     pub arguments: Vec<String>,
 }
 
-#[derive(Debug, Clone)]
-pub struct ValidationReport {
-    pub total_definitions: usize,
-    pub interfaces: usize,
-    pub dictionaries: usize,
-    pub enums: usize,
-    pub typedefs: usize,
-    pub callbacks: usize,
-    pub namespaces: usize,
-    pub errors: Vec<String>,
-}
-
-impl ValidationReport {
-    pub fn new() -> Self {
-        Self {
-            total_definitions: 0,
-            interfaces: 0,
-            dictionaries: 0,
-            enums: 0,
-            typedefs: 0,
-            callbacks: 0,
-            namespaces: 0,
-            errors: Vec::new(),
-        }
-    }
-    pub fn is_valid(&self) -> bool {
-        self.errors.is_empty()
-    }
-}
-
 /// Extract the type name from an IDL type JSON value (recursive).
 fn extract_type_name(val: &serde_json::Value) -> Option<String> {
     match val {
