@@ -6,6 +6,58 @@
 use crate::state::RuntimeState;
 use std::collections::HashMap;
 
+/// Keys owned by native navigator getters (installed via native_env.rs
+/// on Navigator.prototype). env_inject must skip these to avoid
+/// READ_ONLY own data property shadowing the native accessor.
+///
+/// Includes keys that may not yet exist as direct entries in
+/// iv8-defaults.json (e.g. languages, plugins). Those entries are
+/// harmless: the skip check simply never matches them.
+const NATIVE_NAVIGATOR_KEYS: &[&str] = &[
+    "userAgent",
+    "appVersion",
+    "platform",
+    "vendor",
+    "vendorSub",
+    "product",
+    "productSub",
+    "language",
+    "languages",
+    "hardwareConcurrency",
+    "deviceMemory",
+    "maxTouchPoints",
+    "cookieEnabled",
+    "onLine",
+    "doNotTrack",
+    "webdriver",
+    "appName",
+    "appCodeName",
+    "permissions",
+    "mediaDevices",
+    "serviceWorker",
+    "pdfViewerEnabled",
+    "plugins",
+    "mimeTypes",
+    "connection",
+    "geolocation",
+    "clipboard",
+    "credentials",
+];
+
+/// Keys owned by native screen getters (installed via native_env.rs
+/// on Screen.prototype). env_inject must skip these to avoid
+/// READ_ONLY own data property shadowing the native accessor.
+const NATIVE_SCREEN_KEYS: &[&str] = &[
+    "width",
+    "height",
+    "availWidth",
+    "availHeight",
+    "colorDepth",
+    "pixelDepth",
+    "availLeft",
+    "availTop",
+];
+
 /// Keys owned by native window getters (installed via global_template).
 /// env_inject must skip these to avoid READ_ONLY own data property
 /// shadowing the native accessor installed in embedded_v8.rs.
@@ -107,11 +159,28 @@ fn install_fields_on_object(
         }
     }
 
-    // Set direct fields with ReadOnly + DontDelete (prevents JS from modifying/deleting)
+    // Set direct fields with ReadOnly + DontDelete
+    // (prevents JS from modifying/deleting)
     for (field_name, value) in &direct {
-        // Skip native-owned window keys — they get native accessors via
-        // global_template in embedded_v8.rs instead.
-        if prefix == "window" && NATIVE_WINDOW_KEYS.contains(field_name) {
+        // Skip native-owned navigator keys — they get native
+        // accessors via native_env.rs Navigator.prototype.
+        if prefix == "navigator"
+            && NATIVE_NAVIGATOR_KEYS.contains(field_name)
+        {
+            continue;
+        }
+        // Skip native-owned screen keys — they get native
+        // accessors via native_env.rs Screen.prototype.
+        if prefix == "screen"
+            && NATIVE_SCREEN_KEYS.contains(field_name)
+        {
+            continue;
+        }
+        // Skip native-owned window keys — they get native
+        // accessors via global_template in embedded_v8.rs.
+        if prefix == "window"
+            && NATIVE_WINDOW_KEYS.contains(field_name)
+        {
             continue;
         }
         let key = crate::v8_utils::v8_string(scope, field_name);
@@ -275,5 +344,58 @@ mod tests {
             "'use strict'; try { navigator.userAgent = 'hacked'; 'written' } catch(e) { 'protected' }"
         );
         assert_eq!(result, RustValue::String("protected".into()));
+    }
+
+    #[test]
+    fn navigator_user_agent_not_own_property() {
+        let mut kernel = make_kernel_with_env();
+        kernel.install_environment();
+        // After v0.8.69, navigator.userAgent must NOT be an own
+        // data property. It should be a prototype accessor from
+        // native_env.rs. hasOwnProperty must return false.
+        let result = kernel.eval_to_rust_value(
+            "Object.prototype.hasOwnProperty\
+             .call(navigator, 'userAgent')",
+        );
+        assert_eq!(
+            result,
+            RustValue::Bool(false),
+            "navigator.userAgent must not be own property"
+        );
+    }
+
+    #[test]
+    fn screen_width_not_own_property() {
+        let mut kernel = make_kernel_with_env();
+        kernel.install_environment();
+        // After v0.8.69, screen.width must NOT be an own data
+        // property. It should be a prototype accessor from
+        // native_env.rs. hasOwnProperty must return false.
+        let result = kernel.eval_to_rust_value(
+            "Object.prototype.hasOwnProperty\
+             .call(screen, 'width')",
+        );
+        assert_eq!(
+            result,
+            RustValue::Bool(false),
+            "screen.width must not be own property"
+        );
+    }
+
+    #[test]
+    fn document_ready_state_still_own_property() {
+        let mut kernel = make_kernel_with_env();
+        kernel.install_environment();
+        // document.readyState has no native accessor, so
+        // env_inject must still inject it as own data property.
+        let result = kernel.eval_to_rust_value(
+            "Object.prototype.hasOwnProperty\
+             .call(document, 'readyState')",
+        );
+        assert_eq!(
+            result,
+            RustValue::Bool(true),
+            "document.readyState must remain own property"
+        );
     }
 }
