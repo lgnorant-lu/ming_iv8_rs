@@ -293,3 +293,179 @@ fn test_conditional_share_visible_on_mobile() {
     common::assert_js_str(&mut k, "typeof navigator.share", "function");
     common::assert_js_str(&mut k, "typeof navigator.canShare", "function");
 }
+
+// ── v0.8.70 Slice 0: WorkerNavigator Runtime Preflight ──────────
+
+#[test]
+fn test_worker_navigator_typeof() {
+    let mut k = common::make_kernel();
+    // Generated skeleton should install WorkerNavigator constructor
+    common::assert_js_str(
+        &mut k,
+        "typeof WorkerNavigator",
+        "function",
+    );
+}
+
+#[test]
+fn test_worker_navigator_prototype_exists() {
+    let mut k = common::make_kernel();
+    // WorkerNavigator.prototype must be an object
+    common::assert_js_str(
+        &mut k,
+        "typeof WorkerNavigator.prototype",
+        "object",
+    );
+}
+
+#[test]
+fn test_worker_navigator_constructor_throws() {
+    let mut k = common::make_kernel();
+    // new WorkerNavigator() should throw TypeError (Illegal constructor)
+    let result = k.eval_to_rust_value(
+        "'use strict'; try { new WorkerNavigator(); 'ok' } \
+         catch(e) { e.constructor.name }"
+    );
+    assert_eq!(
+        common::to_str(&result),
+        "TypeError",
+        "new WorkerNavigator() must throw TypeError"
+    );
+}
+
+#[test]
+fn test_worker_navigator_not_enumerable() {
+    let mut k = common::make_kernel();
+    // WorkerNavigator constructor should be DONT_ENUM on global
+    common::assert_js_str(
+        &mut k,
+        "Object.prototype.propertyIsEnumerable\
+         .call(globalThis, 'WorkerNavigator')",
+        "false",
+    );
+}
+
+// ── v0.8.70 Slice 1: Navigator Profile Consistency ─────────────
+
+#[test]
+fn test_ua_platform_family_coherent_with_nav_platform() {
+    let mut k = common::make_kernel();
+    let ua = common::to_str(&k.eval_to_rust_value("navigator.userAgent"));
+    let plat = common::to_str(&k.eval_to_rust_value("navigator.platform"));
+    // Default profile: UA contains "Windows", platform is "Win32"
+    if plat.contains("32") || plat.contains("Win") {
+        assert!(
+            ua.contains("Windows"),
+            "platform family {} expects UA contains Windows: {}",
+            plat, ua
+        );
+    } else if plat.contains("Mac") {
+        assert!(ua.contains("Mac"), "Mac platform missing from UA");
+    } else if plat.contains("Linux") {
+        assert!(ua.contains("Linux"), "Linux platform missing from UA");
+    }
+}
+
+#[test]
+fn test_uadata_platform_coherent_with_nav_platform() {
+    let mut k = common::make_kernel();
+    let uadata_plat = common::to_str(
+        &k.eval_to_rust_value("navigator.userAgentData.platform")
+    );
+    let nav_plat = common::to_str(
+        &k.eval_to_rust_value("navigator.platform")
+    );
+    // Default: ua_platform="Windows", platform="Win32"
+    // Family mapping, not equality
+    if uadata_plat.contains("Windows") {
+        assert!(
+            nav_plat.contains("Win"),
+            "uadata Windows expects nav Win32, got {}",
+            nav_plat
+        );
+    } else if uadata_plat.contains("macOS") {
+        assert!(
+            nav_plat.contains("Mac"),
+            "uadata macOS expects nav MacIntel, got {}",
+            nav_plat
+        );
+    } else if uadata_plat.contains("Linux") {
+        assert!(
+            nav_plat.contains("Linux"),
+            "uadata Linux expects nav Linux, got {}",
+            nav_plat
+        );
+    }
+    // Both must be non-empty strings
+    assert!(!uadata_plat.is_empty(), "uadata platform empty");
+    assert!(!nav_plat.is_empty(), "nav platform empty");
+}
+
+#[test]
+fn test_uadata_mobile_matches_ua_mobile() {
+    let mut k = common::make_kernel();
+    // Default profile ua_mobile = false (desktop)
+    // userAgentData.mobile must be false
+    common::assert_js_str(
+        &mut k,
+        "navigator.userAgentData.mobile",
+        "false",
+    );
+    // Test with mobile profile
+    use iv8_core::shims::browser_profile::BrowserProfile;
+    let profile = BrowserProfile {
+        ua_mobile: true,
+        ..iv8_core::shims::browser_profile::DEFAULT_PROFILE.clone()
+    };
+    let mut km = common::make_kernel_with_profile(profile);
+    common::assert_js_str(
+        &mut km,
+        "navigator.userAgentData.mobile",
+        "true",
+    );
+}
+
+#[test]
+fn test_hardware_concurrency_positive() {
+    let mut k = common::make_kernel();
+    let hc = common::to_str(
+        &k.eval_to_rust_value("navigator.hardwareConcurrency")
+    );
+    let val: f64 = hc.parse().unwrap();
+    assert!(val >= 1.0, "hardwareConcurrency must be >= 1: {}", val);
+    assert!(val <= 128.0, "hardwareConcurrency <= 128: {}", val);
+}
+
+#[test]
+fn test_device_memory_positive() {
+    let mut k = common::make_kernel();
+    let dm = common::to_str(
+        &k.eval_to_rust_value("navigator.deviceMemory")
+    );
+    let val: f64 = dm.parse().unwrap();
+    assert!(val >= 0.5, "deviceMemory must be >= 0.5: {}", val);
+    assert!(val <= 64.0, "deviceMemory <= 64: {}", val);
+}
+
+#[test]
+fn test_override_ua_returns_override() {
+    use std::collections::HashMap;
+    use serde_json::Value;
+    use iv8_core::EmbeddedV8Kernel;
+    use iv8_core::KernelConfig;
+    let mut overrides = HashMap::new();
+    overrides.insert(
+        "navigator.userAgent".to_string(),
+        Value::String("CustomBot/2.0".to_string()),
+    );
+    let cfg = KernelConfig {
+        environment_overrides: Some(overrides),
+        ..KernelConfig::default()
+    };
+    let mut k = EmbeddedV8Kernel::new(cfg).unwrap();
+    common::assert_js_str(
+        &mut k,
+        "navigator.userAgent",
+        "CustomBot/2.0",
+    );
+}

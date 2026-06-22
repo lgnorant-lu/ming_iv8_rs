@@ -29,6 +29,7 @@ use iv8_surface::generated::web_apis::create_navigator_template;
 pub fn install_native_env(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     install_native_navigator(scope, global);
     install_native_screen(scope, global);
+    install_worker_navigator(scope, global);
 }
 
 // ─── navigator ────────────────────────────────────────────────────────────────
@@ -185,6 +186,37 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
         global.define_own_property(
             scope,
             ctor_key.into(),
+            func.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+    }
+}
+
+// ─── WorkerNavigator (v0.8.70) ────────────────────────────────────────────
+
+/// Install a native WorkerNavigator constructor that inherits from the
+/// generated create_worker_navigator_template and uses illegal_constructor
+/// so that `new WorkerNavigator()` throws TypeError.
+fn install_worker_navigator(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+) {
+    use iv8_surface::generated::workers::create_worker_navigator_template;
+
+    let gen_tmpl = create_worker_navigator_template(scope, None);
+    let wn_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor)
+        .build(scope);
+    wn_tmpl.set_class_name(
+        crate::v8_utils::v8_string(scope, "WorkerNavigator"),
+    );
+    wn_tmpl.inherit(gen_tmpl);
+
+    if let Some(func) = wn_tmpl.get_function(scope) {
+        let key =
+            crate::v8_utils::v8_string(scope, "WorkerNavigator");
+        global.define_own_property(
+            scope,
+            key.into(),
             func.into(),
             v8::PropertyAttribute::DONT_ENUM,
         );
