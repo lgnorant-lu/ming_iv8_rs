@@ -57,10 +57,25 @@ pub fn install_date_interceptor(scope: &v8::PinScope<'_, '_>, global: v8::Local<
     let now_method_key = crate::v8_utils::v8_string(scope, "now");
     perf_obj.set(scope, now_method_key.into(), perf_now_fn.into());
 
-    // Install performance.timeOrigin — context creation time (0 in logical mode)
+    // Install performance.timeOrigin — context creation logical epoch or real wall-clock.
+    // Logical mode: 1704067200000.0 (IV8 epoch 2024-01-01T00:00:00Z).
+    // System mode: system time at context creation captured by kernel.
     let origin_key = crate::v8_utils::v8_string(scope, "timeOrigin");
-    let origin_val = v8::Number::new(scope, 0.0);
-    perf_obj.set(scope, origin_key.into(), origin_val.into());
+    let origin_val = {
+        let isolate: &v8::Isolate = &**scope;
+        let state = RuntimeState::get(isolate);
+        match state.time_mode {
+            TimeMode::Logical => 1704067200000.0,
+            TimeMode::System => {
+                std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .unwrap_or_default()
+                    .as_secs_f64()
+                    * 1000.0
+            }
+        }
+    };
+    perf_obj.set(scope, origin_key.into(), v8::Number::new(scope, origin_val).into());
 
     // Install Date constructor shim (wraps original to use logical time for no-arg calls)
     // This is done via JS to preserve the original Date behavior for Date(timestamp) calls.

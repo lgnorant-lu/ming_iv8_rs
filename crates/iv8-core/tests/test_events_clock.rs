@@ -121,3 +121,43 @@ fn performance_now_type_is_number() {
     let result = kernel.eval_to_rust_value("typeof performance.now()");
     assert_eq!(result, RustValue::String("number".into()));
 }
+
+#[test]
+fn performance_time_origin_is_not_zero() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value("performance.timeOrigin");
+    let val = as_f64(&result);
+    // timeOrigin must not be 0 (was hardcoded 0 before v0.8.71)
+    assert!(
+        val > 0.0,
+        "performance.timeOrigin should be > 0 (logical epoch or system time), got: {}",
+        val
+    );
+}
+
+#[test]
+fn performance_time_origin_coherence() {
+    let mut kernel = common::make_kernel();
+    let result = kernel.eval_to_rust_value(
+        "Math.abs((Date.now() - performance.timeOrigin) - performance.now()) < 1.0",
+    );
+    assert_eq!(
+        result,
+        RustValue::Bool(true),
+        "Date.now() - performance.timeOrigin should approx equal performance.now()"
+    );
+}
+
+#[test]
+fn performance_time_origin_coherence_after_advance() {
+    let mut kernel = common::make_kernel();
+    kernel.eval_to_rust_value("__iv8__.eventLoop.advance(1000)");
+    let result = kernel.eval_to_rust_value(
+        "Math.abs((Date.now() - performance.timeOrigin) - performance.now()) < 1.0",
+    );
+    assert_eq!(
+        result,
+        RustValue::Bool(true),
+        "Date.now() - performance.timeOrigin should approx equal performance.now() after advance(1000)"
+    );
+}
