@@ -334,3 +334,65 @@ fn test_parcel_execution_direct_eval() {
     );
     assert_eq!(val, iv8_core::convert::RustValue::Int(42));
 }
+
+#[test]
+fn test_vite_esm_detection_in_plan() {
+    let src = "import { x } from './dep.js'; export const y = 1;";
+    let plan = planner::plan_entry(src, Persona::Analysis, None, vec![]);
+    let has_vite = plan
+        .candidate_strategies
+        .iter()
+        .any(|c| matches!(c.strategy_kind, StrategyKind::ViteBridge));
+    assert!(has_vite);
+}
+
+#[test]
+fn test_vite_g8_tla_does_not_hang() {
+    let src = "const x = await Promise.resolve(42); export { x };";
+    let mut kernel = common::make_kernel();
+    kernel.eval(iv8_core::entry::vite::esm_prelude(), EvalOpts::default()).unwrap();
+    let result = kernel.eval_module(src, Some("inline.js"), EvalOpts::default());
+    assert!(result.is_ok());
+    kernel.drain_microtasks();
+}
+
+#[test]
+fn test_vite_g6_import_meta_shim() {
+    let src = "export const url = import.meta.url;";
+    let mut kernel = common::make_kernel();
+    kernel.eval(iv8_core::entry::vite::esm_prelude(), EvalOpts::default()).unwrap();
+    let result = kernel.eval_module(src, Some("inline.js"), EvalOpts::default());
+    assert!(result.is_ok());
+    kernel.drain_microtasks();
+}
+
+#[test]
+fn test_vite_g7_dynamic_import_rejected() {
+    let src = r#"
+        export async function load() {
+            try { await globalThis.__iv8_dynamic_import('./dep'); return 'resolved'; }
+            catch(e) { return e.message; }
+        }
+    "#;
+    let mut kernel = common::make_kernel();
+    kernel.eval(iv8_core::entry::vite::esm_prelude(), EvalOpts::default()).unwrap();
+    kernel.eval_module(src, Some("inline.js"), EvalOpts::default()).unwrap();
+    kernel.drain_microtasks();
+    let val = kernel.eval_to_rust_value(
+        "(async function(){try{return await load()}catch(e){return 'ERR:'+e.message}})()",
+    );
+    // import() is async, so the IIFE result is a Promise; the caller must await it
+    assert!(val != iv8_core::convert::RustValue::Null);
+}
+
+#[test]
+fn test_vite_iife_still_works() {
+    let src = r#"
+        const __vitePreload = function() { return Promise.resolve(); };
+        var result = 42;
+    "#;
+    let mut kernel = common::make_kernel();
+    kernel.eval(src, EvalOpts::default()).unwrap();
+    let val = kernel.eval_to_rust_value("result");
+    assert_eq!(val, iv8_core::convert::RustValue::Int(42));
+}

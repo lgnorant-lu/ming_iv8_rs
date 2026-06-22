@@ -142,16 +142,36 @@ pub fn run_entry(
             _ => source.to_string(),
         };
 
-        let source_ok = match kernel.eval(&eval_source, EvalOpts::default()) {
-            Ok(_) => true,
-            Err(e) => {
-                result.diagnostic_records.push(diag::DiagnosticRecord::new(
-                    "ACT_SOURCE_EVAL_FAILED",
-                    diag::DiagnosticSeverity::Error,
-                    "armed",
-                    &format!("{} source eval: {}", strategy_id, e),
-                ));
-                false
+        let source_ok = if strategy_kind == StrategyKind::ViteBridge
+            && crate::entry::vite::detect(source).is_esm
+        {
+            match kernel.eval_module(source, Some("inline.js"), EvalOpts::default()) {
+                Ok(_) => {
+                    kernel.drain_microtasks();
+                    true
+                }
+                Err(e) => {
+                    result.diagnostic_records.push(diag::DiagnosticRecord::new(
+                        "ACT_SOURCE_EVAL_FAILED",
+                        diag::DiagnosticSeverity::Error,
+                        "armed",
+                        &format!("{} source eval (ESM): {}", strategy_id, e),
+                    ));
+                    false
+                }
+            }
+        } else {
+            match kernel.eval(&eval_source, EvalOpts::default()) {
+                Ok(_) => true,
+                Err(e) => {
+                    result.diagnostic_records.push(diag::DiagnosticRecord::new(
+                        "ACT_SOURCE_EVAL_FAILED",
+                        diag::DiagnosticSeverity::Error,
+                        "armed",
+                        &format!("{} source eval: {}", strategy_id, e),
+                    ));
+                    false
+                }
             }
         };
         if !source_ok {
@@ -339,8 +359,18 @@ fn apply_strategy_prelude(
                 .map_err(|e| format!("browserify prelude: {}", e))?;
             Ok(())
         }
-        StrategyKind::RollupBridge | StrategyKind::ViteBridge | StrategyKind::UmdBridge
+        StrategyKind::RollupBridge | StrategyKind::UmdBridge
             | StrategyKind::ParcelBridge => Ok(()),
+        StrategyKind::ViteBridge => {
+            let det = crate::entry::vite::detect(source);
+            if det.is_esm {
+                let prelude = crate::entry::vite::esm_prelude();
+                kernel
+                    .eval(prelude, EvalOpts::default())
+                    .map_err(|e| format!("vite esm prelude: {}", e))?;
+            }
+            Ok(())
+        }
     }
 }
 
@@ -410,7 +440,8 @@ fn collect_strategy_evidence(
     }
 
     if matches!(kind, StrategyKind::ViteBridge) {
-        let (graph, evidence, diagnostics) = crate::entry::vite::collect_evidence(kernel);
+        let is_esm = crate::entry::vite::detect(source).is_esm;
+        let (graph, evidence, diagnostics) = crate::entry::vite::collect_evidence(kernel, is_esm);
         result.module_graph = Some(graph);
         result.observed_evidence.extend(evidence);
         result.diagnostic_records.extend(diagnostics);

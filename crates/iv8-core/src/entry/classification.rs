@@ -53,32 +53,37 @@ pub fn classify(source: &str, _signals: &[String]) -> SampleKind {
         return SampleKind::ViteBundle;
     }
 
-    // Priority 6: Rollup IIFE bundle (PURE annotations, interop helpers)
+    // Priority 6: ESM module (import/export without bundler markers)
+    if raw_signals.has_esm {
+        return SampleKind::ViteBundle;
+    }
+
+    // Priority 7: Rollup IIFE bundle (PURE annotations, interop helpers)
     if raw_signals.has_rollup_iife {
         return SampleKind::RollupBundle;
     }
 
-    // Priority 7: UMD bundle (AMD/CJS/global branch chain)
+    // Priority 8: UMD bundle (AMD/CJS/global branch chain)
     if raw_signals.has_rollup_umd {
         return SampleKind::UmdBundle;
     }
 
-    // Priority 8: Browserify weak (CommonJS wrappers, no prelude)
+    // Priority 9: Browserify weak (CommonJS wrappers, no prelude)
     if raw_signals.has_browserify_weak {
         return SampleKind::BrowserifyRuntime;
     }
 
-    // Priority 9: Eval-heavy
+    // Priority 10: Eval-heavy
     if raw_signals.eval_call_count >= 3 {
         return SampleKind::EvalHeavy;
     }
 
-    // Priority 10: Closure-captured runtime (heuristic)
+    // Priority 11: Closure-captured runtime (heuristic)
     if raw_signals.has_early_reference_capture {
         return SampleKind::ClosureCapturedRuntime;
     }
 
-    // Priority 11: Unknown IIFE wrapper
+    // Priority 12: Unknown IIFE wrapper
     if raw_signals.has_iife_wrapper {
         return SampleKind::UnknownIife;
     }
@@ -131,6 +136,9 @@ pub fn extract_signals(source: &str) -> Vec<String> {
     if set.has_parcel {
         signals.push("parcel".into());
     }
+    if set.has_esm {
+        signals.push("esm".into());
+    }
 
     signals
 }
@@ -153,6 +161,7 @@ struct SignalSet {
     has_vite: bool,
     has_iife_wrapper: bool,
     has_parcel: bool,
+    has_esm: bool,
 }
 
 impl SignalSet {
@@ -172,6 +181,7 @@ impl SignalSet {
         let has_vite = detect_vite(source);
         let has_iife_wrapper = detect_iife_wrapper(source);
         let has_parcel = detect_parcel(source);
+        let has_esm = detect_esm(source);
 
         SignalSet {
             has_webpack_require,
@@ -187,6 +197,7 @@ impl SignalSet {
             has_vite,
             has_iife_wrapper,
             has_parcel,
+            has_esm,
         }
     }
 }
@@ -369,6 +380,20 @@ fn detect_parcel(source: &str) -> bool {
     has_parcel_marker && has_parcel_require
 }
 
+/// ESM signal: import/export declarations.
+fn detect_esm(source: &str) -> bool {
+    let has_import = source.contains("import {")
+        || source.contains("import \"")
+        || source.contains("import *")
+        || source.contains("import{");
+    let has_export = source.contains("export {")
+        || source.contains("export default")
+        || source.contains("export const")
+        || source.contains("export function")
+        || source.contains("export class");
+    (has_import || has_export) && !source.contains("__webpack_require__")
+}
+
 /// IIFE wrapper detection: self-executing function pattern.
 /// Strips leading `//` comment lines before checking for IIFE prefix.
 fn detect_iife_wrapper(source: &str) -> bool {
@@ -548,6 +573,12 @@ mod tests {
     fn test_parcel_bundle_classification() {
         let src = "var $parcel$global={}; function parcelRequire(id){return{}};";
         assert_eq!(classify(src, &[]), SampleKind::ParcelBundle);
+    }
+
+    #[test]
+    fn test_esm_classification() {
+        let src = "import { x } from './dep.js'; export const y = 1;";
+        assert_eq!(classify(src, &[]), SampleKind::ViteBundle);
     }
 
     #[test]
