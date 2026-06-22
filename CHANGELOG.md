@@ -6,6 +6,51 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.67] - 2026-06-22
+
+> Local milestone: M4 Tools/Codegen closeout and bounded surface coverage audit.
+
+### Added
+- Golden snapshot regression for `iv8-surface-codegen`: 33 committed golden files
+  plus `test_golden`, resolving `unified_ir.json` through `CARGO_MANIFEST_DIR`.
+- `tools/iv8-surface-codegen/src/lib.rs` exports codegen modules for integration tests.
+- `v0.8.67-surface-coverage-audit.md`: formal boundary for current IR coverage
+  (1284/1284 generated and installed) versus non-claims such as Chrome parity,
+  descriptor parity, runtime semantics, deep fingerprint values, and cross-layer
+  HTTP/TLS/IP enforcement.
+- M6 Post-M5 Gate Audit handoff recorded for Chrome exposure, member coverage,
+  descriptor parity, behavior probes, 11+2 responsibility split, and deferred/out-of-scope closure.
+
+### Changed
+- `type_mapper` now handles bigint, Promise, sequence, FrozenArray, record,
+  nullable, and union types with explicit default shapes and tests.
+- IR extended-attribute parsing now preserves `name=value` strings so
+  `LegacyFactoryFunction=Image` reaches codegen.
+- Named constructor aliases for `Image`, `Option`, and `Audio` are generated in
+  `install_all.rs` using `global.define_own_property(..., DONT_ENUM)`.
+- Generated callback/template params now use `_info` / `_parent`-style names where
+  appropriate, reducing `iv8-surface` warnings from 1990 to 66.
+
+### Removed
+- Confirmed-dead codegen scaffolding: `ValidationReport`, `DomainMap`,
+  `GeneratedFile.member_count`, `EaResult.has_replaceable`, `exposed_guard`, and
+  unused imports/locals. Schema/contract fields that still carry IR structure were retained.
+
+### Quality Gates
+- `cargo test -p iv8-surface-codegen --lib`: 31/31 passed.
+- `cargo test -p iv8-surface-codegen --test test_golden`: 1/1 passed, diff 0.
+- `cargo test -p iv8-core --lib`: 273/273 passed.
+- `cargo check -p iv8-surface`: 0 errors, 66 warnings.
+- `cargo check --workspace`: 0 errors.
+
+### Known Limitations
+- The 1284/1284 result is current `unified_ir.json` interface template/install
+  coverage only. It is not a full Chrome/Web Platform surface parity claim.
+- DOM constructor argument wiring for `new Image(src)`, `new Audio(src)`, and
+  `new Option(...)` remains v0.9+.
+- Descriptor parity, conditional exposure, member-level Chrome parity, deep
+  fingerprint values, and cross-layer enforcement are deferred to M6/v0.9+.
+
 ## [0.8.66] - 2026-06-22
 
 > Local milestone: M3 Events/Timers behavior depth (bounded browser-like baseline).
