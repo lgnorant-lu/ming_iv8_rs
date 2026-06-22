@@ -1180,7 +1180,7 @@ unsafe extern "C" fn clipboard_change_event_get_2(info: *const v8::FunctionCallb
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::Object::new(scope).into());
+        rv.set(v8::BigInt::new_from_i64(scope, 0).into());
     }));
 }
 

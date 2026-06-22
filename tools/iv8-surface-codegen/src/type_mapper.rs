@@ -78,6 +78,53 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
             needs_scope: true,
         },
 
+        // bigint
+        "bigint" => TypeMap {
+            rust_type: "v8::Local<'s, v8::BigInt>".into(),
+            default_value: "v8::BigInt::new_from_i64(scope, 0).into()".into(),
+            needs_scope: true,
+        },
+
+        // Promise<T>
+        name if is_promise(name) => TypeMap {
+            rust_type: "v8::Local<'s, v8::Promise>".into(),
+            default_value: "v8::Promise::new(scope).into()".into(),
+            needs_scope: true,
+        },
+
+        // sequence<T> / FrozenArray<T>
+        name if is_sequence(name) || is_frozen_array(name) => TypeMap {
+            rust_type: "v8::Local<'s, v8::Array>".into(),
+            default_value: "v8::Array::new(scope, 0).into()".into(),
+            needs_scope: true,
+        },
+
+        // record<K,V>
+        name if is_record(name) => TypeMap {
+            rust_type: "v8::Local<'s, v8::Object>".into(),
+            default_value: "v8::Object::new(scope).into()".into(),
+            needs_scope: true,
+        },
+
+        // Nullable types (T?)
+        name if name.ends_with('?') => {
+            let inner = name.trim_end_matches('?');
+            let mut m = map_idl_type(inner);
+            m.default_value = "v8::null(scope).into()".into();
+            m
+        }
+
+        // Union types (T or U) — use first member
+        name if is_union(name) => {
+            let inner = name
+                .trim_start_matches('(')
+                .trim_end_matches(')')
+                .split(" or ")
+                .next()
+                .unwrap_or("any");
+            map_idl_type(inner.trim())
+        }
+
         // Interface references — return empty object skeleton
         _ => TypeMap {
             rust_type: "v8::Local<'s, v8::Object>".into(),
@@ -103,6 +150,26 @@ fn is_buffer_source(name: &str) -> bool {
             | "BigInt64Array"
             | "BigUint64Array"
     )
+}
+
+fn is_promise(name: &str) -> bool {
+    name.starts_with("Promise<")
+}
+
+fn is_sequence(name: &str) -> bool {
+    name.starts_with("sequence<")
+}
+
+fn is_frozen_array(name: &str) -> bool {
+    name.starts_with("FrozenArray<")
+}
+
+fn is_record(name: &str) -> bool {
+    name.starts_with("record<")
+}
+
+fn is_union(name: &str) -> bool {
+    name.contains(" or ") && name.starts_with('(') && name.ends_with(')')
 }
 
 /// Convert an IDL type name to a Rust-safe identifier.
@@ -189,6 +256,44 @@ mod tests {
         // (was v8::null prior to the skeleton-repair change).
         let m = map_idl_type("MyInterface");
         assert_eq!(m.default_value, "v8::Object::new(scope).into()");
+    }
+
+    #[test]
+    fn test_bigint_mapping() {
+        let m = map_idl_type("bigint");
+        assert_eq!(m.default_value, "v8::BigInt::new_from_i64(scope, 0).into()");
+    }
+
+    #[test]
+    fn test_promise_mapping() {
+        let m = map_idl_type("Promise<Response>");
+        assert_eq!(m.default_value, "v8::Promise::new(scope).into()");
+    }
+
+    #[test]
+    fn test_sequence_mapping() {
+        let m = map_idl_type("sequence<DOMString>");
+        assert_eq!(m.default_value, "v8::Array::new(scope, 0).into()");
+    }
+
+    #[test]
+    fn test_frozen_array_mapping() {
+        let m = map_idl_type("FrozenArray<long>");
+        assert_eq!(m.default_value, "v8::Array::new(scope, 0).into()");
+    }
+
+    #[test]
+    fn test_record_mapping() {
+        let m = map_idl_type("record<DOMString, any>");
+        assert_eq!(m.default_value, "v8::Object::new(scope).into()");
+    }
+
+    #[test]
+    fn test_nullable_mapping() {
+        let m = map_idl_type("DOMString?");
+        assert_eq!(m.default_value, "v8::null(scope).into()");
+        // inner type should still be correct
+        assert_eq!(m.rust_type, "v8::Local<'s, v8::String>");
     }
 
     #[test]
