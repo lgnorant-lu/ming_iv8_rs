@@ -2631,9 +2631,12 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
     } // end last batch
 
     // Register constructors on global (non-enumerable)
-    // ANGLE_instanced_arrays: NoInterfaceObject — skip global registration
     {
         v8::scope!(let scope, scope);
+        if let Some(ctor_angle_instanced_arrays) = templates.get("ANGLE_instanced_arrays").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_angle_instanced_arrays = v8::String::new(scope, "ANGLE_instanced_arrays").unwrap();
+            global.define_own_property(scope, name_angle_instanced_arrays.into(), ctor_angle_instanced_arrays.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_abort_controller) = templates.get("AbortController").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_abort_controller = v8::String::new(scope, "AbortController").unwrap();
             global.define_own_property(scope, name_abort_controller.into(), ctor_abort_controller.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -3030,13 +3033,13 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_chrome_experience_sampling_private = v8::String::new(scope, "ChromeExperienceSamplingPrivate").unwrap();
             global.define_own_property(scope, name_chrome_experience_sampling_private.into(), ctor_chrome_experience_sampling_private.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_chrome_extension) = templates.get("ChromeExtension").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_chrome_extension = v8::String::new(scope, "ChromeExtension").unwrap();
             global.define_own_property(scope, name_chrome_extension.into(), ctor_chrome_extension.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_chrome_feedback_private) = templates.get("ChromeFeedbackPrivate").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_chrome_feedback_private = v8::String::new(scope, "ChromeFeedbackPrivate").unwrap();
             global.define_own_property(scope, name_chrome_feedback_private.into(), ctor_chrome_feedback_private.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -3433,13 +3436,13 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_compression_stream = v8::String::new(scope, "CompressionStream").unwrap();
             global.define_own_property(scope, name_compression_stream.into(), ctor_compression_stream.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_contact_address) = templates.get("ContactAddress").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_contact_address = v8::String::new(scope, "ContactAddress").unwrap();
             global.define_own_property(scope, name_contact_address.into(), ctor_contact_address.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_contacts_manager) = templates.get("ContactsManager").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_contacts_manager = v8::String::new(scope, "ContactsManager").unwrap();
             global.define_own_property(scope, name_contacts_manager.into(), ctor_contacts_manager.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -3564,19 +3567,58 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_digital_goods_service = v8::String::new(scope, "DigitalGoodsService").unwrap();
             global.define_own_property(scope, name_digital_goods_service.into(), ctor_digital_goods_service.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    // EXT_blend_minmax: NoInterfaceObject — skip global registration
-    // EXT_color_buffer_float: NoInterfaceObject — skip global registration
-    // EXT_color_buffer_half_float: NoInterfaceObject — skip global registration
-    // EXT_disjoint_timer_query: NoInterfaceObject — skip global registration
-    // EXT_disjoint_timer_query_webgl2: NoInterfaceObject — skip global registration
-    // EXT_float_blend: NoInterfaceObject — skip global registration
-    // EXT_frag_depth: NoInterfaceObject — skip global registration
-    // EXT_sRGB: NoInterfaceObject — skip global registration
-    // EXT_shader_texture_lod: NoInterfaceObject — skip global registration
-    // EXT_texture_compression_bptc: NoInterfaceObject — skip global registration
-    // EXT_texture_compression_rgtc: NoInterfaceObject — skip global registration
-    // EXT_texture_filter_anisotropic: NoInterfaceObject — skip global registration
-    // EXT_texture_norm16: NoInterfaceObject — skip global registration
+        if let Some(ctor_ext_blend_minmax) = templates.get("EXT_blend_minmax").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_blend_minmax = v8::String::new(scope, "EXT_blend_minmax").unwrap();
+            global.define_own_property(scope, name_ext_blend_minmax.into(), ctor_ext_blend_minmax.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_color_buffer_float) = templates.get("EXT_color_buffer_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_color_buffer_float = v8::String::new(scope, "EXT_color_buffer_float").unwrap();
+            global.define_own_property(scope, name_ext_color_buffer_float.into(), ctor_ext_color_buffer_float.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_color_buffer_half_float) = templates.get("EXT_color_buffer_half_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_color_buffer_half_float = v8::String::new(scope, "EXT_color_buffer_half_float").unwrap();
+            global.define_own_property(scope, name_ext_color_buffer_half_float.into(), ctor_ext_color_buffer_half_float.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_disjoint_timer_query) = templates.get("EXT_disjoint_timer_query").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_disjoint_timer_query = v8::String::new(scope, "EXT_disjoint_timer_query").unwrap();
+            global.define_own_property(scope, name_ext_disjoint_timer_query.into(), ctor_ext_disjoint_timer_query.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_disjoint_timer_query_webgl2) = templates.get("EXT_disjoint_timer_query_webgl2").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_disjoint_timer_query_webgl2 = v8::String::new(scope, "EXT_disjoint_timer_query_webgl2").unwrap();
+            global.define_own_property(scope, name_ext_disjoint_timer_query_webgl2.into(), ctor_ext_disjoint_timer_query_webgl2.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_float_blend) = templates.get("EXT_float_blend").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_float_blend = v8::String::new(scope, "EXT_float_blend").unwrap();
+            global.define_own_property(scope, name_ext_float_blend.into(), ctor_ext_float_blend.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_frag_depth) = templates.get("EXT_frag_depth").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_frag_depth = v8::String::new(scope, "EXT_frag_depth").unwrap();
+            global.define_own_property(scope, name_ext_frag_depth.into(), ctor_ext_frag_depth.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_s_rgb) = templates.get("EXT_sRGB").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_s_rgb = v8::String::new(scope, "EXT_sRGB").unwrap();
+            global.define_own_property(scope, name_ext_s_rgb.into(), ctor_ext_s_rgb.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_shader_texture_lod) = templates.get("EXT_shader_texture_lod").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_shader_texture_lod = v8::String::new(scope, "EXT_shader_texture_lod").unwrap();
+            global.define_own_property(scope, name_ext_shader_texture_lod.into(), ctor_ext_shader_texture_lod.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_texture_compression_bptc) = templates.get("EXT_texture_compression_bptc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_texture_compression_bptc = v8::String::new(scope, "EXT_texture_compression_bptc").unwrap();
+            global.define_own_property(scope, name_ext_texture_compression_bptc.into(), ctor_ext_texture_compression_bptc.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_texture_compression_rgtc) = templates.get("EXT_texture_compression_rgtc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_texture_compression_rgtc = v8::String::new(scope, "EXT_texture_compression_rgtc").unwrap();
+            global.define_own_property(scope, name_ext_texture_compression_rgtc.into(), ctor_ext_texture_compression_rgtc.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_texture_filter_anisotropic) = templates.get("EXT_texture_filter_anisotropic").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_texture_filter_anisotropic = v8::String::new(scope, "EXT_texture_filter_anisotropic").unwrap();
+            global.define_own_property(scope, name_ext_texture_filter_anisotropic.into(), ctor_ext_texture_filter_anisotropic.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ext_texture_norm16) = templates.get("EXT_texture_norm16").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ext_texture_norm16 = v8::String::new(scope, "EXT_texture_norm16").unwrap();
+            global.define_own_property(scope, name_ext_texture_norm16.into(), ctor_ext_texture_norm16.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_element_internals) = templates.get("ElementInternals").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_element_internals = v8::String::new(scope, "ElementInternals").unwrap();
             global.define_own_property(scope, name_element_internals.into(), ctor_element_internals.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -3797,6 +3839,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_gpu_render_pipeline = v8::String::new(scope, "GPURenderPipeline").unwrap();
             global.define_own_property(scope, name_gpu_render_pipeline.into(), ctor_gpu_render_pipeline.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_gpu_sampler) = templates.get("GPUSampler").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_sampler = v8::String::new(scope, "GPUSampler").unwrap();
             global.define_own_property(scope, name_gpu_sampler.into(), ctor_gpu_sampler.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -3853,9 +3898,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_geolocation_position_error = v8::String::new(scope, "GeolocationPositionError").unwrap();
             global.define_own_property(scope, name_geolocation_position_error.into(), ctor_geolocation_position_error.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_global) = templates.get("Global").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_global = v8::String::new(scope, "Global").unwrap();
             global.define_own_property(scope, name_global.into(), ctor_global.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -3984,7 +4026,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_intrinsic_sizes = v8::String::new(scope, "IntrinsicSizes").unwrap();
             global.define_own_property(scope, name_intrinsic_sizes.into(), ctor_intrinsic_sizes.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    // KHR_parallel_shader_compile: NoInterfaceObject — skip global registration
+        if let Some(ctor_khr_parallel_shader_compile) = templates.get("KHR_parallel_shader_compile").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_khr_parallel_shader_compile = v8::String::new(scope, "KHR_parallel_shader_compile").unwrap();
+            global.define_own_property(scope, name_khr_parallel_shader_compile.into(), ctor_khr_parallel_shader_compile.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_keyboard_layout_map) = templates.get("KeyboardLayoutMap").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_keyboard_layout_map = v8::String::new(scope, "KeyboardLayoutMap").unwrap();
             global.define_own_property(scope, name_keyboard_layout_map.into(), ctor_keyboard_layout_map.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4197,6 +4242,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_navigator_ua_data = v8::String::new(scope, "NavigatorUAData").unwrap();
             global.define_own_property(scope, name_navigator_ua_data.into(), ctor_navigator_ua_data.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_node_iterator) = templates.get("NodeIterator").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_node_iterator = v8::String::new(scope, "NodeIterator").unwrap();
             global.define_own_property(scope, name_node_iterator.into(), ctor_node_iterator.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4213,16 +4261,46 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_not_restored_reasons = v8::String::new(scope, "NotRestoredReasons").unwrap();
             global.define_own_property(scope, name_not_restored_reasons.into(), ctor_not_restored_reasons.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    // OES_draw_buffers_indexed: NoInterfaceObject — skip global registration
-    // OES_element_index_uint: NoInterfaceObject — skip global registration
-    // OES_fbo_render_mipmap: NoInterfaceObject — skip global registration
-    // OES_standard_derivatives: NoInterfaceObject — skip global registration
-    // OES_texture_float: NoInterfaceObject — skip global registration
-    // OES_texture_float_linear: NoInterfaceObject — skip global registration
-    // OES_texture_half_float: NoInterfaceObject — skip global registration
-    // OES_texture_half_float_linear: NoInterfaceObject — skip global registration
-    // OES_vertex_array_object: NoInterfaceObject — skip global registration
-    // OVR_multiview2: NoInterfaceObject — skip global registration
+        if let Some(ctor_oes_draw_buffers_indexed) = templates.get("OES_draw_buffers_indexed").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_draw_buffers_indexed = v8::String::new(scope, "OES_draw_buffers_indexed").unwrap();
+            global.define_own_property(scope, name_oes_draw_buffers_indexed.into(), ctor_oes_draw_buffers_indexed.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_oes_element_index_uint) = templates.get("OES_element_index_uint").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_element_index_uint = v8::String::new(scope, "OES_element_index_uint").unwrap();
+            global.define_own_property(scope, name_oes_element_index_uint.into(), ctor_oes_element_index_uint.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_oes_fbo_render_mipmap) = templates.get("OES_fbo_render_mipmap").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_fbo_render_mipmap = v8::String::new(scope, "OES_fbo_render_mipmap").unwrap();
+            global.define_own_property(scope, name_oes_fbo_render_mipmap.into(), ctor_oes_fbo_render_mipmap.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_oes_standard_derivatives) = templates.get("OES_standard_derivatives").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_standard_derivatives = v8::String::new(scope, "OES_standard_derivatives").unwrap();
+            global.define_own_property(scope, name_oes_standard_derivatives.into(), ctor_oes_standard_derivatives.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_oes_texture_float) = templates.get("OES_texture_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_texture_float = v8::String::new(scope, "OES_texture_float").unwrap();
+            global.define_own_property(scope, name_oes_texture_float.into(), ctor_oes_texture_float.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_oes_texture_float_linear) = templates.get("OES_texture_float_linear").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_texture_float_linear = v8::String::new(scope, "OES_texture_float_linear").unwrap();
+            global.define_own_property(scope, name_oes_texture_float_linear.into(), ctor_oes_texture_float_linear.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_oes_texture_half_float) = templates.get("OES_texture_half_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_texture_half_float = v8::String::new(scope, "OES_texture_half_float").unwrap();
+            global.define_own_property(scope, name_oes_texture_half_float.into(), ctor_oes_texture_half_float.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_oes_texture_half_float_linear) = templates.get("OES_texture_half_float_linear").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_texture_half_float_linear = v8::String::new(scope, "OES_texture_half_float_linear").unwrap();
+            global.define_own_property(scope, name_oes_texture_half_float_linear.into(), ctor_oes_texture_half_float_linear.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_oes_vertex_array_object) = templates.get("OES_vertex_array_object").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_oes_vertex_array_object = v8::String::new(scope, "OES_vertex_array_object").unwrap();
+            global.define_own_property(scope, name_oes_vertex_array_object.into(), ctor_oes_vertex_array_object.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_ovr_multiview2) = templates.get("OVR_multiview2").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_ovr_multiview2 = v8::String::new(scope, "OVR_multiview2").unwrap();
+            global.define_own_property(scope, name_ovr_multiview2.into(), ctor_ovr_multiview2.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_observable) = templates.get("Observable").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_observable = v8::String::new(scope, "Observable").unwrap();
             global.define_own_property(scope, name_observable.into(), ctor_observable.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4267,9 +4345,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_performance_observer_entry_list = v8::String::new(scope, "PerformanceObserverEntryList").unwrap();
             global.define_own_property(scope, name_performance_observer_entry_list.into(), ctor_performance_observer_entry_list.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_performance_server_timing) = templates.get("PerformanceServerTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_server_timing = v8::String::new(scope, "PerformanceServerTiming").unwrap();
             global.define_own_property(scope, name_performance_server_timing.into(), ctor_performance_server_timing.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4526,7 +4601,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_svg_number_list = v8::String::new(scope, "SVGNumberList").unwrap();
             global.define_own_property(scope, name_svg_number_list.into(), ctor_svg_number_list.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    // SVGPathSegment: NoInterfaceObject — skip global registration
+        if let Some(ctor_svg_path_segment) = templates.get("SVGPathSegment").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_svg_path_segment = v8::String::new(scope, "SVGPathSegment").unwrap();
+            global.define_own_property(scope, name_svg_path_segment.into(), ctor_svg_path_segment.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_svg_point_list) = templates.get("SVGPointList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_point_list = v8::String::new(scope, "SVGPointList").unwrap();
             global.define_own_property(scope, name_svg_point_list.into(), ctor_svg_point_list.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4567,6 +4645,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_screen = v8::String::new(scope, "Screen").unwrap();
             global.define_own_property(scope, name_screen.into(), ctor_screen.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_selection) = templates.get("Selection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_selection = v8::String::new(scope, "Selection").unwrap();
             global.define_own_property(scope, name_selection.into(), ctor_selection.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4671,9 +4752,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_text_encoder = v8::String::new(scope, "TextEncoder").unwrap();
             global.define_own_property(scope, name_text_encoder.into(), ctor_text_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_text_encoder_stream) = templates.get("TextEncoderStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_text_encoder_stream = v8::String::new(scope, "TextEncoderStream").unwrap();
             global.define_own_property(scope, name_text_encoder_stream.into(), ctor_text_encoder_stream.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4838,24 +4916,78 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_viewport = v8::String::new(scope, "Viewport").unwrap();
             global.define_own_property(scope, name_viewport.into(), ctor_viewport.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    // WEBGL_blend_equation_advanced_coherent: NoInterfaceObject — skip global registration
-    // WEBGL_clip_cull_distance: NoInterfaceObject — skip global registration
-    // WEBGL_color_buffer_float: NoInterfaceObject — skip global registration
-    // WEBGL_compressed_texture_astc: NoInterfaceObject — skip global registration
-    // WEBGL_compressed_texture_etc: NoInterfaceObject — skip global registration
-    // WEBGL_compressed_texture_etc1: NoInterfaceObject — skip global registration
-    // WEBGL_compressed_texture_pvrtc: NoInterfaceObject — skip global registration
-    // WEBGL_compressed_texture_s3tc: NoInterfaceObject — skip global registration
-    // WEBGL_compressed_texture_s3tc_srgb: NoInterfaceObject — skip global registration
-    // WEBGL_debug_renderer_info: NoInterfaceObject — skip global registration
-    // WEBGL_debug_shaders: NoInterfaceObject — skip global registration
-    // WEBGL_depth_texture: NoInterfaceObject — skip global registration
-    // WEBGL_draw_buffers: NoInterfaceObject — skip global registration
-    // WEBGL_draw_instanced_base_vertex_base_instance: NoInterfaceObject — skip global registration
-    // WEBGL_lose_context: NoInterfaceObject — skip global registration
-    // WEBGL_multi_draw: NoInterfaceObject — skip global registration
-    // WEBGL_multi_draw_instanced_base_vertex_base_instance: NoInterfaceObject — skip global registration
-    // WEBGL_provoking_vertex: NoInterfaceObject — skip global registration
+        if let Some(ctor_webgl_blend_equation_advanced_coherent) = templates.get("WEBGL_blend_equation_advanced_coherent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_blend_equation_advanced_coherent = v8::String::new(scope, "WEBGL_blend_equation_advanced_coherent").unwrap();
+            global.define_own_property(scope, name_webgl_blend_equation_advanced_coherent.into(), ctor_webgl_blend_equation_advanced_coherent.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_clip_cull_distance) = templates.get("WEBGL_clip_cull_distance").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_clip_cull_distance = v8::String::new(scope, "WEBGL_clip_cull_distance").unwrap();
+            global.define_own_property(scope, name_webgl_clip_cull_distance.into(), ctor_webgl_clip_cull_distance.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_color_buffer_float) = templates.get("WEBGL_color_buffer_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_color_buffer_float = v8::String::new(scope, "WEBGL_color_buffer_float").unwrap();
+            global.define_own_property(scope, name_webgl_color_buffer_float.into(), ctor_webgl_color_buffer_float.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_compressed_texture_astc) = templates.get("WEBGL_compressed_texture_astc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_compressed_texture_astc = v8::String::new(scope, "WEBGL_compressed_texture_astc").unwrap();
+            global.define_own_property(scope, name_webgl_compressed_texture_astc.into(), ctor_webgl_compressed_texture_astc.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_compressed_texture_etc) = templates.get("WEBGL_compressed_texture_etc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_compressed_texture_etc = v8::String::new(scope, "WEBGL_compressed_texture_etc").unwrap();
+            global.define_own_property(scope, name_webgl_compressed_texture_etc.into(), ctor_webgl_compressed_texture_etc.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_compressed_texture_etc1) = templates.get("WEBGL_compressed_texture_etc1").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_compressed_texture_etc1 = v8::String::new(scope, "WEBGL_compressed_texture_etc1").unwrap();
+            global.define_own_property(scope, name_webgl_compressed_texture_etc1.into(), ctor_webgl_compressed_texture_etc1.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_compressed_texture_pvrtc) = templates.get("WEBGL_compressed_texture_pvrtc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_compressed_texture_pvrtc = v8::String::new(scope, "WEBGL_compressed_texture_pvrtc").unwrap();
+            global.define_own_property(scope, name_webgl_compressed_texture_pvrtc.into(), ctor_webgl_compressed_texture_pvrtc.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_compressed_texture_s3tc) = templates.get("WEBGL_compressed_texture_s3tc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_compressed_texture_s3tc = v8::String::new(scope, "WEBGL_compressed_texture_s3tc").unwrap();
+            global.define_own_property(scope, name_webgl_compressed_texture_s3tc.into(), ctor_webgl_compressed_texture_s3tc.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_compressed_texture_s3tc_srgb) = templates.get("WEBGL_compressed_texture_s3tc_srgb").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_compressed_texture_s3tc_srgb = v8::String::new(scope, "WEBGL_compressed_texture_s3tc_srgb").unwrap();
+            global.define_own_property(scope, name_webgl_compressed_texture_s3tc_srgb.into(), ctor_webgl_compressed_texture_s3tc_srgb.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_debug_renderer_info) = templates.get("WEBGL_debug_renderer_info").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_debug_renderer_info = v8::String::new(scope, "WEBGL_debug_renderer_info").unwrap();
+            global.define_own_property(scope, name_webgl_debug_renderer_info.into(), ctor_webgl_debug_renderer_info.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_debug_shaders) = templates.get("WEBGL_debug_shaders").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_debug_shaders = v8::String::new(scope, "WEBGL_debug_shaders").unwrap();
+            global.define_own_property(scope, name_webgl_debug_shaders.into(), ctor_webgl_debug_shaders.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_depth_texture) = templates.get("WEBGL_depth_texture").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_depth_texture = v8::String::new(scope, "WEBGL_depth_texture").unwrap();
+            global.define_own_property(scope, name_webgl_depth_texture.into(), ctor_webgl_depth_texture.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_draw_buffers) = templates.get("WEBGL_draw_buffers").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_draw_buffers = v8::String::new(scope, "WEBGL_draw_buffers").unwrap();
+            global.define_own_property(scope, name_webgl_draw_buffers.into(), ctor_webgl_draw_buffers.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_draw_instanced_base_vertex_base_instance) = templates.get("WEBGL_draw_instanced_base_vertex_base_instance").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_draw_instanced_base_vertex_base_instance = v8::String::new(scope, "WEBGL_draw_instanced_base_vertex_base_instance").unwrap();
+            global.define_own_property(scope, name_webgl_draw_instanced_base_vertex_base_instance.into(), ctor_webgl_draw_instanced_base_vertex_base_instance.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_lose_context) = templates.get("WEBGL_lose_context").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_lose_context = v8::String::new(scope, "WEBGL_lose_context").unwrap();
+            global.define_own_property(scope, name_webgl_lose_context.into(), ctor_webgl_lose_context.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_multi_draw) = templates.get("WEBGL_multi_draw").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_multi_draw = v8::String::new(scope, "WEBGL_multi_draw").unwrap();
+            global.define_own_property(scope, name_webgl_multi_draw.into(), ctor_webgl_multi_draw.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_multi_draw_instanced_base_vertex_base_instance) = templates.get("WEBGL_multi_draw_instanced_base_vertex_base_instance").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_multi_draw_instanced_base_vertex_base_instance = v8::String::new(scope, "WEBGL_multi_draw_instanced_base_vertex_base_instance").unwrap();
+            global.define_own_property(scope, name_webgl_multi_draw_instanced_base_vertex_base_instance.into(), ctor_webgl_multi_draw_instanced_base_vertex_base_instance.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_webgl_provoking_vertex) = templates.get("WEBGL_provoking_vertex").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_webgl_provoking_vertex = v8::String::new(scope, "WEBGL_provoking_vertex").unwrap();
+            global.define_own_property(scope, name_webgl_provoking_vertex.into(), ctor_webgl_provoking_vertex.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_wgsl_language_features) = templates.get("WGSLLanguageFeatures").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_wgsl_language_features = v8::String::new(scope, "WGSLLanguageFeatures").unwrap();
             global.define_own_property(scope, name_wgsl_language_features.into(), ctor_wgsl_language_features.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4916,6 +5048,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_worklet = v8::String::new(scope, "Worklet").unwrap();
             global.define_own_property(scope, name_worklet.into(), ctor_worklet.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_worklet_animation_effect) = templates.get("WorkletAnimationEffect").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_worklet_animation_effect = v8::String::new(scope, "WorkletAnimationEffect").unwrap();
             global.define_own_property(scope, name_worklet_animation_effect.into(), ctor_worklet_animation_effect.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5092,9 +5227,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_webkit_get_user_media = v8::String::new(scope, "webkitGetUserMedia").unwrap();
             global.define_own_property(scope, name_webkit_get_user_media.into(), ctor_webkit_get_user_media.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_webkit_idb_key_range) = templates.get("webkitIDBKeyRange").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webkit_idb_key_range = v8::String::new(scope, "webkitIDBKeyRange").unwrap();
             global.define_own_property(scope, name_webkit_idb_key_range.into(), ctor_webkit_idb_key_range.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5319,6 +5451,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_css_style_properties = v8::String::new(scope, "CSSStyleProperties").unwrap();
             global.define_own_property(scope, name_css_style_properties.into(), ctor_css_style_properties.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_css_color_value) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_color_value = v8::String::new(scope, "CSSColorValue").unwrap();
             global.define_own_property(scope, name_css_color_value.into(), ctor_css_color_value.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5495,9 +5630,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_clipboard_event = v8::String::new(scope, "ClipboardEvent").unwrap();
             global.define_own_property(scope, name_clipboard_event.into(), ctor_clipboard_event.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_close_event) = templates.get("CloseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_close_event = v8::String::new(scope, "CloseEvent").unwrap();
             global.define_own_property(scope, name_close_event.into(), ctor_close_event.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5722,6 +5854,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_speech_synthesis_event = v8::String::new(scope, "SpeechSynthesisEvent").unwrap();
             global.define_own_property(scope, name_speech_synthesis_event.into(), ctor_speech_synthesis_event.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_storage_event) = templates.get("StorageEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_storage_event = v8::String::new(scope, "StorageEvent").unwrap();
             global.define_own_property(scope, name_storage_event.into(), ctor_storage_event.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5898,9 +6033,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_event_source = v8::String::new(scope, "EventSource").unwrap();
             global.define_own_property(scope, name_event_source.into(), ctor_event_source.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_file_reader) = templates.get("FileReader").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file_reader = v8::String::new(scope, "FileReader").unwrap();
             global.define_own_property(scope, name_file_reader.into(), ctor_file_reader.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6125,6 +6257,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_sensor = v8::String::new(scope, "Sensor").unwrap();
             global.define_own_property(scope, name_sensor.into(), ctor_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_serial) = templates.get("Serial").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_serial = v8::String::new(scope, "Serial").unwrap();
             global.define_own_property(scope, name_serial.into(), ctor_serial.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6301,9 +6436,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_input_device_info = v8::String::new(scope, "InputDeviceInfo").unwrap();
             global.define_own_property(scope, name_input_device_info.into(), ctor_input_device_info.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_radio_node_list) = templates.get("RadioNodeList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_radio_node_list = v8::String::new(scope, "RadioNodeList").unwrap();
             global.define_own_property(scope, name_radio_node_list.into(), ctor_radio_node_list.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6416,7 +6548,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_web_gl_texture = v8::String::new(scope, "WebGLTexture").unwrap();
             global.define_own_property(scope, name_web_gl_texture.into(), ctor_web_gl_texture.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    // WebGLTimerQueryEXT: NoInterfaceObject — skip global registration
+        if let Some(ctor_web_gl_timer_query_ext) = templates.get("WebGLTimerQueryEXT").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_web_gl_timer_query_ext = v8::String::new(scope, "WebGLTimerQueryEXT").unwrap();
+            global.define_own_property(scope, name_web_gl_timer_query_ext.into(), ctor_web_gl_timer_query_ext.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_web_gl_transform_feedback) = templates.get("WebGLTransformFeedback").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_transform_feedback = v8::String::new(scope, "WebGLTransformFeedback").unwrap();
             global.define_own_property(scope, name_web_gl_transform_feedback.into(), ctor_web_gl_transform_feedback.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6425,7 +6560,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_web_gl_vertex_array_object = v8::String::new(scope, "WebGLVertexArrayObject").unwrap();
             global.define_own_property(scope, name_web_gl_vertex_array_object.into(), ctor_web_gl_vertex_array_object.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    // WebGLVertexArrayObjectOES: NoInterfaceObject — skip global registration
+        if let Some(ctor_web_gl_vertex_array_object_oes) = templates.get("WebGLVertexArrayObjectOES").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_web_gl_vertex_array_object_oes = v8::String::new(scope, "WebGLVertexArrayObjectOES").unwrap();
+            global.define_own_property(scope, name_web_gl_vertex_array_object_oes.into(), ctor_web_gl_vertex_array_object_oes.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_audio_worklet) = templates.get("AudioWorklet").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_worklet = v8::String::new(scope, "AudioWorklet").unwrap();
             global.define_own_property(scope, name_audio_worklet.into(), ctor_audio_worklet.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6522,6 +6660,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_css_starting_style_rule = v8::String::new(scope, "CSSStartingStyleRule").unwrap();
             global.define_own_property(scope, name_css_starting_style_rule.into(), ctor_css_starting_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_css_style_rule) = templates.get("CSSStyleRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_style_rule = v8::String::new(scope, "CSSStyleRule").unwrap();
             global.define_own_property(scope, name_css_style_rule.into(), ctor_css_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6706,9 +6847,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_channel_merger_node = v8::String::new(scope, "ChannelMergerNode").unwrap();
             global.define_own_property(scope, name_channel_merger_node.into(), ctor_channel_merger_node.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_channel_splitter_node) = templates.get("ChannelSplitterNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_channel_splitter_node = v8::String::new(scope, "ChannelSplitterNode").unwrap();
             global.define_own_property(scope, name_channel_splitter_node.into(), ctor_channel_splitter_node.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6925,6 +7063,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_performance_navigation_timing = v8::String::new(scope, "PerformanceNavigationTiming").unwrap();
             global.define_own_property(scope, name_performance_navigation_timing.into(), ctor_performance_navigation_timing.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_css_container_rule) = templates.get("CSSContainerRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_container_rule = v8::String::new(scope, "CSSContainerRule").unwrap();
             global.define_own_property(scope, name_css_container_rule.into(), ctor_css_container_rule.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7109,9 +7250,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_htmld_list_element = v8::String::new(scope, "HTMLDListElement").unwrap();
             global.define_own_property(scope, name_htmld_list_element.into(), ctor_htmld_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_html_data_element) = templates.get("HTMLDataElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_data_element = v8::String::new(scope, "HTMLDataElement").unwrap();
             global.define_own_property(scope, name_html_data_element.into(), ctor_html_data_element.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7192,6 +7330,11 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_html_image_element = v8::String::new(scope, "HTMLImageElement").unwrap();
             global.define_own_property(scope, name_html_image_element.into(), ctor_html_image_element.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+        // NamedConstructor alias: Image
+        if let Some(ctor_html_image_element) = templates.get("HTMLImageElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_image = v8::String::new(scope, "Image").unwrap();
+            global.define_own_property(scope, name_image.into(), ctor_html_image_element.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_html_input_element) = templates.get("HTMLInputElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_input_element = v8::String::new(scope, "HTMLInputElement").unwrap();
             global.define_own_property(scope, name_html_input_element.into(), ctor_html_input_element.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7259,6 +7402,11 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_option_element) = templates.get("HTMLOptionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_option_element = v8::String::new(scope, "HTMLOptionElement").unwrap();
             global.define_own_property(scope, name_html_option_element.into(), ctor_html_option_element.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        // NamedConstructor alias: Option
+        if let Some(ctor_html_option_element) = templates.get("HTMLOptionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_option = v8::String::new(scope, "Option").unwrap();
+            global.define_own_property(scope, name_option.into(), ctor_html_option_element.into(), v8::PropertyAttribute::DONT_ENUM);
         }
         if let Some(ctor_html_output_element) = templates.get("HTMLOutputElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_output_element = v8::String::new(scope, "HTMLOutputElement").unwrap();
@@ -7328,6 +7476,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_html_table_cell_element = v8::String::new(scope, "HTMLTableCellElement").unwrap();
             global.define_own_property(scope, name_html_table_cell_element.into(), ctor_html_table_cell_element.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_html_table_col_element) = templates.get("HTMLTableColElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_table_col_element = v8::String::new(scope, "HTMLTableColElement").unwrap();
             global.define_own_property(scope, name_html_table_col_element.into(), ctor_html_table_col_element.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7512,9 +7663,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_svg_script_element = v8::String::new(scope, "SVGScriptElement").unwrap();
             global.define_own_property(scope, name_svg_script_element.into(), ctor_svg_script_element.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_svg_stop_element) = templates.get("SVGStopElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_stop_element = v8::String::new(scope, "SVGStopElement").unwrap();
             global.define_own_property(scope, name_svg_stop_element.into(), ctor_svg_stop_element.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7534,6 +7682,11 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_audio_element) = templates.get("HTMLAudioElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_audio_element = v8::String::new(scope, "HTMLAudioElement").unwrap();
             global.define_own_property(scope, name_html_audio_element.into(), ctor_html_audio_element.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        // NamedConstructor alias: Audio
+        if let Some(ctor_html_audio_element) = templates.get("HTMLAudioElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_audio = v8::String::new(scope, "Audio").unwrap();
+            global.define_own_property(scope, name_audio.into(), ctor_html_audio_element.into(), v8::PropertyAttribute::DONT_ENUM);
         }
         if let Some(ctor_html_video_element) = templates.get("HTMLVideoElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_video_element = v8::String::new(scope, "HTMLVideoElement").unwrap();

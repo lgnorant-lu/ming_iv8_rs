@@ -380,6 +380,27 @@ pub fn generate_install_all(
         ));
         out.push_str("        }\n");
 
+        if let Some(ref alias) = ea.named_constructor {
+            let alias_ident = alias.to_lowercase().replace('-', "_");
+            out.push_str(&format!(
+                "        // NamedConstructor alias: {}\n",
+                alias
+            ));
+            out.push_str(&format!(
+                "        if let Some(ctor_{0}) = templates.get(\"{1}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
+                fn_name, name,
+            ));
+            out.push_str(&format!(
+                "            let name_{0} = v8::String::new(scope, \"{1}\").unwrap();\n",
+                alias_ident, alias,
+            ));
+            out.push_str(&format!(
+                "            global.define_own_property(scope, name_{0}.into(), ctor_{1}.into(), v8::PropertyAttribute::DONT_ENUM);\n",
+                alias_ident, fn_name,
+            ));
+            out.push_str("        }\n");
+        }
+
         reg_count += 1;
     }
     out.push_str("    } // end last registration batch\n");

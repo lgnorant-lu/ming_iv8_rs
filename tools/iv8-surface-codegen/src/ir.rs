@@ -144,16 +144,21 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
             .and_then(|v| v.as_bool())
             .unwrap_or(false);
 
-        // Ext attrs: extract name strings
+        // Ext attrs: serialize as "name" or "name=value"
         let ext_attrs: Vec<String> = obj
             .get("ext_attrs")
             .and_then(|v| v.as_array())
             .map(|arr| {
                 arr.iter()
                     .filter_map(|ea| {
-                        ea.get("name")
-                            .and_then(|n| n.as_str())
-                            .map(|s| s.to_string())
+                        let name = ea.get("name").and_then(|n| n.as_str())?;
+                        if let Some(val) = ea.get("value").and_then(|v| v.as_str()) {
+                            Some(format!("{}={}", name, val))
+                        } else if let Some(val) = ea.get("value") {
+                            Some(format!("{}={}", name, val))
+                        } else {
+                            Some(name.to_string())
+                        }
                     })
                     .collect()
             })

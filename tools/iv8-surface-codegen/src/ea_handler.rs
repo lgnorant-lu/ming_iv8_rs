@@ -70,12 +70,11 @@ pub fn process_interface_ea(def: &Definition) -> EaResult {
             "Global" => {
                 result.is_global = true;
             }
-            a if a.starts_with("NamedConstructor") => {
-                result.named_constructor = Some(
-                    a.replace("NamedConstructor=", "")
-                        .trim_matches('"')
-                        .to_string(),
-                );
+            a if a.starts_with("NamedConstructor") || a.starts_with("LegacyFactoryFunction") => {
+                // [NamedConstructor=Image] or [LegacyFactoryFunction=Image]
+                if let Some((_, val)) = a.split_once('=') {
+                    result.named_constructor = Some(val.trim_matches('"').to_string());
+                }
             }
             _ => {}
         }
@@ -152,6 +151,13 @@ mod tests {
         let def = make_def("Test", vec!["Exposed"]);
         let ea = process_interface_ea(&def);
         assert!(ea.exposed_window);
+    }
+
+    #[test]
+    fn test_named_constructor() {
+        let def = make_def("HTMLImageElement", vec!["LegacyFactoryFunction=Image"]);
+        let ea = process_interface_ea(&def);
+        assert_eq!(ea.named_constructor, Some("Image".to_string()));
     }
 
     #[test]
