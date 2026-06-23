@@ -392,35 +392,32 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
 
     // Prototype chain fixes — IV8 creates plain V8 objects for document,
     // window, location, history, crypto. Real browsers have these as
-    // instances of their respective interfaces. Set prototype to the
-    // generated interface prototype so instanceof checks pass.
+    // instances of their respective interfaces. Set __proto__ (not
+    // setPrototypeOf) to preserve any existing properties.
     // Note: location prototype is NOT set because the Location codegen
     // template has its own href getter that would shadow the injected
     // profile values. This is a known limitation — location instanceof
     // Location remains false until codegen template inheritance is fixed.
     try {
         if (typeof Document !== 'undefined' && Document.prototype) {
-            Object.setPrototypeOf(document, Document.prototype);
+            document.__proto__ = Document.prototype;
         }
     } catch(e) {}
-    // try { if (typeof Location !== 'undefined' && Location.prototype) {
-    //     Object.setPrototypeOf(location, Location.prototype);
-    // } } catch(e) {}
     try {
         if (typeof History !== 'undefined' && History.prototype && typeof history !== 'undefined') {
-            Object.setPrototypeOf(history, History.prototype);
+            history.__proto__ = History.prototype;
         }
     } catch(e) {}
     try {
         if (typeof Crypto !== 'undefined' && Crypto.prototype && typeof crypto !== 'undefined') {
-            Object.setPrototypeOf(crypto, Crypto.prototype);
+            crypto.__proto__ = Crypto.prototype;
         }
     } catch(e) {}
 
     // crypto.subtle prototype — should be SubtleCrypto instance
     try {
         if (typeof SubtleCrypto !== 'undefined' && SubtleCrypto.prototype && typeof crypto !== 'undefined' && crypto.subtle) {
-            Object.setPrototypeOf(crypto.subtle, SubtleCrypto.prototype);
+            crypto.subtle.__proto__ = SubtleCrypto.prototype;
         }
     } catch(e) {}
 
@@ -460,6 +457,22 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     try {
         if (typeof XMLHttpRequest !== 'undefined' && XMLHttpRequest.prototype) {
             Object.defineProperty(XMLHttpRequest.prototype, Symbol.toStringTag, { value: 'XMLHttpRequest', configurable: true });
+        }
+    } catch(e) {}
+
+    // Prototype inheritance chain fixes.
+    // Codegen creates FunctionTemplates for each interface but does not
+    // set up inheritance (child.prototype.__proto__ = parent.prototype).
+    // This causes instanceof checks to fail across the chain.
+    //
+    // IMPORTANT: Only Document→Node is safe to fix here because Document
+    // is a plain V8 object (not from FunctionTemplate). Navigator and
+    // other codegen-created prototypes lose their installed accessors
+    // when __proto__ is modified — must be fixed in codegen instead.
+    try {
+        if (typeof Document !== 'undefined' && typeof Node !== 'undefined'
+            && Document.prototype && Node.prototype) {
+            Document.prototype.__proto__ = Node.prototype;
         }
     } catch(e) {}
 
