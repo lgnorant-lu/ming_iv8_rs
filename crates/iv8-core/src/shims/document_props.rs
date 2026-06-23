@@ -371,6 +371,25 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         };
     }
 
+    // Symbol.toStringTag for global objects — anti-detection fidelity.
+    // Real Chrome: Object.prototype.toString.call(window) === '[object Window]'
+    // etc. IV8 creates plain V8 objects for these, so they default to
+    // '[object Object]'. Set the correct tags.
+    try {
+        Object.defineProperty(window, Symbol.toStringTag, { value: 'Window', configurable: true });
+    } catch(e) {}
+    try {
+        Object.defineProperty(document, Symbol.toStringTag, { value: 'HTMLDocument', configurable: true });
+    } catch(e) {}
+    try {
+        Object.defineProperty(location, Symbol.toStringTag, { value: 'Location', configurable: true });
+    } catch(e) {}
+    try {
+        if (typeof history !== 'undefined') {
+            Object.defineProperty(history, Symbol.toStringTag, { value: 'History', configurable: true });
+        }
+    } catch(e) {}
+
 })();
 "#;
 
