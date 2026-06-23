@@ -6,6 +6,57 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.74] - 2026-06-23
+
+> Local milestone: substrate debt sweep
+> (债务扫尾 — 6-track debt-only: stale ledger sweep, metadata policy decision,
+> codegen warning cleanup (67→4), crypto path audit (confirmed already unified),
+> env_inject archival audit (skip lists verified complete), CI/config hygiene.
+> Tag `v0.8.74`.)
+
+### Changed
+
+- **Codegen**: add `#![allow(unused_imports)]` to generated domain files;
+  remove unused `use v8::Local` from generated mod.rs. iv8-surface warnings
+  reduced from 67 to 4.
+- **Codegen**: remove unused `heck` dependency from iv8-surface-codegen.
+- **Config**: pin `rust-toolchain.toml` channel from `"stable"` to `"1.96.0"`
+  (aligns with CI toolchain pin from v0.8.69).
+- **Gitignore**: remove stale `docs/TODO-v0.5-enhancements.md` entry.
+
+### Governance
+
+- **D-090**: metadata policy decision — keep 0.8.11 frozen through v0.8.75
+  (Option A). v0.8.x series has no package release; all tags are local
+  milestones.
+- **Decision register**: D-068/D-069 stale entries resolved (were already
+  correct in register; stale TODO-infrastructure entries closed).
+- **CAPABILITY_INDEX**: added v0.8.45-47 capability entries; added v0.8.74
+  capability row.
+- **VERSION_SCOPE_MAP**: filled mid-range v0.8.25-54 table (30 entries).
+
+### Audits (no code changes)
+
+- **Track B (crypto)**: confirmed SubtleCrypto/getRandomValues already use
+  unified profile-backed path (crypto_seed → RuntimeState → deterministic
+  PRNG / OS random fallback). No legacy hardcoded-constants path exists.
+- **Track A (env_inject)**: verified skip lists (28 Navigator + 8 Screen +
+  5 Window = 41 keys) cover all native FunctionTemplate getters. ~350
+  remaining keys are Tier 2/3 — require v0.9+ native value injection before
+  further archival.
+
+### Quality Gates
+
+| Gate | Result |
+|---|---|
+| `cargo check --workspace` | 0 errors |
+| `cargo test -p iv8-core --lib` | 313/313 PASS |
+| `cargo test -p iv8-surface-codegen --lib` | 31/31 PASS |
+| `cargo test -p iv8-surface-codegen --test test_golden` | 1/1 PASS |
+| `cargo test -p iv8-surface --lib` | 30/30 PASS |
+| All 11 integration suites | unchanged (600 total tests PASS) |
+| `iv8-surface` warnings | 67 → 4 |
+
 ## [0.8.73] - 2026-06-23
 
 > Local milestone: debug / automation / geometry closure
