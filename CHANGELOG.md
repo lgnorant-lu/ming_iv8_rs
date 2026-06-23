@@ -6,6 +6,31 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.75] - 2026-06-23
+
+> Local milestone: M7 gate audit
+> (审计-only — 7-track audit: TODO recount, detection surface reclassification,
+> browser surface coverage matrix, env_inject tier classification, governance
+> consistency, residual risk register, v0.9 entry gate decision.
+> v0.9 = OPEN with conditions. Tag `v0.8.75`.)
+
+### Audit Results
+
+- **TODO Recount**: grep-verified 316 items (139 [x] + 41 [~] + 128 [ ] + 8 [-])
+- **Detection Surface**: 11+2 categories updated to post-v0.8.74; average ~92%
+- **Residual Risk Register**: 21 items (R01-R21) with clear v0.8/v0.9 ownership
+- **v0.9 Gate**: OPEN with conditions; ~8 v0.8 patch items identified for v0.8.76
+
+### Quality Gates
+
+| Gate | Result |
+|---|---|
+| `cargo check --workspace` | 0 errors |
+| `cargo test -p iv8-core --lib` | 313/313 PASS |
+| 0 runtime changes | PASS (audit-only) |
+| 0 test changes | PASS |
+| 0 generated code changes | PASS |
+
 ## [0.8.74] - 2026-06-23
 
 > Local milestone: substrate debt sweep
