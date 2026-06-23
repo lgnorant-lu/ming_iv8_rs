@@ -94,6 +94,22 @@ pub const XHR_SHIM_JS: &str = r#"
                 self.status = result.status;
                 self.statusText = result.status === 200 ? 'OK' : '';
                 self._responseHeaders = result.headers || {};
+
+                // Process Set-Cookie headers from response
+                try {
+                    var hdrs = self._responseHeaders;
+                    for (var h in hdrs) {
+                        if (h.toLowerCase() === 'set-cookie') {
+                            var cookieStr = hdrs[h];
+                            // Set-Cookie may be a single string or an array
+                            var cookies = Array.isArray(cookieStr) ? cookieStr : [cookieStr];
+                            for (var ci = 0; ci < cookies.length; ci++) {
+                                document.cookie = cookies[ci];
+                            }
+                        }
+                    }
+                } catch(e) {}
+
                 self.readyState = 2; // HEADERS_RECEIVED
                 if (self.onreadystatechange) self.onreadystatechange();
                 self.responseText = result.responseText;
