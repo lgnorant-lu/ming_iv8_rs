@@ -324,6 +324,59 @@ fn build_response_object<'s>(
     let headers_key = crate::v8_utils::v8_string(scope, "__headers__");
     obj.set(scope, headers_key.into(), headers_obj.into());
 
+    // Process Set-Cookie headers: inject into window._iv8CookieStore
+    for (k, v) in &resource.headers {
+        if k.eq_ignore_ascii_case("set-cookie") {
+            // Get or create cookie store
+            let global = scope.get_current_context().global(scope);
+            let store_key = crate::v8_utils::v8_string(scope, "_iv8CookieStore");
+            let store_val = match global.get(scope, store_key.into()) {
+                Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+                _ => {
+                    let obj = v8::Object::new(scope);
+                    global.set(scope, store_key.into(), obj.into());
+                    obj.into()
+                }
+            };
+            let store: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(store_val) };
+
+            // Parse "name=val; path=/; secure; ..." format
+            let parts: Vec<&str> = v.split(';').collect();
+            if parts.is_empty() { continue; }
+            let kv: Vec<&str> = parts[0].splitn(2, '=').collect();
+            if kv.len() < 2 { continue; }
+            let cookie_name = kv[0].trim();
+            let cookie_val = kv[1].trim();
+
+            let rec = v8::Object::new(scope);
+            let vk = crate::v8_utils::v8_string(scope, "v");
+            let vv = crate::v8_utils::v8_string(scope, cookie_val);
+            rec.set(scope, vk.into(), vv.into());
+            let pk = crate::v8_utils::v8_string(scope, "path");
+            let pv = crate::v8_utils::v8_string(scope, "/");
+            rec.set(scope, pk.into(), pv.into());
+
+            for attr_part in &parts[1..] {
+                let attr = attr_part.trim();
+                let lower = attr.to_lowercase();
+                if let Some(val) = lower.strip_prefix("path=") {
+                    if let Some(p) = v8::String::new(scope, val) {
+                        rec.set(scope, pk.into(), p.into());
+                    }
+                } else if lower == "secure" {
+                    let sk = crate::v8_utils::v8_string(scope, "secure");
+                    rec.set(scope, sk.into(), v8::Boolean::new(scope, true).into());
+                } else if lower == "httponly" {
+                    let hk = crate::v8_utils::v8_string(scope, "httpOnly");
+                    rec.set(scope, hk.into(), v8::Boolean::new(scope, true).into());
+                }
+            }
+
+            let cn = crate::v8_utils::v8_string(scope, cookie_name);
+            store.set(scope, cn.into(), rec.into());
+        }
+    }
+
     // Store body as hidden property
     let body_str = String::from_utf8_lossy(&resource.body);
     let body_key = crate::v8_utils::v8_string(scope, "__body__");
