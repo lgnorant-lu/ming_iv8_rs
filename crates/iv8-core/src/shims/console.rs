@@ -1,7 +1,8 @@
 //! console.log / console.warn / console.error / console.debug / console.info
 //!
 //! Routes JS console output to Rust tracing.
-//! Also stores the last N messages for Python-side retrieval via __iv8__.console_messages.
+//! Also stores the last N messages in RuntimeState.console_messages for
+//! Python-side retrieval via Context.get_console_messages().
 
 use crate::state::RuntimeState;
 
