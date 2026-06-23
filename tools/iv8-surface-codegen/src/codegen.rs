@@ -5,6 +5,50 @@ use crate::ir::Definition;
 use crate::type_mapper;
 use std::collections::BTreeMap;
 
+/// Attributes excluded from codegen — handled by JS shims instead.
+/// (interface_name, attribute_name)
+///
+/// These properties are installed at runtime by `DOCUMENT_PROPS_JS`
+/// (see `crates/iv8-core/src/shims/document_props.rs`). If codegen also
+/// installs a native accessor on the prototype, the shim's
+/// `Object.defineProperty` on the instance is silently shadowed
+/// (prototype accessor wins over instance data property), or the `in`
+/// operator finds the prototype accessor and the shim guard skips
+/// installation — leaving the native stub (returns undefined) as the
+/// effective value.
+///
+/// Excluding them here ensures the shim is the single source of truth.
+const EXCLUDED_ATTRIBUTES: &[(&str, &str)] = &[
+    // --- Document properties (installed by DOCUMENT_PROPS_JS) ---
+    ("Document", "cookie"),
+    ("Document", "referrer"),
+    ("Document", "hidden"),
+    ("Document", "visibilityState"),
+    ("Document", "readyState"),
+    ("Document", "domain"),
+    ("Document", "URL"),
+    ("Document", "title"),
+    ("Document", "documentURI"),
+    ("Document", "scrollingElement"),
+    ("Document", "currentScript"),
+    ("Document", "defaultView"),
+    ("Document", "characterSet"),
+    ("Document", "contentType"),
+    ("Document", "compatMode"),
+    ("Document", "lastModified"),
+    ("Document", "fullscreenEnabled"),
+    ("Document", "pictureInPictureEnabled"),
+    // --- Node properties (inherited by Document, installed by DOCUMENT_PROPS_JS) ---
+    ("Node", "baseURI"),
+    ("Node", "ownerDocument"),
+];
+
+fn should_skip_attribute(interface_name: &str, attr_name: &str) -> bool {
+    EXCLUDED_ATTRIBUTES
+        .iter()
+        .any(|(iface, attr)| *iface == interface_name && *attr == attr_name)
+}
+
 pub struct GeneratedFile {
     pub domain: String,
     pub content: String,
@@ -108,6 +152,10 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
 
     for m in &def.members {
         if m.kind == "attribute" {
+            let attr_name = m.name.as_deref().unwrap_or("");
+            if should_skip_attribute(def.name.as_deref().unwrap_or(""), attr_name) {
+                continue;
+            }
             idx += 1;
             let type_name = m.idl_type.as_deref().unwrap_or("any");
             let tm = type_mapper::map_idl_type(type_name);
@@ -216,6 +264,12 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     for m in &def.members {
         if m.kind != "attribute" && m.kind != "operation" {
             continue;
+        }
+        if m.kind == "attribute" {
+            let attr_name = m.name.as_deref().unwrap_or("");
+            if should_skip_attribute(def.name.as_deref().unwrap_or(""), attr_name) {
+                continue;
+            }
         }
         idx += 1;
         if m.kind == "attribute" {

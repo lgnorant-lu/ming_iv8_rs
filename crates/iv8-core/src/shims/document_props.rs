@@ -108,14 +108,12 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     });
 
     // document.referrer
-    if (!('referrer' in document)) {
-        Object.defineProperty(document, 'referrer', {
-            value: '',
-            writable: true,
-            enumerable: true,
-            configurable: true,
-        });
-    }
+    Object.defineProperty(document, 'referrer', {
+        value: '',
+        writable: true,
+        enumerable: true,
+        configurable: true,
+    });
 
     // document.hidden
     Object.defineProperty(document, 'hidden', {
@@ -142,23 +140,19 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     });
 
     // document.domain
-    if (!('domain' in document)) {
-        Object.defineProperty(document, 'domain', {
-            value: location.hostname || '',
-            writable: true,
-            enumerable: true,
-            configurable: true,
-        });
-    }
+    Object.defineProperty(document, 'domain', {
+        value: location.hostname || '',
+        writable: true,
+        enumerable: true,
+        configurable: true,
+    });
 
     // document.URL
-    if (!('URL' in document) || document.URL === undefined) {
-        Object.defineProperty(document, 'URL', {
-            get: function() { return location.href; },
-            enumerable: true,
-            configurable: true,
-        });
-    }
+    Object.defineProperty(document, 'URL', {
+        get: function() { return location.href; },
+        enumerable: true,
+        configurable: true,
+    });
 
     // document.title (reads/writes <title> element text)
     Object.defineProperty(document, 'title', {
@@ -175,13 +169,11 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     });
 
     // document.documentURI (alias for URL)
-    if (!('documentURI' in document) || document.documentURI === undefined) {
-        Object.defineProperty(document, 'documentURI', {
-            get: function() { return location.href; },
-            enumerable: true,
-            configurable: true,
-        });
-    }
+    Object.defineProperty(document, 'documentURI', {
+        get: function() { return location.href; },
+        enumerable: true,
+        configurable: true,
+    });
 
     // document DOM methods (stubs for anti-bot compatibility)
     if (!document.createEvent) {
@@ -256,42 +248,23 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     if (!document.timeline) {
         document.timeline = { currentTime: performance.now() };
     }
-    if (!document.scrollingElement) {
-        Object.defineProperty(document, 'scrollingElement', { get: function() { return document.body || null; }, configurable: true });
-    }
-    if (!document.currentScript) {
-        Object.defineProperty(document, 'currentScript', { get: function() { return null; }, configurable: true });
-    }
+    // Properties below are in EXCLUDED_ATTRIBUTES — codegen no longer
+    // installs them, so guards are dead code. Always install to ensure
+    // the shim is the single source of truth.
+    Object.defineProperty(document, 'scrollingElement', { get: function() { return document.body || null; }, configurable: true });
+    Object.defineProperty(document, 'currentScript', { get: function() { return null; }, configurable: true });
     if (!document.implementation) {
         document.implementation = { createHTMLDocument: function(t) { return document; }, hasFeature: function() { return true; } };
     }
-    if (!document.defaultView) {
-        Object.defineProperty(document, 'defaultView', { get: function() { return window; }, configurable: true });
-    }
-    if (!document.ownerDocument) {
-        Object.defineProperty(document, 'ownerDocument', { get: function() { return null; }, configurable: true });
-    }
-    if (!document.baseURI) {
-        Object.defineProperty(document, 'baseURI', { get: function() { return location.href; }, configurable: true });
-    }
-    if (!document.characterSet) {
-        Object.defineProperty(document, 'characterSet', { get: function() { return 'UTF-8'; }, configurable: true });
-    }
-    if (!document.contentType) {
-        Object.defineProperty(document, 'contentType', { get: function() { return 'text/html'; }, configurable: true });
-    }
-    if (!document.compatMode) {
-        Object.defineProperty(document, 'compatMode', { get: function() { return 'CSS1Compat'; }, configurable: true });
-    }
-    if (!document.lastModified) {
-        Object.defineProperty(document, 'lastModified', { get: function() { return new Date().toLocaleString(); }, configurable: true });
-    }
-    if (!document.fullscreenEnabled) {
-        Object.defineProperty(document, 'fullscreenEnabled', { get: function() { return false; }, configurable: true });
-    }
-    if (!document.pictureInPictureEnabled) {
-        Object.defineProperty(document, 'pictureInPictureEnabled', { get: function() { return false; }, configurable: true });
-    }
+    Object.defineProperty(document, 'defaultView', { get: function() { return window; }, configurable: true });
+    Object.defineProperty(document, 'ownerDocument', { get: function() { return null; }, configurable: true });
+    Object.defineProperty(document, 'baseURI', { get: function() { return location.href; }, configurable: true });
+    Object.defineProperty(document, 'characterSet', { get: function() { return 'UTF-8'; }, configurable: true });
+    Object.defineProperty(document, 'contentType', { get: function() { return 'text/html'; }, configurable: true });
+    Object.defineProperty(document, 'compatMode', { get: function() { return 'CSS1Compat'; }, configurable: true });
+    Object.defineProperty(document, 'lastModified', { get: function() { return new Date().toLocaleString(); }, configurable: true });
+    Object.defineProperty(document, 'fullscreenEnabled', { get: function() { return false; }, configurable: true });
+    Object.defineProperty(document, 'pictureInPictureEnabled', { get: function() { return false; }, configurable: true });
 
     // MimeTypeArray / PluginArray prototype tags
     // Real Chrome: Object.prototype.toString.call(mimeTypes) === '[object MimeTypeArray]'
@@ -350,18 +323,24 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // video.canPlayType / audio.canPlayType: return "probably" for H.264/AAC
     // Must override on all prototypes that shadow HTMLMediaElement.prototype
     // (codegen creates HTMLAudioElement/HTMLVideoElement with own canPlayType)
+    // Guard against re-wrap accumulation (DOCUMENT_PROPS_JS may run multiple times).
     try {
-        var _mediaCanPlay = HTMLMediaElement.prototype.canPlayType;
-        var _canPlayOverride = function(type) {
-            if (/avc1|mp4a|aac|h\.264|h264/i.test(type)) return 'probably';
-            return _mediaCanPlay.call(this, type);
-        };
-        HTMLMediaElement.prototype.canPlayType = _canPlayOverride;
-        if (typeof HTMLAudioElement !== 'undefined' && HTMLAudioElement.prototype.canPlayType !== _canPlayOverride) {
-            HTMLAudioElement.prototype.canPlayType = _canPlayOverride;
-        }
-        if (typeof HTMLVideoElement !== 'undefined' && HTMLVideoElement.prototype.canPlayType !== _canPlayOverride) {
-            HTMLVideoElement.prototype.canPlayType = _canPlayOverride;
+        if (HTMLMediaElement.prototype.__iv8CanPlayPatched) {
+            // Already patched — skip to avoid wrapper chain buildup.
+        } else {
+            var _mediaCanPlay = HTMLMediaElement.prototype.canPlayType;
+            var _canPlayOverride = function(type) {
+                if (/avc1|mp4a|aac|h\.264|h264/i.test(type)) return 'probably';
+                return _mediaCanPlay.call(this, type);
+            };
+            HTMLMediaElement.prototype.canPlayType = _canPlayOverride;
+            if (typeof HTMLAudioElement !== 'undefined' && HTMLAudioElement.prototype.canPlayType !== _canPlayOverride) {
+                HTMLAudioElement.prototype.canPlayType = _canPlayOverride;
+            }
+            if (typeof HTMLVideoElement !== 'undefined' && HTMLVideoElement.prototype.canPlayType !== _canPlayOverride) {
+                HTMLVideoElement.prototype.canPlayType = _canPlayOverride;
+            }
+            HTMLMediaElement.prototype.__iv8CanPlayPatched = true;
         }
     } catch(e) {}
 
@@ -392,5 +371,76 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         };
     }
 
+})();
+"#;
+
+/// Cookie-only re-install JS. Used at page_load step 9b to restore the
+/// cookie accessor after inline scripts may have overridden it.
+///
+/// Must NOT use the full DOCUMENT_PROPS_JS because the `lastModified`
+/// getter's `new Date().toLocaleString()` triggers Intl re-entrancy → OOM
+/// when run a second time in the same context.
+pub const COOKIE_REINSTALL_JS: &str = r#"
+(function() {
+    if (typeof document === 'undefined') return;
+    var _cookies = window._iv8CookieStore || (window._iv8CookieStore = {});
+    function _cookieValue(rec) {
+        if (typeof rec === 'string') return rec;
+        if (rec && typeof rec === 'object' && rec.v !== undefined) return rec.v;
+        return '';
+    }
+    function _cookieVisible(rec) {
+        if (typeof rec === 'string') return true;
+        if (!rec || typeof rec !== 'object') return true;
+        if (rec.path && rec.path !== '/') {
+            var docPath = '/';
+            try { docPath = document.location ? document.location.pathname : '/'; } catch(e) {}
+            if (docPath !== rec.path && docPath.indexOf(rec.path) !== 0) return false;
+        }
+        if (rec.secure && window.__iv8IsSecureContext !== true) return false;
+        return true;
+    }
+    try {
+    Object.defineProperty(document, 'cookie', {
+        get: function() {
+            var parts = [];
+            for (var k in _cookies) {
+                if (!_cookies.hasOwnProperty(k)) continue;
+                var rec = _cookies[k];
+                if (!_cookieVisible(rec)) continue;
+                parts.push(k + '=' + _cookieValue(rec));
+            }
+            return parts.join('; ');
+        },
+        set: function(val) {
+            var str = String(val);
+            var parts = str.split(';');
+            var kv = parts[0].split('=');
+            if (kv.length < 2) return;
+            var name = kv[0].trim();
+            var value = kv.slice(1).join('=').trim();
+            var attrs = {};
+            var hasAttrs = false;
+            for (var i = 1; i < parts.length; i++) {
+                var attr = parts[i].trim();
+                var lower = attr.toLowerCase();
+                if (lower === 'secure') { attrs.secure = true; hasAttrs = true; }
+                else if (lower === 'httponly') { attrs.httpOnly = true; hasAttrs = true; }
+                else if (lower.indexOf('path=') === 0) { attrs.path = attr.substring(5); hasAttrs = true; }
+                else if (lower.indexOf('domain=') === 0) { attrs.domain = attr.substring(7); hasAttrs = true; }
+                else if (lower.indexOf('samesite=') === 0) { attrs.sameSite = attr.substring(9); hasAttrs = true; }
+                else if (lower.indexOf('expires=') === 0) { attrs.expires = attr.substring(8); hasAttrs = true; }
+                else if (lower.indexOf('max-age=') === 0) {
+                    var ma = parseInt(attr.substring(8), 10);
+                    if (!isNaN(ma)) { if (ma <= 0) { delete _cookies[name]; return; } attrs.maxAge = ma; hasAttrs = true; }
+                }
+            }
+            if (hasAttrs) { attrs.v = value; _cookies[name] = attrs; }
+            else { _cookies[name] = value; }
+        },
+        enumerable: true,
+        configurable: true,
+    });
+    } catch(e) {}
 })();
 "#;
