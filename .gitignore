@@ -99,7 +99,6 @@ docs/.doctrees/
 site/
 
 # ── Local planning / release notes (不进 release 面) ─────────────────────────
-docs/TODO-v0.5-enhancements.md
 
 # ── OS-specific ─────────────────────────────────────────────────────────────
 .DS_Store
