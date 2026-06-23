@@ -374,7 +374,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // Symbol.toStringTag for global objects — anti-detection fidelity.
     // Real Chrome: Object.prototype.toString.call(window) === '[object Window]'
     // etc. IV8 creates plain V8 objects for these, so they default to
-    // '[object Object]'. Set the correct tags.
+    // '[object Object]'. Set the correct tags and prototype chains.
     try {
         Object.defineProperty(window, Symbol.toStringTag, { value: 'Window', configurable: true });
     } catch(e) {}
@@ -387,6 +387,33 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     try {
         if (typeof history !== 'undefined') {
             Object.defineProperty(history, Symbol.toStringTag, { value: 'History', configurable: true });
+        }
+    } catch(e) {}
+
+    // Prototype chain fixes — IV8 creates plain V8 objects for document,
+    // window, location, history, crypto. Real browsers have these as
+    // instances of their respective interfaces. Set prototype to the
+    // generated interface prototype so instanceof checks pass.
+    // Note: location prototype is NOT set because the Location codegen
+    // template has its own href getter that would shadow the injected
+    // profile values. This is a known limitation — location instanceof
+    // Location remains false until codegen template inheritance is fixed.
+    try {
+        if (typeof Document !== 'undefined' && Document.prototype) {
+            Object.setPrototypeOf(document, Document.prototype);
+        }
+    } catch(e) {}
+    // try { if (typeof Location !== 'undefined' && Location.prototype) {
+    //     Object.setPrototypeOf(location, Location.prototype);
+    // } } catch(e) {}
+    try {
+        if (typeof History !== 'undefined' && History.prototype && typeof history !== 'undefined') {
+            Object.setPrototypeOf(history, History.prototype);
+        }
+    } catch(e) {}
+    try {
+        if (typeof Crypto !== 'undefined' && Crypto.prototype && typeof crypto !== 'undefined') {
+            Object.setPrototypeOf(crypto, Crypto.prototype);
         }
     } catch(e) {}
 
