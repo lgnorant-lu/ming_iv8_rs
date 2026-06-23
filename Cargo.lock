@@ -1245,7 +1245,6 @@ dependencies = [
 name = "iv8-surface-codegen"
 version = "0.1.0"
 dependencies = [
- "heck",
  "serde",
  "serde_json",
 ]

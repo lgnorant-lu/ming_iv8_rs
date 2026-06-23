@@ -1,7 +1,5 @@
 //! Generated FunctionTemplate stubs.
 
-use v8::Local;
-
 /// Empty constructor shared by all generated templates.
 pub(crate) unsafe extern "C" fn empty_constructor(_info: *const v8::FunctionCallbackInfo) {}
 
