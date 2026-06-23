@@ -50,22 +50,50 @@ impl LocalStorageStore {
 
     pub fn to_json_object(&self) -> String {
         let map = self.data.lock().unwrap();
-        let parts: Vec<String> = map
-            .iter()
-            .map(|(k, v)| {
-                format!(
-                    "\"{}\":\"{}\"",
-                    k.replace('\\', "\\\\").replace('"', "\\\""),
-                    v.replace('\\', "\\\\").replace('"', "\\\"")
-                )
-            })
-            .collect();
-        format!("{{{}}}", parts.join(","))
+        serde_json::to_string(&*map).unwrap_or_else(|_| "{}".to_string())
     }
 }
 
 impl Default for LocalStorageStore {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_to_json_object_empty() {
+        let store = LocalStorageStore::new();
+        assert_eq!(store.to_json_object(), "{}");
+    }
+
+    #[test]
+    fn test_to_json_object_simple() {
+        let store = LocalStorageStore::new();
+        store.set("key".into(), "value".into());
+        assert_eq!(store.to_json_object(), "{\"key\":\"value\"}");
+    }
+
+    #[test]
+    fn test_to_json_object_special_chars() {
+        let store = LocalStorageStore::new();
+        store.set("k\nnewline".into(), "val\"quote".into());
+        let json = store.to_json_object();
+        // serde_json properly escapes control characters and quotes
+        assert!(json.contains("\\n"));
+        assert!(json.contains("\\\""));
+    }
+
+    #[test]
+    fn test_to_json_object_multiple() {
+        let store = LocalStorageStore::new();
+        store.set("a".into(), "1".into());
+        store.set("b".into(), "2".into());
+        let json = store.to_json_object();
+        assert!(json.contains("\"a\":\"1\""));
+        assert!(json.contains("\"b\":\"2\""));
     }
 }
