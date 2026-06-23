@@ -173,6 +173,7 @@ impl EmbeddedV8Kernel {
         let user_overrides = config.user_overrides;
         let browser_profile: Option<&'static crate::shims::browser_profile::BrowserProfile> =
             config.browser_profile.map(|bp| &*Box::leak(bp));
+        let local_storage_backend = config.local_storage;
 
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
 
@@ -192,6 +193,7 @@ impl EmbeddedV8Kernel {
                 config.js_api_name,
                 environment.clone(),
                 browser_profile,
+                local_storage_backend,
             ),
         );
 
@@ -860,6 +862,23 @@ impl EmbeddedV8Kernel {
         .ok();
 
         // 14. Install localStorage/sessionStorage
+        // Seed from shared backend if present, then install JS shim.
+        {
+            let state = crate::state::RuntimeState::get(&self.isolate);
+            let seed_json = {
+                let borrow = state.local_storage.borrow();
+                borrow
+                    .as_ref()
+                    .map(|b| b.to_json_object())
+                    .unwrap_or_default()
+            };
+            if !seed_json.is_empty() && seed_json != "{}" {
+                let seed_js =
+                    format!("window.__iv8LocalSeed = {};", seed_json);
+                self.eval(&seed_js, crate::kernel::EvalOpts::default())
+                    .ok();
+            }
+        }
         self.eval(
             crate::shims::storage::STORAGE_JS,
             crate::kernel::EvalOpts::default(),
@@ -1016,6 +1035,24 @@ impl EmbeddedV8Kernel {
 
     /// Dispose the kernel (explicit cleanup before drop).
     pub fn dispose(&mut self) {
+        // Flush localStorage data back to shared backend.
+        // Clone the backend before calling eval (eval needs &mut self).
+        let backend = RuntimeState::get(&self.isolate)
+            .local_storage
+            .borrow()
+            .clone();
+        if let Some(backend) = backend {
+            let result = self.eval_to_rust_value(
+                r#"(function(){try{var d={};var s=localStorage;if(s&&s._data){var k=Object.keys(s._data);for(var i=0;i<k.length;i++){d[k[i]]=s._data[k[i]];}}return JSON.stringify(d);}catch(e){return'{}';}})()"#,
+            );
+            if let crate::convert::RustValue::String(json) = result {
+                if let Ok(map) =
+                    serde_json::from_str::<std::collections::HashMap<String, String>>(&json)
+                {
+                    backend.replace_all(map);
+                }
+            }
+        }
         let state = RuntimeState::get(&self.isolate);
         state.mark_disposed();
     }

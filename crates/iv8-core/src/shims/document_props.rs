@@ -1,20 +1,54 @@
 //! document.cookie, document.referrer, document.hidden, document.visibilityState
 //!
-//! These are standard document properties that anti-bot scripts check.
+//! document.cookie (v0.8.72 Track B): enhanced with attribute parsing
+//! (Path, Secure, SameSite, expires, max-age, domain, httpOnly) and
+//! visibility filtering (Path prefix match, Secure context). See
+//! `crates/iv8-core/src/dom/cookie_jar.rs` for the canonical Rust model.
 
 /// JS shim for document properties.
 pub const DOCUMENT_PROPS_JS: &str = r#"
 (function() {
     if (typeof document === 'undefined') return;
 
-    // document.cookie (read/write string, multi-cookie support)
-    // Store on window to survive page.load() re-evaluation of this IIFE
+    // IV8 logical mode treats all contexts as secure.
+    if (window.__iv8IsSecureContext === undefined) {
+        window.__iv8IsSecureContext = true;
+    }
+
+    // document.cookie (v0.8.72 Track B: attribute parsing + filtering)
     var _cookies = window._iv8CookieStore || (window._iv8CookieStore = {});
+
+    function _cookieValue(rec) {
+        if (typeof rec === 'string') return rec;
+        if (rec && typeof rec === 'object' && rec.v !== undefined) return rec.v;
+        return '';
+    }
+
+    function _cookieVisible(rec) {
+        if (typeof rec === 'string') return true;    // legacy: no attributes
+        if (!rec || typeof rec !== 'object') return true;
+        // Path filtering (prefix match)
+        if (rec.path && rec.path !== '/') {
+            var docPath = '/';
+            try { docPath = document.location ? document.location.pathname : '/'; } catch(e) {}
+            if (docPath.indexOf(rec.path) !== 0) return false;
+        }
+        // Secure filtering
+        if (rec.secure) {
+            var isSecure = window.__iv8IsSecureContext;
+            if (isSecure !== true) return false;
+        }
+        return true;
+    }
+
     Object.defineProperty(document, 'cookie', {
         get: function() {
             var parts = [];
             for (var k in _cookies) {
-                if (_cookies.hasOwnProperty(k)) parts.push(k + '=' + _cookies[k]);
+                if (!_cookies.hasOwnProperty(k)) continue;
+                var rec = _cookies[k];
+                if (!_cookieVisible(rec)) continue;
+                parts.push(k + '=' + _cookieValue(rec));
             }
             return parts.join('; ');
         },
@@ -22,19 +56,44 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             var str = String(val);
             var parts = str.split(';');
             var kv = parts[0].split('=');
-            if (kv.length >= 2) {
-                var name = kv[0].trim();
-                var value = kv.slice(1).join('=').trim();
-                _cookies[name] = value;
-            }
-            // expires, path, domain, secure, samesite attributes are parsed but
-            // not enforced; expired cookies are removed on next set via Max-Age=0
+            if (kv.length < 2) return;
+            var name = kv[0].trim();
+            var value = kv.slice(1).join('=').trim();
+
+            // Parse attributes from remaining segments
+            var attrs = {};
+            var hasAttrs = false;
             for (var i = 1; i < parts.length; i++) {
                 var attr = parts[i].trim();
-                if (attr.toLowerCase() === 'max-age=0') {
-                    var pkv = parts[0].split('=');
-                    if (pkv.length >= 2) delete _cookies[pkv[0].trim()];
+                var lower = attr.toLowerCase();
+                if (lower === 'secure')        { attrs.secure = true; hasAttrs = true; }
+                else if (lower === 'httponly') { attrs.httpOnly = true; hasAttrs = true; }
+                else if (lower.indexOf('path=') === 0) {
+                    attrs.path = attr.substring(5); hasAttrs = true;
                 }
+                else if (lower.indexOf('domain=') === 0) {
+                    attrs.domain = attr.substring(7); hasAttrs = true;
+                }
+                else if (lower.indexOf('samesite=') === 0) {
+                    attrs.sameSite = attr.substring(9); hasAttrs = true;
+                }
+                else if (lower.indexOf('expires=') === 0) {
+                    attrs.expires = attr.substring(8); hasAttrs = true;
+                }
+                else if (lower.indexOf('max-age=') === 0) {
+                    var ma = parseInt(attr.substring(8), 10);
+                    if (!isNaN(ma)) {
+                        if (ma <= 0) { delete _cookies[name]; return; }
+                        attrs.maxAge = ma; hasAttrs = true;
+                    }
+                }
+            }
+
+            if (hasAttrs) {
+                attrs.v = value;
+                _cookies[name] = attrs;
+            } else {
+                _cookies[name] = value;
             }
         },
         enumerable: true,

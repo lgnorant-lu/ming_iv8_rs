@@ -1,14 +1,23 @@
 //! localStorage / sessionStorage stubs.
 //!
-//! In-memory implementation (not persisted). Sufficient for anti-bot scripts
-//! that check for storage existence or do simple get/set.
+//! localStorage can be backed by a shared `LocalStorageStore` for cross-kernel
+//! persistence. When a backend is present, `window.__iv8LocalSeed` is injected
+//! before this shim runs and the StorageStub initializes from it.
+//!
+//! sessionStorage is always session-scoped JS-only (cleared on page unload).
 
 /// JS shim for localStorage and sessionStorage.
 pub const STORAGE_JS: &str = r#"
 (function() {
     function StorageStub() {
-        this._data = {};
-        this.length = 0;
+        if (window.__iv8LocalSeed) {
+            this._data = window.__iv8LocalSeed;
+            this.length = Object.keys(window.__iv8LocalSeed).length;
+            delete window.__iv8LocalSeed;
+        } else {
+            this._data = {};
+            this.length = 0;
+        }
     }
     StorageStub.prototype.getItem = function(key) {
         return this._data.hasOwnProperty(key) ? this._data[key] : null;

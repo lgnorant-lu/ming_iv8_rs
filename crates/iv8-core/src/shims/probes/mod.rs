@@ -18,6 +18,7 @@ pub mod probe_eme;
 pub mod probe_gamepad;
 pub mod probe_geolocation;
 pub mod probe_midi;
+pub mod probe_record;
 pub mod probe_send_beacon;
 
 /// Result of a single probe execution.

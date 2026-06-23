@@ -30,6 +30,9 @@ pub struct KernelConfig {
     /// Browser identity profile. Leaked to `&'static` at kernel construction.
     /// Not cloned — each config produces a single kernel.
     pub browser_profile: Option<Box<crate::shims::browser_profile::BrowserProfile>>,
+    /// Optional shared localStorage backend for cross-kernel persistence.
+    /// Multiple kernels sharing the same `LocalStorageStore` see the same data.
+    pub local_storage: Option<crate::dom::local_storage::LocalStorageStore>,
 }
 
 impl Default for KernelConfig {
@@ -44,6 +47,7 @@ impl Default for KernelConfig {
             time_freeze: None,
             user_overrides: crate::user_overrides::UserOverrides::new(),
             browser_profile: None,
+            local_storage: None,
         }
     }
 }

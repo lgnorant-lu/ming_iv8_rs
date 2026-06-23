@@ -197,6 +197,7 @@ impl JSContext {
             time_freeze,
             user_overrides: Default::default(),
             browser_profile: None,
+            local_storage: None,
         };
 
         let kernel = EmbeddedV8Kernel::new(kernel_config).map_err(error::iv8_error_to_pyerr)?;

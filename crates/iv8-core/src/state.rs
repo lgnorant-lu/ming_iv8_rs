@@ -98,6 +98,9 @@ pub struct RuntimeState {
     /// Heap registries for Box allocations stored via External pointers.
     /// Each entry: (pointer, free function). Freed on RuntimeState drop.
     pub heap_registry: RefCell<Vec<(*mut std::ffi::c_void, fn(*mut std::ffi::c_void))>>,
+
+    /// Shared cross-kernel localStorage backend.
+    pub local_storage: RefCell<Option<crate::dom::local_storage::LocalStorageStore>>,
 }
 
 /// Time mode for the JS context.
@@ -117,6 +120,7 @@ impl RuntimeState {
         js_api_name: String,
         environment: Arc<EnvironmentMap>,
         profile: Option<&'static crate::shims::browser_profile::BrowserProfile>,
+        local_storage: Option<crate::dom::local_storage::LocalStorageStore>,
     ) -> Self {
         tracing::info!(
             %strict_compat,
@@ -151,6 +155,7 @@ impl RuntimeState {
             crypto_seed: RefCell::new(None),
             canvases: RefCell::new(std::collections::HashMap::new()),
             heap_registry: RefCell::new(Vec::new()),
+            local_storage: RefCell::new(local_storage),
         }
     }
 
@@ -233,6 +238,7 @@ mod tests {
                 "__iv8__".to_string(),
                 std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
                 None,
+                None,
             ),
         );
 
@@ -267,6 +273,7 @@ mod tests {
                     TimeMode::System,
                     "__test__".to_string(),
                     std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+                    None,
                     None,
                 ),
             );

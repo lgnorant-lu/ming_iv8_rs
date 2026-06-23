@@ -3939,12 +3939,21 @@ unsafe extern "C" fn headers_get_cb(info: *const v8::FunctionCallbackInfo) {
         }
         let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
         if let Some(pairs) = extract_headers_vec(scope, args.this()) {
-            for (k, v) in pairs.iter() {
-                if k.to_lowercase() == name {
-                    if let Some(s) = v8::String::new(scope, v) {
-                        rv.set(s.into());
-                        return;
-                    }
+            // Collect all values matching the case-insensitive name.
+            let mut matches: Vec<&String> = pairs
+                .iter()
+                .filter(|(k, _)| k.to_lowercase() == name)
+                .map(|(_, v)| v)
+                .collect();
+            if !matches.is_empty() {
+                let combined = matches
+                    .iter()
+                    .map(|v| v.as_str())
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                if let Some(s) = v8::String::new(scope, &combined) {
+                    rv.set(s.into());
+                    return;
                 }
             }
         }
@@ -4478,6 +4487,7 @@ mod tests {
             "__test__".to_string(),
             std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
             None,
+            None,
         );
         // Verify extract_style_node_id returns None for a V8 object without
         // internal fields (would panic if the function dereferenced null).
@@ -4501,6 +4511,7 @@ mod tests {
             crate::state::TimeMode::Logical,
             "__test__".to_string(),
             std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+            None,
             None,
         );
         assert!(state.style_cache.borrow().is_empty());

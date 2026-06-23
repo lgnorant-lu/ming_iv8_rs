@@ -7,6 +7,8 @@
 //! full mutation support (append, prepend, insert_before, insert_after, detach).
 
 pub mod binding;
+pub mod cookie_jar;
+pub mod local_storage;
 pub mod node;
 pub mod parser;
 pub mod selector;
