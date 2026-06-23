@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.71 (browser surface coverage baseline + performance.timeOrigin fix) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.73 (debug / automation / geometry closure) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
@@ -14,6 +14,8 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Bundler refinement (M5)**: Parcel detection + bridge (`$parcel$`/`parcelRequire`); Vite ESM G5-G8 minimal support (import.meta, dynamic import, TLA); Browserify bridge quality fixes (string-key deps, span fallback) (v0.8.68)
 - **Infrastructure convergence**: CI Rust toolchain pinned to 1.96.0; env_inject skips 26 direct keys already covered by native accessors (v0.8.69)
 - **Browser surface coverage baseline**: curated priority probe matrix (30 tests, 9 dimensions); tiered T1-T5 coverage statistics; timeOrigin fix (no longer hardcoded 0) (v0.8.71)
+- **Stateful runtime substrate**: localStorage cross-kernel persistence + Drop flush; cookie security attribute parsing/filtering (Path prefix-match, Secure context); Headers comma-join duplicates + constructor array init; structured ProbeRecord JSON schema with collect_probe_records (v0.8.72)
+- **Debug / automation / geometry closure**: inspector step_out wiring (kernel cdp_step_out + Python binding); Python inventory auto-update generator; layout/geometry basic model (Rust callback reads this.__iv8Rect__; __iv8SetElementRect fixture hook); bridge vocabulary glossary (16 terms) (v0.8.73)
 - **Navigator consistency + WorkerNavigator**: 10 new integration tests for Navigator cross-property coherence and WorkerNavigator runtime shape; WorkerNavigator illegal_constructor fix (v0.8.70)
 - **Generated Navigator skeletons**: 46 IDL properties via codegen + native template unification (v0.8.58/0.8.60)
 - **Native Navigator stubs**: connection, getBattery, sendBeacon, geolocation, clipboard, credentials (v0.8.55); getGamepads, requestMediaKeySystemAccess, requestMIDIAccess (v0.8.61)
@@ -54,7 +56,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Diagnostic-to-Substrate Bridge M2 (v0.8.41)**: before/after delta contract and repair candidate ledger; 1469 Python PASS.
 - **Runtime Repair Harness M1 (v0.8.42)**: repair brief, evidence bundle manifest, validation plan, and readiness classification; 1481 Python PASS.
 - **L3 P0 Navigator/Profile Runtime Batch M1 (v0.8.43)**: first evidence-driven Rust runtime mutation; Navigator value projection from v0.8.42 repair briefs with before/after delta validation; 1490 Python PASS.
-Current `0.8.11` package release scope. v0.8.12-v0.8.67 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked pending M5 plus M6 gate audit.
+Current `0.8.11` package release scope. v0.8.12-v0.8.73 are local milestones; metadata remains `0.8.11`. v0.9 holding track blocked pending M7 gate audit.
 
 ## Install
 
