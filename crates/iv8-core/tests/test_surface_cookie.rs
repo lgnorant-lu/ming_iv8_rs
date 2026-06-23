@@ -149,3 +149,33 @@ fn test_cookie_secure_hidden_in_non_secure_context() {
         v2
     );
 }
+
+#[test]
+fn test_cookie_path_prefix_boundary() {
+    let mut k = common::make_kernel();
+    k.eval_to_rust_value("document.cookie = 'x=1; Path=/app'");
+    // /app is visible (exact match)
+    // Default doc path is / — cookie with Path=/app should NOT be visible
+    let v = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    assert!(
+        !v.contains("x=1"),
+        "Path=/app cookie should be hidden at root path: got '{}'",
+        v
+    );
+    // Set doc path to /app and verify visibility
+    k.eval_to_rust_value(
+        "Object.defineProperty(document, 'location', {value: {pathname: '/app'}, configurable: true})",
+    );
+    let v2 = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    assert!(v2.contains("x=1"), "Path=/app cookie should be visible at /app: got '{}'", v2);
+    // /application must NOT match
+    k.eval_to_rust_value(
+        "document.location.pathname = '/application'",
+    );
+    let v3 = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    assert!(
+        !v3.contains("x=1"),
+        "Path=/app must NOT match /application: got '{}'",
+        v3
+    );
+}

@@ -27,11 +27,11 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     function _cookieVisible(rec) {
         if (typeof rec === 'string') return true;    // legacy: no attributes
         if (!rec || typeof rec !== 'object') return true;
-        // Path filtering (prefix match)
+        // Path filtering (RFC 6265 prefix match)
         if (rec.path && rec.path !== '/') {
             var docPath = '/';
             try { docPath = document.location ? document.location.pathname : '/'; } catch(e) {}
-            if (docPath.indexOf(rec.path) !== 0) return false;
+            if (!_pathMatches(docPath, rec.path)) return false;
         }
         // Secure filtering
         if (rec.secure) {
@@ -39,6 +39,13 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             if (isSecure !== true) return false;
         }
         return true;
+    }
+
+    function _pathMatches(docPath, cookiePath) {
+        if (docPath === cookiePath) return true;
+        if (docPath.indexOf(cookiePath) !== 0) return false;
+        var next = docPath.charAt(cookiePath.length);
+        return next === '/' || next === '';
     }
 
     Object.defineProperty(document, 'cookie', {

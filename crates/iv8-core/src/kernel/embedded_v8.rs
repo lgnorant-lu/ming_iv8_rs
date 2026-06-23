@@ -1035,8 +1035,11 @@ impl EmbeddedV8Kernel {
 
     /// Dispose the kernel (explicit cleanup before drop).
     pub fn dispose(&mut self) {
+        // Guard against double-dispose.
+        if RuntimeState::get(&self.isolate).is_disposed() {
+            return;
+        }
         // Flush localStorage data back to shared backend.
-        // Clone the backend before calling eval (eval needs &mut self).
         let backend = RuntimeState::get(&self.isolate)
             .local_storage
             .borrow()
@@ -1053,8 +1056,7 @@ impl EmbeddedV8Kernel {
                 }
             }
         }
-        let state = RuntimeState::get(&self.isolate);
-        state.mark_disposed();
+        RuntimeState::get(&self.isolate).mark_disposed();
     }
 
     /// Install BrowserSurface — default init path since v0.8.26.

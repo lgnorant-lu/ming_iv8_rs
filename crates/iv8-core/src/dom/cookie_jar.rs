@@ -92,7 +92,24 @@ impl CookieJar {
                     if ma <= 0 {
                         self.cookies.retain(|c| c.name != name);
                         return;
-                    }
+    #[test]
+    fn test_jar_path_prefix_boundary() {
+        let mut jar = CookieJar::new();
+        jar.set_cookie("x=1; Path=/app");
+        // /app matches
+        assert_eq!(jar.get_cookie_string("/app", true), "x=1");
+        // /app/page matches (next char is /)
+        assert_eq!(jar.get_cookie_string("/app/page", true), "x=1");
+        // /application does NOT match (next char is 'l', not /)
+        assert_eq!(
+            jar.get_cookie_string("/application", true),
+            "",
+            "Path=/app must not match /application"
+        );
+        // /appx does NOT match
+        assert_eq!(jar.get_cookie_string("/appx", true), "");
+    }
+}
                     record.max_age = Some(ma);
                 }
             }
@@ -137,17 +154,28 @@ fn cookie_visible(
     document_path: &str,
     is_secure_context: bool,
 ) -> bool {
-    // Path filtering (prefix match)
     if let Some(ref path) = cookie.path {
-        if path != "/" && !document_path.starts_with(path.as_str()) {
+        if path != "/" && !path_matches(document_path, path) {
             return false;
         }
     }
-    // Secure filtering
     if cookie.secure && !is_secure_context {
         return false;
     }
     true
+}
+
+/// RFC 6265 path-match: cookie-path is a prefix of request-path,
+/// and either paths are equal or the next character after the
+/// cookie-path in the request-path is '/'.
+fn path_matches(request_path: &str, cookie_path: &str) -> bool {
+    if request_path == cookie_path {
+        return true;
+    }
+    if !request_path.starts_with(cookie_path) {
+        return false;
+    }
+    request_path[cookie_path.len()..].starts_with('/')
 }
 
 #[cfg(test)]
@@ -257,5 +285,16 @@ mod tests {
         assert_eq!(jar.len(), 1);
         let s = jar.get_cookie_string("/", true);
         assert!(s.contains("token=abc=def=ghi"));
+    }
+
+    #[test]
+    fn test_jar_path_prefix_boundary() {
+        let mut jar = CookieJar::new();
+        jar.set_cookie("x=1; Path=/app");
+        assert_eq!(jar.get_cookie_string("/app", true), "x=1");
+        assert_eq!(jar.get_cookie_string("/app/page", true), "x=1");
+        // Must NOT match /application (next char after /app is 'l', not /)
+        assert_eq!(jar.get_cookie_string("/application", true), "");
+        assert_eq!(jar.get_cookie_string("/appx", true), "");
     }
 }
