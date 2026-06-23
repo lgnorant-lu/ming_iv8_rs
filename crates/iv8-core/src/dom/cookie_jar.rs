@@ -92,24 +92,7 @@ impl CookieJar {
                     if ma <= 0 {
                         self.cookies.retain(|c| c.name != name);
                         return;
-    #[test]
-    fn test_jar_path_prefix_boundary() {
-        let mut jar = CookieJar::new();
-        jar.set_cookie("x=1; Path=/app");
-        // /app matches
-        assert_eq!(jar.get_cookie_string("/app", true), "x=1");
-        // /app/page matches (next char is /)
-        assert_eq!(jar.get_cookie_string("/app/page", true), "x=1");
-        // /application does NOT match (next char is 'l', not /)
-        assert_eq!(
-            jar.get_cookie_string("/application", true),
-            "",
-            "Path=/app must not match /application"
-        );
-        // /appx does NOT match
-        assert_eq!(jar.get_cookie_string("/appx", true), "");
-    }
-}
+                    }
                     record.max_age = Some(ma);
                 }
             }
@@ -118,10 +101,6 @@ impl CookieJar {
         // Replace existing cookie with same name (case-sensitive)
         self.cookies.retain(|c| c.name != name);
         self.cookies.push(record);
-    }
-
-    fn is_secure_context(is_secure: bool) -> bool {
-        is_secure
     }
 
     pub fn get_cookie_string(

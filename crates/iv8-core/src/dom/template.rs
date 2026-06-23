@@ -3999,7 +3999,7 @@ unsafe extern "C" fn headers_get_cb(info: *const v8::FunctionCallbackInfo) {
         let name = args.get(0).to_rust_string_lossy(scope).to_lowercase();
         if let Some(pairs) = extract_headers_vec(scope, args.this()) {
             // Collect all values matching the case-insensitive name.
-            let mut matches: Vec<&String> = pairs
+            let matches: Vec<&String> = pairs
                 .iter()
                 .filter(|(k, _)| k.to_lowercase() == name)
                 .map(|(_, v)| v)
