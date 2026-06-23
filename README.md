@@ -66,6 +66,11 @@ Current `0.8.11` package release scope. v0.8.12-v0.8.73 are local milestones; me
 # From source (requires Rust toolchain + Python 3.13+)
 git clone <repo>
 cd iv8-rs
+
+# Local development (fast: ~10s per file change)
+uv run maturin develop --target-dir target-maturin --strip --profile dev
+
+# Distribution build (slow: LTO optimization, 5-10 min)
 uv run maturin develop --release
 ```
 
