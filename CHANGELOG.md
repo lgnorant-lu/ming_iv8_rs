@@ -6,6 +6,83 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.73] - 2026-06-23
+
+> Local milestone: debug / automation / geometry closure
+> (家具收束 — inspector step_out wiring, Python inventory auto-update,
+> layout/geometry basic model, bridge vocabulary consolidation. Tag `v0.8.73`.)
+
+### Added
+- `EmbeddedV8Kernel::cdp_step_out()` (`embedded_v8.rs`): mirrors
+  `cdp_step_over`/`cdp_step_into` pattern, calls `CdpClient::step_out()`.
+- `JSContext.cdp_step_out()` Python binding (`context.rs`).
+- `scripts/update_python_test_inventory.py`: deterministic inventory regenerator
+  from `pytest --collect-only` output.
+- `__iv8SetElementRect(element, rect)`: global fixture hook for per-element
+  geometry configuration (`shims/geometry.rs`).
+- `docs/roadmap/v0.8/shared/v0.8-vocabulary.md`: 16-term cross-layer glossary.
+- 3 new geometry integration tests: configured rect, derived fields,
+  missing-field defaults (`test_dom_geometry.rs`, 11 -> 14).
+
+### Changed
+- `get_bounding_client_rect_cb` (`dom/template.rs`): Rust callback now reads
+  `this.__iv8Rect__` JS property; default-zero backward compatible.
+- Geometry shim (`shims/geometry.rs`): simplified to fixture hooks +
+  getComputedStyle only; `getBoundingClientRect` fully Rust-native on prototype.
+- Python API contract test (`test_api_contract.py`): verifies `cdp_step_out`
+  method existence.
+
+### Quality Gates
+- `cargo test -p iv8-core --lib`: 313/313 passed.
+- `cargo test --test test_dom_geometry`: 14/14 passed (+3).
+- `cargo test --test test_kernel_init`: 94/94 passed.
+- All 10 integration test suites: 287 passed, 0 failed.
+- `cargo check --workspace`: 0 errors.
+
+### Known Limitations
+- Geometry: no real layout engine (CSS box model, reflow, DOM element sizing).
+- Inspector: no in-process pause/step round-trip test (requires inspector start).
+- Bridge vocabulary: docs-only, no tool-enforced term usage lint.
+- Inventory generator: output not yet verified in CI.
+
+## [0.8.72] - 2026-06-23
+
+> Local milestone: stateful runtime substrate + structured probes
+> (家具/精装收束 — Storage, Cookie, Headers, Probe Records. Tag `v0.8.72`
+> at `1adafde`; post-tag audit closed at `2379e45` with 586 tests.)
+
+### Added
+- `LocalStorageStore` (`dom/local_storage.rs`): `Arc<Mutex<HashMap>>`
+  profile-scoped shared backend; `KernelConfig::local_storage` field.
+- `CookieRecord` + `CookieJar` (`dom/cookie_jar.rs`): structured cookie model
+  with attribute parsing (Path/Secure/SameSite/expires/max-age) and path-matched
+  visibility filtering.
+- `headers_constructor_cb` (`dom/template.rs`): `new Headers([["k","v"]])`
+  constructor supporting array init.
+- `ProbeRecord` struct (`shims/probes/probe_record.rs`): machine-readable
+  structured probe output with `serde::Serialize`; `collect_probe_records()`,
+  `probe_records_to_json()`.
+- 10 storage, 14 cookie, 8 headers, 11 probe integration tests.
+
+### Changed
+- `headers_get_cb`: duplicate values now comma-joined per Fetch spec.
+- `flush_local_storage()`: called from both `dispose()` and `Drop` (RAII).
+- `to_json_object()`: manual `replace` escaping replaced with `serde_json::to_string`.
+
+### Fixed
+- `cookie_jar.rs` path matching: next-character boundary check per RFC 6265.
+- `cookie_jar.rs` dead code removal: unused `is_secure_context()`, duplicate
+  test block inside `set_cookie()`.
+
+### Quality Gates
+- Post-tag audit closed: 313 lib + 273 integration = 586 tests PASS.
+- `cargo check -p iv8-core`: 0 errors, 0 warnings.
+- `cargo check --workspace`: 0 errors.
+
+### Known Limitations
+- No filesystem/IndexedDB persistence, no full RFC 6265 date parser, no domain
+  matching, no httpOnly/SameSite enforcement, no Headers object init constructor.
+
 ## [0.8.71] - 2026-06-23
 
 > Local milestone: browser surface coverage baseline + performance.timeOrigin fix
