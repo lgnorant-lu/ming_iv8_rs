@@ -417,6 +417,52 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
+    // crypto.subtle prototype — should be SubtleCrypto instance
+    try {
+        if (typeof SubtleCrypto !== 'undefined' && SubtleCrypto.prototype && typeof crypto !== 'undefined' && crypto.subtle) {
+            Object.setPrototypeOf(crypto.subtle, SubtleCrypto.prototype);
+        }
+    } catch(e) {}
+
+    // Notification.permission default — real Chrome returns 'default'
+    try {
+        if (typeof Notification !== 'undefined' && Notification.permission === undefined) {
+            Object.defineProperty(Notification, 'permission', { value: 'default', writable: true, configurable: true });
+        }
+    } catch(e) {}
+
+    // localStorage/sessionStorage constructor name fix
+    // JS shim creates them as "StorageStub" — rename to match browser
+    try {
+        if (typeof localStorage !== 'undefined' && localStorage.constructor && localStorage.constructor.name === 'StorageStub') {
+            Object.defineProperty(localStorage.constructor, 'name', { value: 'Storage', configurable: true });
+        }
+    } catch(e) {}
+    try {
+        if (typeof sessionStorage !== 'undefined' && sessionStorage.constructor && sessionStorage.constructor.name === 'StorageStub') {
+            Object.defineProperty(sessionStorage.constructor, 'name', { value: 'Storage', configurable: true });
+        }
+    } catch(e) {}
+
+    // localStorage/sessionStorage toString tag
+    try {
+        if (typeof localStorage !== 'undefined') {
+            Object.defineProperty(localStorage, Symbol.toStringTag, { value: 'Storage', configurable: true });
+        }
+    } catch(e) {}
+    try {
+        if (typeof sessionStorage !== 'undefined') {
+            Object.defineProperty(sessionStorage, Symbol.toStringTag, { value: 'Storage', configurable: true });
+        }
+    } catch(e) {}
+
+    // XMLHttpRequest toString tag
+    try {
+        if (typeof XMLHttpRequest !== 'undefined' && XMLHttpRequest.prototype) {
+            Object.defineProperty(XMLHttpRequest.prototype, Symbol.toStringTag, { value: 'XMLHttpRequest', configurable: true });
+        }
+    } catch(e) {}
+
 })();
 "#;
 
