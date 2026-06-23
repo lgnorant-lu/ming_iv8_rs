@@ -66,12 +66,28 @@ def _parse_entry(raw: str) -> Optional[TraceEntry]:
 
     if len(parts) >= 4:
         # 4-field: TYPE,pc,target,value
+        # pc must be an integer. If not:
+        # - For D entries: parts[1] is an opcode (3-field D,opcode,value),
+        #   so target=parts[2], value=parts[3] (original 4-field fallback).
+        # - For C/R/W entries: parts[1] is the target (e.g.
+        #   "crypto.getRandomValues" in C,crypto.getRandomValues,36,212,...),
+        #   so we fall back to 3-field: target=parts[1], value=parts[2:] joined.
         try:
             pc = int(parts[1])
         except ValueError:
             pc = -1
-        target = parts[2]
-        value = parts[3]
+            if entry_type == "D":
+                # D,opcode,... format: keep 4-field interpretation
+                target = parts[2]
+                value = parts[3]
+            else:
+                # C/R/W with non-integer "pc" → 3-field format
+                # target contains a dot, value has commas
+                target = parts[1]
+                value = ",".join(parts[2:])
+        else:
+            target = parts[2]
+            value = parts[3]
     else:
         # 3-field: TYPE,target,value  (no PC; for D entries, second field is opcode)
         pc = -1

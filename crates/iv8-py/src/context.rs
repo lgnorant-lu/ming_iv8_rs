@@ -486,6 +486,26 @@ impl JSContext {
         Ok(())
     }
 
+    /// Load HTML with response headers (for Set-Cookie processing).
+    ///
+    /// Args:
+    ///     html: The HTML source to parse.
+    ///     base_url: Optional base URL for resolving relative URLs.
+    ///     headers: Optional list of [name, value] header pairs.
+    #[pyo3(signature = (html, base_url=None, headers=None))]
+    fn page_load_with_headers(
+        &self,
+        html: &str,
+        base_url: Option<&str>,
+        headers: Option<Vec<(String, String)>>,
+    ) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        let hdrs = headers.unwrap_or_default();
+        kernel.page_load_with_headers(html, base_url, &hdrs);
+        Ok(())
+    }
+
     /// Start the V8 Inspector (CDP WebSocket server).
     ///
     /// Returns self for chaining: `ctx = JSContext().with_devtools(port=9229)`
