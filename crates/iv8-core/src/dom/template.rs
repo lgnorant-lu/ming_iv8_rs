@@ -800,9 +800,68 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         set_to_string_tag(scope, proto, "CSSStyleDeclaration");
     }
 
+    // ── 13.5 Headers constructor ───────────────────────────────────────────
+    unsafe extern "C" fn headers_constructor_cb(info: *const v8::FunctionCallbackInfo) {
+        let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let info_ref = unsafe { &*info };
+            v8::callback_scope!(unsafe scope, info_ref);
+            let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+
+            let mut pairs: Vec<(String, String)> = Vec::new();
+
+            // Optional Array init: new Headers([["k1","v1"],["k2","v2"]])
+            if args.length() >= 1 {
+                let init = args.get(0);
+                if init.is_array() {
+                    let arr: v8::Local<v8::Array> =
+                        unsafe { v8::Local::cast_unchecked(init) };
+                    let len = arr.length();
+                    for i in 0..len {
+                        if let Some(elem) = arr.get_index(scope, i) {
+                            if elem.is_array() {
+                                let pair_arr: v8::Local<v8::Array> =
+                                    unsafe { v8::Local::cast_unchecked(elem) };
+                                if pair_arr.length() >= 2 {
+                                    let key = pair_arr
+                                        .get_index(scope, 0)
+                                        .map(|v| v.to_rust_string_lossy(scope).to_lowercase())
+                                        .unwrap_or_default();
+                                    let val = pair_arr
+                                        .get_index(scope, 1)
+                                        .map(|v| v.to_rust_string_lossy(scope))
+                                        .unwrap_or_default();
+                                    pairs.push((key, val));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            let state = crate::state::RuntimeState::get(&*scope);
+            let boxed = Box::new(pairs);
+            let ptr = Box::into_raw(boxed) as *mut std::ffi::c_void;
+            state.register_heap(ptr, |p| unsafe {
+                drop(Box::from_raw(p as *mut Vec<(String, String)>))
+            });
+
+            let this = args.this();
+            if this.is_object() {
+                let obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(this) };
+                obj.set_internal_field(0, v8::External::new(scope, ptr).into());
+            }
+        }));
+    }
+
     // ── 14. Headers ─────────────────────────────────────────────────────────
-    let headers = make_template(scope, "Headers");
-    headers.instance_template(scope).set_internal_field_count(1);
+    let headers = {
+        let tmpl = v8::FunctionTemplate::builder_raw(headers_constructor_cb).build(scope);
+        let name = crate::v8_utils::v8_string(scope, "Headers");
+        tmpl.set_class_name(name);
+        tmpl.instance_template(scope).set_internal_field_count(1);
+        tmpl
+    };
     {
         let proto = headers.prototype_template(scope);
         install_proto_method(scope, proto, "get", headers_get_cb);

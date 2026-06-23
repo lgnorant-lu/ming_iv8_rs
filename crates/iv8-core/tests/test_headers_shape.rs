@@ -126,8 +126,25 @@ fn test_headers_constructor_creates_empty() {
     assert_str(&mut k, "String(h instanceof Headers)", "true");
 }
 
-// NOTE: new Headers([["a","1"]]) and new Headers({"a":"1"}) constructor
-// variants are not yet implemented — the current Headers FunctionTemplate
-// uses empty_constructor. Headers instances are created via fetch()
-// Response objects (create_headers_instance in dom/template.rs).
-// Constructor arg wiring → v0.9+. See TODO-tools-maintenance.md §NamedConstructor.
+// NOTE: new Headers([["a","1"]]) constructor array init is implemented
+// (see headers_constructor_cb in dom/template.rs). Object init
+// new Headers({"a":"1"}) is not yet implemented → v0.9+.
+
+#[test]
+fn test_headers_constructor_from_array() {
+    let mut k = common::make_kernel();
+    k.eval(
+        "var h = new Headers([['X-Custom', 'myval'], ['Accept', 'text/html']]);",
+        EvalOpts::default(),
+    ).unwrap();
+    assert_str(&mut k, "h.get('x-custom')", "myval");
+    assert_str(&mut k, "h.get('accept')", "text/html");
+}
+
+#[test]
+fn test_headers_constructor_from_empty_array() {
+    let mut k = common::make_kernel();
+    k.eval("var h = new Headers([]);", EvalOpts::default()).unwrap();
+    assert_str(&mut k, "String(h.get('anything'))", "null");
+    assert_str(&mut k, "String(h instanceof Headers)", "true");
+}

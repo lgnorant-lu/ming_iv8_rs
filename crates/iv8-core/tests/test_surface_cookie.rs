@@ -2,6 +2,8 @@
 // v0.8.72 Track B: + cookie security attribute tests.
 mod common;
 
+use iv8_core::dom::cookie_jar::CookieJar;
+
 #[test]
 fn test_cookie_set_and_get() {
     let mut k = common::make_kernel();
@@ -178,4 +180,87 @@ fn test_cookie_path_prefix_boundary() {
         "Path=/app must NOT match /application: got '{}'",
         v3
     );
+}
+
+// ── v0.8.72 audit: CookieJar (Rust) vs JS shim parity ──
+
+#[test]
+fn test_cookie_rust_js_parity_simple() {
+    let mut k = common::make_kernel();
+    let mut jar = CookieJar::new();
+
+    // Set same cookies in both Rust and JS
+    k.eval_to_rust_value("document.cookie = 'a=1'");
+    k.eval_to_rust_value("document.cookie = 'b=2'");
+    jar.set_cookie("a=1");
+    jar.set_cookie("b=2");
+
+    let js = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    let rust = jar.get_cookie_string("/", true);
+    // Both should contain both cookies
+    assert!(js.contains("a=1") && js.contains("b=2"));
+    assert!(rust.contains("a=1") && rust.contains("b=2"));
+}
+
+#[test]
+fn test_cookie_rust_js_parity_path_filtering() {
+    let mut k = common::make_kernel();
+    let mut jar = CookieJar::new();
+
+    k.eval_to_rust_value("document.cookie = 'global=1; Path=/'");
+    k.eval_to_rust_value("document.cookie = 'nested=2; Path=/app'");
+    jar.set_cookie("global=1; Path=/");
+    jar.set_cookie("nested=2; Path=/app");
+
+    // At root: only global visible
+    let js_root = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    let rust_root = jar.get_cookie_string("/", true);
+    assert!(!js_root.contains("nested"), "JS should hide Path=/app at root");
+    assert!(!rust_root.contains("nested"), "Rust should hide Path=/app at root");
+    assert!(js_root.contains("global=1"));
+    assert!(rust_root.contains("global=1"));
+
+    // At /app/page: both visible
+    let rust_app = jar.get_cookie_string("/app/page", true);
+    assert!(rust_app.contains("global=1"));
+    assert!(rust_app.contains("nested=2"));
+}
+
+#[test]
+fn test_cookie_rust_js_parity_secure() {
+    let mut k = common::make_kernel();
+    let mut jar = CookieJar::new();
+
+    k.eval_to_rust_value("document.cookie = 'sec=1; Secure'");
+    jar.set_cookie("sec=1; Secure");
+
+    // Secure context: visible in both
+    let js_sec = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    let rust_sec = jar.get_cookie_string("/", true);
+    assert!(js_sec.contains("sec=1"));
+    assert!(rust_sec.contains("sec=1"));
+
+    // Non-secure: hidden in both
+    k.eval_to_rust_value("window.__iv8IsSecureContext = false");
+    let js_nonsec = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    let rust_nonsec = jar.get_cookie_string("/", false);
+    assert!(!js_nonsec.contains("sec=1"));
+    assert!(!rust_nonsec.contains("sec=1"));
+}
+
+#[test]
+fn test_cookie_rust_js_parity_max_age_zero() {
+    let mut k = common::make_kernel();
+    let mut jar = CookieJar::new();
+
+    k.eval_to_rust_value("document.cookie = 'to_remove=1'");
+    jar.set_cookie("to_remove=1");
+    assert_eq!(jar.len(), 1);
+
+    k.eval_to_rust_value("document.cookie = 'to_remove=; Max-Age=0'");
+    jar.set_cookie("to_remove=; Max-Age=0");
+    assert_eq!(jar.len(), 0);
+
+    let js = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    assert!(!js.contains("to_remove=1"), "JS should have removed cookie");
 }

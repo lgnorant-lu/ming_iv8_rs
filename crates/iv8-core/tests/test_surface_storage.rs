@@ -137,3 +137,33 @@ fn test_local_storage_empty_store_no_seed() {
     let len = common::to_str(&k.eval_to_rust_value("localStorage.length"));
     assert_eq!(len, "0");
 }
+
+#[test]
+fn test_local_storage_persists_on_drop() {
+    let store = LocalStorageStore::new();
+
+    // Kernel 1: set value, let it drop (no explicit dispose)
+    {
+        let mut cfg = KernelConfig::default();
+        cfg.local_storage = Some(store.clone());
+        let mut k1 = iv8_core::kernel::embedded_v8::EmbeddedV8Kernel::new(cfg).unwrap();
+        k1.eval_to_rust_value("localStorage.setItem('drop_test', 'survives_drop')");
+        // no explicit dispose — RAII drop must flush
+    }
+
+    // Kernel 2: value must survive
+    {
+        let mut cfg = KernelConfig::default();
+        cfg.local_storage = Some(store.clone());
+        let mut k2 = iv8_core::kernel::embedded_v8::EmbeddedV8Kernel::new(cfg).unwrap();
+        let v = common::to_str(
+            &k2.eval_to_rust_value("localStorage.getItem('drop_test')"),
+        );
+        assert_eq!(
+            v, "survives_drop",
+            "Drop should flush localStorage: got '{}'",
+            v
+        );
+        k2.dispose();
+    }
+}

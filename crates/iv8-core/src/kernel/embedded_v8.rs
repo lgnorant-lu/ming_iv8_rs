@@ -1035,28 +1035,32 @@ impl EmbeddedV8Kernel {
 
     /// Dispose the kernel (explicit cleanup before drop).
     pub fn dispose(&mut self) {
-        // Guard against double-dispose.
-        if RuntimeState::get(&self.isolate).is_disposed() {
-            return;
-        }
-        // Flush localStorage data back to shared backend.
-        let backend = RuntimeState::get(&self.isolate)
-            .local_storage
-            .borrow()
-            .clone();
+        self.flush_local_storage();
+        RuntimeState::get(&self.isolate).mark_disposed();
+    }
+
+    /// Flush localStorage JS data back to the shared backend.
+    /// Idempotent: safe across double-dispose.
+    fn flush_local_storage(&mut self) {
+        let backend = {
+            let state = RuntimeState::get(&self.isolate);
+            if state.is_disposed() {
+                return;
+            }
+            state.local_storage.borrow().clone()
+        };
         if let Some(backend) = backend {
-            let result = self.eval_to_rust_value(
-                r#"(function(){try{var d={};var s=localStorage;if(s&&s._data){var k=Object.keys(s._data);for(var i=0;i<k.length;i++){d[k[i]]=s._data[k[i]];}}return JSON.stringify(d);}catch(e){return'{}';}})()"#,
-            );
+            let result =
+                self.eval_to_rust_value("window.__iv8DumpLocalStorage()");
             if let crate::convert::RustValue::String(json) = result {
-                if let Ok(map) =
-                    serde_json::from_str::<std::collections::HashMap<String, String>>(&json)
+                if let Ok(map) = serde_json::from_str::<
+                    std::collections::HashMap<String, String>,
+                >(&json)
                 {
                     backend.replace_all(map);
                 }
             }
         }
-        RuntimeState::get(&self.isolate).mark_disposed();
     }
 
     /// Install BrowserSurface — default init path since v0.8.26.
@@ -2196,6 +2200,8 @@ impl EmbeddedV8Kernel {
 
 impl Drop for EmbeddedV8Kernel {
     fn drop(&mut self) {
+        // Flush localStorage before isolate disposal.
+        self.flush_local_storage();
         // Re-enter the isolate before drop — OwnedIsolate expects to be entered
         // SAFETY: we exited after new(), now re-enter for proper cleanup
         unsafe {

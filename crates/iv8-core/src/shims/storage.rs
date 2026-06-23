@@ -47,5 +47,17 @@ pub const STORAGE_JS: &str = r#"
     if (typeof sessionStorage === 'undefined') {
         globalThis.sessionStorage = new StorageStub();
     }
+
+    // v0.8.72: explicit dump helper for Rust-side flush (dispose / drop).
+    // Returns JSON string of all localStorage entries.
+    window.__iv8DumpLocalStorage = function() {
+        try {
+            var store = localStorage;
+            if (store && store._data) {
+                return JSON.stringify(store._data);
+            }
+        } catch(e) {}
+        return '{}';
+    };
 })();
 "#;
