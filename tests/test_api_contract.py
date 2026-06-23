@@ -170,6 +170,10 @@ def test_inspector_safe_api_contract():
         ctx.process_inspector_messages()
         assert ctx.cdp_process_events() is False
         assert ctx.cdp_get_call_frames() is None
+        # step methods exist; callable without inspector (return RuntimeError)
+        assert hasattr(ctx, "cdp_step_over")
+        assert hasattr(ctx, "cdp_step_into")
+        assert hasattr(ctx, "cdp_step_out")
     finally:
         ctx.close()
 

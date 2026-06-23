@@ -2893,13 +2893,60 @@ unsafe extern "C" fn normalize_cb(_info: *const v8::FunctionCallbackInfo) {}
 // ── Geometry ──────────────────────────────────────────────────────────────────
 
 unsafe extern "C" fn get_bounding_client_rect_cb(info: *const v8::FunctionCallbackInfo) {
-    run_callback(info, |scope, _args, rv, _state, _node_id| {
+    run_callback(info, |scope, args, rv, _state, _node_id| {
+        let this = args.this();
+        let mut x: f64 = 0.0;
+        let mut y: f64 = 0.0;
+        let mut width: f64 = 0.0;
+        let mut height: f64 = 0.0;
+
+        // Read fixture-configured rect from __iv8Rect__ JS property
+        let rect_key = crate::v8_utils::v8_string(scope, "__iv8Rect__");
+        if let Some(rect_val) = this.get(scope, rect_key.into()) {
+            if rect_val.is_object() {
+                let rect_obj: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(rect_val) };
+                let x_key = crate::v8_utils::v8_string(scope, "x");
+                let y_key = crate::v8_utils::v8_string(scope, "y");
+                let w_key = crate::v8_utils::v8_string(scope, "width");
+                let h_key = crate::v8_utils::v8_string(scope, "height");
+                if let Some(v) = rect_obj.get(scope, x_key.into()) {
+                    if let Some(n) = v.number_value(scope) {
+                        x = n;
+                    }
+                }
+                if let Some(v) = rect_obj.get(scope, y_key.into()) {
+                    if let Some(n) = v.number_value(scope) {
+                        y = n;
+                    }
+                }
+                if let Some(v) = rect_obj.get(scope, w_key.into()) {
+                    if let Some(n) = v.number_value(scope) {
+                        width = n;
+                    }
+                }
+                if let Some(v) = rect_obj.get(scope, h_key.into()) {
+                    if let Some(n) = v.number_value(scope) {
+                        height = n;
+                    }
+                }
+            }
+        }
+
         let obj = v8::Object::new(scope);
-        for key in &[
-            "x", "y", "width", "height", "top", "left", "bottom", "right",
-        ] {
+        let pairs: [(&str, f64); 8] = [
+            ("x", x),
+            ("y", y),
+            ("width", width),
+            ("height", height),
+            ("top", y),
+            ("left", x),
+            ("bottom", y + height),
+            ("right", x + width),
+        ];
+        for (key, val) in &pairs {
             let k = crate::v8_utils::v8_string(scope, key);
-            obj.set(scope, k.into(), v8::Number::new(scope, 0.0).into());
+            obj.set(scope, k.into(), v8::Number::new(scope, *val).into());
         }
         rv.set(obj.into());
     });

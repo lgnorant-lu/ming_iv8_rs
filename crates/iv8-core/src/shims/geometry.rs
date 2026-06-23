@@ -1,14 +1,14 @@
 //! getBoundingClientRect + offsetWidth/offsetHeight stubs.
 //!
-//! Returns configurable default values (from environment or sensible defaults).
-//! No real layout engine — just static values that pass fingerprint checks.
+//! Default values are zero. Fixtures can configure per-element rectangles via
+//! `__iv8SetElementRect(element, {x, y, width, height})`.
+//! The native Rust callback reads the stored rect from `this.__iv8Rect__`.
+//! No real layout engine.
 
-/// JS shim for getBoundingClientRect and geometry properties.
+/// JS shim for geometry properties (fixture hooks + getComputedStyle).
+/// getBoundingClientRect itself is a Rust native callback on the prototype.
 pub const GEOMETRY_SHIM_JS: &str = r#"
 (function() {
-    // Default DOMRect values (configurable via environment in future)
-    var defaultRect = {x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0};
-
     // DOMRect constructor
     function DOMRect(x, y, width, height) {
         this.x = x || 0;
@@ -26,34 +26,16 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
     };
     globalThis.DOMRect = DOMRect;
 
-    // Store original __addNavProps__ and extend it
-    var _origAddNav = globalThis.__addNavProps__;
-    globalThis.__addNavProps__ = function(node) {
-        if (_origAddNav) node = _origAddNav(node);
-        if (!node || typeof node !== 'object' || !node.__nodeId__) return node;
-        if (node.__geomInstalled__) return node;
-
-        // getBoundingClientRect
-        node.getBoundingClientRect = function() {
-            return new DOMRect(0, 0, 0, 0);
+    // Fixture hook: store a rect directly on the element object.
+    // The native getBoundingClientRect callback reads this.__iv8Rect__.
+    globalThis.__iv8SetElementRect = function(element, rect) {
+        if (!element || typeof element !== 'object') return;
+        element.__iv8Rect__ = {
+            x: ('x' in rect) ? Number(rect.x) : 0,
+            y: ('y' in rect) ? Number(rect.y) : 0,
+            width: ('width' in rect) ? Number(rect.width) : 0,
+            height: ('height' in rect) ? Number(rect.height) : 0,
         };
-
-        // Geometry properties (default 0, real values would need layout engine)
-        Object.defineProperties(node, {
-            offsetWidth: { get: function() { return 0; }, enumerable: true },
-            offsetHeight: { get: function() { return 0; }, enumerable: true },
-            offsetTop: { get: function() { return 0; }, enumerable: true },
-            offsetLeft: { get: function() { return 0; }, enumerable: true },
-            clientWidth: { get: function() { return 0; }, enumerable: true },
-            clientHeight: { get: function() { return 0; }, enumerable: true },
-            scrollWidth: { get: function() { return 0; }, enumerable: true },
-            scrollHeight: { get: function() { return 0; }, enumerable: true },
-            scrollTop: { value: 0, writable: true, enumerable: true },
-            scrollLeft: { value: 0, writable: true, enumerable: true },
-            __geomInstalled__: { value: true, enumerable: false },
-        });
-
-        return node;
     };
 
     // getComputedStyle stub
@@ -78,11 +60,10 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
             transition: 'all 0s ease 0s',
         };
         styles.getPropertyValue = function(prop) {
-            // Convert camelCase to kebab-case
             var kebab = prop.replace(/([A-Z])/g, '-$1').toLowerCase();
             return this[prop] || this[kebab] || '';
         };
-        styles.length = Object.keys(styles).length - 1; // exclude getPropertyValue
+        styles.length = Object.keys(styles).length - 1;
         return styles;
     };
 })();

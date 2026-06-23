@@ -1820,6 +1820,28 @@ impl EmbeddedV8Kernel {
         result
     }
 
+    /// Step out (exit current function, return to caller).
+    pub fn cdp_step_out(&mut self) -> Result<(), String> {
+        unsafe {
+            self.isolate.enter();
+        }
+        let result = {
+            let state = RuntimeState::get(&self.isolate);
+            let session_guard = state.inspector_session.borrow();
+            let session = session_guard
+                .as_ref()
+                .and_then(|s| s.session_ref())
+                .ok_or_else(|| "Inspector not started.".to_string())?;
+            let cdp = state.cdp_client.borrow();
+            let cdp = cdp.as_ref().ok_or("CDP client not initialized.")?;
+            cdp.step_out(session)
+        };
+        unsafe {
+            self.isolate.exit();
+        }
+        result
+    }
+
     /// Get call frames from last Debugger.paused event.
     pub fn cdp_get_call_frames(&self) -> Option<serde_json::Value> {
         let state = RuntimeState::get(&self.isolate);

@@ -121,3 +121,58 @@ fn client_width_height() {
     );
     assert_eq!(result, RustValue::Bool(true));
 }
+
+#[test]
+fn set_element_rect_returns_configured_values() {
+    let mut kernel = common::make_kernel_with_doc("<div id='box'></div>");
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var el = document.getElementById('box');
+        __iv8SetElementRect(el, {x: 10, y: 20, width: 100, height: 50});
+        var r = el.getBoundingClientRect();
+        r.x === 10 && r.y === 20 && r.width === 100 && r.height === 50
+    "#,
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
+
+#[test]
+fn set_element_rect_derived_fields() {
+    let mut kernel = common::make_kernel_with_doc("<div id='box'></div>");
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var el = document.getElementById('box');
+        __iv8SetElementRect(el, {x: 10, y: 20, width: 100, height: 50});
+        var r = el.getBoundingClientRect();
+        r.top === 20 && r.left === 10 && r.right === 110 && r.bottom === 70
+    "#,
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
+
+#[test]
+fn default_rect_is_zero() {
+    let mut kernel = common::make_kernel_with_doc("<div id='box'></div>");
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var el = document.getElementById('box');
+        var r = el.getBoundingClientRect();
+        r.x === 0 && r.y === 0 && r.width === 0 && r.height === 0
+    "#,
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}
+
+#[test]
+fn set_element_rect_missing_fields_default_to_zero() {
+    let mut kernel = common::make_kernel_with_doc("<div id='box'></div>");
+    let result = kernel.eval_to_rust_value(
+        r#"
+        var el = document.getElementById('box');
+        __iv8SetElementRect(el, {width: 30, height: 40});
+        var r = el.getBoundingClientRect();
+        r.x === 0 && r.y === 0 && r.width === 30 && r.height === 40
+    "#,
+    );
+    assert_eq!(result, RustValue::Bool(true));
+}

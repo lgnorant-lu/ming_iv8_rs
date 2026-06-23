@@ -621,6 +621,15 @@ impl JSContext {
             .map_err(pyo3::exceptions::PyRuntimeError::new_err)
     }
 
+    /// Step out (exit current function, return to caller).
+    fn cdp_step_out(&self) -> PyResult<()> {
+        self.assert_thread()?;
+        let mut kernel = self.inner.kernel.lock();
+        kernel
+            .cdp_step_out()
+            .map_err(pyo3::exceptions::PyRuntimeError::new_err)
+    }
+
     /// Get call frames from the last breakpoint pause.
     ///
     /// Returns:
