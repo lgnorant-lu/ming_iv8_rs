@@ -130,3 +130,22 @@ fn test_cookie_backward_compat_plain_value() {
     let val = common::to_str(&k.eval_to_rust_value("document.cookie"));
     assert!(val.contains("simple=42"));
 }
+
+// ── v0.8.72 audit fixes ──
+
+#[test]
+fn test_cookie_secure_hidden_in_non_secure_context() {
+    let mut k = common::make_kernel();
+    k.eval_to_rust_value("document.cookie = 'sec_hidden=1; Secure'");
+    // In secure context, visible
+    let v1 = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    assert!(v1.contains("sec_hidden=1"));
+    // Switch to non-secure context
+    k.eval_to_rust_value("window.__iv8IsSecureContext = false");
+    let v2 = common::to_str(&k.eval_to_rust_value("document.cookie"));
+    assert!(
+        !v2.contains("sec_hidden=1"),
+        "Secure cookie should be hidden in non-secure context: got '{}'",
+        v2
+    );
+}

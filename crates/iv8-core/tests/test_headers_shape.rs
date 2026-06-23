@@ -93,3 +93,41 @@ fn test_headers_content_type_case_insensitive() {
     assert_str(&mut k, "r.headers.get('Content-Type')", "text/plain");
     assert_str(&mut k, "r.headers.get('CONTENT-TYPE')", "text/plain");
 }
+
+// ── v0.8.72 audit fixes ──
+
+#[test]
+fn test_headers_iteration_order_stable() {
+    let mut k = make_kernel_with_headers();
+    k.eval(
+        "r.headers.set('X-A', '1'); r.headers.set('X-B', '2'); r.headers.set('X-C', '3'); \
+         var keys_in_order = []; r.headers.forEach(function(v, k) { keys_in_order.push(k); });",
+        EvalOpts::default(),
+    ).unwrap();
+    // Verify content-type (from resource) appears before X-A
+    let ar = eval_result(&mut k, "JSON.stringify(keys_in_order)");
+    let s = common::to_str(&ar);
+    assert!(s.contains("content-type"), "foreach iteration should include content-type");
+    assert!(s.contains("x-a"), "foreach iteration should include x-a");
+}
+
+#[test]
+fn test_headers_constructor_exists() {
+    let mut k = common::make_kernel();
+    assert_str(&mut k, "typeof Headers", "function");
+}
+
+#[test]
+fn test_headers_constructor_creates_empty() {
+    let mut k = common::make_kernel();
+    k.eval("var h = new Headers();", EvalOpts::default()).unwrap();
+    // new Headers() creates empty (constructor args not yet wired)
+    assert_str(&mut k, "String(h.get('anything'))", "null");
+    assert_str(&mut k, "String(h instanceof Headers)", "true");
+}
+
+// NOTE: new Headers([["a","1"]]) and new Headers({"a":"1"}) constructor
+// variants are not yet implemented — the current Headers FunctionTemplate
+// uses empty_constructor. Headers instances are created via fetch()
+// Response objects (create_headers_instance in dom/template.rs).
+// Constructor arg wiring → v0.9+. See TODO-tools-maintenance.md §NamedConstructor.

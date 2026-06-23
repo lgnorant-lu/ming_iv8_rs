@@ -12,6 +12,7 @@ use iv8_core::shims::probes::probe_gamepad::GetGamepadsProbe;
 use iv8_core::shims::probes::probe_geolocation::GeolocationProbe;
 use iv8_core::shims::probes::probe_midi::RequestMidiAccessProbe;
 use iv8_core::shims::probes::probe_send_beacon::SendBeaconProbe;
+use iv8_core::shims::probes::probe_record::{collect_probe_records, probe_records_to_json};
 use iv8_core::shims::probes::{BehaviorProbe, ProbeResult};
 
 #[test]
@@ -140,4 +141,27 @@ fn test_request_midi_access_probe_passes() {
         "requestMIDIAccess probe failed: {:?}",
         result
     );
+}
+
+// ── v0.8.72 Track D: structured probe records ──
+
+#[test]
+fn test_collect_probe_records_json() {
+    let mut k = common::make_kernel();
+    let records = collect_probe_records(&mut k);
+    assert_eq!(records.len(), 9, "should collect all 9 probes");
+    // Verify each record has required fields
+    for r in &records {
+        assert!(!r.surface_id.is_empty());
+        assert!(!r.expression.is_empty());
+        assert!(!r.gap_kind.is_empty());
+    }
+    // Serialize to JSON
+    let json = probe_records_to_json(&records);
+    assert!(json.starts_with("[\n") || json.starts_with("["));
+    assert!(json.contains("\"surface_id\""));
+    assert!(json.contains("\"gap_kind\""));
+    assert!(json.contains("\"route\""));
+    assert!(json.contains("\"tier\""));
+    assert!(json.contains("\"verification_owner\""));
 }
