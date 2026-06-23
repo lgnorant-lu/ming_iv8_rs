@@ -10,6 +10,19 @@
 
 use crate::state::RuntimeState;
 
+/// Helper macro: evaluate a JS string in the given scope, discarding errors.
+/// Equivalent to `self.eval(js, EvalOpts::default()).ok()` in embedded_v8.rs.
+macro_rules! eval_js {
+    ($scope:expr, $js:expr) => {{
+        v8::tc_scope!(tc, $scope);
+        if let Some(src_str) = v8::String::new(tc, $js) {
+            if let Some(script) = v8::Script::compile(tc, src_str, None) {
+                script.run(tc);
+            }
+        }
+    }};
+}
+
 /// Install __iv8__.page on the __iv8__ tool object.
 pub fn install_page_api(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     let js_api_name = {
@@ -147,6 +160,30 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
                 crate::dom::binding::install_document_bindings(scope, global);
             }
 
+            // Pre-populate cookie store from Set-Cookie headers before shims run
+            inject_set_cookie_headers(scope, snapshot);
+
+            // 4b. Re-install Canvas2D shim (DOM bindings may have reset HTMLCanvasElement.prototype)
+            eval_js!(scope, crate::canvas::binding::CANVAS2D_SHIM_JS);
+
+            // 4c. Install document.write workaround shim
+            eval_js!(scope, crate::kernel::embedded_v8::DOCUMENT_WRITE_SHIM);
+
+            // 4d. Re-install document properties (readyState, cookie, etc.)
+            eval_js!(scope, crate::shims::document_props::DOCUMENT_PROPS_JS);
+
+            // 4d2. Re-install AudioContext subsystem
+            eval_js!(scope, crate::shims::audio_context::AUDIO_CONTEXT_JS);
+
+            // 4d3. Re-install window properties, global constructors, structuredClone, Blob
+            eval_js!(scope, crate::shims::window_extras::WINDOW_EXTRAS_JS);
+
+            // 4e. Update location if baseURL was provided (before scripts run,
+            // so inline scripts see the correct location.href)
+            if let Some(ref url_str) = base_url {
+                update_location(scope, url_str);
+            }
+
             // Execute inline scripts
             for script_src in scripts.iter() {
                 v8::tc_scope!(tc, scope);
@@ -157,17 +194,71 @@ unsafe extern "C" fn page_load_callback(info: *const v8::FunctionCallbackInfo) {
                 }
             }
 
-            // Set readyState to interactive
-            let doc_ref = state.document.borrow();
-            if let Some(ref doc) = *doc_ref {
-                doc.set_ready_state(crate::dom::node::DocumentReadyState::Interactive);
+            // 6. Set readyState to interactive (Rust + JS side)
+            {
+                let doc_ref = state.document.borrow();
+                if let Some(ref doc) = *doc_ref {
+                    doc.set_ready_state(crate::dom::node::DocumentReadyState::Interactive);
+                }
+                drop(doc_ref);
             }
-            drop(doc_ref);
-        }
+            eval_js!(scope, "try { document.readyState = 'interactive'; } catch(e) {}");
 
-        // Update location object if baseURL was provided
-        if let Some(ref url_str) = base_url {
-            update_location(scope, url_str);
+            // 7. Dispatch DOMContentLoaded event on document root
+            {
+                let doc_ref = state.document.borrow();
+                if let Some(ref document) = *doc_ref {
+                    let root_id = document.root_id();
+                    let registry = &state.event_listeners;
+                    crate::events::target::dispatch_event(
+                        scope,
+                        registry,
+                        document,
+                        root_id,
+                        "DOMContentLoaded",
+                        false,
+                    );
+                }
+            }
+
+            // 8. Set readyState to complete (Rust + JS side)
+            {
+                let doc_ref = state.document.borrow();
+                if let Some(ref doc) = *doc_ref {
+                    doc.set_ready_state(crate::dom::node::DocumentReadyState::Complete);
+                }
+                drop(doc_ref);
+            }
+            eval_js!(scope, "try { document.readyState = 'complete'; } catch(e) {}");
+
+            // 9. Dispatch load event on document root
+            {
+                let doc_ref = state.document.borrow();
+                if let Some(ref document) = *doc_ref {
+                    let root_id = document.root_id();
+                    let registry = &state.event_listeners;
+                    crate::events::target::dispatch_event(
+                        scope,
+                        registry,
+                        document,
+                        root_id,
+                        "load",
+                        false,
+                    );
+                }
+            }
+
+            // 9b. Re-install cookie accessor after all scripts executed.
+            // Inline scripts may have interfered with the cookie accessor via
+            // Object.defineProperty. Only re-install cookie (not full
+            // DOCUMENT_PROPS_JS) to avoid Intl/Date re-entrancy OOM.
+            eval_js!(scope, crate::shims::document_props::COOKIE_REINSTALL_JS);
+
+            // 10. Drain microtasks
+            {
+                let isolate: &mut v8::Isolate = scope;
+                isolate.perform_microtask_checkpoint();
+            }
         }
     }));
 }
@@ -301,4 +392,106 @@ fn extract_resources(
     }
 
     result
+}
+
+/// Extract Set-Cookie headers from snapshot.headers and pre-populate
+/// the cookie store before DOCUMENT_PROPS_JS runs.
+///
+/// headers format: [[name, value], ...]
+/// Set-Cookie entries are parsed into { v: value, path: "/", ... } records
+/// and stored in window._iv8CookieStore.
+fn inject_set_cookie_headers(scope: &v8::PinScope<'_, '_>, snapshot: v8::Local<v8::Object>) {
+    let headers_key = match v8::String::new(scope, "headers") {
+        Some(k) => k,
+        None => return,
+    };
+    let headers_val = match snapshot.get(scope, headers_key.into()) {
+        Some(v) if v.is_array() => v,
+        _ => return,
+    };
+    let headers_arr: v8::Local<v8::Array> = unsafe { v8::Local::cast_unchecked(headers_val) };
+    let len = headers_arr.length();
+
+    // Get or create window._iv8CookieStore
+    let global = scope.get_current_context().global(scope);
+    let store_key = match v8::String::new(scope, "_iv8CookieStore") {
+        Some(k) => k,
+        None => return,
+    };
+    let store_val = match global.get(scope, store_key.into()) {
+        Some(v) if v.is_object() && !v.is_null_or_undefined() => v,
+        _ => {
+            // Create the store
+            let obj = v8::Object::new(scope);
+            global.set(scope, store_key.into(), obj.into());
+            obj.into()
+        }
+    };
+    let store: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(store_val) };
+
+    for i in 0..len {
+        let entry = match headers_arr.get_index(scope, i) {
+            Some(v) if v.is_array() => v,
+            _ => continue,
+        };
+        let entry_arr: v8::Local<v8::Array> = unsafe { v8::Local::cast_unchecked(entry) };
+        let name = match entry_arr.get_index(scope, 0) {
+            Some(v) => v.to_rust_string_lossy(scope),
+            None => continue,
+        };
+        if !name.eq_ignore_ascii_case("set-cookie") {
+            continue;
+        }
+        let value = match entry_arr.get_index(scope, 1) {
+            Some(v) => v.to_rust_string_lossy(scope),
+            None => continue,
+        };
+
+        // Parse "name=val; path=/; secure; ..." format
+        let parts: Vec<&str> = value.split(';').collect();
+        if parts.is_empty() {
+            continue;
+        }
+        let kv: Vec<&str> = parts[0].splitn(2, '=').collect();
+        if kv.len() < 2 {
+            continue;
+        }
+        let cookie_name = kv[0].trim();
+        let cookie_val = kv[1].trim();
+
+        // Build record object { v: value, path: "/", ... }
+        let rec = v8::Object::new(scope);
+        let v_key = v8::String::new(scope, "v").unwrap();
+        let v_val = v8::String::new(scope, cookie_val).unwrap();
+        rec.set(scope, v_key.into(), v_val.into());
+
+        let path_key = v8::String::new(scope, "path").unwrap();
+        let path_val = v8::String::new(scope, "/").unwrap();
+        rec.set(scope, path_key.into(), path_val.into());
+
+        // Parse additional attributes
+        for attr_part in &parts[1..] {
+            let attr = attr_part.trim();
+            let lower = attr.to_lowercase();
+            if let Some(val) = lower.strip_prefix("path=") {
+                if let Some(p) = v8::String::new(scope, val) {
+                    rec.set(scope, path_key.into(), p.into());
+                }
+            } else if let Some(val) = lower.strip_prefix("domain=") {
+                let dk = v8::String::new(scope, "domain").unwrap();
+                if let Some(dv) = v8::String::new(scope, val) {
+                    rec.set(scope, dk.into(), dv.into());
+                }
+            } else if lower == "secure" {
+                let sk = v8::String::new(scope, "secure").unwrap();
+                rec.set(scope, sk.into(), v8::Boolean::new(scope, true).into());
+            } else if lower == "httponly" {
+                let hk = v8::String::new(scope, "httpOnly").unwrap();
+                rec.set(scope, hk.into(), v8::Boolean::new(scope, true).into());
+            }
+        }
+
+        let cn = v8::String::new(scope, cookie_name).unwrap();
+        store.set(scope, cn.into(), rec.into());
+    }
 }

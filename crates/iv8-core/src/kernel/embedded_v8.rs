@@ -15,7 +15,7 @@ use std::sync::Arc;
 
 /// document.write workaround shim (REQ-DOM-008).
 /// Replaces document.write with insertAdjacentHTML-based implementation.
-const DOCUMENT_WRITE_SHIM: &str = r#"
+pub(crate) const DOCUMENT_WRITE_SHIM: &str = r#"
 (function() {
     if (typeof document === 'undefined') return;
     var origWrite = document.write;
@@ -1263,6 +1263,17 @@ impl EmbeddedV8Kernel {
     /// Full page.load: parse HTML, install DOM, execute inline <script> tags,
     /// fire DOMContentLoaded event.
     pub fn page_load(&mut self, html: &str, base_url: Option<&str>) {
+        self.page_load_with_headers(html, base_url, &[])
+    }
+
+    /// Load HTML with response headers (for Set-Cookie processing).
+    /// headers: slice of (name, value) pairs.
+    pub fn page_load_with_headers(
+        &mut self,
+        html: &str,
+        base_url: Option<&str>,
+        headers: &[(String, String)],
+    ) {
         // 1. Parse HTML into DOM
         let doc = crate::dom::parse_html(html, base_url);
 
@@ -1303,6 +1314,23 @@ impl EmbeddedV8Kernel {
         self.with_global_scope(|scope, global| {
             crate::dom::binding::install_document_bindings(scope, global);
         });
+
+        // 4a. Pre-populate cookie store from Set-Cookie headers
+        if !headers.is_empty() {
+            let mut js_lines = Vec::new();
+            js_lines.push("(function(){var s=window._iv8CookieStore||(window._iv8CookieStore={});".to_string());
+            for (name, value) in headers {
+                if name.eq_ignore_ascii_case("set-cookie") {
+                    let escaped = value.replace('\\', "\\\\").replace('\'', "\\'");
+                    js_lines.push(format!(
+                        "(function(v){{var p=v.split(';');var kv=p[0].split('=');if(kv.length<2)return;var n=kv[0].trim();var val=kv.slice(1).join('=').trim();var a={{}};var h=false;for(var i=1;i<p.length;i++){{var at=p[i].trim();var lo=at.toLowerCase();if(lo.indexOf('path=')===0){{a.path=at.substring(5);h=true;}}else if(lo.indexOf('domain=')===0){{a.domain=at.substring(7);h=true;}}else if(lo==='secure'){{a.secure=true;h=true;}}else if(lo==='httponly'){{a.httpOnly=true;h=true;}}}}if(h){{a.v=val;s[n]=a;}}else{{s[n]=val;}}}})('{}');",
+                        escaped
+                    ));
+                }
+            }
+            js_lines.push("})();".to_string());
+            self.eval(&js_lines.join(""), crate::kernel::EvalOpts::default()).ok();
+        }
 
         // 4b. Re-install Canvas2D shim (DOM bindings may have reset HTMLCanvasElement.prototype)
         self.eval(
@@ -1529,6 +1557,17 @@ impl EmbeddedV8Kernel {
                 );
             }
         });
+
+        // 9b. Re-install cookie accessor after all scripts executed.
+        // Inline scripts may have interfered with the cookie accessor via
+        // Object.defineProperty. Only re-install cookie (not full
+        // DOCUMENT_PROPS_JS) to avoid Intl/Date lastModified getter
+        // re-entrancy OOM in callback contexts.
+        self.eval(
+            crate::shims::document_props::COOKIE_REINSTALL_JS,
+            crate::kernel::EvalOpts::default(),
+        )
+        .ok();
 
         // 10. Drain microtasks
         self.drain_microtasks();
