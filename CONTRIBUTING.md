@@ -301,7 +301,28 @@ Tag message 不是 commit message，但遵循相同审美：
 
 ---
 
-## 七、参考
+## 七、Git 操作安全（D-094）
+
+以下操作为**破坏性操作**，未经用户明确确认不得执行：
+
+| 操作 | 风险 |
+|------|------|
+| `git reset --hard` | 丢弃未提交改动且移动分支指针，丢失提交 |
+| `git rebase` | 重写历史，可能静默丢弃提交 |
+| `git checkout -- .` / `git restore .` | 丢弃工作区所有改动 |
+
+### 规则
+
+1. 实验性代码改动用 `git stash`（可恢复）或 `git checkout -- <具体文件>`（窄范围），**不用** `git reset --hard`。
+2. 如需 `git reset` 或 `git rebase`，须向用户说明确切命令和原因，等待确认。
+3. 任何历史重写操作后，立即运行 `git reflog -10` 和 `cargo test --workspace` 验证提交和改动未丢失。
+4. rebase 出问题时 `git rebase --abort` 是安全的，但仍需 `git reflog` 验证。
+
+> 事故记录：v0.8.78 会话中 `git reset` 将分支指针从 v0.8.77 tag 移回 v0.8.76 tag，丢失 39 个提交。通过 `git reset --hard 64e52a3` 恢复。
+
+---
+
+## 八、参考
 
 - [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
 - [Semantic Versioning 2.0.0](https://semver.org/)

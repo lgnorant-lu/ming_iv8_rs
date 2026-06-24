@@ -414,3 +414,43 @@ fn ua_platform_family_coherent_with_uadata() {
         );
     }
 }
+
+// v0.8.78: navigator instanceof EventTarget — the native_env refactor
+// links nav_tmpl.prototype.__proto__ to install_all's Navigator.prototype,
+// which inherits EventTarget. So navigator instanceof EventTarget === true
+// AND navigator instanceof Navigator === true.
+#[test]
+fn navigator_instanceof_event_target() {
+    let mut k = common::make_kernel();
+    let result = k.eval_to_rust_value("navigator instanceof EventTarget");
+    assert_eq!(
+        result,
+        iv8_core::convert::RustValue::Bool(true),
+        "navigator instanceof EventTarget should be true"
+    );
+}
+
+#[test]
+fn navigator_instanceof_navigator() {
+    let mut k = common::make_kernel();
+    let result = k.eval_to_rust_value("navigator instanceof Navigator");
+    assert_eq!(
+        result,
+        iv8_core::convert::RustValue::Bool(true),
+        "navigator instanceof Navigator should be true"
+    );
+}
+
+#[test]
+fn navigator_proto_chain() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.userAgent", "string");
+    let result = k.eval_to_rust_value(
+        "Object.getPrototypeOf(Object.getPrototypeOf(navigator)) === Navigator.prototype",
+    );
+    assert_eq!(
+        result,
+        iv8_core::convert::RustValue::Bool(true),
+        "navigator.__proto__.__proto__ should be Navigator.prototype"
+    );
+}

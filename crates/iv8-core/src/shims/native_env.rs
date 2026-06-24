@@ -20,8 +20,6 @@
 
 use crate::shims::browser_profile::DEFAULT_PROFILE;
 use crate::state::RuntimeState;
-use iv8_surface::generated::css_om::create_screen_template;
-use iv8_surface::generated::web_apis::create_navigator_template;
 
 /// Install native-getter versions of navigator and screen on the global.
 /// Must be called AFTER env_inject (so the base objects exist) but BEFORE
@@ -33,6 +31,64 @@ pub fn install_native_env(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Ob
 }
 
 // ─── navigator ────────────────────────────────────────────────────────────────
+
+/// Install accessor getters on an already-instantiated prototype object using
+/// `Object.defineProperty`. Each getter is created via FunctionTemplate to
+/// preserve `[native code]` toString.
+fn install_getters_on_proto(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+    proto: v8::Local<v8::Object>,
+    getters: &[(&str, v8::FunctionCallback)],
+) {
+    let obj_key = crate::v8_utils::v8_string(scope, "Object");
+    let obj_val = match global.get(scope, obj_key.into()) {
+        Some(v) if v.is_object() => v,
+        _ => return,
+    };
+    let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj_val) };
+    let dop_key = crate::v8_utils::v8_string(scope, "defineProperty");
+    let dop_fn: v8::Local<v8::Function> = match obj.get(scope, dop_key.into()) {
+        Some(v) if v.is_function() => unsafe { v8::Local::cast_unchecked(v) },
+        _ => return,
+    };
+    let get_key = crate::v8_utils::v8_string(scope, "get");
+    let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+    let config_key = crate::v8_utils::v8_string(scope, "configurable");
+
+    for (name, cb) in getters {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
+        let name_str = crate::v8_utils::v8_string(scope, name);
+        getter_tmpl.set_class_name(name_str);
+        getter_tmpl.remove_prototype();
+        let getter_fn = match getter_tmpl.get_function(scope) {
+            Some(f) => f,
+            None => continue,
+        };
+        let desc = v8::Object::new(scope);
+        let _ = desc.set(scope, get_key.into(), getter_fn.into());
+        let _ = desc.set(scope, enum_key.into(), v8::Boolean::new(scope, false).into());
+        let _ = desc.set(scope, config_key.into(), v8::Boolean::new(scope, true).into());
+        let _ = dop_fn.call(scope, obj.into(), &[proto.into(), name_str.into(), desc.into()]);
+    }
+}
+
+/// Install method functions on an already-instantiated prototype object.
+fn install_methods_on_proto(
+    scope: &v8::PinScope<'_, '_>,
+    proto: v8::Local<v8::Object>,
+    methods: &[(&str, v8::FunctionCallback)],
+) {
+    for (name, cb) in methods {
+        let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
+        let name_str = crate::v8_utils::v8_string(scope, name);
+        fn_tmpl.set_class_name(name_str);
+        fn_tmpl.remove_prototype();
+        if let Some(func) = fn_tmpl.get_function(scope) {
+            let _ = proto.set(scope, name_str.into(), func.into());
+        }
+    }
+}
 
 /// Illegal constructor — Navigator and Screen are not constructable from JS.
 /// Throws TypeError: Illegal constructor, matching real browser behavior.
@@ -77,26 +133,25 @@ fn build_dom_exception<'s>(
 }
 
 /// Build a native navigator object with accessor properties.
-/// v0.8.60: creates a native Navigator template that inherits from the
-/// generated create_navigator_template (46 skeleton properties). Native
-/// getters are added to the native template's prototype, shadowing
-/// generated skeleton properties via the prototype chain.
-/// This unifies BrowserSurface-generated skeleton properties
-/// (bluetooth, hid, usb, gpu, etc.) with native profile-backed
-/// getters in a single Navigator object.
+///
+/// v0.8.78: Rewritten prototype chain strategy.
+/// Instead of creating a gen_tmpl via create_navigator_template(scope, None)
+/// and overwriting the global Navigator constructor (which broke
+/// `navigator instanceof EventTarget`), we now:
+/// 1. Create nav_tmpl WITHOUT inheriting any gen_tmpl.
+/// 2. Install native getters on nav_tmpl.prototype_template.
+/// 3. Instantiate navigator from nav_tmpl.instance_template.
+/// 4. Link nav_tmpl.prototype.__proto__ to install_all's Navigator.prototype.
+/// 5. Also install getters/methods on install_all's Navigator.prototype via
+///    Object.defineProperty (for descriptor shape detection).
+/// 6. Do NOT overwrite the global Navigator constructor.
+///
+/// Result: navigator instanceof Navigator === true AND
+///         navigator instanceof EventTarget === true.
 fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    // After install_all, the global "Navigator" constructor already exists
-    // with EventTarget inheritance. We create a nav_tmpl that inherits from
-    // the codegen Navigator template to get both native getters AND the
-    // EventTarget prototype chain.
-    let gen_tmpl = create_navigator_template(scope, None);
     let nav_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     nav_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Navigator"));
-    nav_tmpl.inherit(gen_tmpl);
 
-    // Install native getters on Navigator.prototype template.
-    // These shadow generated skeleton getters for overlapping names
-    // via prototype chain (native proto → generated proto).
     let proto = nav_tmpl.prototype_template(scope);
     macro_rules! nav_getter {
         ($name:literal, $cb:ident) => {
@@ -135,52 +190,38 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("mediaDevices", nav_media_devices);
     nav_getter!("serviceWorker", nav_service_worker);
     nav_getter!("pdfViewerEnabled", nav_pdf_viewer_enabled);
-
-    // plugins + mimeTypes: native getters so length is configurable
     nav_getter!("plugins", nav_plugins);
     nav_getter!("mimeTypes", nav_mime_types);
-
-    // connection — NetworkInformation-like accessor getter
     nav_getter!("connection", nav_connection);
 
-    // getBattery: function returning Promise<BatteryManager>
     let battery_fn = v8::FunctionTemplate::builder_raw(nav_get_battery).build(scope);
     let battery_name = crate::v8_utils::v8_string(scope, "getBattery");
     battery_fn.set_class_name(battery_name);
     battery_fn.remove_prototype();
     proto.set(battery_name.into(), battery_fn.into());
 
-    // sendBeacon: function returning true
     let beacon_fn = v8::FunctionTemplate::builder_raw(nav_send_beacon).build(scope);
     let beacon_name = crate::v8_utils::v8_string(scope, "sendBeacon");
     beacon_fn.set_class_name(beacon_name);
     beacon_fn.remove_prototype();
     proto.set(beacon_name.into(), beacon_fn.into());
 
-    // geolocation — accessor getter returning object with stub methods
     nav_getter!("geolocation", nav_geolocation);
-
-    // clipboard — accessor getter returning object with stub methods
     nav_getter!("clipboard", nav_clipboard);
-
-    // credentials — accessor getter returning object with stub methods
     nav_getter!("credentials", nav_credentials);
 
-    // javaEnabled: function that returns false (no Java plugin in V8)
     let java_fn = v8::FunctionTemplate::builder_raw(nav_java_enabled).build(scope);
     let java_name = crate::v8_utils::v8_string(scope, "javaEnabled");
     java_fn.set_class_name(java_name);
     java_fn.remove_prototype();
     proto.set(java_name.into(), java_fn.into());
 
-    // getGamepads: function returning empty array (v0.8.61)
     let gamepads_fn = v8::FunctionTemplate::builder_raw(nav_get_gamepads).build(scope);
     let gamepads_name = crate::v8_utils::v8_string(scope, "getGamepads");
     gamepads_fn.set_class_name(gamepads_name);
     gamepads_fn.remove_prototype();
     proto.set(gamepads_name.into(), gamepads_fn.into());
 
-    // requestMediaKeySystemAccess: function returning rejected Promise (v0.8.61)
     let eme_fn =
         v8::FunctionTemplate::builder_raw(nav_request_media_key_system_access).build(scope);
     let eme_name = crate::v8_utils::v8_string(scope, "requestMediaKeySystemAccess");
@@ -188,61 +229,117 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     eme_fn.remove_prototype();
     proto.set(eme_name.into(), eme_fn.into());
 
-    // requestMIDIAccess: function returning rejected Promise (v0.8.61)
     let midi_fn = v8::FunctionTemplate::builder_raw(nav_request_midi_access).build(scope);
     let midi_name = crate::v8_utils::v8_string(scope, "requestMIDIAccess");
     midi_fn.set_class_name(midi_name);
     midi_fn.remove_prototype();
     proto.set(midi_name.into(), midi_fn.into());
 
-    // Instantiate via instance_template (bypasses constructor — we don't want
-    // illegal_constructor to block Rust-side instance creation).
-    // When JS does `new Navigator()`, the constructor throws TypeError.
     let inst_tmpl = nav_tmpl.instance_template(scope);
     if let Some(nav_obj) = inst_tmpl.new_instance(scope) {
-        // Install userAgentData sub-object on navigator instance
-        crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
+        // Link nav_tmpl.prototype.__proto__ to install_all's Navigator.prototype.
+        if let Some(nav_func) = nav_tmpl.get_function(scope) {
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            if let Some(nav_proto_val) = nav_func.get(scope, proto_key.into()) {
+                if nav_proto_val.is_object() {
+                    let nav_proto: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(nav_proto_val) };
+                    let nav_ctor_key = crate::v8_utils::v8_string(scope, "Navigator");
+                    if let Some(nav_ctor_val) = global.get(scope, nav_ctor_key.into()) {
+                        if nav_ctor_val.is_function() {
+                            let nav_ctor: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(nav_ctor_val) };
+                            if let Some(install_all_proto_val) = nav_ctor.get(scope, proto_key.into()) {
+                                if install_all_proto_val.is_object() {
+                                    let install_all_proto: v8::Local<v8::Object> =
+                                        unsafe { v8::Local::cast_unchecked(install_all_proto_val) };
+                                    let _ = nav_proto.set_prototype(scope, install_all_proto.into());
 
-        // v0.8.62: conditionally hide platform-dependent properties
+                                    install_getters_on_proto(scope, global, install_all_proto, &[
+                                        ("userAgent", nav_user_agent),
+                                        ("appVersion", nav_app_version),
+                                        ("platform", nav_platform),
+                                        ("vendor", nav_vendor),
+                                        ("vendorSub", nav_vendor_sub),
+                                        ("product", nav_product),
+                                        ("productSub", nav_product_sub),
+                                        ("language", nav_language),
+                                        ("languages", nav_languages),
+                                        ("hardwareConcurrency", nav_hardware_concurrency),
+                                        ("deviceMemory", nav_device_memory),
+                                        ("maxTouchPoints", nav_max_touch_points),
+                                        ("cookieEnabled", nav_cookie_enabled),
+                                        ("onLine", nav_online),
+                                        ("doNotTrack", nav_do_not_track),
+                                        ("webdriver", nav_webdriver),
+                                        ("appName", nav_app_name),
+                                        ("appCodeName", nav_app_code_name),
+                                        ("permissions", nav_permissions),
+                                        ("mediaDevices", nav_media_devices),
+                                        ("serviceWorker", nav_service_worker),
+                                        ("pdfViewerEnabled", nav_pdf_viewer_enabled),
+                                        ("plugins", nav_plugins),
+                                        ("mimeTypes", nav_mime_types),
+                                        ("connection", nav_connection),
+                                        ("geolocation", nav_geolocation),
+                                        ("clipboard", nav_clipboard),
+                                        ("credentials", nav_credentials),
+                                    ]);
+                                    install_methods_on_proto(scope, install_all_proto, &[
+                                        ("getBattery", nav_get_battery),
+                                        ("sendBeacon", nav_send_beacon),
+                                        ("javaEnabled", nav_java_enabled),
+                                        ("getGamepads", nav_get_gamepads),
+                                        ("requestMediaKeySystemAccess", nav_request_media_key_system_access),
+                                        ("requestMIDIAccess", nav_request_midi_access),
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        crate::shims::user_agent_data::install_user_agent_data(scope, nav_obj);
         conditionally_hide_properties(scope, nav_obj);
 
         let key = crate::v8_utils::v8_string(scope, "navigator");
-        global.define_own_property(
+        let _ = global.define_own_property(
             scope,
             key.into(),
             nav_obj.into(),
             v8::PropertyAttribute::DONT_DELETE,
         );
-    }
 
-    // Do NOT overwrite the global Navigator constructor (from install_all).
-    // install_all's Navigator has EventTarget inheritance. Our nav_tmpl is
-    // only used to create the navigator instance with native getters.
-    // The global Navigator constructor stays as install_all's version,
-    // so navigator instanceof EventTarget works through the prototype chain.
-    // Note: navigator.__proto__ will be nav_tmpl.prototype (which has native
-    // getters), and nav_tmpl.prototype.__proto__ = gen_tmpl.prototype
-    // (codegen Navigator.prototype with EventTarget inheritance).
-    // navigator instanceof Navigator checks if Navigator.prototype is in
-    // navigator's prototype chain — it is, through nav_tmpl → gen_tmpl.
-
-    // Re-register Navigator constructor (overwrites install_all's version).
-    // This is necessary because install_native_navigator's gen_tmpl is a
-    // DIFFERENT FunctionTemplate than install_all's gen_tmpl. Without
-    // overwriting, navigator instanceof Navigator would fail because
-    // navigator.__proto__.__proto__ (our gen_tmpl.prototype) !==
-    // Navigator.prototype (install_all's gen_tmpl.prototype).
-    // Trade-off: navigator instanceof EventTarget = False (our gen_tmpl
-    // was created with parent=None, not EventTarget).
-    // See TODO-infrastructure.md for full analysis.
-    if let Some(func) = nav_tmpl.get_function(scope) {
-        let ctor_key = crate::v8_utils::v8_string(scope, "Navigator");
-        global.define_own_property(
-            scope,
-            ctor_key.into(),
-            func.into(),
-            v8::PropertyAttribute::DONT_ENUM,
-        );
+        // Overwrite global Navigator constructor with illegal_constructor,
+        // but preserve install_all's Navigator.prototype (which has EventTarget
+        // inheritance + our native getters). We create a new FunctionTemplate
+        // with illegal_constructor, get its function, then set its .prototype
+        // to install_all's Navigator.prototype.
+        let nav_ctor_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+        nav_ctor_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Navigator"));
+        nav_ctor_tmpl.remove_prototype();
+        if let Some(nav_ctor_fn) = nav_ctor_tmpl.get_function(scope) {
+            // Set the constructor's .prototype to install_all's Navigator.prototype
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            let nav_ctor_key = crate::v8_utils::v8_string(scope, "Navigator");
+            if let Some(install_all_nav_ctor_val) = global.get(scope, nav_ctor_key.into()) {
+                if install_all_nav_ctor_val.is_function() {
+                    let install_all_nav_ctor: v8::Local<v8::Function> =
+                        unsafe { v8::Local::cast_unchecked(install_all_nav_ctor_val) };
+                    if let Some(install_all_proto_val) = install_all_nav_ctor.get(scope, proto_key.into()) {
+                        let _ = nav_ctor_fn.set(scope, proto_key.into(), install_all_proto_val);
+                    }
+                }
+            }
+            let _ = global.define_own_property(
+                scope,
+                nav_ctor_key.into(),
+                nav_ctor_fn.into(),
+                v8::PropertyAttribute::DONT_ENUM,
+            );
+        }
     }
 }
 
@@ -917,11 +1014,8 @@ unsafe extern "C" fn nav_plugins(info: *const v8::FunctionCallbackInfo) {
 // ─── screen ───────────────────────────────────────────────────────────────────
 
 fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    // v0.8.61: inherit from generated Screen template (9 skeleton properties)
-    let gen_tmpl = create_screen_template(scope, None);
     let screen_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     screen_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Screen"));
-    screen_tmpl.inherit(gen_tmpl);
 
     let proto = screen_tmpl.prototype_template(scope);
 
@@ -949,12 +1043,35 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     screen_getter!("availLeft", screen_avail_left);
     screen_getter!("availTop", screen_avail_top);
 
-    // Instantiate via instance_template (bypasses constructor).
-    // When JS does `new Screen()`, the constructor throws TypeError.
     let inst_tmpl = screen_tmpl.instance_template(scope);
     if let Some(screen_obj) = inst_tmpl.new_instance(scope) {
+        // Link screen_tmpl.prototype.__proto__ to install_all's Screen.prototype.
+        if let Some(screen_func) = screen_tmpl.get_function(scope) {
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            if let Some(screen_proto_val) = screen_func.get(scope, proto_key.into()) {
+                if screen_proto_val.is_object() {
+                    let screen_proto: v8::Local<v8::Object> =
+                        unsafe { v8::Local::cast_unchecked(screen_proto_val) };
+                    let screen_ctor_key = crate::v8_utils::v8_string(scope, "Screen");
+                    if let Some(screen_ctor_val) = global.get(scope, screen_ctor_key.into()) {
+                        if screen_ctor_val.is_function() {
+                            let screen_ctor: v8::Local<v8::Function> =
+                                unsafe { v8::Local::cast_unchecked(screen_ctor_val) };
+                            if let Some(install_all_proto_val) = screen_ctor.get(scope, proto_key.into()) {
+                                if install_all_proto_val.is_object() {
+                                    let install_all_proto: v8::Local<v8::Object> =
+                                        unsafe { v8::Local::cast_unchecked(install_all_proto_val) };
+                                    let _ = screen_proto.set_prototype(scope, install_all_proto.into());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         let key = crate::v8_utils::v8_string(scope, "screen");
-        global.define_own_property(
+        let _ = global.define_own_property(
             scope,
             key.into(),
             screen_obj.into(),
@@ -962,10 +1079,10 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
         );
     }
 
-    // Install Screen constructor on global (non-enumerable, like DOM)
+    // Overwrite global Screen constructor with illegal_constructor version.
     if let Some(func) = screen_tmpl.get_function(scope) {
         let ctor_key = crate::v8_utils::v8_string(scope, "Screen");
-        global.define_own_property(
+        let _ = global.define_own_property(
             scope,
             ctor_key.into(),
             func.into(),

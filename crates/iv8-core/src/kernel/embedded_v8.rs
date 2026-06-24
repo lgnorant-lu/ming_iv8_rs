@@ -1051,14 +1051,12 @@ impl EmbeddedV8Kernel {
             let context = v8::Local::new(handle_scope, &self.context);
             v8::scope_with_context!(scope, handle_scope, context);
             let global = context.global(scope);
-            // Phase 2: override navigator + screen with native-getter ObjectTemplates
-            // This makes Object.getOwnPropertyDescriptor(navigator, 'userAgent')
-            // return a native getter instead of a plain value descriptor.
             crate::shims::native_env::install_native_env(scope, global);
         }
         unsafe {
             self.isolate.exit();
         }
+        self.fix_prototype_chains();
     }
 
     /// Fix prototype chains after install_all has registered codegen
