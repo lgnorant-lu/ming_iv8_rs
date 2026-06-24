@@ -53,6 +53,25 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - Promise rejection microtask drain needs eventLoop improvement
 - 5 behavior probes reclassified v0.9+→v0.8 精装 (BatteryManager, sendBeacon, DOMException, permissions, chrome)
 
+## [0.8.76] - 2026-06-23
+
+> Local milestone: M7 residual patch aggregation
+> (补丁聚合 — R01-R21 风险寄存器项收束, 8 项 closed, 13 项 deferred.
+> TODO-infra recount 36/85. Tag `v0.8.76`.)
+
+### Changed
+- R01/R02 deferred to v0.9+ (automated .pyd refresh, style_cache→v8::Weak)
+- R03 stale — diagnostics.rs already has 10 inline tests (v0.8.76 recount)
+- R04 stale — v8_extra/v8_init/v8_utils each have 1 inline test
+- R05 design-decision recorded — iv8-py intentionally lightweight
+- R07 documented — cross_reference 10/26 witness gap, v0.9+ target
+- R11 policy note added — tests/iv8-ref/ reference policy
+- R21 quick CDP domain coverage audit completed
+
+### Quality Gates
+- `cargo test --workspace`: 600 passed, 0 failed (unchanged)
+- No new runtime features
+
 ## [0.8.75] - 2026-06-23
 
 > Local milestone: M7 gate audit
