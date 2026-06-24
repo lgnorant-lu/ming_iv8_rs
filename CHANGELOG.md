@@ -6,6 +6,29 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.78] - 2026-06-25
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+
+### Added
+- Promise microtask drain: `eventLoop.sleep()`, `eventLoop.tick()`, and `eventLoop.drainMicrotasks()` now call `perform_microtask_checkpoint()`. Promise `.then()`/`.catch()` callbacks drain correctly.
+- `window instanceof Window` and `window instanceof EventTarget` now return `true` via `fix_prototype_chains` prototype linking.
+- 3 navigator instanceof tests added to `test_fingerprint.py`.
+- 3 behavior probe tests added to `test_surface_coverage.rs` (B1 BatteryManager, B3 DOMException, B4 permissions).
+
+### Changed
+- `install_native_navigator`: rewritten prototype chain strategy. No longer creates independent `gen_tmpl` or overwrites global `Navigator` constructor. Links `nav_tmpl.prototype.__proto__` to install_all's `Navigator.prototype` via `set_prototype`. Native getters installed on install_all's `Navigator.prototype` via `Object.defineProperty`.
+- `install_native_screen`: same pattern as navigator.
+- `install_location` (location.rs): same prototype chain pattern. `location instanceof Location` = `true`.
+- `fix_prototype_chains`: now called after `install_native_environment`. Added `Window.prototype.__proto__ = EventTarget.prototype` and `globalThis.__proto__ = Window.prototype`.
+- `el_drain_microtasks`: replaced no-op stub with `perform_microtask_checkpoint()`.
+
+### Quality Gates
+- `cargo test --workspace`: 1221 passed, 0 failed
+- Python tests: 2060 passed, 1 skipped, 1 deselected (pre-existing)
+- Runtime audit: navigator/screen/location/window instanceof all true
+- Promise microtask drain: verified `.then()` callbacks execute after `eventLoop.sleep(1)`
+
 ## [0.8.77] - 2026-06-24
 
 > Local milestone: build speed + cookie + anti-detection + runtime audit
