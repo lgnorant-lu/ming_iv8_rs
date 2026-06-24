@@ -6,6 +6,53 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.77] - 2026-06-24
+
+> Local milestone: build speed + cookie + anti-detection + runtime audit
+> (补丁聚合 — 构建速度 3 层 bug 修复, cookie accessor 双路径 parity,
+> 16 项反检测缺陷修复, codegen 继承覆盖, 行为探针补全,
+> 运行时审计 98/98 OK. Tag `v0.8.77`.)
+
+### Added
+- `page_load_with_headers()` API for Set-Cookie in internal page_load path
+- DOMException constructor shim for EME/MIDI Promise rejections
+- BatteryManager Symbol.toStringTag via Rust callback
+- createElement tag dispatch (50+ tag→constructor mappings)
+- codegen INHERITANCE_OVERRIDES (6 mixin interfaces: Navigator, WorkerNavigator, Storage, XHR+EventTarget)
+- Split init phase: env_inject before install_all, native_env after
+- 25 page_api integration tests (test_page_api.rs)
+- 27 Canvas/WebGL integration tests (test_surface_canvas.rs)
+- 22 console integration tests (expanded from 6)
+- `.cargo/config.toml` dev profile (opt-level=0, incremental=true)
+
+### Changed
+- page_api.rs: full parity with embedded_v8.rs page_load (7 shims + events + microtask + location)
+- EXCLUDED_ATTRIBUTES: 1→20 properties (eliminates codegen-vs-shim conflicts)
+- document_props.rs: 15 dead guards removed, canPlayType wrapper guard, COOKIE_REINSTALL_JS shared const
+- storage.rs: refactored to use codegen Storage.prototype (Object.create)
+- native_env.rs: permissions.query returns 'default' for notifications
+- native_env.rs: EME/MIDI rejections use DOMException instead of TypeError
+- trace.py: _parse_entry fallback for C/R/W non-integer pc
+- xhr.rs: Set-Cookie header processing in doSend
+- fetch.rs: Set-Cookie header processing in build_response_object
+- 8 toString tags: window/document/location/history/navigator/screen/localStorage/sessionStorage
+- 6 prototype chains: document→Document→Node, history→History, crypto→Crypto, crypto.subtle→SubtleCrypto
+- 6 constructor names: document/history/crypto/localStorage/sessionStorage/crypto.subtle
+- Probes: Navigator.prototype→navigator.__proto__ (4 probe files)
+
+### Quality Gates
+- `cargo test --workspace`: 1215 passed, 0 failed
+- `pytest tests/`: 2058 passed, 1 skipped, 0 failed
+- Runtime behavior audit: 98/98 OK (0 FAIL)
+- Codegen golden: 1/1 PASS (dom_core.rs 8162→7867 lines)
+- Coverage: 54.80% lines (cargo-llvm-cov)
+- Build speed: 2.4s no-change / 9.7s single-file (was 308s / 319s)
+
+### Known Limitations
+- navigator/location/window instanceof EventTarget = False (descriptor shape correct)
+- Promise rejection microtask drain needs eventLoop improvement
+- 5 behavior probes reclassified v0.9+→v0.8 精装 (BatteryManager, sendBeacon, DOMException, permissions, chrome)
+
 ## [0.8.75] - 2026-06-23
 
 > Local milestone: M7 gate audit

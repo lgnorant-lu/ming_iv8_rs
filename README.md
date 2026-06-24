@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.75 (M7 gate audit, v0.9 OPEN) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.77 (build speed + cookie + anti-detection + runtime audit) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
@@ -17,6 +17,7 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **Stateful runtime substrate**: localStorage cross-kernel persistence + Drop flush; cookie security attribute parsing/filtering (Path prefix-match, Secure context); Headers comma-join duplicates + constructor array init; structured ProbeRecord JSON schema with collect_probe_records (v0.8.72)
 - **Debug / automation / geometry closure**: inspector step_out wiring (kernel cdp_step_out + Python binding); Python inventory auto-update generator; layout/geometry basic model (Rust callback reads this.__iv8Rect__; __iv8SetElementRect fixture hook); bridge vocabulary glossary (16 terms) (v0.8.73)
 - **Substrate debt sweep**: codegen warning cleanup (67→4 + heck removal); ledger sweep (VERSION_SCOPE_MAP mid-range, CAPABILITY_INDEX v0.8.45-47, stale decision register entries); metadata policy decision (keep 0.8.11 frozen); crypto/env_inject audit (paths confirmed unified/complete); CI/config hygiene (rust-toolchain 1.96.0, .gitignore cleanup) (v0.8.74)
+- **Build speed + cookie + anti-detection**: 3-layer build bug fix (308s→2.4s); page_api.rs full parity with 7 shims + events + Set-Cookie; 16 anti-detection fixes (toString tags, prototype chains, constructor names, createElement dispatch, DOMException, BatteryManager, permissions); codegen inheritance overrides; runtime audit 98/98 OK; 1215 Rust + 2058 Python tests (v0.8.77)
 - **M7 gate audit**: TODO recount (grep-verified 316 items); detection surface reclassification (11+2 categories, ~92% avg); residual risk register (21 items R01-R21); v0.9 entry gate OPEN with conditions (v0.8 精装≈100%; ~8 v0.8.76 patch items identified) (v0.8.75)
 - **Navigator consistency + WorkerNavigator**: 10 new integration tests for Navigator cross-property coherence and WorkerNavigator runtime shape; WorkerNavigator illegal_constructor fix (v0.8.70)
 - **Generated Navigator skeletons**: 46 IDL properties via codegen + native template unification (v0.8.58/0.8.60)
