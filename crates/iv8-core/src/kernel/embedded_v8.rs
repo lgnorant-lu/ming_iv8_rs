@@ -1033,6 +1033,61 @@ impl EmbeddedV8Kernel {
         }
     }
 
+    /// Fix prototype chains after install_all has registered codegen
+    /// FunctionTemplates as globals. native_env and location.rs create
+    /// their own FunctionTemplates before install_all runs, resulting in
+    /// two different prototype objects per interface. This function uses
+    /// V8's Object::set_prototype to link the native_env prototypes to
+    /// the codegen prototypes, so instanceof checks work correctly.
+    fn fix_prototype_chains(&mut self) {
+        unsafe {
+            self.isolate.enter();
+        }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+            let global = context.global(scope);
+
+            // Helper: get global constructor's .prototype object
+            fn get_proto<'s>(scope: &v8::PinScope<'s, '_>, global: v8::Local<'s, v8::Object>, name: &str) -> Option<v8::Local<'s, v8::Object>> {
+                let key = crate::v8_utils::v8_string(scope, name);
+                let ctor_val = global.get(scope, key.into())?;
+                if !ctor_val.is_function() { return None; }
+                let ctor: v8::Local<'s, v8::Function> = unsafe { v8::Local::cast_unchecked(ctor_val) };
+                let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+                let proto_val = ctor.get(scope, proto_key.into())?;
+                if !proto_val.is_object() { return None; }
+                let proto_obj: v8::Local<'s, v8::Object> = unsafe { v8::Local::cast_unchecked(proto_val) };
+                Some(proto_obj)
+            }
+
+            // Navigator.prototype.__proto__ = EventTarget.prototype
+            if let (Some(nav_proto), Some(et_proto)) = (get_proto(&scope, global, "Navigator"), get_proto(&scope, global, "EventTarget")) {
+                let _ = nav_proto.set_prototype(&*scope, et_proto.into());
+            }
+            // Storage.prototype.__proto__ = EventTarget.prototype
+            if let (Some(st_proto), Some(et_proto)) = (get_proto(&scope, global, "Storage"), get_proto(&scope, global, "EventTarget")) {
+                let _ = st_proto.set_prototype(&*scope, et_proto.into());
+            }
+            // XMLHttpRequestEventTarget.prototype.__proto__ = EventTarget.prototype
+            if let (Some(xhr_et_proto), Some(et_proto)) = (get_proto(&scope, global, "XMLHttpRequestEventTarget"), get_proto(&scope, global, "EventTarget")) {
+                let _ = xhr_et_proto.set_prototype(&*scope, et_proto.into());
+            }
+            // XMLHttpRequest.prototype.__proto__ = XMLHttpRequestEventTarget.prototype
+            if let (Some(xhr_proto), Some(xhr_et_proto)) = (get_proto(&scope, global, "XMLHttpRequest"), get_proto(&scope, global, "XMLHttpRequestEventTarget")) {
+                let _ = xhr_proto.set_prototype(&*scope, xhr_et_proto.into());
+            }
+            // WorkerNavigator.prototype.__proto__ = EventTarget.prototype
+            if let (Some(wn_proto), Some(et_proto)) = (get_proto(&scope, global, "WorkerNavigator"), get_proto(&scope, global, "EventTarget")) {
+                let _ = wn_proto.set_prototype(&*scope, et_proto.into());
+            }
+        }
+        unsafe {
+            self.isolate.exit();
+        }
+    }
+
     /// Dispose the kernel (explicit cleanup before drop).
     pub fn dispose(&mut self) {
         self.flush_local_storage();
