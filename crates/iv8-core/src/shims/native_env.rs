@@ -479,7 +479,25 @@ unsafe extern "C" fn permissions_query_cb(info: *const v8::FunctionCallbackInfo)
                             unsafe { v8::Local::cast_unchecked(resolve_fn) };
                         let result_obj = v8::Object::new(scope);
                         let state_key = crate::v8_utils::v8_string(scope, "state");
-                        let state_val = crate::v8_utils::v8_string(scope, "prompt");
+                        // Check descriptor name: 'notifications' → 'default',
+                        // everything else → 'prompt'
+                        let mut state_str = "prompt";
+                        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+                        if args.length() > 0 {
+                            let arg0 = args.get(0);
+                            if arg0.is_object() {
+                                let desc_obj: v8::Local<v8::Object> =
+                                    unsafe { v8::Local::cast_unchecked(arg0) };
+                                let name_key = crate::v8_utils::v8_string(scope, "name");
+                                if let Some(name_val) = desc_obj.get(scope, name_key.into()) {
+                                    let name = name_val.to_rust_string_lossy(scope);
+                                    if name == "notifications" {
+                                        state_str = "default";
+                                    }
+                                }
+                            }
+                        }
+                        let state_val = crate::v8_utils::v8_string(scope, state_str);
                         result_obj.set(scope, state_key.into(), state_val.into());
                         let _undefined = v8::undefined(scope);
                         if let Some(promise) =
