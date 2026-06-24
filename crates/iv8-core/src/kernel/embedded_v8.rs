@@ -259,6 +259,11 @@ impl EmbeddedV8Kernel {
         // — already installed by install_browser_surface_init above).
         kernel.install_undetect_shims(true);
 
+        // TODO v0.8.79: Re-fix XHR prototype chain after install_undetect_shims.
+        // Currently disabled because it breaks netlog_multiple_requests test
+        // (second XHR send not recorded). Root cause under investigation.
+        // kernel.fix_xhr_prototype_chain();
+
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
@@ -1115,6 +1120,48 @@ impl EmbeddedV8Kernel {
             // globalThis.__proto__ = Window.prototype (so window instanceof Window)
             if let Some(win_proto) = get_proto(&scope, global, "Window") {
                 let _ = global.set_prototype(&*scope, win_proto.into());
+            }
+        }
+        unsafe {
+            self.isolate.exit();
+        }
+    }
+
+    /// Fix XHR prototype chain after install_undetect_shims re-evaluates
+    /// XHR_SHIM_JS, which overwrites the global XMLHttpRequest constructor
+    /// with a new one whose prototype is not linked to
+    /// XMLHttpRequestEventTarget.prototype. This restores addEventListener
+    /// and other EventTarget methods on XHR instances.
+    fn fix_xhr_prototype_chain(&mut self) {
+        unsafe {
+            self.isolate.enter();
+        }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+            let global = context.global(scope);
+            let proto_key = crate::v8_utils::v8_string(&scope, "prototype");
+            let xhr_ctor_key = crate::v8_utils::v8_string(&scope, "XMLHttpRequest");
+            let xhr_et_ctor_key = crate::v8_utils::v8_string(&scope, "XMLHttpRequestEventTarget");
+            if let (Some(xhr_ctor_val), Some(xhr_et_ctor_val)) = (
+                global.get(&scope, xhr_ctor_key.into()),
+                global.get(&scope, xhr_et_ctor_key.into()),
+            ) {
+                if xhr_ctor_val.is_function() && xhr_et_ctor_val.is_function() {
+                    let xhr_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(xhr_ctor_val) };
+                    let xhr_et_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(xhr_et_ctor_val) };
+                    if let (Some(xhr_proto_val), Some(xhr_et_proto_val)) = (
+                        xhr_ctor.get(&scope, proto_key.into()),
+                        xhr_et_ctor.get(&scope, proto_key.into()),
+                    ) {
+                        if xhr_proto_val.is_object() && xhr_et_proto_val.is_object() {
+                            let xhr_proto: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(xhr_proto_val) };
+                            let xhr_et_proto: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(xhr_et_proto_val) };
+                            let _ = xhr_proto.set_prototype(&*scope, xhr_et_proto.into());
+                        }
+                    }
+                }
             }
         }
         unsafe {
