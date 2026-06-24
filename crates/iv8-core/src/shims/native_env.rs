@@ -86,6 +86,13 @@ fn build_dom_exception<'s>(
 /// getters in a single Navigator object.
 fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Create native Navigator template — inherits generated template's prototype
+    // Note: parent=None because EventTarget template is not yet available
+    // (install_native_navigator runs before install_all). The prototype
+    // chain Navigator→EventTarget is set up by install_all's template
+    // later, but the global "Navigator" constructor registered here
+    // (via define_own_property DONT_ENUM) is not overwritten by install_all.
+    // This means navigator instanceof EventTarget = False at runtime.
+    // See TODO-infrastructure.md for root cause analysis.
     let gen_tmpl = create_navigator_template(scope, None);
     let nav_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     nav_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Navigator"));
