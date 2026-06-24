@@ -1,7 +1,7 @@
 # Tests Directory Conventions
 
 > Created: 2026-06-18
-> Status: proposed
+> Status: accepted
 > Scope: All files and directories under `tests/`
 > Supersedes: §10 (Organization) of `python-testing-conventions.md`
 > Related: `testing-conventions.md`, `naming-conventions.md`
@@ -439,14 +439,14 @@ fixtures/
 
 ## 8. Review Checklist
 
-- [ ] Test file name uses capability, not version/milestone label
-- [ ] Non-test scripts use `_` prefix (no `test_` prefix without test functions)
-- [ ] Helper modules do NOT use `test_` prefix
-- [ ] Parametrized contract tests exist instead of per-family thin files
-- [ ] Domain with ≥6 test files is identified for potential subdirectory
-- [ ] `tests/_archive/` contains only stale, unreferenced artifacts
-- [ ] `tests/compat/` is self-contained and documented
-- [ ] `tests/fixtures/` follows version → capability organization
-- [ ] No active test file imports from `_archive/`
+- [x] Test file name uses capability, not version/milestone label
+- [x] Non-test scripts use `_` prefix (no `test_` prefix without test functions)
+- [x] Helper modules do NOT use `test_` prefix
+- [x] Parametrized contract tests exist instead of per-family thin files
+- [x] Domain with ≥6 test files is identified for potential subdirectory
+- [x] `tests/_archive/` contains only stale, unreferenced artifacts
+- [x] `tests/compat/` is self-contained and documented
+- [x] `tests/fixtures/` follows version → capability organization
+- [x] No active test file imports from `_archive/`
 - [ ] `test_m*` milestone files are documented with a plan to rename to capability names
-- [ ] Data files (`probe_results.json`) have a documented purpose and owner
+- [x] Data files (`probe_results.json`) have a documented purpose and owner

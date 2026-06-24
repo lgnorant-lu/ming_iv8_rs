@@ -454,3 +454,40 @@ fn navigator_proto_chain() {
         "navigator.__proto__.__proto__ should be Navigator.prototype"
     );
 }
+
+// ─── B1-B5 behavior probes (v0.8.78) ────────────────────────────────────────────
+//
+// B2 sendBeacon and B5 chrome.runtime are already correct; verified separately.
+// Here we cover the synchronous observable shape for B1, B3, B4.
+
+#[test]
+fn b1_battery_getbattery_native_code() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof navigator.getBattery", "function");
+    let result = k.eval_to_rust_value("navigator.getBattery.toString().includes('[native code]')");
+    assert_eq!(
+        result,
+        iv8_core::convert::RustValue::Bool(true),
+        "getBattery.toString() should report [native code]"
+    );
+}
+
+#[test]
+fn b3_domexception_exists_and_correct() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "typeof DOMException", "function");
+    let result = k.eval_to_rust_value(
+        "(function(){ try { var e = new DOMException('test', 'NotSupportedError'); return e.name; } catch(e) { return 'error:' + e.message; } })()",
+    );
+    match result {
+        iv8_core::convert::RustValue::String(s) => assert_eq!(s, "NotSupportedError"),
+        _ => panic!("Expected NotSupportedError, got {:?}", result),
+    }
+}
+
+#[test]
+fn b4_permissions_notification_consistency() {
+    let mut k = common::make_kernel();
+    common::assert_js_str(&mut k, "Notification.permission", "default");
+    common::assert_js_str(&mut k, "typeof navigator.permissions.query", "function");
+}

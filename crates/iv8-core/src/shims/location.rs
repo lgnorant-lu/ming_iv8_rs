@@ -78,14 +78,139 @@ pub fn install_location(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obje
         .new_instance(scope, &[])
         .expect("Location instance");
 
+    // v0.8.78: Link loc_tmpl.prototype.__proto__ to install_all's
+    // Location.prototype (created by the surface codegen). This makes
+    // `location instanceof Location` and `location instanceof EventTarget`
+    // evaluate to true, matching real browser prototype chains.
+    if let Some(loc_func) = loc_tmpl.get_function(scope) {
+        let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+        if let Some(loc_proto_val) = loc_func.get(scope, proto_key.into()) {
+            if loc_proto_val.is_object() {
+                let loc_proto: v8::Local<v8::Object> =
+                    unsafe { v8::Local::cast_unchecked(loc_proto_val) };
+                let loc_ctor_key = crate::v8_utils::v8_string(scope, "Location");
+                if let Some(loc_ctor_val) = global.get(scope, loc_ctor_key.into()) {
+                    if loc_ctor_val.is_function() {
+                        let loc_ctor: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(loc_ctor_val) };
+                        if let Some(install_all_proto_val) = loc_ctor.get(scope, proto_key.into()) {
+                            if install_all_proto_val.is_object() {
+                                let install_all_proto: v8::Local<v8::Object> =
+                                    unsafe { v8::Local::cast_unchecked(install_all_proto_val) };
+                                let _ = loc_proto.set_prototype(scope, install_all_proto.into());
+
+                                // Re-install accessor getters on install_all's
+                                // Location.prototype via Object.defineProperty so
+                                // that the getters are reachable through the linked
+                                // prototype chain.
+                                install_loc_getters_on_proto(scope, global, install_all_proto);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     global.set(
         scope,
         crate::v8_utils::v8_string(scope, "location").into(),
         obj.into(),
     );
+
+    // Overwrite global Location constructor with illegal_constructor,
+    // but preserve install_all's Location.prototype (which has EventTarget
+    // inheritance + our native getters).
+    let loc_ctor_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+    loc_ctor_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Location"));
+    loc_ctor_tmpl.remove_prototype();
+    if let Some(loc_ctor_fn) = loc_ctor_tmpl.get_function(scope) {
+        let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+        let loc_ctor_key = crate::v8_utils::v8_string(scope, "Location");
+        if let Some(install_all_loc_ctor_val) = global.get(scope, loc_ctor_key.into()) {
+            if install_all_loc_ctor_val.is_function() {
+                let install_all_loc_ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(install_all_loc_ctor_val) };
+                if let Some(install_all_proto_val) =
+                    install_all_loc_ctor.get(scope, proto_key.into())
+                {
+                    let _ = loc_ctor_fn.set(scope, proto_key.into(), install_all_proto_val);
+                }
+            }
+        }
+        let _ = global.define_own_property(
+            scope,
+            loc_ctor_key.into(),
+            loc_ctor_fn.into(),
+            v8::PropertyAttribute::DONT_ENUM,
+        );
+    }
 }
 
 unsafe extern "C" fn illegal_constructor(_info: *const v8::FunctionCallbackInfo) {}
+
+/// Install accessor getter/setter pairs on an already-instantiated prototype
+/// object using `Object.defineProperty`, mirroring the loc_accessor! macro but
+/// for install_all's Location.prototype (so getters are reachable through the
+/// linked prototype chain).
+fn install_loc_getters_on_proto(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+    proto: v8::Local<v8::Object>,
+) {
+    let obj_key = crate::v8_utils::v8_string(scope, "Object");
+    let obj_val = match global.get(scope, obj_key.into()) {
+        Some(v) if v.is_object() => v,
+        _ => return,
+    };
+    let obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(obj_val) };
+    let dop_key = crate::v8_utils::v8_string(scope, "defineProperty");
+    let dop_fn: v8::Local<v8::Function> = match obj.get(scope, dop_key.into()) {
+        Some(v) if v.is_function() => unsafe { v8::Local::cast_unchecked(v) },
+        _ => return,
+    };
+    let get_key = crate::v8_utils::v8_string(scope, "get");
+    let set_key = crate::v8_utils::v8_string(scope, "set");
+    let enum_key = crate::v8_utils::v8_string(scope, "enumerable");
+    let config_key = crate::v8_utils::v8_string(scope, "configurable");
+
+    // (name, getter, setter) — setter is None for read-only accessors
+    let accessors: &[(&str, v8::FunctionCallback, Option<v8::FunctionCallback>)] = &[
+        ("href", loc_href_getter, Some(loc_href_setter)),
+        ("origin", loc_origin_getter, None),
+        ("protocol", loc_protocol_getter, Some(loc_protocol_setter)),
+        ("host", loc_host_getter, Some(loc_host_setter)),
+        ("hostname", loc_hostname_getter, Some(loc_hostname_setter)),
+        ("port", loc_port_getter, Some(loc_port_setter)),
+        ("pathname", loc_pathname_getter, Some(loc_pathname_setter)),
+        ("search", loc_search_getter, Some(loc_search_setter)),
+        ("hash", loc_hash_getter, Some(loc_hash_setter)),
+    ];
+
+    for (name, getter_cb, setter_opt) in accessors {
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(*getter_cb).build(scope);
+        let name_str = crate::v8_utils::v8_string(scope, name);
+        getter_tmpl.set_class_name(name_str);
+        getter_tmpl.remove_prototype();
+        let getter_fn = match getter_tmpl.get_function(scope) {
+            Some(f) => f,
+            None => continue,
+        };
+        let desc = v8::Object::new(scope);
+        let _ = desc.set(scope, get_key.into(), getter_fn.into());
+        if let Some(setter_cb) = setter_opt {
+            let setter_tmpl = v8::FunctionTemplate::builder_raw(*setter_cb).build(scope);
+            setter_tmpl.set_class_name(name_str);
+            setter_tmpl.remove_prototype();
+            if let Some(setter_fn) = setter_tmpl.get_function(scope) {
+                let _ = desc.set(scope, set_key.into(), setter_fn.into());
+            }
+        }
+        let _ = desc.set(scope, enum_key.into(), v8::Boolean::new(scope, false).into());
+        let _ = desc.set(scope, config_key.into(), v8::Boolean::new(scope, true).into());
+        let _ = dop_fn.call(scope, obj.into(), &[proto.into(), name_str.into(), desc.into()]);
+    }
+}
 
 // ── Environment read helper ──
 

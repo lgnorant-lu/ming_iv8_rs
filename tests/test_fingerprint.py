@@ -200,6 +200,20 @@ class TestNavigatorFingerprint:
     def test_custom_hardware_concurrency(self, ctx_custom):
         assert ctx_custom.eval("navigator.hardwareConcurrency") == 16
 
+    def test_navigator_instanceof_event_target(self, ctx):
+        """v0.8.78: navigator instanceof EventTarget must be True"""
+        assert ctx.eval("navigator instanceof EventTarget") == True
+
+    def test_navigator_instanceof_navigator(self, ctx):
+        """v0.8.78: navigator instanceof Navigator must be True"""
+        assert ctx.eval("navigator instanceof Navigator") == True
+
+    def test_navigator_proto_chain(self, ctx):
+        """v0.8.78: navigator.__proto__.__proto__ === Navigator.prototype"""
+        assert ctx.eval(
+            "Object.getPrototypeOf(Object.getPrototypeOf(navigator)) === Navigator.prototype"
+        ) == True
+
 
 # ─── 4. Screen 指纹 ───────────────────────────────────────────────────────────
 

@@ -320,12 +320,12 @@ brought to P0/P1 level.
 
 ## 13. Review Checklist
 
-- [ ] Test file named `test_<module>.py`, not version-tagged
-- [ ] Test functions use `test_<what>_<expected>()` naming
-- [ ] `importorskip("iv8_rs")` at module level (or in conftest if shared fixture)
-- [ ] No per-file fixture duplication — use conftest.py
-- [ ] Contract tests parametrized, not standalone thin files
-- [ ] No `unittest.TestCase`, no `sys.path.insert`
-- [ ] No `test_` prefix on non-test scripts
-- [ ] Hypothesis used for invariant testing where applicable
-- [ ] No trivial assertions (`assert True`)
+- [x] Test file named `test_<module>.py`, not version-tagged
+- [x] Test functions use `test_<what>_<expected>()` naming
+- [x] `importorskip("iv8_rs")` at module level (or in conftest if shared fixture)
+- [x] No per-file fixture duplication — use conftest.py
+- [x] Contract tests parametrized, not standalone thin files
+- [x] No `unittest.TestCase`, no `sys.path.insert`
+- [x] No `test_` prefix on non-test scripts
+- [x] Hypothesis used for invariant testing where applicable
+- [x] No trivial assertions (`assert True`)
