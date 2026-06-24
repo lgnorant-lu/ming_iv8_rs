@@ -118,6 +118,8 @@ unsafe extern "C" fn el_sleep(info: *const v8::FunctionCallbackInfo) {
         let state = RuntimeState::get(isolate);
         state.event_loop.borrow_mut().advance_time(ms);
         run_due_tasks(scope, state);
+        let isolate: &mut v8::Isolate = scope;
+        isolate.perform_microtask_checkpoint();
     }));
 }
 
@@ -138,6 +140,8 @@ unsafe extern "C" fn el_tick(info: *const v8::FunctionCallbackInfo) {
         let state = RuntimeState::get(isolate);
         state.event_loop.borrow_mut().tick_time(ms);
         run_one_due_task(scope, state);
+        let isolate: &mut v8::Isolate = scope;
+        isolate.perform_microtask_checkpoint();
     }));
 }
 
@@ -159,7 +163,8 @@ unsafe extern "C" fn el_drain_microtasks(info: *const v8::FunctionCallbackInfo) 
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let _ = scope; // microtasks run at checkpoint (handled by V8 automatically)
+        let isolate: &mut v8::Isolate = scope;
+        isolate.perform_microtask_checkpoint();
     }));
 }
 

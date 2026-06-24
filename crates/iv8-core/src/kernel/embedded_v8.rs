@@ -1108,6 +1108,14 @@ impl EmbeddedV8Kernel {
             if let (Some(wn_proto), Some(et_proto)) = (get_proto(&scope, global, "WorkerNavigator"), get_proto(&scope, global, "EventTarget")) {
                 let _ = wn_proto.set_prototype(&*scope, et_proto.into());
             }
+            // Window.prototype.__proto__ = EventTarget.prototype
+            if let (Some(win_proto), Some(et_proto)) = (get_proto(&scope, global, "Window"), get_proto(&scope, global, "EventTarget")) {
+                let _ = win_proto.set_prototype(&*scope, et_proto.into());
+            }
+            // globalThis.__proto__ = Window.prototype (so window instanceof Window)
+            if let Some(win_proto) = get_proto(&scope, global, "Window") {
+                let _ = global.set_prototype(&*scope, win_proto.into());
+            }
         }
         unsafe {
             self.isolate.exit();
