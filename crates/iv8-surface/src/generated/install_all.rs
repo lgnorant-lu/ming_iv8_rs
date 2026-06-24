@@ -818,7 +818,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("NavigationPreloadManager", v8::Global::new(scope, tmpl_navigation_preload_manager));
         let tmpl_navigation_transition = super::web_apis::create_navigation_transition_template(scope, None);
         templates.insert("NavigationTransition", v8::Global::new(scope, tmpl_navigation_transition));
-        let tmpl_navigator = super::web_apis::create_navigator_template(scope, None);
+        let tmpl_navigator = super::web_apis::create_navigator_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Navigator", v8::Global::new(scope, tmpl_navigator));
         let tmpl_navigator_login = super::web_apis::create_navigator_login_template(scope, None);
         templates.insert("NavigatorLogin", v8::Global::new(scope, tmpl_navigator_login));
@@ -1048,7 +1048,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SpeechRecognitionResultList", v8::Global::new(scope, tmpl_speech_recognition_result_list));
         let tmpl_speech_synthesis_voice = super::web_apis::create_speech_synthesis_voice_template(scope, None);
         templates.insert("SpeechSynthesisVoice", v8::Global::new(scope, tmpl_speech_synthesis_voice));
-        let tmpl_storage = super::web_apis::create_storage_template(scope, None);
+        let tmpl_storage = super::web_apis::create_storage_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Storage", v8::Global::new(scope, tmpl_storage));
         let tmpl_storage_access_handle = super::web_apis::create_storage_access_handle_template(scope, None);
         templates.insert("StorageAccessHandle", v8::Global::new(scope, tmpl_storage_access_handle));
@@ -1228,7 +1228,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WebTransportSendGroup", v8::Global::new(scope, tmpl_web_transport_send_group));
         let tmpl_worker_location = super::workers::create_worker_location_template(scope, None);
         templates.insert("WorkerLocation", v8::Global::new(scope, tmpl_worker_location));
-        let tmpl_worker_navigator = super::workers::create_worker_navigator_template(scope, None);
+        let tmpl_worker_navigator = super::workers::create_worker_navigator_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("WorkerNavigator", v8::Global::new(scope, tmpl_worker_navigator));
         let tmpl_worklet = super::web_apis::create_worklet_template(scope, None);
         templates.insert("Worklet", v8::Global::new(scope, tmpl_worklet));

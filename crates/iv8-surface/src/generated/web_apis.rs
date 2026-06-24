@@ -12054,6 +12054,9 @@ pub fn create_navigator_template<'s>(
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "Navigator").unwrap());
+    if let Some(p) = _parent {
+        tmpl.inherit(p);
+    }
 
     let proto = tmpl.prototype_template(scope);
     {
@@ -16657,6 +16660,9 @@ pub fn create_storage_template<'s>(
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
     tmpl.set_class_name(v8::String::new(scope, "Storage").unwrap());
+    if let Some(p) = _parent {
+        tmpl.inherit(p);
+    }
 
     let proto = tmpl.prototype_template(scope);
     {

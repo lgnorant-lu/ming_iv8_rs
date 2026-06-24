@@ -216,8 +216,24 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     let name = def.name.as_deref().unwrap_or("Unknown");
     let mut out = String::new();
 
+    // Check both IR inheritance and overrides for known mixin interfaces
+    const INHERITANCE_OVERRIDES: &[(&str, &str)] = &[
+        ("Navigator", "EventTarget"),
+        ("WorkerNavigator", "EventTarget"),
+        ("Storage", "EventTarget"),
+        ("XMLHttpRequestEventTarget", "EventTarget"),
+        ("XMLHttpRequest", "XMLHttpRequestEventTarget"),
+        ("XMLHttpRequestUpload", "XMLHttpRequestEventTarget"),
+    ];
+    let effective_parent = def.inheritance.as_ref().map(|s| s.as_str()).or_else(|| {
+        INHERITANCE_OVERRIDES
+            .iter()
+            .find(|(iface, _)| *iface == name)
+            .map(|(_, parent)| *parent)
+    });
+
     // Determine parent create function name for cross-referencing
-    let _parent_fn = def.inheritance.as_ref().map(|p| {
+    let _parent_fn = effective_parent.map(|p| {
         format!(
             "{}::create_{}_template",
             crate::topo::classify_domain(p).replace('-', "_"),
@@ -239,7 +255,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     ));
 
     // Inheritance
-    if def.inheritance.is_some() {
+    if effective_parent.is_some() {
         out.push_str("    if let Some(p) = _parent {\n");
         out.push_str("        tmpl.inherit(p);\n");
         out.push_str("    }\n");
@@ -372,7 +388,25 @@ pub fn generate_install_all(
             .unwrap_or("web_apis");
         let domain_mod = domain.replace('-', "_");
 
-        let parent_code = match &def.inheritance {
+        // Some interfaces use WebIDL `implements` (mixin) instead of `:`
+        // (inheritance), so their `inheritance` field is None in the IR
+        // even though they should inherit EventTarget. Add known overrides.
+        const INHERITANCE_OVERRIDES: &[(&str, &str)] = &[
+            ("Navigator", "EventTarget"),
+            ("WorkerNavigator", "EventTarget"),
+            ("Storage", "EventTarget"),
+            ("XMLHttpRequestEventTarget", "EventTarget"),
+            ("XMLHttpRequest", "XMLHttpRequestEventTarget"),
+            ("XMLHttpRequestUpload", "XMLHttpRequestEventTarget"),
+        ];
+        let effective_parent = def.inheritance.as_ref().map(|s| s.as_str()).or_else(|| {
+            INHERITANCE_OVERRIDES
+                .iter()
+                .find(|(iface, _)| *iface == name.as_str())
+                .map(|(_, parent)| *parent)
+        });
+
+        let parent_code = match effective_parent {
             Some(p) => format!("templates.get(\"{}\").map(|g| v8::Local::new(scope, g))", p),
             None => "None".to_string(),
         };
