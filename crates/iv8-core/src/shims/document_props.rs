@@ -476,6 +476,19 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
+    // DOMException constructor shim — real Chrome has DOMException for
+    // Promise rejections (EME, MIDI, mediaDevices). V8 only has TypeError.
+    if (typeof DOMException === 'undefined') {
+        function DOMException(message, name) {
+            this.message = message || '';
+            this.name = name || 'Error';
+        }
+        Object.defineProperty(DOMException.prototype, Symbol.toStringTag, {
+            value: 'DOMException', configurable: true
+        });
+        globalThis.DOMException = DOMException;
+    }
+
 })();
 "#;
 

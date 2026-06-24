@@ -44,6 +44,38 @@ unsafe extern "C" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) 
     scope.throw_exception(exc);
 }
 
+/// Build a DOMException object with the given message and name.
+/// If DOMException constructor is not available (shim not yet installed),
+/// falls back to a plain Error with name property set.
+fn build_dom_exception<'s>(
+    scope: &v8::PinScope<'s, '_>,
+    global: &v8::Local<'s, v8::Object>,
+    message: &str,
+    name: &str,
+) -> v8::Local<'s, v8::Value> {
+    // Try DOMException constructor (installed by DOCUMENT_PROPS_JS shim)
+    let dom_key = crate::v8_utils::v8_string(scope, "DOMException");
+    if let Some(dom_ctor_val) = global.get(scope, dom_key.into()) {
+        if dom_ctor_val.is_function() {
+            let ctor: v8::Local<v8::Function> =
+                unsafe { v8::Local::cast_unchecked(dom_ctor_val) };
+            let msg_arg = crate::v8_utils::v8_string(scope, message);
+            let name_arg = crate::v8_utils::v8_string(scope, name);
+            let undefined = v8::undefined(scope);
+            if let Some(result) = ctor.call(scope, undefined.into(), &[msg_arg.into(), name_arg.into()]) {
+                return result;
+            }
+        }
+    }
+    // Fallback: Error with name property
+    let err = v8::Exception::type_error(scope, crate::v8_utils::v8_string(scope, message));
+    let name_key = crate::v8_utils::v8_string(scope, "name");
+    let name_val = crate::v8_utils::v8_string(scope, name);
+    let err_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(err) };
+    err_obj.set(scope, name_key.into(), name_val.into());
+    err
+}
+
 /// Build a native navigator object with accessor properties.
 /// v0.8.60: creates a native Navigator template that inherits from the
 /// generated create_navigator_template (46 skeleton properties). Native
@@ -666,6 +698,10 @@ unsafe extern "C" fn nav_get_battery(info: *const v8::FunctionCallbackInfo) {
             v8::Number::new(scope, f64::INFINITY).into(),
         );
         result.set(scope, s("level").into(), v8::Number::new(scope, 1.0).into());
+        // Set Symbol.toStringTag = "BatteryManager" for fingerprint fidelity
+        let tag_sym = v8::Symbol::get_to_string_tag(scope);
+        let tag_val = crate::v8_utils::v8_string(scope, "BatteryManager");
+        result.set(scope, tag_sym.into(), tag_val.into());
         let resolver = crate::v8_utils::v8_resolver(scope);
         resolver.resolve(scope, result.into());
         rv.set(resolver.get_promise(scope).into());
@@ -962,7 +998,8 @@ unsafe extern "C" fn nav_request_media_key_system_access(info: *const v8::Functi
                     if reject_fn.is_function() {
                         let reject: v8::Local<v8::Function> =
                             unsafe { v8::Local::cast_unchecked(reject_fn) };
-                        let err_obj = v8::Exception::type_error(scope, v8_str(scope, ""));
+                        // Use DOMException(NotSupportedError) instead of TypeError
+                        let err_obj = build_dom_exception(scope, &global, "Unsupported keySystem", "NotSupportedError");
                         if let Some(promise) = reject.call(scope, ctor.into(), &[err_obj.into()]) {
                             rv.set(promise);
                             return;
@@ -975,7 +1012,7 @@ unsafe extern "C" fn nav_request_media_key_system_access(info: *const v8::Functi
     }));
 }
 
-// navigator.requestMIDIAccess() → Promise.reject(TypeError) (M1 approximation)
+// navigator.requestMIDIAccess() → Promise.reject(DOMException)
 unsafe extern "C" fn nav_request_midi_access(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -991,7 +1028,7 @@ unsafe extern "C" fn nav_request_midi_access(info: *const v8::FunctionCallbackIn
                     if reject_fn.is_function() {
                         let reject: v8::Local<v8::Function> =
                             unsafe { v8::Local::cast_unchecked(reject_fn) };
-                        let err_obj = v8::Exception::type_error(scope, v8_str(scope, ""));
+                        let err_obj = build_dom_exception(scope, &global, "MIDI access not supported", "NotSupportedError");
                         if let Some(promise) = reject.call(scope, ctor.into(), &[err_obj.into()]) {
                             rv.set(promise);
                             return;
