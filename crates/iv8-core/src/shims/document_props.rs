@@ -489,6 +489,59 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         globalThis.DOMException = DOMException;
     }
 
+    // createElement prototype fix — template_for_tag maps many tags to
+    // generic HTMLElement. For tags with a specific codegen constructor,
+    // set the correct prototype so instanceof checks pass.
+    try {
+        var _tagToClass = {
+            iframe: 'HTMLIFrameElement', object: 'HTMLObjectElement',
+            embed: 'HTMLEmbedElement', progress: 'HTMLProgressElement',
+            meter: 'HTMLMeterElement', label: 'HTMLLabelElement',
+            fieldset: 'HTMLFieldSetElement', legend: 'HTMLLegendElement',
+            optgroup: 'HTMLOptGroupElement', option: 'HTMLOptionElement',
+            template: 'HTMLTemplateElement', slot: 'HTMLSlotElement',
+            data: 'HTMLDataElement', time: 'HTMLTimeElement',
+            output: 'HTMLOutputElement', picture: 'HTMLPictureElement',
+            source: 'HTMLSourceElement', details: 'HTMLDetailsElement',
+            dialog: 'HTMLDialogElement', datalist: 'HTMLDataListElement',
+            track: 'HTMLTrackElement', video: 'HTMLVideoElement',
+            audio: 'HTMLAudioElement', map: 'HTMLMapElement',
+            area: 'HTMLAreaElement', base: 'HTMLBaseElement',
+            head: 'HTMLHeadElement', body: 'HTMLBodyElement',
+            html: 'HTMLHtmlElement', link: 'HTMLLinkElement',
+            meta: 'HTMLMetaElement', title: 'HTMLTitleElement',
+            style: 'HTMLStyleElement', script: 'HTMLScriptElement',
+            img: 'HTMLImageElement', canvas: 'HTMLCanvasElement',
+            select: 'HTMLSelectElement', textarea: 'HTMLTextAreaElement',
+            pre: 'HTMLPreElement', br: 'HTMLBRElement', hr: 'HTMLHRElement',
+            blockquote: 'HTMLQuoteElement', q: 'HTMLQuoteElement',
+            ins: 'HTMLModElement', del: 'HTMLModElement',
+            ul: 'HTMLUListElement', ol: 'HTMLOListElement', li: 'HTMLLIElement',
+            table: 'HTMLTableElement', td: 'HTMLTableCellElement',
+            th: 'HTMLTableCellElement', tr: 'HTMLTableRowElement',
+            thead: 'HTMLTableSectionElement', tbody: 'HTMLTableSectionElement',
+            tfoot: 'HTMLTableSectionElement', col: 'HTMLTableColElement',
+            colgroup: 'HTMLTableColElement', caption: 'HTMLTableCaptionElement',
+        };
+        var _origCreate = document.createElement;
+        if (_origCreate && !_origCreate.__iv8ElemPatched) {
+            var _wrapper = function(tagName) {
+                var el = _origCreate.call(document, tagName);
+                if (el && typeof tagName === 'string') {
+                    var cls = _tagToClass[tagName.toLowerCase()];
+                    if (cls && typeof globalThis[cls] !== 'undefined'
+                        && globalThis[cls].prototype
+                        && el.__proto__ !== globalThis[cls].prototype) {
+                        try { el.__proto__ = globalThis[cls].prototype; } catch(e) {}
+                    }
+                }
+                return el;
+            };
+            _wrapper.__iv8ElemPatched = true;
+            document.createElement = _wrapper;
+        }
+    } catch(e) {}
+
 })();
 "#;
 
