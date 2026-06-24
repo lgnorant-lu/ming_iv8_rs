@@ -9,43 +9,75 @@
 /// JS shim for localStorage and sessionStorage.
 pub const STORAGE_JS: &str = r#"
 (function() {
-    function StorageStub() {
-        if (window.__iv8LocalSeed) {
-            this._data = window.__iv8LocalSeed;
-            this.length = Object.keys(window.__iv8LocalSeed).length;
-            delete window.__iv8LocalSeed;
+    // Use the codegen-generated Storage constructor if available;
+    // otherwise fall back to a local constructor.
+    var StorageCtor = (typeof Storage !== 'undefined') ? Storage : null;
+
+    function makeStorage() {
+        var obj;
+        if (StorageCtor) {
+            // Create instance from codegen Storage.prototype
+            // Use Object.create to avoid calling the constructor
+            // (codegen constructors may throw illegal_constructor)
+            obj = Object.create(StorageCtor.prototype);
         } else {
-            this._data = {};
-            this.length = 0;
+            // Fallback: define a local Storage constructor
+            function Storage() {}
+            StorageCtor = Storage;
+            Object.defineProperty(Storage.prototype, Symbol.toStringTag, {
+                value: 'Storage', configurable: true
+            });
+            obj = new Storage();
         }
+
+        // Use Object.defineProperty for _data and length to avoid
+        // potential issues with FunctionTemplate prototype restrictions
+        var seed = window.__iv8LocalSeed;
+        var data = (seed && typeof seed === 'object') ? seed : {};
+        var len = Object.keys(data).length;
+        try {
+            Object.defineProperty(obj, '_data', { value: data, writable: true, enumerable: false, configurable: true });
+            Object.defineProperty(obj, 'length', { value: len, writable: true, enumerable: false, configurable: true });
+        } catch(e) {
+            // Fallback: direct assignment
+            obj._data = data;
+            obj.length = len;
+        }
+        if (seed) {
+            try { delete window.__iv8LocalSeed; } catch(e) {}
+        }
+        return obj;
     }
-    StorageStub.prototype.getItem = function(key) {
+
+    // Install methods on StorageCtor.prototype
+    var p = StorageCtor.prototype;
+    p.getItem = function(key) {
         return this._data.hasOwnProperty(key) ? this._data[key] : null;
     };
-    StorageStub.prototype.setItem = function(key, value) {
+    p.setItem = function(key, value) {
         if (!this._data.hasOwnProperty(key)) this.length++;
         this._data[key] = String(value);
     };
-    StorageStub.prototype.removeItem = function(key) {
+    p.removeItem = function(key) {
         if (this._data.hasOwnProperty(key)) {
             delete this._data[key];
             this.length--;
         }
     };
-    StorageStub.prototype.clear = function() {
+    p.clear = function() {
         this._data = {};
         this.length = 0;
     };
-    StorageStub.prototype.key = function(index) {
+    p.key = function(index) {
         var keys = Object.keys(this._data);
         return index < keys.length ? keys[index] : null;
     };
 
     if (typeof localStorage === 'undefined') {
-        globalThis.localStorage = new StorageStub();
+        globalThis.localStorage = makeStorage();
     }
     if (typeof sessionStorage === 'undefined') {
-        globalThis.sessionStorage = new StorageStub();
+        globalThis.sessionStorage = makeStorage();
     }
 
     // v0.8.72: explicit dump helper for Rust-side flush (dispose / drop).
