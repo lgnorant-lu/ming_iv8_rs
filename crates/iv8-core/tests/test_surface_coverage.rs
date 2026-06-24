@@ -64,13 +64,13 @@ fn navigator_core_descriptor_shape() {
     let keys = ["platform", "language", "hardwareConcurrency", "webdriver", "cookieEnabled"];
     for key in &keys {
         let is_getter = k.eval_to_rust_value(&format!(
-            "(function(){{var d=Object.getOwnPropertyDescriptor(Navigator.prototype,'{}');return d!==undefined&&typeof d.get==='function'}})()",
+            "(function(){{var d=Object.getOwnPropertyDescriptor(navigator.__proto__,'{}');return d!==undefined&&typeof d.get==='function'}})()",
             key
         ));
         assert_eq!(
             is_getter,
             iv8_core::convert::RustValue::Bool(true),
-            "Navigator.prototype.{} should be a native getter",
+            "navigator.__proto__.{} should be a native getter",
             key
         );
     }

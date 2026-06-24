@@ -81,7 +81,7 @@ impl BehaviorProbe for ConnectionProbe {
 
         match eval_bool(
             kernel,
-            "'prototype' in Object.getOwnPropertyDescriptor(Navigator.prototype, 'connection').get",
+            "'prototype' in Object.getOwnPropertyDescriptor(navigator.__proto__, 'connection').get",
         ) {
             Some(false) => {}
             v => {

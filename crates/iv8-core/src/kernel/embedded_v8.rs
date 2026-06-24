@@ -240,12 +240,20 @@ impl EmbeddedV8Kernel {
         };
 
         // Install environment fields (navigator.*, screen.*, etc.) into global
+        // Phase 1 only: static value injection via env_inject.
+        // Phase 2 (native_env) runs after install_browser_surface_init
+        // so that codegen EventTarget template is available for inheritance.
         kernel.install_environment();
 
         // Install BrowserSurface (1284 IDL templates + 14 native behaviors).
         // Heap limits increased from default 1.4GB to 4GB to accommodate
         // 1284 FunctionTemplate creation without V8 GC IsOnCentralStack crash.
         kernel.install_browser_surface_init();
+
+        // Phase 2: install native environment objects (navigator, screen)
+        // AFTER install_all so codegen parent templates (EventTarget) are
+        // available for FunctionTemplate inheritance.
+        kernel.install_native_environment();
 
         // Install anti-detection shims + JS shims (skip native behaviors
         // — already installed by install_browser_surface_init above).
@@ -1011,7 +1019,8 @@ impl EmbeddedV8Kernel {
     /// Install environment fields into the V8 global object.
     /// Called once after kernel creation to populate navigator.*, screen.*, etc.
     /// Phase 1: static value injection (all 393 entries via env_inject)
-    /// Phase 2: native getter override for key objects (navigator, screen)
+    /// Must run BEFORE install_browser_surface_init so that native getter
+    /// override (Phase 2) can use the codegen EventTarget template.
     pub fn install_environment(&mut self) {
         unsafe {
             self.isolate.enter();
@@ -1023,6 +1032,25 @@ impl EmbeddedV8Kernel {
             let global = context.global(scope);
             // Phase 1: static injection (all 393 dot-path entries)
             crate::env_inject::install_environment(scope, global);
+        }
+        unsafe {
+            self.isolate.exit();
+        }
+    }
+
+    /// Install native environment objects (navigator, screen, location)
+    /// with native-getter FunctionTemplates. Must run AFTER
+    /// install_browser_surface_init so that codegen EventTarget and other
+    /// parent templates are available for inheritance.
+    pub fn install_native_environment(&mut self) {
+        unsafe {
+            self.isolate.enter();
+        }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+            let global = context.global(scope);
             // Phase 2: override navigator + screen with native-getter ObjectTemplates
             // This makes Object.getOwnPropertyDescriptor(navigator, 'userAgent')
             // return a native getter instead of a plain value descriptor.

@@ -85,14 +85,10 @@ fn build_dom_exception<'s>(
 /// (bluetooth, hid, usb, gpu, etc.) with native profile-backed
 /// getters in a single Navigator object.
 fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
-    // Create native Navigator template — inherits generated template's prototype
-    // Note: parent=None because EventTarget template is not yet available
-    // (install_native_navigator runs before install_all). The prototype
-    // chain Navigator→EventTarget is set up by install_all's template
-    // later, but the global "Navigator" constructor registered here
-    // (via define_own_property DONT_ENUM) is not overwritten by install_all.
-    // This means navigator instanceof EventTarget = False at runtime.
-    // See TODO-infrastructure.md for root cause analysis.
+    // After install_all, the global "Navigator" constructor already exists
+    // with EventTarget inheritance. We create a nav_tmpl that inherits from
+    // the codegen Navigator template to get both native getters AND the
+    // EventTarget prototype chain.
     let gen_tmpl = create_navigator_template(scope, None);
     let nav_tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     nav_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Navigator"));
@@ -219,7 +215,26 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
         );
     }
 
-    // Install Navigator constructor on global (non-enumerable, like DOM)
+    // Do NOT overwrite the global Navigator constructor (from install_all).
+    // install_all's Navigator has EventTarget inheritance. Our nav_tmpl is
+    // only used to create the navigator instance with native getters.
+    // The global Navigator constructor stays as install_all's version,
+    // so navigator instanceof EventTarget works through the prototype chain.
+    // Note: navigator.__proto__ will be nav_tmpl.prototype (which has native
+    // getters), and nav_tmpl.prototype.__proto__ = gen_tmpl.prototype
+    // (codegen Navigator.prototype with EventTarget inheritance).
+    // navigator instanceof Navigator checks if Navigator.prototype is in
+    // navigator's prototype chain — it is, through nav_tmpl → gen_tmpl.
+
+    // Re-register Navigator constructor (overwrites install_all's version).
+    // This is necessary because install_native_navigator's gen_tmpl is a
+    // DIFFERENT FunctionTemplate than install_all's gen_tmpl. Without
+    // overwriting, navigator instanceof Navigator would fail because
+    // navigator.__proto__.__proto__ (our gen_tmpl.prototype) !==
+    // Navigator.prototype (install_all's gen_tmpl.prototype).
+    // Trade-off: navigator instanceof EventTarget = False (our gen_tmpl
+    // was created with parent=None, not EventTarget).
+    // See TODO-infrastructure.md for full analysis.
     if let Some(func) = nav_tmpl.get_function(scope) {
         let ctor_key = crate::v8_utils::v8_string(scope, "Navigator");
         global.define_own_property(

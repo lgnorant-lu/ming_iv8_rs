@@ -61,7 +61,7 @@ impl BehaviorProbe for GeolocationProbe {
             }
         }
 
-        match eval_bool(kernel, "'prototype' in Object.getOwnPropertyDescriptor(Navigator.prototype, 'geolocation').get") {
+        match eval_bool(kernel, "'prototype' in Object.getOwnPropertyDescriptor(navigator.__proto__, 'geolocation').get") {
             Some(false) => {}
             v => {
                 return ProbeResult::Fail {

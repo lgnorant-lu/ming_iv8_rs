@@ -62,7 +62,7 @@ impl BehaviorProbe for ClipboardProbe {
 
         match eval_bool(
             kernel,
-            "'prototype' in Object.getOwnPropertyDescriptor(Navigator.prototype, 'clipboard').get",
+            "'prototype' in Object.getOwnPropertyDescriptor(navigator.__proto__, 'clipboard').get",
         ) {
             Some(false) => {}
             v => {

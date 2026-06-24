@@ -101,6 +101,10 @@ pub struct RuntimeState {
 
     /// Shared cross-kernel localStorage backend.
     pub local_storage: RefCell<Option<crate::dom::local_storage::LocalStorageStore>>,
+
+    /// Global FunctionTemplates from install_all, stored for post-install
+    /// prototype chain fixes (e.g., Navigator inherits EventTarget).
+    pub codegen_templates: RefCell<std::collections::HashMap<String, v8::Global<v8::FunctionTemplate>>>,
 }
 
 /// Time mode for the JS context.
@@ -156,6 +160,7 @@ impl RuntimeState {
             canvases: RefCell::new(std::collections::HashMap::new()),
             heap_registry: RefCell::new(Vec::new()),
             local_storage: RefCell::new(local_storage),
+            codegen_templates: RefCell::new(std::collections::HashMap::new()),
         }
     }
 

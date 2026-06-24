@@ -60,7 +60,7 @@ impl BehaviorProbe for CredentialsProbe {
             }
         }
 
-        match eval_bool(kernel, "'prototype' in Object.getOwnPropertyDescriptor(Navigator.prototype, 'credentials').get") {
+        match eval_bool(kernel, "'prototype' in Object.getOwnPropertyDescriptor(navigator.__proto__, 'credentials').get") {
             Some(false) => {}
             v => {
                 return ProbeResult::Fail {
