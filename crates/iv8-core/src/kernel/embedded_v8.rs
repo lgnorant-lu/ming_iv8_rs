@@ -944,6 +944,11 @@ impl EmbeddedV8Kernel {
             return opts;
         }};
         // Wrap constructor to inject default timezone
+        // Guard against re-entrancy: use a flag on the original constructor
+        // to prevent re-wrapping if this shim is evaluated multiple times.
+        if (_origDTF.__iv8_tz_wrapped) {{
+            return;
+        }}
         var _wrappedDTF = function(locales, options) {{
             if (!options) options = {{}};
             if (!options.timeZone) options.timeZone = _tz_val;
@@ -954,7 +959,10 @@ impl EmbeddedV8Kernel {
         }};
         _wrappedDTF.prototype = _origProto;
         _wrappedDTF.supportedLocalesOf = _origDTF.supportedLocalesOf;
-        try {{ Intl.DateTimeFormat = _wrappedDTF; }} catch(e) {{}}
+        try {{
+            _origDTF.__iv8_tz_wrapped = true;
+            Intl.DateTimeFormat = _wrappedDTF;
+        }} catch(e) {{}}
     }}
 }})();
 "#,

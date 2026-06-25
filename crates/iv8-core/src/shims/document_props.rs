@@ -262,7 +262,14 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     Object.defineProperty(document, 'characterSet', { get: function() { return 'UTF-8'; }, configurable: true });
     Object.defineProperty(document, 'contentType', { get: function() { return 'text/html'; }, configurable: true });
     Object.defineProperty(document, 'compatMode', { get: function() { return 'CSS1Compat'; }, configurable: true });
-    Object.defineProperty(document, 'lastModified', { get: function() { return new Date().toLocaleString(); }, configurable: true });
+    // Cache lastModified at install time using a non-Intl date format to
+    // avoid Intl.DateTimeFormat re-entrancy OOM. Real Chrome formats this
+    // as "MM/DD/YYYY HH:MM:SS" from the document's last-modified header.
+    var _now = new Date();
+    var _iv8LastModified = (_now.getMonth()+1) + '/' + _now.getDate() + '/' +
+        _now.getFullYear() + ' ' + _now.getHours() + ':' +
+        ('0'+_now.getMinutes()).slice(-2) + ':' + ('0'+_now.getSeconds()).slice(-2);
+    Object.defineProperty(document, 'lastModified', { get: function() { return _iv8LastModified; }, configurable: true });
     Object.defineProperty(document, 'fullscreenEnabled', { get: function() { return false; }, configurable: true });
     Object.defineProperty(document, 'pictureInPictureEnabled', { get: function() { return false; }, configurable: true });
 
