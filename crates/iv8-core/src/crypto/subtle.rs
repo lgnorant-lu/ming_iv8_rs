@@ -23,6 +23,8 @@ use sha2::{Digest, Sha256, Sha384, Sha512};
 // AES-CBC
 use aes::Aes128;
 use cbc::cipher::{BlockDecryptMut, BlockEncryptMut, KeyIvInit};
+use ctr::Ctr32BE;
+use ctr::cipher::StreamCipher;
 use cbc::{Decryptor as CbcDecryptor, Encryptor as CbcEncryptor};
 
 use crate::crypto::ec_impl::{EcCurve, EcKeyMaterial};
@@ -1193,6 +1195,25 @@ unsafe extern "C" fn subtle_encrypt(info: *const v8::FunctionCallbackInfo) {
                 };
                 aes_cbc_encrypt(&key_bytes, &iv, &plaintext)
             }
+            "AESCTR" => {
+                let key_bytes = match key_bytes_opt {
+                    Some(k) => k,
+                    None => {
+                        let msg = crate::v8_utils::v8_string(scope, "encrypt: invalid key");
+                        resolver.reject(scope, v8::Exception::error(scope, msg));
+                        return;
+                    }
+                };
+                let iv = match iv {
+                    Some(iv) => iv,
+                    None => {
+                        let msg = crate::v8_utils::v8_string(scope, "encrypt: AES-CTR requires counter");
+                        resolver.reject(scope, v8::Exception::error(scope, msg));
+                        return;
+                    }
+                };
+                aes_ctr_encrypt(&key_bytes, &iv, &plaintext)
+            }
             "RSAOAEP" => {
                 if let Some(meta) = extract_key_meta(scope, args.get(1)) {
                     match meta_to_rsa_public(&meta) {
@@ -1307,6 +1328,25 @@ unsafe extern "C" fn subtle_decrypt(info: *const v8::FunctionCallbackInfo) {
                     }
                 };
                 aes_cbc_decrypt(&key_bytes, &iv, &ciphertext)
+            }
+            "AESCTR" => {
+                let key_bytes = match key_bytes_opt {
+                    Some(k) => k,
+                    None => {
+                        let msg = crate::v8_utils::v8_string(scope, "decrypt: invalid key");
+                        resolver.reject(scope, v8::Exception::error(scope, msg));
+                        return;
+                    }
+                };
+                let iv = match iv {
+                    Some(iv) => iv,
+                    None => {
+                        let msg = crate::v8_utils::v8_string(scope, "decrypt: AES-CTR requires counter");
+                        resolver.reject(scope, v8::Exception::error(scope, msg));
+                        return;
+                    }
+                };
+                aes_ctr_decrypt(&key_bytes, &iv, &ciphertext)
             }
             "RSAOAEP" => {
                 if let Some(meta) = extract_key_meta(scope, args.get(1)) {
@@ -1726,6 +1766,37 @@ fn aes_cbc_decrypt(key: &[u8], iv: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, 
         }
     }
     Ok(plaintext)
+}
+
+/// AES-CTR encrypt (stream cipher, no padding needed).
+fn aes_ctr_encrypt(key: &[u8], counter: &[u8], plaintext: &[u8]) -> Result<Vec<u8>, String> {
+    if key.len() != 16 && key.len() != 32 {
+        return Err(format!(
+            "AES-CTR: unsupported key length {} (need 16 or 32)",
+            key.len()
+        ));
+    }
+    if counter.len() != 16 {
+        return Err("AES-CTR: counter must be 16 bytes".to_string());
+    }
+    let mut buf = plaintext.to_vec();
+    match key.len() {
+        16 => {
+            let mut cipher = Ctr32BE::<Aes128>::new(key.into(), counter.into());
+            cipher.apply_keystream(&mut buf);
+        }
+        32 => {
+            let mut cipher = Ctr32BE::<aes::Aes256>::new(key.into(), counter.into());
+            cipher.apply_keystream(&mut buf);
+        }
+        _ => unreachable!(),
+    }
+    Ok(buf)
+}
+
+/// AES-CTR decrypt (same as encrypt for stream cipher).
+fn aes_ctr_decrypt(key: &[u8], counter: &[u8], ciphertext: &[u8]) -> Result<Vec<u8>, String> {
+    aes_ctr_encrypt(key, counter, ciphertext)
 }
 
 /// crypto.subtle.generateKey(algorithm, extractable, usages) → Promise<CryptoKey | CryptoKeyPair>

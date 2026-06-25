@@ -55,6 +55,7 @@ hmac = "0.12"
 aes-gcm = "0.10"
 cbc = { version = "0.1", features = ["alloc"] }
 aes = "0.8"
+ctr = "0.9"
 # RSA + ECDSA/ECDH
 rsa = { version = "0.9", features = ["sha2"] }
 p256 = { version = "0.13", features = ["ecdsa", "ecdh"] }

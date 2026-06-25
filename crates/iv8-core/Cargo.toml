@@ -48,6 +48,7 @@ swc_ecma_ast = "25"
 swc_ecma_parser = "41"
 swc_ecma_visit = "25"
 swc_ecma_codegen = "28"
+ctr = "0.9"
 
 [features]
 default = []
