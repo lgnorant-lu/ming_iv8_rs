@@ -295,7 +295,7 @@
   "webgl.SHADING_LANGUAGE_VERSION": "WebGL GLSL ES 1.0 (OpenGL ES GLSL ES 1.0 Chromium)",
   "webgl.STENCIL_BITS": 0,
   "webgl.SUBPIXEL_BITS": 4,
-  "webgl.UNMASKED_RENDERER_WEBGL": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "webgl.UNMASKED_RENDERER_WEBGL": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) Direct3D11 vs_5_0 ps_5_0, D3D11)",
   "webgl.UNMASKED_VENDOR_WEBGL": "Google Inc. (NVIDIA)",
   "webgl.VENDOR": "WebKit",
   "webgl.VERSION": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
