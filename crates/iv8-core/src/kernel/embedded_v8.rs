@@ -2861,4 +2861,90 @@ mod tests {
             other => panic!("expected string from eval.toString(), got {:?}", other),
         }
     }
+
+    #[test]
+    fn event_loop_microtask_drain_alignment_v080() {
+        // B4: Verify microtask drain happens after eval (HTML spec alignment).
+        // Promise.then callbacks are microtasks that should drain before
+        // the next eval call.
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+
+        // Set up a microtask via Promise.resolve().then()
+        kernel
+            .eval(
+                "globalThis.__mt_result = 'before'; Promise.resolve().then(function() { globalThis.__mt_result = 'after'; })",
+                EvalOpts::default(),
+            )
+            .ok();
+
+        // After eval returns, microtasks should have drained
+        let result = kernel.eval_to_rust_value("globalThis.__mt_result");
+        assert_eq!(
+            result,
+            crate::convert::RustValue::String("after".into()),
+            "microtask should drain after eval (HTML spec microtask checkpoint)"
+        );
+    }
+
+    #[test]
+    fn event_loop_settimeout_order_alignment_v080() {
+        // B4: Verify setTimeout callbacks execute in registration order.
+        // Note: setTimeout timers require event loop time advancement to fire.
+        // page_load does not auto-advance time, so we verify the timer queue
+        // accepts registrations and IDs are sequential.
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+
+        // setTimeout returns timer IDs that should be sequential
+        let id1 = kernel.eval_to_rust_value("setTimeout(function(){}, 0)");
+        let id2 = kernel.eval_to_rust_value("setTimeout(function(){}, 0)");
+        let id3 = kernel.eval_to_rust_value("setTimeout(function(){}, 0)");
+
+        // Timer IDs should be sequential positive integers
+        let id_vals: Vec<i64> = [id1, id2, id3]
+            .iter()
+            .map(|v| match v {
+                crate::convert::RustValue::Int(i) => *i,
+                _ => -1,
+            })
+            .collect();
+        assert!(id_vals[0] >= 1, "first timer ID should be >= 1, got {}", id_vals[0]);
+        assert_eq!(
+            id_vals[1],
+            id_vals[0] + 1,
+            "second timer ID should be sequential"
+        );
+        assert_eq!(
+            id_vals[2],
+            id_vals[0] + 2,
+            "third timer ID should be sequential"
+        );
+    }
+
+    #[test]
+    fn event_loop_microtask_before_macrotask_v080() {
+        // B4: Verify microtasks drain after eval (HTML spec microtask checkpoint).
+        // Promise.then is a microtask that drains before the next eval.
+        // setTimeout is a macrotask that requires event loop time advancement.
+        let mut kernel = EmbeddedV8Kernel::new(KernelConfig::default()).unwrap();
+
+        // Register a microtask and a macrotask
+        kernel
+            .eval(
+                r#"
+                globalThis.__seq = [];
+                setTimeout(function() { globalThis.__seq.push('timeout'); }, 0);
+                Promise.resolve().then(function() { globalThis.__seq.push('microtask'); });
+                "#,
+                EvalOpts::default(),
+            )
+            .ok();
+
+        // After eval, microtask should have drained but macrotask should not
+        let result = kernel.eval_to_rust_value("globalThis.__seq.join(',')");
+        assert_eq!(
+            result,
+            crate::convert::RustValue::String("microtask".into()),
+            "microtask must drain after eval; setTimeout macrotask should NOT fire yet"
+        );
+    }
 }
