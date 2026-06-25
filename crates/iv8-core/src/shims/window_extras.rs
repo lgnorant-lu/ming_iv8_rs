@@ -47,6 +47,30 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         globalThis.HTMLDocument = HTMLDocument;
     }
 
+    // Document properties that RS VMP and other samples may access
+    if (typeof document !== 'undefined') {
+        if (document.activeElement === undefined) {
+            Object.defineProperty(document, 'activeElement', { get: function() { return document.body || null; }, configurable: true });
+        }
+        if (document.styleSheets === undefined) {
+            document.styleSheets = [];
+        }
+        if (document.fullscreenElement === undefined) {
+            Object.defineProperty(document, 'fullscreenElement', { get: function() { return null; }, configurable: true });
+        }
+        if (document.pointerLockElement === undefined) {
+            Object.defineProperty(document, 'pointerLockElement', { get: function() { return null; }, configurable: true });
+        }
+        // Event handler stubs (RS checks typeof)
+        var _eventHandlers = ['onmousemove', 'ontouchstart', 'ontouchend', 'ontouchmove',
+            'onkeydown', 'onkeyup', 'onkeypress', 'ondragstart', 'oncontextmenu'];
+        for (var _i = 0; _i < _eventHandlers.length; _i++) {
+            if (document[_eventHandlers[_i]] === undefined) {
+                document[_eventHandlers[_i]] = null;
+            }
+        }
+    }
+
     // performance.timing stub
     if (typeof performance !== 'undefined' && !performance.timing) {
         var _navStart = Date.now() - Math.floor(performance.now());
