@@ -243,7 +243,39 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         document.exitPointerLock = function() {};
     }
     if (!document.fonts) {
-        document.fonts = { ready: Promise.resolve(), check: function() { return true; }, load: function() { return Promise.resolve([]); }, forEach: function() {} };
+        var _fontPrefs = (typeof globalThis.__iv8FontPrefs === 'object' && globalThis.__iv8FontPrefs) ? globalThis.__iv8FontPrefs : {};
+        var _fontFamilies = _fontPrefs.families || [];
+        var _fontSet = {
+            ready: Promise.resolve(),
+            status: 'loaded',
+            onloading: null,
+            onloadingdone: null,
+            onloadingerror: null,
+            size: _fontFamilies.length,
+            check: function(font, text) {
+                // Return true if the font is in the profile's family list
+                if (!font) return true;
+                var m = font.match(/["']?([^"']+)["']?/);
+                var family = m ? m[1].toLowerCase() : font.toLowerCase();
+                if (family.indexOf('sans-serif') !== -1 || family.indexOf('serif') !== -1 ||
+                    family.indexOf('monospace') !== -1 || family.indexOf('cursive') !== -1 ||
+                    family.indexOf('fantasy') !== -1) return true;
+                return _fontFamilies.some(function(f) { return f.toLowerCase() === family; });
+            },
+            load: function(font, text) { return Promise.resolve([]); },
+            forEach: function(cb) {
+                _fontFamilies.forEach(function(f, i) {
+                    cb({ family: f, status: 'loaded', weight: 'normal', style: 'normal', display: 'auto' }, i, _fontSet);
+                });
+            },
+            values: function() { return _fontFamilies.map(function(f) { return { family: f, status: 'loaded' }; }).values(); },
+            entries: function() { return _fontFamilies.map(function(f, i) { return [i, { family: f, status: 'loaded' }]; }).entries(); },
+            keys: function() { return _fontFamilies.keys(); },
+            add: function(fontFace) {},
+            delete: function(fontFace) {},
+            clear: function() {},
+        };
+        document.fonts = _fontSet;
     }
     if (!document.timeline) {
         document.timeline = { currentTime: performance.now() };

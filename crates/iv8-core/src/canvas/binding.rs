@@ -264,8 +264,14 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
                 var sizeMatch = font.match(/(\d+(?:\.\d+)?)(px|pt|em)/);
                 var fontSize = sizeMatch ? parseFloat(sizeMatch[1]) : 10;
                 if (sizeMatch && sizeMatch[2] === 'pt') fontSize *= 1.333;
-                var isMonospace = /monospace|courier|mono/i.test(font);
-                var isSerif = /serif/i.test(font) && !/sans-serif/i.test(font);
+                // Check if the font family is in the profile's font list
+                var fontPrefs = (typeof globalThis.__iv8FontPrefs === 'object' && globalThis.__iv8FontPrefs) ? globalThis.__iv8FontPrefs : {};
+                var families = fontPrefs.families || [];
+                var fontMatch = font.match(/["']?([^"']+)["']?\s*$/);
+                var fontName = fontMatch ? fontMatch[1].toLowerCase() : '';
+                var isKnown = families.some(function(f) { return f.toLowerCase() === fontName; });
+                var isMonospace = /monospace|courier|mono/i.test(font) || (isKnown && /consolas|menlo|monaco|lucida/i.test(fontName));
+                var isSerif = /serif/i.test(font) && !/sans-serif/i.test(font) || (isKnown && /times|georgia|garamond/i.test(fontName));
                 var charWidth = isMonospace ? fontSize * 0.6 : isSerif ? fontSize * 0.55 : fontSize * 0.5;
                 var width = (text || '').length * charWidth;
                 return {

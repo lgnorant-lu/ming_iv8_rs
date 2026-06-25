@@ -978,6 +978,7 @@ impl EmbeddedV8Kernel {
         );
 
         // 19. Install document properties (cookie, referrer, hidden, visibilityState, DOM methods)
+        self.inject_font_prefs();
         self.eval(
             crate::shims::document_props::DOCUMENT_PROPS_JS,
             crate::kernel::EvalOpts::default(),
@@ -1136,6 +1137,52 @@ impl EmbeddedV8Kernel {
         let js = format!(
             "globalThis.__iv8AudioPrefs = {{ baseLatency: {}, outputLatency: {}, channelDataSeed: {} }};",
             base_latency, output_latency, channel_data_seed as i64
+        );
+        self.eval(&js, crate::kernel::EvalOpts::default()).ok();
+    }
+
+    /// Inject font preferences from the environment map into the JS context
+    /// as `globalThis.__iv8FontPrefs`. The measureText shim and document.fonts
+    /// FontFaceSet read these values for font-aware behavior.
+    fn inject_font_prefs(&mut self) {
+        let state = RuntimeState::get(&self.isolate);
+        let fonts_mode = state
+            .environment
+            .get_str("fonts.mode")
+            .unwrap_or("common")
+            .to_string();
+        let families_json = state
+            .environment
+            .get("fonts.families")
+            .and_then(|v| v.as_array())
+            .map(|arr| {
+                let names: Vec<String> = arr
+                    .iter()
+                    .filter_map(|v| v.as_str().map(|s| s.to_string()))
+                    .collect();
+                serde_json::to_string(&names).unwrap_or_else(|_| "[]".into())
+            })
+            .unwrap_or_else(|| {
+                // Default common Windows fonts
+                let default_fonts: Vec<&str> = vec![
+                    "Arial", "Arial Black", "Arial Narrow", "Calibri", "Cambria",
+                    "Cambria Math", "Comic Sans MS", "Consolas", "Courier New",
+                    "Ebrima", "Franklin Gothic Medium", "Gabriola", "Gadugi",
+                    "Georgia", "Impact", "Javanese Text", "Leelawadee UI",
+                    "Lucida Console", "Lucida Sans Unicode", "Malgun Gothic",
+                    "MV Boli", "Microsoft Sans Serif", "MingLiU-ExtB",
+                    "Mongolian Baiti", "MS Gothic", "Nirmala UI",
+                    "Palatino Linotype", "Segoe MDL2 Assets", "Segoe Print",
+                    "Segoe Script", "Segoe UI", "Segoe UI Emoji",
+                    "Segoe UI Historic", "Segoe UI Symbol", "SimSun",
+                    "Sitka Small", "Sylfaen", "Tahoma", "Times New Roman",
+                    "Trebuchet MS", "Verdana", "Webdings", "Wingdings",
+                ];
+                serde_json::to_string(&default_fonts).unwrap_or_else(|_| "[]".into())
+            });
+        let js = format!(
+            "globalThis.__iv8FontPrefs = {{ mode: '{}', families: {} }};",
+            fonts_mode, families_json
         );
         self.eval(&js, crate::kernel::EvalOpts::default()).ok();
     }
