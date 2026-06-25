@@ -837,11 +837,16 @@ impl EmbeddedV8Kernel {
         .ok();
 
         // 8. Install XMLHttpRequest class shim
-        self.eval(
-            crate::network::xhr::XHR_SHIM_JS,
-            crate::kernel::EvalOpts::default(),
-        )
-        .ok();
+        // Skip when skip_native_behaviors=true: install_xhr (called via BCR in
+        // install_browser_surface_init) already eval'd XHR_SHIM_JS. Re-eval
+        // would overwrite the constructor and its prototype chain.
+        if !skip_native_behaviors {
+            self.eval(
+                crate::network::xhr::XHR_SHIM_JS,
+                crate::kernel::EvalOpts::default(),
+            )
+            .ok();
+        }
 
         // 9. Install TextEncoder/TextDecoder polyfill
         self.eval(TEXT_ENCODER_SHIM, crate::kernel::EvalOpts::default())

@@ -8,6 +8,8 @@
 use crate::state::RuntimeState;
 
 /// Install XMLHttpRequest as a JS class via shim.
+/// Installs both the native __xhr_send__ callback and the XHR_SHIM_JS
+/// that creates the JS-level XMLHttpRequest constructor.
 pub fn install_xhr(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // Install native __xhr_send__(method, url) → {status, responseText} or null
     let send_tmpl = v8::FunctionTemplate::builder_raw(xhr_send_callback).build(scope);
@@ -19,6 +21,17 @@ pub fn install_xhr(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) 
         send_fn.into(),
         v8::PropertyAttribute::DONT_ENUM,
     );
+
+    // Eval XHR_SHIM_JS to create the JS-level XMLHttpRequest constructor.
+    // This is the single source of truth for XHR_SHIM_JS eval —
+    // install_undetect_shims skips XHR_SHIM_JS when skip_native_behaviors=true.
+    let script = v8::Script::compile(
+        scope,
+        crate::v8_utils::v8_string(scope, XHR_SHIM_JS),
+        None,
+    )
+    .unwrap();
+    let _ = script.run(scope);
 }
 
 /// JS shim that creates the XMLHttpRequest class.
