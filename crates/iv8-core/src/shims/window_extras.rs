@@ -220,6 +220,17 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         ResizeObserver.prototype.observe = function(target, options) {};
         ResizeObserver.prototype.unobserve = function(target) {};
         ResizeObserver.prototype.disconnect = function() {};
+        ResizeObserver.prototype.takeRecords = function() { return []; };
+    }
+
+    // ReportingObserver stub
+    if (typeof ReportingObserver === 'undefined') {
+        globalThis.ReportingObserver = function ReportingObserver(callback, options) {
+            this._callback = callback;
+        };
+        ReportingObserver.prototype.observe = function() {};
+        ReportingObserver.prototype.disconnect = function() {};
+        ReportingObserver.prototype.takeRecords = function() { return []; };
     }
 
     // Blob stub
@@ -561,6 +572,62 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         Range.prototype.cloneContents = function() { return document.createDocumentFragment(); };
         Range.START_TO_START = 0; Range.START_TO_END = 1;
         Range.END_TO_END = 2; Range.END_TO_START = 3;
+    }
+
+    // P1: Notification.requestPermission returns Promise
+    if (typeof Notification !== 'undefined' && Notification.requestPermission) {
+        Notification.requestPermission = function() {
+            return Promise.resolve(Notification.permission || 'default');
+        };
+    }
+
+    // P1: BroadcastChannel name echo
+    if (typeof BroadcastChannel !== 'undefined') {
+        var _origBCProto = BroadcastChannel.prototype;
+        globalThis.BroadcastChannel = function BroadcastChannel(name) {
+            this.name = name || '';
+            this.onmessage = null;
+            this.onmessageerror = null;
+        };
+        globalThis.BroadcastChannel.prototype = _origBCProto;
+        if (!_origBCProto.postMessage) _origBCProto.postMessage = function(data) {};
+        if (!_origBCProto.close) _origBCProto.close = function() {};
+    }
+
+    // P1: navigator.getInstalledRelatedApps returns Promise
+    if (typeof navigator !== 'undefined' && typeof navigator.getInstalledRelatedApps === 'function') {
+        navigator.getInstalledRelatedApps = function() { return Promise.resolve([]); };
+    }
+
+    // P1: navigator.wakeLock.request returns Promise
+    if (typeof navigator !== 'undefined' && navigator.wakeLock && typeof navigator.wakeLock.request === 'undefined') {
+        navigator.wakeLock.request = function(type) {
+            return Promise.resolve({
+                type: type || 'screen', released: false,
+                release: function() { this.released = true; return Promise.resolve(); },
+                addEventListener: function() {}, removeEventListener: function() {},
+                dispatchEvent: function() { return true; }
+            });
+        };
+    }
+
+    // P1: PaymentRequest show/canMakePayment return Promises
+    if (typeof PaymentRequest !== 'undefined') {
+        PaymentRequest.prototype.show = function() { return Promise.reject(new DOMException('AbortError')); };
+        PaymentRequest.prototype.canMakePayment = function() { return Promise.resolve(false); };
+        PaymentRequest.prototype.abort = function() { return Promise.reject(new DOMException('InvalidStateError')); };
+    }
+
+    // P1: desktop-only APIs should be undefined
+    if (typeof navigator !== 'undefined') {
+        try {
+            if (navigator.contacts && Object.keys(navigator.contacts).length === 0) {
+                Object.defineProperty(navigator, 'contacts', { value: undefined, writable: true, configurable: true });
+            }
+            if (navigator.virtualKeyboard && Object.keys(navigator.virtualKeyboard).length === 0) {
+                Object.defineProperty(navigator, 'virtualKeyboard', { value: undefined, writable: true, configurable: true });
+            }
+        } catch(e) {}
     }
 })();
 "#;

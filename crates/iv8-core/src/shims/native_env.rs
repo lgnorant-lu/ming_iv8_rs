@@ -747,8 +747,33 @@ unsafe extern "C" fn nav_service_worker(info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let obj = v8::Object::new(scope);
-        let state_key = crate::v8_utils::v8_string(scope, "controller");
-        obj.set(scope, state_key.into(), v8::null(scope).into());
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        obj.set(scope, s("controller").into(), v8::null(scope).into());
+        obj.set(scope, s("ready").into(), v8::null(scope).into());
+        // register(scriptURL) → Promise<ServiceWorkerRegistration>
+        let register_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("register"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("register").into(), register_fn.into());
+        // getRegistration → Promise<undefined>
+        let get_reg_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("getRegistration"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("getRegistration").into(), get_reg_fn.into());
+        // getRegistrations → Promise<[]>
+        let get_regs_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_empty_array).build(scope);
+            tmpl.set_class_name(s("getRegistrations"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("getRegistrations").into(), get_regs_fn.into());
         rv.set(obj.into());
     }));
 }
@@ -888,6 +913,42 @@ unsafe extern "C" fn stub_noop(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+// Stub that returns Promise.resolve() — for APIs that should return Promises
+unsafe extern "C" fn stub_promise_resolve(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        resolver.resolve(scope, v8::undefined(scope).into());
+        rv.set(resolver.get_promise(scope).into());
+    }));
+}
+
+// Stub that returns Promise.resolve(null) — for APIs that resolve to null
+unsafe extern "C" fn stub_promise_resolve_null(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        resolver.resolve(scope, v8::null(scope).into());
+        rv.set(resolver.get_promise(scope).into());
+    }));
+}
+
+// Stub that returns Promise.resolve([]) — for APIs that resolve to empty array
+unsafe extern "C" fn stub_promise_resolve_empty_array(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let resolver = crate::v8_utils::v8_resolver(scope);
+        resolver.resolve(scope, v8::Array::new(scope, 0).into());
+        rv.set(resolver.get_promise(scope).into());
+    }));
+}
+
 // navigator.geolocation → object with stub methods
 unsafe extern "C" fn nav_geolocation(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -922,7 +983,7 @@ unsafe extern "C" fn nav_geolocation(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-// navigator.clipboard → object with stub methods
+// navigator.clipboard → object with Promise-returning methods
 unsafe extern "C" fn nav_clipboard(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -930,20 +991,26 @@ unsafe extern "C" fn nav_clipboard(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let obj = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
-        let build_stub = |name: &str| {
-            let tmpl = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+        let build_promise_stub = |name: &str, cb: unsafe extern "C" fn(*const v8::FunctionCallbackInfo)| {
+            let tmpl = v8::FunctionTemplate::builder_raw(cb).build(scope);
             let name_str = crate::v8_utils::v8_string(scope, name);
             tmpl.set_class_name(name_str);
             tmpl.remove_prototype();
             crate::v8_utils::v8_fn(scope, &tmpl)
         };
-        obj.set(scope, s("readText").into(), build_stub("readText").into());
-        obj.set(scope, s("writeText").into(), build_stub("writeText").into());
+        // readText → Promise<String> (returns empty string)
+        // writeText → Promise<void>
+        // read → Promise<Array> (returns empty array)
+        // write → Promise<void>
+        obj.set(scope, s("readText").into(), build_promise_stub("readText", stub_promise_resolve).into());
+        obj.set(scope, s("writeText").into(), build_promise_stub("writeText", stub_promise_resolve).into());
+        obj.set(scope, s("read").into(), build_promise_stub("read", stub_promise_resolve_empty_array).into());
+        obj.set(scope, s("write").into(), build_promise_stub("write", stub_promise_resolve).into());
         rv.set(obj.into());
     }));
 }
 
-// navigator.credentials → object with stub methods
+// navigator.credentials → object with Promise-returning methods
 unsafe extern "C" fn nav_credentials(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -951,21 +1018,21 @@ unsafe extern "C" fn nav_credentials(info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let obj = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
-        let build_stub = |name: &str| {
-            let tmpl = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+        let build_promise_stub = |name: &str, cb: unsafe extern "C" fn(*const v8::FunctionCallbackInfo)| {
+            let tmpl = v8::FunctionTemplate::builder_raw(cb).build(scope);
             let name_str = crate::v8_utils::v8_string(scope, name);
             tmpl.set_class_name(name_str);
             tmpl.remove_prototype();
             crate::v8_utils::v8_fn(scope, &tmpl)
         };
-        obj.set(scope, s("get").into(), build_stub("get").into());
-        obj.set(scope, s("create").into(), build_stub("create").into());
-        obj.set(scope, s("store").into(), build_stub("store").into());
-        obj.set(
-            scope,
-            s("preventSilentAccess").into(),
-            build_stub("preventSilentAccess").into(),
-        );
+        // get → Promise<Credential|null> (resolves null — no credentials)
+        // create → Promise<Credential|null> (resolves null)
+        // store → Promise<Credential|null> (resolves null)
+        // preventSilentAccess → Promise<void>
+        obj.set(scope, s("get").into(), build_promise_stub("get", stub_promise_resolve_null).into());
+        obj.set(scope, s("create").into(), build_promise_stub("create", stub_promise_resolve_null).into());
+        obj.set(scope, s("store").into(), build_promise_stub("store", stub_promise_resolve_null).into());
+        obj.set(scope, s("preventSilentAccess").into(), build_promise_stub("preventSilentAccess", stub_promise_resolve).into());
         rv.set(obj.into());
     }));
 }
