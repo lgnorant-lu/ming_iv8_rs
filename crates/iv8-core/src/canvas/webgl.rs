@@ -259,8 +259,8 @@ pub const WEBGL_SHIM_JS: &str = r#"
                 return { rangeMin: 30, rangeMax: 30, precision: 0 };
             }
             if (precisionType === 36341) {
-                // HIGH_INT — {31, 31, 0}
-                return { rangeMin: 31, rangeMax: 31, precision: 0 };
+                // HIGH_INT — {31, 30, 0} (Chrome 148 desktop verified)
+                return { rangeMin: 31, rangeMax: 30, precision: 0 };
             }
             return { rangeMin: 0, rangeMax: 0, precision: 0 };
         },
@@ -434,7 +434,7 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
                 rv.set(v8::Integer::new(scope, 16).into());
             }
             GL_MAX_VERTEX_UNIFORM_VECTORS => {
-                rv.set(v8::Integer::new(scope, 4096).into());
+                rv.set(v8::Integer::new(scope, 4095).into());
             }
             GL_MAX_FRAGMENT_UNIFORM_VECTORS => {
                 rv.set(v8::Integer::new(scope, 1024).into());
