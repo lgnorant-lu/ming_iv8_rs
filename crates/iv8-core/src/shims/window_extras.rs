@@ -30,6 +30,23 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         if (!window.history.forward) window.history.forward = function() {};
         if (window.history.state === undefined) window.history.state = null;
     }
+
+    // Ensure window.top/self/parent/frames identity (may be overwritten by codegen)
+    try {
+        Object.defineProperty(window, 'top', { get: function() { return window; }, configurable: true });
+        Object.defineProperty(window, 'self', { get: function() { return window; }, configurable: true });
+        Object.defineProperty(window, 'parent', { get: function() { return window; }, configurable: true });
+        Object.defineProperty(window, 'frames', { get: function() { return window; }, configurable: true });
+    } catch(e) {}
+
+    // HTMLDocument constructor (RS VMP checks document instanceof HTMLDocument)
+    if (typeof HTMLDocument === 'undefined' && typeof document !== 'undefined') {
+        function HTMLDocument() {}
+        HTMLDocument.prototype = Object.getPrototypeOf(document) || {};
+        Object.defineProperty(document, 'constructor', { value: HTMLDocument, writable: true, configurable: true });
+        globalThis.HTMLDocument = HTMLDocument;
+    }
+
     // performance.timing stub
     if (typeof performance !== 'undefined' && !performance.timing) {
         var _navStart = Date.now() - Math.floor(performance.now());
