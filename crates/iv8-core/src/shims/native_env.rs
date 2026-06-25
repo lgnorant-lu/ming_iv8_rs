@@ -348,6 +348,9 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
 /// Install a native WorkerNavigator constructor that inherits from the
 /// generated create_worker_navigator_template and uses illegal_constructor
 /// so that `new WorkerNavigator()` throws TypeError.
+/// Note: parent=None is used because we can't get EventTarget FunctionTemplate
+/// from an already-instantiated function. fix_prototype_chains in
+/// embedded_v8.rs patches WorkerNavigator.prototype.__proto__ = EventTarget.prototype.
 fn install_worker_navigator(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
