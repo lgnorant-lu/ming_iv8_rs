@@ -447,14 +447,8 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
                 rv.set(arr.into());
             }
             // Additional WebGL 1.0 parameters (Chrome desktop defaults)
-            0x84E8 => { // GL_MAX_RENDERBUFFER_SIZE already above, this is GL_MAX_TEXTURE_IMAGE_UNITS fallback
-                rv.set(v8::Integer::new(scope, 16).into());
-            }
             0x8872 => { // GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS — Chrome default: 16
                 rv.set(v8::Integer::new(scope, 16).into());
-            }
-            0x8B4D => { // GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS already above, redundant guard
-                rv.set(v8::Integer::new(scope, 32).into());
             }
             0x0D32 => { // GL_MAX_TEXTURE_LOD_BIAS — Chrome default: 2.0
                 rv.set(v8::Number::new(scope, 2.0).into());
@@ -515,6 +509,37 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
             }
             0x8A11 => { // GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT (WebGL2) — 256
                 rv.set(v8::Integer::new(scope, 256).into());
+            }
+            // Remaining WebGL 1.0 parameters
+            0x0D50 => { // GL_SUBPIXEL_BITS — 4
+                rv.set(v8::Integer::new(scope, 4).into());
+            }
+            0x0D52 => { // GL_RED_BITS — 8
+                rv.set(v8::Integer::new(scope, 8).into());
+            }
+            0x0D53 => { // GL_GREEN_BITS — 8
+                rv.set(v8::Integer::new(scope, 8).into());
+            }
+            0x0D54 => { // GL_BLUE_BITS — 8
+                rv.set(v8::Integer::new(scope, 8).into());
+            }
+            0x0D55 => { // GL_ALPHA_BITS — 8
+                rv.set(v8::Integer::new(scope, 8).into());
+            }
+            0x0D56 => { // GL_DEPTH_BITS — 24
+                rv.set(v8::Integer::new(scope, 24).into());
+            }
+            0x0D57 => { // GL_STENCIL_BITS — 0 (Chrome default: no stencil)
+                rv.set(v8::Integer::new(scope, 0).into());
+            }
+            0x8B8B => { // GL_MAX_VARYING_COMPONENTS (WebGL2) — 120
+                rv.set(v8::Integer::new(scope, 120).into());
+            }
+            0x9125 => { // GL_MAX_VERTEX_UNIFORM_COMPONENTS (WebGL2) — 16380
+                rv.set(v8::Integer::new(scope, 16380).into());
+            }
+            0x9127 => { // GL_MAX_FRAGMENT_UNIFORM_COMPONENTS (WebGL2) — 4096
+                rv.set(v8::Integer::new(scope, 4096).into());
             }
             _ => {
                 // Unknown parameter → return null

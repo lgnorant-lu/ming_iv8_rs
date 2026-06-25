@@ -299,5 +299,61 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             configurable: true,
         });
     }
+
+    // PerformanceObserver stub
+    if (typeof PerformanceObserver === 'undefined') {
+        globalThis.PerformanceObserver = function PerformanceObserver(callback) {
+            this._callback = callback;
+        };
+        PerformanceObserver.prototype.observe = function(options) {};
+        PerformanceObserver.prototype.disconnect = function() {};
+        PerformanceObserver.prototype.takeRecords = function() { return []; };
+        PerformanceObserver.supportedEntryTypes = [
+            'element', 'event', 'first-input', 'largest-contentful-paint',
+            'layout-shift', 'longtask', 'mark', 'measure', 'navigation',
+            'paint', 'resource'
+        ];
+    }
+
+    // PerformanceEntry stub (base class)
+    if (typeof PerformanceEntry === 'undefined') {
+        globalThis.PerformanceEntry = function PerformanceEntry() {};
+        PerformanceEntry.prototype.name = '';
+        PerformanceEntry.prototype.entryType = '';
+        PerformanceEntry.prototype.startTime = 0;
+        PerformanceEntry.prototype.duration = 0;
+        PerformanceEntry.prototype.toJSON = function() {
+            return { name: this.name, entryType: this.entryType,
+                     startTime: this.startTime, duration: this.duration };
+        };
+    }
+
+    // performance.getEntries / getEntriesByName / getEntriesByType stubs
+    if (typeof performance !== 'undefined') {
+        if (!performance.getEntries) {
+            performance.getEntries = function() { return []; };
+        }
+        if (!performance.getEntriesByName) {
+            performance.getEntriesByName = function() { return []; };
+        }
+        if (!performance.getEntriesByType) {
+            performance.getEntriesByType = function() { return []; };
+        }
+        if (!performance.mark) {
+            performance.mark = function(name) {};
+        }
+        if (!performance.measure) {
+            performance.measure = function(name, startMark, endMark) {};
+        }
+        if (!performance.clearMarks) {
+            performance.clearMarks = function() {};
+        }
+        if (!performance.clearMeasures) {
+            performance.clearMeasures = function() {};
+        }
+        if (!performance.now) {
+            performance.now = function() { return Date.now() - (performance.timeOrigin || 0); };
+        }
+    }
 })();
 "#;
