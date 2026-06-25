@@ -38,7 +38,8 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
         };
     };
 
-    // getComputedStyle stub
+    // getComputedStyle stub — returns a CSSStyleDeclaration-like object
+    // with Chrome-default computed values for common properties.
     globalThis.getComputedStyle = function(element, pseudoElt) {
         var styles = {
             display: 'block',
@@ -51,13 +52,37 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
             width: 'auto',
             height: 'auto',
             margin: '0px',
+            marginTop: '0px',
+            marginRight: '0px',
+            marginBottom: '0px',
+            marginLeft: '0px',
             padding: '0px',
+            paddingTop: '0px',
+            paddingRight: '0px',
+            paddingBottom: '0px',
+            paddingLeft: '0px',
             border: '0px none rgb(0, 0, 0)',
+            borderTopWidth: '0px',
+            borderRightWidth: '0px',
+            borderBottomWidth: '0px',
+            borderLeftWidth: '0px',
+            boxSizing: 'content-box',
             overflow: 'visible',
             opacity: '1',
             zIndex: 'auto',
             transform: 'none',
             transition: 'all 0s ease 0s',
+            pointerEvents: 'auto',
+            cursor: 'auto',
+            lineHeight: 'normal',
+            fontWeight: '400',
+            fontStyle: 'normal',
+            textTransform: 'none',
+            textAlign: 'start',
+            textDecoration: 'none solid rgb(0, 0, 0)',
+            whiteSpace: 'normal',
+            float: 'none',
+            clear: 'none',
         };
         styles.getPropertyValue = function(prop) {
             var kebab = prop.replace(/([A-Z])/g, '-$1').toLowerCase();

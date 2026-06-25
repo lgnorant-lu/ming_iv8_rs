@@ -246,7 +246,13 @@ pub const WEBGL_SHIM_JS: &str = r#"
         getProgramInfoLog: function() { return ''; },
         getRenderbufferParameter: function() { return null; },
         getShaderInfoLog: function() { return ''; },
-        getShaderPrecisionFormat: function() { return {rangeMin:127,rangeMax:127,precision:23}; },
+        getShaderPrecisionFormat: function(shaderType, precisionType) {
+            var rangeMin = 127, rangeMax = 127, precision = 23;
+            if (precisionType === 36336) { precision = 0; rangeMin = 1; rangeMax = 1; }
+            else if (precisionType === 36337) { precision = 10; rangeMin = 15; rangeMax = 15; }
+            else if (precisionType === 36338) { precision = 23; rangeMin = 127; rangeMax = 127; }
+            return { rangeMin: rangeMin, rangeMax: rangeMax, precision: precision };
+        },
         getShaderSource: function() { return ''; },
         getTexParameter: function() { return null; },
         getUniform: function() { return null; },
@@ -492,7 +498,7 @@ unsafe extern "C" fn webgl_get_extension(info: *const v8::FunctionCallbackInfo) 
                 rv.set(obj.into());
             }
             _ => {
-                rv.set(v8::null(scope).into());
+                rv.set(v8::Object::new(scope).into());
             }
         }
     }));

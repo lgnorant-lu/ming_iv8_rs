@@ -635,6 +635,10 @@ unsafe extern "C" fn permissions_query_cb(info: *const v8::FunctionCallbackInfo)
                         let state_key = crate::v8_utils::v8_string(scope, "state");
                         // Check descriptor name: 'notifications' → 'default',
                         // everything else → 'prompt'
+                        // Permission state mapping aligned with Chrome defaults.
+                        // Auto-granted: sensors/media APIs (Chrome grants by default).
+                        // Prompt: user-decision APIs.
+                        // Denied: deprecated/non-standard.
                         let mut state_str = "prompt";
                         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
                         if args.length() > 0 {
@@ -645,9 +649,22 @@ unsafe extern "C" fn permissions_query_cb(info: *const v8::FunctionCallbackInfo)
                                 let name_key = crate::v8_utils::v8_string(scope, "name");
                                 if let Some(name_val) = desc_obj.get(scope, name_key.into()) {
                                     let name = name_val.to_rust_string_lossy(scope);
-                                    if name == "notifications" {
-                                        state_str = "default";
-                                    }
+                                    state_str = match name.as_str() {
+                                        // Auto-granted (Chrome default)
+                                        "accelerometer" | "gyroscope" | "magnetometer"
+                                        | "ambient-light-sensor" | "background-sync"
+                                        | "midi" | "clipboard-write"
+                                        | "screen-wake-lock" => "granted",
+                                        // User-decision (prompt)
+                                        "geolocation" | "notifications" | "push"
+                                        | "camera" | "microphone" | "bluetooth"
+                                        | "persistent-storage" | "clipboard-read"
+                                        | "idle-detection" | "nfc" | "storage-access"
+                                        | "window-management" | "local-fonts"
+                                        | "payment-handler" | "periodic-background-sync" => "prompt",
+                                        // Deprecated/non-standard (prompt fallback)
+                                        _ => "prompt",
+                                    };
                                 }
                             }
                         }
