@@ -441,11 +441,80 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
                 rv.set(v8::Integer::new(scope, 16384).into());
             }
             GL_MAX_VIEWPORT_DIMS | GL_ALIASED_LINE_WIDTH_RANGE | GL_ALIASED_POINT_SIZE_RANGE => {
-                // Return a Float32Array [1, max]
                 let arr = v8::Array::new(scope, 2);
                 arr.set_index(scope, 0, v8::Number::new(scope, 1.0).into());
                 arr.set_index(scope, 1, v8::Number::new(scope, 16384.0).into());
                 rv.set(arr.into());
+            }
+            // Additional WebGL 1.0 parameters (Chrome desktop defaults)
+            0x84E8 => { // GL_MAX_RENDERBUFFER_SIZE already above, this is GL_MAX_TEXTURE_IMAGE_UNITS fallback
+                rv.set(v8::Integer::new(scope, 16).into());
+            }
+            0x8872 => { // GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS — Chrome default: 16
+                rv.set(v8::Integer::new(scope, 16).into());
+            }
+            0x8B4D => { // GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS already above, redundant guard
+                rv.set(v8::Integer::new(scope, 32).into());
+            }
+            0x0D32 => { // GL_MAX_TEXTURE_LOD_BIAS — Chrome default: 2.0
+                rv.set(v8::Number::new(scope, 2.0).into());
+            }
+            0x84FD => { // GL_MAX_VERTEX_OUTPUT_COMPONENTS (WebGL2) — 120
+                rv.set(v8::Integer::new(scope, 120).into());
+            }
+            0x9122 => { // GL_MAX_FRAGMENT_INPUT_COMPONENTS (WebGL2) — 120
+                rv.set(v8::Integer::new(scope, 120).into());
+            }
+            0x9067 => { // GL_MIN_PROGRAM_TEXEL_OFFSET (WebGL2) — -8
+                rv.set(v8::Integer::new(scope, -8).into());
+            }
+            0x9068 => { // GL_MAX_PROGRAM_TEXEL_OFFSET (WebGL2) — 7
+                rv.set(v8::Integer::new(scope, 7).into());
+            }
+            0x8CDF => { // GL_MAX_SAMPLES (WebGL2) — 8
+                rv.set(v8::Integer::new(scope, 8).into());
+            }
+            0x8D57 => { // GL_MAX_ELEMENTS_INDICES — 1048576
+                rv.set(v8::Integer::new(scope, 1048576).into());
+            }
+            0x8D56 => { // GL_MAX_ELEMENTS_VERTICES — 1048576
+                rv.set(v8::Integer::new(scope, 1048576).into());
+            }
+            0x8073 => { // GL_MAX_3D_TEXTURE_SIZE (WebGL2) — 2048
+                rv.set(v8::Integer::new(scope, 2048).into());
+            }
+            0x84FF => { // GL_MAX_ARRAY_TEXTURE_LAYERS (WebGL2) — 2048
+                rv.set(v8::Integer::new(scope, 2048).into());
+            }
+            0x8CEB => { // GL_MAX_DRAW_BUFFERS (WebGL2) — 8
+                rv.set(v8::Integer::new(scope, 8).into());
+            }
+            0x8CE0 => { // GL_MAX_COLOR_ATTACHMENTS (WebGL2) — 8
+                rv.set(v8::Integer::new(scope, 8).into());
+            }
+            0x9365 => { // GL_MAX_VERTEX_UNIFORM_BLOCKS (WebGL2) — 12
+                rv.set(v8::Integer::new(scope, 12).into());
+            }
+            0x903D => { // GL_MAX_FRAGMENT_UNIFORM_BLOCKS (WebGL2) — 12
+                rv.set(v8::Integer::new(scope, 12).into());
+            }
+            0x8A2E => { // GL_MAX_COMBINED_UNIFORM_BLOCKS (WebGL2) — 24
+                rv.set(v8::Integer::new(scope, 24).into());
+            }
+            0x8A2F => { // GL_MAX_UNIFORM_BUFFER_BINDINGS (WebGL2) — 24
+                rv.set(v8::Integer::new(scope, 24).into());
+            }
+            0x8A30 => { // GL_MAX_UNIFORM_BLOCK_SIZE (WebGL2) — 65536
+                rv.set(v8::Integer::new(scope, 65536).into());
+            }
+            0x8A34 => { // GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS (WebGL2)
+                rv.set(v8::Integer::new(scope, 212988).into());
+            }
+            0x8A33 => { // GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS (WebGL2)
+                rv.set(v8::Integer::new(scope, 200704).into());
+            }
+            0x8A11 => { // GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT (WebGL2) — 256
+                rv.set(v8::Integer::new(scope, 256).into());
             }
             _ => {
                 // Unknown parameter → return null

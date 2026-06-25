@@ -194,6 +194,11 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("mimeTypes", nav_mime_types);
     nav_getter!("connection", nav_connection);
 
+    // navigator.globalPrivacyControl → false (Chrome default, not enabled)
+    nav_getter!("globalPrivacyControl", nav_global_privacy_control);
+
+    // navigator.pdfViewerEnabled is already a profile-backed getter above
+
     let battery_fn = v8::FunctionTemplate::builder_raw(nav_get_battery).build(scope);
     let battery_name = crate::v8_utils::v8_string(scope, "getBattery");
     battery_fn.set_class_name(battery_name);
@@ -786,7 +791,23 @@ unsafe extern "C" fn nav_do_not_track(info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
-// navigator.connection → NetworkInformation-like accessor getter
+// navigator.globalPrivacyControl → false (Chrome default)
+unsafe extern "C" fn nav_global_privacy_control(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let val = state
+            .environment
+            .get_str("navigator.globalPrivacyControl");
+        match val {
+            Some("true") => rv.set(v8::Boolean::new(scope, true).into()),
+            _ => rv.set(v8::Boolean::new(scope, false).into()),
+        }
+    }));
+}
 unsafe extern "C" fn nav_connection(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };

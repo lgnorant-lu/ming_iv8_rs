@@ -266,5 +266,38 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         };
         URL.revokeObjectURL = function revokeObjectURL(url) {};
     }
+
+    // speechSynthesis stub (SpeechSynthesis API)
+    if (typeof speechSynthesis === 'undefined') {
+        globalThis.speechSynthesis = {
+            pending: false,
+            speaking: false,
+            paused: false,
+            onvoiceschanged: null,
+            onstart: null,
+            onend: null,
+            onerror: null,
+            onpause: null,
+            onresume: null,
+            onmark: null,
+            onboundary: null,
+            getVoices: function() { return []; },
+            speak: function() {},
+            cancel: function() {},
+            pause: function() {},
+            resume: function() {},
+            addEventListener: function() {},
+            removeEventListener: function() {},
+            dispatchEvent: function() { return true; },
+        };
+    }
+
+    // navigator.speechSynthesis alias
+    if (typeof navigator !== 'undefined' && !navigator.speechSynthesis) {
+        Object.defineProperty(navigator, 'speechSynthesis', {
+            get: function() { return globalThis.speechSynthesis; },
+            configurable: true,
+        });
+    }
 })();
 "#;
