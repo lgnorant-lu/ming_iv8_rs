@@ -255,8 +255,8 @@ pub const WEBGL_SHIM_JS: &str = r#"
                 return { rangeMin: 127, rangeMax: 127, precision: 23 };
             }
             if (precisionType === 36339 || precisionType === 36340) {
-                // LOW_INT / MEDIUM_INT — {30, 30, 0}
-                return { rangeMin: 30, rangeMax: 30, precision: 0 };
+                // LOW_INT / MEDIUM_INT — {31, 30, 0} (Chrome 148 desktop verified)
+                return { rangeMin: 31, rangeMax: 30, precision: 0 };
             }
             if (precisionType === 36341) {
                 // HIGH_INT — {31, 30, 0} (Chrome 148 desktop verified)
