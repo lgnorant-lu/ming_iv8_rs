@@ -247,11 +247,22 @@ pub const WEBGL_SHIM_JS: &str = r#"
         getRenderbufferParameter: function() { return null; },
         getShaderInfoLog: function() { return ''; },
         getShaderPrecisionFormat: function(shaderType, precisionType) {
-            var rangeMin = 127, rangeMax = 127, precision = 23;
-            if (precisionType === 36336) { precision = 0; rangeMin = 1; rangeMax = 1; }
-            else if (precisionType === 36337) { precision = 10; rangeMin = 15; rangeMax = 15; }
-            else if (precisionType === 36338) { precision = 23; rangeMin = 127; rangeMax = 127; }
-            return { rangeMin: rangeMin, rangeMax: rangeMax, precision: precision };
+            // Desktop Chrome (all GPUs via ANGLE): all float precisions
+            // promoted to IEEE 32-bit, all int precisions to 32-bit int.
+            // Mobile GPUs may use real 16-bit mediump — we are desktop only.
+            if (precisionType === 36336 || precisionType === 36337 || precisionType === 36338) {
+                // LOW_FLOAT / MEDIUM_FLOAT / HIGH_FLOAT — all {127, 127, 23}
+                return { rangeMin: 127, rangeMax: 127, precision: 23 };
+            }
+            if (precisionType === 36339 || precisionType === 36340) {
+                // LOW_INT / MEDIUM_INT — {30, 30, 0}
+                return { rangeMin: 30, rangeMax: 30, precision: 0 };
+            }
+            if (precisionType === 36341) {
+                // HIGH_INT — {31, 31, 0}
+                return { rangeMin: 31, rangeMax: 31, precision: 0 };
+            }
+            return { rangeMin: 0, rangeMax: 0, precision: 0 };
         },
         getShaderSource: function() { return ''; },
         getTexParameter: function() { return null; },
@@ -535,11 +546,57 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
             0x8B8B => { // GL_MAX_VARYING_COMPONENTS (WebGL2) — 120
                 rv.set(v8::Integer::new(scope, 120).into());
             }
-            0x9125 => { // GL_MAX_VERTEX_UNIFORM_COMPONENTS (WebGL2) — 16380
+            0x9125 => { // GL_MAX_FRAGMENT_INPUT_COMPONENTS (WebGL2) — 120
+                rv.set(v8::Integer::new(scope, 120).into());
+            }
+            0x9127 => { // GL_MAX_VERTEX_OUTPUT_COMPONENTS (WebGL2) — 120
+                rv.set(v8::Integer::new(scope, 120).into());
+            }
+            0x8B4A => { // GL_MAX_VERTEX_UNIFORM_COMPONENTS (WebGL2) — 16380
                 rv.set(v8::Integer::new(scope, 16380).into());
             }
-            0x9127 => { // GL_MAX_FRAGMENT_UNIFORM_COMPONENTS (WebGL2) — 4096
+            0x8B49 => { // GL_MAX_FRAGMENT_UNIFORM_COMPONENTS (WebGL2) — 4096
                 rv.set(v8::Integer::new(scope, 4096).into());
+            }
+            0x8B4B => { // GL_MAX_VARYING_COMPONENTS (WebGL2) — 120
+                rv.set(v8::Integer::new(scope, 120).into());
+            }
+            // Additional CreepJS-queried pname values
+            0x8D6B => { // GL_MAX_ELEMENT_INDEX (WebGL2) — 4294967295 (as float)
+                rv.set(v8::Number::new(scope, 4294967295.0).into());
+            }
+            0x9111 => { // GL_MAX_SERVER_WAIT_TIMEOUT (WebGL2) — 0
+                rv.set(v8::Integer::new(scope, 0).into());
+            }
+            0x8C8A => { // GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS — 120
+                rv.set(v8::Integer::new(scope, 120).into());
+            }
+            0x8C8B => { // GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS — 4
+                rv.set(v8::Integer::new(scope, 4).into());
+            }
+            0x8C80 => { // GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS — 120
+                rv.set(v8::Integer::new(scope, 120).into());
+            }
+            0x9247 => { // GL_MAX_CLIENT_WAIT_TIMEOUT_WEBGL — 0
+                rv.set(v8::Integer::new(scope, 0).into());
+            }
+            0x86A2 => { // GL_NUM_COMPRESSED_TEXTURE_FORMATS — 0
+                rv.set(v8::Integer::new(scope, 0).into());
+            }
+            0x8192 => { // GL_GENERATE_MIPMAP_HINT — DONT_CARE (0x1100)
+                rv.set(v8::Integer::new(scope, 4352).into());
+            }
+            0x0B21 => { // GL_LINE_WIDTH — 1.0
+                rv.set(v8::Number::new(scope, 1.0).into());
+            }
+            0x80A8 => { // GL_SAMPLE_BUFFERS — 1
+                rv.set(v8::Integer::new(scope, 1).into());
+            }
+            0x80A9 => { // GL_SAMPLES — 4
+                rv.set(v8::Integer::new(scope, 4).into());
+            }
+            0x84FF => { // GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT — 16.0
+                rv.set(v8::Number::new(scope, 16.0).into());
             }
             _ => {
                 // Unknown parameter → return null
