@@ -356,6 +356,24 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         }
     }
 
+    // CookieStore API stub (modern cookie access)
+    if (typeof CookieStore === 'undefined') {
+        globalThis.CookieStore = function CookieStore() {};
+        CookieStore.prototype.get = function(name) { return Promise.resolve(null); };
+        CookieStore.prototype.set = function(name, value) { return Promise.resolve(); };
+        CookieStore.prototype.delete = function(name) { return Promise.resolve(); };
+        CookieStore.prototype.getAll = function() { return Promise.resolve([]); };
+        if (typeof window !== 'undefined' && !window.cookieStore) {
+            window.cookieStore = new CookieStore();
+        }
+    }
+
+    // CookieStore onchange event stub
+    if (typeof window !== 'undefined' && window.cookieStore && !window.cookieStore.addEventListener) {
+        window.cookieStore.addEventListener = function() {};
+        window.cookieStore.removeEventListener = function() {};
+    }
+
     // Custom Elements (customElements) stub
     if (typeof customElements !== 'undefined' && !customElements.define) {
         customElements._registry = {};
