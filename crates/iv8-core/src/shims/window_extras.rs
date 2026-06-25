@@ -355,5 +355,77 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             performance.now = function() { return Date.now() - (performance.timeOrigin || 0); };
         }
     }
+
+    // queryLocalFonts API stub (Font Detection)
+    if (typeof queryLocalFonts === 'undefined') {
+        globalThis.queryLocalFonts = function queryLocalFonts(options) {
+            return Promise.resolve([]);
+        };
+    }
+
+    // Managed Device config (navigator.managed) stub
+    if (typeof navigator !== 'undefined' && !navigator.managed) {
+        var _managed = {
+            deviceId: '',
+            organizationName: '',
+            annotatedAssetId: '',
+            annotatedLocation: '',
+            directoryId: '',
+            hostname: '',
+            serialNumber: '',
+        };
+        Object.defineProperty(navigator, 'managed', {
+            get: function() { return _managed; },
+            configurable: true,
+        });
+    }
+
+    // Range stub (DOM Range API)
+    if (typeof Range === 'undefined') {
+        globalThis.Range = function Range() {
+            this.startContainer = null;
+            this.startOffset = 0;
+            this.endContainer = null;
+            this.endOffset = 0;
+            this.collapsed = true;
+            this.commonAncestorContainer = null;
+        };
+        Range.prototype.setStart = function(node, offset) {
+            this.startContainer = node; this.startOffset = offset;
+        };
+        Range.prototype.setEnd = function(node, offset) {
+            this.endContainer = node; this.endOffset = offset;
+        };
+        Range.prototype.setStartBefore = function(node) { this.startContainer = node; };
+        Range.prototype.setStartAfter = function(node) { this.startContainer = node; };
+        Range.prototype.setEndBefore = function(node) { this.endContainer = node; };
+        Range.prototype.setEndAfter = function(node) { this.endContainer = node; };
+        Range.prototype.selectNode = function(node) {
+            this.startContainer = node; this.endContainer = node;
+        };
+        Range.prototype.selectNodeContents = function(node) {
+            this.startContainer = node; this.endContainer = node;
+        };
+        Range.prototype.collapse = function(toStart) { this.collapsed = true; };
+        Range.prototype.cloneRange = function() {
+            var r = new Range();
+            r.startContainer = this.startContainer; r.startOffset = this.startOffset;
+            r.endContainer = this.endContainer; r.endOffset = this.endOffset;
+            return r;
+        };
+        Range.prototype.detach = function() {};
+        Range.prototype.toString = function() { return ''; };
+        Range.prototype.getBoundingClientRect = function() {
+            return { x: 0, y: 0, width: 0, height: 0, top: 0, left: 0, bottom: 0, right: 0 };
+        };
+        Range.prototype.getClientRects = function() { return []; };
+        Range.prototype.insertNode = function(node) {};
+        Range.prototype.deleteContents = function() {};
+        Range.prototype.extractContents = function() { return document.createDocumentFragment(); };
+        Range.prototype.surroundContents = function(newParent) {};
+        Range.prototype.cloneContents = function() { return document.createDocumentFragment(); };
+        Range.START_TO_START = 0; Range.START_TO_END = 1;
+        Range.END_TO_END = 2; Range.END_TO_START = 3;
+    }
 })();
 "#;
