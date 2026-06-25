@@ -6,6 +6,44 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.80] - 2026-06-25
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Added
+- `PermissionsSection` expanded with `extra` HashMap for 28+ permission names. Runtime `permissions.query()` reads from profile env map instead of hardcoded Chrome defaults.
+- `MediaPreferences` expanded from 4 to 16 fields (prefers-contrast, prefers-reduced-motion, prefers-reduced-data, forced-colors, dynamic-range, scripting, update, any-pointer, any-hover, display-mode, inverted-colors, prefers-reduced-transparency).
+- `globalThis.__iv8MediaPrefs` injection: matchMedia reads 16 media features from profile config instead of hardcoded JS branches.
+- `globalThis.__iv8AudioPrefs` injection: AudioContext baseLatency/outputLatency configurable from profile. AudioBuffer.getChannelData supports `channelDataSeed` deterministic PRNG fingerprint (xorshift32).
+- `globalThis.__iv8FontPrefs` injection: measureText uses profile font list for better font classification. document.fonts FontFaceSet with check/forEach/values/entries/keys from profile families (43 default Windows fonts).
+- H02 Environment Fingerprint Consistency harness (scripts/evaluate_env_consistency.py): 16/16 PASS, 3 categories (data correctness, edge cases, false positive resistance).
+- Event loop alignment tests: microtask drain after eval, setTimeout ID sequentiality, microtask-before-macrotask ordering.
+- Canvas toDataURL consistency test: same noise seed produces identical output.
+- `fonts.mode`, `fonts.families`, `audio.baseLatency`, `audio.outputLatency` dot-path keys in build_flat_env.
+
+### Changed
+- GPU default updated from GTX 1650 (0x00001F82) to RTX 4060 (0x00002882) across 8 locations (defaults.rs, behavior_config.rs, webgl.rs, hand_implemented/webgl.rs, default_chrome147.json, test fixtures). Based on real Chrome desktop ANGLE string.
+- WebGL UNMASKED_RENDERER_WEBGL surface layer inconsistency fixed (was RTX 3060 in iv8-surface, GTX 1650 in iv8-core).
+- `build_flat_env` emits `permissions.<name>` for all 7 named + all extra permission fields.
+- `build_flat_env` emits `media.<feature>` for all 16 media preference fields.
+- `MatrixPermissions` expanded from 2 to 7+extra fields. `ConfigPermissions` now reads camera/microphone from matrix.
+
+### Fixed
+- Intl DateTimeFormat OOM: `document.lastModified` getter cached at install time using non-Intl date format, avoiding Intl.DateTimeFormat re-entrancy through timezone wrapper. Added `__iv8_tz_wrapped` re-entrancy guard on Intl.DateTimeFormat wrapper.
+
+### Verified
+- 317 Rust lib tests (iv8-core, +4 from v0.8.79 baseline of 313).
+- 31 profile tests, 30 surface tests.
+- H02 harness: 16/16 PASS.
+- Intl OOM: resolved (previously Fatal OOM at DateTimePatternGeneratorCache::CreateGenerator).
+
+### Known Limitations
+- RS VMP / DataDome / Akamai sample testing deferred to v0.8.81+ (needs sample acquisition).
+- Full timer clamping/throttling/task-source priority deferred to v0.9+ (requires event loop time advance API).
+- R01 .pyd auto-refresh and R02 style_cache v8::Weak confirmed deferred to v0.9+.
+- Full DynamicsCompressor audio rendering still requires v0.9+ real audio pipeline.
+
 ## [0.8.79] - 2026-06-25
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
