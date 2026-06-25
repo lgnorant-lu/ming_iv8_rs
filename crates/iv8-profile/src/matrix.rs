@@ -454,6 +454,35 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         "audio.outputLatency".into(),
         serde_json::json!(0.01),
     );
+    env.insert(
+        "audio.channelDataSeed".into(),
+        serde_json::json!(0.0),
+    );
+    // Audio compressor params (DynamicsCompressorNode defaults)
+    env.insert("audio.compressor.threshold".into(), serde_json::json!(-24));
+    env.insert("audio.compressor.knee".into(), serde_json::json!(30));
+    env.insert("audio.compressor.ratio".into(), serde_json::json!(12));
+    env.insert("audio.compressor.attack".into(), serde_json::json!(0.003));
+    env.insert("audio.compressor.release".into(), serde_json::json!(0.25));
+
+    // === network.connection === (navigator.connection)
+    env.insert("network.effectiveType".into(), serde_json::json!("4g"));
+    env.insert("network.downlink".into(), serde_json::json!(10.0));
+    env.insert("network.rtt".into(), serde_json::json!(50));
+    env.insert("network.saveData".into(), serde_json::json!(false));
+    env.insert("network.type".into(), serde_json::json!("wifi"));
+
+    // === battery === (BatteryManager)
+    env.insert("battery.charging".into(), serde_json::json!(true));
+    env.insert("battery.chargingTime".into(), serde_json::json!(0.0));
+    env.insert("battery.dischargingTime".into(), serde_json::json!(f64::INFINITY));
+    env.insert("battery.level".into(), serde_json::json!(1.0));
+
+    // === webgl extensions === (getSupportedExtensions)
+    env.insert(
+        "webgl.extensions".into(),
+        serde_json::json!(crate::defaults::WEBGL_EXTENSIONS_JSON),
+    );
 
     // === timers ===
     let raf_interval_ms = if source.timing.fps > 0 {

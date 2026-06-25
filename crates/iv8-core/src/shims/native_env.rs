@@ -841,21 +841,21 @@ unsafe extern "C" fn nav_connection(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let env = &state.environment;
         let obj = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
-        obj.set(scope, s("effectiveType").into(), s("4g").into());
-        obj.set(
-            scope,
-            s("downlink").into(),
-            v8::Number::new(scope, 10.0).into(),
-        );
-        obj.set(scope, s("rtt").into(), v8::Number::new(scope, 50.0).into());
-        obj.set(
-            scope,
-            s("saveData").into(),
-            v8::Boolean::new(scope, false).into(),
-        );
-        obj.set(scope, s("type").into(), s("wifi").into());
+        let eff_type = env.get_str("network.effectiveType").unwrap_or("4g");
+        obj.set(scope, s("effectiveType").into(), s(eff_type).into());
+        let downlink = env.get_f64("network.downlink").unwrap_or(10.0);
+        obj.set(scope, s("downlink").into(), v8::Number::new(scope, downlink).into());
+        let rtt = env.get_f64("network.rtt").unwrap_or(50.0);
+        obj.set(scope, s("rtt").into(), v8::Number::new(scope, rtt).into());
+        let save_data = env.get_str("network.saveData").map(|v| v == "true").unwrap_or(false);
+        obj.set(scope, s("saveData").into(), v8::Boolean::new(scope, save_data).into());
+        let net_type = env.get_str("network.type").unwrap_or("wifi");
+        obj.set(scope, s("type").into(), s(net_type).into());
         let ts = v8::Symbol::get_to_string_tag(scope);
         obj.set(scope, ts.into(), s("NetworkInformation").into());
         rv.set(obj.into());
@@ -868,24 +868,19 @@ unsafe extern "C" fn nav_get_battery(info: *const v8::FunctionCallbackInfo) {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let env = &state.environment;
         let result = v8::Object::new(scope);
         let s = |k: &str| crate::v8_utils::v8_string(scope, k);
-        result.set(
-            scope,
-            s("charging").into(),
-            v8::Boolean::new(scope, true).into(),
-        );
-        result.set(
-            scope,
-            s("chargingTime").into(),
-            v8::Number::new(scope, 0.0).into(),
-        );
-        result.set(
-            scope,
-            s("dischargingTime").into(),
-            v8::Number::new(scope, f64::INFINITY).into(),
-        );
-        result.set(scope, s("level").into(), v8::Number::new(scope, 1.0).into());
+        let charging = env.get_str("battery.charging").map(|v| v == "true").unwrap_or(true);
+        result.set(scope, s("charging").into(), v8::Boolean::new(scope, charging).into());
+        let charging_time = env.get_f64("battery.chargingTime").unwrap_or(0.0);
+        result.set(scope, s("chargingTime").into(), v8::Number::new(scope, charging_time).into());
+        let discharging_time = env.get_f64("battery.dischargingTime").unwrap_or(f64::INFINITY);
+        result.set(scope, s("dischargingTime").into(), v8::Number::new(scope, discharging_time).into());
+        let level = env.get_f64("battery.level").unwrap_or(1.0);
+        result.set(scope, s("level").into(), v8::Number::new(scope, level).into());
         // Set Symbol.toStringTag = "BatteryManager" for fingerprint fidelity
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = crate::v8_utils::v8_string(scope, "BatteryManager");

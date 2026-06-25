@@ -51,13 +51,14 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     OscillatorNode.prototype.stop = function(when) {};
 
     // DynamicsCompressorNode
+    var _compPrefs = _audioPrefs.compressor || {};
     function DynamicsCompressorNode(ctx, options) {
         AudioNode.call(this, ctx);
-        this.threshold = new AudioParam((options && options.threshold !== undefined) ? options.threshold : -24);
-        this.knee = new AudioParam((options && options.knee !== undefined) ? options.knee : 30);
-        this.ratio = new AudioParam((options && options.ratio !== undefined) ? options.ratio : 12);
-        this.attack = new AudioParam((options && options.attack !== undefined) ? options.attack : 0.003);
-        this.release = new AudioParam((options && options.release !== undefined) ? options.release : 0.25);
+        this.threshold = new AudioParam((options && options.threshold !== undefined) ? options.threshold : (_compPrefs.threshold !== undefined ? _compPrefs.threshold : -24));
+        this.knee = new AudioParam((options && options.knee !== undefined) ? options.knee : (_compPrefs.knee !== undefined ? _compPrefs.knee : 30));
+        this.ratio = new AudioParam((options && options.ratio !== undefined) ? options.ratio : (_compPrefs.ratio !== undefined ? _compPrefs.ratio : 12));
+        this.attack = new AudioParam((options && options.attack !== undefined) ? options.attack : (_compPrefs.attack !== undefined ? _compPrefs.attack : 0.003));
+        this.release = new AudioParam((options && options.release !== undefined) ? options.release : (_compPrefs.release !== undefined ? _compPrefs.release : 0.25));
         this.reduction = 0;
     }
     DynamicsCompressorNode.prototype = Object.create(AudioNode.prototype);
