@@ -6,6 +6,44 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.81] - 2026-06-25
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Fixed
+- WebGL 14 pname hex values corrected in surface layer (SAMPLE_BUFFERS/SAMPLES/STENCIL/DEPTH/RED/GREEN/BLUE/ALPHA BITS + MAX_DRAW_BUFFERS/MAX_COLOR_ATTACHMENTS/MAX_VERTEX_UNIFORM_COMPONENTS). Source: Khronos spec IDL.
+- getShaderPrecisionFormat 9/12 values fixed: LOW_FLOAT/MEDIUM_FLOAT now return desktop {127,127,23} (was mobile values); all INT types now return {30/31,30/31,0} (was float values — physically impossible).
+- Promise semantics: 6 APIs now return Promises (clipboard/credentials/notification/getInstalledRelatedApps/wakeLock/payment).
+- Navigator getters: contacts/virtualKeyboard return undefined on desktop (was empty {}); wakeLock has request method (was bare {}).
+- ResizeObserver: takeRecords() added (was missing). ReportingObserver: full stub added.
+- ServiceWorker: register/getRegistration/getRegistrations methods added (was only controller:null).
+- BroadcastChannel: name now echoes constructor argument (was always "").
+
+### Added
+- 14 new WebGL pname values (MAX_ELEMENT_INDEX/MAX_SERVER_WAIT_TIMEOUT/MAX_TRANSFORM_FEEDBACK_*/MAX_CLIENT_WAIT_TIMEOUT_WEBGL/NUM_COMPRESSED_TEXTURE_FORMATS/COMPRESSED_TEXTURE_FORMATS/GENERATE_MIPMAP_HINT/LINE_WIDTH/SAMPLE_BUFFERS/SAMPLES/MAX_TEXTURE_MAX_ANISOTROPY_EXT + 3 corrected hex entries).
+- 3 Promise stub utilities (stub_promise_resolve/resolve_null/resolve_empty_array).
+- H03 L2 Surface Accuracy harness: sample_iv8_surface.py + evaluate_surface_accuracy.py + H03-surface-accuracy.md spec.
+- Fingerprint testing tools survey (805 lines, 10 categories).
+- build_flat_env: audio.channelDataSeed (bug fix — was read but not emitted), audio.compressor.* (5 params), network.* (5 params), battery.* (4 params), webgl.extensions (28 Chrome 147 extensions JSON).
+
+### Changed
+- navigator.connection: 5 fields now read from env map (was hardcoded).
+- navigator.getBattery: 4 fields now read from env map (was hardcoded).
+- DynamicsCompressorNode: 5 params now read from __iv8AudioPrefs.compressor (was hardcoded).
+- Feature Flags: 32 flags now merge profile overrides from __iv8FeatureFlagPrefs (was hardcoded).
+- MAX_TEXTURE_MAX_ANISOTROPY_EXT (0x84FF) name corrected (was MAX_FRAGMENT_SHADER_DERIVATIVE).
+- MAX_VERTEX_UNIFORM_COMPONENTS default: 4096 → 16380 (Chrome desktop RTX 4060).
+- MAX_COMBINED_TEXTURE_IMAGE_UNITS default: 32 → 80 (Chrome desktop).
+- MAX_VARYING_VECTORS default: 30 → 32 (Chrome desktop).
+
+### Known Limitations
+- P3 弱项重项 (WebGPU/document.write/AES-KW/RSA-PKCS1-v1.5/MutationObserver/WebSocket) deferred to v0.8.82+.
+- P4 样本测试 (RS/DataDome/Akamai) deferred — needs Chrome CDP environment.
+- getComputedStyle config-driven (P2-15) deferred — 41 CSS properties are Chrome desktop defaults, low change frequency.
+- H03 L1/L3/L4/L5 layers planned for v0.8.82+.
+- Golden data (golden/chrome147_win10_rtx4060.json) not yet collected — needs CDP sampling from real Chrome.
+
 ## [0.8.80] - 2026-06-25
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
