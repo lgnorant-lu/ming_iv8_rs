@@ -22,10 +22,10 @@ pub fn default_profile_source() -> ProfileSource {
             browser: BrowserIdentity::default(),
             gpu: GpuIdentity {
                 vendor: "NVIDIA".into(),
-                renderer: "NVIDIA GeForce GTX 1650".into(),
+                renderer: "NVIDIA GeForce RTX 4060".into(),
                 webgl_unmasked_vendor: "Google Inc. (NVIDIA)".into(),
                 webgl_unmasked_renderer: concat!(
-                    "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) ",
+                    "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) ",
                     "Direct3D11 vs_5_0 ps_5_0, D3D11)"
                 )
                 .into(),
@@ -93,6 +93,18 @@ pub fn default_profile_source() -> ProfileSource {
                 hover: "hover".into(),
                 color_gamut: "srgb".into(),
                 prefers_color_scheme: "light".into(),
+                prefers_contrast: "no-preference".into(),
+                prefers_reduced_motion: "no-preference".into(),
+                prefers_reduced_data: "no-preference".into(),
+                forced_colors: "none".into(),
+                dynamic_range: "srgb".into(),
+                scripting: "yes".into(),
+                update: "fast".into(),
+                any_pointer: "coarse".into(),
+                any_hover: "none".into(),
+                display_mode: "browser".into(),
+                inverted_colors: "none".into(),
+                prefers_reduced_transparency: "no-preference".into(),
             },
         },
         rendering: RenderingSection {
@@ -159,6 +171,28 @@ pub fn default_profile_source() -> ProfileSource {
             clipboard_read: "prompt".into(),
             clipboard_write: "granted".into(),
             local_fonts: "prompt".into(),
+            extra: {
+                let mut m = std::collections::HashMap::new();
+                // Auto-granted (Chrome default)
+                m.insert("accelerometer".into(), "granted".into());
+                m.insert("gyroscope".into(), "granted".into());
+                m.insert("magnetometer".into(), "granted".into());
+                m.insert("ambient-light-sensor".into(), "granted".into());
+                m.insert("background-sync".into(), "granted".into());
+                m.insert("midi".into(), "granted".into());
+                m.insert("screen-wake-lock".into(), "granted".into());
+                // Prompt (Chrome default)
+                m.insert("push".into(), "prompt".into());
+                m.insert("bluetooth".into(), "prompt".into());
+                m.insert("persistent-storage".into(), "prompt".into());
+                m.insert("idle-detection".into(), "prompt".into());
+                m.insert("nfc".into(), "prompt".into());
+                m.insert("storage-access".into(), "prompt".into());
+                m.insert("window-management".into(), "prompt".into());
+                m.insert("payment-handler".into(), "prompt".into());
+                m.insert("periodic-background-sync".into(), "prompt".into());
+                m
+            },
         },
         capabilities: CapabilitiesSection {
             window_chrome: true,

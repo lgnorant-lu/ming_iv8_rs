@@ -37,7 +37,7 @@ def ctx_custom():
         },
         "webgl": {
             "UNMASKED_VENDOR_WEBGL": "Google Inc. (NVIDIA)",
-            "UNMASKED_RENDERER_WEBGL": "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 Direct3D11)",
+            "UNMASKED_RENDERER_WEBGL": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11)",
         },
     })
     yield c

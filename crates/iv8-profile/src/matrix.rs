@@ -155,6 +155,12 @@ impl ProfileMatrix {
             permissions: MatrixPermissions {
                 geolocation: source.permissions.geolocation.clone(),
                 notifications: source.permissions.notifications.clone(),
+                camera: source.permissions.camera.clone(),
+                microphone: source.permissions.microphone.clone(),
+                clipboard_read: source.permissions.clipboard_read.clone(),
+                clipboard_write: source.permissions.clipboard_write.clone(),
+                local_fonts: source.permissions.local_fonts.clone(),
+                extra: source.permissions.extra.clone(),
             },
             capabilities: MatrixCapabilities {
                 window_chrome: source.capabilities.window_chrome,
@@ -374,6 +380,72 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         serde_json::Value::String(source.rendering.webgl_1.mode.clone()),
     );
 
+    // === permissions.* (native_env.rs permissions_query_cb) ===
+    // Emit all 7 named fields + all extra fields as dot-path keys.
+    // The runtime reads `permissions.<name>` and falls back to "prompt".
+    for (name, state) in [
+        ("geolocation", &source.permissions.geolocation),
+        ("notifications", &source.permissions.notifications),
+        ("camera", &source.permissions.camera),
+        ("microphone", &source.permissions.microphone),
+        ("clipboard-read", &source.permissions.clipboard_read),
+        ("clipboard-write", &source.permissions.clipboard_write),
+        ("local-fonts", &source.permissions.local_fonts),
+    ] {
+        env.insert(
+            format!("permissions.{}", name),
+            serde_json::Value::String(state.clone()),
+        );
+    }
+    for (name, state) in &source.permissions.extra {
+        env.insert(
+            format!("permissions.{}", name),
+            serde_json::Value::String(state.clone()),
+        );
+    }
+
+    // === media.* (geometry.rs matchMedia shim) ===
+    // Emit all 16 media preference fields as dot-path keys.
+    for (name, val) in [
+        ("pointer", &source.display.media.pointer),
+        ("hover", &source.display.media.hover),
+        ("color-gamut", &source.display.media.color_gamut),
+        ("prefers-color-scheme", &source.display.media.prefers_color_scheme),
+        ("prefers-contrast", &source.display.media.prefers_contrast),
+        ("prefers-reduced-motion", &source.display.media.prefers_reduced_motion),
+        ("prefers-reduced-data", &source.display.media.prefers_reduced_data),
+        ("forced-colors", &source.display.media.forced_colors),
+        ("dynamic-range", &source.display.media.dynamic_range),
+        ("scripting", &source.display.media.scripting),
+        ("update", &source.display.media.update),
+        ("any-pointer", &source.display.media.any_pointer),
+        ("any-hover", &source.display.media.any_hover),
+        ("display-mode", &source.display.media.display_mode),
+        ("inverted-colors", &source.display.media.inverted_colors),
+        ("prefers-reduced-transparency", &source.display.media.prefers_reduced_transparency),
+    ] {
+        env.insert(
+            format!("media.{}", name),
+            serde_json::Value::String(val.clone()),
+        );
+    }
+
+    // === fonts.* (canvas/binding.rs measureText + document.fonts) ===
+    env.insert(
+        "fonts.mode".into(),
+        serde_json::Value::String(source.rendering.fonts.mode.clone()),
+    );
+    env.insert(
+        "fonts.families".into(),
+        serde_json::to_value(&source.rendering.fonts.families).unwrap_or_default(),
+    );
+
+    // === audio.* (audio_context.rs) ===
+    env.insert(
+        "audio.mode".into(),
+        serde_json::Value::String(source.rendering.audio_context.mode.clone()),
+    );
+
     // === timers ===
     let raf_interval_ms = if source.timing.fps > 0 {
         1000.0 / source.timing.fps as f64
@@ -552,6 +624,12 @@ pub struct MatrixNetwork {
 pub struct MatrixPermissions {
     pub geolocation: String,
     pub notifications: String,
+    pub camera: String,
+    pub microphone: String,
+    pub clipboard_read: String,
+    pub clipboard_write: String,
+    pub local_fonts: String,
+    pub extra: std::collections::HashMap<String, String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

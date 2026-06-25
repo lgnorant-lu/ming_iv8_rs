@@ -377,7 +377,7 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
             .get_str("webgl.UNMASKED_VENDOR_WEBGL")
             .unwrap_or("Google Inc. (NVIDIA)");
         let unmasked_renderer = env.get_str("webgl.UNMASKED_RENDERER_WEBGL").unwrap_or(
-            "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         );
 
         match pname {

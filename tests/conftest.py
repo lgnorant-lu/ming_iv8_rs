@@ -37,7 +37,7 @@ def ctx_custom() -> Iterator[iv8_rs.JSContext]:
         "screen.pixelDepth": 24,
         "webgl.UNMASKED_VENDOR_WEBGL": "Google Inc. (NVIDIA)",
         "webgl.UNMASKED_RENDERER_WEBGL": (
-            "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 Direct3D11)"
+            "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11)"
         ),
     })
     yield c

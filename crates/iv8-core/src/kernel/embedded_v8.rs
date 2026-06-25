@@ -860,6 +860,8 @@ impl EmbeddedV8Kernel {
         .ok();
 
         // 11. Install getBoundingClientRect + getComputedStyle + DOMRect
+        //     First inject media preferences from profile env map.
+        self.inject_media_prefs();
         self.eval(
             crate::shims::geometry::GEOMETRY_SHIM_JS,
             crate::kernel::EvalOpts::default(),
@@ -1047,6 +1049,62 @@ impl EmbeddedV8Kernel {
         unsafe {
             self.isolate.exit();
         }
+    }
+
+    /// Inject media preferences from the environment map into the JS context
+    /// as `globalThis.__iv8MediaPrefs`. The matchMedia shim reads these values
+    /// instead of using hardcoded defaults.
+    fn inject_media_prefs(&mut self) {
+        let state = RuntimeState::get(&self.isolate);
+        let media_fields = [
+            "prefers-color-scheme",
+            "prefers-contrast",
+            "prefers-reduced-motion",
+            "prefers-reduced-data",
+            "forced-colors",
+            "color-gamut",
+            "dynamic-range",
+            "scripting",
+            "update",
+            "pointer",
+            "hover",
+            "any-pointer",
+            "any-hover",
+            "display-mode",
+            "inverted-colors",
+            "prefers-reduced-transparency",
+        ];
+        let mut json_obj = serde_json::Map::new();
+        for field in &media_fields {
+            let key = format!("media.{}", field);
+            let val = state
+                .environment
+                .get_str(&key)
+                .unwrap_or_else(|| match *field {
+                    "prefers-color-scheme" => "light",
+                    "prefers-contrast" => "no-preference",
+                    "prefers-reduced-motion" => "no-preference",
+                    "prefers-reduced-data" => "no-preference",
+                    "forced-colors" => "none",
+                    "color-gamut" => "srgb",
+                    "dynamic-range" => "srgb",
+                    "scripting" => "enabled",
+                    "update" => "fast",
+                    "pointer" => "fine",
+                    "hover" => "hover",
+                    "any-pointer" => "coarse",
+                    "any-hover" => "none",
+                    "display-mode" => "browser",
+                    "inverted-colors" => "none",
+                    "prefers-reduced-transparency" => "no-preference",
+                    _ => "none",
+                });
+            json_obj.insert(field.to_string(), serde_json::Value::String(val.into()));
+        }
+        let json_str = serde_json::to_string(&serde_json::Value::Object(json_obj))
+            .unwrap_or_else(|_| "{}".into());
+        let js = format!("globalThis.__iv8MediaPrefs = {};", json_str);
+        self.eval(&js, crate::kernel::EvalOpts::default()).ok();
     }
 
     /// Install native environment objects (navigator, screen, location)

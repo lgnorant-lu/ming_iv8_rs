@@ -105,33 +105,87 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
     };
 
     // matchMedia — returns MediaQueryList-like object
-    // Chrome desktop defaults: light scheme, fine pointer, hover, sRGB, etc.
+    // Reads from globalThis.__iv8MediaPrefs (injected from profile env map).
+    // Falls back to Chrome desktop defaults if not set.
     globalThis.matchMedia = function(query) {
         query = String(query || '');
         var q = query.toLowerCase().replace(/\s+/g, '');
 
-        // Chrome desktop defaults
+        var prefs = (typeof globalThis.__iv8MediaPrefs === 'object' && globalThis.__iv8MediaPrefs) ? globalThis.__iv8MediaPrefs : {};
+        function prefVal(name, fallback) {
+            return prefs[name] || fallback;
+        }
+
+        // Helper: check if a media feature query matches the configured value.
+        function mediaMatches(feature, value) {
+            var configured = prefVal(feature, '');
+            if (!configured) return false;
+            // Handle scripting specially: Chrome uses "enabled"/"none",
+            // CSS spec uses "initial"/"none".
+            if (feature === 'scripting' && value === 'enabled') {
+                return configured === 'enabled' || configured === 'yes' || configured === 'initial';
+            }
+            return configured === value;
+        }
+
         var matches = false;
-        if (q.indexOf('prefers-color-scheme:light') !== -1) matches = true;
-        else if (q.indexOf('prefers-color-scheme:dark') !== -1) matches = false;
-        else if (q.indexOf('prefers-reduced-motion:no-preference') !== -1) matches = true;
-        else if (q.indexOf('prefers-reduced-motion:reduce') !== -1) matches = false;
-        else if (q.indexOf('prefers-contrast:no-preference') !== -1) matches = true;
-        else if (q.indexOf('prefers-reduced-data:no-preference') !== -1) matches = true;
-        else if (q.indexOf('forced-colors:none') !== -1) matches = true;
-        else if (q.indexOf('color-gamut:srgb') !== -1) matches = true;
-        else if (q.indexOf('color-gamut:p3') !== -1) matches = false;
-        else if (q.indexOf('scripting:enabled') !== -1) matches = true;
-        else if (q.indexOf('update:fast') !== -1) matches = true;
-        else if (q.indexOf('pointer:fine') !== -1) matches = true;
-        else if (q.indexOf('pointer:coarse') !== -1) matches = false;
-        else if (q.indexOf('hover:hover') !== -1) matches = true;
-        else if (q.indexOf('hover:none') !== -1) matches = false;
-        else if (q.indexOf('any-pointer:fine') !== -1) matches = true;
-        else if (q.indexOf('any-hover:hover') !== -1) matches = true;
-        else if (q.indexOf('display-mode:browser') !== -1) matches = true;
-        else if (q.indexOf('inverted-colors:none') !== -1) matches = true;
-        else if (q.indexOf('min-width:') !== -1 || q.indexOf('max-width:') !== -1) {
+        // Parse query for feature:value patterns
+        if (q.indexOf('prefers-color-scheme:') !== -1) {
+            matches = mediaMatches('prefers-color-scheme',
+                q.indexOf('prefers-color-scheme:light') !== -1 ? 'light' :
+                q.indexOf('prefers-color-scheme:dark') !== -1 ? 'dark' : '');
+        } else if (q.indexOf('prefers-reduced-motion:') !== -1) {
+            matches = mediaMatches('prefers-reduced-motion',
+                q.indexOf('prefers-reduced-motion:reduce') !== -1 ? 'reduce' : 'no-preference');
+        } else if (q.indexOf('prefers-contrast:') !== -1) {
+            matches = mediaMatches('prefers-contrast',
+                q.indexOf('prefers-contrast:more') !== -1 ? 'more' :
+                q.indexOf('prefers-contrast:less') !== -1 ? 'less' : 'no-preference');
+        } else if (q.indexOf('prefers-reduced-data:') !== -1) {
+            matches = mediaMatches('prefers-reduced-data',
+                q.indexOf('prefers-reduced-data:reduce') !== -1 ? 'reduce' : 'no-preference');
+        } else if (q.indexOf('prefers-reduced-transparency:') !== -1) {
+            matches = mediaMatches('prefers-reduced-transparency',
+                q.indexOf('prefers-reduced-transparency:reduce') !== -1 ? 'reduce' : 'no-preference');
+        } else if (q.indexOf('forced-colors:') !== -1) {
+            matches = mediaMatches('forced-colors',
+                q.indexOf('forced-colors:none') !== -1 ? 'none' : 'active');
+        } else if (q.indexOf('color-gamut:') !== -1) {
+            matches = mediaMatches('color-gamut',
+                q.indexOf('color-gamut:p3') !== -1 ? 'p3' :
+                q.indexOf('color-gamut:rec2020') !== -1 ? 'rec2020' : 'srgb');
+        } else if (q.indexOf('dynamic-range:') !== -1) {
+            matches = mediaMatches('dynamic-range',
+                q.indexOf('dynamic-range:high') !== -1 ? 'high' : 'standard');
+        } else if (q.indexOf('scripting:') !== -1) {
+            matches = mediaMatches('scripting',
+                q.indexOf('scripting:enabled') !== -1 ? 'enabled' :
+                q.indexOf('scripting:none') !== -1 ? 'none' : 'initial');
+        } else if (q.indexOf('update:') !== -1) {
+            matches = mediaMatches('update',
+                q.indexOf('update:slow') !== -1 ? 'slow' :
+                q.indexOf('update:none') !== -1 ? 'none' : 'fast');
+        } else if (q.indexOf('any-pointer:') !== -1) {
+            matches = mediaMatches('any-pointer',
+                q.indexOf('any-pointer:fine') !== -1 ? 'fine' : 'coarse');
+        } else if (q.indexOf('any-hover:') !== -1) {
+            matches = mediaMatches('any-hover',
+                q.indexOf('any-hover:hover') !== -1 ? 'hover' : 'none');
+        } else if (q.indexOf('pointer:') !== -1) {
+            matches = mediaMatches('pointer',
+                q.indexOf('pointer:fine') !== -1 ? 'fine' : 'coarse');
+        } else if (q.indexOf('hover:') !== -1) {
+            matches = mediaMatches('hover',
+                q.indexOf('hover:hover') !== -1 ? 'hover' : 'none');
+        } else if (q.indexOf('display-mode:') !== -1) {
+            matches = mediaMatches('display-mode',
+                q.indexOf('display-mode:fullscreen') !== -1 ? 'fullscreen' :
+                q.indexOf('display-mode:standalone') !== -1 ? 'standalone' :
+                q.indexOf('display-mode:minimal-ui') !== -1 ? 'minimal-ui' : 'browser');
+        } else if (q.indexOf('inverted-colors:') !== -1) {
+            matches = mediaMatches('inverted-colors',
+                q.indexOf('inverted-colors:inverted') !== -1 ? 'inverted' : 'none');
+        } else if (q.indexOf('min-width:') !== -1 || q.indexOf('max-width:') !== -1) {
             // Screen-based queries — use window.innerWidth
             var w = (typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : 1920;
             var minMatch = q.match(/min-width:\s*(\d+)px/);

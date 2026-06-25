@@ -373,6 +373,15 @@ pub fn validate(source: &ProfileSource) -> ValidationResult {
             ));
         }
     }
+    // Validate extra permissions map
+    for (name, val) in &source.permissions.extra {
+        if !valid_states.contains(&val.as_str()) {
+            r = r.error(ValidationIssue::new(
+                format!("permissions.extra.{}", name),
+                format!("unexpected permission state '{}'", val),
+            ));
+        }
+    }
 
     r
 }

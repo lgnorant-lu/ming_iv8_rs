@@ -624,6 +624,8 @@ unsafe extern "C" fn permissions_query_cb(info: *const v8::FunctionCallbackInfo)
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
         // Return Promise.resolve({state: 'prompt'})
         let global = scope.get_current_context().global(scope);
         let promise_key = crate::v8_utils::v8_string(scope, "Promise");
@@ -654,22 +656,23 @@ unsafe extern "C" fn permissions_query_cb(info: *const v8::FunctionCallbackInfo)
                                 let name_key = crate::v8_utils::v8_string(scope, "name");
                                 if let Some(name_val) = desc_obj.get(scope, name_key.into()) {
                                     let name = name_val.to_rust_string_lossy(scope);
-                                    state_str = match name.as_str() {
-                                        // Auto-granted (Chrome default)
-                                        "accelerometer" | "gyroscope" | "magnetometer"
-                                        | "ambient-light-sensor" | "background-sync"
-                                        | "midi" | "clipboard-write"
-                                        | "screen-wake-lock" => "granted",
-                                        // User-decision (prompt)
-                                        "geolocation" | "notifications" | "push"
-                                        | "camera" | "microphone" | "bluetooth"
-                                        | "persistent-storage" | "clipboard-read"
-                                        | "idle-detection" | "nfc" | "storage-access"
-                                        | "window-management" | "local-fonts"
-                                        | "payment-handler" | "periodic-background-sync" => "prompt",
-                                        // Deprecated/non-standard (prompt fallback)
-                                        _ => "prompt",
-                                    };
+                                    // Read from environment map (profile-driven).
+                                    // Falls back to "prompt" for any permission
+                                    // not in the profile.
+                                    let env_key = format!("permissions.{}", name);
+                                    state_str = state
+                                        .environment
+                                        .get_str(&env_key)
+                                        .unwrap_or_else(|| {
+                                            // Chrome default: sensors/media APIs auto-granted.
+                                            match name.as_str() {
+                                                "accelerometer" | "gyroscope" | "magnetometer"
+                                                | "ambient-light-sensor" | "background-sync"
+                                                | "midi" | "clipboard-write"
+                                                | "screen-wake-lock" => "granted",
+                                                _ => "prompt",
+                                            }
+                                        });
                                 }
                             }
                         }

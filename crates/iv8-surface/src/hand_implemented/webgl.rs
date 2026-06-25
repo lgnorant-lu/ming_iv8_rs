@@ -68,7 +68,7 @@ pub fn build_gl_param_map() -> HashMap<u32, GlParamSpec> {
             pname: 0x9246,
             name: "UNMASKED_RENDERER_WEBGL",
             param_type: GlParamType::String,
-            default: r#""ANGLE (NVIDIA, NVIDIA GeForce RTX 3060 Direct3D11 vs_5_0 ps_5_0)"#,
+            default: r#""ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) Direct3D11 vs_5_0 ps_5_0, D3D11)"#,
         },
         // Integer parameters
         GlParamSpec {

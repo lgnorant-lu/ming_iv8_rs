@@ -181,13 +181,13 @@ impl Default for ConfigWebGl {
             mode: "noise".into(),
             vendor: "Google Inc. (NVIDIA)".into(),
             renderer: concat!(
-                "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) ",
+                "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) ",
                 "Direct3D11 vs_5_0 ps_5_0, D3D11)"
             )
             .into(),
             unmasked_vendor: "Google Inc. (NVIDIA)".into(),
             unmasked_renderer: concat!(
-                "ANGLE (NVIDIA, NVIDIA GeForce GTX 1650 (0x00001F82) ",
+                "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) ",
                 "Direct3D11 vs_5_0 ps_5_0, D3D11)"
             )
             .into(),
@@ -407,8 +407,8 @@ impl BehaviorConfig {
             permissions: ConfigPermissions {
                 geolocation: matrix.permissions.geolocation.clone(),
                 notifications: matrix.permissions.notifications.clone(),
-                camera: "prompt".into(),
-                microphone: "prompt".into(),
+                camera: matrix.permissions.camera.clone(),
+                microphone: matrix.permissions.microphone.clone(),
             },
             user_agent_data: ConfigUserAgentData {
                 platform: matrix

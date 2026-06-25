@@ -156,6 +156,8 @@ pub struct WindowInfo {
     pub device_pixel_ratio: f64,
 }
 
+/// Media query preferences. Expanded from 4 to 16 fields for v0.8.80 to cover
+/// the full set of Chrome media features tested by CreepJS / BotD / Sannysoft.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct MediaPreferences {
@@ -163,7 +165,41 @@ pub struct MediaPreferences {
     pub hover: String,
     pub color_gamut: String,
     pub prefers_color_scheme: String,
+    /// v0.8.80 additions — all default to Chrome desktop defaults.
+    #[serde(default = "default_no_preference")]
+    pub prefers_contrast: String,
+    #[serde(default = "default_no_preference")]
+    pub prefers_reduced_motion: String,
+    #[serde(default = "default_no_preference")]
+    pub prefers_reduced_data: String,
+    #[serde(default = "default_none")]
+    pub forced_colors: String,
+    #[serde(default = "default_srgb")]
+    pub dynamic_range: String,
+    #[serde(default = "default_yes")]
+    pub scripting: String,
+    #[serde(default = "default_fast")]
+    pub update: String,
+    #[serde(default = "default_coarse")]
+    pub any_pointer: String,
+    #[serde(default = "default_none_hover")]
+    pub any_hover: String,
+    #[serde(default = "default_browser")]
+    pub display_mode: String,
+    #[serde(default = "default_none")]
+    pub inverted_colors: String,
+    #[serde(default = "default_yes")]
+    pub prefers_reduced_transparency: String,
 }
+
+fn default_no_preference() -> String { "no-preference".into() }
+fn default_none() -> String { "none".into() }
+fn default_srgb() -> String { "srgb".into() }
+fn default_yes() -> String { "yes".into() }
+fn default_fast() -> String { "fast".into() }
+fn default_coarse() -> String { "coarse".into() }
+fn default_none_hover() -> String { "none".into() }
+fn default_browser() -> String { "browser".into() }
 
 // ---------------------------------------------------------------------------
 // Rendering
@@ -280,6 +316,13 @@ pub struct TlsConfig {
 // Permissions
 // ---------------------------------------------------------------------------
 
+/// Permissions section.
+///
+/// The 7 named fields are the user-visible strict schema. The `extra` map
+/// allows extending to any permission name (e.g. the 28+ Chrome permission
+/// states) without changing the struct every time. At runtime, `build_flat_env`
+/// emits `permissions.<name>` dot-path keys for every field + extra entry,
+/// falling back to Chrome defaults for any permission not specified.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PermissionsSection {
@@ -293,6 +336,11 @@ pub struct PermissionsSection {
     pub clipboard_write: String,
     #[serde(rename = "local-fonts")]
     pub local_fonts: String,
+    /// Additional permission states beyond the 7 named fields.
+    /// Keys are permission names (e.g. "accelerometer", "gyroscope"),
+    /// values are "granted"/"denied"/"prompt".
+    #[serde(default)]
+    pub extra: std::collections::HashMap<String, String>,
 }
 
 // ---------------------------------------------------------------------------
