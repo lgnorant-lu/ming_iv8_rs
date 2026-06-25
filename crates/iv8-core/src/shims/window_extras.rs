@@ -356,6 +356,29 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         }
     }
 
+    // Custom Elements (customElements) stub
+    if (typeof customElements !== 'undefined' && !customElements.define) {
+        customElements._registry = {};
+        customElements.define = function(name, constructor, options) {
+            customElements._registry[name] = { constructor: constructor, options: options };
+        };
+        customElements.get = function(name) {
+            var entry = customElements._registry[name];
+            return entry ? entry.constructor : undefined;
+        };
+        customElements.getName = function(constructor) {
+            var keys = Object.keys(customElements._registry);
+            for (var i = 0; i < keys.length; i++) {
+                if (customElements._registry[keys[i]].constructor === constructor) return keys[i];
+            }
+            return null;
+        };
+        customElements.upgrade = function(root) {};
+        customElements.whenDefined = function(name) {
+            return Promise.resolve(customElements._registry[name] ? constructor : undefined);
+        };
+    }
+
     // queryLocalFonts API stub (Font Detection)
     if (typeof queryLocalFonts === 'undefined') {
         globalThis.queryLocalFonts = function queryLocalFonts(options) {
