@@ -6,6 +6,73 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [0.8.79] - 2026-06-25
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+
+### Added
+- `window.matchMedia`: 20+ media features (prefers-color-scheme, reduced-motion, contrast, pointer, hover, color-gamut, scripting, etc.) + min/max-width/height + orientation. Returns MediaQueryList object.
+- `navigator.globalPrivacyControl`: returns false (Chrome default), environment-overridable.
+- `window.speechSynthesis`: getVoices() returns [], navigator.speechSynthesis alias.
+- `PerformanceObserver` + `PerformanceEntry` + `performance.getEntries/getEntriesByName/getEntriesByType/mark/measure/clearMarks/clearMeasures` stubs.
+- `queryLocalFonts`: returns Promise.resolve([]).
+- `navigator.managed`: 7-field Managed Device config stub.
+- `Range`: 15 prototype methods + 4 constants (DOM Range API stub).
+- `Custom Elements`: customElements.define/get/getName/upgrade/whenDefined stub.
+- `CookieStore`: get/set/delete/getAll stub + window.cookieStore instance.
+- `RTCPeerConnection`: 9 prototype methods (createOffer/createAnswer/setLocalDescription/setRemoteDescription/addIceCandidate/close/getStats/addTransceiver/addTrack).
+- `window.__iv8FeatureFlags`: 30 Chromium feature flags (Chrome desktop defaults).
+- `Ad Block Detection` passive resistance (bait elements return normal values).
+- `Extension Detection` passive resistance (chrome-extension:// fetch rejection).
+- AES-CTR encrypt/decrypt (using ctr crate, 128/256-bit key, 16-byte counter).
+- Detection standard matrix (4-tier: Sannysoft/CreepJS/BotD/FingerprintJS + end-to-end samples).
+- 30+ TODO gap items (G01-G30) from systematic detection signal audit.
+
+### Changed
+- WebGL `getShaderPrecisionFormat`: now distinguishes LOW_FLOAT/MEDIUM_FLOAT/HIGH_FLOAT precision types (was constant {127,127,23}).
+- WebGL `getExtension`: unknown extensions return empty Object instead of null (aligns with Chrome).
+- WebGL `getParameter`: expanded from 18 to 49 pname (added WebGL1 + WebGL2 parameters).
+- `Permissions.query`: expanded from 2 branches to 28+ permission items with Chrome default values.
+- `getComputedStyle`: expanded from 17 to 41 CSS properties; now reads element.style values first.
+- `document.write` shim: corrected description to three-level fallback (currentScript.afterend -> body.beforeend -> documentElement.beforeend).
+
+### Verified (no code change needed)
+- `crypto.randomUUID`: confirmed implemented (random.rs:136).
+- Multi-threading GIL: confirmed released (allow_threads for source >= 256 bytes).
+- `hookNative`: functional (accessor-type properties like userAgent getter cannot be hooked).
+- `AudioContext.baseLatency/outputLatency`: confirmed implemented (0.005/0.01).
+- `Float32Array` NaN bit pattern: 0x7fc00000 (x86 quiet NaN, V8 native).
+- `Function.prototype.bind`: native code toString (BotD pass).
+- `MutationObserver`: stub exists (observe/disconnect/takeRecords, no-op).
+- `TextMetrics`: 7 fields complete (W3C spec all fields).
+- `Intl.supportedValuesOf`: V8 native support confirmed.
+- `EnvironmentMap`: 396 entries (corrected from 393).
+- `userAgentData`: 9 fields (corrected from 10, no uaFullVersion).
+- `BotD`: 21 SignalKind values (corrected from ~10).
+- `CreepJS`: 24+ collectors / 55 signal pages / 18 lie types (corrected from "21 dimensions").
+
+### Anti-detection sample testing
+- Douyin a_bogus (bdms.js): PASS — 188 chars, 3 endpoints.
+- Douyin X-Bogus (webmssdk.js): PASS — 16 chars, frontierSign.
+- RS (Ruishu): FAIL — VMP internal access undefined variable (v0.8.80).
+- Webpack runtime/chunk/vendor: PASS — all loaded.
+- DataDome/Akamai: registered, pending sample acquisition.
+
+### Quality Gates
+- `cargo test --workspace`: 1221 passed, 0 failed
+- Python tests: 2060 passed, 1 skipped
+- CreepJS: 0/44 lies
+- Runtime audit: 98/98 OK
+
+### Known Limitations
+- Intl DateTimeFormat OOM in direct eval context (v0.8.80)
+- RS VMP load error (v0.8.80)
+- DataDome/Akamai samples pending (v0.8.80)
+- matchMedia media config fields not yet configurable (v0.8.80)
+- Permissions profile not yet wired to runtime (v0.8.80)
+- WebGPU behavior unimplemented (v0.8.81)
+- AES-KW / RSA-PKCS1-v1.5 sign/verify unimplemented (v0.8.81)
+
 ## [0.8.78] - 2026-06-25
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
