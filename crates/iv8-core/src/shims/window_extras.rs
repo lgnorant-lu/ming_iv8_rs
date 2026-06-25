@@ -374,6 +374,75 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         window.cookieStore.removeEventListener = function() {};
     }
 
+    // RTCPeerConnection ICE stub (WebRTC fingerprint)
+    // codegen provides constructor skeleton; we add behavioral stubs
+    if (typeof RTCPeerConnection !== 'undefined' && !RTCPeerConnection.prototype.createOffer) {
+        RTCPeerConnection.prototype.createOffer = function(options) {
+            return Promise.resolve({ type: 'offer', sdp: '' });
+        };
+        RTCPeerConnection.prototype.createAnswer = function(options) {
+            return Promise.resolve({ type: 'answer', sdp: '' });
+        };
+        RTCPeerConnection.prototype.setLocalDescription = function(desc) {
+            this.localDescription = desc;
+            return Promise.resolve();
+        };
+        RTCPeerConnection.prototype.setRemoteDescription = function(desc) {
+            this.remoteDescription = desc;
+            return Promise.resolve();
+        };
+        RTCPeerConnection.prototype.addIceCandidate = function(candidate) {
+            return Promise.resolve();
+        };
+        RTCPeerConnection.prototype.close = function() { this.connectionState = 'closed'; };
+        RTCPeerConnection.prototype.getStats = function() {
+            return Promise.resolve(new Map());
+        };
+        RTCPeerConnection.prototype.addTransceiver = function(track) { return {}; };
+        RTCPeerConnection.prototype.addTrack = function(track) { return {}; };
+    }
+
+    // Chromium Feature Flags stub (navigator.userAgentData feature detection)
+    // Chrome exposes these via Object.defineProperty on navigator or window
+    if (typeof window !== 'undefined' && !window.__iv8FeatureFlags) {
+        var _flags = {
+            FencedFrames: true,
+            FencedFramesAPIChanges: false,
+            FencedFramesDefaultMode: false,
+            FencedFramesLocalUnpartitionedDataAccess: false,
+            SharedArrayBufferEnabled: false,
+            ModelExecutionAPI: true,
+            TrustedTypeBeforePolicyCreationEvent: false,
+            AdInterestGroupAPI: true,
+            Fledge: true,
+            AllowURNsInIframes: true,
+            AllowURNsInIframe: false,
+            FledgeNegativeTargeting: true,
+            FledgeClearOriginJoinedAdInterestGroups: true,
+            FledgeFeatureDetection: true,
+            EnforceAnonymityExposure: true,
+            InstalledApp: true,
+            CookieDeprecationFacilitatedTesting: false,
+            AttributionReportingInterface: true,
+            SharedStorageAPIM118: true,
+            NavigationId: false,
+            CrossFramePerformanceTimeline: false,
+            CSSKeyframesRuleLength: true,
+            ManagedConfiguration: true,
+            DeviceAttributes: false,
+            Focusgroup: true,
+            FetchLaterAPI: false,
+            UACHOverrideBlank: false,
+            HTMLElementScrollParent: false,
+            LateWindowProperties: false,
+            WebGPUExperimentalFeatures: false,
+            WebGPUDeveloperFeatures: false,
+        };
+        Object.defineProperty(window, '__iv8FeatureFlags', {
+            value: _flags, writable: false, configurable: false, enumerable: false,
+        });
+    }
+
     // Custom Elements (customElements) stub
     if (typeof customElements !== 'undefined' && !customElements.define) {
         customElements._registry = {};
