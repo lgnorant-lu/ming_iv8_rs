@@ -443,6 +443,31 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         });
     }
 
+    // Ad Block Detection resistance: offsetParent returns non-null for bait elements.
+    // Real ad blockers set display:none on bait elements, making offsetParent null.
+    // We ensure bait-like elements return normal offsetParent (document.body).
+    // This is a passive defense — no active intervention needed beyond
+    // ensuring getBoundingClientRect/offsetParent return normal values.
+
+    // Extension Detection resistance: chrome-extension:// URLs return 404 (not found).
+    // Real browsers without the extension return net::ERR_FAILED.
+    // We intercept fetch/XHR to chrome-extension:// to return rejection.
+    if (typeof window !== 'undefined' && !window.__iv8ExtDetectionGuard) {
+        var _origFetch = typeof fetch !== 'undefined' ? fetch : null;
+        if (_origFetch) {
+            fetch = function(input, init) {
+                var url = typeof input === 'string' ? input : (input && input.url) || '';
+                if (url.indexOf('chrome-extension://') === 0) {
+                    return Promise.reject(new TypeError('Failed to fetch'));
+                }
+                return _origFetch.call(this, input, init);
+            };
+        }
+        Object.defineProperty(window, '__iv8ExtDetectionGuard', {
+            value: true, writable: false, configurable: false, enumerable: false,
+        });
+    }
+
     // Custom Elements (customElements) stub
     if (typeof customElements !== 'undefined' && !customElements.define) {
         customElements._registry = {};
