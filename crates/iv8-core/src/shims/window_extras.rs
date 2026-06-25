@@ -449,6 +449,11 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             WebGPUExperimentalFeatures: false,
             WebGPUDeveloperFeatures: false,
         };
+        // Merge profile-driven overrides from globalThis.__iv8FeatureFlagPrefs
+        var _flagPrefs = (typeof globalThis.__iv8FeatureFlagPrefs === 'object' && globalThis.__iv8FeatureFlagPrefs) ? globalThis.__iv8FeatureFlagPrefs : {};
+        for (var _fk in _flagPrefs) {
+            if (_fk in _flags) _flags[_fk] = _flagPrefs[_fk];
+        }
         Object.defineProperty(window, '__iv8FeatureFlags', {
             value: _flags, writable: false, configurable: false, enumerable: false,
         });

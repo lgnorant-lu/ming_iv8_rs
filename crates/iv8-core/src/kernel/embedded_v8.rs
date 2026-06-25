@@ -994,6 +994,7 @@ impl EmbeddedV8Kernel {
         .ok();
 
         // 19c. Install window properties, global constructors, structuredClone, Blob
+        self.inject_feature_flag_prefs();
         self.eval(
             crate::shims::window_extras::WINDOW_EXTRAS_JS,
             crate::kernel::EvalOpts::default(),
@@ -1183,6 +1184,37 @@ impl EmbeddedV8Kernel {
             fonts_mode, families_json
         );
         self.eval(&js, crate::kernel::EvalOpts::default()).ok();
+    }
+
+    /// Inject feature flag overrides from the environment map.
+    /// The window_extras.rs shim merges these over the hardcoded defaults.
+    fn inject_feature_flag_prefs(&mut self) {
+        let state = RuntimeState::get(&self.isolate);
+        // Check for feature flags override in env map
+        // Format: "featureflags.FencedFrames" = "true"/"false"
+        let mut overrides = Vec::new();
+        for (key, value) in state.environment.iter() {
+            if key.starts_with("featureflags.") {
+                let flag_name = &key["featureflags.".len()..];
+                let flag_val = match value {
+                    serde_json::Value::Bool(b) => *b,
+                    serde_json::Value::String(s) => s == "true",
+                    _ => continue,
+                };
+                overrides.push((flag_name.to_string(), flag_val));
+            }
+        }
+        if !overrides.is_empty() {
+            let pairs: Vec<String> = overrides
+                .iter()
+                .map(|(k, v)| format!("{}: {}", k, v))
+                .collect();
+            let js = format!(
+                "globalThis.__iv8FeatureFlagPrefs = {{ {} }};",
+                pairs.join(", ")
+            );
+            self.eval(&js, crate::kernel::EvalOpts::default()).ok();
+        }
     }
 
     /// Install native environment objects (navigator, screen, location)
