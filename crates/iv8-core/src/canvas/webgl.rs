@@ -434,7 +434,7 @@ unsafe extern "C" fn webgl_get_parameter(info: *const v8::FunctionCallbackInfo) 
                 rv.set(v8::Integer::new(scope, 16).into());
             }
             GL_MAX_VERTEX_UNIFORM_VECTORS => {
-                rv.set(v8::Integer::new(scope, 4095).into());
+                rv.set(v8::Integer::new(scope, 4096).into());
             }
             GL_MAX_FRAGMENT_UNIFORM_VECTORS => {
                 rv.set(v8::Integer::new(scope, 1024).into());

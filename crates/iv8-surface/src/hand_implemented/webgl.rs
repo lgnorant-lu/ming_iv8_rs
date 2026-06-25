@@ -93,7 +93,7 @@ pub fn build_gl_param_map() -> HashMap<u32, GlParamSpec> {
             pname: 0x8DFB,
             name: "MAX_VERTEX_UNIFORM_VECTORS",
             param_type: GlParamType::Int,
-            default: "4095",
+            default: "4096",
         },
         GlParamSpec {
             pname: 0x8B49,
