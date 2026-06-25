@@ -31,13 +31,28 @@ pub const XHR_SHIM_JS: &str = r#"
         this.responseText = '';
         this.response = '';
         this.responseType = '';
+        this.responseURL = '';
+        this.timeout = 0;
+        this.withCredentials = false;
         this.onreadystatechange = null;
-        this.onload = null;
-        this.onerror = null;
         this._method = 'GET';
         this._url = '';
         this._async = true;
         this._headers = {};
+        this._responseHeaders = null;
+        // XMLHttpRequestUpload stub (real browser has EventTarget subclass)
+        this.upload = {
+            addEventListener: function() {},
+            removeEventListener: function() {},
+            dispatchEvent: function() { return true; },
+        };
+        // on* event handlers: use defineProperty to create own data properties
+        // because codegen XMLHttpRequestEventTarget.prototype has accessor-only
+        // getters (no setter), so `this.onload = null` silently fails.
+        var onProps = ['onload','onerror','onloadstart','onprogress','onabort','ontimeout','onloadend'];
+        for (var i = 0; i < onProps.length; i++) {
+            Object.defineProperty(this, onProps[i], {value: null, writable: true, enumerable: true, configurable: true});
+        }
     }
 
     XMLHttpRequest.UNSENT = 0;
@@ -94,6 +109,7 @@ pub const XHR_SHIM_JS: &str = r#"
                 self.status = result.status;
                 self.statusText = result.status === 200 ? 'OK' : '';
                 self._responseHeaders = result.headers || {};
+                self.responseURL = self._url;
 
                 // Process Set-Cookie headers from response
                 try {
@@ -139,6 +155,18 @@ pub const XHR_SHIM_JS: &str = r#"
     XMLHttpRequest.prototype.abort = function() {
         this.readyState = 0;
     };
+
+    XMLHttpRequest.prototype.overrideMimeType = function(mime) {
+        this._overrideMimeType = mime;
+    };
+
+    // Link prototype chain to codegen XMLHttpRequestEventTarget.prototype
+    // so addEventListener/removeEventListener/dispatchEvent are inherited
+    // via EventTarget. This is re-applied on every eval of XHR_SHIM_JS
+    // (install_undetect_shims re-evals it, overwriting the constructor).
+    if (typeof XMLHttpRequestEventTarget !== 'undefined' && XMLHttpRequestEventTarget.prototype) {
+        Object.setPrototypeOf(XMLHttpRequest.prototype, XMLHttpRequestEventTarget.prototype);
+    }
 
     globalThis.XMLHttpRequest = XMLHttpRequest;
 })();
