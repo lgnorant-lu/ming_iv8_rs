@@ -985,6 +985,7 @@ impl EmbeddedV8Kernel {
         .ok();
 
         // 19b. Install AudioContext subsystem (extracted from document_props.rs)
+        self.inject_audio_prefs();
         self.eval(
             crate::shims::audio_context::AUDIO_CONTEXT_JS,
             crate::kernel::EvalOpts::default(),
@@ -1112,6 +1113,30 @@ impl EmbeddedV8Kernel {
         let json_str = serde_json::to_string(&serde_json::Value::Object(json_obj))
             .unwrap_or_else(|_| "{}".into());
         let js = format!("globalThis.__iv8MediaPrefs = {};", json_str);
+        self.eval(&js, crate::kernel::EvalOpts::default()).ok();
+    }
+
+    /// Inject audio preferences from the environment map into the JS context
+    /// as `globalThis.__iv8AudioPrefs`. The AudioContext shim reads these
+    /// values for baseLatency/outputLatency and channelData fingerprint seed.
+    fn inject_audio_prefs(&mut self) {
+        let state = RuntimeState::get(&self.isolate);
+        let base_latency = state
+            .environment
+            .get_f64("audio.baseLatency")
+            .unwrap_or(0.005);
+        let output_latency = state
+            .environment
+            .get_f64("audio.outputLatency")
+            .unwrap_or(0.01);
+        let channel_data_seed = state
+            .environment
+            .get_f64("audio.channelDataSeed")
+            .unwrap_or(0.0);
+        let js = format!(
+            "globalThis.__iv8AudioPrefs = {{ baseLatency: {}, outputLatency: {}, channelDataSeed: {} }};",
+            base_latency, output_latency, channel_data_seed as i64
+        );
         self.eval(&js, crate::kernel::EvalOpts::default()).ok();
     }
 

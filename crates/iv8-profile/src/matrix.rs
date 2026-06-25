@@ -445,6 +445,15 @@ fn build_flat_env(source: &ProfileSource) -> HashMap<String, serde_json::Value> 
         "audio.mode".into(),
         serde_json::Value::String(source.rendering.audio_context.mode.clone()),
     );
+    // Audio fingerprint values (configurable fixed sample outputs)
+    env.insert(
+        "audio.baseLatency".into(),
+        serde_json::json!(0.005),
+    );
+    env.insert(
+        "audio.outputLatency".into(),
+        serde_json::json!(0.01),
+    );
 
     // === timers ===
     let raf_interval_ms = if source.timing.fps > 0 {

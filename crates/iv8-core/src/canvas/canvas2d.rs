@@ -596,4 +596,20 @@ mod tests {
         // "M" → "TQ=="
         assert_eq!(base64_encode(b"M"), "TQ==");
     }
+
+    #[test]
+    fn test_same_seed_produces_same_output() {
+        // Cross-call consistency: same seed → same output (DataDome Picasso)
+        let mut canvas = Canvas2D::new(50, 50);
+        canvas.commands.push(DrawCmd::FillRect {
+            x: 0.0,
+            y: 0.0,
+            w: 50.0,
+            h: 50.0,
+            color: [100, 150, 200, 255],
+        });
+        let png1 = canvas.to_png(Some(42));
+        let png2 = canvas.to_png(Some(42));
+        assert_eq!(png1, png2, "same seed must produce identical output");
+    }
 }

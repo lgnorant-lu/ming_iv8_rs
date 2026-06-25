@@ -103,8 +103,22 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     }
     AudioBuffer.prototype.getChannelData = function(channel) {
         var data = new Float32Array(this.length);
-        for (var i = 0; i < Math.min(data.length, 100); i++) {
-            data[i] = Math.sin(i * 0.1) * 0.0001;
+        // Check for profile-driven fingerprint seed
+        var fpSeed = _audioPrefs.channelDataSeed;
+        if (typeof fpSeed === 'number' && fpSeed !== 0) {
+            // Deterministic PRNG from seed (xorshift32)
+            var s = fpSeed | 0;
+            for (var i = 0; i < data.length; i++) {
+                s = (s ^ (s << 13)) | 0;
+                s = (s ^ (s >>> 17)) | 0;
+                s = (s ^ (s << 5)) | 0;
+                data[i] = ((s >>> 0) / 4294967296 - 0.5) * 0.0001;
+            }
+        } else {
+            // Default: sinusoid fingerprint (deterministic, no seed)
+            for (var i = 0; i < Math.min(data.length, 100); i++) {
+                data[i] = Math.sin(i * 0.1) * 0.0001;
+            }
         }
         return data;
     };
@@ -227,10 +241,11 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     BaseAudioContext.prototype.dispatchEvent = function() { return true; };
 
     // AudioContext
+    var _audioPrefs = (typeof globalThis.__iv8AudioPrefs === 'object' && globalThis.__iv8AudioPrefs) ? globalThis.__iv8AudioPrefs : {};
     function AudioContext(options) {
         BaseAudioContext.call(this, options && options.sampleRate);
-        this.baseLatency = 0.005;
-        this.outputLatency = 0.01;
+        this.baseLatency = _audioPrefs.baseLatency || 0.005;
+        this.outputLatency = _audioPrefs.outputLatency || 0.01;
     }
     AudioContext.prototype = Object.create(BaseAudioContext.prototype);
     AudioContext.prototype.constructor = AudioContext;
