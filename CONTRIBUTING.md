@@ -310,13 +310,23 @@ Tag message 不是 commit message，但遵循相同审美：
 | `git reset --hard` | 丢弃未提交改动且移动分支指针，丢失提交 |
 | `git rebase` | 重写历史，可能静默丢弃提交 |
 | `git checkout -- .` / `git restore .` | 丢弃工作区所有改动 |
+| `git commit --amend` | 修改已有提交，在已 tag 的版本上可能导致历史不一致 |
+| `git tag -d` / `git tag -f` | 删除或移动已有 tag |
 
-### 规则
+### 核心原则
 
-1. 实验性代码改动用 `git stash`（可恢复）或 `git checkout -- <具体文件>`（窄范围），**不用** `git reset --hard`。
-2. 如需 `git reset` 或 `git rebase`，须向用户说明确切命令和原因，等待确认。
-3. 任何历史重写操作后，立即运行 `git reflog -10` 和 `cargo test --workspace` 验证提交和改动未丢失。
-4. rebase 出问题时 `git rebase --abort` 是安全的，但仍需 `git reflog` 验证。
+1. **禁止自动执行**：上述操作一律需要用户明确确认后方可执行。
+2. **实验性改动用 stash**：`git stash`（可恢复）或 `git checkout -- <具体文件>`（窄范围），**不用** `git reset --hard`。
+3. **确认后才执行**：如需 `git reset` 或 `git rebase`，须向用户说明确切命令和原因，等待确认。
+4. **验证完整性**：任何历史重写操作后，立即运行 `git reflog -10` 和 `cargo test --workspace` 验证提交和改动未丢失。
+5. **rebase 中止安全**：rebase 出问题时 `git rebase --abort` 是安全的，但仍需 `git reflog` 验证返回状态。
+6. **tag 不可移动**：已创建的 tag 不得删除或移动，除非用户明确批准。
+
+### 项目禁止 Emoji
+
+本项目所有文件（源码、文档、提交信息）**禁止使用 emoji**。状态标记使用文本：
+- PASS / FAIL / WARN 替代 emoji 符号
+- `[x]` / `[ ]` / `[~]` 用于 checkbox 表格
 
 > 事故记录：v0.8.78 会话中 `git reset` 将分支指针从 v0.8.77 tag 移回 v0.8.76 tag，丢失 39 个提交。通过 `git reset --hard 64e52a3` 恢复。
 
