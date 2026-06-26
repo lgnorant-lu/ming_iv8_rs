@@ -38,12 +38,21 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 
     // AudioNode base
     function AudioNode(ctx) {
-        this.context = ctx;
-        this.numberOfInputs = 0;
-        this.numberOfOutputs = 1;
-        this.channelCount = 2;
-        this.channelCountMode = 'max';
-        this.channelInterpretation = 'speakers';
+        throw new TypeError('Illegal constructor');
+        _initAudioNode(this, ctx);
+    }
+    function _initAudioNode(self, ctx) {
+        self.context = ctx;
+        self.numberOfInputs = 0;
+        self.numberOfOutputs = 1;
+        self.channelCount = 2;
+        self.channelCountMode = 'max';
+        self.channelInterpretation = 'speakers';
+    }
+    function _createAudioNode(ctx) {
+        var node = Object.create(AudioNode.prototype);
+        _initAudioNode(node, ctx);
+        return node;
     }
     AudioNode.prototype.connect = function(dest) { return dest; };
     AudioNode.prototype.disconnect = function() {};
@@ -136,20 +145,38 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 
     // AudioDestinationNode
     function AudioDestinationNode(ctx) {
-        AudioNode.call(this, ctx);
-        this.maxChannelCount = 2;
-        this.numberOfInputs = 1;
-        this.numberOfOutputs = 0;
+        throw new TypeError('Illegal constructor');
+        _initAudioDestinationNode(this, ctx);
+    }
+    function _initAudioDestinationNode(self, ctx) {
+        _initAudioNode(self, ctx);
+        self.maxChannelCount = 2;
+        self.numberOfInputs = 1;
+        self.numberOfOutputs = 0;
+    }
+    function _createAudioDestinationNode(ctx) {
+        var node = Object.create(AudioDestinationNode.prototype);
+        _initAudioDestinationNode(node, ctx);
+        return node;
     }
     AudioDestinationNode.prototype = Object.create(AudioNode.prototype);
 
     // AudioBuffer stub
     function AudioBuffer(options) {
-        this.sampleRate = (options && options.sampleRate) || 44100;
-        this.length = (options && options.length) || 0;
-        this.duration = this.length / this.sampleRate;
-        this.numberOfChannels = (options && options.numberOfChannels) || 1;
-        this._data = new Float32Array(this.length);
+        throw new TypeError('Illegal constructor');
+        _initAudioBuffer(this, options);
+    }
+    function _initAudioBuffer(self, options) {
+        self.sampleRate = (options && options.sampleRate) || 44100;
+        self.length = (options && options.length) || 0;
+        self.duration = self.length / self.sampleRate;
+        self.numberOfChannels = (options && options.numberOfChannels) || 1;
+        self._data = new Float32Array(self.length);
+    }
+    function _createAudioBuffer(options) {
+        var buf = Object.create(AudioBuffer.prototype);
+        _initAudioBuffer(buf, options);
+        return buf;
     }
     AudioBuffer.prototype.getChannelData = function(channel) {
         var data = new Float32Array(this.length);
@@ -177,12 +204,16 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 
     // BaseAudioContext
     function BaseAudioContext(sampleRate) {
-        this._sampleRate = sampleRate || 44100;
-        this._currentTime = 0;
-        this._destination = new AudioDestinationNode(this);
-        this._listener = {};
-        this._state = 'suspended';
-        this._onstatechange = null;
+        throw new TypeError('Illegal constructor');
+        _initBaseAudioContext(this, sampleRate);
+    }
+    function _initBaseAudioContext(self, sampleRate) {
+        self._sampleRate = sampleRate || 44100;
+        self._currentTime = 0;
+        self._destination = _createAudioDestinationNode(self);
+        self._listener = {};
+        self._state = 'suspended';
+        self._onstatechange = null;
     }
     Object.defineProperty(BaseAudioContext.prototype, 'sampleRate', { get: function() { return this._sampleRate; }, enumerable: true, configurable: true });
     Object.defineProperty(BaseAudioContext.prototype, 'currentTime', { get: function() { return this._currentTime; }, enumerable: true, configurable: true });
@@ -203,10 +234,10 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         return _createGainNode(this, options);
     };
     BaseAudioContext.prototype.createBuffer = function(channels, length, sampleRate) {
-        return new AudioBuffer({ numberOfChannels: channels, length: length, sampleRate: sampleRate });
+        return _createAudioBuffer({ numberOfChannels: channels, length: length, sampleRate: sampleRate });
     };
     BaseAudioContext.prototype.createBufferSource = function() {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.buffer = null;
         node.loop = false;
         node.loopStart = 0;
@@ -219,34 +250,34 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         return node;
     };
     BaseAudioContext.prototype.createScriptProcessor = function(bufferSize, inputChannels, outputChannels) {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.bufferSize = bufferSize || 4096;
         node.onaudioprocess = null;
         return node;
     };
     BaseAudioContext.prototype.createChannelSplitter = function(n) {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.numberOfOutputs = n || 6;
         return node;
     };
     BaseAudioContext.prototype.createChannelMerger = function(n) {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.numberOfInputs = n || 6;
         return node;
     };
     BaseAudioContext.prototype.createConvolver = function() {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.buffer = null;
         node.normalize = true;
         return node;
     };
     BaseAudioContext.prototype.createDelay = function(maxDelay) {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.delayTime = _createAudioParam(0);
         return node;
     };
     BaseAudioContext.prototype.createBiquadFilter = function() {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.type = 'lowpass';
         node.frequency = _createAudioParam(350);
         node.detune = _createAudioParam(0);
@@ -256,18 +287,18 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         return node;
     };
     BaseAudioContext.prototype.createWaveShaper = function() {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.curve = null;
         node.oversample = 'none';
         return node;
     };
     BaseAudioContext.prototype.createStereoPanner = function() {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.pan = _createAudioParam(0);
         return node;
     };
     BaseAudioContext.prototype.createPanner = function() {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.panningModel = 'equalpower';
         node.distanceModel = 'inverse';
         node.positionX = _createAudioParam(0);
@@ -285,7 +316,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         return node;
     };
     BaseAudioContext.prototype.decodeAudioData = function(buffer, successCb, errorCb) {
-        var ab = new AudioBuffer({ length: 1, sampleRate: this.sampleRate });
+        var ab = _createAudioBuffer({ length: 1, sampleRate: this.sampleRate });
         if (successCb) { setTimeout(function() { successCb(ab); }, 0); return; }
         return Promise.resolve(ab);
     };
@@ -299,7 +330,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     // AudioContext
     var _audioPrefs = (typeof globalThis.__iv8AudioPrefs === 'object' && globalThis.__iv8AudioPrefs) ? globalThis.__iv8AudioPrefs : {};
     function AudioContext(options) {
-        BaseAudioContext.call(this, options && options.sampleRate);
+        _initBaseAudioContext(this, options && options.sampleRate);
         this._baseLatency = _audioPrefs.baseLatency || 0.005;
         this._outputLatency = _audioPrefs.outputLatency || 0.01;
     }
@@ -310,13 +341,13 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     AudioContext.prototype.getOutputTimestamp = function() {
         return { contextTime: this._currentTime, performanceTime: performance.now() };
     };
-    AudioContext.prototype.createMediaStreamSource = function(stream) { return new AudioNode(this); };
+    AudioContext.prototype.createMediaStreamSource = function(stream) { return _createAudioNode(this); };
     AudioContext.prototype.createMediaStreamDestination = function() {
-        var node = new AudioNode(this);
+        var node = _createAudioNode(this);
         node.stream = { getTracks: function() { return []; }, getAudioTracks: function() { return []; } };
         return node;
     };
-    AudioContext.prototype.createMediaElementSource = function(el) { return new AudioNode(this); };
+    AudioContext.prototype.createMediaElementSource = function(el) { return _createAudioNode(this); };
 
     // OfflineAudioContext
     function OfflineAudioContext(numberOfChannels, length, sampleRate) {
@@ -326,10 +357,10 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
             length = opts.length || 44100;
             sampleRate = opts.sampleRate || 44100;
         }
-        BaseAudioContext.call(this, sampleRate);
+        _initBaseAudioContext(this, sampleRate);
         this.length = length;
         this.numberOfChannels = numberOfChannels;
-        this._buffer = new AudioBuffer({ numberOfChannels: numberOfChannels, length: length, sampleRate: sampleRate });
+        this._buffer = _createAudioBuffer({ numberOfChannels: numberOfChannels, length: length, sampleRate: sampleRate });
     }
     OfflineAudioContext.prototype = Object.create(BaseAudioContext.prototype);
     OfflineAudioContext.prototype.constructor = OfflineAudioContext;

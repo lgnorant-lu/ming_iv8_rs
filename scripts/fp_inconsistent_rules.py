@@ -370,7 +370,13 @@ def match_value(field_name, rule_value, actual_value):
                       "vendor_flavors"):
         rv = str(rule_value).strip()
         av = str(actual_value).strip()
-        return rv == av
+        if rv == av:
+            return True
+        if rv.endswith("|"):
+            candidates = [p.strip() for p in rv[:-1].split("|") if p.strip()]
+            candidates.append("")
+            return av in candidates
+        return False
 
     return str(rule_value) == str(actual_value)
 
