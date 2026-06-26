@@ -105,6 +105,63 @@ pub struct RuntimeState {
     /// Global FunctionTemplates from install_all, stored for post-install
     /// prototype chain fixes (e.g., Navigator inherits EventTarget).
     pub codegen_templates: RefCell<std::collections::HashMap<String, v8::Global<v8::FunctionTemplate>>>,
+
+    /// performance.memory: per-page stable, quantized heap snapshot.
+    /// Initialized lazily on first access. Quantized to 100KB (102400 bytes)
+    /// multiples to avoid per-call-varying unbucketed values (bot-tell).
+    /// See date_interceptor.rs::install_performance_memory.
+    pub perf_memory: RefCell<Option<PerformanceMemory>>,
+
+    /// performance.now() monotonic jitter state.
+    /// Tracks the last returned value to guarantee monotonicity while adding
+    /// a small sub-millisecond increment so consecutive samples in a tight
+    /// loop do not return identical diffs (bot-tell). See
+    /// date_interceptor.rs::performance_now_callback.
+    pub perf_now_last: std::cell::Cell<f64>,
+}
+
+/// Quantized, per-page-stable `performance.memory` snapshot.
+///
+/// Real Chrome exposes `performance.memory` (non-standard) returning
+/// per-call-varying unbucketed heap values derived from V8 Isolate
+/// statistics. Returning precise bytes that change every call is a
+/// fingerprinting/bot-tell signal. Instead we expose fixed values
+/// quantized to 100KB (102400-byte) buckets that remain stable across
+/// all calls within a page session.
+#[derive(Debug, Clone, Copy)]
+pub struct PerformanceMemory {
+    /// jsHeapSizeLimit (bytes), multiple of 102400.
+    pub js_heap_size_limit: u64,
+    /// totalJSHeapSize (bytes), multiple of 102400, <= limit.
+    pub total_js_heap_size: u64,
+    /// usedJSHeapSize (bytes), multiple of 102400, <= total.
+    pub used_js_heap_size: u64,
+}
+
+impl PerformanceMemory {
+    /// 100KB bucket size in bytes.
+    pub const BUCKET: u64 = 102_400;
+
+    /// Quantize a byte count down to the nearest 100KB bucket (>=1 bucket).
+    pub fn quantize(bytes: u64) -> u64 {
+        let b = (bytes / Self::BUCKET).max(1);
+        b * Self::BUCKET
+    }
+
+    /// Default per-page-stable quantized snapshot.
+    /// Targets: limit ~400MB, total ~10MB, used ~5MB — all snapped to 100KB.
+    pub fn default_quantized() -> Self {
+        let limit = Self::quantize(419_430_400); // 4096 buckets = 400MB
+        let total = Self::quantize(10_485_760); // 102 buckets ≈ 9.77MB
+        let used = Self::quantize(5_242_880); // 51 buckets ≈ 4.88MB
+        debug_assert!(total <= limit);
+        debug_assert!(used <= total);
+        Self {
+            js_heap_size_limit: limit,
+            total_js_heap_size: total,
+            used_js_heap_size: used,
+        }
+    }
 }
 
 /// Time mode for the JS context.
@@ -161,6 +218,8 @@ impl RuntimeState {
             heap_registry: RefCell::new(Vec::new()),
             local_storage: RefCell::new(local_storage),
             codegen_templates: RefCell::new(std::collections::HashMap::new()),
+            perf_memory: RefCell::new(None),
+            perf_now_last: std::cell::Cell::new(f64::NEG_INFINITY),
         }
     }
 

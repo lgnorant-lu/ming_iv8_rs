@@ -2861,6 +2861,103 @@ mod tests {
     }
 
     #[test]
+    fn performance_memory_quantized_and_stable_v080() {
+        use crate::convert::RustValue;
+
+        let source = iv8_profile::defaults::default_profile_source();
+        let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
+        let config = KernelConfig::default().with_profile_matrix(&matrix);
+        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+
+        // performance.memory must exist and be an object.
+        assert_eq!(
+            kernel.eval_to_rust_value("typeof performance.memory"),
+            RustValue::String("object".into())
+        );
+
+        fn num(kernel: &mut EmbeddedV8Kernel, expr: &str) -> f64 {
+            match kernel.eval_to_rust_value(expr) {
+                RustValue::Float(f) => f,
+                RustValue::Int(i) => i as f64,
+                other => panic!("expected number from `{}`, got {:?}", expr, other),
+            }
+        }
+
+        let limit = num(&mut kernel, "performance.memory.jsHeapSizeLimit");
+        let total = num(&mut kernel, "performance.memory.totalJSHeapSize");
+        let used = num(&mut kernel, "performance.memory.usedJSHeapSize");
+
+        // All values must be multiples of the 100KB bucket (102400 bytes).
+        const BUCKET: f64 = 102_400.0;
+        assert!(
+            limit > 0.0 && (limit % BUCKET).abs() < f64::EPSILON,
+            "jsHeapSizeLimit must be a positive 100KB multiple, got {}",
+            limit
+        );
+        assert!(
+            total > 0.0 && (total % BUCKET).abs() < f64::EPSILON,
+            "totalJSHeapSize must be a positive 100KB multiple, got {}",
+            total
+        );
+        assert!(
+            used > 0.0 && (used % BUCKET).abs() < f64::EPSILON,
+            "usedJSHeapSize must be a positive 100KB multiple, got {}",
+            used
+        );
+
+        // Heap invariant: used <= total <= limit.
+        assert!(used <= total, "used ({}) must be <= total ({})", used, total);
+        assert!(total <= limit, "total ({}) must be <= limit ({})", total, limit);
+
+        // Per-page stability: repeated reads return identical values.
+        let limit2 = num(&mut kernel, "performance.memory.jsHeapSizeLimit");
+        let total2 = num(&mut kernel, "performance.memory.totalJSHeapSize");
+        let used2 = num(&mut kernel, "performance.memory.usedJSHeapSize");
+        assert_eq!(limit, limit2, "jsHeapSizeLimit must be stable across calls");
+        assert_eq!(total, total2, "totalJSHeapSize must be stable across calls");
+        assert_eq!(used, used2, "usedJSHeapSize must be stable across calls");
+    }
+
+    #[test]
+    fn performance_now_jitter_breaks_identical_diffs_v080() {
+        use crate::convert::RustValue;
+
+        let source = iv8_profile::defaults::default_profile_source();
+        let (matrix, _) = iv8_profile::ProfileMatrix::from_source(&source);
+        let config = KernelConfig::default().with_profile_matrix(&matrix);
+        let mut kernel = EmbeddedV8Kernel::new(config).unwrap();
+
+        fn now(kernel: &mut EmbeddedV8Kernel) -> f64 {
+            match kernel.eval_to_rust_value("performance.now()") {
+                RustValue::Float(f) => f,
+                RustValue::Int(i) => i as f64,
+                other => panic!("expected number, got {:?}", other),
+            }
+        }
+
+        // Sample 10 times in a tight loop with no task advancement.
+        let mut samples: Vec<f64> = Vec::with_capacity(10);
+        for _ in 0..10 {
+            samples.push(now(&mut kernel));
+        }
+
+        // Monotonicity: each sample >= previous.
+        for w in samples.windows(2) {
+            assert!(w[1] >= w[0], "performance.now() not monotonic: {} then {}", w[0], w[1]);
+        }
+
+        // Bot-tell guard: not all consecutive diffs are identical. At least
+        // one diff must differ from the others (jitter is active).
+        let diffs: Vec<f64> = samples.windows(2).map(|w| w[1] - w[0]).collect();
+        let first = diffs[0];
+        let all_same = diffs.iter().all(|d| (*d - first).abs() < f64::EPSILON);
+        // With the monotonic jitter, consecutive calls strictly increase, so
+        // at least the first diff (0 if base didn't move) differs from later
+        // diffs (0.0011). Assert not-all-identical.
+        assert!(!all_same, "performance.now() diffs all identical ({}) — jitter not active", first);
+    }
+
+    #[test]
     fn native_code_tostring_boundary_v047() {
         use crate::convert::RustValue;
 

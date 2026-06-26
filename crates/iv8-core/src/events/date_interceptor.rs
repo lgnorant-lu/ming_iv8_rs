@@ -57,6 +57,13 @@ pub fn install_date_interceptor(scope: &v8::PinScope<'_, '_>, global: v8::Local<
     let now_method_key = crate::v8_utils::v8_string(scope, "now");
     perf_obj.set(scope, now_method_key.into(), perf_now_fn.into());
 
+    // Install performance.memory — quantized, per-page-stable snapshot.
+    // Real Chrome returns per-call-varying unbucketed heap bytes from V8
+    // Isolate statistics; exposing those is a bot-tell. We expose fixed
+    // values quantized to 100KB (102400-byte) buckets, stable across all
+    // calls within a page session.
+    install_performance_memory(scope, perf_obj);
+
     // Install performance.timeOrigin — context creation logical epoch or real wall-clock.
     // Logical mode: 1704067200000.0 (IV8 epoch 2024-01-01T00:00:00Z).
     // System mode: system time at context creation captured by kernel.
@@ -157,8 +164,10 @@ unsafe extern "C" fn date_now_callback(info: *const v8::FunctionCallbackInfo) {
 }
 
 /// performance.now() → time since context creation (ms, high resolution).
-/// In logical mode: eventLoop time directly.
-/// In system mode: real performance.now equivalent.
+/// In logical mode: eventLoop time directly, plus a small monotonic sub-ms
+/// jitter so consecutive samples in a tight loop do not return identical
+/// diffs (a known bot-tell when 10 samples yield the exact same delta).
+/// In system mode: real performance.now equivalent with the same jitter.
 unsafe extern "C" fn performance_now_callback(info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
@@ -168,7 +177,7 @@ unsafe extern "C" fn performance_now_callback(info: *const v8::FunctionCallbackI
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
 
-        let now_ms = match state.time_mode {
+        let base_ms = match state.time_mode {
             TimeMode::Logical => state.event_loop.borrow().get_time_ms(),
             TimeMode::System => {
                 // Approximate: use process uptime
@@ -180,6 +189,75 @@ unsafe extern "C" fn performance_now_callback(info: *const v8::FunctionCallbackI
             }
         };
 
+        // Monotonic jitter: ensure each call is strictly greater than the
+        // last returned value by a small sub-millisecond increment, so that
+        // repeated sampling does not produce identical consecutive diffs.
+        // The increment varies per call (deterministic, no RNG) so the diffs
+        // themselves are not a constant — a constant delta across N samples
+        // is itself a bot-tell. Stays sub-millisecond to avoid disturbing
+        // timer scheduling.
+        let prev = state.perf_now_last.get();
+        let mut now_ms = base_ms;
+        if now_ms <= prev {
+            // Varying sub-ms step in the ~0.5–1.5 microsecond range, derived
+            // from a cheap xorshift over the monotonic last value. This keeps
+            // diffs non-identical while preserving strict monotonicity.
+            let mut s = prev.to_bits().wrapping_add(0x9E37_79B9_7F4A_7C15);
+            s ^= s >> 17;
+            s = s.wrapping_mul(0xBF58_476D_1CE4_E5B9);
+            s ^= s >> 31;
+            // Map to [0.0005, 0.0015) ms (0.5–1.5 us).
+            let frac = (s & 0xFFFF) as f64 / 65535.0;
+            let step = 0.0005 + frac * 0.0010;
+            now_ms = prev + step;
+        }
+        state.perf_now_last.set(now_ms);
+
         rv.set(v8::Number::new(scope, now_ms).into());
     }));
+}
+
+/// Install `performance.memory` as a non-enumerable accessor returning a
+/// per-page-stable, 100KB-quantized heap snapshot.
+///
+/// The values are computed once (lazily on first access) and cached in
+/// `RuntimeState.perf_memory`, so every subsequent read within the same
+/// page session returns identical numbers — matching real-browser
+/// behavior where `performance.memory` is approximately stable for a
+/// given page, while avoiding the per-call-varying unbucketed bytes that
+/// fingerprinting scripts flag as a bot-tell.
+fn install_performance_memory(scope: &v8::PinScope<'_, '_>, perf_obj: v8::Local<v8::Object>) {
+    let isolate: &v8::Isolate = &**scope;
+    let state = RuntimeState::get(isolate);
+
+    // Lazily initialize the per-page-stable quantized snapshot.
+    let mem = {
+        let mut slot = state.perf_memory.borrow_mut();
+        if slot.is_none() {
+            *slot = Some(crate::state::PerformanceMemory::default_quantized());
+        }
+        // We only need the copy; drop the borrow before touching V8.
+        slot.as_ref().copied().expect("initialized above")
+    };
+
+    let memory_obj = v8::Object::new(scope);
+
+    let limit = v8::Number::new(scope, mem.js_heap_size_limit as f64);
+    let total = v8::Number::new(scope, mem.total_js_heap_size as f64);
+    let used = v8::Number::new(scope, mem.used_js_heap_size as f64);
+
+    let k_limit = crate::v8_utils::v8_string(scope, "jsHeapSizeLimit");
+    let k_total = crate::v8_utils::v8_string(scope, "totalJSHeapSize");
+    let k_used = crate::v8_utils::v8_string(scope, "usedJSHeapSize");
+
+    // Define as read-only, non-enumerable properties to mirror Chrome.
+    let ro = v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_ENUM;
+    memory_obj.define_own_property(scope, k_limit.into(), limit.into(), ro);
+    let ro = v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_ENUM;
+    memory_obj.define_own_property(scope, k_total.into(), total.into(), ro);
+    let ro = v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_ENUM;
+    memory_obj.define_own_property(scope, k_used.into(), used.into(), ro);
+
+    let k_memory = crate::v8_utils::v8_string(scope, "memory");
+    perf_obj.set(scope, k_memory.into(), memory_obj.into());
 }
