@@ -39,7 +39,7 @@ _SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
-from test_metamorphic import MR_MAP
+from _metamorphic import MR_MAP
 
 
 def _enrich_baseline(env: dict) -> dict:
