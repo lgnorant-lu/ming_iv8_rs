@@ -249,4 +249,36 @@ mod tests {
         let result: Result<ProfileSource, _> = serde_json::from_str(json);
         assert!(result.is_err());
     }
+
+    #[test]
+    fn deserialize_browserforge_generated_profile() {
+        let json = std::fs::read_to_string(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../data/browserforge_profile.json"),
+        )
+        .expect("read browserforge_profile.json");
+        let outer: serde_json::Value = serde_json::from_str(&json).expect("parse outer JSON");
+        let ps_json = outer
+            .get("profile_source")
+            .expect("has profile_source key");
+        let source: ProfileSource = serde_json::from_value(ps_json.clone())
+            .expect("deserialize ProfileSource from BrowserForge JSON");
+        assert_eq!(source.meta.schema_version, "0.8.32");
+        assert_eq!(source.meta.provenance, "browserforge");
+        assert!(!source.navigator.user_agent.is_empty());
+        assert!(!source.identity.gpu.webgl_unmasked_vendor.is_empty());
+
+        let (matrix, validation) = crate::ProfileMatrix::from_source(&source);
+        assert!(
+            validation.is_valid(),
+            "BrowserForge profile validation errors: {}",
+            validation
+        );
+        assert!(
+            matrix.flat_env.len() > 50,
+            "flat_env has {} keys",
+            matrix.flat_env.len()
+        );
+        assert!(matrix.flat_env.contains_key("navigator.userAgent"));
+    }
 }

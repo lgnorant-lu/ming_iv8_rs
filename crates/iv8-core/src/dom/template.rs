@@ -100,23 +100,39 @@ pub struct DomTemplates {
 }
 
 /// Helper: create a FunctionTemplate with a class name and internal field count.
+/// `ctor` selects the constructor callback: `illegal_dom_constructor` for
+/// non-constructable interfaces (the common case — DOM nodes are created by
+/// Rust, not by `new HTMLElement()`), `empty_dom_constructor` for the few
+/// constructable interfaces (Request, Response).
 fn make_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     class_name: &str,
+    ctor: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(ctor).build(scope);
     let name = crate::v8_utils::v8_string(scope, class_name);
     tmpl.set_class_name(name);
-    // Set internal field count on the instance template
     let inst = tmpl.instance_template(scope);
     inst.set_internal_field_count(INTERNAL_FIELD_COUNT as usize);
     tmpl
 }
 
-/// Empty constructor callback — DOM nodes are not constructed from JS.
-unsafe extern "C" fn empty_constructor(_info: *const v8::FunctionCallbackInfo) {
-    // No-op: DOM nodes are created by Rust, not by `new HTMLElement()`.
+/// Illegal constructor callback — DOM nodes are not constructed from JS.
+/// Throws TypeError "Illegal constructor", matching real browser behavior.
+/// Internal node creation uses ObjectTemplate::new_instance, which does not
+/// invoke this callback, so Rust-side instantiation is unaffected.
+unsafe extern "C" fn illegal_dom_constructor(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let msg = crate::v8_utils::v8_string(scope, "Illegal constructor");
+    let exc = v8::Exception::type_error(scope, msg);
+    scope.throw_exception(exc);
 }
+
+/// No-op constructor callback — for interfaces that ARE constructable from JS
+/// (Request, Response). Produces an empty instance; real construction logic
+/// is handled by JS shims layered on top.
+unsafe extern "C" fn empty_dom_constructor(_info: *const v8::FunctionCallbackInfo) {}
 
 /// Helper: install a native method on a prototype template.
 fn install_proto_method(
@@ -165,7 +181,7 @@ fn set_to_string_tag(
 /// Must be called once per Isolate, with the isolate entered.
 pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     // ── 1. EventTarget ──────────────────────────────────────────────────────
-    let event_target = make_template(scope, "EventTarget");
+    let event_target = make_template(scope, "EventTarget", illegal_dom_constructor);
     {
         let proto = event_target.prototype_template(scope);
         install_proto_method(scope, proto, "addEventListener", add_event_listener_cb);
@@ -179,7 +195,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 2. Node (inherits EventTarget) ──────────────────────────────────────
-    let node = make_template(scope, "Node");
+    let node = make_template(scope, "Node", illegal_dom_constructor);
     node.inherit(event_target);
     {
         let proto = node.prototype_template(scope);
@@ -212,7 +228,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 3. Element (inherits Node) ──────────────────────────────────────────
-    let element = make_template(scope, "Element");
+    let element = make_template(scope, "Element", illegal_dom_constructor);
     element.inherit(node);
     {
         let proto = element.prototype_template(scope);
@@ -356,7 +372,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 4. HTMLElement (inherits Element) ───────────────────────────────────
-    let html_element = make_template(scope, "HTMLElement");
+    let html_element = make_template(scope, "HTMLElement", illegal_dom_constructor);
     html_element.inherit(element);
     {
         let proto = html_element.prototype_template(scope);
@@ -401,13 +417,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 5. Specific HTML element types ──────────────────────────────────────
-    let html_div_element = make_template(scope, "HTMLDivElement");
+    let html_div_element = make_template(scope, "HTMLDivElement", illegal_dom_constructor);
     html_div_element.inherit(html_element);
 
-    let html_span_element = make_template(scope, "HTMLSpanElement");
+    let html_span_element = make_template(scope, "HTMLSpanElement", illegal_dom_constructor);
     html_span_element.inherit(html_element);
 
-    let html_anchor_element = make_template(scope, "HTMLAnchorElement");
+    let html_anchor_element = make_template(scope, "HTMLAnchorElement", illegal_dom_constructor);
     html_anchor_element.inherit(html_element);
     {
         let proto = html_anchor_element.prototype_template(scope);
@@ -425,7 +441,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "origin", anchor_origin_getter, None);
     }
 
-    let html_input_element = make_template(scope, "HTMLInputElement");
+    let html_input_element = make_template(scope, "HTMLInputElement", illegal_dom_constructor);
     html_input_element.inherit(html_element);
     {
         let proto = html_input_element.prototype_template(scope);
@@ -465,7 +481,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "click", click_cb);
     }
 
-    let html_button_element = make_template(scope, "HTMLButtonElement");
+    let html_button_element = make_template(scope, "HTMLButtonElement", illegal_dom_constructor);
     html_button_element.inherit(html_element);
     {
         let proto = html_button_element.prototype_template(scope);
@@ -487,7 +503,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "click", click_cb);
     }
 
-    let html_form_element = make_template(scope, "HTMLFormElement");
+    let html_form_element = make_template(scope, "HTMLFormElement", illegal_dom_constructor);
     html_form_element.inherit(html_element);
     {
         let proto = html_form_element.prototype_template(scope);
@@ -496,7 +512,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "checkValidity", check_validity_cb);
     }
 
-    let html_canvas_element = make_template(scope, "HTMLCanvasElement");
+    let html_canvas_element = make_template(scope, "HTMLCanvasElement", illegal_dom_constructor);
     html_canvas_element.inherit(html_element);
     {
         let proto = html_canvas_element.prototype_template(scope);
@@ -521,7 +537,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "webkitCaptureStream", capture_stream_cb);
     }
 
-    let html_script_element = make_template(scope, "HTMLScriptElement");
+    let html_script_element = make_template(scope, "HTMLScriptElement", illegal_dom_constructor);
     html_script_element.inherit(html_element);
     {
         let proto = html_script_element.prototype_template(scope);
@@ -537,7 +553,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "defer", defer_getter, Some(defer_setter));
     }
 
-    let html_image_element = make_template(scope, "HTMLImageElement");
+    let html_image_element = make_template(scope, "HTMLImageElement", illegal_dom_constructor);
     html_image_element.inherit(html_element);
     {
         let proto = html_image_element.prototype_template(scope);
@@ -562,7 +578,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "complete", img_complete_getter, None);
     }
 
-    let html_video_element = make_template(scope, "HTMLVideoElement");
+    let html_video_element = make_template(scope, "HTMLVideoElement", illegal_dom_constructor);
     html_video_element.inherit(html_element);
     {
         let proto = html_video_element.prototype_template(scope);
@@ -587,7 +603,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "webkitCaptureStream", capture_stream_cb);
     }
 
-    let html_audio_element = make_template(scope, "HTMLAudioElement");
+    let html_audio_element = make_template(scope, "HTMLAudioElement", illegal_dom_constructor);
     html_audio_element.inherit(html_element);
     {
         let proto = html_audio_element.prototype_template(scope);
@@ -609,7 +625,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "canPlayType", can_play_type_cb);
     }
 
-    let html_select_element = make_template(scope, "HTMLSelectElement");
+    let html_select_element = make_template(scope, "HTMLSelectElement", illegal_dom_constructor);
     html_select_element.inherit(html_element);
     {
         let proto = html_select_element.prototype_template(scope);
@@ -637,7 +653,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         );
     }
 
-    let html_textarea_element = make_template(scope, "HTMLTextAreaElement");
+    let html_textarea_element = make_template(scope, "HTMLTextAreaElement", illegal_dom_constructor);
     html_textarea_element.inherit(html_element);
     {
         let proto = html_textarea_element.prototype_template(scope);
@@ -659,37 +675,37 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "select", select_cb);
     }
 
-    let html_head_element = make_template(scope, "HTMLHeadElement");
+    let html_head_element = make_template(scope, "HTMLHeadElement", illegal_dom_constructor);
     html_head_element.inherit(html_element);
 
-    let html_body_element = make_template(scope, "HTMLBodyElement");
+    let html_body_element = make_template(scope, "HTMLBodyElement", illegal_dom_constructor);
     html_body_element.inherit(html_element);
 
-    let html_html_element = make_template(scope, "HTMLHtmlElement");
+    let html_html_element = make_template(scope, "HTMLHtmlElement", illegal_dom_constructor);
     html_html_element.inherit(html_element);
 
-    let html_paragraph_element = make_template(scope, "HTMLParagraphElement");
+    let html_paragraph_element = make_template(scope, "HTMLParagraphElement", illegal_dom_constructor);
     html_paragraph_element.inherit(html_element);
 
-    let html_heading_element = make_template(scope, "HTMLHeadingElement");
+    let html_heading_element = make_template(scope, "HTMLHeadingElement", illegal_dom_constructor);
     html_heading_element.inherit(html_element);
 
-    let html_ulist_element = make_template(scope, "HTMLUListElement");
+    let html_ulist_element = make_template(scope, "HTMLUListElement", illegal_dom_constructor);
     html_ulist_element.inherit(html_element);
 
-    let html_olist_element = make_template(scope, "HTMLOListElement");
+    let html_olist_element = make_template(scope, "HTMLOListElement", illegal_dom_constructor);
     html_olist_element.inherit(html_element);
 
-    let html_li_element = make_template(scope, "HTMLLIElement");
+    let html_li_element = make_template(scope, "HTMLLIElement", illegal_dom_constructor);
     html_li_element.inherit(html_element);
 
-    let html_table_element = make_template(scope, "HTMLTableElement");
+    let html_table_element = make_template(scope, "HTMLTableElement", illegal_dom_constructor);
     html_table_element.inherit(html_element);
 
-    let html_style_element = make_template(scope, "HTMLStyleElement");
+    let html_style_element = make_template(scope, "HTMLStyleElement", illegal_dom_constructor);
     html_style_element.inherit(html_element);
 
-    let html_link_element = make_template(scope, "HTMLLinkElement");
+    let html_link_element = make_template(scope, "HTMLLinkElement", illegal_dom_constructor);
     html_link_element.inherit(html_element);
     {
         let proto = html_link_element.prototype_template(scope);
@@ -697,7 +713,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "rel", rel_getter, Some(rel_setter));
     }
 
-    let html_meta_element = make_template(scope, "HTMLMetaElement");
+    let html_meta_element = make_template(scope, "HTMLMetaElement", illegal_dom_constructor);
     html_meta_element.inherit(html_element);
     {
         let proto = html_meta_element.prototype_template(scope);
@@ -712,7 +728,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 6. HTMLUnknownElement (inherits HTMLElement) ─────────────────────────
-    let html_unknown_element = make_template(scope, "HTMLUnknownElement");
+    let html_unknown_element = make_template(scope, "HTMLUnknownElement", illegal_dom_constructor);
     html_unknown_element.inherit(html_element);
     {
         let proto = html_unknown_element.prototype_template(scope);
@@ -720,19 +736,19 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 7. Text node (inherits Node) ────────────────────────────────────────
-    let text_node = make_template(scope, "Text");
+    let text_node = make_template(scope, "Text", illegal_dom_constructor);
     text_node.inherit(node);
 
     // ── 8. Comment node (inherits Node) ─────────────────────────────────────
-    let comment_node = make_template(scope, "Comment");
+    let comment_node = make_template(scope, "Comment", illegal_dom_constructor);
     comment_node.inherit(node);
 
     // ── 9. Document node (inherits Node) ────────────────────────────────────
-    let document_node = make_template(scope, "Document");
+    let document_node = make_template(scope, "Document", illegal_dom_constructor);
     document_node.inherit(node);
 
     // ── 10. NodeList ────────────────────────────────────────────────────────
-    let node_list = make_template(scope, "NodeList");
+    let node_list = make_template(scope, "NodeList", illegal_dom_constructor);
     node_list
         .instance_template(scope)
         .set_internal_field_count(2);
@@ -744,7 +760,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 12. DOMTokenList ────────────────────────────────────────────────────
-    let dom_token_list = make_template(scope, "DOMTokenList");
+    let dom_token_list = make_template(scope, "DOMTokenList", illegal_dom_constructor);
     dom_token_list
         .instance_template(scope)
         .set_internal_field_count(1);
@@ -773,7 +789,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 13. CSSStyleDeclaration ─────────────────────────────────────────────
-    let css_style_declaration = make_template(scope, "CSSStyleDeclaration");
+    let css_style_declaration = make_template(scope, "CSSStyleDeclaration", illegal_dom_constructor);
     css_style_declaration
         .instance_template(scope)
         .set_internal_field_count(2);
@@ -877,7 +893,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 15. Response ────────────────────────────────────────────────────────
-    let response = make_template(scope, "Response");
+    let response = make_template(scope, "Response", empty_dom_constructor);
     {
         let proto = response.prototype_template(scope);
         install_proto_method(scope, proto, "text", response_text_cb);
@@ -900,7 +916,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     }
 
     // ── 16. Request ─────────────────────────────────────────────────────────
-    let request = make_template(scope, "Request");
+    let request = make_template(scope, "Request", empty_dom_constructor);
     {
         let proto = request.prototype_template(scope);
         install_proto_method(scope, proto, "clone", request_clone_cb);
@@ -1156,10 +1172,13 @@ pub fn create_node_object<'s>(
         NodeData::DocumentType { .. } => v8::Local::new(scope, &templates.node),
     };
 
-    // Instantiate from the FunctionTemplate (not instance_template directly)
-    // This ensures the prototype chain is correct for instanceof checks
-    let func = tmpl_local.get_function(scope)?;
-    let obj = func.new_instance(scope, &[])?;
+    // Instantiate from the instance_template directly. This bypasses the
+    // FunctionTemplate's constructor callback (which throws "Illegal
+    // constructor" for non-constructable interfaces) while still producing
+    // an object whose [[Prototype]] is the template's .prototype — so
+    // instanceof checks remain correct. Same pattern as native_env.rs.
+    let inst_tmpl = tmpl_local.instance_template(scope);
+    let obj = inst_tmpl.new_instance(scope)?;
 
     // Store NodeId in internal field 0 as a usize via External
     let nid_usize = super::binding::node_id_to_usize(node_id);
@@ -1574,14 +1593,13 @@ unsafe extern "C" fn class_list_getter(info: *const v8::FunctionCallbackInfo) {
         let templates = state.dom_templates.borrow();
         if let Some(templates) = templates.as_ref() {
             let tmpl = v8::Local::new(scope, &templates.dom_token_list);
-            if let Some(func) = tmpl.get_function(scope) {
-                if let Some(obj) = func.new_instance(scope, &[]) {
+            let inst_tmpl = tmpl.instance_template(scope);
+            if let Some(obj) = inst_tmpl.new_instance(scope) {
                     let nid_usize = super::binding::node_id_to_usize(node_id);
                     let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
                     obj.set_internal_field(0, external.into());
                     rv.set(obj.into());
                 }
-            }
         }
     });
 }
@@ -2631,8 +2649,8 @@ pub fn create_node_list_instance<'s>(
     let templates = state.dom_templates.borrow();
     let templates = templates.as_ref()?;
     let tmpl = v8::Local::new(scope, &templates.node_list);
-    let func = tmpl.get_function(scope)?;
-    let obj = func.new_instance(scope, &[])?;
+    let inst_tmpl = tmpl.instance_template(scope);
+    let obj = inst_tmpl.new_instance(scope)?;
 
     let ids: Vec<usize> = node_ids
         .iter()
@@ -3217,8 +3235,8 @@ unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
         let templates = state.dom_templates.borrow();
         if let Some(templates) = templates.as_ref() {
             let tmpl = v8::Local::new(scope, &templates.css_style_declaration);
-            if let Some(func) = tmpl.get_function(scope) {
-                if let Some(obj) = func.new_instance(scope, &[]) {
+            let inst_tmpl = tmpl.instance_template(scope);
+            if let Some(obj) = inst_tmpl.new_instance(scope) {
                     let nid_usize = super::binding::node_id_to_usize(node_id);
                     let external = v8::External::new(scope, nid_usize as *mut std::ffi::c_void);
                     obj.set_internal_field(0, external.into());
@@ -3229,7 +3247,6 @@ unsafe extern "C" fn style_getter(info: *const v8::FunctionCallbackInfo) {
                     state.style_cache.borrow_mut().insert(node_id, global);
                     rv.set(obj.into());
                 }
-            }
         }
     });
 }
@@ -4013,8 +4030,8 @@ pub fn create_headers_instance<'s>(
     pairs: Vec<(String, String)>,
 ) -> Option<v8::Local<'s, v8::Object>> {
     let tmpl = v8::Local::new(scope, &templates.headers);
-    let func = tmpl.get_function(scope)?;
-    let obj = func.new_instance(scope, &[])?;
+    let inst_tmpl = tmpl.instance_template(scope);
+    let obj = inst_tmpl.new_instance(scope)?;
     let boxed = Box::new(pairs);
     let ptr = Box::into_raw(boxed) as *mut std::ffi::c_void;
     state.register_heap(ptr, |p| unsafe {
@@ -4029,8 +4046,8 @@ pub fn create_response_instance<'s>(
     templates: &DomTemplates,
 ) -> Option<v8::Local<'s, v8::Object>> {
     let tmpl = v8::Local::new(scope, &templates.response);
-    let func = tmpl.get_function(scope)?;
-    func.new_instance(scope, &[])
+    let inst_tmpl = tmpl.instance_template(scope);
+    inst_tmpl.new_instance(scope)
 }
 
 unsafe extern "C" fn headers_get_cb(info: *const v8::FunctionCallbackInfo) {
@@ -4412,8 +4429,8 @@ unsafe extern "C" fn request_clone_cb(info: *const v8::FunctionCallbackInfo) {
         let templates = state.dom_templates.borrow();
         if let Some(templates) = templates.as_ref() {
             let tmpl = v8::Local::new(scope, &templates.request);
-            if let Some(func) = tmpl.get_function(scope) {
-                if let Some(new_obj) = func.new_instance(scope, &[]) {
+            let inst_tmpl = tmpl.instance_template(scope);
+            if let Some(new_obj) = inst_tmpl.new_instance(scope) {
                     for &key in &["__url__", "__method__"] {
                         let k = crate::v8_utils::v8_string(scope, key);
                         if let Some(v) = this.get(scope, k.into()) {
@@ -4427,7 +4444,6 @@ unsafe extern "C" fn request_clone_cb(info: *const v8::FunctionCallbackInfo) {
                     rv.set(new_obj.into());
                     return;
                 }
-            }
         }
         rv.set(this.into());
     }));

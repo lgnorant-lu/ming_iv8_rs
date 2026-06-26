@@ -70,6 +70,23 @@ def load_runtime_env() -> dict:
                 r['permissions.geolocation'] = 'prompt';
                 r['permissions.accelerometer'] = 'granted';
                 r['fonts.families'] = ['Arial', 'Calibri', 'Consolas', 'Segoe UI', 'Times New Roman'];
+                r['navigator.hardwareConcurrency'] = navigator.hardwareConcurrency || 0;
+                r['navigator.deviceMemory'] = navigator.deviceMemory || 0;
+                r['navigator.maxTouchPoints'] = navigator.maxTouchPoints || 0;
+                try {
+                    r['navigator.osCPU'] = navigator.osCPU || '';
+                } catch(e) {
+                    r['navigator.osCPU'] = '';
+                }
+                try {
+                    var pluginNames = [];
+                    for (var i = 0; i < navigator.plugins.length; i++) {
+                        pluginNames.push(navigator.plugins[i].name);
+                    }
+                    r['navigator.plugins'] = pluginNames;
+                } catch(e) {
+                    r['navigator.plugins'] = [];
+                }
                 return JSON.stringify(r);
             })()
         """)
@@ -84,6 +101,15 @@ def load_runtime_env() -> dict:
         for key in ('audio.baseLatency', 'audio.outputLatency'):
             if key in env:
                 env[key] = float(env[key]) if env[key] is not None else 0.0
+        for key in ('navigator.hardwareConcurrency',):
+            if key in env:
+                env[key] = int(env[key]) if env[key] is not None else 0
+        for key in ('navigator.deviceMemory',):
+            if key in env:
+                env[key] = float(env[key]) if env[key] is not None else 0.0
+        for key in ('navigator.maxTouchPoints',):
+            if key in env:
+                env[key] = int(env[key]) if env[key] is not None else 0
 
         return env
 
@@ -108,6 +134,12 @@ def _hardcoded_fallback_env() -> dict:
         "display.color-gamut": "srgb",
         "permissions.geolocation": "prompt", "permissions.accelerometer": "granted",
         "fonts.families": ["Arial", "Calibri", "Consolas", "Segoe UI", "Times New Roman"],
+        "navigator.hardwareConcurrency": 8,
+        "navigator.deviceMemory": 8,
+        "navigator.maxTouchPoints": 0,
+        "navigator.osCPU": "",
+        "navigator.plugins": ["PDF Viewer", "Chrome PDF Viewer", "Chromium PDF Viewer",
+                              "Microsoft Edge PDF Viewer", "WebKit built-in PDF"],
     }
 
 
@@ -308,6 +340,59 @@ def check_c03_contradictory_flagged(env):
     return len(contradictions) == 0
 
 
+# --- Category D: FP-Inconsistent Cross-Field Consistency ---
+
+_FP_RULES = None
+_FP_GROUPS = None
+
+
+def _load_fp_rules():
+    global _FP_RULES, _FP_GROUPS
+    if _FP_RULES is not None:
+        return _FP_RULES, _FP_GROUPS
+    sys.path.insert(0, str(REPO_ROOT / "scripts"))
+    from fp_inconsistent_rules import parse_filterlist, categorize_rules
+    all_rules = parse_filterlist()
+    applicable, _ = categorize_rules(all_rules)
+    groups = {}
+    for r in applicable:
+        pk = r["pair_key"]
+        groups.setdefault(pk, []).append(r)
+    _FP_RULES = applicable
+    _FP_GROUPS = groups
+    return _FP_RULES, _FP_GROUPS
+
+
+def _make_d_check(pair_key, rules_in_group):
+    def check(env):
+        from fp_inconsistent_rules import evaluate_group
+        ua = env.get("navigator.userAgent", "")
+        passes, _ = evaluate_group(pair_key, rules_in_group, env, ua)
+        return passes
+    return check
+
+
+def build_d_checks():
+    _, groups = _load_fp_rules()
+    d_checks = []
+    idx = 1
+    for pk in sorted(groups.keys()):
+        rules_in_group = groups[pk]
+        fields = pk.split("<>")
+        fa = fields[0] if len(fields) > 0 else ""
+        fb = fields[1] if len(fields) > 1 else ""
+        if fa and fb:
+            fa_short = fa.replace("ua_", "").replace("_", " ")
+            fb_short = fb.replace("ua_", "").replace("_", " ")
+            desc = f"{fa_short} <-> {fb_short} ({len(rules_in_group)} rules)"
+        else:
+            desc = f"{pk} ({len(rules_in_group)} rules)"
+        cid = f"D{idx:02d}"
+        d_checks.append((cid, desc, _make_d_check(pk, rules_in_group)))
+        idx += 1
+    return d_checks
+
+
 # --- Orchestrator ---
 
 def run():
@@ -335,6 +420,7 @@ def run():
         ("C02", "single override passes", check_c02_single_override_passes),
         ("C03", "all A-class contradictions flagged", check_c03_contradictory_flagged),
     ]
+    d_checks = build_d_checks()
 
     all_pass = True
     print("=== H02: Environment Fingerprint Consistency ===")
@@ -366,10 +452,20 @@ def run():
             all_pass = False
 
     print()
-    total = len(a_checks) + len(b_checks) + len(c_checks)
+    print("--- Category D: FP-Inconsistent Cross-Field Consistency ---")
+    for cid, desc, fn in d_checks:
+        result = fn(env)
+        status = "PASS" if result else "FAIL"
+        print(f"  [{status}] {cid}: {desc}")
+        if not result:
+            all_pass = False
+
+    print()
+    total = len(a_checks) + len(b_checks) + len(c_checks) + len(d_checks)
     passed = sum(1 for _, _, fn in a_checks if fn(env)) + \
              sum(1 for _, _, fn in b_checks if fn(env)) + \
-             sum(1 for _, _, fn in c_checks if fn(env))
+             sum(1 for _, _, fn in c_checks if fn(env)) + \
+             sum(1 for _, _, fn in d_checks if fn(env))
     print(f"Total: {passed}/{total} checks passed")
     print(f"Result: {'PASS' if all_pass else 'FAIL'}")
 

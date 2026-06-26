@@ -1,11 +1,14 @@
-"""H02 Harness Mutation Testing (D-105).
+"""H02/H03 Harness Mutation Testing (D-105/D-101).
 
-Injects deliberate defects into a valid runtime env, one per A-class rule,
+Injects deliberate defects into a valid runtime env, one per MR rule,
 and verifies each defect is caught by its corresponding check.
 
 A "killed" mutant means the harness detected the injected defect (check
 returned False). A "survived" mutant means the harness missed it — a
 false-negative in the harness itself.
+
+D-101 (v0.8.83): Extended from 10 to 27 mutations covering all 36
+executable MRs (7 cross-context MRs are SKIP, not mutation-tested).
 
 Usage: python scripts/evaluate_harness_mutation.py
 Exit code: 0 = all mutants killed, 1 = at least one mutant survived
@@ -32,10 +35,70 @@ from scripts.evaluate_env_consistency import (
     check_a10_color_gamut_valid,
 )
 
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+if str(_SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_DIR))
 
-# Each mutation: (id, description, rule, mutator fn, checker fn)
-# The mutator receives a fresh deep copy of the baseline env and injects
-# exactly one defect. The checker is the A-class rule that should catch it.
+from test_metamorphic import MR_MAP
+
+
+def _enrich_baseline(env: dict) -> dict:
+    """Add extended fields to runtime env for new MR mutations.
+
+    The runtime env only has A01-A10 fields. This adds the extra fields
+    needed by the D-101 MR rules, consistent with the runtime values.
+    """
+    ua = env.get("navigator.userAgent", "").lower()
+    if "windows" in ua or "win64" in ua:
+        os_name = "windows"
+        platform_uach = "Windows"
+    elif "macintosh" in ua or "mac os" in ua:
+        os_name = "macos"
+        platform_uach = "macOS"
+    else:
+        os_name = "linux"
+        platform_uach = "Linux"
+
+    vendor = env.get("navigator.vendor", "")
+    is_chrome = "Google Inc." in vendor
+
+    env.setdefault("identity.os", os_name)
+    env.setdefault("identity.browser.brand", "chrome" if is_chrome else "firefox")
+    env.setdefault("identity.cpu_cores", env.get("navigator.hardwareConcurrency", 8))
+    env.setdefault("identity.memory_gb", int(env.get("navigator.deviceMemory", 8)))
+
+    env.setdefault("navigator.language", "en-US")
+    env.setdefault("navigator.languages", ["en-US", "en"])
+    env.setdefault("navigator.maxTouchPoints", env.get("navigator.maxTouchPoints", 0))
+    env.setdefault("navigator.pdfViewerEnabled", True if is_chrome else False)
+
+    env.setdefault("navigator.userAgentData.platform", platform_uach)
+    env.setdefault("navigator.userAgentData.mobile", False)
+    env.setdefault("navigator.userAgentData.brands",
+                  [{"brand": "Chromium", "version": "147"},
+                   {"brand": "Google Chrome", "version": "147"}] if is_chrome else [])
+
+    sw = env.get("screen.width", 1920)
+    sh = env.get("screen.height", 1080)
+    iw = env.get("window.innerWidth", sw)
+    ih = env.get("window.innerHeight", sh)
+    env.setdefault("screen.availWidth", sw)
+    env.setdefault("screen.availHeight", sh - 40)
+    env.setdefault("screen.colorDepth", 24)
+    env.setdefault("window.outerWidth", sw)
+    env.setdefault("window.outerHeight", sh)
+    env.setdefault("window.devicePixelRatio", 1.0)
+
+    env.setdefault("locale.language", "en-US")
+    env.setdefault("locale.accept_language", "en-US,en;q=0.9")
+    env.setdefault("capabilities.windowChrome", True if is_chrome else False)
+
+    return env
+
+
+# ---------------------------------------------------------------------------
+# Original mutations (A01-A10)
+# ---------------------------------------------------------------------------
 
 def _m01_inject(env):
     env["navigator.platform"] = "MacIntel"
@@ -72,60 +135,148 @@ def _m10_inject(env):
     env["display.color-gamut"] = "invalid"
 
 
+# ---------------------------------------------------------------------------
+# Extended mutations (D-101: target new MRs)
+# ---------------------------------------------------------------------------
+
+def _m11_inject(env):
+    env["navigator.language"] = "ja-JP"
+
+def _m12_inject(env):
+    env["navigator.userAgentData.platform"] = "macOS"
+
+def _m13_inject(env):
+    env["window.devicePixelRatio"] = -1.0
+
+def _m14_inject(env):
+    env["media.pointer"] = "stylus"
+
+def _m15_inject(env):
+    env["media.hover"] = "always"
+
+def _m16_inject(env):
+    env["identity.cpu_cores"] = 0
+
+def _m17_inject(env):
+    env["identity.memory_gb"] = 0
+
+def _m18_inject(env):
+    env["screen.colorDepth"] = 16
+
+def _m19_inject(env):
+    env["window.outerWidth"] = env.get("window.innerWidth", 1920) - 1
+
+def _m20_inject(env):
+    env["screen.availHeight"] = env.get("screen.height", 1080) + 100
+
+def _m21_inject(env):
+    env["navigator.userAgentData.mobile"] = True
+
+def _m22_inject(env):
+    env["navigator.vendor"] = "Google Inc."
+    env["capabilities.windowChrome"] = False
+
+def _m23_inject(env):
+    env["identity.browser.brand"] = "chrome"
+    env["navigator.pdfViewerEnabled"] = False
+
+def _m24_inject(env):
+    env["navigator.maxTouchPoints"] = 5
+
+def _m25_inject(env):
+    env["webgl.UNMASKED_VENDOR_WEBGL"] = "Google Inc. (NVIDIA)"
+    env["webgl.UNMASKED_RENDERER_WEBGL"] = (
+        "ANGLE (Intel, Intel(R) UHD Graphics Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    )
+
+def _m26_inject(env):
+    env["locale.accept_language"] = "ja-JP,ja;q=0.9,en;q=0.8"
+
+def _m27_inject(env):
+    env["identity.browser.brand"] = "chrome"
+    env["navigator.vendor"] = "Google Inc."
+    env["navigator.userAgentData.brands"] = [
+        {"brand": "Firefox", "version": "121"}
+    ]
+
+
 MUTATIONS = [
-    ("M01", "platform -> MacIntel (contradicts Windows UA)", "A01",
-     _m01_inject, check_a01_platform_matches_ua),
-    ("M02", "vendor -> Microsoft (matches no browser)", "A02",
-     _m02_inject, check_a02_vendor_matches_browser),
-    ("M03", "webgl renderer -> Intel (contradicts NVIDIA vendor)", "A03",
-     _m03_inject, check_a03_webgl_vendor_renderer_consistency),
-    ("M04", "screen.width -> 800 (< window.innerWidth)", "A04",
-     _m04_inject, check_a04_screen_ge_window),
-    ("M05", "pointer=coarse, any-pointer=fine", "A05",
-     _m05_inject, check_a05_pointer_consistency),
-    ("M06", "hover=none, any-hover=hover", "A06",
-     _m06_inject, check_a06_hover_consistency),
-    ("M07", "permissions.geolocation -> unknown", "A07",
-     _m07_inject, check_a07_permissions_valid),
-    ("M08", "audio.baseLatency -> 0", "A08",
-     _m08_inject, check_a08_audio_latency_valid),
-    ("M09", "fonts.families -> []", "A09",
-     _m09_inject, check_a09_fonts_nonempty),
-    ("M10", "display.color-gamut -> invalid", "A10",
-     _m10_inject, check_a10_color_gamut_valid),
+    ("M01", "platform -> MacIntel (contradicts Windows UA)", "MR-EQ-001",
+     _m01_inject, "MR-EQ-001"),
+    ("M02", "vendor -> Microsoft (matches no browser)", "MR-EQ-002",
+     _m02_inject, "MR-EQ-002"),
+    ("M03", "webgl renderer -> Intel (contradicts NVIDIA vendor)", "MR-EQ-010",
+     _m03_inject, "MR-EQ-010"),
+    ("M04", "screen.width -> 800 (< window.innerWidth)", "MR-BND-001",
+     _m04_inject, "MR-BND-001"),
+    ("M05", "pointer=coarse, any-pointer=fine", "MR-IMP-003",
+     _m05_inject, "MR-IMP-003"),
+    ("M06", "hover=none, any-hover=hover", "MR-IMP-004",
+     _m06_inject, "MR-IMP-004"),
+    ("M07", "permissions.geolocation -> unknown", "MR-VAL-001",
+     _m07_inject, "MR-VAL-001"),
+    ("M08", "audio.baseLatency -> 0", "MR-BND-006",
+     _m08_inject, "MR-BND-006"),
+    ("M09", "fonts.families -> []", "MR-VAL-003",
+     _m09_inject, "MR-VAL-003"),
+    ("M10", "display.color-gamut -> invalid", "MR-VAL-002",
+     _m10_inject, "MR-VAL-002"),
+    ("M11", "navigator.language -> ja-JP (mismatches locale)", "MR-EQ-004",
+     _m11_inject, "MR-EQ-004"),
+    ("M12", "UA-CH platform -> macOS (contradicts Windows)", "MR-IMP-010",
+     _m12_inject, "MR-IMP-010"),
+    ("M13", "devicePixelRatio -> -1.0", "MR-BND-007",
+     _m13_inject, "MR-BND-007"),
+    ("M14", "media.pointer -> stylus (invalid value)", "MR-VAL-004",
+     _m14_inject, "MR-VAL-004"),
+    ("M15", "media.hover -> always (invalid value)", "MR-VAL-005",
+     _m15_inject, "MR-VAL-005"),
+    ("M16", "identity.cpu_cores -> 0", "MR-BND-008",
+     _m16_inject, "MR-BND-008"),
+    ("M17", "identity.memory_gb -> 0", "MR-BND-009",
+     _m17_inject, "MR-BND-009"),
+    ("M18", "screen.colorDepth -> 16 (invalid)", "MR-BND-010",
+     _m18_inject, "MR-BND-010"),
+    ("M19", "outerWidth < innerWidth", "MR-BND-003",
+     _m19_inject, "MR-BND-003"),
+    ("M20", "availHeight > screen.height", "MR-BND-002",
+     _m20_inject, "MR-BND-002"),
+    ("M21", "UA-CH mobile=true, maxTouchPoints=0", "MR-EQ-009",
+     _m21_inject, "MR-EQ-009"),
+    ("M22", "vendor=Google, windowChrome=false", "MR-IMP-001",
+     _m22_inject, "MR-IMP-001"),
+    ("M23", "brand=chrome, pdfViewerEnabled=false", "MR-IMP-005",
+     _m23_inject, "MR-IMP-005"),
+    ("M24", "desktop maxTouchPoints=5", "MR-IMP-006",
+     _m24_inject, "MR-IMP-006"),
+    ("M25", "NVIDIA vendor, Intel renderer", "MR-IMP-008",
+     _m25_inject, "MR-IMP-008"),
+    ("M26", "Accept-Language mismatches locale", "MR-EQ-006",
+     _m26_inject, "MR-EQ-006"),
+    ("M27", "UA-CH brands don't match UA browser", "MR-EQ-008",
+     _m27_inject, "MR-EQ-008"),
 ]
 
 
 def run():
-    print("=== H02 Harness Mutation Testing ===")
+    print("=== Harness Mutation Testing (D-101: 27 mutations) ===")
     print()
 
     baseline = load_runtime_env()
+    baseline = _enrich_baseline(baseline)
 
-    # Sanity: baseline must pass every A-class check, otherwise a "kill"
-    # might be caused by the baseline itself rather than the mutation.
-    print("--- Baseline sanity (all A-class checks must pass) ---")
-    all_checks = [
-        ("A01", check_a01_platform_matches_ua),
-        ("A02", check_a02_vendor_matches_browser),
-        ("A03", check_a03_webgl_vendor_renderer_consistency),
-        ("A04", check_a04_screen_ge_window),
-        ("A05", check_a05_pointer_consistency),
-        ("A06", check_a06_hover_consistency),
-        ("A07", check_a07_permissions_valid),
-        ("A08", check_a08_audio_latency_valid),
-        ("A09", check_a09_fonts_nonempty),
-        ("A10", check_a10_color_gamut_valid),
-    ]
+    print("--- Baseline sanity (all 36 MR checks must pass) ---")
     baseline_ok = True
-    for cid, fn in all_checks:
-        ok = fn(baseline)
-        print(f"  [{'PASS' if ok else 'FAIL'}] {cid}")
-        if not ok:
+    for mr_id in sorted(MR_MAP.keys()):
+        _name, _cat, fn = MR_MAP[mr_id]
+        passed, detail = fn(baseline)
+        status = "PASS" if passed else "FAIL"
+        print(f"  [{status}] {mr_id}: {detail}")
+        if not passed:
             baseline_ok = False
     if not baseline_ok:
         print()
-        print("[ERROR] Baseline env fails A-class checks; aborting mutation test.")
+        print("[ERROR] Baseline env fails MR checks; aborting mutation test.")
         return 1
     print()
 
@@ -134,18 +285,19 @@ def run():
     survived = 0
     survivors = []
 
-    for mid, desc, rule, mutator, checker in MUTATIONS:
+    for mid, desc, _rule, mutator, mr_id in MUTATIONS:
         env_mut = copy.deepcopy(baseline)
         mutator(env_mut)
-        detected = checker(env_mut)
-        if not detected:
+        _name, _cat, fn = MR_MAP[mr_id]
+        passed, detail = fn(env_mut)
+        if not passed:
             status = "KILLED"
             killed += 1
         else:
             status = "SURVIVED"
             survived += 1
-            survivors.append((mid, desc, rule))
-        print(f"  [{status}] {mid}: {desc} (detected by {rule})")
+            survivors.append((mid, desc, mr_id))
+        print(f"  [{status}] {mid}: {desc} (detected by {mr_id})")
 
     print()
     print(f"Total: {killed} killed, {survived} survived")
@@ -158,8 +310,8 @@ def run():
     if survivors:
         print()
         print("--- Survivors (harness false-negatives) ---")
-        for mid, desc, rule in survivors:
-            print(f"  {mid} ({rule}): {desc}")
+        for mid, desc, mr_id in survivors:
+            print(f"  {mid} ({mr_id}): {desc}")
         return 1
 
     return 0

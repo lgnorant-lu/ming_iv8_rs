@@ -49,6 +49,187 @@ fn should_skip_attribute(interface_name: &str, attr_name: &str) -> bool {
         .any(|(iface, attr)| *iface == interface_name && *attr == attr_name)
 }
 
+/// Web IDL interfaces that are NOT constructable from JavaScript in real
+/// browsers (Chrome). `new XxxInterface()` must throw TypeError
+/// "Illegal constructor".
+///
+/// Derived from the v0.8.82 illegal-constructor audit
+/// (`data/illicit_constructor_audit.json`, 167 potential_issues) minus the
+/// legitimately-constructable exclusions listed in `KNOWN_CONSTRUCTABLE`
+/// (Headers, FontFace, SecurityPolicyViolationEvent, VTTCue, MediaStream,
+/// PerformanceMark, PerformanceMeasure, AbortSignal, ClipboardItem,
+/// CSSStyleSheet). Historical constructor aliases such as Image, Option,
+/// and Audio are also excluded — they are constructable by design.
+const NON_CONSTRUCTABLE: &[&str] = &[
+    "AbstractRange",
+    "AnalyserNode",
+    "Attr",
+    "AudioBufferSourceNode",
+    "AudioDestinationNode",
+    "AudioListener",
+    "AudioParam",
+    "AudioParamMap",
+    "AudioTrackList",
+    "BarProp",
+    "BiquadFilterNode",
+    "Cache",
+    "CacheStorage",
+    "CanvasGradient",
+    "CanvasPattern",
+    "CanvasRenderingContext2D",
+    "CDATASection",
+    "ChannelMergerNode",
+    "ChannelSplitterNode",
+    "CharacterData",
+    "Clipboard",
+    "Comment",
+    "ConstantSourceNode",
+    "ConvolverNode",
+    "Crypto",
+    "CryptoKey",
+    "CSSConditionRule",
+    "CSSContainerRule",
+    "CSSFontFaceRule",
+    "CSSGroupingRule",
+    "CSSImportRule",
+    "CSSKeyframeRule",
+    "CSSKeyframesRule",
+    "CSSLayerBlockRule",
+    "CSSLayerStatementRule",
+    "CSSMarginRule",
+    "CSSMediaRule",
+    "CSSNamespaceRule",
+    "CSSPageRule",
+    "CSSRule",
+    "CSSRuleList",
+    "CSSStartingStyleRule",
+    "CSSStyleDeclaration",
+    "CSSStyleRule",
+    "CSSSupportsRule",
+    "CustomElementRegistry",
+    "DataTransfer",
+    "DataTransferItem",
+    "DataTransferItemList",
+    "DelayNode",
+    "Document",
+    "DocumentFragment",
+    "DocumentType",
+    "DOMImplementation",
+    "DOMStringMap",
+    "DOMTokenList",
+    "DynamicsCompressorNode",
+    "Element",
+    "EventTarget",
+    "FontFaceSet",
+    "GainNode",
+    "History",
+    "HTMLCollection",
+    "HTMLDocument",
+    "HTMLElement",
+    "HTMLFormControlsCollection",
+    "HTMLOptionsCollection",
+    "IIRFilterNode",
+    "IntersectionObserverEntry",
+    "LayoutShiftAttribution",
+    "MediaElementAudioSourceNode",
+    "MediaList",
+    "MediaQueryList",
+    "MediaStreamAudioDestinationNode",
+    "MediaStreamAudioSourceNode",
+    "MediaStreamTrack",
+    "MediaStreamTrackAudioSourceNode",
+    "MimeType",
+    "MutationRecord",
+    "NamedNodeMap",
+    "Node",
+    "NodeIterator",
+    "NodeList",
+    "OffscreenCanvasRenderingContext2D",
+    "OscillatorNode",
+    "PannerNode",
+    "Performance",
+    "PerformanceEntry",
+    "PerformanceEventTiming",
+    "PerformanceLongTaskTiming",
+    "PerformanceNavigationTiming",
+    "PerformanceObserverEntryList",
+    "PerformancePaintTiming",
+    "PerformanceResourceTiming",
+    "PeriodicWave",
+    "Plugin",
+    "PluginArray",
+    "ProcessingInstruction",
+    "PushManager",
+    "PushSubscription",
+    "RadioNodeList",
+    "Range",
+    "ResizeObserverEntry",
+    "ScreenDetailed",
+    "ScreenDetails",
+    "ScreenOrientation",
+    "ScriptProcessorNode",
+    "ServiceWorker",
+    "ShadowRoot",
+    "StereoPannerNode",
+    "Storage",
+    "StyleSheet",
+    "StyleSheetList",
+    "SubtleCrypto",
+    "SVGAngle",
+    "SVGAnimatedAngle",
+    "SVGAnimatedBoolean",
+    "SVGAnimatedEnumeration",
+    "SVGAnimatedInteger",
+    "SVGAnimatedLength",
+    "SVGAnimatedLengthList",
+    "SVGAnimatedNumber",
+    "SVGAnimatedNumberList",
+    "SVGAnimatedPreserveAspectRatio",
+    "SVGAnimatedRect",
+    "SVGAnimatedString",
+    "SVGAnimatedTransformList",
+    "SVGLength",
+    "SVGLengthList",
+    "SVGNumber",
+    "SVGNumberList",
+    "SVGPointList",
+    "SVGStringList",
+    "SVGTransform",
+    "SVGTransformList",
+    "TaskAttributionTiming",
+    "Text",
+    "TextMetrics",
+    "TextTrack",
+    "TextTrackCueList",
+    "TextTrackList",
+    "TreeWalker",
+    "ValidityState",
+    "VideoTrackList",
+    "VisualViewport",
+    "WaveShaperNode",
+    "WebGL2RenderingContext",
+    "WebGLActiveInfo",
+    "WebGLBuffer",
+    "WebGLFramebuffer",
+    "WebGLProgram",
+    "WebGLQuery",
+    "WebGLRenderbuffer",
+    "WebGLRenderingContext",
+    "WebGLSampler",
+    "WebGLShader",
+    "WebGLShaderPrecisionFormat",
+    "WebGLSync",
+    "WebGLTexture",
+    "WebGLTransformFeedback",
+    "WebGLUniformLocation",
+    "WebGLVertexArrayObject",
+    "Window",
+];
+
+fn is_non_constructable(interface_name: &str) -> bool {
+    NON_CONSTRUCTABLE.iter().any(|n| *n == interface_name)
+}
+
 pub struct GeneratedFile {
     pub domain: String,
     pub content: String,
@@ -122,7 +303,17 @@ fn generate_domain_file(
     out.push_str(&format!("//! Generated stubs: {}\n", domain));
     out.push_str("//! Auto-generated by iv8-surface-codegen.\n");
     out.push_str("#![allow(unused_imports)]\n\n");
-    out.push_str("use super::empty_constructor;\n");
+    let needs_illegal = defs.iter().any(|d| {
+        d.name
+            .as_deref()
+            .map(is_non_constructable)
+            .unwrap_or(false)
+    });
+    if needs_illegal {
+        out.push_str("use super::{empty_constructor, illegal_constructor};\n");
+    } else {
+        out.push_str("use super::empty_constructor;\n");
+    }
     out.push_str("use v8::Local;\n");
     out.push_str("use v8::FunctionTemplate;\n\n");
 
@@ -246,9 +437,15 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     out.push_str("    scope: &v8::PinScope<'s, '_>,\n");
     out.push_str("    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,\n");
     out.push_str(") -> v8::Local<'s, v8::FunctionTemplate> {\n");
-    out.push_str(
-        "    let tmpl = v8::FunctionTemplate::builder_raw(empty_constructor).build(scope);\n",
-    );
+    let ctor_cb = if is_non_constructable(name) {
+        "illegal_constructor"
+    } else {
+        "empty_constructor"
+    };
+    out.push_str(&format!(
+        "    let tmpl = v8::FunctionTemplate::builder_raw({}).build(scope);\n",
+        ctor_cb
+    ));
     out.push_str(&format!(
         "    tmpl.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n",
         name
@@ -502,6 +699,15 @@ pub fn generate_mod_rs(domains: &[String]) -> String {
     out.push_str("//! Generated FunctionTemplate stubs.\n\n");
     out.push_str("/// Empty constructor shared by all generated templates.\n");
     out.push_str("pub(crate) unsafe extern \"C\" fn empty_constructor(_info: *const v8::FunctionCallbackInfo) {}\n\n");
+    out.push_str("/// Illegal constructor — throws TypeError, matching real browser behavior for\n");
+    out.push_str("/// non-constructable Web IDL interfaces.\n");
+    out.push_str("pub(crate) unsafe extern \"C\" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) {\n");
+    out.push_str("    let info_ref = unsafe { &*info };\n");
+    out.push_str("    v8::callback_scope!(unsafe scope, info_ref);\n");
+    out.push_str("    let msg = v8::String::new(scope, \"Illegal constructor\").unwrap();\n");
+    out.push_str("    let exc = v8::Exception::type_error(scope, msg);\n");
+    out.push_str("    scope.throw_exception(exc);\n");
+    out.push_str("}\n\n");
     for domain in domains {
         out.push_str(&format!("pub mod {};\n", domain.replace('-', "_")));
     }
@@ -568,6 +774,104 @@ mod tests {
         assert!(
             cb.contains("doThing") == false,
             "op name should not be in callback code"
+        );
+    }
+
+    fn make_empty_def(name: &str) -> Definition {
+        Definition {
+            kind: "interface".into(),
+            name: Some(name.into()),
+            source: Some("w3c".into()),
+            inheritance: None,
+            ext_attrs: vec![],
+            members: vec![],
+            partial: false,
+            values: vec![],
+            target: None,
+            includes: None,
+        }
+    }
+
+    #[test]
+    fn test_non_constructable_uses_illegal_constructor() {
+        for name in &["Node", "Element", "HTMLElement", "Window", "Crypto"] {
+            let def = make_empty_def(name);
+            let fn_name = type_mapper::idl_name_to_rust(name);
+            let ea = process_interface_ea(&def);
+            let code = generate_template_function(&def, &ea, &fn_name);
+            assert!(
+                code.contains("builder_raw(illegal_constructor)"),
+                "{} should use illegal_constructor",
+                name
+            );
+            assert!(
+                !code.contains("builder_raw(empty_constructor)"),
+                "{} must not use empty_constructor",
+                name
+            );
+        }
+    }
+
+    #[test]
+    fn test_constructable_uses_empty_constructor() {
+        for name in &["AbortController", "Foo", "UnknownInterface"] {
+            let def = make_empty_def(name);
+            let fn_name = type_mapper::idl_name_to_rust(name);
+            let ea = process_interface_ea(&def);
+            let code = generate_template_function(&def, &ea, &fn_name);
+            assert!(
+                code.contains("builder_raw(empty_constructor)"),
+                "{} should use empty_constructor",
+                name
+            );
+        }
+    }
+
+    #[test]
+    fn test_mod_rs_defines_illegal_constructor() {
+        let mod_content = generate_mod_rs(&["web_apis".to_string()]);
+        assert!(
+            mod_content.contains("fn illegal_constructor"),
+            "mod.rs must define illegal_constructor"
+        );
+        assert!(
+            mod_content.contains("Illegal constructor"),
+            "mod.rs illegal_constructor must throw"
+        );
+        assert!(
+            mod_content.contains("fn empty_constructor"),
+            "mod.rs must still define empty_constructor"
+        );
+    }
+
+    #[test]
+    fn test_domain_file_imports_illegal_when_needed() {
+        let defs = vec![make_empty_def("Node")];
+        let def_refs: Vec<&Definition> = defs.iter().collect();
+        let by_name: BTreeMap<String, &Definition> = defs
+            .iter()
+            .map(|d| (d.name.clone().unwrap(), d))
+            .collect();
+        let content = generate_domain_file("dom_core", &def_refs, &by_name);
+        assert!(
+            content.contains("use super::{empty_constructor, illegal_constructor};"),
+            "domain with non-constructable interface must import illegal_constructor"
+        );
+    }
+
+    #[test]
+    fn test_domain_file_omits_illegal_when_not_needed() {
+        let defs = vec![make_empty_def("AbortController")];
+        let def_refs: Vec<&Definition> = defs.iter().collect();
+        let by_name: BTreeMap<String, &Definition> = defs
+            .iter()
+            .map(|d| (d.name.clone().unwrap(), d))
+            .collect();
+        let content = generate_domain_file("dom_core", &def_refs, &by_name);
+        assert!(
+            content.contains("use super::empty_constructor;")
+                && !content.contains("illegal_constructor"),
+            "domain without non-constructable interface must not import illegal_constructor"
         );
     }
 }

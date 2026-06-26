@@ -3,6 +3,16 @@
 /// Empty constructor shared by all generated templates.
 pub(crate) unsafe extern "C" fn empty_constructor(_info: *const v8::FunctionCallbackInfo) {}
 
+/// Illegal constructor — throws TypeError, matching real browser behavior for
+/// non-constructable Web IDL interfaces.
+pub(crate) unsafe extern "C" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let msg = v8::String::new(scope, "Illegal constructor").unwrap();
+    let exc = v8::Exception::type_error(scope, msg);
+    scope.throw_exception(exc);
+}
+
 pub mod bluetooth;
 pub mod cache_api;
 pub mod chrome_extensions;

@@ -518,9 +518,25 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // DOMException constructor shim — real Chrome has DOMException for
     // Promise rejections (EME, MIDI, mediaDevices). V8 only has TypeError.
     if (typeof DOMException === 'undefined') {
+        var _domExCodes = {
+            IndexSizeError: 1, DOMStringSizeError: 2,
+            HierarchyRequestError: 3, WrongDocumentError: 4,
+            InvalidCharacterError: 5, NoDataAllowedError: 6,
+            NoModificationAllowedError: 7, NotFoundError: 8,
+            NotSupportedError: 9, InUseAttributeError: 10,
+            InvalidStateError: 11, SyntaxError: 12,
+            InvalidModificationError: 13, NamespaceError: 14,
+            InvalidAccessError: 15, ValidationError: 16,
+            TypeMismatchError: 17, SecurityError: 18,
+            NetworkError: 19, AbortError: 20,
+            URLMismatchError: 21, QuotaExceededError: 22,
+            TimeoutError: 23, InvalidNodeTypeError: 24,
+            DataCloneError: 25
+        };
         function DOMException(message, name) {
             this.message = message || '';
             this.name = name || 'Error';
+            this.code = _domExCodes[name] || 0;
         }
         Object.defineProperty(DOMException.prototype, Symbol.toStringTag, {
             value: 'DOMException', configurable: true

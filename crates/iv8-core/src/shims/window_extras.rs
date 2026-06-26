@@ -380,6 +380,25 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         };
     }
 
+    // D1 fix: unconditionally patch Observer takeRecords to return []
+    // (codegen defines these Observers, so the typeof === 'undefined' guards
+    // above do not fire; codegen takeRecords returns undefined)
+    if (typeof IntersectionObserver !== 'undefined' && IntersectionObserver.prototype) {
+        IntersectionObserver.prototype.takeRecords = function() { return []; };
+    }
+    if (typeof ResizeObserver !== 'undefined' && ResizeObserver.prototype) {
+        ResizeObserver.prototype.takeRecords = function() { return []; };
+    }
+    if (typeof ReportingObserver !== 'undefined' && ReportingObserver.prototype) {
+        ReportingObserver.prototype.takeRecords = function() { return []; };
+    }
+    if (typeof MutationObserver !== 'undefined' && MutationObserver.prototype) {
+        MutationObserver.prototype.takeRecords = function() { return []; };
+    }
+    if (typeof PerformanceObserver !== 'undefined' && PerformanceObserver.prototype) {
+        PerformanceObserver.prototype.takeRecords = function() { return []; };
+    }
+
     // performance.getEntries / getEntriesByName / getEntriesByType stubs
     if (typeof performance !== 'undefined') {
         if (!performance.getEntries) {
@@ -624,7 +643,9 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     }
 
     // P1: Notification.requestPermission returns Promise
-    if (typeof Notification !== 'undefined' && Notification.requestPermission) {
+    // requestPermission is a static method on the constructor in real browsers,
+    // but codegen puts it on the prototype. We override it as a static property.
+    if (typeof Notification !== 'undefined') {
         Notification.requestPermission = function() {
             return Promise.resolve(Notification.permission || 'default');
         };
@@ -649,8 +670,10 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     }
 
     // P1: navigator.wakeLock.request returns Promise
-    if (typeof navigator !== 'undefined' && navigator.wakeLock && typeof navigator.wakeLock.request === 'undefined') {
-        navigator.wakeLock.request = function(type) {
+    // codegen navigator.wakeLock getter returns a new empty Object each access,
+    // so we replace it with a data property holding a fixed WakeLock-like object.
+    if (typeof navigator !== 'undefined' && navigator.wakeLock) {
+        var _wlSentinel = function(type) {
             return Promise.resolve({
                 type: type || 'screen', released: false,
                 release: function() { this.released = true; return Promise.resolve(); },
@@ -658,6 +681,14 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
                 dispatchEvent: function() { return true; }
             });
         };
+        var _wakeLockObj = { request: _wlSentinel };
+        try {
+            Object.defineProperty(navigator, 'wakeLock', {
+                value: _wakeLockObj, writable: true, configurable: true, enumerable: true
+            });
+        } catch(e) {
+            navigator.wakeLock = _wakeLockObj;
+        }
     }
 
     // P1: PaymentRequest show/canMakePayment return Promises

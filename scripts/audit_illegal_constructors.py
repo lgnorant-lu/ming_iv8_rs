@@ -81,7 +81,7 @@ KNOWN_NON_CONSTRUCTABLE: frozenset[str] = frozenset({
     "Headers",  # NOTE: Headers IS constructable in Chrome — kept out
     # --- DataTransfer / clipboard non-constructable ---
     "DataTransfer", "DataTransferItemList", "DataTransferItem",
-    "Clipboard", "ClipboardItem",  # ClipboardItem IS constructable actually
+    "Clipboard",  # ClipboardItem is constructable (see KNOWN_CONSTRUCTABLE)
     # --- DOM URL / location singletons ---
     # URL is constructable, URLSearchParams is constructable
     # --- Audio / video non-constructable ---
@@ -203,6 +203,7 @@ KNOWN_CONSTRUCTABLE: frozenset[str] = frozenset({
     "CanvasGradient", "CanvasPattern",
     "OffscreenCanvas",
     "ImageData",
+    "ClipboardItem",  # new ClipboardItem(items) is constructable in Chrome
     "ClipboardEvent",
     "SubmitEvent",
     "SubmitEvent",
@@ -305,10 +306,12 @@ def main() -> int:
         results[key].sort()
 
     # Identify potential issues: interfaces that CONSTRUCTED in IV8 but are
-    # known to be non-constructable in real browsers.
+    # known to be non-constructable in real browsers. KNOWN_CONSTRUCTABLE
+    # takes precedence (an interface constructable in Chrome is never an
+    # issue even if also listed in KNOWN_NON_CONSTRUCTABLE).
     constructed_set = set(results["CONSTRUCTED"])
     potential_issues = sorted(
-        constructed_set & KNOWN_NON_CONSTRUCTABLE
+        constructed_set & KNOWN_NON_CONSTRUCTABLE - KNOWN_CONSTRUCTABLE
     )
 
     # Also flag CONSTRUCTED interfaces that are NOT in our known-constructable
