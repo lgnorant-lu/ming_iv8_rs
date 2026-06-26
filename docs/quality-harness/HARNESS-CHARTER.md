@@ -113,6 +113,11 @@ Definition of Done。本宪法是这些成熟实践在 iv8-rs 的本地化落地
 | 编号 | 领域 | spec | impl | gate | 状态 |
 |---|---|---|---|---|---|
 | H01 | Crypto Detection | `H01-crypto-detection.md` | `scripts/evaluate_detection.py` | `crypto-detection-quality-gate.md` | 基线 PASS |
+| H02 | Env Consistency | `H02-env-consistency.md` | `scripts/evaluate_env_consistency.py` | `env-consistency-quality-gate.md` | candidate (Phase 4 合并入 H04) |
+| H03 | Surface Accuracy | `H03-surface-accuracy.md` | `scripts/evaluate_surface_accuracy.py` | `surface-accuracy-quality-gate.md` | candidate (Phase 4 合并入 H04) |
+| H04 | Surface Integrity Matrix | `H04-surface-integrity-matrix.md` | `scripts/evaluate_surface_integrity.py` | `surface-integrity-quality-gate.md` | candidate (Phase 1 待实施) |
+
+> H04 是 H02/H03 的超集（D-102），Phase 4 完成后 H02/H03 标记 DEPRECATED。
 
 > 后续如有新需求场景（如：环境指纹一致性、TDC 字段正确率、trace 解析鲁棒性），
 > 评估其是否够格立 harness，够格则按本宪法新增 H02、H03...，并登记于此表。
