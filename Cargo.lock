@@ -1172,6 +1172,7 @@ dependencies = [
  "cc",
  "criterion",
  "cssparser",
+ "ctr",
  "ecdsa",
  "ego-tree",
  "elliptic-curve",
