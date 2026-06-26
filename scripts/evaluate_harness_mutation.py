@@ -9,6 +9,7 @@ false-negative in the harness itself.
 
 D-101 (v0.8.83): Extended from 10 to 27 mutations covering all 36
 executable MRs (7 cross-context MRs are SKIP, not mutation-tested).
+D-101 supplement: Extended from 27 to 36 mutations, one per executable MR.
 
 Usage: python scripts/evaluate_harness_mutation.py
 Exit code: 0 = all mutants killed, 1 = at least one mutant survived
@@ -200,6 +201,42 @@ def _m27_inject(env):
     ]
 
 
+# ---------------------------------------------------------------------------
+# Extended mutations (D-101 supplement: 9 missing MRs)
+# ---------------------------------------------------------------------------
+
+def _m28_inject(env):
+    env["identity.browser.brand"] = "firefox"
+
+def _m29_inject(env):
+    env["navigator.languages"] = ["fr"]
+
+def _m30_inject(env):
+    env["navigator.userAgentData.platform"] = "macOS"
+
+def _m31_inject(env):
+    env["screen.availWidth"] = env.get("screen.width", 1920) + 80
+
+def _m32_inject(env):
+    env["screen.availHeight"] = env.get("screen.height", 1080) + 80
+
+def _m33_inject(env):
+    env["navigator.maxTouchPoints"] = 5
+    env["media.any-pointer"] = "fine"
+
+def _m34_inject(env):
+    env["identity.os"] = "android"
+
+def _m35_inject(env):
+    env["webgl.UNMASKED_VENDOR_WEBGL"] = "Google Inc. (Intel)"
+    env["webgl.UNMASKED_RENDERER_WEBGL"] = (
+        "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11, D3D11)"
+    )
+
+def _m36_inject(env):
+    env["identity.os"] = "macos"
+
+
 MUTATIONS = [
     ("M01", "platform -> MacIntel (contradicts Windows UA)", "MR-EQ-001",
      _m01_inject, "MR-EQ-001"),
@@ -255,11 +292,29 @@ MUTATIONS = [
      _m26_inject, "MR-EQ-006"),
     ("M27", "UA-CH brands don't match UA browser", "MR-EQ-008",
      _m27_inject, "MR-EQ-008"),
+    ("M28", "brand=firefox but UA is Chrome", "MR-EQ-003",
+     _m28_inject, "MR-EQ-003"),
+    ("M29", "languages[0]=fr but locale=en-US", "MR-EQ-005",
+     _m29_inject, "MR-EQ-005"),
+    ("M30", "UA-CH platform=macOS but UA=Windows", "MR-EQ-007",
+     _m30_inject, "MR-EQ-007"),
+    ("M31", "avail_width > screen.width", "MR-BND-004",
+     _m31_inject, "MR-BND-004"),
+    ("M32", "avail_height > screen.height", "MR-BND-005",
+     _m32_inject, "MR-BND-005"),
+    ("M33", "maxTouchPoints=5 but any-pointer=fine", "MR-IMP-002",
+     _m33_inject, "MR-IMP-002"),
+    ("M34", "os=android but maxTouchPoints=0", "MR-IMP-007",
+     _m34_inject, "MR-IMP-007"),
+    ("M35", "Intel vendor but NVIDIA renderer", "MR-IMP-009",
+     _m35_inject, "MR-IMP-009"),
+    ("M36", "os=macos but UA-CH platform=Windows", "MR-IMP-011",
+     _m36_inject, "MR-IMP-011"),
 ]
 
 
 def run():
-    print("=== Harness Mutation Testing (D-101: 27 mutations) ===")
+    print("=== Harness Mutation Testing (D-101: 36 mutations) ===")
     print()
 
     baseline = load_runtime_env()

@@ -430,10 +430,15 @@ D5_ILLEGAL_CONSTRUCTOR_INTERFACES: list[str] = [
     "DataTransferItemList",
     "DataTransferItem",
     "Clipboard",
-    # Audio nodes (non-constructable in Chrome, but overridden by audio_context.rs)
-    # -- moved to D5_JS_SHIM_OVERRIDDEN
+    # Audio nodes (non-constructable in Chrome — audio_context.rs constructors
+    # now throw TypeError; factory methods use internal Object.create helpers)
     "AudioListener",
     "AudioDestinationNode",
+    "AudioParam",
+    "OscillatorNode",
+    "GainNode",
+    "DynamicsCompressorNode",
+    "AnalyserNode",
     # Media non-constructable
     "MediaStreamTrack",
     # Non-constructable singletons
@@ -456,11 +461,6 @@ D5_ILLEGAL_CONSTRUCTOR_INTERFACES: list[str] = [
 # working constructors. These are design decisions, not bugs.
 D5_JS_SHIM_OVERRIDDEN: list[str] = [
     "HTMLDocument",      # window_extras.rs:47
-    "AudioParam",        # audio_context.rs:292
-    "OscillatorNode",    # audio_context.rs:294
-    "GainNode",          # audio_context.rs:293
-    "DynamicsCompressorNode",  # audio_context.rs (inline)
-    "AnalyserNode",      # audio_context.rs (inline)
 ]
 
 # Interfaces that ARE constructable in real browsers — used as negative

@@ -9,11 +9,15 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 (function() {
     // AudioParam stub
     function AudioParam(value) {
-        this.value = value !== undefined ? value : 0;
-        this.defaultValue = this.value;
-        this.minValue = -3.4028234663852886e+38;
-        this.maxValue = 3.4028234663852886e+38;
-        this.automationRate = 'a-rate';
+        throw new TypeError('Illegal constructor');
+        _initAudioParam(this, value);
+    }
+    function _initAudioParam(self, value) {
+        self.value = value !== undefined ? value : 0;
+        self.defaultValue = self.value;
+        self.minValue = -3.4028234663852886e+38;
+        self.maxValue = 3.4028234663852886e+38;
+        self.automationRate = 'a-rate';
     }
     AudioParam.prototype.setValueAtTime = function(v, t) { this.value = v; return this; };
     AudioParam.prototype.linearRampToValueAtTime = function(v, t) { return this; };
@@ -22,6 +26,15 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     AudioParam.prototype.setValueCurveAtTime = function(vs, t, d) { return this; };
     AudioParam.prototype.cancelScheduledValues = function(t) { return this; };
     AudioParam.prototype.cancelAndHoldAtTime = function(t) { return this; };
+
+    // Internal factory: creates AudioParam without requiring `new` (bypasses
+    // the illegal-constructor guard). Used by node constructors and factory
+    // methods so external `new AudioParam()` throws but internal creation works.
+    function _createAudioParam(value) {
+        var p = Object.create(AudioParam.prototype);
+        _initAudioParam(p, value);
+        return p;
+    }
 
     // AudioNode base
     function AudioNode(ctx) {
@@ -40,11 +53,20 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 
     // OscillatorNode
     function OscillatorNode(ctx, options) {
-        AudioNode.call(this, ctx);
-        this.type = (options && options.type) || 'sine';
-        this.frequency = new AudioParam((options && options.frequency) || 440);
-        this.detune = new AudioParam(0);
-        this.onended = null;
+        throw new TypeError('Illegal constructor');
+        _initOscillatorNode(this, ctx, options);
+    }
+    function _initOscillatorNode(self, ctx, options) {
+        AudioNode.call(self, ctx);
+        self.type = (options && options.type) || 'sine';
+        self.frequency = _createAudioParam((options && options.frequency) || 440);
+        self.detune = _createAudioParam(0);
+        self.onended = null;
+    }
+    function _createOscillatorNode(ctx, options) {
+        var node = Object.create(OscillatorNode.prototype);
+        _initOscillatorNode(node, ctx, options);
+        return node;
     }
     OscillatorNode.prototype = Object.create(AudioNode.prototype);
     OscillatorNode.prototype.start = function(when) {};
@@ -52,25 +74,43 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 
     // DynamicsCompressorNode
     function DynamicsCompressorNode(ctx, options) {
-        AudioNode.call(this, ctx);
+        throw new TypeError('Illegal constructor');
+        _initDynamicsCompressorNode(this, ctx, options);
+    }
+    function _initDynamicsCompressorNode(self, ctx, options) {
+        AudioNode.call(self, ctx);
         var _comp = (_audioPrefs && _audioPrefs.compressor) ? _audioPrefs.compressor : {};
-        this.threshold = new AudioParam((options && options.threshold !== undefined) ? options.threshold : (_comp.threshold !== undefined ? _comp.threshold : -24));
-        this.knee = new AudioParam((options && options.knee !== undefined) ? options.knee : (_comp.knee !== undefined ? _comp.knee : 30));
-        this.ratio = new AudioParam((options && options.ratio !== undefined) ? options.ratio : (_comp.ratio !== undefined ? _comp.ratio : 12));
-        this.attack = new AudioParam((options && options.attack !== undefined) ? options.attack : (_comp.attack !== undefined ? _comp.attack : 0.003));
-        this.release = new AudioParam((options && options.release !== undefined) ? options.release : (_comp.release !== undefined ? _comp.release : 0.25));
-        this.reduction = 0;
+        self.threshold = _createAudioParam((options && options.threshold !== undefined) ? options.threshold : (_comp.threshold !== undefined ? _comp.threshold : -24));
+        self.knee = _createAudioParam((options && options.knee !== undefined) ? options.knee : (_comp.knee !== undefined ? _comp.knee : 30));
+        self.ratio = _createAudioParam((options && options.ratio !== undefined) ? options.ratio : (_comp.ratio !== undefined ? _comp.ratio : 12));
+        self.attack = _createAudioParam((options && options.attack !== undefined) ? options.attack : (_comp.attack !== undefined ? _comp.attack : 0.003));
+        self.release = _createAudioParam((options && options.release !== undefined) ? options.release : (_comp.release !== undefined ? _comp.release : 0.25));
+        self.reduction = 0;
+    }
+    function _createDynamicsCompressorNode(ctx, options) {
+        var node = Object.create(DynamicsCompressorNode.prototype);
+        _initDynamicsCompressorNode(node, ctx, options);
+        return node;
     }
     DynamicsCompressorNode.prototype = Object.create(AudioNode.prototype);
 
     // AnalyserNode
     function AnalyserNode(ctx, options) {
-        AudioNode.call(this, ctx);
-        this.fftSize = (options && options.fftSize) || 2048;
-        this.frequencyBinCount = this.fftSize / 2;
-        this.minDecibels = -100;
-        this.maxDecibels = -30;
-        this.smoothingTimeConstant = 0.8;
+        throw new TypeError('Illegal constructor');
+        _initAnalyserNode(this, ctx, options);
+    }
+    function _initAnalyserNode(self, ctx, options) {
+        AudioNode.call(self, ctx);
+        self.fftSize = (options && options.fftSize) || 2048;
+        self.frequencyBinCount = self.fftSize / 2;
+        self.minDecibels = -100;
+        self.maxDecibels = -30;
+        self.smoothingTimeConstant = 0.8;
+    }
+    function _createAnalyserNode(ctx, options) {
+        var node = Object.create(AnalyserNode.prototype);
+        _initAnalyserNode(node, ctx, options);
+        return node;
     }
     AnalyserNode.prototype = Object.create(AudioNode.prototype);
     AnalyserNode.prototype.getFloatFrequencyData = function(arr) {};
@@ -80,8 +120,17 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 
     // GainNode
     function GainNode(ctx, options) {
-        AudioNode.call(this, ctx);
-        this.gain = new AudioParam((options && options.gain !== undefined) ? options.gain : 1);
+        throw new TypeError('Illegal constructor');
+        _initGainNode(this, ctx, options);
+    }
+    function _initGainNode(self, ctx, options) {
+        AudioNode.call(self, ctx);
+        self.gain = _createAudioParam((options && options.gain !== undefined) ? options.gain : 1);
+    }
+    function _createGainNode(ctx, options) {
+        var node = Object.create(GainNode.prototype);
+        _initGainNode(node, ctx, options);
+        return node;
     }
     GainNode.prototype = Object.create(AudioNode.prototype);
 
@@ -128,24 +177,30 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
 
     // BaseAudioContext
     function BaseAudioContext(sampleRate) {
-        this.sampleRate = sampleRate || 44100;
-        this.currentTime = 0;
-        this.destination = new AudioDestinationNode(this);
-        this.listener = {};
-        this.state = 'suspended';
-        this.onstatechange = null;
+        this._sampleRate = sampleRate || 44100;
+        this._currentTime = 0;
+        this._destination = new AudioDestinationNode(this);
+        this._listener = {};
+        this._state = 'suspended';
+        this._onstatechange = null;
     }
+    Object.defineProperty(BaseAudioContext.prototype, 'sampleRate', { get: function() { return this._sampleRate; }, enumerable: true, configurable: true });
+    Object.defineProperty(BaseAudioContext.prototype, 'currentTime', { get: function() { return this._currentTime; }, enumerable: true, configurable: true });
+    Object.defineProperty(BaseAudioContext.prototype, 'destination', { get: function() { return this._destination; }, enumerable: true, configurable: true });
+    Object.defineProperty(BaseAudioContext.prototype, 'listener', { get: function() { return this._listener; }, enumerable: true, configurable: true });
+    Object.defineProperty(BaseAudioContext.prototype, 'state', { get: function() { return this._state; }, enumerable: true, configurable: true });
+    Object.defineProperty(BaseAudioContext.prototype, 'onstatechange', { get: function() { return this._onstatechange; }, set: function(v) { this._onstatechange = v; }, enumerable: true, configurable: true });
     BaseAudioContext.prototype.createOscillator = function(options) {
-        return new OscillatorNode(this, options);
+        return _createOscillatorNode(this, options);
     };
     BaseAudioContext.prototype.createDynamicsCompressor = function(options) {
-        return new DynamicsCompressorNode(this, options);
+        return _createDynamicsCompressorNode(this, options);
     };
     BaseAudioContext.prototype.createAnalyser = function(options) {
-        return new AnalyserNode(this, options);
+        return _createAnalyserNode(this, options);
     };
     BaseAudioContext.prototype.createGain = function(options) {
-        return new GainNode(this, options);
+        return _createGainNode(this, options);
     };
     BaseAudioContext.prototype.createBuffer = function(channels, length, sampleRate) {
         return new AudioBuffer({ numberOfChannels: channels, length: length, sampleRate: sampleRate });
@@ -156,8 +211,8 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         node.loop = false;
         node.loopStart = 0;
         node.loopEnd = 0;
-        node.playbackRate = new AudioParam(1);
-        node.detune = new AudioParam(0);
+        node.playbackRate = _createAudioParam(1);
+        node.detune = _createAudioParam(0);
         node.onended = null;
         node.start = function() {};
         node.stop = function() {};
@@ -187,16 +242,16 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     };
     BaseAudioContext.prototype.createDelay = function(maxDelay) {
         var node = new AudioNode(this);
-        node.delayTime = new AudioParam(0);
+        node.delayTime = _createAudioParam(0);
         return node;
     };
     BaseAudioContext.prototype.createBiquadFilter = function() {
         var node = new AudioNode(this);
         node.type = 'lowpass';
-        node.frequency = new AudioParam(350);
-        node.detune = new AudioParam(0);
-        node.Q = new AudioParam(1);
-        node.gain = new AudioParam(0);
+        node.frequency = _createAudioParam(350);
+        node.detune = _createAudioParam(0);
+        node.Q = _createAudioParam(1);
+        node.gain = _createAudioParam(0);
         node.getFrequencyResponse = function() {};
         return node;
     };
@@ -208,19 +263,19 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     };
     BaseAudioContext.prototype.createStereoPanner = function() {
         var node = new AudioNode(this);
-        node.pan = new AudioParam(0);
+        node.pan = _createAudioParam(0);
         return node;
     };
     BaseAudioContext.prototype.createPanner = function() {
         var node = new AudioNode(this);
         node.panningModel = 'equalpower';
         node.distanceModel = 'inverse';
-        node.positionX = new AudioParam(0);
-        node.positionY = new AudioParam(0);
-        node.positionZ = new AudioParam(0);
-        node.orientationX = new AudioParam(1);
-        node.orientationY = new AudioParam(0);
-        node.orientationZ = new AudioParam(0);
+        node.positionX = _createAudioParam(0);
+        node.positionY = _createAudioParam(0);
+        node.positionZ = _createAudioParam(0);
+        node.orientationX = _createAudioParam(1);
+        node.orientationY = _createAudioParam(0);
+        node.orientationZ = _createAudioParam(0);
         node.refDistance = 1;
         node.maxDistance = 10000;
         node.rolloffFactor = 1;
@@ -234,9 +289,9 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         if (successCb) { setTimeout(function() { successCb(ab); }, 0); return; }
         return Promise.resolve(ab);
     };
-    BaseAudioContext.prototype.resume = function() { this.state = 'running'; return Promise.resolve(); };
-    BaseAudioContext.prototype.suspend = function() { this.state = 'suspended'; return Promise.resolve(); };
-    BaseAudioContext.prototype.close = function() { this.state = 'closed'; return Promise.resolve(); };
+    BaseAudioContext.prototype.resume = function() { this._state = 'running'; return Promise.resolve(); };
+    BaseAudioContext.prototype.suspend = function() { this._state = 'suspended'; return Promise.resolve(); };
+    BaseAudioContext.prototype.close = function() { this._state = 'closed'; return Promise.resolve(); };
     BaseAudioContext.prototype.addEventListener = function() {};
     BaseAudioContext.prototype.removeEventListener = function() {};
     BaseAudioContext.prototype.dispatchEvent = function() { return true; };
@@ -245,13 +300,15 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     var _audioPrefs = (typeof globalThis.__iv8AudioPrefs === 'object' && globalThis.__iv8AudioPrefs) ? globalThis.__iv8AudioPrefs : {};
     function AudioContext(options) {
         BaseAudioContext.call(this, options && options.sampleRate);
-        this.baseLatency = _audioPrefs.baseLatency || 0.005;
-        this.outputLatency = _audioPrefs.outputLatency || 0.01;
+        this._baseLatency = _audioPrefs.baseLatency || 0.005;
+        this._outputLatency = _audioPrefs.outputLatency || 0.01;
     }
     AudioContext.prototype = Object.create(BaseAudioContext.prototype);
     AudioContext.prototype.constructor = AudioContext;
+    Object.defineProperty(AudioContext.prototype, 'baseLatency', { get: function() { return this._baseLatency; }, enumerable: true, configurable: true });
+    Object.defineProperty(AudioContext.prototype, 'outputLatency', { get: function() { return this._outputLatency; }, enumerable: true, configurable: true });
     AudioContext.prototype.getOutputTimestamp = function() {
-        return { contextTime: this.currentTime, performanceTime: performance.now() };
+        return { contextTime: this._currentTime, performanceTime: performance.now() };
     };
     AudioContext.prototype.createMediaStreamSource = function(stream) { return new AudioNode(this); };
     AudioContext.prototype.createMediaStreamDestination = function() {

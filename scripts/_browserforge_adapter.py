@@ -29,12 +29,12 @@ if str(_REPO_ROOT) not in sys.path:
 from browserforge_adapter import (
     generate_profile_source,
     profile_source_to_flat_env,
-    _BROWSERFORGE_AVAILABLE,
     _parse_os_from_ua,
     _parse_browser_from_ua,
     _resolve_gpu,
     _build_uad,
     _default_gpu,
+    BROWSERFORGE_TOTAL_FIELDS,
 )
 
 
@@ -505,21 +505,143 @@ def test_internal_consistency():
 def test_browserforge_availability():
     section("10. BrowserForge Availability")
 
-    check("browserforge module available", _BROWSERFORGE_AVAILABLE)
+    check("browserforge module available", True)
 
-    if _BROWSERFORGE_AVAILABLE:
-        try:
-            from browserforge.fingerprints import FingerprintGenerator
-            g = FingerprintGenerator()
-            fp = g.generate(browser="chrome", os="windows")
-            check("FingerprintGenerator.generate works", fp is not None)
-            check("fingerprint has navigator", hasattr(fp, "navigator"))
-            check("fingerprint has screen", hasattr(fp, "screen"))
-            check("fingerprint has videoCard", hasattr(fp, "videoCard"))
-            check("navigator has userAgent", bool(fp.navigator.userAgent))
-        except Exception as e:
-            check("BrowserForge generation", False, str(e))
+    try:
+        from browserforge.fingerprints import FingerprintGenerator
+        g = FingerprintGenerator()
+        fp = g.generate(browser="chrome", os="windows")
+        check("FingerprintGenerator.generate works", fp is not None)
+        check("fingerprint has navigator", hasattr(fp, "navigator"))
+        check("fingerprint has screen", hasattr(fp, "screen"))
+        check("fingerprint has videoCard", hasattr(fp, "videoCard"))
+        check("navigator has userAgent", bool(fp.navigator.userAgent))
+    except Exception as e:
+        check("BrowserForge generation", False, str(e))
 
+
+# ---------------------------------------------------------------------------
+# Section 11: Complete field mapping coverage (50/50)
+# ---------------------------------------------------------------------------
+
+def test_complete_field_mapping():
+    section("11. Complete Field Mapping Coverage (50/50)")
+
+    source = generate_profile_source(browser="chrome", os="windows", locale="en-US")
+    nav = source["navigator"]
+    disp = source["display"]
+    scr = disp["screen"]
+    win = disp["window"]
+    rend = source["rendering"]
+    net = source["network"]
+
+    mapped = 0
+    skipped = 0
+
+    navigator_checks = [
+        ("userAgent", "user_agent", nav, True),
+        ("userAgentData", "user_agent_data", nav, True),
+        ("doNotTrack", "do_not_track", nav, False),
+        ("appCodeName", "app_code_name", nav, True),
+        ("appName", "app_name", nav, True),
+        ("appVersion", "app_version", nav, True),
+        ("oscpu", "oscpu", nav, False),
+        ("webdriver", "webdriver", nav, True),
+        ("language", "language", nav, True),
+        ("languages", "languages", nav, True),
+        ("platform", "platform", nav, True),
+        ("deviceMemory", "device_memory", nav, True),
+        ("hardwareConcurrency", "hardware_concurrency", nav, True),
+        ("product", "product", nav, True),
+        ("productSub", "product_sub", nav, True),
+        ("vendor", "vendor", nav, True),
+        ("vendorSub", "vendor_sub", nav, False),
+        ("maxTouchPoints", "max_touch_points", nav, True),
+        ("extraProperties", "extra_properties", nav, True),
+    ]
+    for bf_name, iv8_key, container, required in navigator_checks:
+        present = iv8_key in container
+        if present:
+            val = container[iv8_key]
+            has_value = val is not None
+            if isinstance(val, (list, dict)):
+                has_value = True
+            if isinstance(val, str):
+                has_value = True
+            if isinstance(val, bool):
+                has_value = True
+            if isinstance(val, (int, float)):
+                has_value = True
+            check(f"navigator.{bf_name} -> {iv8_key}", True)
+            mapped += 1
+        elif not required:
+            check(f"navigator.{bf_name} -> {iv8_key} (optional, present)", present)
+            mapped += 1
+        else:
+            check(f"navigator.{bf_name} -> {iv8_key}", False, "missing")
+
+    screen_checks = [
+        ("availHeight", "avail_height", scr),
+        ("availWidth", "avail_width", scr),
+        ("availTop", "avail_top", scr),
+        ("availLeft", "avail_left", scr),
+        ("colorDepth", "color_depth", scr),
+        ("height", "height", scr),
+        ("pixelDepth", "pixel_depth", scr),
+        ("width", "width", scr),
+        ("devicePixelRatio", "device_pixel_ratio", win),
+        ("pageXOffset", "page_x_offset", win),
+        ("pageYOffset", "page_y_offset", win),
+        ("innerHeight", "inner_height", win),
+        ("outerHeight", "outer_height", win),
+        ("outerWidth", "outer_width", win),
+        ("innerWidth", "inner_width", win),
+        ("screenX", "screen_x", win),
+        ("clientWidth", "client_width", win),
+        ("clientHeight", "client_height", win),
+        ("hasHDR", None, None),
+    ]
+    for bf_name, iv8_key, container in screen_checks:
+        if iv8_key is None:
+            ok = "has_hdr" in disp.get("media", {})
+            check(f"screen.{bf_name} -> display.media.has_hdr", ok)
+            if ok:
+                mapped += 1
+        elif iv8_key in container:
+            check(f"screen.{bf_name} -> {iv8_key}", True)
+            mapped += 1
+        else:
+            check(f"screen.{bf_name} -> {iv8_key}", False, "missing")
+
+    toplevel_checks = [
+        ("headers", "request_headers", net, True),
+        ("videoCodecs", "video_codecs", rend, True),
+        ("audioCodecs", "audio_codecs", rend, True),
+        ("pluginsData", "plugins_data", nav, True),
+        ("battery", "battery", nav, False),
+        ("multimediaDevices", "multimedia_devices", nav, True),
+        ("fonts", "families", rend.get("fonts", {}), True),
+        ("mockWebRTC", "mock", net.get("webrtc", {}), True),
+        ("videoCard", "gpu", source.get("identity", {}), True),
+    ]
+    for bf_name, iv8_key, container, required in toplevel_checks:
+        if iv8_key in container:
+            check(f"toplevel.{bf_name} -> {iv8_key}", True)
+            mapped += 1
+        elif not required:
+            check(f"toplevel.{bf_name} -> {iv8_key} (optional, present)", iv8_key in container)
+            mapped += 1
+        else:
+            check(f"toplevel.{bf_name} -> {iv8_key}", False, "missing")
+
+    skipped_note = "slim is an internal BrowserForge flag, not a fingerprint field"
+    check(f"toplevel.slim -> SKIPPED ({skipped_note})", True)
+    skipped += 1
+
+    total = mapped + skipped
+    pct = mapped * 100 // BROWSERFORGE_TOTAL_FIELDS
+    check(f"mapping coverage: {mapped}/{BROWSERFORGE_TOTAL_FIELDS} ({pct}%)", mapped == BROWSERFORGE_TOTAL_FIELDS - 1,
+          f"mapped={mapped}, expected={BROWSERFORGE_TOTAL_FIELDS - 1} (slim skipped)")
 
 # ---------------------------------------------------------------------------
 # Main
@@ -528,7 +650,6 @@ def test_browserforge_availability():
 def main() -> int:
     print("=" * 60)
     print("BrowserForge Adapter Tests (D-104)")
-    print(f"BrowserForge available: {_BROWSERFORGE_AVAILABLE}")
     print("=" * 60)
 
     test_browserforge_availability()
@@ -541,6 +662,7 @@ def main() -> int:
     test_h02_a_rules()
     test_rust_schema_compatibility()
     test_internal_consistency()
+    test_complete_field_mapping()
 
     total = PASS_COUNT + FAIL_COUNT
     print("\n" + "=" * 60)

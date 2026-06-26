@@ -22,14 +22,17 @@ import sys
 from pathlib import Path
 from typing import Any
 
-try:
-    from browserforge.fingerprints import Fingerprint, FingerprintGenerator, Screen
-    _BROWSERFORGE_AVAILABLE = True
-except ImportError:
-    _BROWSERFORGE_AVAILABLE = False
+from browserforge.fingerprints import Fingerprint, FingerprintGenerator, Screen
 
 
 SCHEMA_VERSION = "0.8.32"
+
+BROWSERFORGE_NAVIGATOR_FIELDS = 19
+BROWSERFORGE_SCREEN_FIELDS = 19
+BROWSERFORGE_TOPLEVEL_FIELDS = 10
+BROWSERFORGE_TOTAL_FIELDS = (
+    BROWSERFORGE_NAVIGATOR_FIELDS + BROWSERFORGE_SCREEN_FIELDS + BROWSERFORGE_TOPLEVEL_FIELDS
+)
 
 
 # ---------------------------------------------------------------------------
@@ -62,28 +65,16 @@ def generate_profile_source(
     """
     rng = random.Random(seed)
 
-    if _BROWSERFORGE_AVAILABLE:
-        screen = None
-        if any(v is not None for v in (min_width, max_width, min_height, max_height)):
-            screen = Screen(
-                min_width=min_width,
-                max_width=max_width,
-                min_height=min_height,
-                max_height=max_height,
-            )
-        generator = FingerprintGenerator(screen=screen, strict=False)
-        last_err: Exception | None = None
-        for _attempt in range(3):
-            try:
-                fp = generator.generate(browser=browser, os=os, locale=locale)
-                break
-            except Exception as e:
-                last_err = e
-                generator = FingerprintGenerator(strict=False)
-        else:
-            raise last_err  # type: ignore[misc]
-    else:
-        fp = _stub_fingerprint(browser, os, locale, rng)
+    screen = None
+    if any(v is not None for v in (min_width, max_width, min_height, max_height)):
+        screen = Screen(
+            min_width=min_width,
+            max_width=max_width,
+            min_height=min_height,
+            max_height=max_height,
+        )
+    generator = FingerprintGenerator(screen=screen, strict=False)
+    fp = generator.generate(browser=browser, os=os, locale=locale)
 
     return _fingerprint_to_profile_source(fp, rng)
 
@@ -109,22 +100,23 @@ def profile_source_to_flat_env(source: dict[str, Any]) -> dict[str, Any]:
     env["config.features.browserVersion"] = ident["browser"]["version"]
 
     env["navigator.userAgent"] = nav["user_agent"]
-    env["navigator.appVersion"] = "5.0"
+    env["navigator.appVersion"] = nav.get("app_version", "5.0")
     env["navigator.platform"] = nav["platform"]
     env["navigator.vendor"] = nav["vendor"]
-    env["navigator.vendorSub"] = ""
-    env["navigator.product"] = "Gecko"
-    env["navigator.productSub"] = "20030107"
+    env["navigator.vendorSub"] = nav.get("vendor_sub") or ""
+    env["navigator.product"] = nav.get("product", "Gecko")
+    env["navigator.productSub"] = nav.get("product_sub", "20030107")
+    env["navigator.appCodeName"] = nav.get("app_code_name", "Mozilla")
+    env["navigator.appName"] = nav.get("app_name", "Netscape")
+    env["navigator.oscpu"] = nav.get("oscpu")
     env["navigator.language"] = nav["language"]
     env["navigator.hardwareConcurrency"] = nav["hardware_concurrency"]
     env["navigator.deviceMemory"] = nav["device_memory"]
     env["navigator.maxTouchPoints"] = nav["max_touch_points"]
     env["navigator.cookieEnabled"] = True
     env["navigator.onLine"] = True
-    env["navigator.doNotTrack"] = None
+    env["navigator.doNotTrack"] = nav.get("do_not_track")
     env["navigator.webdriver"] = nav["webdriver"]
-    env["navigator.appName"] = "Netscape"
-    env["navigator.appCodeName"] = "Mozilla"
     env["navigator.pdfViewerEnabled"] = nav["pdf_viewer_enabled"]
     env["navigator.languages"] = nav["languages"]
 
@@ -147,14 +139,19 @@ def profile_source_to_flat_env(source: dict[str, Any]) -> dict[str, Any]:
     env["screen.availHeight"] = scr["avail_height"]
     env["screen.colorDepth"] = scr["color_depth"]
     env["screen.pixelDepth"] = scr["pixel_depth"]
-    env["screen.availLeft"] = 0
-    env["screen.availTop"] = 0
+    env["screen.availLeft"] = scr.get("avail_left", 0)
+    env["screen.availTop"] = scr.get("avail_top", 0)
 
     env["window.innerWidth"] = win["inner_width"]
     env["window.innerHeight"] = win["inner_height"]
     env["window.devicePixelRatio"] = win["device_pixel_ratio"]
     env["window.outerWidth"] = win["outer_width"]
     env["window.outerHeight"] = win["outer_height"]
+    env["window.screenX"] = win.get("screen_x", 0)
+    env["window.pageXOffset"] = win.get("page_x_offset", 0)
+    env["window.pageYOffset"] = win.get("page_y_offset", 0)
+    env["document.documentElement.clientWidth"] = win.get("client_width", 0)
+    env["document.documentElement.clientHeight"] = win.get("client_height", 0)
 
     env["webgl.VENDOR"] = ident["gpu"]["vendor"]
     env["webgl.RENDERER"] = ident["gpu"]["renderer"]
@@ -193,11 +190,42 @@ def profile_source_to_flat_env(source: dict[str, Any]) -> dict[str, Any]:
     env["audio.baseLatency"] = 0.005
     env["audio.outputLatency"] = 0.01
     env["display.color-gamut"] = media.get("color_gamut", "srgb")
+    env["display.hasHDR"] = media.get("has_hdr", False)
+
+    video_codecs = rendering.get("video_codecs", {})
+    for codec, support in video_codecs.items():
+        env[f"videoCodecs.{codec}"] = support
+    audio_codecs = rendering.get("audio_codecs", {})
+    for codec, support in audio_codecs.items():
+        env[f"audioCodecs.{codec}"] = support
+
+    battery = nav.get("battery")
+    if battery and isinstance(battery, dict):
+        env["battery.charging"] = battery.get("charging", False)
+        env["battery.chargingTime"] = battery.get("chargingTime")
+        env["battery.dischargingTime"] = battery.get("dischargingTime")
+        env["battery.level"] = battery.get("level", 1.0)
+
+    mm_devs = nav.get("multimedia_devices", {})
+    if isinstance(mm_devs, dict):
+        env["mediaDevices.speakers"] = len(mm_devs.get("speakers", []))
+        env["mediaDevices.micros"] = len(mm_devs.get("micros", []))
+        env["mediaDevices.webcams"] = len(mm_devs.get("webcams", []))
+
+    plugins_data = nav.get("plugins_data", {})
+    if isinstance(plugins_data, dict):
+        env["navigator.plugins"] = plugins_data.get("plugins", [])
 
     env["network.effectiveType"] = "4g"
     env["network.downlink"] = 10.0
     env["network.rtt"] = 50
     env["network.saveData"] = False
+    env["network.webrtc.mock"] = source.get("network", {}).get("webrtc", {}).get("mock", False)
+
+    request_headers = source.get("network", {}).get("request_headers", {})
+    if isinstance(request_headers, dict):
+        for hname, hval in request_headers.items():
+            env[f"headers.{hname}"] = hval
 
     env["identity.browser.brand"] = ident["browser"]["brand"]
     env["identity.os"] = ident["os"]
@@ -217,23 +245,25 @@ def profile_source_to_flat_env(source: dict[str, Any]) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 def _fingerprint_to_profile_source(
-    fp: Any, rng: random.Random
+    fp: Fingerprint, rng: random.Random
 ) -> dict[str, Any]:
     """Convert BrowserForge Fingerprint to IV8 ProfileSource JSON."""
 
-    ua = fp.navigator.userAgent
-    os_name, os_version = _parse_os_from_ua(ua, fp.navigator.platform)
+    nav_fp = fp.navigator
+    scr = fp.screen
+
+    ua = nav_fp.userAgent
+    os_name, os_version = _parse_os_from_ua(ua, nav_fp.platform)
     browser_brand, browser_version = _parse_browser_from_ua(ua)
 
     gpu_config = _resolve_gpu(fp.videoCard, os_name)
 
-    languages = list(fp.navigator.languages) if fp.navigator.languages else ["en"]
-    primary_lang = fp.navigator.language or languages[0]
+    languages = list(nav_fp.languages) if nav_fp.languages else ["en"]
+    primary_lang = nav_fp.language or languages[0]
     accept_lang = _build_accept_language(languages)
 
     noise_seed = rng.getrandbits(64)
 
-    scr = fp.screen
     color_depth = scr.colorDepth or 24
     pixel_depth = scr.pixelDepth or color_depth
 
@@ -252,6 +282,10 @@ def _fingerprint_to_profile_source(
 
     dpr = scr.devicePixelRatio or 1.0
 
+    uad = _build_uad_from_browserforge(nav_fp.userAgentData, ua, browser_brand, browser_version)
+
+    webdriver = _coerce_webdriver(nav_fp.webdriver)
+
     source: dict[str, Any] = {
         "meta": {
             "schema_version": SCHEMA_VERSION,
@@ -263,25 +297,37 @@ def _fingerprint_to_profile_source(
         "identity": {
             "os": os_name,
             "os_version": os_version,
-            "cpu_arch": _arch_from_platform(fp.navigator.platform),
-            "cpu_cores": fp.navigator.hardwareConcurrency or 8,
-            "memory_gb": fp.navigator.deviceMemory or 8,
+            "cpu_arch": _arch_from_platform(nav_fp.platform),
+            "cpu_cores": nav_fp.hardwareConcurrency or 8,
+            "memory_gb": nav_fp.deviceMemory or 8,
             "browser": {"brand": browser_brand, "version": browser_version},
             "gpu": gpu_config,
             "noise_seed": noise_seed,
         },
         "navigator": {
             "user_agent": ua,
-            "platform": fp.navigator.platform,
-            "vendor": fp.navigator.vendor,
+            "platform": nav_fp.platform,
+            "vendor": nav_fp.vendor,
             "language": primary_lang,
             "languages": languages,
-            "hardware_concurrency": fp.navigator.hardwareConcurrency or 8,
-            "device_memory": fp.navigator.deviceMemory or 8,
-            "max_touch_points": fp.navigator.maxTouchPoints or 0,
-            "webdriver": False,
-            "pdf_viewer_enabled": True,
-            "user_agent_data": _build_uad(ua, browser_brand, browser_version),
+            "hardware_concurrency": nav_fp.hardwareConcurrency or 8,
+            "device_memory": nav_fp.deviceMemory or 8,
+            "max_touch_points": nav_fp.maxTouchPoints or 0,
+            "webdriver": webdriver,
+            "pdf_viewer_enabled": _extract_pdf_viewer(nav_fp.extraProperties),
+            "user_agent_data": uad,
+            "do_not_track": nav_fp.doNotTrack,
+            "app_code_name": nav_fp.appCodeName,
+            "app_name": nav_fp.appName,
+            "app_version": nav_fp.appVersion,
+            "oscpu": nav_fp.oscpu,
+            "product": nav_fp.product,
+            "product_sub": nav_fp.productSub,
+            "vendor_sub": nav_fp.vendorSub,
+            "extra_properties": dict(nav_fp.extraProperties) if nav_fp.extraProperties else {},
+            "plugins_data": _normalize_plugins_data(fp.pluginsData),
+            "battery": _normalize_battery(fp.battery),
+            "multimedia_devices": _normalize_multimedia_devices(fp.multimediaDevices),
             "connection": {
                 "effective_type": "4g",
                 "rtt": 50,
@@ -295,6 +341,8 @@ def _fingerprint_to_profile_source(
                 "height": scr.height,
                 "avail_width": avail_width,
                 "avail_height": avail_height,
+                "avail_top": scr.availTop or 0,
+                "avail_left": scr.availLeft or 0,
                 "color_depth": color_depth,
                 "pixel_depth": pixel_depth,
             },
@@ -304,10 +352,15 @@ def _fingerprint_to_profile_source(
                 "outer_width": outer_width,
                 "outer_height": outer_height,
                 "device_pixel_ratio": dpr,
+                "screen_x": scr.screenX or 0,
+                "page_x_offset": scr.pageXOffset or 0,
+                "page_y_offset": scr.pageYOffset or 0,
+                "client_width": scr.clientWidth or 0,
+                "client_height": scr.clientHeight or 0,
             },
-            "media": _default_media_prefs(),
+            "media": _default_media_prefs(scr.hasHDR),
         },
-        "rendering": _default_rendering(),
+        "rendering": _default_rendering(fp),
         "locale": {
             "timezone": _tz_from_locale(primary_lang),
             "language": primary_lang,
@@ -315,7 +368,7 @@ def _fingerprint_to_profile_source(
             "accept_language": accept_lang,
             "geolocation": {"mode": "prompt", "based_on_ip": True},
         },
-        "network": _default_network(),
+        "network": _default_network(fp),
         "permissions": _default_permissions(),
         "capabilities": _default_capabilities(),
         "storage": _default_storage(),
@@ -487,7 +540,30 @@ def _default_gpu(os_name: str) -> dict[str, str]:
 # userAgentData (Client Hints)
 # ---------------------------------------------------------------------------
 
-def _build_uad(ua: str, brand: str, version: str) -> dict[str, Any]:
+def _build_uad_from_browserforge(
+    bf_uad: dict[str, Any] | None,
+    ua: str,
+    brand: str,
+    version: str,
+) -> dict[str, Any]:
+    """Build IV8 userAgentData from BrowserForge's userAgentData dict.
+
+    Falls back to UA-string parsing if BrowserForge did not provide one.
+    """
+    if bf_uad and isinstance(bf_uad, dict) and bf_uad.get("brands"):
+        return {
+            "platform": bf_uad.get("platform", _platform_str_from_ua(ua)),
+            "platform_version": bf_uad.get("platformVersion", _extract_platform_version(ua)),
+            "architecture": bf_uad.get("architecture", "x86"),
+            "bitness": bf_uad.get("bitness", "64"),
+            "mobile": bf_uad.get("mobile", False),
+            "brands": bf_uad.get("brands", []),
+            "full_version_list": bf_uad.get("fullVersionList", bf_uad.get("brands", [])),
+        }
+    return _build_uad_from_ua(ua, brand, version)
+
+
+def _build_uad_from_ua(ua: str, brand: str, version: str) -> dict[str, Any]:
     full_version = _extract_full_version(ua, brand)
     brand_map: dict[str, list[tuple[str, str]]] = {
         "chrome": [("Chromium", version), ("Google Chrome", version)],
@@ -498,15 +574,8 @@ def _build_uad(ua: str, brand: str, version: str) -> dict[str, Any]:
     brands = brand_map.get(brand, [])
     full_brands = [{"brand": b, "version": full_version} for b, _ in brands]
 
-    platform_str = (
-        "Windows" if "Windows" in ua
-        else "macOS" if "Mac" in ua
-        else "Linux" if "Linux" in ua
-        else "Unknown"
-    )
-
     return {
-        "platform": platform_str,
+        "platform": _platform_str_from_ua(ua),
         "platform_version": _extract_platform_version(ua),
         "architecture": "x86",
         "bitness": "64",
@@ -514,6 +583,80 @@ def _build_uad(ua: str, brand: str, version: str) -> dict[str, Any]:
         "brands": [{"brand": b, "version": v} for b, v in brands],
         "full_version_list": full_brands,
     }
+
+
+def _platform_str_from_ua(ua: str) -> str:
+    if "Windows" in ua:
+        return "Windows"
+    if "Mac" in ua:
+        return "macOS"
+    if "Linux" in ua:
+        return "Linux"
+    return "Unknown"
+
+
+def _coerce_webdriver(value: Any) -> bool:
+    if value is None:
+        return False
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.lower() not in ("false", "0", "", "null", "none")
+    return bool(value)
+
+
+def _extract_pdf_viewer(extra_props: dict[str, Any] | None) -> bool:
+    if not extra_props:
+        return True
+    val = extra_props.get("pdfViewerEnabled")
+    if val is None:
+        return True
+    if isinstance(val, bool):
+        return val
+    if isinstance(val, str):
+        return val.lower() not in ("false", "0", "", "null", "none")
+    return bool(val)
+
+
+def _normalize_plugins_data(plugins_data: Any) -> dict[str, Any]:
+    if not plugins_data or not isinstance(plugins_data, dict):
+        return {"plugins": [], "mime_types": []}
+    return dict(plugins_data)
+
+
+def _normalize_battery(battery: Any) -> dict[str, Any] | None:
+    if not battery or not isinstance(battery, dict):
+        return None
+    return dict(battery)
+
+
+def _normalize_multimedia_devices(devices: Any) -> dict[str, Any]:
+    if not devices:
+        return {"speakers": [], "micros": [], "webcams": []}
+    if isinstance(devices, dict):
+        return dict(devices)
+    if isinstance(devices, list):
+        categorized: dict[str, list[dict[str, Any]]] = {
+            "speakers": [],
+            "micros": [],
+            "webcams": [],
+        }
+        kind_map = {
+            "audiooutput": "speakers",
+            "audioinput": "micros",
+            "videoinput": "webcams",
+        }
+        for dev in devices:
+            if isinstance(dev, dict):
+                kind = dev.get("kind", "")
+                category = kind_map.get(kind, "speakers")
+                categorized[category].append(dev)
+        return categorized
+    return {"speakers": [], "micros": [], "webcams": []}
+
+
+# Backwards-compatible alias (tests import _build_uad)
+_build_uad = _build_uad_from_ua
 
 
 def _extract_full_version(ua: str, brand: str) -> str:
@@ -543,7 +686,7 @@ def _extract_platform_version(ua: str) -> str:
 # Default section builders (mirror defaults.rs)
 # ---------------------------------------------------------------------------
 
-def _default_media_prefs() -> dict[str, str]:
+def _default_media_prefs(has_hdr: bool = False) -> dict[str, Any]:
     return {
         "pointer": "fine",
         "hover": "hover",
@@ -561,10 +704,21 @@ def _default_media_prefs() -> dict[str, str]:
         "display_mode": "browser",
         "inverted_colors": "none",
         "prefers_reduced_transparency": "no-preference",
+        "has_hdr": has_hdr,
     }
 
 
-def _default_rendering() -> dict[str, Any]:
+def _default_rendering(fp: Fingerprint | None = None) -> dict[str, Any]:
+    fonts_families: list[str] = []
+    video_codecs: dict[str, str] = {}
+    audio_codecs: dict[str, str] = {}
+    if fp is not None:
+        if fp.fonts:
+            fonts_families = list(fp.fonts)
+        if fp.videoCodecs and isinstance(fp.videoCodecs, dict):
+            video_codecs = dict(fp.videoCodecs)
+        if fp.audioCodecs and isinstance(fp.audioCodecs, dict):
+            audio_codecs = dict(fp.audioCodecs)
     return {
         "canvas_2d": {"mode": "noise", "sub_seed": None},
         "webgl_1": {"mode": "noise", "sub_seed": None},
@@ -572,16 +726,30 @@ def _default_rendering() -> dict[str, Any]:
         "webgpu": {"mode": "unsupported"},
         "audio_context": {"mode": "noise", "sub_seed": None},
         "client_rects": {"mode": "noise", "sub_seed": None},
-        "fonts": {"mode": "common", "families": []},
+        "fonts": {"mode": "common", "families": fonts_families},
+        "video_codecs": video_codecs,
+        "audio_codecs": audio_codecs,
     }
 
 
-def _default_network() -> dict[str, Any]:
+def _default_network(fp: Fingerprint | None = None) -> dict[str, Any]:
+    request_headers: dict[str, str] = {}
+    webrtc_mock = False
+    if fp is not None:
+        if fp.headers and isinstance(fp.headers, dict):
+            request_headers = dict(fp.headers)
+        if fp.mockWebRTC is not None:
+            webrtc_mock = bool(fp.mockWebRTC)
     return {
         "proxy": None,
-        "webrtc": {"mode": "disabled"},
+        "webrtc": {"mode": "disabled", "mock": webrtc_mock},
         "dns": {"mode": "system"},
-        "headers": {"ua": "profile", "accept_language": "profile", "client_hints": "profile"},
+        "headers": {
+            "ua": "profile",
+            "accept_language": "profile",
+            "client_hints": "profile",
+        },
+        "request_headers": request_headers,
         "tls": {"mode": "unsupported"},
     }
 
@@ -671,81 +839,6 @@ def _build_accept_language(languages: list[str]) -> str:
         parts.append(f"{lang};q={round(1.0 - 0.1 * i, 1)}")
     parts.append("en;q=0.5")
     return ",".join(parts)
-
-
-# ---------------------------------------------------------------------------
-# Stub fingerprint (fallback when browserforge is not installed)
-# ---------------------------------------------------------------------------
-
-class _StubScreen:
-    def __init__(self, rng: random.Random, os_name: str):
-        dims = {
-            "windows": (1920, 1080),
-            "macos": (1440, 900),
-            "linux": (1920, 1080),
-        }
-        self.width, self.height = dims.get(os_name, (1920, 1080))
-        self.availWidth = self.width
-        self.availHeight = self.height - 40
-        self.colorDepth = 24
-        self.pixelDepth = 24
-        self.innerWidth = 0
-        self.innerHeight = 0
-        self.outerWidth = self.width
-        self.outerHeight = self.height
-        self.devicePixelRatio = 1.0
-
-
-class _StubNavigator:
-    def __init__(self, rng: random.Random, os_name: str, browser: str, locale: str | None):
-        os_ua = {
-            "windows": "Windows NT 10.0; Win64; x64",
-            "macos": "Macintosh; Intel Mac OS X 10_15_7",
-            "linux": "X11; Linux x86_64",
-        }
-        platform = {
-            "windows": "Win32",
-            "macos": "MacIntel",
-            "linux": "Linux x86_64",
-        }
-        self.platform = platform.get(os_name, "Win32")
-        chrome_ver = rng.choice(["131", "147", "128"])
-        os_part = os_ua.get(os_name, os_ua["windows"])
-        self.userAgent = (
-            f"Mozilla/5.0 ({os_part}) AppleWebKit/537.36 "
-            f"(KHTML, like Gecko) Chrome/{chrome_ver}.0.0.0 Safari/537.36"
-        )
-        self.vendor = "Google Inc."
-        self.hardwareConcurrency = rng.choice([4, 8, 12, 16])
-        self.deviceMemory = rng.choice([4, 8, 16])
-        self.maxTouchPoints = 0
-        lang = locale or "en-US"
-        self.language = lang
-        self.languages = [lang]
-
-
-class _StubVideoCard:
-    def __init__(self, os_name: str):
-        self.vendor = "Google Inc. (NVIDIA)"
-        self.renderer = (
-            "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) "
-            "Direct3D11 vs_5_0 ps_5_0, D3D11)"
-        )
-
-
-class _StubFingerprint:
-    def __init__(self, rng: random.Random, browser: str | None, os_name: str | None, locale: str | None):
-        os_n = os_name or "windows"
-        browser_n = browser or "chrome"
-        self.navigator = _StubNavigator(rng, os_n, browser_n, locale)
-        self.screen = _StubScreen(rng, os_n)
-        self.videoCard = _StubVideoCard(os_n)
-
-
-def _stub_fingerprint(
-    browser: str | None, os_name: str | None, locale: str | None, rng: random.Random
-) -> _StubFingerprint:
-    return _StubFingerprint(rng, browser, os_name, locale)
 
 
 # ---------------------------------------------------------------------------
