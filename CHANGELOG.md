@@ -6,6 +6,53 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 
 ## [Unreleased]
 
+## [v0.8.84] - 2026-06-27
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Added
+- Web Worker execution environment (方案A, D-110): 独立 V8 isolate + 独立 OS 线程 + ValueSerializer structured clone. worker.rs (411行) + structured_clone.rs (130行) + worker_bootstrap.js (277行). 5 源交叉验证 (W3C + BrowserOxide + Deno + V8 docs + workerd). MR-CTX 7/7 PASS.
+- codegen construct_only 回调: new 可用, [[Call]] 抛 TypeError (WebIDL spec).
+- codegen IDL 常量生成: 从 IR const member 解析, 安装到 prototype.
+- codegen read_only_prototype(): prototype 不可写 (WebIDL spec {Writable:false}).
+- codegen set_length: FunctionBuilder.length(N) 从 IR required_arg_count.
+- Navigator 23 缺失属性 (gpu/locks/storage/storageBuckets/getUserMedia 等).
+- Screen 7 缺失属性 (isExtended/orientation/onchange 等).
+- AudioContext 9 缺失方法 (audioWorklet/createConstantSource/createIIRFilter 等).
+- CreepJS CI gate 脚本 (0/38 lies PASS).
+- Chromium IDL sparse checkout + runtime_enabled_features 解析.
+- Development Principles 规范 (4 条: deep fix / TODO discipline / temp file / commit msg file).
+
+### Changed
+- DEFAULT_PROFILE 从 Chrome 131 升级到 147 (UA/brands/version 统一).
+- dom/template.rs make_template + Headers 添加 read_only_prototype().
+- dom/template.rs Node prototype 安装 18 个 IDL 常量.
+- navigator.languages fallback 从 [navigator.language] 改为 DEFAULT_PROFILE.languages.
+- drain_worker_messages 移到 isolate exit 之前 (修复 Worker 消息传递).
+- HTMLDocument 修复 (prototype 链 + constructor).
+- fetch.toString = native code (两处).
+- FP-Inconsistent D20/D24 规则修正 (23 KILLED / 0 SURVIVED).
+- D1/D5 EventTarget 从 NON_CONSTRUCTABLE 移除, HTMLDocument 重分类.
+- iv8-defaults.json outerWidth/outerHeight/innerHeight 修正.
+- .gitignore 新增 _tmp_* 模式.
+
+### Quality Gates
+- cargo test --workspace: 323 lib + 6 Worker + integration (2 pre-existing dom_binding FAIL).
+- H02: 40/40 PASS.
+- PBT/Metamorphic: 37/38 PASS + 7/7 MR-CTX PASS.
+- Mutation: 36/36 KILLED.
+- D1/D5: 115/0/1 PASS.
+- FP mutation: 23 KILLED / 0 SURVIVED / 1 SKIP.
+- idlharness: 3245/10222 PASS (31.75%), +323 from baseline 2922.
+- CreepJS: 0/38 lies.
+
+### Known Limitations
+- dom/template.rs 覆盖 codegen 的 39 个接口 (D-112, v0.8.85 统一).
+- codegen null-this TypeError 未实现 (D-113, v0.8.86).
+- CDP diff 修补 deferred (D-115, v0.8.85-86 根因修复).
+- 配置层 4 套源统一 deferred (D-111, v0.8.85).
+
 ## [0.8.81] - 2026-06-25
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
