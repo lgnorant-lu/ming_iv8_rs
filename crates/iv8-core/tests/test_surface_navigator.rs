@@ -1,6 +1,8 @@
 // v0.8.51 S3: Integration tests for Navigator surface.
 mod common;
 
+use iv8_core::kernel::embedded_v8::EmbeddedV8Kernel;
+
 #[test]
 fn test_navigator_user_agent() {
     let mut k = common::make_kernel();
@@ -184,14 +186,16 @@ fn test_navigator_new_properties_tostring_native_code() {
 
 #[test]
 fn test_navigator_custom_profile() {
-    use iv8_core::shims::browser_profile::{BrowserProfile, DEFAULT_PROFILE};
-    let profile = BrowserProfile {
-        user_agent: &*Box::leak("TestAgent/9.9".to_string().into_boxed_str()),
-        platform: &*Box::leak("TestOS".to_string().into_boxed_str()),
-        language: &*Box::leak("test-LANG".to_string().into_boxed_str()),
-        ..DEFAULT_PROFILE
+    use iv8_core::shims::browser_profile::DEFAULT_PROFILE;
+    let mut overrides = std::collections::HashMap::new();
+    overrides.insert("navigator.userAgent".to_string(), serde_json::json!("TestAgent/9.9"));
+    overrides.insert("navigator.platform".to_string(), serde_json::json!("TestOS"));
+    overrides.insert("navigator.language".to_string(), serde_json::json!("test-LANG"));
+    let config = iv8_core::kernel::KernelConfig {
+        environment_overrides: Some(overrides),
+        ..Default::default()
     };
-    let mut k = common::make_kernel_with_profile(profile);
+    let mut k = EmbeddedV8Kernel::new(config).unwrap();
     common::assert_js_str(&mut k, "navigator.userAgent", "TestAgent/9.9");
     common::assert_js_str(&mut k, "navigator.platform", "TestOS");
     common::assert_js_str(&mut k, "navigator.language", "test-LANG");

@@ -536,10 +536,10 @@ macro_rules! env_str_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
-                let val = match state.profile {
-                    Some(p) => p.$field,
-                    None => state.environment.get_str($path).unwrap_or($default),
-                };
+                let val = state
+                    .environment
+                    .get_str($path)
+                    .unwrap_or_else(|| state.profile.map(|p| p.$field).unwrap_or($default));
                 if let Some(s) = v8::String::new(scope, val) {
                     rv.set(s.into());
                 }
@@ -557,10 +557,10 @@ macro_rules! env_f64_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
-                let val = match state.profile {
-                    Some(p) => p.$field,
-                    None => state.environment.get_f64($path).unwrap_or($default),
-                };
+                let val = state
+                    .environment
+                    .get_f64($path)
+                    .unwrap_or_else(|| state.profile.map(|p| p.$field).unwrap_or($default));
                 rv.set(v8::Number::new(scope, val).into());
             }));
         }
@@ -576,10 +576,10 @@ macro_rules! env_bool_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
-                let val = match state.profile {
-                    Some(p) => p.$field,
-                    None => state.environment.get_bool($path).unwrap_or($default),
-                };
+                let val = state
+                    .environment
+                    .get_bool($path)
+                    .unwrap_or_else(|| state.profile.map(|p| p.$field).unwrap_or($default));
                 rv.set(v8::Boolean::new(scope, val).into());
             }));
         }
@@ -687,26 +687,34 @@ unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
         let state = RuntimeState::get(isolate);
 
         // Try to get languages array from environment
-        let langs: Vec<String> = if let Some(p) = &state.profile {
-            p.languages.iter().map(|s| s.to_string()).collect()
-        } else if let Some(val) = state.environment.get("navigator.languages") {
+        let langs: Vec<String> = if let Some(val) = state.environment.get("navigator.languages") {
             if let Some(arr) = val.as_array() {
                 arr.iter()
                     .filter_map(|v| v.as_str().map(|s| s.to_string()))
                     .collect()
             } else {
-                DEFAULT_PROFILE
-                    .languages
-                    .iter()
-                    .map(|s| s.to_string())
-                    .collect()
+                state
+                    .profile
+                    .map(|p| p.languages.iter().map(|s| s.to_string()).collect())
+                    .unwrap_or_else(|| {
+                        DEFAULT_PROFILE
+                            .languages
+                            .iter()
+                            .map(|s| s.to_string())
+                            .collect()
+                    })
             }
         } else {
-            DEFAULT_PROFILE
-                .languages
-                .iter()
-                .map(|s| s.to_string())
-                .collect()
+            state
+                .profile
+                .map(|p| p.languages.iter().map(|s| s.to_string()).collect())
+                .unwrap_or_else(|| {
+                    DEFAULT_PROFILE
+                        .languages
+                        .iter()
+                        .map(|s| s.to_string())
+                        .collect()
+                })
         };
 
         let arr = v8::Array::new(scope, langs.len() as i32);
@@ -922,11 +930,12 @@ unsafe extern "C" fn nav_do_not_track(info: *const v8::FunctionCallbackInfo) {
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
         let val = state
-            .profile
-            .and_then(|p| p.do_not_track)
-            .or_else(|| state.environment.get_str("navigator.doNotTrack"));
+            .environment
+            .get_str("navigator.doNotTrack")
+            .map(|s| s.to_string())
+            .or_else(|| state.profile.and_then(|p| p.do_not_track.map(|s| s.to_string())));
         if let Some(s) = val {
-            if let Some(v) = v8::String::new(scope, s) {
+            if let Some(v) = v8::String::new(scope, &s) {
                 rv.set(v.into());
                 return;
             }
