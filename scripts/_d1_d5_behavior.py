@@ -397,7 +397,7 @@ D5_ILLEGAL_CONSTRUCTOR_INTERFACES: list[str] = [
     "NamedNodeMap",
     "DOMImplementation",
     "Range",
-    "EventTarget",
+    "HTMLDocument",
     # Window / browsing context singletons
     "Window",
     "History",
@@ -460,7 +460,6 @@ D5_ILLEGAL_CONSTRUCTOR_INTERFACES: list[str] = [
 # overridden by IV8 JS shims (audio_context.rs, window_extras.rs) with
 # working constructors. These are design decisions, not bugs.
 D5_JS_SHIM_OVERRIDDEN: list[str] = [
-    "HTMLDocument",      # window_extras.rs:47
 ]
 
 # Interfaces that ARE constructable in real browsers — used as negative

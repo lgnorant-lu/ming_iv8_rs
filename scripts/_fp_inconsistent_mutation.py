@@ -195,6 +195,8 @@ def set_env_field(field_name, value, env):
         env["navigator.maxTouchPoints"] = int(float(value))
     elif field_name == "touch_support":
         rv = str(value).strip().strip('"')
+        if rv.endswith("|"):
+            rv = rv[:-1].strip().strip('"')
         if rv == "":
             env["navigator.maxTouchPoints"] = 0
         else:

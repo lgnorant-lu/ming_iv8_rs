@@ -18,6 +18,8 @@ RULES_JSON_PATH = REPO_ROOT / "data" / "fp_inconsistent_rules.json"
 
 EXCLUDED_FIELDS = {"ip_location", "timezone"}
 
+INVALID_UA_OS_VALUES = {"Apple Mail"}
+
 FIELD_PAIR_GROUPS = [
     "hw_concurrency<>ua_device",
     "maxTouchPoints<>ua_device",
@@ -84,12 +86,18 @@ def parse_filterlist(path=FILTERLIST_PATH):
 def categorize_rules(rules):
     """Split rules into applicable and excluded.
 
-    Excluded: any rule involving ip_location or timezone.
+    Excluded: any rule involving ip_location or timezone, or rules with
+    ua_os values that cannot be produced by parse_ua_os (e.g. "Apple Mail"
+    is a mail client, not an OS).
     """
     applicable = []
     excluded = []
     for r in rules:
         if r["field_a"] in EXCLUDED_FIELDS or r["field_b"] in EXCLUDED_FIELDS:
+            excluded.append(r)
+        elif r["field_a"] == "ua_os" and r["value_a"] in INVALID_UA_OS_VALUES:
+            excluded.append(r)
+        elif r["field_b"] == "ua_os" and r["value_b"] in INVALID_UA_OS_VALUES:
             excluded.append(r)
         else:
             applicable.append(r)
@@ -102,7 +110,7 @@ def save_rules_json(rules, path=RULES_JSON_PATH):
         "total_rules": len(rules),
         "applicable_count": len(applicable),
         "excluded_count": len(excluded),
-        "excluded_reason": "ip_location/timezone (IV8 has no network layer)",
+        "excluded_reason": "ip_location/timezone (IV8 has no network layer) or invalid ua_os values (e.g. Apple Mail is a mail client, not an OS)",
         "applicable_rules": applicable,
         "excluded_rules": excluded,
     }
@@ -339,6 +347,8 @@ def match_value(field_name, rule_value, actual_value):
 
     if field_name == "touch_support":
         rv = str(rule_value).strip().strip('"')
+        if rv.endswith("|"):
+            rv = rv[:-1].strip().strip('"')
         av = str(actual_value).strip()
         if rv == "" and av == "":
             return True
