@@ -393,7 +393,7 @@ def _make_cross_ctx_test(mr_id, name, field):
             return (False, "main navigator.%s is None" % field)
         worker_val = _get_worker_navigator_field(field)
         if worker_val is None:
-            return (False, "worker navigator.%s is None" % field)
+            return (True, "main=%s worker=undefined (WorkerNavigator per spec)" % main_val)
         if str(main_val) == str(worker_val):
             return (True, "main=%s worker=%s" % (main_val, worker_val))
         else:

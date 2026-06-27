@@ -702,11 +702,11 @@ unsafe extern "C" fn nav_languages(info: *const v8::FunctionCallbackInfo) {
                     .collect()
             }
         } else {
-            let lang = state
-                .environment
-                .get_str("navigator.language")
-                .unwrap_or(DEFAULT_PROFILE.language);
-            vec![lang.to_string()]
+            DEFAULT_PROFILE
+                .languages
+                .iter()
+                .map(|s| s.to_string())
+                .collect()
         };
 
         let arr = v8::Array::new(scope, langs.len() as i32);
