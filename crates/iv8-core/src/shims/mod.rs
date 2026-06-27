@@ -15,6 +15,8 @@ pub mod native_env;
 pub mod navigator_extras;
 pub mod probes;
 pub mod storage;
+pub mod structured_clone;
 pub mod url;
 pub mod user_agent_data;
 pub mod window_extras;
+pub mod worker;
