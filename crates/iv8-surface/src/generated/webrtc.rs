@@ -349,6 +349,13 @@ pub fn create_rtc_ice_candidate_template<'s>(
         let tag_val = v8::String::new(scope, "RTCIceCandidate").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_rtc_ice_candidate_members_1(scope, proto);
+    install_rtc_ice_candidate_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_rtc_ice_candidate_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: candidate
     {
         let name = v8::String::new(scope, "candidate").unwrap();
@@ -409,6 +416,9 @@ pub fn create_rtc_ice_candidate_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_rtc_ice_candidate_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: tcpType
     {
         let name = v8::String::new(scope, "tcpType").unwrap();
@@ -452,9 +462,8 @@ pub fn create_rtc_ice_candidate_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn rtc_ice_candidate_pair_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1674,6 +1683,14 @@ pub fn create_rtc_data_channel_template<'s>(
         let tag_val = v8::String::new(scope, "RTCDataChannel").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_rtc_data_channel_members_1(scope, proto);
+    install_rtc_data_channel_members_2(scope, proto);
+    install_rtc_data_channel_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_rtc_data_channel_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
@@ -1735,6 +1752,9 @@ pub fn create_rtc_data_channel_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_rtc_data_channel_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onopen
     {
         let name = v8::String::new(scope, "onopen").unwrap();
@@ -1805,6 +1825,9 @@ pub fn create_rtc_data_channel_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_rtc_data_channel_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: send()
     {
         let name = v8::String::new(scope, "send").unwrap();
@@ -1825,9 +1848,8 @@ pub fn create_rtc_data_channel_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_23).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn rtc_dtls_transport_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2137,6 +2159,13 @@ pub fn create_rtc_ice_transport_template<'s>(
         let tag_val = v8::String::new(scope, "RTCIceTransport").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_rtc_ice_transport_members_1(scope, proto);
+    install_rtc_ice_transport_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_rtc_ice_transport_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: role
     {
         let name = v8::String::new(scope, "role").unwrap();
@@ -2203,6 +2232,9 @@ pub fn create_rtc_ice_transport_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_rtc_ice_transport_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ongatheringstatechange
     {
         let name = v8::String::new(scope, "ongatheringstatechange").unwrap();
@@ -2259,9 +2291,8 @@ pub fn create_rtc_ice_transport_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_18).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn rtc_peer_connection_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2758,6 +2789,16 @@ pub fn create_rtc_peer_connection_template<'s>(
         let tag_val = v8::String::new(scope, "RTCPeerConnection").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_rtc_peer_connection_members_1(scope, proto);
+    install_rtc_peer_connection_members_2(scope, proto);
+    install_rtc_peer_connection_members_3(scope, proto);
+    install_rtc_peer_connection_members_4(scope, proto);
+    install_rtc_peer_connection_members_5(scope, proto);
+
+    tmpl
+}
+
+fn install_rtc_peer_connection_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createOffer()
     {
         let name = v8::String::new(scope, "createOffer").unwrap();
@@ -2822,6 +2863,9 @@ pub fn create_rtc_peer_connection_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_rtc_peer_connection_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: addIceCandidate()
     {
         let name = v8::String::new(scope, "addIceCandidate").unwrap();
@@ -2887,6 +2931,9 @@ pub fn create_rtc_peer_connection_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_rtc_peer_connection_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onnegotiationneeded
     {
         let name = v8::String::new(scope, "onnegotiationneeded").unwrap();
@@ -2957,6 +3004,9 @@ pub fn create_rtc_peer_connection_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_rtc_peer_connection_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: setRemoteDescription()
     {
         let name = v8::String::new(scope, "setRemoteDescription").unwrap();
@@ -3024,6 +3074,9 @@ pub fn create_rtc_peer_connection_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_rtc_peer_connection_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getTransceivers()
     {
         let name = v8::String::new(scope, "getTransceivers").unwrap();
@@ -3086,9 +3139,8 @@ pub fn create_rtc_peer_connection_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn rtc_rtp_s_frame_decrypter_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

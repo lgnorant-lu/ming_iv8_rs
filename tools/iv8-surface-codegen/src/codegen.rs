@@ -346,20 +346,25 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     out.push_str("    }\n");
 
     // Members — generate for attribute, operation, and const
+    // Large interfaces are split into helper functions to avoid stack overflow.
+    const MEMBER_BATCH_SIZE: usize = 10;
+    let mut member_blocks: Vec<String> = Vec::new();
     let mut idx = 0;
     for m in &def.members {
         if m.kind == "const" {
             if let (Some(cname), Some(cval)) = (&m.name, &m.const_value) {
                 let v8_val = format_const_v8_value(cval);
-                out.push_str(&format!("    // const: {}\n", cname));
-                out.push_str("    {\n");
-                out.push_str(&format!(
+                let mut block = String::new();
+                block.push_str(&format!("    // const: {}\n", cname));
+                block.push_str("    {\n");
+                block.push_str(&format!(
                     "        let name = v8::String::new(scope, \"{}\").unwrap();\n",
                     cname
                 ));
-                out.push_str(&format!("        let val = {};\n", v8_val));
-                out.push_str("        proto.set(name.into(), val);\n");
-                out.push_str("    }\n");
+                block.push_str(&format!("        let val = {};\n", v8_val));
+                block.push_str("        proto.set(name.into(), val);\n");
+                block.push_str("    }\n");
+                member_blocks.push(block);
             }
             continue;
         }
@@ -375,47 +380,75 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
         idx += 1;
         if m.kind == "attribute" {
             let attr_name = m.name.as_deref().unwrap_or("unknown");
-            out.push_str(&format!("    // attribute: {}\n", attr_name));
-            out.push_str("    {\n");
-            out.push_str(&format!(
+            let mut block = String::new();
+            block.push_str(&format!("    // attribute: {}\n", attr_name));
+            block.push_str("    {\n");
+            block.push_str(&format!(
                 "        let name = v8::String::new(scope, \"{}\").unwrap();\n",
                 attr_name
             ));
-            out.push_str(&format!(
+            block.push_str(&format!(
                 "        let getter = v8::FunctionTemplate::builder_raw({}_get_{}).build(scope);\n",
                 fn_name, idx
             ));
             if m.readonly {
-                out.push_str("        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);\n");
+                block.push_str("        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);\n");
             } else {
-                out.push_str(&format!(
+                block.push_str(&format!(
                     "        let setter = v8::FunctionTemplate::builder_raw({}_set_{}).build(scope);\n", fn_name, idx));
-                out.push_str("        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);\n");
+                block.push_str("        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);\n");
             }
-            out.push_str("    }\n");
+            block.push_str("    }\n");
+            member_blocks.push(block);
         }
 
         if m.kind == "operation" {
             let op_name = m.name.as_deref().unwrap_or("unknown");
             let arg_count = m.required_arg_count;
-            out.push_str(&format!("    // method: {}()\n", op_name));
-            out.push_str("    {\n");
-            out.push_str(&format!(
+            let mut block = String::new();
+            block.push_str(&format!("    // method: {}()\n", op_name));
+            block.push_str("    {\n");
+            block.push_str(&format!(
                 "        let name = v8::String::new(scope, \"{}\").unwrap();\n",
                 op_name
             ));
             if arg_count > 0 {
-                out.push_str(&format!(
+                block.push_str(&format!(
                     "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).length({}).build(scope);\n",
                     fn_name, idx, arg_count));
             } else {
-                out.push_str(&format!(
+                block.push_str(&format!(
                     "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).build(scope);\n", fn_name, idx));
             }
-            out.push_str("        func_tmpl.set_class_name(name);\n");
-            out.push_str("        proto.set(name.into(), func_tmpl.into());\n");
-            out.push_str("    }\n");
+            block.push_str("        func_tmpl.set_class_name(name);\n");
+            block.push_str("        proto.set(name.into(), func_tmpl.into());\n");
+            block.push_str("    }\n");
+            member_blocks.push(block);
         }
+    }
+
+    if member_blocks.len() <= MEMBER_BATCH_SIZE {
+        for block in &member_blocks {
+            out.push_str(block);
+        }
+    } else {
+        let mut helper_fns = String::new();
+        for (batch_i, chunk) in member_blocks.chunks(MEMBER_BATCH_SIZE).enumerate() {
+            let helper_name = format!("install_{}_members_{}", fn_name, batch_i + 1);
+            out.push_str(&format!("    {}(scope, proto);\n", helper_name));
+            helper_fns.push_str(&format!(
+                "fn {}<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {{\n",
+                helper_name
+            ));
+            for block in chunk {
+                helper_fns.push_str(block);
+            }
+            helper_fns.push_str("}\n\n");
+        }
+        out.push_str("\n    tmpl\n");
+        out.push_str("}\n\n");
+        out.push_str(&helper_fns);
+        return out;
     }
 
     out.push_str("\n    tmpl\n");
@@ -448,7 +481,7 @@ pub fn generate_install_all(
     out.push_str("pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {\n");
     out.push_str("    let mut templates: std::collections::HashMap<&str, v8::Global<FunctionTemplate>> = std::collections::HashMap::new();\n\n");
 
-    const BATCH_SIZE: usize = 100;
+    const BATCH_SIZE: usize = 5;
 
     // Phase 1: Template creation with scope-break batches
     // BATCH_SIZE counts ACTUAL templates created, not sorted array indices

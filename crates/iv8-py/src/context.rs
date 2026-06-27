@@ -44,7 +44,7 @@ pub struct JSContext {
 
 struct JSContextInner {
     kernel: ManuallyDrop<KernelCell>,
-    creator_thread: std::thread::ThreadId,
+    creator_thread: Mutex<std::thread::ThreadId>,
     disposed: AtomicBool,
     exposed_callbacks: Mutex<Vec<expose::ExposedPyFnHandle>>,
 }
@@ -88,7 +88,7 @@ unsafe impl Sync for JSContextInner {}
 
 impl Drop for JSContextInner {
     fn drop(&mut self) {
-        if std::thread::current().id() == self.creator_thread {
+        if std::thread::current().id() == *self.creator_thread.lock() {
             // SAFETY: the last Python reference is being dropped on the owner
             // thread, so it is safe to destroy the V8 isolate here.
             unsafe {
@@ -205,11 +205,24 @@ impl JSContext {
         Ok(Self {
             inner: Arc::new(JSContextInner {
                 kernel: ManuallyDrop::new(KernelCell::new(kernel)),
-                creator_thread: std::thread::current().id(),
+                creator_thread: Mutex::new(std::thread::current().id()),
                 disposed: AtomicBool::new(false),
                 exposed_callbacks: Mutex::new(Vec::new()),
             }),
         })
+    }
+
+    /// Transfer thread ownership to the calling thread.
+    /// Used after creating JSContext on a large-stack thread.
+    fn _transfer_thread(&self) -> PyResult<()> {
+        *self.inner.creator_thread.lock() = std::thread::current().id();
+        {
+            let mut kernel_lock = self.inner.kernel.inner.lock();
+            if let Some(ref mut kernel) = *kernel_lock {
+                kernel.creator_thread = std::thread::current().id();
+            }
+        }
+        Ok(())
     }
 
     /// Evaluate JavaScript source code and return the result as a Python object.
@@ -1603,7 +1616,7 @@ impl JSContext {
 
 impl JSContext {
     fn assert_creator_thread(&self) -> PyResult<()> {
-        if std::thread::current().id() != self.inner.creator_thread {
+        if *self.inner.creator_thread.lock() != std::thread::current().id() {
             return Err(pyo3::exceptions::PyRuntimeError::new_err(
                 "JSContext must be used from the thread that created it",
             ));

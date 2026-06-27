@@ -99,8 +99,14 @@ pub struct EmbeddedV8Kernel {
     pub(crate) isolate: v8::OwnedIsolate,
     pub(crate) context: v8::Global<v8::Context>,
     environment: Arc<EnvironmentMap>,
-    creator_thread: std::thread::ThreadId,
+    pub creator_thread: std::thread::ThreadId,
 }
+
+// SAFETY: EmbeddedV8Kernel is effectively single-threaded. The Isolate
+// is entered by at most one thread at a time (enforced by creator_thread
+// check). We need Send to move the kernel from the init thread (with
+// large stack) back to the caller thread after V8 template creation.
+unsafe impl Send for EmbeddedV8Kernel {}
 
 // ─── Window dimension native getter callbacks ─────────────────────
 // Defined locally per v0.8.65 design: keep window getters in
@@ -283,6 +289,11 @@ fn resolve_worker_script(isolate: &v8::Isolate, url: &str) -> String {
 
 impl EmbeddedV8Kernel {
     /// Create a new embedded V8 kernel with the given configuration.
+    ///
+    /// The caller MUST ensure sufficient thread stack size (>= 32MB) for
+    /// V8 template creation. On the Python side, JSContext() handles this
+    /// via threading.stack_size(). On the Rust test side, the test harness
+    /// must use thread::Builder::new().stack_size(32 * 1024 * 1024).
     pub fn new(config: KernelConfig) -> Result<Self, IV8Error> {
         ensure_v8_initialized();
 
@@ -293,7 +304,6 @@ impl EmbeddedV8Kernel {
             )));
         }
 
-        // Extract deterministic config before moving config fields
         let random_seed = config.random_seed;
         let crypto_seed = config.crypto_seed;
         let time_freeze = config.time_freeze;
@@ -301,9 +311,37 @@ impl EmbeddedV8Kernel {
         let browser_profile: Option<&'static crate::shims::browser_profile::BrowserProfile> =
             config.browser_profile.map(|bp| &*Box::leak(bp));
         let local_storage_backend = config.local_storage;
-
+        let strict_compat = config.strict_compat;
+        let time_mode = config.time_mode;
+        let js_api_name = config.js_api_name;
         let environment = Arc::new(EnvironmentMap::build(config.environment_overrides.as_ref()));
 
+        Self::init_kernel(
+            environment,
+            strict_compat,
+            time_mode,
+            js_api_name,
+            browser_profile,
+            local_storage_backend,
+            random_seed,
+            crypto_seed,
+            time_freeze,
+            user_overrides,
+        )
+    }
+
+    fn init_kernel(
+        environment: Arc<EnvironmentMap>,
+        strict_compat: bool,
+        time_mode: crate::state::TimeMode,
+        js_api_name: String,
+        browser_profile: Option<&'static crate::shims::browser_profile::BrowserProfile>,
+        local_storage_backend: Option<crate::dom::local_storage::LocalStorageStore>,
+        random_seed: Option<u64>,
+        crypto_seed: Option<u64>,
+        time_freeze: Option<f64>,
+        user_overrides: crate::user_overrides::UserOverrides,
+    ) -> Result<Self, IV8Error> {
         let mut isolate = v8::Isolate::new(
             v8::CreateParams::default().heap_limits(512 * 1024 * 1024, 4 * 1024 * 1024 * 1024),
         );
@@ -315,9 +353,9 @@ impl EmbeddedV8Kernel {
         RuntimeState::install(
             &mut isolate,
             RuntimeState::new(
-                config.strict_compat,
-                config.time_mode,
-                config.js_api_name,
+                strict_compat,
+                time_mode,
+                js_api_name,
                 environment.clone(),
                 browser_profile,
                 local_storage_backend,

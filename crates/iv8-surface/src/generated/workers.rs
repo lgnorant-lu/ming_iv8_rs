@@ -497,6 +497,14 @@ pub fn create_worker_navigator_template<'s>(
         let tag_val = v8::String::new(scope, "WorkerNavigator").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_worker_navigator_members_1(scope, proto);
+    install_worker_navigator_members_2(scope, proto);
+    install_worker_navigator_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_worker_navigator_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: mediaCapabilities
     {
         let name = v8::String::new(scope, "mediaCapabilities").unwrap();
@@ -559,6 +567,9 @@ pub fn create_worker_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_worker_navigator_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: appCodeName
     {
         let name = v8::String::new(scope, "appCodeName").unwrap();
@@ -619,6 +630,9 @@ pub fn create_worker_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_worker_navigator_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: languages
     {
         let name = v8::String::new(scope, "languages").unwrap();
@@ -679,9 +693,8 @@ pub fn create_worker_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn message_port_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1313,6 +1326,13 @@ pub fn create_service_worker_registration_template<'s>(
         let tag_val = v8::String::new(scope, "ServiceWorkerRegistration").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_service_worker_registration_members_1(scope, proto);
+    install_service_worker_registration_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_service_worker_registration_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: installing
     {
         let name = v8::String::new(scope, "installing").unwrap();
@@ -1376,6 +1396,9 @@ pub fn create_service_worker_registration_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(service_worker_registration_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_service_worker_registration_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: sync
     {
         let name = v8::String::new(scope, "sync").unwrap();
@@ -1426,9 +1449,8 @@ pub fn create_service_worker_registration_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(service_worker_registration_get_18).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn worker_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1818,6 +1840,14 @@ pub fn create_worker_global_scope_template<'s>(
         let tag_val = v8::String::new(scope, "WorkerGlobalScope").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_worker_global_scope_members_1(scope, proto);
+    install_worker_global_scope_members_2(scope, proto);
+    install_worker_global_scope_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: self
     {
         let name = v8::String::new(scope, "self").unwrap();
@@ -1885,6 +1915,9 @@ pub fn create_worker_global_scope_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: fonts
     {
         let name = v8::String::new(scope, "fonts").unwrap();
@@ -1951,6 +1984,9 @@ pub fn create_worker_global_scope_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: clearInterval()
     {
         let name = v8::String::new(scope, "clearInterval").unwrap();
@@ -1979,9 +2015,8 @@ pub fn create_worker_global_scope_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn service_worker_global_scope_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2293,6 +2328,14 @@ pub fn create_service_worker_global_scope_template<'s>(
         let tag_val = v8::String::new(scope, "ServiceWorkerGlobalScope").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_service_worker_global_scope_members_1(scope, proto);
+    install_service_worker_global_scope_members_2(scope, proto);
+    install_service_worker_global_scope_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: clients
     {
         let name = v8::String::new(scope, "clients").unwrap();
@@ -2360,6 +2403,9 @@ pub fn create_service_worker_global_scope_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onbackgroundfetchfail
     {
         let name = v8::String::new(scope, "onbackgroundfetchfail").unwrap();
@@ -2429,6 +2475,9 @@ pub fn create_service_worker_global_scope_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onpush
     {
         let name = v8::String::new(scope, "onpush").unwrap();
@@ -2457,7 +2506,6 @@ pub fn create_service_worker_global_scope_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(service_worker_global_scope_set_24).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 

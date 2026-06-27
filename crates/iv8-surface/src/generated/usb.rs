@@ -482,6 +482,15 @@ pub fn create_usb_device_template<'s>(
         let tag_val = v8::String::new(scope, "USBDevice").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_usb_device_members_1(scope, proto);
+    install_usb_device_members_2(scope, proto);
+    install_usb_device_members_3(scope, proto);
+    install_usb_device_members_4(scope, proto);
+
+    tmpl
+}
+
+fn install_usb_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: usbVersionMajor
     {
         let name = v8::String::new(scope, "usbVersionMajor").unwrap();
@@ -542,6 +551,9 @@ pub fn create_usb_device_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(usb_device_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_usb_device_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: deviceVersionSubminor
     {
         let name = v8::String::new(scope, "deviceVersionSubminor").unwrap();
@@ -605,6 +617,9 @@ pub fn create_usb_device_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_usb_device_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: selectConfiguration()
     {
         let name = v8::String::new(scope, "selectConfiguration").unwrap();
@@ -675,6 +690,9 @@ pub fn create_usb_device_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_usb_device_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: isochronousTransferOut()
     {
         let name = v8::String::new(scope, "isochronousTransferOut").unwrap();
@@ -689,9 +707,8 @@ pub fn create_usb_device_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn usb_endpoint_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

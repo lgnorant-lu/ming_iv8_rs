@@ -306,6 +306,14 @@ pub fn create_event_template<'s>(
         let tag_val = v8::String::new(scope, "Event").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_event_members_1(scope, proto);
+    install_event_members_2(scope, proto);
+    install_event_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
@@ -367,6 +375,9 @@ pub fn create_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(event_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_event_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: stopPropagation()
     {
         let name = v8::String::new(scope, "stopPropagation").unwrap();
@@ -432,6 +443,9 @@ pub fn create_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(event_get_16).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_event_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: timeStamp
     {
         let name = v8::String::new(scope, "timeStamp").unwrap();
@@ -445,9 +459,8 @@ pub fn create_event_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for EventCounts.
 pub fn create_event_counts_template<'s>(
@@ -2956,6 +2969,13 @@ pub fn create_navigate_event_template<'s>(
         let tag_val = v8::String::new(scope, "NavigateEvent").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_navigate_event_members_1(scope, proto);
+    install_navigate_event_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_navigate_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: navigationType
     {
         let name = v8::String::new(scope, "navigationType").unwrap();
@@ -3016,6 +3036,9 @@ pub fn create_navigate_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(navigate_event_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_navigate_event_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: sourceElement
     {
         let name = v8::String::new(scope, "sourceElement").unwrap();
@@ -3036,9 +3059,8 @@ pub fn create_navigate_event_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn navigation_current_entry_change_event_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -4215,6 +4237,13 @@ pub fn create_security_policy_violation_event_template<'s>(
         let tag_val = v8::String::new(scope, "SecurityPolicyViolationEvent").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_security_policy_violation_event_members_1(scope, proto);
+    install_security_policy_violation_event_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_security_policy_violation_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: documentURI
     {
         let name = v8::String::new(scope, "documentURI").unwrap();
@@ -4275,6 +4304,9 @@ pub fn create_security_policy_violation_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(security_policy_violation_event_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_security_policy_violation_event_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: lineNumber
     {
         let name = v8::String::new(scope, "lineNumber").unwrap();
@@ -4287,9 +4319,8 @@ pub fn create_security_policy_violation_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(security_policy_violation_event_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn sensor_error_event_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -6193,6 +6224,13 @@ pub fn create_payment_request_event_template<'s>(
         let tag_val = v8::String::new(scope, "PaymentRequestEvent").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_payment_request_event_members_1(scope, proto);
+    install_payment_request_event_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_payment_request_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: topOrigin
     {
         let name = v8::String::new(scope, "topOrigin").unwrap();
@@ -6255,6 +6293,9 @@ pub fn create_payment_request_event_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_payment_request_event_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: changeShippingAddress()
     {
         let name = v8::String::new(scope, "changeShippingAddress").unwrap();
@@ -6276,9 +6317,8 @@ pub fn create_payment_request_event_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn periodic_sync_event_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -6885,6 +6925,13 @@ pub fn create_keyboard_event_template<'s>(
         let tag_val = v8::String::new(scope, "KeyboardEvent").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_keyboard_event_members_1(scope, proto);
+    install_keyboard_event_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_keyboard_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DOM_KEY_LOCATION_STANDARD
     {
         let name = v8::String::new(scope, "DOM_KEY_LOCATION_STANDARD").unwrap();
@@ -6945,6 +6992,9 @@ pub fn create_keyboard_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(keyboard_event_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_keyboard_event_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: metaKey
     {
         let name = v8::String::new(scope, "metaKey").unwrap();
@@ -6989,9 +7039,8 @@ pub fn create_keyboard_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(keyboard_event_get_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn mouse_event_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -7218,6 +7267,14 @@ pub fn create_mouse_event_template<'s>(
         let tag_val = v8::String::new(scope, "MouseEvent").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_mouse_event_members_1(scope, proto);
+    install_mouse_event_members_2(scope, proto);
+    install_mouse_event_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_mouse_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: screenX
     {
         let name = v8::String::new(scope, "screenX").unwrap();
@@ -7278,6 +7335,9 @@ pub fn create_mouse_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(mouse_event_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_mouse_event_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: button
     {
         let name = v8::String::new(scope, "button").unwrap();
@@ -7339,6 +7399,9 @@ pub fn create_mouse_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(mouse_event_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_mouse_event_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: initMouseEvent()
     {
         let name = v8::String::new(scope, "initMouseEvent").unwrap();
@@ -7358,9 +7421,8 @@ pub fn create_mouse_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(mouse_event_get_23).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn navigation_event_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -7838,6 +7900,13 @@ pub fn create_pointer_event_template<'s>(
         let tag_val = v8::String::new(scope, "PointerEvent").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_pointer_event_members_1(scope, proto);
+    install_pointer_event_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_pointer_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: pointerId
     {
         let name = v8::String::new(scope, "pointerId").unwrap();
@@ -7898,6 +7967,9 @@ pub fn create_pointer_event_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(pointer_event_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_pointer_event_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: pointerType
     {
         let name = v8::String::new(scope, "pointerType").unwrap();
@@ -7930,9 +8002,8 @@ pub fn create_pointer_event_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn wheel_event_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

@@ -1773,6 +1773,23 @@ pub fn create_html_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_element_members_1(scope, proto);
+    install_html_element_members_2(scope, proto);
+    install_html_element_members_3(scope, proto);
+    install_html_element_members_4(scope, proto);
+    install_html_element_members_5(scope, proto);
+    install_html_element_members_6(scope, proto);
+    install_html_element_members_7(scope, proto);
+    install_html_element_members_8(scope, proto);
+    install_html_element_members_9(scope, proto);
+    install_html_element_members_10(scope, proto);
+    install_html_element_members_11(scope, proto);
+    install_html_element_members_12(scope, proto);
+
+    tmpl
+}
+
+fn install_html_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: title
     {
         let name = v8::String::new(scope, "title").unwrap();
@@ -1842,6 +1859,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: spellcheck
     {
         let name = v8::String::new(scope, "spellcheck").unwrap();
@@ -1912,6 +1932,9 @@ pub fn create_html_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_html_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: popover
     {
         let name = v8::String::new(scope, "popover").unwrap();
@@ -1976,6 +1999,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: style
     {
         let name = v8::String::new(scope, "style").unwrap();
@@ -2045,6 +2071,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
@@ -2115,6 +2144,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_50).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ondblclick
     {
         let name = v8::String::new(scope, "ondblclick").unwrap();
@@ -2185,6 +2217,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onended
     {
         let name = v8::String::new(scope, "onended").unwrap();
@@ -2255,6 +2290,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_70).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onloadeddata
     {
         let name = v8::String::new(scope, "onloadeddata").unwrap();
@@ -2325,6 +2363,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_80).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onpaste
     {
         let name = v8::String::new(scope, "onpaste").unwrap();
@@ -2395,6 +2436,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_90).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onsecuritypolicyviolation
     {
         let name = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
@@ -2465,6 +2509,9 @@ pub fn create_html_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_element_set_100).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onvolumechange
     {
         let name = v8::String::new(scope, "onvolumechange").unwrap();
@@ -2534,6 +2581,9 @@ pub fn create_html_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_element_get_110).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_element_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: inputMode
     {
         let name = v8::String::new(scope, "inputMode").unwrap();
@@ -2582,9 +2632,8 @@ pub fn create_html_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_anchor_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2934,6 +2983,14 @@ pub fn create_html_anchor_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLAnchorElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_anchor_element_members_1(scope, proto);
+    install_html_anchor_element_members_2(scope, proto);
+    install_html_anchor_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_html_anchor_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: download
     {
         let name = v8::String::new(scope, "download").unwrap();
@@ -3003,6 +3060,9 @@ pub fn create_html_anchor_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_anchor_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: shape
     {
         let name = v8::String::new(scope, "shape").unwrap();
@@ -3072,6 +3132,9 @@ pub fn create_html_anchor_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_anchor_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: search
     {
         let name = v8::String::new(scope, "search").unwrap();
@@ -3114,9 +3177,8 @@ pub fn create_html_anchor_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_26).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_area_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -3427,6 +3489,14 @@ pub fn create_html_area_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLAreaElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_area_element_members_1(scope, proto);
+    install_html_area_element_members_2(scope, proto);
+    install_html_area_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_html_area_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: alt
     {
         let name = v8::String::new(scope, "alt").unwrap();
@@ -3495,6 +3565,9 @@ pub fn create_html_area_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_area_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: protocol
     {
         let name = v8::String::new(scope, "protocol").unwrap();
@@ -3565,6 +3638,9 @@ pub fn create_html_area_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_area_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
@@ -3586,9 +3662,8 @@ pub fn create_html_area_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_23).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn htmlbr_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -4037,6 +4112,14 @@ pub fn create_html_body_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLBodyElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_body_element_members_1(scope, proto);
+    install_html_body_element_members_2(scope, proto);
+    install_html_body_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_html_body_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onorientationchange
     {
         let name = v8::String::new(scope, "onorientationchange").unwrap();
@@ -4107,6 +4190,9 @@ pub fn create_html_body_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_body_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onhashchange
     {
         let name = v8::String::new(scope, "onhashchange").unwrap();
@@ -4177,6 +4263,9 @@ pub fn create_html_body_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_body_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onpopstate
     {
         let name = v8::String::new(scope, "onpopstate").unwrap();
@@ -4212,9 +4301,8 @@ pub fn create_html_body_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_25).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_button_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -4475,6 +4563,14 @@ pub fn create_html_button_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLButtonElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_button_element_members_1(scope, proto);
+    install_html_button_element_members_2(scope, proto);
+    install_html_button_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_html_button_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: command
     {
         let name = v8::String::new(scope, "command").unwrap();
@@ -4544,6 +4640,9 @@ pub fn create_html_button_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_button_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
@@ -4610,6 +4709,9 @@ pub fn create_html_button_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_button_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: popoverTargetAction
     {
         let name = v8::String::new(scope, "popoverTargetAction").unwrap();
@@ -4617,9 +4719,8 @@ pub fn create_html_button_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_21).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_canvas_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -5576,6 +5677,13 @@ pub fn create_html_field_set_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLFieldSetElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_field_set_element_members_1(scope, proto);
+    install_html_field_set_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_field_set_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
@@ -5640,6 +5748,9 @@ pub fn create_html_field_set_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_html_field_set_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: setCustomValidity()
     {
         let name = v8::String::new(scope, "setCustomValidity").unwrap();
@@ -5647,9 +5758,8 @@ pub fn create_html_field_set_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_font_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -5971,6 +6081,13 @@ pub fn create_html_form_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLFormElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_form_element_members_1(scope, proto);
+    install_html_form_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_form_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: acceptCharset
     {
         let name = v8::String::new(scope, "acceptCharset").unwrap();
@@ -6041,6 +6158,9 @@ pub fn create_html_form_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_form_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: relList
     {
         let name = v8::String::new(scope, "relList").unwrap();
@@ -6108,9 +6228,8 @@ pub fn create_html_form_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_frame_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -6602,6 +6721,13 @@ pub fn create_html_frame_set_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLFrameSetElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_frame_set_element_members_1(scope, proto);
+    install_html_frame_set_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_frame_set_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: cols
     {
         let name = v8::String::new(scope, "cols").unwrap();
@@ -6672,6 +6798,9 @@ pub fn create_html_frame_set_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_frame_set_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ononline
     {
         let name = v8::String::new(scope, "ononline").unwrap();
@@ -6742,9 +6871,8 @@ pub fn create_html_frame_set_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_geolocation_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -6896,6 +7024,13 @@ pub fn create_html_geolocation_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLGeolocationElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_geolocation_element_members_1(scope, proto);
+    install_html_geolocation_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_geolocation_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: position
     {
         let name = v8::String::new(scope, "position").unwrap();
@@ -6960,6 +7095,9 @@ pub fn create_html_geolocation_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_geolocation_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onpromptaction
     {
         let name = v8::String::new(scope, "onpromptaction").unwrap();
@@ -6974,9 +7112,8 @@ pub fn create_html_geolocation_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn htmlhr_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -7503,6 +7640,14 @@ pub fn create_htmli_frame_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLIFrameElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_htmli_frame_element_members_1(scope, proto);
+    install_htmli_frame_element_members_2(scope, proto);
+    install_htmli_frame_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_htmli_frame_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
@@ -7572,6 +7717,9 @@ pub fn create_htmli_frame_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_htmli_frame_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: contentDocument
     {
         let name = v8::String::new(scope, "contentDocument").unwrap();
@@ -7640,6 +7788,9 @@ pub fn create_htmli_frame_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_htmli_frame_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: marginWidth
     {
         let name = v8::String::new(scope, "marginWidth").unwrap();
@@ -7660,9 +7811,8 @@ pub fn create_htmli_frame_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_23).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_image_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -8018,6 +8168,14 @@ pub fn create_html_image_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLImageElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_image_element_members_1(scope, proto);
+    install_html_image_element_members_2(scope, proto);
+    install_html_image_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_html_image_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: alt
     {
         let name = v8::String::new(scope, "alt").unwrap();
@@ -8088,6 +8246,9 @@ pub fn create_html_image_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_image_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: naturalWidth
     {
         let name = v8::String::new(scope, "naturalWidth").unwrap();
@@ -8153,6 +8314,9 @@ pub fn create_html_image_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_image_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
@@ -8208,9 +8372,8 @@ pub fn create_html_image_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_28).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_input_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -8968,6 +9131,18 @@ pub fn create_html_input_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLInputElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_input_element_members_1(scope, proto);
+    install_html_input_element_members_2(scope, proto);
+    install_html_input_element_members_3(scope, proto);
+    install_html_input_element_members_4(scope, proto);
+    install_html_input_element_members_5(scope, proto);
+    install_html_input_element_members_6(scope, proto);
+    install_html_input_element_members_7(scope, proto);
+
+    tmpl
+}
+
+fn install_html_input_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: accept
     {
         let name = v8::String::new(scope, "accept").unwrap();
@@ -9037,6 +9212,9 @@ pub fn create_html_input_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_input_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: files
     {
         let name = v8::String::new(scope, "files").unwrap();
@@ -9106,6 +9284,9 @@ pub fn create_html_input_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_input_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: maxLength
     {
         let name = v8::String::new(scope, "maxLength").unwrap();
@@ -9176,6 +9357,9 @@ pub fn create_html_input_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_input_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
@@ -9246,6 +9430,9 @@ pub fn create_html_input_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_html_input_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: willValidate
     {
         let name = v8::String::new(scope, "willValidate").unwrap();
@@ -9312,6 +9499,9 @@ pub fn create_html_input_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_50).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_input_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: selectionDirection
     {
         let name = v8::String::new(scope, "selectionDirection").unwrap();
@@ -9381,6 +9571,9 @@ pub fn create_html_input_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_input_element_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: popoverTargetElement
     {
         let name = v8::String::new(scope, "popoverTargetElement").unwrap();
@@ -9395,9 +9588,8 @@ pub fn create_html_input_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_62).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn htmlli_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -9852,6 +10044,13 @@ pub fn create_html_link_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLLinkElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_link_element_members_1(scope, proto);
+    install_html_link_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_link_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
@@ -9920,6 +10119,9 @@ pub fn create_html_link_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_link_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: imageSrcset
     {
         let name = v8::String::new(scope, "imageSrcset").unwrap();
@@ -9988,9 +10190,8 @@ pub fn create_html_link_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_map_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -10228,6 +10429,13 @@ pub fn create_html_marquee_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLMarqueeElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_marquee_element_members_1(scope, proto);
+    install_html_marquee_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_marquee_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: behavior
     {
         let name = v8::String::new(scope, "behavior").unwrap();
@@ -10298,6 +10506,9 @@ pub fn create_html_marquee_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_marquee_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
@@ -10319,9 +10530,8 @@ pub fn create_html_marquee_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_media_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -10818,6 +11028,17 @@ pub fn create_html_media_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLMediaElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_media_element_members_1(scope, proto);
+    install_html_media_element_members_2(scope, proto);
+    install_html_media_element_members_3(scope, proto);
+    install_html_media_element_members_4(scope, proto);
+    install_html_media_element_members_5(scope, proto);
+    install_html_media_element_members_6(scope, proto);
+
+    tmpl
+}
+
+fn install_html_media_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: error
     {
         let name = v8::String::new(scope, "error").unwrap();
@@ -10881,6 +11102,9 @@ pub fn create_html_media_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_media_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: preload
     {
         let name = v8::String::new(scope, "preload").unwrap();
@@ -10944,6 +11168,9 @@ pub fn create_html_media_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_media_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: seeking
     {
         let name = v8::String::new(scope, "seeking").unwrap();
@@ -11010,6 +11237,9 @@ pub fn create_html_media_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_21).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_media_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: seekable
     {
         let name = v8::String::new(scope, "seekable").unwrap();
@@ -11078,6 +11308,9 @@ pub fn create_html_media_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_31).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_media_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: loading
     {
         let name = v8::String::new(scope, "loading").unwrap();
@@ -11143,6 +11376,9 @@ pub fn create_html_media_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_41).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_media_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: setMediaKeys()
     {
         let name = v8::String::new(scope, "setMediaKeys").unwrap();
@@ -11170,9 +11406,8 @@ pub fn create_html_media_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_45).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_menu_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -12117,6 +12352,14 @@ pub fn create_html_object_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLObjectElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_object_element_members_1(scope, proto);
+    install_html_object_element_members_2(scope, proto);
+    install_html_object_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_html_object_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: data
     {
         let name = v8::String::new(scope, "data").unwrap();
@@ -12183,6 +12426,9 @@ pub fn create_html_object_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_object_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
@@ -12251,6 +12497,9 @@ pub fn create_html_object_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_object_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: standby
     {
         let name = v8::String::new(scope, "standby").unwrap();
@@ -12293,9 +12542,8 @@ pub fn create_html_object_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_26).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_opt_group_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -12678,6 +12926,13 @@ pub fn create_html_output_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLOutputElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_output_element_members_1(scope, proto);
+    install_html_output_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_output_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: htmlFor
     {
         let name = v8::String::new(scope, "htmlFor").unwrap();
@@ -12742,6 +12997,9 @@ pub fn create_html_output_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_html_output_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: reportValidity()
     {
         let name = v8::String::new(scope, "reportValidity").unwrap();
@@ -12762,9 +13020,8 @@ pub fn create_html_output_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_paragraph_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -13447,6 +13704,13 @@ pub fn create_html_script_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLScriptElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_script_element_members_1(scope, proto);
+    install_html_script_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_script_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
@@ -13516,6 +13780,9 @@ pub fn create_html_script_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_script_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: text
     {
         let name = v8::String::new(scope, "text").unwrap();
@@ -13551,9 +13818,8 @@ pub fn create_html_script_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_15).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_select_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -13852,6 +14118,14 @@ pub fn create_html_select_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLSelectElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_select_element_members_1(scope, proto);
+    install_html_select_element_members_2(scope, proto);
+    install_html_select_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_html_select_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: autocomplete
     {
         let name = v8::String::new(scope, "autocomplete").unwrap();
@@ -13919,6 +14193,9 @@ pub fn create_html_select_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_select_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: item()
     {
         let name = v8::String::new(scope, "item").unwrap();
@@ -13987,6 +14264,9 @@ pub fn create_html_select_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_select_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
@@ -14033,9 +14313,8 @@ pub fn create_html_select_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_27).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for HTMLSelectedContentElement.
 pub fn create_html_selected_content_element_template<'s>(
@@ -14696,6 +14975,13 @@ pub fn create_html_table_cell_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLTableCellElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_table_cell_element_members_1(scope, proto);
+    install_html_table_cell_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_table_cell_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: colSpan
     {
         let name = v8::String::new(scope, "colSpan").unwrap();
@@ -14765,6 +15051,9 @@ pub fn create_html_table_cell_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_table_cell_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ch
     {
         let name = v8::String::new(scope, "ch").unwrap();
@@ -14800,9 +15089,8 @@ pub fn create_html_table_cell_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_15).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_table_col_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -15219,6 +15507,14 @@ pub fn create_html_table_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLTableElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_table_element_members_1(scope, proto);
+    install_html_table_element_members_2(scope, proto);
+    install_html_table_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_html_table_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: caption
     {
         let name = v8::String::new(scope, "caption").unwrap();
@@ -15288,6 +15584,9 @@ pub fn create_html_table_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_table_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createTBody()
     {
         let name = v8::String::new(scope, "createTBody").unwrap();
@@ -15357,6 +15656,9 @@ pub fn create_html_table_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_table_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: bgColor
     {
         let name = v8::String::new(scope, "bgColor").unwrap();
@@ -15378,9 +15680,8 @@ pub fn create_html_table_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_23).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_table_row_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -16252,6 +16553,15 @@ pub fn create_html_text_area_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLTextAreaElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_text_area_element_members_1(scope, proto);
+    install_html_text_area_element_members_2(scope, proto);
+    install_html_text_area_element_members_3(scope, proto);
+    install_html_text_area_element_members_4(scope, proto);
+
+    tmpl
+}
+
+fn install_html_text_area_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: autocomplete
     {
         let name = v8::String::new(scope, "autocomplete").unwrap();
@@ -16321,6 +16631,9 @@ pub fn create_html_text_area_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_text_area_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: required
     {
         let name = v8::String::new(scope, "required").unwrap();
@@ -16386,6 +16699,9 @@ pub fn create_html_text_area_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_text_area_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: checkValidity()
     {
         let name = v8::String::new(scope, "checkValidity").unwrap();
@@ -16455,6 +16771,9 @@ pub fn create_html_text_area_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_html_text_area_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: setSelectionRange()
     {
         let name = v8::String::new(scope, "setSelectionRange").unwrap();
@@ -16462,9 +16781,8 @@ pub fn create_html_text_area_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn html_time_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -16651,6 +16969,13 @@ pub fn create_html_track_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLTrackElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_track_element_members_1(scope, proto);
+    install_html_track_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_track_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: kind
     {
         let name = v8::String::new(scope, "kind").unwrap();
@@ -16716,15 +17041,17 @@ pub fn create_html_track_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_track_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: track
     {
         let name = v8::String::new(scope, "track").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_7).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn htmlu_list_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -16995,6 +17322,13 @@ pub fn create_html_video_element_template<'s>(
         let tag_val = v8::String::new(scope, "HTMLVideoElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_html_video_element_members_1(scope, proto);
+    install_html_video_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_html_video_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
@@ -17063,6 +17397,9 @@ pub fn create_html_video_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_html_video_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: disablePictureInPicture
     {
         let name = v8::String::new(scope, "disablePictureInPicture").unwrap();
@@ -17084,7 +17421,6 @@ pub fn create_html_video_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 

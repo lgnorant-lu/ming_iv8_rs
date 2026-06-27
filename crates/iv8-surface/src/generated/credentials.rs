@@ -491,6 +491,13 @@ pub fn create_public_key_credential_template<'s>(
         let tag_val = v8::String::new(scope, "PublicKeyCredential").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_public_key_credential_members_1(scope, proto);
+    install_public_key_credential_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_public_key_credential_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: rawId
     {
         let name = v8::String::new(scope, "rawId").unwrap();
@@ -558,6 +565,9 @@ pub fn create_public_key_credential_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_public_key_credential_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: signalUnknownCredential()
     {
         let name = v8::String::new(scope, "signalUnknownCredential").unwrap();
@@ -579,7 +589,6 @@ pub fn create_public_key_credential_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 

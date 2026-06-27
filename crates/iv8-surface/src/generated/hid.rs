@@ -230,6 +230,13 @@ pub fn create_hid_device_template<'s>(
         let tag_val = v8::String::new(scope, "HIDDevice").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_hid_device_members_1(scope, proto);
+    install_hid_device_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_hid_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oninputreport
     {
         let name = v8::String::new(scope, "oninputreport").unwrap();
@@ -295,6 +302,9 @@ pub fn create_hid_device_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_hid_device_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: sendFeatureReport()
     {
         let name = v8::String::new(scope, "sendFeatureReport").unwrap();
@@ -309,7 +319,6 @@ pub fn create_hid_device_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 

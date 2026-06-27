@@ -1888,6 +1888,19 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         let tag_val = v8::String::new(scope, "CanvasRenderingContext2D").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_canvas_rendering_context2d_members_1(scope, proto);
+    install_canvas_rendering_context2d_members_2(scope, proto);
+    install_canvas_rendering_context2d_members_3(scope, proto);
+    install_canvas_rendering_context2d_members_4(scope, proto);
+    install_canvas_rendering_context2d_members_5(scope, proto);
+    install_canvas_rendering_context2d_members_6(scope, proto);
+    install_canvas_rendering_context2d_members_7(scope, proto);
+    install_canvas_rendering_context2d_members_8(scope, proto);
+
+    tmpl
+}
+
+fn install_canvas_rendering_context2d_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: canvas
     {
         let name = v8::String::new(scope, "canvas").unwrap();
@@ -1957,6 +1970,9 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_canvas_rendering_context2d_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getTransform()
     {
         let name = v8::String::new(scope, "getTransform").unwrap();
@@ -2027,6 +2043,9 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_canvas_rendering_context2d_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createRadialGradient()
     {
         let name = v8::String::new(scope, "createRadialGradient").unwrap();
@@ -2097,6 +2116,9 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_canvas_rendering_context2d_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: strokeRect()
     {
         let name = v8::String::new(scope, "strokeRect").unwrap();
@@ -2167,6 +2189,9 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_canvas_rendering_context2d_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: measureText()
     {
         let name = v8::String::new(scope, "measureText").unwrap();
@@ -2237,6 +2262,9 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_canvas_rendering_context2d_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getLineDash()
     {
         let name = v8::String::new(scope, "getLineDash").unwrap();
@@ -2307,6 +2335,9 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_canvas_rendering_context2d_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: fontVariantCaps
     {
         let name = v8::String::new(scope, "fontVariantCaps").unwrap();
@@ -2377,6 +2408,9 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_canvas_rendering_context2d_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: roundRect()
     {
         let name = v8::String::new(scope, "roundRect").unwrap();
@@ -2398,9 +2432,8 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn caret_position_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -3033,6 +3066,13 @@ pub fn create_contact_address_template<'s>(
         let tag_val = v8::String::new(scope, "ContactAddress").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_contact_address_members_1(scope, proto);
+    install_contact_address_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_contact_address_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: toJSON()
     {
         let name = v8::String::new(scope, "toJSON").unwrap();
@@ -3094,15 +3134,17 @@ pub fn create_contact_address_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(contact_address_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_contact_address_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: addressLine
     {
         let name = v8::String::new(scope, "addressLine").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(contact_address_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn contacts_manager_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -3567,6 +3609,14 @@ pub fn create_dom_exception_template<'s>(
         let tag_val = v8::String::new(scope, "DOMException").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_dom_exception_members_1(scope, proto);
+    install_dom_exception_members_2(scope, proto);
+    install_dom_exception_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_dom_exception_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
@@ -3627,6 +3677,9 @@ pub fn create_dom_exception_template<'s>(
         let val = v8::Number::new(scope, 7.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_dom_exception_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: NOT_FOUND_ERR
     {
         let name = v8::String::new(scope, "NOT_FOUND_ERR").unwrap();
@@ -3687,6 +3740,9 @@ pub fn create_dom_exception_template<'s>(
         let val = v8::Number::new(scope, 17.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_dom_exception_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SECURITY_ERR
     {
         let name = v8::String::new(scope, "SECURITY_ERR").unwrap();
@@ -3735,9 +3791,8 @@ pub fn create_dom_exception_template<'s>(
         let val = v8::Number::new(scope, 25.0).into();
         proto.set(name.into(), val);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn dom_parser_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -4776,6 +4831,13 @@ pub fn create_ext_disjoint_timer_query_template<'s>(
         let tag_val = v8::String::new(scope, "EXT_disjoint_timer_query").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_ext_disjoint_timer_query_members_1(scope, proto);
+    install_ext_disjoint_timer_query_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_ext_disjoint_timer_query_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: QUERY_COUNTER_BITS_EXT
     {
         let name = v8::String::new(scope, "QUERY_COUNTER_BITS_EXT").unwrap();
@@ -4839,6 +4901,9 @@ pub fn create_ext_disjoint_timer_query_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ext_disjoint_timer_query_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: beginQueryEXT()
     {
         let name = v8::String::new(scope, "beginQueryEXT").unwrap();
@@ -4874,9 +4939,8 @@ pub fn create_ext_disjoint_timer_query_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn ext_disjoint_timer_query_webgl2_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -6011,6 +6075,18 @@ pub fn create_element_internals_template<'s>(
         let tag_val = v8::String::new(scope, "ElementInternals").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_element_internals_members_1(scope, proto);
+    install_element_internals_members_2(scope, proto);
+    install_element_internals_members_3(scope, proto);
+    install_element_internals_members_4(scope, proto);
+    install_element_internals_members_5(scope, proto);
+    install_element_internals_members_6(scope, proto);
+    install_element_internals_members_7(scope, proto);
+
+    tmpl
+}
+
+fn install_element_internals_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: shadowRoot
     {
         let name = v8::String::new(scope, "shadowRoot").unwrap();
@@ -6075,6 +6151,9 @@ pub fn create_element_internals_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(element_internals_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_element_internals_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: states
     {
         let name = v8::String::new(scope, "states").unwrap();
@@ -6144,6 +6223,9 @@ pub fn create_element_internals_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(element_internals_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_element_internals_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ariaColIndex
     {
         let name = v8::String::new(scope, "ariaColIndex").unwrap();
@@ -6214,6 +6296,9 @@ pub fn create_element_internals_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(element_internals_set_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_element_internals_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ariaExpanded
     {
         let name = v8::String::new(scope, "ariaExpanded").unwrap();
@@ -6284,6 +6369,9 @@ pub fn create_element_internals_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(element_internals_set_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_element_internals_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ariaModal
     {
         let name = v8::String::new(scope, "ariaModal").unwrap();
@@ -6354,6 +6442,9 @@ pub fn create_element_internals_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(element_internals_set_50).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_element_internals_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ariaRequired
     {
         let name = v8::String::new(scope, "ariaRequired").unwrap();
@@ -6424,6 +6515,9 @@ pub fn create_element_internals_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(element_internals_set_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_element_internals_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ariaValueMin
     {
         let name = v8::String::new(scope, "ariaValueMin").unwrap();
@@ -6445,9 +6539,8 @@ pub fn create_element_internals_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(element_internals_set_63).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn encoded_audio_chunk_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -7838,6 +7931,13 @@ pub fn create_font_face_template<'s>(
         let tag_val = v8::String::new(scope, "FontFace").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_font_face_members_1(scope, proto);
+    install_font_face_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_font_face_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: family
     {
         let name = v8::String::new(scope, "family").unwrap();
@@ -7908,6 +8008,9 @@ pub fn create_font_face_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(font_face_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_font_face_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: lineGapOverride
     {
         let name = v8::String::new(scope, "lineGapOverride").unwrap();
@@ -7952,9 +8055,8 @@ pub fn create_font_face_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(font_face_get_17).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for FontFaceFeatures.
 pub fn create_font_face_features_template<'s>(
@@ -8359,6 +8461,13 @@ pub fn create_font_metrics_template<'s>(
         let tag_val = v8::String::new(scope, "FontMetrics").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_font_metrics_members_1(scope, proto);
+    install_font_metrics_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_font_metrics_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
@@ -8419,6 +8528,9 @@ pub fn create_font_metrics_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(font_metrics_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_font_metrics_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: fontBoundingBoxDescent
     {
         let name = v8::String::new(scope, "fontBoundingBoxDescent").unwrap();
@@ -8443,9 +8555,8 @@ pub fn create_font_metrics_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(font_metrics_get_14).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for FragmentDirective.
 pub fn create_fragment_directive_template<'s>(
@@ -11406,6 +11517,13 @@ pub fn create_location_template<'s>(
         let tag_val = v8::String::new(scope, "Location").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_location_members_1(scope, proto);
+    install_location_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_location_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
@@ -11475,6 +11593,9 @@ pub fn create_location_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_location_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: replace()
     {
         let name = v8::String::new(scope, "replace").unwrap();
@@ -11495,9 +11616,8 @@ pub fn create_location_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(location_get_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn lock_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -12793,6 +12913,21 @@ pub fn create_ml_graph_builder_template<'s>(
         let tag_val = v8::String::new(scope, "MLGraphBuilder").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_ml_graph_builder_members_1(scope, proto);
+    install_ml_graph_builder_members_2(scope, proto);
+    install_ml_graph_builder_members_3(scope, proto);
+    install_ml_graph_builder_members_4(scope, proto);
+    install_ml_graph_builder_members_5(scope, proto);
+    install_ml_graph_builder_members_6(scope, proto);
+    install_ml_graph_builder_members_7(scope, proto);
+    install_ml_graph_builder_members_8(scope, proto);
+    install_ml_graph_builder_members_9(scope, proto);
+    install_ml_graph_builder_members_10(scope, proto);
+
+    tmpl
+}
+
+fn install_ml_graph_builder_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: input()
     {
         let name = v8::String::new(scope, "input").unwrap();
@@ -12863,6 +12998,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: concat()
     {
         let name = v8::String::new(scope, "concat").unwrap();
@@ -12933,6 +13071,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: pow()
     {
         let name = v8::String::new(scope, "pow").unwrap();
@@ -13003,6 +13144,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: logicalXor()
     {
         let name = v8::String::new(scope, "logicalXor").unwrap();
@@ -13073,6 +13217,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: log()
     {
         let name = v8::String::new(scope, "log").unwrap();
@@ -13143,6 +13290,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: elu()
     {
         let name = v8::String::new(scope, "elu").unwrap();
@@ -13213,6 +13363,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: hardSwish()
     {
         let name = v8::String::new(scope, "hardSwish").unwrap();
@@ -13283,6 +13436,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: l2Pool2d()
     {
         let name = v8::String::new(scope, "l2Pool2d").unwrap();
@@ -13353,6 +13509,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: reduceProduct()
     {
         let name = v8::String::new(scope, "reduceProduct").unwrap();
@@ -13423,6 +13582,9 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_ml_graph_builder_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: slice()
     {
         let name = v8::String::new(scope, "slice").unwrap();
@@ -13493,9 +13655,8 @@ pub fn create_ml_graph_builder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn ml_operand_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -15285,6 +15446,19 @@ pub fn create_navigator_template<'s>(
         let tag_val = v8::String::new(scope, "Navigator").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_navigator_members_1(scope, proto);
+    install_navigator_members_2(scope, proto);
+    install_navigator_members_3(scope, proto);
+    install_navigator_members_4(scope, proto);
+    install_navigator_members_5(scope, proto);
+    install_navigator_members_6(scope, proto);
+    install_navigator_members_7(scope, proto);
+    install_navigator_members_8(scope, proto);
+
+    tmpl
+}
+
+fn install_navigator_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: attribution
     {
         let name = v8::String::new(scope, "attribution").unwrap();
@@ -15350,6 +15524,9 @@ pub fn create_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(navigator_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_navigator_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: devicePosture
     {
         let name = v8::String::new(scope, "devicePosture").unwrap();
@@ -15418,6 +15595,9 @@ pub fn create_navigator_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_navigator_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: userActivation
     {
         let name = v8::String::new(scope, "userActivation").unwrap();
@@ -15478,6 +15658,9 @@ pub fn create_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(navigator_get_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_navigator_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: permissions
     {
         let name = v8::String::new(scope, "permissions").unwrap();
@@ -15540,6 +15723,9 @@ pub fn create_navigator_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_navigator_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: canShare()
     {
         let name = v8::String::new(scope, "canShare").unwrap();
@@ -15604,6 +15790,9 @@ pub fn create_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(navigator_get_50).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_navigator_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: appCodeName
     {
         let name = v8::String::new(scope, "appCodeName").unwrap();
@@ -15664,6 +15853,9 @@ pub fn create_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(navigator_get_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_navigator_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: languages
     {
         let name = v8::String::new(scope, "languages").unwrap();
@@ -15727,6 +15919,9 @@ pub fn create_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(navigator_get_70).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_navigator_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: connection
     {
         let name = v8::String::new(scope, "connection").unwrap();
@@ -15775,9 +15970,8 @@ pub fn create_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(navigator_get_78).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn navigator_login_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -16723,6 +16917,13 @@ pub fn create_observable_template<'s>(
         let tag_val = v8::String::new(scope, "Observable").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_observable_members_1(scope, proto);
+    install_observable_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_observable_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: subscribe()
     {
         let name = v8::String::new(scope, "subscribe").unwrap();
@@ -16793,6 +16994,9 @@ pub fn create_observable_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_observable_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: catch()
     {
         let name = v8::String::new(scope, "catch").unwrap();
@@ -16863,9 +17067,8 @@ pub fn create_observable_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -17638,6 +17841,19 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         let tag_val = v8::String::new(scope, "OffscreenCanvasRenderingContext2D").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_offscreen_canvas_rendering_context2d_members_1(scope, proto);
+    install_offscreen_canvas_rendering_context2d_members_2(scope, proto);
+    install_offscreen_canvas_rendering_context2d_members_3(scope, proto);
+    install_offscreen_canvas_rendering_context2d_members_4(scope, proto);
+    install_offscreen_canvas_rendering_context2d_members_5(scope, proto);
+    install_offscreen_canvas_rendering_context2d_members_6(scope, proto);
+    install_offscreen_canvas_rendering_context2d_members_7(scope, proto);
+    install_offscreen_canvas_rendering_context2d_members_8(scope, proto);
+
+    tmpl
+}
+
+fn install_offscreen_canvas_rendering_context2d_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: canvas
     {
         let name = v8::String::new(scope, "canvas").unwrap();
@@ -17707,6 +17923,9 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_offscreen_canvas_rendering_context2d_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getTransform()
     {
         let name = v8::String::new(scope, "getTransform").unwrap();
@@ -17777,6 +17996,9 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_offscreen_canvas_rendering_context2d_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createRadialGradient()
     {
         let name = v8::String::new(scope, "createRadialGradient").unwrap();
@@ -17847,6 +18069,9 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_offscreen_canvas_rendering_context2d_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: strokeRect()
     {
         let name = v8::String::new(scope, "strokeRect").unwrap();
@@ -17917,6 +18142,9 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_offscreen_canvas_rendering_context2d_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: drawImage()
     {
         let name = v8::String::new(scope, "drawImage").unwrap();
@@ -17987,6 +18215,9 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_offscreen_canvas_rendering_context2d_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: lineDashOffset
     {
         let name = v8::String::new(scope, "lineDashOffset").unwrap();
@@ -18057,6 +18288,9 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_offscreen_canvas_rendering_context2d_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: textRendering
     {
         let name = v8::String::new(scope, "textRendering").unwrap();
@@ -18127,6 +18361,9 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_offscreen_canvas_rendering_context2d_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: arc()
     {
         let name = v8::String::new(scope, "arc").unwrap();
@@ -18141,9 +18378,8 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn origin_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -18770,6 +19006,17 @@ pub fn create_paint_rendering_context2d_template<'s>(
         let tag_val = v8::String::new(scope, "PaintRenderingContext2D").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_paint_rendering_context2d_members_1(scope, proto);
+    install_paint_rendering_context2d_members_2(scope, proto);
+    install_paint_rendering_context2d_members_3(scope, proto);
+    install_paint_rendering_context2d_members_4(scope, proto);
+    install_paint_rendering_context2d_members_5(scope, proto);
+    install_paint_rendering_context2d_members_6(scope, proto);
+
+    tmpl
+}
+
+fn install_paint_rendering_context2d_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: save()
     {
         let name = v8::String::new(scope, "save").unwrap();
@@ -18840,6 +19087,9 @@ pub fn create_paint_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_paint_rendering_context2d_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: resetTransform()
     {
         let name = v8::String::new(scope, "resetTransform").unwrap();
@@ -18910,6 +19160,9 @@ pub fn create_paint_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_paint_rendering_context2d_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createPattern()
     {
         let name = v8::String::new(scope, "createPattern").unwrap();
@@ -18980,6 +19233,9 @@ pub fn create_paint_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_paint_rendering_context2d_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: stroke()
     {
         let name = v8::String::new(scope, "stroke").unwrap();
@@ -19050,6 +19306,9 @@ pub fn create_paint_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_paint_rendering_context2d_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getLineDash()
     {
         let name = v8::String::new(scope, "getLineDash").unwrap();
@@ -19120,6 +19379,9 @@ pub fn create_paint_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_paint_rendering_context2d_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: arc()
     {
         let name = v8::String::new(scope, "arc").unwrap();
@@ -19134,9 +19396,8 @@ pub fn create_paint_rendering_context2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn paint_size_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -19301,6 +19562,13 @@ pub fn create_path2d_template<'s>(
         let tag_val = v8::String::new(scope, "Path2D").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_path2d_members_1(scope, proto);
+    install_path2d_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_path2d_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: addPath()
     {
         let name = v8::String::new(scope, "addPath").unwrap();
@@ -19371,6 +19639,9 @@ pub fn create_path2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_path2d_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: ellipse()
     {
         let name = v8::String::new(scope, "ellipse").unwrap();
@@ -19378,9 +19649,8 @@ pub fn create_path2d_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn performance_entry_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -19956,6 +20226,14 @@ pub fn create_performance_timing_template<'s>(
         let tag_val = v8::String::new(scope, "PerformanceTiming").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_performance_timing_members_1(scope, proto);
+    install_performance_timing_members_2(scope, proto);
+    install_performance_timing_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_performance_timing_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: navigationStart
     {
         let name = v8::String::new(scope, "navigationStart").unwrap();
@@ -20016,6 +20294,9 @@ pub fn create_performance_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_timing_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_performance_timing_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: secureConnectionStart
     {
         let name = v8::String::new(scope, "secureConnectionStart").unwrap();
@@ -20076,6 +20357,9 @@ pub fn create_performance_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_timing_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_performance_timing_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: loadEventEnd
     {
         let name = v8::String::new(scope, "loadEventEnd").unwrap();
@@ -20089,9 +20373,8 @@ pub fn create_performance_timing_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn performance_timing_confidence_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -21212,6 +21495,13 @@ pub fn create_rewriter_template<'s>(
         let tag_val = v8::String::new(scope, "Rewriter").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_rewriter_members_1(scope, proto);
+    install_rewriter_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_rewriter_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: create()
     {
         let name = v8::String::new(scope, "create").unwrap();
@@ -21276,6 +21566,9 @@ pub fn create_rewriter_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(rewriter_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_rewriter_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: outputLanguage
     {
         let name = v8::String::new(scope, "outputLanguage").unwrap();
@@ -21302,9 +21595,8 @@ pub fn create_rewriter_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn s_frame_encrypter_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -21485,6 +21777,13 @@ pub fn create_sanitizer_template<'s>(
         let tag_val = v8::String::new(scope, "Sanitizer").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_sanitizer_members_1(scope, proto);
+    install_sanitizer_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_sanitizer_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: get()
     {
         let name = v8::String::new(scope, "get").unwrap();
@@ -21555,6 +21854,9 @@ pub fn create_sanitizer_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_sanitizer_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: removeUnsafe()
     {
         let name = v8::String::new(scope, "removeUnsafe").unwrap();
@@ -21562,9 +21864,8 @@ pub fn create_sanitizer_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn scheduler_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -21892,6 +22193,14 @@ pub fn create_selection_template<'s>(
         let tag_val = v8::String::new(scope, "Selection").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_selection_members_1(scope, proto);
+    install_selection_members_2(scope, proto);
+    install_selection_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_selection_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: anchorNode
     {
         let name = v8::String::new(scope, "anchorNode").unwrap();
@@ -21954,6 +22263,9 @@ pub fn create_selection_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_selection_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: removeRange()
     {
         let name = v8::String::new(scope, "removeRange").unwrap();
@@ -22024,6 +22336,9 @@ pub fn create_selection_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_selection_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: selectAllChildren()
     {
         let name = v8::String::new(scope, "selectAllChildren").unwrap();
@@ -22059,9 +22374,8 @@ pub fn create_selection_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn speech_grammar_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -22742,6 +23056,13 @@ pub fn create_storage_access_handle_template<'s>(
         let tag_val = v8::String::new(scope, "StorageAccessHandle").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_storage_access_handle_members_1(scope, proto);
+    install_storage_access_handle_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_storage_access_handle_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: sessionStorage
     {
         let name = v8::String::new(scope, "sessionStorage").unwrap();
@@ -22807,6 +23128,9 @@ pub fn create_storage_access_handle_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_storage_access_handle_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: SharedWorker()
     {
         let name = v8::String::new(scope, "SharedWorker").unwrap();
@@ -22814,9 +23138,8 @@ pub fn create_storage_access_handle_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn storage_bucket_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -23473,6 +23796,13 @@ pub fn create_summarizer_template<'s>(
         let tag_val = v8::String::new(scope, "Summarizer").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_summarizer_members_1(scope, proto);
+    install_summarizer_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_summarizer_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: create()
     {
         let name = v8::String::new(scope, "create").unwrap();
@@ -23537,6 +23867,9 @@ pub fn create_summarizer_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(summarizer_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_summarizer_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: expectedContextLanguages
     {
         let name = v8::String::new(scope, "expectedContextLanguages").unwrap();
@@ -23569,9 +23902,8 @@ pub fn create_summarizer_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn sync_manager_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -23994,6 +24326,13 @@ pub fn create_text_metrics_template<'s>(
         let tag_val = v8::String::new(scope, "TextMetrics").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_text_metrics_members_1(scope, proto);
+    install_text_metrics_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_text_metrics_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
@@ -24054,6 +24393,9 @@ pub fn create_text_metrics_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(text_metrics_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_text_metrics_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: alphabeticBaseline
     {
         let name = v8::String::new(scope, "alphabeticBaseline").unwrap();
@@ -24066,9 +24408,8 @@ pub fn create_text_metrics_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(text_metrics_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn text_track_cue_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -24352,6 +24693,13 @@ pub fn create_touch_template<'s>(
         let tag_val = v8::String::new(scope, "Touch").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_touch_members_1(scope, proto);
+    install_touch_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_touch_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: identifier
     {
         let name = v8::String::new(scope, "identifier").unwrap();
@@ -24412,6 +24760,9 @@ pub fn create_touch_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(touch_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_touch_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: rotationAngle
     {
         let name = v8::String::new(scope, "rotationAngle").unwrap();
@@ -24442,9 +24793,8 @@ pub fn create_touch_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(touch_get_15).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn touch_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -25165,6 +25515,13 @@ pub fn create_url_pattern_template<'s>(
         let tag_val = v8::String::new(scope, "URLPattern").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_url_pattern_members_1(scope, proto);
+    install_url_pattern_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_url_pattern_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: test()
     {
         let name = v8::String::new(scope, "test").unwrap();
@@ -25227,15 +25584,17 @@ pub fn create_url_pattern_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(url_pattern_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_url_pattern_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: hasRegExpGroups
     {
         let name = v8::String::new(scope, "hasRegExpGroups").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(url_pattern_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn user_activation_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -25579,6 +25938,13 @@ pub fn create_validity_state_template<'s>(
         let tag_val = v8::String::new(scope, "ValidityState").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_validity_state_members_1(scope, proto);
+    install_validity_state_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_validity_state_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: valueMissing
     {
         let name = v8::String::new(scope, "valueMissing").unwrap();
@@ -25639,15 +26005,17 @@ pub fn create_validity_state_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(validity_state_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_validity_state_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: valid
     {
         let name = v8::String::new(scope, "valid").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(validity_state_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn video_color_space_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -25912,6 +26280,13 @@ pub fn create_video_frame_template<'s>(
         let tag_val = v8::String::new(scope, "VideoFrame").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_video_frame_members_1(scope, proto);
+    install_video_frame_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_video_frame_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: format
     {
         let name = v8::String::new(scope, "format").unwrap();
@@ -25972,6 +26347,9 @@ pub fn create_video_frame_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(video_frame_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_video_frame_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: timestamp
     {
         let name = v8::String::new(scope, "timestamp").unwrap();
@@ -26019,9 +26397,8 @@ pub fn create_video_frame_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn video_playback_quality_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -26479,6 +26856,13 @@ pub fn create_webgl_blend_equation_advanced_coherent_template<'s>(
         let tag_val = v8::String::new(scope, "WEBGL_blend_equation_advanced_coherent").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_webgl_blend_equation_advanced_coherent_members_1(scope, proto);
+    install_webgl_blend_equation_advanced_coherent_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_webgl_blend_equation_advanced_coherent_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MULTIPLY
     {
         let name = v8::String::new(scope, "MULTIPLY").unwrap();
@@ -26539,6 +26923,9 @@ pub fn create_webgl_blend_equation_advanced_coherent_template<'s>(
         let val = v8::Number::new(scope, 37534.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_webgl_blend_equation_advanced_coherent_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: EXCLUSION
     {
         let name = v8::String::new(scope, "EXCLUSION").unwrap();
@@ -26569,9 +26956,8 @@ pub fn create_webgl_blend_equation_advanced_coherent_template<'s>(
         let val = v8::Number::new(scope, 37552.0).into();
         proto.set(name.into(), val);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for WEBGL_clip_cull_distance.
 pub fn create_webgl_clip_cull_distance_template<'s>(
@@ -26588,6 +26974,13 @@ pub fn create_webgl_clip_cull_distance_template<'s>(
         let tag_val = v8::String::new(scope, "WEBGL_clip_cull_distance").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_webgl_clip_cull_distance_members_1(scope, proto);
+    install_webgl_clip_cull_distance_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_webgl_clip_cull_distance_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_CLIP_DISTANCES_WEBGL
     {
         let name = v8::String::new(scope, "MAX_CLIP_DISTANCES_WEBGL").unwrap();
@@ -26648,15 +27041,17 @@ pub fn create_webgl_clip_cull_distance_template<'s>(
         let val = v8::Number::new(scope, 12294.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_webgl_clip_cull_distance_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: CLIP_DISTANCE7_WEBGL
     {
         let name = v8::String::new(scope, "CLIP_DISTANCE7_WEBGL").unwrap();
         let val = v8::Number::new(scope, 12295.0).into();
         proto.set(name.into(), val);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for WEBGL_color_buffer_float.
 pub fn create_webgl_color_buffer_float_template<'s>(
@@ -26719,6 +27114,14 @@ pub fn create_webgl_compressed_texture_astc_template<'s>(
         let tag_val = v8::String::new(scope, "WEBGL_compressed_texture_astc").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_webgl_compressed_texture_astc_members_1(scope, proto);
+    install_webgl_compressed_texture_astc_members_2(scope, proto);
+    install_webgl_compressed_texture_astc_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_webgl_compressed_texture_astc_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: COMPRESSED_RGBA_ASTC_4x4_KHR
     {
         let name = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_4x4_KHR").unwrap();
@@ -26779,6 +27182,9 @@ pub fn create_webgl_compressed_texture_astc_template<'s>(
         let val = v8::Number::new(scope, 37817.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_webgl_compressed_texture_astc_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: COMPRESSED_RGBA_ASTC_10x8_KHR
     {
         let name = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_10x8_KHR").unwrap();
@@ -26839,6 +27245,9 @@ pub fn create_webgl_compressed_texture_astc_template<'s>(
         let val = v8::Number::new(scope, 37845.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_webgl_compressed_texture_astc_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR
     {
         let name = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR").unwrap();
@@ -26894,9 +27303,8 @@ pub fn create_webgl_compressed_texture_astc_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for WEBGL_compressed_texture_etc.
 pub fn create_webgl_compressed_texture_etc_template<'s>(
@@ -27246,6 +27654,15 @@ pub fn create_webgl_draw_buffers_template<'s>(
         let tag_val = v8::String::new(scope, "WEBGL_draw_buffers").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_webgl_draw_buffers_members_1(scope, proto);
+    install_webgl_draw_buffers_members_2(scope, proto);
+    install_webgl_draw_buffers_members_3(scope, proto);
+    install_webgl_draw_buffers_members_4(scope, proto);
+
+    tmpl
+}
+
+fn install_webgl_draw_buffers_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: COLOR_ATTACHMENT0_WEBGL
     {
         let name = v8::String::new(scope, "COLOR_ATTACHMENT0_WEBGL").unwrap();
@@ -27306,6 +27723,9 @@ pub fn create_webgl_draw_buffers_template<'s>(
         let val = v8::Number::new(scope, 36073.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_webgl_draw_buffers_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: COLOR_ATTACHMENT10_WEBGL
     {
         let name = v8::String::new(scope, "COLOR_ATTACHMENT10_WEBGL").unwrap();
@@ -27366,6 +27786,9 @@ pub fn create_webgl_draw_buffers_template<'s>(
         let val = v8::Number::new(scope, 34856.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_webgl_draw_buffers_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DRAW_BUFFER4_WEBGL
     {
         let name = v8::String::new(scope, "DRAW_BUFFER4_WEBGL").unwrap();
@@ -27426,6 +27849,9 @@ pub fn create_webgl_draw_buffers_template<'s>(
         let val = v8::Number::new(scope, 34866.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_webgl_draw_buffers_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DRAW_BUFFER14_WEBGL
     {
         let name = v8::String::new(scope, "DRAW_BUFFER14_WEBGL").unwrap();
@@ -27457,9 +27883,8 @@ pub fn create_webgl_draw_buffers_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn webgl_draw_instanced_base_vertex_base_instance_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -27998,6 +28423,13 @@ pub fn create_web_transport_template<'s>(
         let tag_val = v8::String::new(scope, "WebTransport").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_web_transport_members_1(scope, proto);
+    install_web_transport_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_web_transport_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getStats()
     {
         let name = v8::String::new(scope, "getStats").unwrap();
@@ -28062,6 +28494,9 @@ pub fn create_web_transport_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(web_transport_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_web_transport_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: draining
     {
         let name = v8::String::new(scope, "draining").unwrap();
@@ -28120,9 +28555,8 @@ pub fn create_web_transport_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(web_transport_get_19).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn web_transport_bidirectional_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -28654,6 +29088,13 @@ pub fn create_writer_template<'s>(
         let tag_val = v8::String::new(scope, "Writer").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_writer_members_1(scope, proto);
+    install_writer_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_writer_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: create()
     {
         let name = v8::String::new(scope, "create").unwrap();
@@ -28718,6 +29159,9 @@ pub fn create_writer_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(writer_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_writer_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: outputLanguage
     {
         let name = v8::String::new(scope, "outputLanguage").unwrap();
@@ -28744,9 +29188,8 @@ pub fn create_writer_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn xml_serializer_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -29000,6 +29443,13 @@ pub fn create_x_path_result_template<'s>(
         let tag_val = v8::String::new(scope, "XPathResult").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_x_path_result_members_1(scope, proto);
+    install_x_path_result_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_x_path_result_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: ANY_TYPE
     {
         let name = v8::String::new(scope, "ANY_TYPE").unwrap();
@@ -29060,6 +29510,9 @@ pub fn create_x_path_result_template<'s>(
         let val = v8::Number::new(scope, 9.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_x_path_result_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: resultType
     {
         let name = v8::String::new(scope, "resultType").unwrap();
@@ -29116,9 +29569,8 @@ pub fn create_x_path_result_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn xslt_processor_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -30551,6 +31003,14 @@ pub fn create_animation_template<'s>(
         let tag_val = v8::String::new(scope, "Animation").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_animation_members_1(scope, proto);
+    install_animation_members_2(scope, proto);
+    install_animation_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_animation_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
@@ -30616,6 +31076,9 @@ pub fn create_animation_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(animation_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_animation_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oncancel
     {
         let name = v8::String::new(scope, "oncancel").unwrap();
@@ -30686,6 +31149,9 @@ pub fn create_animation_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_animation_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: startTime
     {
         let name = v8::String::new(scope, "startTime").unwrap();
@@ -30713,9 +31179,8 @@ pub fn create_animation_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(animation_get_24).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn background_fetch_registration_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -30847,6 +31312,13 @@ pub fn create_background_fetch_registration_template<'s>(
         let tag_val = v8::String::new(scope, "BackgroundFetchRegistration").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_background_fetch_registration_members_1(scope, proto);
+    install_background_fetch_registration_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_background_fetch_registration_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
@@ -30909,6 +31381,9 @@ pub fn create_background_fetch_registration_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_background_fetch_registration_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: match()
     {
         let name = v8::String::new(scope, "match").unwrap();
@@ -30923,9 +31398,8 @@ pub fn create_background_fetch_registration_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn battery_manager_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -32091,6 +32565,13 @@ pub fn create_edit_context_template<'s>(
         let tag_val = v8::String::new(scope, "EditContext").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_edit_context_members_1(scope, proto);
+    install_edit_context_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_edit_context_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: updateText()
     {
         let name = v8::String::new(scope, "updateText").unwrap();
@@ -32157,6 +32638,9 @@ pub fn create_edit_context_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(edit_context_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_edit_context_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: characterBounds()
     {
         let name = v8::String::new(scope, "characterBounds").unwrap();
@@ -32199,9 +32683,8 @@ pub fn create_edit_context_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(edit_context_set_16).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn file_reader_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -32371,6 +32854,13 @@ pub fn create_file_reader_template<'s>(
         let tag_val = v8::String::new(scope, "FileReader").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_file_reader_members_1(scope, proto);
+    install_file_reader_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_file_reader_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: readAsArrayBuffer()
     {
         let name = v8::String::new(scope, "readAsArrayBuffer").unwrap();
@@ -32436,6 +32926,9 @@ pub fn create_file_reader_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(file_reader_get_7).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_file_reader_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: error
     {
         let name = v8::String::new(scope, "error").unwrap();
@@ -32484,9 +32977,8 @@ pub fn create_file_reader_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(file_reader_set_14).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn font_face_set_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -33062,6 +33554,13 @@ pub fn create_language_model_template<'s>(
         let tag_val = v8::String::new(scope, "LanguageModel").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_language_model_members_1(scope, proto);
+    install_language_model_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_language_model_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: create()
     {
         let name = v8::String::new(scope, "create").unwrap();
@@ -33130,6 +33629,9 @@ pub fn create_language_model_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(language_model_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_language_model_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: measureInputUsage()
     {
         let name = v8::String::new(scope, "measureInputUsage").unwrap();
@@ -33182,9 +33684,8 @@ pub fn create_language_model_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn model_context_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -33647,6 +34148,13 @@ pub fn create_navigation_template<'s>(
         let tag_val = v8::String::new(scope, "Navigation").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_navigation_members_1(scope, proto);
+    install_navigation_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_navigation_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: entries()
     {
         let name = v8::String::new(scope, "entries").unwrap();
@@ -33712,6 +34220,9 @@ pub fn create_navigation_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_navigation_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: back()
     {
         let name = v8::String::new(scope, "back").unwrap();
@@ -33754,9 +34265,8 @@ pub fn create_navigation_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(navigation_set_16).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn navigation_history_entry_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -34411,6 +34921,14 @@ pub fn create_notification_template<'s>(
         let tag_val = v8::String::new(scope, "Notification").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_notification_members_1(scope, proto);
+    install_notification_members_2(scope, proto);
+    install_notification_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_notification_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: permission
     {
         let name = v8::String::new(scope, "permission").unwrap();
@@ -34476,6 +34994,9 @@ pub fn create_notification_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(notification_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_notification_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: body
     {
         let name = v8::String::new(scope, "body").unwrap();
@@ -34536,6 +35057,9 @@ pub fn create_notification_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(notification_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_notification_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: requireInteraction
     {
         let name = v8::String::new(scope, "requireInteraction").unwrap();
@@ -34561,9 +35085,8 @@ pub fn create_notification_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn offscreen_canvas_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -34899,6 +35422,13 @@ pub fn create_performance_template<'s>(
         let tag_val = v8::String::new(scope, "Performance").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_performance_members_1(scope, proto);
+    install_performance_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_performance_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: now()
     {
         let name = v8::String::new(scope, "now").unwrap();
@@ -34964,6 +35494,9 @@ pub fn create_performance_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_performance_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getEntriesByName()
     {
         let name = v8::String::new(scope, "getEntriesByName").unwrap();
@@ -35020,9 +35553,8 @@ pub fn create_performance_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn picture_in_picture_window_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -36025,6 +36557,13 @@ pub fn create_serial_port_template<'s>(
         let tag_val = v8::String::new(scope, "SerialPort").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_serial_port_members_1(scope, proto);
+    install_serial_port_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_serial_port_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onconnect
     {
         let name = v8::String::new(scope, "onconnect").unwrap();
@@ -36092,6 +36631,9 @@ pub fn create_serial_port_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_serial_port_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: forget()
     {
         let name = v8::String::new(scope, "forget").unwrap();
@@ -36099,9 +36641,8 @@ pub fn create_serial_port_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn shared_worker_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -36376,6 +36917,13 @@ pub fn create_source_buffer_template<'s>(
         let tag_val = v8::String::new(scope, "SourceBuffer").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_source_buffer_members_1(scope, proto);
+    install_source_buffer_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_source_buffer_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: mode
     {
         let name = v8::String::new(scope, "mode").unwrap();
@@ -36441,6 +36989,9 @@ pub fn create_source_buffer_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(source_buffer_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_source_buffer_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onupdate
     {
         let name = v8::String::new(scope, "onupdate").unwrap();
@@ -36497,9 +37048,8 @@ pub fn create_source_buffer_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn source_buffer_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -36913,6 +37463,14 @@ pub fn create_speech_recognition_template<'s>(
         let tag_val = v8::String::new(scope, "SpeechRecognition").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_speech_recognition_members_1(scope, proto);
+    install_speech_recognition_members_2(scope, proto);
+    install_speech_recognition_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_speech_recognition_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: grammars
     {
         let name = v8::String::new(scope, "grammars").unwrap();
@@ -36983,6 +37541,9 @@ pub fn create_speech_recognition_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_speech_recognition_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: stop()
     {
         let name = v8::String::new(scope, "stop").unwrap();
@@ -37053,6 +37614,9 @@ pub fn create_speech_recognition_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(speech_recognition_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_speech_recognition_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onresult
     {
         let name = v8::String::new(scope, "onresult").unwrap();
@@ -37088,9 +37652,8 @@ pub fn create_speech_recognition_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(speech_recognition_set_25).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn speech_synthesis_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -37446,6 +38009,13 @@ pub fn create_speech_synthesis_utterance_template<'s>(
         let tag_val = v8::String::new(scope, "SpeechSynthesisUtterance").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_speech_synthesis_utterance_members_1(scope, proto);
+    install_speech_synthesis_utterance_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_speech_synthesis_utterance_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: text
     {
         let name = v8::String::new(scope, "text").unwrap();
@@ -37516,6 +38086,9 @@ pub fn create_speech_synthesis_utterance_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(speech_synthesis_utterance_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_speech_synthesis_utterance_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onresume
     {
         let name = v8::String::new(scope, "onresume").unwrap();
@@ -37537,9 +38110,8 @@ pub fn create_speech_synthesis_utterance_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(speech_synthesis_utterance_set_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn text_track_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -37675,6 +38247,13 @@ pub fn create_text_track_template<'s>(
         let tag_val = v8::String::new(scope, "TextTrack").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_text_track_members_1(scope, proto);
+    install_text_track_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_text_track_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: kind
     {
         let name = v8::String::new(scope, "kind").unwrap();
@@ -37738,6 +38317,9 @@ pub fn create_text_track_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_text_track_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oncuechange
     {
         let name = v8::String::new(scope, "oncuechange").unwrap();
@@ -37751,9 +38333,8 @@ pub fn create_text_track_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(text_track_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn text_track_cue_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -38864,6 +39445,13 @@ pub fn create_web_socket_template<'s>(
         let tag_val = v8::String::new(scope, "WebSocket").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_web_socket_members_1(scope, proto);
+    install_web_socket_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_web_socket_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: url
     {
         let name = v8::String::new(scope, "url").unwrap();
@@ -38927,6 +39515,9 @@ pub fn create_web_socket_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(web_socket_set_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_web_socket_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: extensions
     {
         let name = v8::String::new(scope, "extensions").unwrap();
@@ -38967,9 +39558,8 @@ pub fn create_web_socket_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn window_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -41282,6 +41872,32 @@ pub fn create_window_template<'s>(
         let tag_val = v8::String::new(scope, "Window").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_window_members_1(scope, proto);
+    install_window_members_2(scope, proto);
+    install_window_members_3(scope, proto);
+    install_window_members_4(scope, proto);
+    install_window_members_5(scope, proto);
+    install_window_members_6(scope, proto);
+    install_window_members_7(scope, proto);
+    install_window_members_8(scope, proto);
+    install_window_members_9(scope, proto);
+    install_window_members_10(scope, proto);
+    install_window_members_11(scope, proto);
+    install_window_members_12(scope, proto);
+    install_window_members_13(scope, proto);
+    install_window_members_14(scope, proto);
+    install_window_members_15(scope, proto);
+    install_window_members_16(scope, proto);
+    install_window_members_17(scope, proto);
+    install_window_members_18(scope, proto);
+    install_window_members_19(scope, proto);
+    install_window_members_20(scope, proto);
+    install_window_members_21(scope, proto);
+
+    tmpl
+}
+
+fn install_window_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: window
     {
         let name = v8::String::new(scope, "window").unwrap();
@@ -41343,6 +41959,9 @@ pub fn create_window_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(window_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: personalbar
     {
         let name = v8::String::new(scope, "personalbar").unwrap();
@@ -41408,6 +42027,9 @@ pub fn create_window_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_window_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: frames
     {
         let name = v8::String::new(scope, "frames").unwrap();
@@ -41471,6 +42093,9 @@ pub fn create_window_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(window_get_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: originAgentCluster
     {
         let name = v8::String::new(scope, "originAgentCluster").unwrap();
@@ -41538,6 +42163,9 @@ pub fn create_window_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(window_get_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onorientationchange
     {
         let name = v8::String::new(scope, "onorientationchange").unwrap();
@@ -41603,6 +42231,9 @@ pub fn create_window_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_window_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: moveBy()
     {
         let name = v8::String::new(scope, "moveBy").unwrap();
@@ -41667,6 +42298,9 @@ pub fn create_window_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_window_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: scroll()
     {
         let name = v8::String::new(scope, "scroll").unwrap();
@@ -41732,6 +42366,9 @@ pub fn create_window_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(window_get_70).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: outerHeight
     {
         let name = v8::String::new(scope, "outerHeight").unwrap();
@@ -41797,6 +42434,9 @@ pub fn create_window_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_window_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: showDirectoryPicker()
     {
         let name = v8::String::new(scope, "showDirectoryPicker").unwrap();
@@ -41866,6 +42506,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_90).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: portalHost
     {
         let name = v8::String::new(scope, "portalHost").unwrap();
@@ -41933,6 +42576,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_100).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onbeforematch
     {
         let name = v8::String::new(scope, "onbeforematch").unwrap();
@@ -42003,6 +42649,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_110).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oncontextlost
     {
         let name = v8::String::new(scope, "oncontextlost").unwrap();
@@ -42073,6 +42722,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_120).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_13<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ondragleave
     {
         let name = v8::String::new(scope, "ondragleave").unwrap();
@@ -42143,6 +42795,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_130).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_14<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oninput
     {
         let name = v8::String::new(scope, "oninput").unwrap();
@@ -42213,6 +42868,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_140).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_15<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onmouseenter
     {
         let name = v8::String::new(scope, "onmouseenter").unwrap();
@@ -42283,6 +42941,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_150).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_16<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onprogress
     {
         let name = v8::String::new(scope, "onprogress").unwrap();
@@ -42353,6 +43014,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_160).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_17<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onslotchange
     {
         let name = v8::String::new(scope, "onslotchange").unwrap();
@@ -42423,6 +43087,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_170).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_18<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onwebkitanimationstart
     {
         let name = v8::String::new(scope, "onwebkitanimationstart").unwrap();
@@ -42493,6 +43160,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_180).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_19<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onoffline
     {
         let name = v8::String::new(scope, "onoffline").unwrap();
@@ -42563,6 +43233,9 @@ pub fn create_window_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(window_set_190).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_window_members_20<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onunload
     {
         let name = v8::String::new(scope, "onunload").unwrap();
@@ -42630,6 +43303,9 @@ pub fn create_window_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_window_members_21<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: clearInterval()
     {
         let name = v8::String::new(scope, "clearInterval").unwrap();
@@ -42690,9 +43366,8 @@ pub fn create_window_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(window_get_209).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn window_controls_overlay_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -43835,6 +44510,13 @@ pub fn create_performance_element_timing_template<'s>(
         let tag_val = v8::String::new(scope, "PerformanceElementTiming").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_performance_element_timing_members_1(scope, proto);
+    install_performance_element_timing_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_performance_element_timing_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: renderTime
     {
         let name = v8::String::new(scope, "renderTime").unwrap();
@@ -43896,6 +44578,9 @@ pub fn create_performance_element_timing_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_performance_element_timing_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: paintTime
     {
         let name = v8::String::new(scope, "paintTime").unwrap();
@@ -43908,9 +44593,8 @@ pub fn create_performance_element_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_element_timing_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn performance_event_timing_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -44166,6 +44850,13 @@ pub fn create_performance_long_animation_frame_timing_template<'s>(
         let tag_val = v8::String::new(scope, "PerformanceLongAnimationFrameTiming").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_performance_long_animation_frame_timing_members_1(scope, proto);
+    install_performance_long_animation_frame_timing_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_performance_long_animation_frame_timing_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: startTime
     {
         let name = v8::String::new(scope, "startTime").unwrap();
@@ -44227,6 +44918,9 @@ pub fn create_performance_long_animation_frame_timing_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_performance_long_animation_frame_timing_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: paintTime
     {
         let name = v8::String::new(scope, "paintTime").unwrap();
@@ -44239,9 +44933,8 @@ pub fn create_performance_long_animation_frame_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_long_animation_frame_timing_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn performance_long_task_timing_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -44786,6 +45479,14 @@ pub fn create_performance_resource_timing_template<'s>(
         let tag_val = v8::String::new(scope, "PerformanceResourceTiming").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_performance_resource_timing_members_1(scope, proto);
+    install_performance_resource_timing_members_2(scope, proto);
+    install_performance_resource_timing_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_performance_resource_timing_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: initiatorType
     {
         let name = v8::String::new(scope, "initiatorType").unwrap();
@@ -44846,6 +45547,9 @@ pub fn create_performance_resource_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_resource_timing_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_performance_resource_timing_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: connectEnd
     {
         let name = v8::String::new(scope, "connectEnd").unwrap();
@@ -44906,6 +45610,9 @@ pub fn create_performance_resource_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_resource_timing_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_performance_resource_timing_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: workerFinalRouterSource
     {
         let name = v8::String::new(scope, "workerFinalRouterSource").unwrap();
@@ -44967,9 +45674,8 @@ pub fn create_performance_resource_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_resource_timing_get_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn performance_script_timing_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -45124,6 +45830,13 @@ pub fn create_performance_script_timing_template<'s>(
         let tag_val = v8::String::new(scope, "PerformanceScriptTiming").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_performance_script_timing_members_1(scope, proto);
+    install_performance_script_timing_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_performance_script_timing_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: startTime
     {
         let name = v8::String::new(scope, "startTime").unwrap();
@@ -45184,6 +45897,9 @@ pub fn create_performance_script_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_script_timing_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_performance_script_timing_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: pauseDuration
     {
         let name = v8::String::new(scope, "pauseDuration").unwrap();
@@ -45215,9 +45931,8 @@ pub fn create_performance_script_timing_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn task_attribution_timing_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -46979,6 +47694,13 @@ pub fn create_panner_node_template<'s>(
         let tag_val = v8::String::new(scope, "PannerNode").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_panner_node_members_1(scope, proto);
+    install_panner_node_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_panner_node_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: panningModel
     {
         let name = v8::String::new(scope, "panningModel").unwrap();
@@ -47043,6 +47765,9 @@ pub fn create_panner_node_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(panner_node_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_panner_node_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: rolloffFactor
     {
         let name = v8::String::new(scope, "rolloffFactor").unwrap();
@@ -47085,9 +47810,8 @@ pub fn create_panner_node_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn script_processor_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -47690,6 +48414,13 @@ pub fn create_vtt_cue_template<'s>(
         let tag_val = v8::String::new(scope, "VTTCue").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_vtt_cue_members_1(scope, proto);
+    install_vtt_cue_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_vtt_cue_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: region
     {
         let name = v8::String::new(scope, "region").unwrap();
@@ -47760,6 +48491,9 @@ pub fn create_vtt_cue_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(vtt_cue_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_vtt_cue_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getCueAsHTML()
     {
         let name = v8::String::new(scope, "getCueAsHTML").unwrap();
@@ -47767,9 +48501,8 @@ pub fn create_vtt_cue_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn dedicated_worker_global_scope_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -48244,6 +48977,14 @@ pub fn create_xml_http_request_template<'s>(
         let tag_val = v8::String::new(scope, "XMLHttpRequest").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_xml_http_request_members_1(scope, proto);
+    install_xml_http_request_members_2(scope, proto);
+    install_xml_http_request_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_xml_http_request_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onreadystatechange
     {
         let name = v8::String::new(scope, "onreadystatechange").unwrap();
@@ -48308,6 +49049,9 @@ pub fn create_xml_http_request_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_xml_http_request_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: timeout
     {
         let name = v8::String::new(scope, "timeout").unwrap();
@@ -48374,6 +49118,9 @@ pub fn create_xml_http_request_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_xml_http_request_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: overrideMimeType()
     {
         let name = v8::String::new(scope, "overrideMimeType").unwrap();
@@ -48413,9 +49160,8 @@ pub fn create_xml_http_request_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for XMLHttpRequestUpload.
 pub fn create_xml_http_request_upload_template<'s>(
@@ -48592,6 +49338,13 @@ pub fn create_performance_navigation_timing_template<'s>(
         let tag_val = v8::String::new(scope, "PerformanceNavigationTiming").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_performance_navigation_timing_members_1(scope, proto);
+    install_performance_navigation_timing_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_performance_navigation_timing_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: unloadEventStart
     {
         let name = v8::String::new(scope, "unloadEventStart").unwrap();
@@ -48652,6 +49405,9 @@ pub fn create_performance_navigation_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_navigation_timing_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_performance_navigation_timing_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: criticalCHRestart
     {
         let name = v8::String::new(scope, "criticalCHRestart").unwrap();
@@ -48683,9 +49439,8 @@ pub fn create_performance_navigation_timing_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(performance_navigation_timing_get_15).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn constant_source_node_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -49879,6 +50634,20 @@ pub fn create_math_ml_element_template<'s>(
         let tag_val = v8::String::new(scope, "MathMLElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_math_ml_element_members_1(scope, proto);
+    install_math_ml_element_members_2(scope, proto);
+    install_math_ml_element_members_3(scope, proto);
+    install_math_ml_element_members_4(scope, proto);
+    install_math_ml_element_members_5(scope, proto);
+    install_math_ml_element_members_6(scope, proto);
+    install_math_ml_element_members_7(scope, proto);
+    install_math_ml_element_members_8(scope, proto);
+    install_math_ml_element_members_9(scope, proto);
+
+    tmpl
+}
+
+fn install_math_ml_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: style
     {
         let name = v8::String::new(scope, "style").unwrap();
@@ -49948,6 +50717,9 @@ pub fn create_math_ml_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
@@ -50018,6 +50790,9 @@ pub fn create_math_ml_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ondblclick
     {
         let name = v8::String::new(scope, "ondblclick").unwrap();
@@ -50088,6 +50863,9 @@ pub fn create_math_ml_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onended
     {
         let name = v8::String::new(scope, "onended").unwrap();
@@ -50158,6 +50936,9 @@ pub fn create_math_ml_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onloadeddata
     {
         let name = v8::String::new(scope, "onloadeddata").unwrap();
@@ -50228,6 +51009,9 @@ pub fn create_math_ml_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_50).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onpaste
     {
         let name = v8::String::new(scope, "onpaste").unwrap();
@@ -50298,6 +51082,9 @@ pub fn create_math_ml_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_element_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onsecuritypolicyviolation
     {
         let name = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
@@ -50368,6 +51155,9 @@ pub fn create_math_ml_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_70).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_element_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onvolumechange
     {
         let name = v8::String::new(scope, "onvolumechange").unwrap();
@@ -50437,6 +51227,9 @@ pub fn create_math_ml_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_80).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_element_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: tabIndex
     {
         let name = v8::String::new(scope, "tabIndex").unwrap();
@@ -50458,9 +51251,8 @@ pub fn create_math_ml_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for CDATASection.
 pub fn create_cdata_section_template<'s>(
@@ -50680,6 +51472,13 @@ pub fn create_math_ml_anchor_element_template<'s>(
         let tag_val = v8::String::new(scope, "MathMLAnchorElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_math_ml_anchor_element_members_1(scope, proto);
+    install_math_ml_anchor_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_math_ml_anchor_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
@@ -50749,6 +51548,9 @@ pub fn create_math_ml_anchor_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_math_ml_anchor_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: search
     {
         let name = v8::String::new(scope, "search").unwrap();
@@ -50777,7 +51579,6 @@ pub fn create_math_ml_anchor_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_14).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 

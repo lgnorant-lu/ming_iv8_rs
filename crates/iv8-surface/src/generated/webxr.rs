@@ -458,6 +458,13 @@ pub fn create_xr_frame_template<'s>(
         let tag_val = v8::String::new(scope, "XRFrame").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_xr_frame_members_1(scope, proto);
+    install_xr_frame_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_xr_frame_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: session
     {
         let name = v8::String::new(scope, "session").unwrap();
@@ -523,6 +530,9 @@ pub fn create_xr_frame_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_xr_frame_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: fillJointRadii()
     {
         let name = v8::String::new(scope, "fillJointRadii").unwrap();
@@ -564,9 +574,8 @@ pub fn create_xr_frame_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(xr_frame_get_16).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn xr_hand_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2050,6 +2059,13 @@ pub fn create_xr_web_gl_binding_template<'s>(
         let tag_val = v8::String::new(scope, "XRWebGLBinding").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_xr_web_gl_binding_members_1(scope, proto);
+    install_xr_web_gl_binding_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_xr_web_gl_binding_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: nativeProjectionScaleFactor
     {
         let name = v8::String::new(scope, "nativeProjectionScaleFactor").unwrap();
@@ -2118,6 +2134,9 @@ pub fn create_xr_web_gl_binding_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_xr_web_gl_binding_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getCameraImage()
     {
         let name = v8::String::new(scope, "getCameraImage").unwrap();
@@ -2139,9 +2158,8 @@ pub fn create_xr_web_gl_binding_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn xr_input_source_event_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -3000,6 +3018,16 @@ pub fn create_xr_session_template<'s>(
         let tag_val = v8::String::new(scope, "XRSession").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_xr_session_members_1(scope, proto);
+    install_xr_session_members_2(scope, proto);
+    install_xr_session_members_3(scope, proto);
+    install_xr_session_members_4(scope, proto);
+    install_xr_session_members_5(scope, proto);
+
+    tmpl
+}
+
+fn install_xr_session_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: visibilityState
     {
         let name = v8::String::new(scope, "visibilityState").unwrap();
@@ -3062,6 +3090,9 @@ pub fn create_xr_session_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_xr_session_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: requestReferenceSpace()
     {
         let name = v8::String::new(scope, "requestReferenceSpace").unwrap();
@@ -3132,6 +3163,9 @@ pub fn create_xr_session_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(xr_session_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_xr_session_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onsqueezestart
     {
         let name = v8::String::new(scope, "onsqueezestart").unwrap();
@@ -3198,6 +3232,9 @@ pub fn create_xr_session_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(xr_session_get_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_xr_session_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: depthDataFormat
     {
         let name = v8::String::new(scope, "depthDataFormat").unwrap();
@@ -3263,6 +3300,9 @@ pub fn create_xr_session_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(xr_session_get_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_xr_session_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: initiateRoomCapture()
     {
         let name = v8::String::new(scope, "initiateRoomCapture").unwrap();
@@ -3276,9 +3316,8 @@ pub fn create_xr_session_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(xr_session_get_42).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for XRSpace.
 pub fn create_xr_space_template<'s>(

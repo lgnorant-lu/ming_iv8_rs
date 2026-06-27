@@ -920,6 +920,13 @@ pub fn create_bluetooth_template<'s>(
         let tag_val = v8::String::new(scope, "Bluetooth").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_bluetooth_members_1(scope, proto);
+    install_bluetooth_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_bluetooth_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getAvailability()
     {
         let name = v8::String::new(scope, "getAvailability").unwrap();
@@ -989,6 +996,9 @@ pub fn create_bluetooth_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_bluetooth_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onservicechanged
     {
         let name = v8::String::new(scope, "onservicechanged").unwrap();
@@ -1003,9 +1013,8 @@ pub fn create_bluetooth_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn bluetooth_device_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1157,6 +1166,13 @@ pub fn create_bluetooth_device_template<'s>(
         let tag_val = v8::String::new(scope, "BluetoothDevice").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_bluetooth_device_members_1(scope, proto);
+    install_bluetooth_device_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_bluetooth_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
@@ -1223,6 +1239,9 @@ pub fn create_bluetooth_device_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_bluetooth_device_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onservicechanged
     {
         let name = v8::String::new(scope, "onservicechanged").unwrap();
@@ -1237,9 +1256,8 @@ pub fn create_bluetooth_device_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn bluetooth_remote_gatt_characteristic_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1380,6 +1398,13 @@ pub fn create_bluetooth_remote_gatt_characteristic_template<'s>(
         let tag_val = v8::String::new(scope, "BluetoothRemoteGATTCharacteristic").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_bluetooth_remote_gatt_characteristic_members_1(scope, proto);
+    install_bluetooth_remote_gatt_characteristic_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_bluetooth_remote_gatt_characteristic_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: service
     {
         let name = v8::String::new(scope, "service").unwrap();
@@ -1446,6 +1471,9 @@ pub fn create_bluetooth_remote_gatt_characteristic_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_bluetooth_remote_gatt_characteristic_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: startNotifications()
     {
         let name = v8::String::new(scope, "startNotifications").unwrap();
@@ -1467,9 +1495,8 @@ pub fn create_bluetooth_remote_gatt_characteristic_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_set_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn bluetooth_remote_gatt_service_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1604,6 +1631,13 @@ pub fn create_bluetooth_remote_gatt_service_template<'s>(
         let tag_val = v8::String::new(scope, "BluetoothRemoteGATTService").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_bluetooth_remote_gatt_service_members_1(scope, proto);
+    install_bluetooth_remote_gatt_service_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_bluetooth_remote_gatt_service_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: device
     {
         let name = v8::String::new(scope, "device").unwrap();
@@ -1671,6 +1705,9 @@ pub fn create_bluetooth_remote_gatt_service_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_bluetooth_remote_gatt_service_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onserviceremoved
     {
         let name = v8::String::new(scope, "onserviceremoved").unwrap();
@@ -1678,9 +1715,8 @@ pub fn create_bluetooth_remote_gatt_service_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn bluetooth_le_scan_permission_result_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

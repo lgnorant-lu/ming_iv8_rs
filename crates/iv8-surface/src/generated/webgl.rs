@@ -2108,6 +2108,90 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let tag_val = v8::String::new(scope, "WebGL2RenderingContext").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_web_gl2rendering_context_members_1(scope, proto);
+    install_web_gl2rendering_context_members_2(scope, proto);
+    install_web_gl2rendering_context_members_3(scope, proto);
+    install_web_gl2rendering_context_members_4(scope, proto);
+    install_web_gl2rendering_context_members_5(scope, proto);
+    install_web_gl2rendering_context_members_6(scope, proto);
+    install_web_gl2rendering_context_members_7(scope, proto);
+    install_web_gl2rendering_context_members_8(scope, proto);
+    install_web_gl2rendering_context_members_9(scope, proto);
+    install_web_gl2rendering_context_members_10(scope, proto);
+    install_web_gl2rendering_context_members_11(scope, proto);
+    install_web_gl2rendering_context_members_12(scope, proto);
+    install_web_gl2rendering_context_members_13(scope, proto);
+    install_web_gl2rendering_context_members_14(scope, proto);
+    install_web_gl2rendering_context_members_15(scope, proto);
+    install_web_gl2rendering_context_members_16(scope, proto);
+    install_web_gl2rendering_context_members_17(scope, proto);
+    install_web_gl2rendering_context_members_18(scope, proto);
+    install_web_gl2rendering_context_members_19(scope, proto);
+    install_web_gl2rendering_context_members_20(scope, proto);
+    install_web_gl2rendering_context_members_21(scope, proto);
+    install_web_gl2rendering_context_members_22(scope, proto);
+    install_web_gl2rendering_context_members_23(scope, proto);
+    install_web_gl2rendering_context_members_24(scope, proto);
+    install_web_gl2rendering_context_members_25(scope, proto);
+    install_web_gl2rendering_context_members_26(scope, proto);
+    install_web_gl2rendering_context_members_27(scope, proto);
+    install_web_gl2rendering_context_members_28(scope, proto);
+    install_web_gl2rendering_context_members_29(scope, proto);
+    install_web_gl2rendering_context_members_30(scope, proto);
+    install_web_gl2rendering_context_members_31(scope, proto);
+    install_web_gl2rendering_context_members_32(scope, proto);
+    install_web_gl2rendering_context_members_33(scope, proto);
+    install_web_gl2rendering_context_members_34(scope, proto);
+    install_web_gl2rendering_context_members_35(scope, proto);
+    install_web_gl2rendering_context_members_36(scope, proto);
+    install_web_gl2rendering_context_members_37(scope, proto);
+    install_web_gl2rendering_context_members_38(scope, proto);
+    install_web_gl2rendering_context_members_39(scope, proto);
+    install_web_gl2rendering_context_members_40(scope, proto);
+    install_web_gl2rendering_context_members_41(scope, proto);
+    install_web_gl2rendering_context_members_42(scope, proto);
+    install_web_gl2rendering_context_members_43(scope, proto);
+    install_web_gl2rendering_context_members_44(scope, proto);
+    install_web_gl2rendering_context_members_45(scope, proto);
+    install_web_gl2rendering_context_members_46(scope, proto);
+    install_web_gl2rendering_context_members_47(scope, proto);
+    install_web_gl2rendering_context_members_48(scope, proto);
+    install_web_gl2rendering_context_members_49(scope, proto);
+    install_web_gl2rendering_context_members_50(scope, proto);
+    install_web_gl2rendering_context_members_51(scope, proto);
+    install_web_gl2rendering_context_members_52(scope, proto);
+    install_web_gl2rendering_context_members_53(scope, proto);
+    install_web_gl2rendering_context_members_54(scope, proto);
+    install_web_gl2rendering_context_members_55(scope, proto);
+    install_web_gl2rendering_context_members_56(scope, proto);
+    install_web_gl2rendering_context_members_57(scope, proto);
+    install_web_gl2rendering_context_members_58(scope, proto);
+    install_web_gl2rendering_context_members_59(scope, proto);
+    install_web_gl2rendering_context_members_60(scope, proto);
+    install_web_gl2rendering_context_members_61(scope, proto);
+    install_web_gl2rendering_context_members_62(scope, proto);
+    install_web_gl2rendering_context_members_63(scope, proto);
+    install_web_gl2rendering_context_members_64(scope, proto);
+    install_web_gl2rendering_context_members_65(scope, proto);
+    install_web_gl2rendering_context_members_66(scope, proto);
+    install_web_gl2rendering_context_members_67(scope, proto);
+    install_web_gl2rendering_context_members_68(scope, proto);
+    install_web_gl2rendering_context_members_69(scope, proto);
+    install_web_gl2rendering_context_members_70(scope, proto);
+    install_web_gl2rendering_context_members_71(scope, proto);
+    install_web_gl2rendering_context_members_72(scope, proto);
+    install_web_gl2rendering_context_members_73(scope, proto);
+    install_web_gl2rendering_context_members_74(scope, proto);
+    install_web_gl2rendering_context_members_75(scope, proto);
+    install_web_gl2rendering_context_members_76(scope, proto);
+    install_web_gl2rendering_context_members_77(scope, proto);
+    install_web_gl2rendering_context_members_78(scope, proto);
+    install_web_gl2rendering_context_members_79(scope, proto);
+
+    tmpl
+}
+
+fn install_web_gl2rendering_context_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DEPTH_BUFFER_BIT
     {
         let name = v8::String::new(scope, "DEPTH_BUFFER_BIT").unwrap();
@@ -2168,6 +2252,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 6.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: ZERO
     {
         let name = v8::String::new(scope, "ZERO").unwrap();
@@ -2228,6 +2315,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 775.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SRC_ALPHA_SATURATE
     {
         let name = v8::String::new(scope, "SRC_ALPHA_SATURATE").unwrap();
@@ -2288,6 +2378,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32970.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: BLEND_SRC_ALPHA
     {
         let name = v8::String::new(scope, "BLEND_SRC_ALPHA").unwrap();
@@ -2348,6 +2441,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34965.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: STREAM_DRAW
     {
         let name = v8::String::new(scope, "STREAM_DRAW").unwrap();
@@ -2408,6 +2504,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 2884.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: BLEND
     {
         let name = v8::String::new(scope, "BLEND").unwrap();
@@ -2468,6 +2567,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 1280.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INVALID_VALUE
     {
         let name = v8::String::new(scope, "INVALID_VALUE").unwrap();
@@ -2528,6 +2630,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 2886.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DEPTH_RANGE
     {
         let name = v8::String::new(scope, "DEPTH_RANGE").unwrap();
@@ -2588,6 +2693,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 2967.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: STENCIL_VALUE_MASK
     {
         let name = v8::String::new(scope, "STENCIL_VALUE_MASK").unwrap();
@@ -2648,6 +2756,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 2978.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SCISSOR_BOX
     {
         let name = v8::String::new(scope, "SCISSOR_BOX").unwrap();
@@ -2708,6 +2819,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 3411.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: BLUE_BITS
     {
         let name = v8::String::new(scope, "BLUE_BITS").unwrap();
@@ -2768,6 +2882,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32938.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SAMPLE_COVERAGE_INVERT
     {
         let name = v8::String::new(scope, "SAMPLE_COVERAGE_INVERT").unwrap();
@@ -2828,6 +2945,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 5123.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_13<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INT
     {
         let name = v8::String::new(scope, "INT").unwrap();
@@ -2888,6 +3008,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32819.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_14<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: UNSIGNED_SHORT_5_5_5_1
     {
         let name = v8::String::new(scope, "UNSIGNED_SHORT_5_5_5_1").unwrap();
@@ -2948,6 +3071,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34930.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_15<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_FRAGMENT_UNIFORM_VECTORS
     {
         let name = v8::String::new(scope, "MAX_FRAGMENT_UNIFORM_VECTORS").unwrap();
@@ -3008,6 +3134,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35725.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_16<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: NEVER
     {
         let name = v8::String::new(scope, "NEVER").unwrap();
@@ -3068,6 +3197,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 7681.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_17<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INCR
     {
         let name = v8::String::new(scope, "INCR").unwrap();
@@ -3128,6 +3260,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 9729.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_18<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: NEAREST_MIPMAP_NEAREST
     {
         let name = v8::String::new(scope, "NEAREST_MIPMAP_NEAREST").unwrap();
@@ -3188,6 +3323,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 5890.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_19<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE_CUBE_MAP
     {
         let name = v8::String::new(scope, "TEXTURE_CUBE_MAP").unwrap();
@@ -3248,6 +3386,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 33984.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_20<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE1
     {
         let name = v8::String::new(scope, "TEXTURE1").unwrap();
@@ -3308,6 +3449,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 33994.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_21<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE11
     {
         let name = v8::String::new(scope, "TEXTURE11").unwrap();
@@ -3368,6 +3512,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34004.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_22<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE21
     {
         let name = v8::String::new(scope, "TEXTURE21").unwrap();
@@ -3428,6 +3575,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34014.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_23<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE31
     {
         let name = v8::String::new(scope, "TEXTURE31").unwrap();
@@ -3488,6 +3638,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35668.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_24<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INT_VEC4
     {
         let name = v8::String::new(scope, "INT_VEC4").unwrap();
@@ -3548,6 +3701,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35680.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_25<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: VERTEX_ATTRIB_ARRAY_ENABLED
     {
         let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_ENABLED").unwrap();
@@ -3608,6 +3764,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35713.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_26<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: LOW_FLOAT
     {
         let name = v8::String::new(scope, "LOW_FLOAT").unwrap();
@@ -3668,6 +3827,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32855.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_27<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RGBA8
     {
         let name = v8::String::new(scope, "RGBA8").unwrap();
@@ -3728,6 +3890,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36177.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_28<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RENDERBUFFER_BLUE_SIZE
     {
         let name = v8::String::new(scope, "RENDERBUFFER_BLUE_SIZE").unwrap();
@@ -3788,6 +3953,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36096.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_29<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: STENCIL_ATTACHMENT
     {
         let name = v8::String::new(scope, "STENCIL_ATTACHMENT").unwrap();
@@ -3848,6 +4016,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36007.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_30<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_RENDERBUFFER_SIZE
     {
         let name = v8::String::new(scope, "MAX_RENDERBUFFER_SIZE").unwrap();
@@ -3908,6 +4079,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_web_gl2rendering_context_members_31<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: drawingBufferFormat
     {
         let name = v8::String::new(scope, "drawingBufferFormat").unwrap();
@@ -3977,6 +4151,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_32<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: bindAttribLocation()
     {
         let name = v8::String::new(scope, "bindAttribLocation").unwrap();
@@ -4047,6 +4224,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_33<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: checkFramebufferStatus()
     {
         let name = v8::String::new(scope, "checkFramebufferStatus").unwrap();
@@ -4117,6 +4297,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_34<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createFramebuffer()
     {
         let name = v8::String::new(scope, "createFramebuffer").unwrap();
@@ -4187,6 +4370,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_35<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: deleteShader()
     {
         let name = v8::String::new(scope, "deleteShader").unwrap();
@@ -4257,6 +4443,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_36<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: enable()
     {
         let name = v8::String::new(scope, "enable").unwrap();
@@ -4327,6 +4516,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_37<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getAttachedShaders()
     {
         let name = v8::String::new(scope, "getAttachedShaders").unwrap();
@@ -4397,6 +4589,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_38<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getShaderPrecisionFormat()
     {
         let name = v8::String::new(scope, "getShaderPrecisionFormat").unwrap();
@@ -4467,6 +4662,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_39<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: isEnabled()
     {
         let name = v8::String::new(scope, "isEnabled").unwrap();
@@ -4537,6 +4735,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_40<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: renderbufferStorage()
     {
         let name = v8::String::new(scope, "renderbufferStorage").unwrap();
@@ -4607,6 +4808,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_41<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: texParameterf()
     {
         let name = v8::String::new(scope, "texParameterf").unwrap();
@@ -4677,6 +4881,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_42<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: useProgram()
     {
         let name = v8::String::new(scope, "useProgram").unwrap();
@@ -4747,6 +4954,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_43<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: vertexAttribPointer()
     {
         let name = v8::String::new(scope, "vertexAttribPointer").unwrap();
@@ -4809,6 +5019,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 6144.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_44<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DEPTH
     {
         let name = v8::String::new(scope, "DEPTH").unwrap();
@@ -4869,6 +5082,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32882.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_45<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_3D_TEXTURE_SIZE
     {
         let name = v8::String::new(scope, "MAX_3D_TEXTURE_SIZE").unwrap();
@@ -4929,6 +5145,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32776.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_46<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DEPTH_COMPONENT24
     {
         let name = v8::String::new(scope, "DEPTH_COMPONENT24").unwrap();
@@ -4989,6 +5208,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35045.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_47<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: STATIC_COPY
     {
         let name = v8::String::new(scope, "STATIC_COPY").unwrap();
@@ -5049,6 +5271,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34858.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_48<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DRAW_BUFFER6
     {
         let name = v8::String::new(scope, "DRAW_BUFFER6").unwrap();
@@ -5109,6 +5334,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34868.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_49<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_FRAGMENT_UNIFORM_COMPONENTS
     {
         let name = v8::String::new(scope, "MAX_FRAGMENT_UNIFORM_COMPONENTS").unwrap();
@@ -5169,6 +5397,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35685.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_50<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: FLOAT_MAT2x4
     {
         let name = v8::String::new(scope, "FLOAT_MAT2x4").unwrap();
@@ -5229,6 +5460,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34836.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_51<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RGB32F
     {
         let name = v8::String::new(scope, "RGB32F").unwrap();
@@ -5289,6 +5523,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35869.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_52<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: R11F_G11F_B10F
     {
         let name = v8::String::new(scope, "R11F_G11F_B10F").unwrap();
@@ -5349,6 +5586,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35976.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_53<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RASTERIZER_DISCARD
     {
         let name = v8::String::new(scope, "RASTERIZER_DISCARD").unwrap();
@@ -5409,6 +5649,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36214.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_54<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RGB16UI
     {
         let name = v8::String::new(scope, "RGB16UI").unwrap();
@@ -5469,6 +5712,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36244.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_55<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RGB_INTEGER
     {
         let name = v8::String::new(scope, "RGB_INTEGER").unwrap();
@@ -5529,6 +5775,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36299.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_56<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INT_SAMPLER_CUBE
     {
         let name = v8::String::new(scope, "INT_SAMPLER_CUBE").unwrap();
@@ -5589,6 +5838,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 33296.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_57<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE
     {
         let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE").unwrap();
@@ -5649,6 +5901,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35056.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_58<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: UNSIGNED_NORMALIZED
     {
         let name = v8::String::new(scope, "UNSIGNED_NORMALIZED").unwrap();
@@ -5709,6 +5964,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36066.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_59<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: COLOR_ATTACHMENT3
     {
         let name = v8::String::new(scope, "COLOR_ATTACHMENT3").unwrap();
@@ -5769,6 +6027,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36076.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_60<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: COLOR_ATTACHMENT13
     {
         let name = v8::String::new(scope, "COLOR_ATTACHMENT13").unwrap();
@@ -5829,6 +6090,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 33323.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_61<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: R16F
     {
         let name = v8::String::new(scope, "R16F").unwrap();
@@ -5889,6 +6153,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 33334.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_62<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RG8I
     {
         let name = v8::String::new(scope, "RG8I").unwrap();
@@ -5949,6 +6216,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36758.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_63<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RGBA8_SNORM
     {
         let name = v8::String::new(scope, "RGBA8_SNORM").unwrap();
@@ -6009,6 +6279,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35370.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_64<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_VERTEX_UNIFORM_BLOCKS
     {
         let name = v8::String::new(scope, "MAX_VERTEX_UNIFORM_BLOCKS").unwrap();
@@ -6069,6 +6342,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35383.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_65<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: UNIFORM_SIZE
     {
         let name = v8::String::new(scope, "UNIFORM_SIZE").unwrap();
@@ -6129,6 +6405,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35395.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_66<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER
     {
         let name = v8::String::new(scope, "UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER").unwrap();
@@ -6189,6 +6468,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 37141.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_67<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SYNC_FENCE
     {
         let name = v8::String::new(scope, "SYNC_FENCE").unwrap();
@@ -6249,6 +6531,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35070.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_68<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: ANY_SAMPLES_PASSED
     {
         let name = v8::String::new(scope, "ANY_SAMPLES_PASSED").unwrap();
@@ -6309,6 +6594,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let val = v8::Number::new(scope, 37167.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl2rendering_context_members_69<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_ELEMENT_INDEX
     {
         let name = v8::String::new(scope, "MAX_ELEMENT_INDEX").unwrap();
@@ -6375,6 +6663,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_70<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: readBuffer()
     {
         let name = v8::String::new(scope, "readBuffer").unwrap();
@@ -6445,6 +6736,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_71<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getFragDataLocation()
     {
         let name = v8::String::new(scope, "getFragDataLocation").unwrap();
@@ -6515,6 +6809,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_72<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: uniformMatrix4x2fv()
     {
         let name = v8::String::new(scope, "uniformMatrix4x2fv").unwrap();
@@ -6585,6 +6882,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_73<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: vertexAttribDivisor()
     {
         let name = v8::String::new(scope, "vertexAttribDivisor").unwrap();
@@ -6655,6 +6955,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_74<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: deleteQuery()
     {
         let name = v8::String::new(scope, "deleteQuery").unwrap();
@@ -6725,6 +7028,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_75<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: samplerParameteri()
     {
         let name = v8::String::new(scope, "samplerParameteri").unwrap();
@@ -6795,6 +7101,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_76<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: deleteTransformFeedback()
     {
         let name = v8::String::new(scope, "deleteTransformFeedback").unwrap();
@@ -6865,6 +7174,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_77<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: bindBufferRange()
     {
         let name = v8::String::new(scope, "bindBufferRange").unwrap();
@@ -6935,6 +7247,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_78<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: isVertexArray()
     {
         let name = v8::String::new(scope, "isVertexArray").unwrap();
@@ -7005,6 +7320,9 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl2rendering_context_members_79<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: uniform3fv()
     {
         let name = v8::String::new(scope, "uniform3fv").unwrap();
@@ -7075,9 +7393,8 @@ pub fn create_web_gl2rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn web_gl_active_info_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -8492,6 +8809,55 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let tag_val = v8::String::new(scope, "WebGLRenderingContext").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_web_gl_rendering_context_members_1(scope, proto);
+    install_web_gl_rendering_context_members_2(scope, proto);
+    install_web_gl_rendering_context_members_3(scope, proto);
+    install_web_gl_rendering_context_members_4(scope, proto);
+    install_web_gl_rendering_context_members_5(scope, proto);
+    install_web_gl_rendering_context_members_6(scope, proto);
+    install_web_gl_rendering_context_members_7(scope, proto);
+    install_web_gl_rendering_context_members_8(scope, proto);
+    install_web_gl_rendering_context_members_9(scope, proto);
+    install_web_gl_rendering_context_members_10(scope, proto);
+    install_web_gl_rendering_context_members_11(scope, proto);
+    install_web_gl_rendering_context_members_12(scope, proto);
+    install_web_gl_rendering_context_members_13(scope, proto);
+    install_web_gl_rendering_context_members_14(scope, proto);
+    install_web_gl_rendering_context_members_15(scope, proto);
+    install_web_gl_rendering_context_members_16(scope, proto);
+    install_web_gl_rendering_context_members_17(scope, proto);
+    install_web_gl_rendering_context_members_18(scope, proto);
+    install_web_gl_rendering_context_members_19(scope, proto);
+    install_web_gl_rendering_context_members_20(scope, proto);
+    install_web_gl_rendering_context_members_21(scope, proto);
+    install_web_gl_rendering_context_members_22(scope, proto);
+    install_web_gl_rendering_context_members_23(scope, proto);
+    install_web_gl_rendering_context_members_24(scope, proto);
+    install_web_gl_rendering_context_members_25(scope, proto);
+    install_web_gl_rendering_context_members_26(scope, proto);
+    install_web_gl_rendering_context_members_27(scope, proto);
+    install_web_gl_rendering_context_members_28(scope, proto);
+    install_web_gl_rendering_context_members_29(scope, proto);
+    install_web_gl_rendering_context_members_30(scope, proto);
+    install_web_gl_rendering_context_members_31(scope, proto);
+    install_web_gl_rendering_context_members_32(scope, proto);
+    install_web_gl_rendering_context_members_33(scope, proto);
+    install_web_gl_rendering_context_members_34(scope, proto);
+    install_web_gl_rendering_context_members_35(scope, proto);
+    install_web_gl_rendering_context_members_36(scope, proto);
+    install_web_gl_rendering_context_members_37(scope, proto);
+    install_web_gl_rendering_context_members_38(scope, proto);
+    install_web_gl_rendering_context_members_39(scope, proto);
+    install_web_gl_rendering_context_members_40(scope, proto);
+    install_web_gl_rendering_context_members_41(scope, proto);
+    install_web_gl_rendering_context_members_42(scope, proto);
+    install_web_gl_rendering_context_members_43(scope, proto);
+    install_web_gl_rendering_context_members_44(scope, proto);
+
+    tmpl
+}
+
+fn install_web_gl_rendering_context_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DEPTH_BUFFER_BIT
     {
         let name = v8::String::new(scope, "DEPTH_BUFFER_BIT").unwrap();
@@ -8552,6 +8918,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 6.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: ZERO
     {
         let name = v8::String::new(scope, "ZERO").unwrap();
@@ -8612,6 +8981,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 775.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SRC_ALPHA_SATURATE
     {
         let name = v8::String::new(scope, "SRC_ALPHA_SATURATE").unwrap();
@@ -8672,6 +9044,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32970.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: BLEND_SRC_ALPHA
     {
         let name = v8::String::new(scope, "BLEND_SRC_ALPHA").unwrap();
@@ -8732,6 +9107,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34965.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: STREAM_DRAW
     {
         let name = v8::String::new(scope, "STREAM_DRAW").unwrap();
@@ -8792,6 +9170,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 2884.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: BLEND
     {
         let name = v8::String::new(scope, "BLEND").unwrap();
@@ -8852,6 +9233,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 1280.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INVALID_VALUE
     {
         let name = v8::String::new(scope, "INVALID_VALUE").unwrap();
@@ -8912,6 +9296,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 2886.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: DEPTH_RANGE
     {
         let name = v8::String::new(scope, "DEPTH_RANGE").unwrap();
@@ -8972,6 +9359,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 2967.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: STENCIL_VALUE_MASK
     {
         let name = v8::String::new(scope, "STENCIL_VALUE_MASK").unwrap();
@@ -9032,6 +9422,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 2978.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SCISSOR_BOX
     {
         let name = v8::String::new(scope, "SCISSOR_BOX").unwrap();
@@ -9092,6 +9485,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 3411.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: BLUE_BITS
     {
         let name = v8::String::new(scope, "BLUE_BITS").unwrap();
@@ -9152,6 +9548,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32938.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SAMPLE_COVERAGE_INVERT
     {
         let name = v8::String::new(scope, "SAMPLE_COVERAGE_INVERT").unwrap();
@@ -9212,6 +9611,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 5123.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_13<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INT
     {
         let name = v8::String::new(scope, "INT").unwrap();
@@ -9272,6 +9674,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32819.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_14<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: UNSIGNED_SHORT_5_5_5_1
     {
         let name = v8::String::new(scope, "UNSIGNED_SHORT_5_5_5_1").unwrap();
@@ -9332,6 +9737,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34930.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_15<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_FRAGMENT_UNIFORM_VECTORS
     {
         let name = v8::String::new(scope, "MAX_FRAGMENT_UNIFORM_VECTORS").unwrap();
@@ -9392,6 +9800,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35725.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_16<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: NEVER
     {
         let name = v8::String::new(scope, "NEVER").unwrap();
@@ -9452,6 +9863,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 7681.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_17<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INCR
     {
         let name = v8::String::new(scope, "INCR").unwrap();
@@ -9512,6 +9926,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 9729.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_18<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: NEAREST_MIPMAP_NEAREST
     {
         let name = v8::String::new(scope, "NEAREST_MIPMAP_NEAREST").unwrap();
@@ -9572,6 +9989,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 5890.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_19<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE_CUBE_MAP
     {
         let name = v8::String::new(scope, "TEXTURE_CUBE_MAP").unwrap();
@@ -9632,6 +10052,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 33984.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_20<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE1
     {
         let name = v8::String::new(scope, "TEXTURE1").unwrap();
@@ -9692,6 +10115,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 33994.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_21<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE11
     {
         let name = v8::String::new(scope, "TEXTURE11").unwrap();
@@ -9752,6 +10178,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34004.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_22<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE21
     {
         let name = v8::String::new(scope, "TEXTURE21").unwrap();
@@ -9812,6 +10241,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 34014.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_23<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: TEXTURE31
     {
         let name = v8::String::new(scope, "TEXTURE31").unwrap();
@@ -9872,6 +10304,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35668.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_24<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: INT_VEC4
     {
         let name = v8::String::new(scope, "INT_VEC4").unwrap();
@@ -9932,6 +10367,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35680.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_25<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: VERTEX_ATTRIB_ARRAY_ENABLED
     {
         let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_ENABLED").unwrap();
@@ -9992,6 +10430,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 35713.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_26<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: LOW_FLOAT
     {
         let name = v8::String::new(scope, "LOW_FLOAT").unwrap();
@@ -10052,6 +10493,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 32855.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_27<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RGBA8
     {
         let name = v8::String::new(scope, "RGBA8").unwrap();
@@ -10112,6 +10556,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36177.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_28<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: RENDERBUFFER_BLUE_SIZE
     {
         let name = v8::String::new(scope, "RENDERBUFFER_BLUE_SIZE").unwrap();
@@ -10172,6 +10619,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36096.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_29<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: STENCIL_ATTACHMENT
     {
         let name = v8::String::new(scope, "STENCIL_ATTACHMENT").unwrap();
@@ -10232,6 +10682,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let val = v8::Number::new(scope, 36007.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_web_gl_rendering_context_members_30<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MAX_RENDERBUFFER_SIZE
     {
         let name = v8::String::new(scope, "MAX_RENDERBUFFER_SIZE").unwrap();
@@ -10292,6 +10745,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_web_gl_rendering_context_members_31<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: drawingBufferFormat
     {
         let name = v8::String::new(scope, "drawingBufferFormat").unwrap();
@@ -10361,6 +10817,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_32<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: bindAttribLocation()
     {
         let name = v8::String::new(scope, "bindAttribLocation").unwrap();
@@ -10431,6 +10890,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_33<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: checkFramebufferStatus()
     {
         let name = v8::String::new(scope, "checkFramebufferStatus").unwrap();
@@ -10501,6 +10963,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_34<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createFramebuffer()
     {
         let name = v8::String::new(scope, "createFramebuffer").unwrap();
@@ -10571,6 +11036,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_35<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: deleteShader()
     {
         let name = v8::String::new(scope, "deleteShader").unwrap();
@@ -10641,6 +11109,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_36<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: enable()
     {
         let name = v8::String::new(scope, "enable").unwrap();
@@ -10711,6 +11182,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_37<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getAttachedShaders()
     {
         let name = v8::String::new(scope, "getAttachedShaders").unwrap();
@@ -10781,6 +11255,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_38<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getShaderPrecisionFormat()
     {
         let name = v8::String::new(scope, "getShaderPrecisionFormat").unwrap();
@@ -10851,6 +11328,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_39<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: isEnabled()
     {
         let name = v8::String::new(scope, "isEnabled").unwrap();
@@ -10921,6 +11401,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_40<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: renderbufferStorage()
     {
         let name = v8::String::new(scope, "renderbufferStorage").unwrap();
@@ -10991,6 +11474,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_41<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: texParameterf()
     {
         let name = v8::String::new(scope, "texParameterf").unwrap();
@@ -11061,6 +11547,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_42<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: useProgram()
     {
         let name = v8::String::new(scope, "useProgram").unwrap();
@@ -11131,6 +11620,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_43<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: vertexAttribPointer()
     {
         let name = v8::String::new(scope, "vertexAttribPointer").unwrap();
@@ -11201,6 +11693,9 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_web_gl_rendering_context_members_44<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: uniform2fv()
     {
         let name = v8::String::new(scope, "uniform2fv").unwrap();
@@ -11271,9 +11766,8 @@ pub fn create_web_gl_rendering_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn web_gl_shader_precision_format_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

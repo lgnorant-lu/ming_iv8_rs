@@ -343,6 +343,13 @@ pub fn create_css_rule_template<'s>(
         let tag_val = v8::String::new(scope, "CSSRule").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_css_rule_members_1(scope, proto);
+    install_css_rule_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_css_rule_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: cssText
     {
         let name = v8::String::new(scope, "cssText").unwrap();
@@ -404,6 +411,9 @@ pub fn create_css_rule_template<'s>(
         let val = v8::Number::new(scope, 6.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_css_rule_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: MARGIN_RULE
     {
         let name = v8::String::new(scope, "MARGIN_RULE").unwrap();
@@ -446,9 +456,8 @@ pub fn create_css_rule_template<'s>(
         let val = v8::Number::new(scope, 14.0).into();
         proto.set(name.into(), val);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn css_rule_list_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1954,6 +1963,13 @@ pub fn create_css_counter_style_rule_template<'s>(
         let tag_val = v8::String::new(scope, "CSSCounterStyleRule").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_css_counter_style_rule_members_1(scope, proto);
+    install_css_counter_style_rule_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_css_counter_style_rule_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
@@ -2024,6 +2040,9 @@ pub fn create_css_counter_style_rule_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_counter_style_rule_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_counter_style_rule_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: fallback
     {
         let name = v8::String::new(scope, "fallback").unwrap();
@@ -2031,9 +2050,8 @@ pub fn create_css_counter_style_rule_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_counter_style_rule_set_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn css_custom_media_rule_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -3664,6 +3682,16 @@ pub fn create_css_font_face_descriptors_template<'s>(
         let tag_val = v8::String::new(scope, "CSSFontFaceDescriptors").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_css_font_face_descriptors_members_1(scope, proto);
+    install_css_font_face_descriptors_members_2(scope, proto);
+    install_css_font_face_descriptors_members_3(scope, proto);
+    install_css_font_face_descriptors_members_4(scope, proto);
+    install_css_font_face_descriptors_members_5(scope, proto);
+
+    tmpl
+}
+
+fn install_css_font_face_descriptors_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
@@ -3734,6 +3762,9 @@ pub fn create_css_font_face_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_font_face_descriptors_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_font_face_descriptors_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: font-width
     {
         let name = v8::String::new(scope, "font-width").unwrap();
@@ -3804,6 +3835,9 @@ pub fn create_css_font_face_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_font_face_descriptors_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_font_face_descriptors_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: font-variation-settings
     {
         let name = v8::String::new(scope, "font-variation-settings").unwrap();
@@ -3874,6 +3908,9 @@ pub fn create_css_font_face_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_font_face_descriptors_set_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_font_face_descriptors_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: descent-override
     {
         let name = v8::String::new(scope, "descent-override").unwrap();
@@ -3944,6 +3981,9 @@ pub fn create_css_font_face_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_font_face_descriptors_set_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_font_face_descriptors_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: subscript-size-override
     {
         let name = v8::String::new(scope, "subscript-size-override").unwrap();
@@ -3951,9 +3991,8 @@ pub fn create_css_font_face_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_font_face_descriptors_set_41).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn css_function_descriptors_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -4197,6 +4236,13 @@ pub fn create_css_page_descriptors_template<'s>(
         let tag_val = v8::String::new(scope, "CSSPageDescriptors").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_css_page_descriptors_members_1(scope, proto);
+    install_css_page_descriptors_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_css_page_descriptors_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: margin
     {
         let name = v8::String::new(scope, "margin").unwrap();
@@ -4267,6 +4313,9 @@ pub fn create_css_page_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_page_descriptors_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_page_descriptors_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: pageOrientation
     {
         let name = v8::String::new(scope, "pageOrientation").unwrap();
@@ -4295,9 +4344,8 @@ pub fn create_css_page_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_page_descriptors_set_14).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn css_position_try_descriptors_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -5227,6 +5275,18 @@ pub fn create_css_position_try_descriptors_template<'s>(
         let tag_val = v8::String::new(scope, "CSSPositionTryDescriptors").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_css_position_try_descriptors_members_1(scope, proto);
+    install_css_position_try_descriptors_members_2(scope, proto);
+    install_css_position_try_descriptors_members_3(scope, proto);
+    install_css_position_try_descriptors_members_4(scope, proto);
+    install_css_position_try_descriptors_members_5(scope, proto);
+    install_css_position_try_descriptors_members_6(scope, proto);
+    install_css_position_try_descriptors_members_7(scope, proto);
+
+    tmpl
+}
+
+fn install_css_position_try_descriptors_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: margin
     {
         let name = v8::String::new(scope, "margin").unwrap();
@@ -5297,6 +5357,9 @@ pub fn create_css_position_try_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_position_try_descriptors_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_position_try_descriptors_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: marginInlineEnd
     {
         let name = v8::String::new(scope, "marginInlineEnd").unwrap();
@@ -5367,6 +5430,9 @@ pub fn create_css_position_try_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_position_try_descriptors_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_position_try_descriptors_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: margin-inline-end
     {
         let name = v8::String::new(scope, "margin-inline-end").unwrap();
@@ -5437,6 +5503,9 @@ pub fn create_css_position_try_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_position_try_descriptors_set_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_position_try_descriptors_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: right
     {
         let name = v8::String::new(scope, "right").unwrap();
@@ -5507,6 +5576,9 @@ pub fn create_css_position_try_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_position_try_descriptors_set_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_position_try_descriptors_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: maxWidth
     {
         let name = v8::String::new(scope, "maxWidth").unwrap();
@@ -5577,6 +5649,9 @@ pub fn create_css_position_try_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_position_try_descriptors_set_50).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_position_try_descriptors_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: min-width
     {
         let name = v8::String::new(scope, "min-width").unwrap();
@@ -5647,6 +5722,9 @@ pub fn create_css_position_try_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_position_try_descriptors_set_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_css_position_try_descriptors_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: placeSelf
     {
         let name = v8::String::new(scope, "placeSelf").unwrap();
@@ -5717,9 +5795,8 @@ pub fn create_css_position_try_descriptors_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(css_position_try_descriptors_set_70).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn css_style_properties_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -5982,6 +6059,13 @@ pub fn create_css_numeric_value_template<'s>(
         let tag_val = v8::String::new(scope, "CSSNumericValue").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_css_numeric_value_members_1(scope, proto);
+    install_css_numeric_value_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_css_numeric_value_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: add()
     {
         let name = v8::String::new(scope, "add").unwrap();
@@ -6052,6 +6136,9 @@ pub fn create_css_numeric_value_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_css_numeric_value_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: parse()
     {
         let name = v8::String::new(scope, "parse").unwrap();
@@ -6059,9 +6146,8 @@ pub fn create_css_numeric_value_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn css_transform_value_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

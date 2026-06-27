@@ -129,6 +129,13 @@ pub fn create_gamepad_template<'s>(
         let tag_val = v8::String::new(scope, "Gamepad").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_gamepad_members_1(scope, proto);
+    install_gamepad_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_gamepad_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
@@ -189,6 +196,9 @@ pub fn create_gamepad_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(gamepad_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_gamepad_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: hapticActuators
     {
         let name = v8::String::new(scope, "hapticActuators").unwrap();
@@ -201,9 +211,8 @@ pub fn create_gamepad_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(gamepad_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn gamepad_button_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

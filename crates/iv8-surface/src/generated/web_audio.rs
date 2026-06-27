@@ -420,6 +420,13 @@ pub fn create_audio_listener_template<'s>(
         let tag_val = v8::String::new(scope, "AudioListener").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_audio_listener_members_1(scope, proto);
+    install_audio_listener_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_audio_listener_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: positionX
     {
         let name = v8::String::new(scope, "positionX").unwrap();
@@ -481,6 +488,9 @@ pub fn create_audio_listener_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_audio_listener_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: setOrientation()
     {
         let name = v8::String::new(scope, "setOrientation").unwrap();
@@ -488,9 +498,8 @@ pub fn create_audio_listener_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn audio_param_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -623,6 +632,13 @@ pub fn create_audio_param_template<'s>(
         let tag_val = v8::String::new(scope, "AudioParam").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_audio_param_members_1(scope, proto);
+    install_audio_param_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_audio_param_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
@@ -690,6 +706,9 @@ pub fn create_audio_param_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_audio_param_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: cancelScheduledValues()
     {
         let name = v8::String::new(scope, "cancelScheduledValues").unwrap();
@@ -704,9 +723,8 @@ pub fn create_audio_param_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for AudioParamMap.
 pub fn create_audio_param_map_template<'s>(
@@ -1551,6 +1569,13 @@ pub fn create_audio_node_template<'s>(
         let tag_val = v8::String::new(scope, "AudioNode").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_audio_node_members_1(scope, proto);
+    install_audio_node_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_audio_node_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: connect()
     {
         let name = v8::String::new(scope, "connect").unwrap();
@@ -1620,6 +1645,9 @@ pub fn create_audio_node_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(audio_node_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_audio_node_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: numberOfInputs
     {
         let name = v8::String::new(scope, "numberOfInputs").unwrap();
@@ -1653,9 +1681,8 @@ pub fn create_audio_node_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(audio_node_set_15).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn audio_session_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2128,6 +2155,14 @@ pub fn create_base_audio_context_template<'s>(
         let tag_val = v8::String::new(scope, "BaseAudioContext").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_base_audio_context_members_1(scope, proto);
+    install_base_audio_context_members_2(scope, proto);
+    install_base_audio_context_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_base_audio_context_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: destination
     {
         let name = v8::String::new(scope, "destination").unwrap();
@@ -2191,6 +2226,9 @@ pub fn create_base_audio_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_base_audio_context_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createBuffer()
     {
         let name = v8::String::new(scope, "createBuffer").unwrap();
@@ -2261,6 +2299,9 @@ pub fn create_base_audio_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_base_audio_context_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createOscillator()
     {
         let name = v8::String::new(scope, "createOscillator").unwrap();
@@ -2310,9 +2351,8 @@ pub fn create_base_audio_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn audio_worklet_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -3000,6 +3040,13 @@ pub fn create_audio_context_template<'s>(
         let tag_val = v8::String::new(scope, "AudioContext").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_audio_context_members_1(scope, proto);
+    install_audio_context_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_audio_context_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: baseLatency
     {
         let name = v8::String::new(scope, "baseLatency").unwrap();
@@ -3066,6 +3113,9 @@ pub fn create_audio_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_audio_context_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: setSinkId()
     {
         let name = v8::String::new(scope, "setSinkId").unwrap();
@@ -3101,9 +3151,8 @@ pub fn create_audio_context_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn offline_audio_context_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

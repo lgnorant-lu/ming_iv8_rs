@@ -465,6 +465,13 @@ pub fn create_idb_index_template<'s>(
         let tag_val = v8::String::new(scope, "IDBIndex").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_idb_index_members_1(scope, proto);
+    install_idb_index_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_idb_index_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
@@ -531,6 +538,9 @@ pub fn create_idb_index_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_idb_index_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: count()
     {
         let name = v8::String::new(scope, "count").unwrap();
@@ -552,9 +562,8 @@ pub fn create_idb_index_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn idb_key_range_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -914,6 +923,13 @@ pub fn create_idb_object_store_template<'s>(
         let tag_val = v8::String::new(scope, "IDBObjectStore").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_idb_object_store_members_1(scope, proto);
+    install_idb_object_store_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_idb_object_store_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
@@ -980,6 +996,9 @@ pub fn create_idb_object_store_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_idb_object_store_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getKey()
     {
         let name = v8::String::new(scope, "getKey").unwrap();
@@ -1050,9 +1069,8 @@ pub fn create_idb_object_store_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn idb_record_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1251,6 +1269,13 @@ pub fn create_idb_database_template<'s>(
         let tag_val = v8::String::new(scope, "IDBDatabase").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_idb_database_members_1(scope, proto);
+    install_idb_database_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_idb_database_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
@@ -1318,6 +1343,9 @@ pub fn create_idb_database_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(idb_database_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_idb_database_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onversionchange
     {
         let name = v8::String::new(scope, "onversionchange").unwrap();
@@ -1325,9 +1353,8 @@ pub fn create_idb_database_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(idb_database_set_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn idb_request_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1595,6 +1622,13 @@ pub fn create_idb_transaction_template<'s>(
         let tag_val = v8::String::new(scope, "IDBTransaction").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_idb_transaction_members_1(scope, proto);
+    install_idb_transaction_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_idb_transaction_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: objectStoreNames
     {
         let name = v8::String::new(scope, "objectStoreNames").unwrap();
@@ -1660,6 +1694,9 @@ pub fn create_idb_transaction_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(idb_transaction_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_idb_transaction_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
@@ -1667,9 +1704,8 @@ pub fn create_idb_transaction_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(idb_transaction_set_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn idb_cursor_with_value_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

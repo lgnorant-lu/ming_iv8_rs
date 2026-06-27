@@ -315,6 +315,13 @@ pub fn create_presentation_connection_template<'s>(
         let tag_val = v8::String::new(scope, "PresentationConnection").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_presentation_connection_members_1(scope, proto);
+    install_presentation_connection_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_presentation_connection_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
@@ -382,6 +389,9 @@ pub fn create_presentation_connection_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_presentation_connection_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: send()
     {
         let name = v8::String::new(scope, "send").unwrap();
@@ -410,9 +420,8 @@ pub fn create_presentation_connection_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn presentation_connection_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

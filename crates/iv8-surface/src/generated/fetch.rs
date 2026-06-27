@@ -526,6 +526,14 @@ pub fn create_request_template<'s>(
         let tag_val = v8::String::new(scope, "Request").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_request_members_1(scope, proto);
+    install_request_members_2(scope, proto);
+    install_request_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_request_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: method
     {
         let name = v8::String::new(scope, "method").unwrap();
@@ -586,6 +594,9 @@ pub fn create_request_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(request_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_request_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: integrity
     {
         let name = v8::String::new(scope, "integrity").unwrap();
@@ -647,6 +658,9 @@ pub fn create_request_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(request_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_request_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: arrayBuffer()
     {
         let name = v8::String::new(scope, "arrayBuffer").unwrap();
@@ -696,9 +710,8 @@ pub fn create_request_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn response_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -886,6 +899,13 @@ pub fn create_response_template<'s>(
         let tag_val = v8::String::new(scope, "Response").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_response_members_1(scope, proto);
+    install_response_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_response_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: error()
     {
         let name = v8::String::new(scope, "error").unwrap();
@@ -949,6 +969,9 @@ pub fn create_response_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(response_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_response_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: clone()
     {
         let name = v8::String::new(scope, "clone").unwrap();
@@ -1010,7 +1033,6 @@ pub fn create_response_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 

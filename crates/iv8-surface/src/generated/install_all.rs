@@ -9,7 +9,7 @@ use v8::FunctionTemplate;
 pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
     let mut templates: std::collections::HashMap<&str, v8::Global<FunctionTemplate>> = std::collections::HashMap::new();
 
-    // Batch 1: 100 templates
+    // Batch 1: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_angle_instanced_arrays = super::web_apis::create_angle_instanced_arrays_template(scope, None);
@@ -22,6 +22,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AnimationEffect", v8::Global::new(scope, tmpl_animation_effect));
         let tmpl_animation_node_list = super::web_apis::create_animation_node_list_template(scope, None);
         templates.insert("AnimationNodeList", v8::Global::new(scope, tmpl_animation_node_list));
+    } // end batch
+    // Batch 2: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_animation_timeline = super::web_apis::create_animation_timeline_template(scope, None);
         templates.insert("AnimationTimeline", v8::Global::new(scope, tmpl_animation_timeline));
         let tmpl_animation_trigger = super::web_apis::create_animation_trigger_template(scope, None);
@@ -32,6 +36,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AttributionAggregationServices", v8::Global::new(scope, tmpl_attribution_aggregation_services));
         let tmpl_audio_buffer = super::web_audio::create_audio_buffer_template(scope, None);
         templates.insert("AudioBuffer", v8::Global::new(scope, tmpl_audio_buffer));
+    } // end batch
+    // Batch 3: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_audio_data = super::web_audio::create_audio_data_template(scope, None);
         templates.insert("AudioData", v8::Global::new(scope, tmpl_audio_data));
         let tmpl_audio_listener = super::web_audio::create_audio_listener_template(scope, None);
@@ -42,6 +50,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AudioParamMap", v8::Global::new(scope, tmpl_audio_param_map));
         let tmpl_audio_playback_stats = super::web_audio::create_audio_playback_stats_template(scope, None);
         templates.insert("AudioPlaybackStats", v8::Global::new(scope, tmpl_audio_playback_stats));
+    } // end batch
+    // Batch 4: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_audio_sink_info = super::web_audio::create_audio_sink_info_template(scope, None);
         templates.insert("AudioSinkInfo", v8::Global::new(scope, tmpl_audio_sink_info));
         let tmpl_audio_track = super::web_audio::create_audio_track_template(scope, None);
@@ -52,6 +64,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AuthenticatorResponse", v8::Global::new(scope, tmpl_authenticator_response));
         let tmpl_background_fetch_manager = super::web_apis::create_background_fetch_manager_template(scope, None);
         templates.insert("BackgroundFetchManager", v8::Global::new(scope, tmpl_background_fetch_manager));
+    } // end batch
+    // Batch 5: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_background_fetch_record = super::web_apis::create_background_fetch_record_template(scope, None);
         templates.insert("BackgroundFetchRecord", v8::Global::new(scope, tmpl_background_fetch_record));
         let tmpl_bar_prop = super::web_apis::create_bar_prop_template(scope, None);
@@ -62,6 +78,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Baseline", v8::Global::new(scope, tmpl_baseline));
         let tmpl_blob = super::web_apis::create_blob_template(scope, None);
         templates.insert("Blob", v8::Global::new(scope, tmpl_blob));
+    } // end batch
+    // Batch 6: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_bluetooth_characteristic_properties = super::bluetooth::create_bluetooth_characteristic_properties_template(scope, None);
         templates.insert("BluetoothCharacteristicProperties", v8::Global::new(scope, tmpl_bluetooth_characteristic_properties));
         let tmpl_bluetooth_data_filter = super::bluetooth::create_bluetooth_data_filter_template(scope, None);
@@ -72,6 +92,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("BluetoothLEScanFilter", v8::Global::new(scope, tmpl_bluetooth_le_scan_filter));
         let tmpl_bluetooth_manufacturer_data_filter = super::bluetooth::create_bluetooth_manufacturer_data_filter_template(scope, None);
         templates.insert("BluetoothManufacturerDataFilter", v8::Global::new(scope, tmpl_bluetooth_manufacturer_data_filter));
+    } // end batch
+    // Batch 7: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_bluetooth_manufacturer_data_map = super::bluetooth::create_bluetooth_manufacturer_data_map_template(scope, None);
         templates.insert("BluetoothManufacturerDataMap", v8::Global::new(scope, tmpl_bluetooth_manufacturer_data_map));
         let tmpl_bluetooth_remote_gatt_descriptor = super::bluetooth::create_bluetooth_remote_gatt_descriptor_template(scope, None);
@@ -82,6 +106,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("BluetoothServiceDataFilter", v8::Global::new(scope, tmpl_bluetooth_service_data_filter));
         let tmpl_bluetooth_service_data_map = super::bluetooth::create_bluetooth_service_data_map_template(scope, None);
         templates.insert("BluetoothServiceDataMap", v8::Global::new(scope, tmpl_bluetooth_service_data_map));
+    } // end batch
+    // Batch 8: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_bluetooth_uuid = super::bluetooth::create_bluetooth_uuid_template(scope, None);
         templates.insert("BluetoothUUID", v8::Global::new(scope, tmpl_bluetooth_uuid));
         let tmpl_break_token = super::web_apis::create_break_token_template(scope, None);
@@ -92,6 +120,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSFontFeatureValuesMap", v8::Global::new(scope, tmpl_css_font_feature_values_map));
         let tmpl_css_numeric_array = super::css_om::create_css_numeric_array_template(scope, None);
         templates.insert("CSSNumericArray", v8::Global::new(scope, tmpl_css_numeric_array));
+    } // end batch
+    // Batch 9: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_parser_rule = super::css_om::create_css_parser_rule_template(scope, None);
         templates.insert("CSSParserRule", v8::Global::new(scope, tmpl_css_parser_rule));
         let tmpl_css_parser_value = super::css_om::create_css_parser_value_template(scope, None);
@@ -102,6 +134,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSRule", v8::Global::new(scope, tmpl_css_rule));
         let tmpl_css_rule_list = super::css_om::create_css_rule_list_template(scope, None);
         templates.insert("CSSRuleList", v8::Global::new(scope, tmpl_css_rule_list));
+    } // end batch
+    // Batch 10: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_style_declaration = super::css_om::create_css_style_declaration_template(scope, None);
         templates.insert("CSSStyleDeclaration", v8::Global::new(scope, tmpl_css_style_declaration));
         let tmpl_css_style_value = super::css_om::create_css_style_value_template(scope, None);
@@ -112,6 +148,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSVariableReferenceValue", v8::Global::new(scope, tmpl_css_variable_reference_value));
         let tmpl_cache = super::cache_api::create_cache_template(scope, None);
         templates.insert("Cache", v8::Global::new(scope, tmpl_cache));
+    } // end batch
+    // Batch 11: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_cache_storage = super::cache_api::create_cache_storage_template(scope, None);
         templates.insert("CacheStorage", v8::Global::new(scope, tmpl_cache_storage));
         let tmpl_canvas_gradient = super::web_apis::create_canvas_gradient_template(scope, None);
@@ -122,6 +162,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CanvasRenderingContext2D", v8::Global::new(scope, tmpl_canvas_rendering_context2d));
         let tmpl_caret_position = super::web_apis::create_caret_position_template(scope, None);
         templates.insert("CaretPosition", v8::Global::new(scope, tmpl_caret_position));
+    } // end batch
+    // Batch 12: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chapter_information = super::web_apis::create_chapter_information_template(scope, None);
         templates.insert("ChapterInformation", v8::Global::new(scope, tmpl_chapter_information));
         let tmpl_child_break_token = super::web_apis::create_child_break_token_template(scope, None);
@@ -132,6 +176,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeAction", v8::Global::new(scope, tmpl_chrome_action));
         let tmpl_chrome_alarms = super::chrome_extensions::create_chrome_alarms_template(scope, None);
         templates.insert("ChromeAlarms", v8::Global::new(scope, tmpl_chrome_alarms));
+    } // end batch
+    // Batch 13: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_app = super::chrome_extensions::create_chrome_app_template(scope, None);
         templates.insert("ChromeApp", v8::Global::new(scope, tmpl_chrome_app));
         let tmpl_chrome_app_runtime = super::chrome_extensions::create_chrome_app_runtime_template(scope, None);
@@ -142,6 +190,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeAudio", v8::Global::new(scope, tmpl_chrome_audio));
         let tmpl_chrome_autofill_private = super::chrome_extensions::create_chrome_autofill_private_template(scope, None);
         templates.insert("ChromeAutofillPrivate", v8::Global::new(scope, tmpl_chrome_autofill_private));
+    } // end batch
+    // Batch 14: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_bluetooth = super::chrome_extensions::create_chrome_bluetooth_template(scope, None);
         templates.insert("ChromeBluetooth", v8::Global::new(scope, tmpl_chrome_bluetooth));
         let tmpl_chrome_bluetooth_low_energy = super::chrome_extensions::create_chrome_bluetooth_low_energy_template(scope, None);
@@ -152,6 +204,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeBookmarks", v8::Global::new(scope, tmpl_chrome_bookmarks));
         let tmpl_chrome_braille_display_private = super::chrome_extensions::create_chrome_braille_display_private_template(scope, None);
         templates.insert("ChromeBrailleDisplayPrivate", v8::Global::new(scope, tmpl_chrome_braille_display_private));
+    } // end batch
+    // Batch 15: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_browsing_data = super::chrome_extensions::create_chrome_browsing_data_template(scope, None);
         templates.insert("ChromeBrowsingData", v8::Global::new(scope, tmpl_chrome_browsing_data));
         let tmpl_chrome_csi = super::chrome_extensions::create_chrome_csi_template(scope, None);
@@ -162,6 +218,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeCastStreaming", v8::Global::new(scope, tmpl_chrome_cast_streaming));
         let tmpl_chrome_certificate_provider = super::chrome_extensions::create_chrome_certificate_provider_template(scope, None);
         templates.insert("ChromeCertificateProvider", v8::Global::new(scope, tmpl_chrome_certificate_provider));
+    } // end batch
+    // Batch 16: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_clipboard = super::chrome_extensions::create_chrome_clipboard_template(scope, None);
         templates.insert("ChromeClipboard", v8::Global::new(scope, tmpl_chrome_clipboard));
         let tmpl_chrome_command_line_private = super::chrome_extensions::create_chrome_command_line_private_template(scope, None);
@@ -172,6 +232,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeContentSettings", v8::Global::new(scope, tmpl_chrome_content_settings));
         let tmpl_chrome_context_menus = super::chrome_extensions::create_chrome_context_menus_template(scope, None);
         templates.insert("ChromeContextMenus", v8::Global::new(scope, tmpl_chrome_context_menus));
+    } // end batch
+    // Batch 17: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_cookies = super::chrome_extensions::create_chrome_cookies_template(scope, None);
         templates.insert("ChromeCookies", v8::Global::new(scope, tmpl_chrome_cookies));
         let tmpl_chrome_dom = super::chrome_extensions::create_chrome_dom_template(scope, None);
@@ -182,6 +246,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeDeclarativeContent", v8::Global::new(scope, tmpl_chrome_declarative_content));
         let tmpl_chrome_declarative_net_request = super::chrome_extensions::create_chrome_declarative_net_request_template(scope, None);
         templates.insert("ChromeDeclarativeNetRequest", v8::Global::new(scope, tmpl_chrome_declarative_net_request));
+    } // end batch
+    // Batch 18: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_desk_capture = super::chrome_extensions::create_chrome_desk_capture_template(scope, None);
         templates.insert("ChromeDeskCapture", v8::Global::new(scope, tmpl_chrome_desk_capture));
         let tmpl_chrome_desktop_capture = super::chrome_extensions::create_chrome_desktop_capture_template(scope, None);
@@ -192,6 +260,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeDiagnostics", v8::Global::new(scope, tmpl_chrome_diagnostics));
         let tmpl_chrome_display_source = super::chrome_extensions::create_chrome_display_source_template(scope, None);
         templates.insert("ChromeDisplaySource", v8::Global::new(scope, tmpl_chrome_display_source));
+    } // end batch
+    // Batch 19: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_dns = super::chrome_extensions::create_chrome_dns_template(scope, None);
         templates.insert("ChromeDns", v8::Global::new(scope, tmpl_chrome_dns));
         let tmpl_chrome_document_scan = super::chrome_extensions::create_chrome_document_scan_template(scope, None);
@@ -202,6 +274,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeEchoPrivate", v8::Global::new(scope, tmpl_chrome_echo_private));
         let tmpl_chrome_enterprise_hardware_platform = super::chrome_extensions::create_chrome_enterprise_hardware_platform_template(scope, None);
         templates.insert("ChromeEnterpriseHardwarePlatform", v8::Global::new(scope, tmpl_chrome_enterprise_hardware_platform));
+    } // end batch
+    // Batch 20: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_enterprise_ns = super::chrome_extensions::create_chrome_enterprise_ns_template(scope, None);
         templates.insert("ChromeEnterpriseNS", v8::Global::new(scope, tmpl_chrome_enterprise_ns));
         let tmpl_chrome_enterprise_platform_keys = super::chrome_extensions::create_chrome_enterprise_platform_keys_template(scope, None);
@@ -213,7 +289,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_chrome_experience_sampling_private = super::chrome_extensions::create_chrome_experience_sampling_private_template(scope, None);
         templates.insert("ChromeExperienceSamplingPrivate", v8::Global::new(scope, tmpl_chrome_experience_sampling_private));
     } // end batch
-    // Batch 2: 100 templates
+    // Batch 21: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_chrome_extension = super::chrome_extensions::create_chrome_extension_template(scope, None);
@@ -226,6 +302,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeFileSystemProvider", v8::Global::new(scope, tmpl_chrome_file_system_provider));
         let tmpl_chrome_first_run_private = super::chrome_extensions::create_chrome_first_run_private_template(scope, None);
         templates.insert("ChromeFirstRunPrivate", v8::Global::new(scope, tmpl_chrome_first_run_private));
+    } // end batch
+    // Batch 22: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_font_settings = super::chrome_extensions::create_chrome_font_settings_template(scope, None);
         templates.insert("ChromeFontSettings", v8::Global::new(scope, tmpl_chrome_font_settings));
         let tmpl_chrome_gcm = super::chrome_extensions::create_chrome_gcm_template(scope, None);
@@ -236,6 +316,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeHistory", v8::Global::new(scope, tmpl_chrome_history));
         let tmpl_chrome_hotword_private = super::chrome_extensions::create_chrome_hotword_private_template(scope, None);
         templates.insert("ChromeHotwordPrivate", v8::Global::new(scope, tmpl_chrome_hotword_private));
+    } // end batch
+    // Batch 23: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_i18n = super::chrome_extensions::create_chrome_i18n_template(scope, None);
         templates.insert("ChromeI18n", v8::Global::new(scope, tmpl_chrome_i18n));
         let tmpl_chrome_identity = super::chrome_extensions::create_chrome_identity_template(scope, None);
@@ -246,6 +330,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeIdentityPrivateAPI", v8::Global::new(scope, tmpl_chrome_identity_private_api));
         let tmpl_chrome_idle = super::chrome_extensions::create_chrome_idle_template(scope, None);
         templates.insert("ChromeIdle", v8::Global::new(scope, tmpl_chrome_idle));
+    } // end batch
+    // Batch 24: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_idle_private = super::chrome_extensions::create_chrome_idle_private_template(scope, None);
         templates.insert("ChromeIdlePrivate", v8::Global::new(scope, tmpl_chrome_idle_private));
         let tmpl_chrome_input_ime = super::chrome_extensions::create_chrome_input_ime_template(scope, None);
@@ -256,6 +344,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeInstanceID", v8::Global::new(scope, tmpl_chrome_instance_id));
         let tmpl_chrome_language_settings_private = super::chrome_extensions::create_chrome_language_settings_private_template(scope, None);
         templates.insert("ChromeLanguageSettingsPrivate", v8::Global::new(scope, tmpl_chrome_language_settings_private));
+    } // end batch
+    // Batch 25: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_load_times = super::chrome_extensions::create_chrome_load_times_template(scope, None);
         templates.insert("ChromeLoadTimes", v8::Global::new(scope, tmpl_chrome_load_times));
         let tmpl_chrome_location = super::chrome_extensions::create_chrome_location_template(scope, None);
@@ -266,6 +358,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeLoginState", v8::Global::new(scope, tmpl_chrome_login_state));
         let tmpl_chrome_management = super::chrome_extensions::create_chrome_management_template(scope, None);
         templates.insert("ChromeManagement", v8::Global::new(scope, tmpl_chrome_management));
+    } // end batch
+    // Batch 26: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_mdns = super::chrome_extensions::create_chrome_mdns_template(scope, None);
         templates.insert("ChromeMdns", v8::Global::new(scope, tmpl_chrome_mdns));
         let tmpl_chrome_media_galleries = super::chrome_extensions::create_chrome_media_galleries_template(scope, None);
@@ -276,6 +372,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeMidi", v8::Global::new(scope, tmpl_chrome_midi));
         let tmpl_chrome_music_manager_private = super::chrome_extensions::create_chrome_music_manager_private_template(scope, None);
         templates.insert("ChromeMusicManagerPrivate", v8::Global::new(scope, tmpl_chrome_music_manager_private));
+    } // end batch
+    // Batch 27: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_networking_config = super::chrome_extensions::create_chrome_networking_config_template(scope, None);
         templates.insert("ChromeNetworkingConfig", v8::Global::new(scope, tmpl_chrome_networking_config));
         let tmpl_chrome_networking_onc = super::chrome_extensions::create_chrome_networking_onc_template(scope, None);
@@ -286,6 +386,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeNotifications", v8::Global::new(scope, tmpl_chrome_notifications));
         let tmpl_chrome_offscreen = super::chrome_extensions::create_chrome_offscreen_template(scope, None);
         templates.insert("ChromeOffscreen", v8::Global::new(scope, tmpl_chrome_offscreen));
+    } // end batch
+    // Batch 28: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_omnibox = super::chrome_extensions::create_chrome_omnibox_template(scope, None);
         templates.insert("ChromeOmnibox", v8::Global::new(scope, tmpl_chrome_omnibox));
         let tmpl_chrome_page_capture = super::chrome_extensions::create_chrome_page_capture_template(scope, None);
@@ -296,6 +400,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromePermissions", v8::Global::new(scope, tmpl_chrome_permissions));
         let tmpl_chrome_platform_keys = super::chrome_extensions::create_chrome_platform_keys_template(scope, None);
         templates.insert("ChromePlatformKeys", v8::Global::new(scope, tmpl_chrome_platform_keys));
+    } // end batch
+    // Batch 29: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_port = super::chrome_extensions::create_chrome_port_template(scope, None);
         templates.insert("ChromePort", v8::Global::new(scope, tmpl_chrome_port));
         let tmpl_chrome_power = super::chrome_extensions::create_chrome_power_template(scope, None);
@@ -306,6 +414,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromePrintingAPI", v8::Global::new(scope, tmpl_chrome_printing_api));
         let tmpl_chrome_printing_metrics = super::chrome_extensions::create_chrome_printing_metrics_template(scope, None);
         templates.insert("ChromePrintingMetrics", v8::Global::new(scope, tmpl_chrome_printing_metrics));
+    } // end batch
+    // Batch 30: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_privacy = super::chrome_extensions::create_chrome_privacy_template(scope, None);
         templates.insert("ChromePrivacy", v8::Global::new(scope, tmpl_chrome_privacy));
         let tmpl_chrome_processes = super::chrome_extensions::create_chrome_processes_template(scope, None);
@@ -316,6 +428,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeQuickUnlockPrivate", v8::Global::new(scope, tmpl_chrome_quick_unlock_private));
         let tmpl_chrome_reading_list = super::chrome_extensions::create_chrome_reading_list_template(scope, None);
         templates.insert("ChromeReadingList", v8::Global::new(scope, tmpl_chrome_reading_list));
+    } // end batch
+    // Batch 31: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_resource_private = super::chrome_extensions::create_chrome_resource_private_template(scope, None);
         templates.insert("ChromeResourcePrivate", v8::Global::new(scope, tmpl_chrome_resource_private));
         let tmpl_chrome_runtime = super::chrome_extensions::create_chrome_runtime_template(scope, None);
@@ -326,6 +442,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeRuntimePrivate", v8::Global::new(scope, tmpl_chrome_runtime_private));
         let tmpl_chrome_safe_browsing_private = super::chrome_extensions::create_chrome_safe_browsing_private_template(scope, None);
         templates.insert("ChromeSafeBrowsingPrivate", v8::Global::new(scope, tmpl_chrome_safe_browsing_private));
+    } // end batch
+    // Batch 32: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_scripting = super::chrome_extensions::create_chrome_scripting_template(scope, None);
         templates.insert("ChromeScripting", v8::Global::new(scope, tmpl_chrome_scripting));
         let tmpl_chrome_search = super::chrome_extensions::create_chrome_search_template(scope, None);
@@ -336,6 +456,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeSessions", v8::Global::new(scope, tmpl_chrome_sessions));
         let tmpl_chrome_settings_private = super::chrome_extensions::create_chrome_settings_private_template(scope, None);
         templates.insert("ChromeSettingsPrivate", v8::Global::new(scope, tmpl_chrome_settings_private));
+    } // end batch
+    // Batch 33: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_side_panel = super::chrome_extensions::create_chrome_side_panel_template(scope, None);
         templates.insert("ChromeSidePanel", v8::Global::new(scope, tmpl_chrome_side_panel));
         let tmpl_chrome_signed_in_devices = super::chrome_extensions::create_chrome_signed_in_devices_template(scope, None);
@@ -346,6 +470,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeSpeechRecognitionPrivate", v8::Global::new(scope, tmpl_chrome_speech_recognition_private));
         let tmpl_chrome_storage = super::chrome_extensions::create_chrome_storage_template(scope, None);
         templates.insert("ChromeStorage", v8::Global::new(scope, tmpl_chrome_storage));
+    } // end batch
+    // Batch 34: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_storage_area = super::chrome_extensions::create_chrome_storage_area_template(scope, None);
         templates.insert("ChromeStorageArea", v8::Global::new(scope, tmpl_chrome_storage_area));
         let tmpl_chrome_storage_managed = super::chrome_extensions::create_chrome_storage_managed_template(scope, None);
@@ -356,6 +484,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeSystemCpu", v8::Global::new(scope, tmpl_chrome_system_cpu));
         let tmpl_chrome_system_display = super::chrome_extensions::create_chrome_system_display_template(scope, None);
         templates.insert("ChromeSystemDisplay", v8::Global::new(scope, tmpl_chrome_system_display));
+    } // end batch
+    // Batch 35: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_system_memory = super::chrome_extensions::create_chrome_system_memory_template(scope, None);
         templates.insert("ChromeSystemMemory", v8::Global::new(scope, tmpl_chrome_system_memory));
         let tmpl_chrome_system_ns = super::chrome_extensions::create_chrome_system_ns_template(scope, None);
@@ -366,6 +498,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeSystemStorage", v8::Global::new(scope, tmpl_chrome_system_storage));
         let tmpl_chrome_tab_capture = super::chrome_extensions::create_chrome_tab_capture_template(scope, None);
         templates.insert("ChromeTabCapture", v8::Global::new(scope, tmpl_chrome_tab_capture));
+    } // end batch
+    // Batch 36: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_tab_groups = super::chrome_extensions::create_chrome_tab_groups_template(scope, None);
         templates.insert("ChromeTabGroups", v8::Global::new(scope, tmpl_chrome_tab_groups));
         let tmpl_chrome_tabs = super::chrome_extensions::create_chrome_tabs_template(scope, None);
@@ -376,6 +512,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeTts", v8::Global::new(scope, tmpl_chrome_tts));
         let tmpl_chrome_tts_engine = super::chrome_extensions::create_chrome_tts_engine_template(scope, None);
         templates.insert("ChromeTtsEngine", v8::Global::new(scope, tmpl_chrome_tts_engine));
+    } // end batch
+    // Batch 37: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_types = super::chrome_extensions::create_chrome_types_template(scope, None);
         templates.insert("ChromeTypes", v8::Global::new(scope, tmpl_chrome_types));
         let tmpl_chrome_usb = super::chrome_extensions::create_chrome_usb_template(scope, None);
@@ -386,6 +526,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeVirtualKeyboardPrivate", v8::Global::new(scope, tmpl_chrome_virtual_keyboard_private));
         let tmpl_chrome_vpn_provider = super::chrome_extensions::create_chrome_vpn_provider_template(scope, None);
         templates.insert("ChromeVpnProvider", v8::Global::new(scope, tmpl_chrome_vpn_provider));
+    } // end batch
+    // Batch 38: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_wallpaper = super::chrome_extensions::create_chrome_wallpaper_template(scope, None);
         templates.insert("ChromeWallpaper", v8::Global::new(scope, tmpl_chrome_wallpaper));
         let tmpl_chrome_web_authentication_proxy = super::chrome_extensions::create_chrome_web_authentication_proxy_template(scope, None);
@@ -396,6 +540,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeWebRequest", v8::Global::new(scope, tmpl_chrome_web_request));
         let tmpl_chrome_web_view = super::chrome_extensions::create_chrome_web_view_template(scope, None);
         templates.insert("ChromeWebView", v8::Global::new(scope, tmpl_chrome_web_view));
+    } // end batch
+    // Batch 39: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_webrtc_audio_private = super::chrome_extensions::create_chrome_webrtc_audio_private_template(scope, None);
         templates.insert("ChromeWebrtcAudioPrivate", v8::Global::new(scope, tmpl_chrome_webrtc_audio_private));
         let tmpl_chrome_webrtc_desktop_capture_private = super::chrome_extensions::create_chrome_webrtc_desktop_capture_private_template(scope, None);
@@ -406,6 +554,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChromeWebstore", v8::Global::new(scope, tmpl_chrome_webstore));
         let tmpl_chrome_webstore_private = super::chrome_extensions::create_chrome_webstore_private_template(scope, None);
         templates.insert("ChromeWebstorePrivate", v8::Global::new(scope, tmpl_chrome_webstore_private));
+    } // end batch
+    // Batch 40: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_chrome_windows = super::chrome_extensions::create_chrome_windows_template(scope, None);
         templates.insert("ChromeWindows", v8::Global::new(scope, tmpl_chrome_windows));
         let tmpl_client = super::web_apis::create_client_template(scope, None);
@@ -417,7 +569,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_compression_stream = super::web_apis::create_compression_stream_template(scope, None);
         templates.insert("CompressionStream", v8::Global::new(scope, tmpl_compression_stream));
     } // end batch
-    // Batch 3: 100 templates
+    // Batch 41: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_contact_address = super::web_apis::create_contact_address_template(scope, None);
@@ -430,6 +582,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CookieStoreManager", v8::Global::new(scope, tmpl_cookie_store_manager));
         let tmpl_count_queuing_strategy = super::streams::create_count_queuing_strategy_template(scope, None);
         templates.insert("CountQueuingStrategy", v8::Global::new(scope, tmpl_count_queuing_strategy));
+    } // end batch
+    // Batch 42: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_crash_report_context = super::web_apis::create_crash_report_context_template(scope, None);
         templates.insert("CrashReportContext", v8::Global::new(scope, tmpl_crash_report_context));
         let tmpl_credential = super::credentials::create_credential_template(scope, None);
@@ -440,6 +596,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CropTarget", v8::Global::new(scope, tmpl_crop_target));
         let tmpl_crypto = super::crypto::create_crypto_template(scope, None);
         templates.insert("Crypto", v8::Global::new(scope, tmpl_crypto));
+    } // end batch
+    // Batch 43: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_crypto_key = super::crypto::create_crypto_key_template(scope, None);
         templates.insert("CryptoKey", v8::Global::new(scope, tmpl_crypto_key));
         let tmpl_custom_element_registry = super::web_apis::create_custom_element_registry_template(scope, None);
@@ -450,6 +610,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("DOMException", v8::Global::new(scope, tmpl_dom_exception));
         let tmpl_dom_implementation = super::dom_core::create_dom_implementation_template(scope, None);
         templates.insert("DOMImplementation", v8::Global::new(scope, tmpl_dom_implementation));
+    } // end batch
+    // Batch 44: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_dom_matrix_read_only = super::dom_core::create_dom_matrix_read_only_template(scope, None);
         templates.insert("DOMMatrixReadOnly", v8::Global::new(scope, tmpl_dom_matrix_read_only));
         let tmpl_dom_parser = super::web_apis::create_dom_parser_template(scope, None);
@@ -460,6 +624,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("DOMQuad", v8::Global::new(scope, tmpl_dom_quad));
         let tmpl_dom_rect_list = super::web_apis::create_dom_rect_list_template(scope, None);
         templates.insert("DOMRectList", v8::Global::new(scope, tmpl_dom_rect_list));
+    } // end batch
+    // Batch 45: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_dom_rect_read_only = super::dom_core::create_dom_rect_read_only_template(scope, None);
         templates.insert("DOMRectReadOnly", v8::Global::new(scope, tmpl_dom_rect_read_only));
         let tmpl_dom_string_list = super::idb::create_dom_string_list_template(scope, None);
@@ -470,6 +638,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("DOMTokenList", v8::Global::new(scope, tmpl_dom_token_list));
         let tmpl_data_transfer = super::web_apis::create_data_transfer_template(scope, None);
         templates.insert("DataTransfer", v8::Global::new(scope, tmpl_data_transfer));
+    } // end batch
+    // Batch 46: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_data_transfer_item = super::web_apis::create_data_transfer_item_template(scope, None);
         templates.insert("DataTransferItem", v8::Global::new(scope, tmpl_data_transfer_item));
         let tmpl_data_transfer_item_list = super::web_apis::create_data_transfer_item_list_template(scope, None);
@@ -480,6 +652,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("DelegatedInkTrailPresenter", v8::Global::new(scope, tmpl_delegated_ink_trail_presenter));
         let tmpl_device_motion_event_acceleration = super::web_apis::create_device_motion_event_acceleration_template(scope, None);
         templates.insert("DeviceMotionEventAcceleration", v8::Global::new(scope, tmpl_device_motion_event_acceleration));
+    } // end batch
+    // Batch 47: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_device_motion_event_rotation_rate = super::web_apis::create_device_motion_event_rotation_rate_template(scope, None);
         templates.insert("DeviceMotionEventRotationRate", v8::Global::new(scope, tmpl_device_motion_event_rotation_rate));
         let tmpl_digital_goods_service = super::web_apis::create_digital_goods_service_template(scope, None);
@@ -490,6 +666,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("EXT_color_buffer_float", v8::Global::new(scope, tmpl_ext_color_buffer_float));
         let tmpl_ext_color_buffer_half_float = super::web_apis::create_ext_color_buffer_half_float_template(scope, None);
         templates.insert("EXT_color_buffer_half_float", v8::Global::new(scope, tmpl_ext_color_buffer_half_float));
+    } // end batch
+    // Batch 48: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_ext_disjoint_timer_query = super::web_apis::create_ext_disjoint_timer_query_template(scope, None);
         templates.insert("EXT_disjoint_timer_query", v8::Global::new(scope, tmpl_ext_disjoint_timer_query));
         let tmpl_ext_disjoint_timer_query_webgl2 = super::web_apis::create_ext_disjoint_timer_query_webgl2_template(scope, None);
@@ -500,6 +680,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("EXT_frag_depth", v8::Global::new(scope, tmpl_ext_frag_depth));
         let tmpl_ext_s_rgb = super::web_apis::create_ext_s_rgb_template(scope, None);
         templates.insert("EXT_sRGB", v8::Global::new(scope, tmpl_ext_s_rgb));
+    } // end batch
+    // Batch 49: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_ext_shader_texture_lod = super::web_apis::create_ext_shader_texture_lod_template(scope, None);
         templates.insert("EXT_shader_texture_lod", v8::Global::new(scope, tmpl_ext_shader_texture_lod));
         let tmpl_ext_texture_compression_bptc = super::web_apis::create_ext_texture_compression_bptc_template(scope, None);
@@ -510,6 +694,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("EXT_texture_filter_anisotropic", v8::Global::new(scope, tmpl_ext_texture_filter_anisotropic));
         let tmpl_ext_texture_norm16 = super::web_apis::create_ext_texture_norm16_template(scope, None);
         templates.insert("EXT_texture_norm16", v8::Global::new(scope, tmpl_ext_texture_norm16));
+    } // end batch
+    // Batch 50: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_element_internals = super::web_apis::create_element_internals_template(scope, None);
         templates.insert("ElementInternals", v8::Global::new(scope, tmpl_element_internals));
         let tmpl_encoded_audio_chunk = super::web_apis::create_encoded_audio_chunk_template(scope, None);
@@ -520,6 +708,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Event", v8::Global::new(scope, tmpl_event));
         let tmpl_event_counts = super::events::create_event_counts_template(scope, None);
         templates.insert("EventCounts", v8::Global::new(scope, tmpl_event_counts));
+    } // end batch
+    // Batch 51: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_event_listener = super::events::create_event_listener_template(scope, None);
         templates.insert("EventListener", v8::Global::new(scope, tmpl_event_listener));
         let tmpl_event_target = super::dom_core::create_event_target_template(scope, None);
@@ -530,6 +722,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("External", v8::Global::new(scope, tmpl_external));
         let tmpl_eye_dropper = super::web_apis::create_eye_dropper_template(scope, None);
         templates.insert("EyeDropper", v8::Global::new(scope, tmpl_eye_dropper));
+    } // end batch
+    // Batch 52: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_face_detector = super::web_apis::create_face_detector_template(scope, None);
         templates.insert("FaceDetector", v8::Global::new(scope, tmpl_face_detector));
         let tmpl_fence = super::web_apis::create_fence_template(scope, None);
@@ -540,6 +736,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("FetchLaterResult", v8::Global::new(scope, tmpl_fetch_later_result));
         let tmpl_file_list = super::web_apis::create_file_list_template(scope, None);
         templates.insert("FileList", v8::Global::new(scope, tmpl_file_list));
+    } // end batch
+    // Batch 53: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_file_reader_sync = super::web_apis::create_file_reader_sync_template(scope, None);
         templates.insert("FileReaderSync", v8::Global::new(scope, tmpl_file_reader_sync));
         let tmpl_file_system = super::web_apis::create_file_system_template(scope, None);
@@ -550,6 +750,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("FileSystemEntry", v8::Global::new(scope, tmpl_file_system_entry));
         let tmpl_file_system_handle = super::web_apis::create_file_system_handle_template(scope, None);
         templates.insert("FileSystemHandle", v8::Global::new(scope, tmpl_file_system_handle));
+    } // end batch
+    // Batch 54: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_file_system_sync_access_handle = super::web_apis::create_file_system_sync_access_handle_template(scope, None);
         templates.insert("FileSystemSyncAccessHandle", v8::Global::new(scope, tmpl_file_system_sync_access_handle));
         let tmpl_font = super::web_apis::create_font_template(scope, None);
@@ -560,6 +764,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("FontFace", v8::Global::new(scope, tmpl_font_face));
         let tmpl_font_face_features = super::web_apis::create_font_face_features_template(scope, None);
         templates.insert("FontFaceFeatures", v8::Global::new(scope, tmpl_font_face_features));
+    } // end batch
+    // Batch 55: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_font_face_palette = super::web_apis::create_font_face_palette_template(scope, None);
         templates.insert("FontFacePalette", v8::Global::new(scope, tmpl_font_face_palette));
         let tmpl_font_face_palettes = super::web_apis::create_font_face_palettes_template(scope, None);
@@ -570,6 +778,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("FontFaceVariations", v8::Global::new(scope, tmpl_font_face_variations));
         let tmpl_font_metrics = super::web_apis::create_font_metrics_template(scope, None);
         templates.insert("FontMetrics", v8::Global::new(scope, tmpl_font_metrics));
+    } // end batch
+    // Batch 56: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_form_data = super::fetch::create_form_data_template(scope, None);
         templates.insert("FormData", v8::Global::new(scope, tmpl_form_data));
         let tmpl_fragment_directive = super::web_apis::create_fragment_directive_template(scope, None);
@@ -580,6 +792,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GPU", v8::Global::new(scope, tmpl_gpu));
         let tmpl_gpu_adapter = super::gpu::create_gpu_adapter_template(scope, None);
         templates.insert("GPUAdapter", v8::Global::new(scope, tmpl_gpu_adapter));
+    } // end batch
+    // Batch 57: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_gpu_adapter_info = super::gpu::create_gpu_adapter_info_template(scope, None);
         templates.insert("GPUAdapterInfo", v8::Global::new(scope, tmpl_gpu_adapter_info));
         let tmpl_gpu_bind_group = super::gpu::create_gpu_bind_group_template(scope, None);
@@ -590,6 +806,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GPUBuffer", v8::Global::new(scope, tmpl_gpu_buffer));
         let tmpl_gpu_canvas_context = super::gpu::create_gpu_canvas_context_template(scope, None);
         templates.insert("GPUCanvasContext", v8::Global::new(scope, tmpl_gpu_canvas_context));
+    } // end batch
+    // Batch 58: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_gpu_command_buffer = super::gpu::create_gpu_command_buffer_template(scope, None);
         templates.insert("GPUCommandBuffer", v8::Global::new(scope, tmpl_gpu_command_buffer));
         let tmpl_gpu_command_encoder = super::gpu::create_gpu_command_encoder_template(scope, None);
@@ -600,6 +820,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GPUCompilationMessage", v8::Global::new(scope, tmpl_gpu_compilation_message));
         let tmpl_gpu_compute_pass_encoder = super::gpu::create_gpu_compute_pass_encoder_template(scope, None);
         templates.insert("GPUComputePassEncoder", v8::Global::new(scope, tmpl_gpu_compute_pass_encoder));
+    } // end batch
+    // Batch 59: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_gpu_compute_pipeline = super::gpu::create_gpu_compute_pipeline_template(scope, None);
         templates.insert("GPUComputePipeline", v8::Global::new(scope, tmpl_gpu_compute_pipeline));
         let tmpl_gpu_device_lost_info = super::gpu::create_gpu_device_lost_info_template(scope, None);
@@ -610,6 +834,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GPUExternalTexture", v8::Global::new(scope, tmpl_gpu_external_texture));
         let tmpl_gpu_pipeline_layout = super::gpu::create_gpu_pipeline_layout_template(scope, None);
         templates.insert("GPUPipelineLayout", v8::Global::new(scope, tmpl_gpu_pipeline_layout));
+    } // end batch
+    // Batch 60: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_gpu_query_set = super::gpu::create_gpu_query_set_template(scope, None);
         templates.insert("GPUQuerySet", v8::Global::new(scope, tmpl_gpu_query_set));
         let tmpl_gpu_queue = super::gpu::create_gpu_queue_template(scope, None);
@@ -621,7 +849,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_gpu_render_pass_encoder = super::gpu::create_gpu_render_pass_encoder_template(scope, None);
         templates.insert("GPURenderPassEncoder", v8::Global::new(scope, tmpl_gpu_render_pass_encoder));
     } // end batch
-    // Batch 4: 100 templates
+    // Batch 61: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_gpu_render_pipeline = super::gpu::create_gpu_render_pipeline_template(scope, None);
@@ -634,6 +862,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GPUSupportedFeatures", v8::Global::new(scope, tmpl_gpu_supported_features));
         let tmpl_gpu_supported_limits = super::gpu::create_gpu_supported_limits_template(scope, None);
         templates.insert("GPUSupportedLimits", v8::Global::new(scope, tmpl_gpu_supported_limits));
+    } // end batch
+    // Batch 62: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_gpu_texture = super::gpu::create_gpu_texture_template(scope, None);
         templates.insert("GPUTexture", v8::Global::new(scope, tmpl_gpu_texture));
         let tmpl_gpu_texture_view = super::gpu::create_gpu_texture_view_template(scope, None);
@@ -644,6 +876,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GamepadButton", v8::Global::new(scope, tmpl_gamepad_button));
         let tmpl_gamepad_haptic_actuator = super::gamepad::create_gamepad_haptic_actuator_template(scope, None);
         templates.insert("GamepadHapticActuator", v8::Global::new(scope, tmpl_gamepad_haptic_actuator));
+    } // end batch
+    // Batch 63: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_gamepad_pose = super::gamepad::create_gamepad_pose_template(scope, None);
         templates.insert("GamepadPose", v8::Global::new(scope, tmpl_gamepad_pose));
         let tmpl_geolocation = super::web_apis::create_geolocation_template(scope, None);
@@ -654,6 +890,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GeolocationPosition", v8::Global::new(scope, tmpl_geolocation_position));
         let tmpl_geolocation_position_error = super::web_apis::create_geolocation_position_error_template(scope, None);
         templates.insert("GeolocationPositionError", v8::Global::new(scope, tmpl_geolocation_position_error));
+    } // end batch
+    // Batch 64: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_global = super::web_apis::create_global_template(scope, None);
         templates.insert("Global", v8::Global::new(scope, tmpl_global));
         let tmpl_group_effect = super::web_apis::create_group_effect_template(scope, None);
@@ -664,6 +904,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLCollection", v8::Global::new(scope, tmpl_html_collection));
         let tmpl_handwriting_drawing = super::web_apis::create_handwriting_drawing_template(scope, None);
         templates.insert("HandwritingDrawing", v8::Global::new(scope, tmpl_handwriting_drawing));
+    } // end batch
+    // Batch 65: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_handwriting_recognizer = super::web_apis::create_handwriting_recognizer_template(scope, None);
         templates.insert("HandwritingRecognizer", v8::Global::new(scope, tmpl_handwriting_recognizer));
         let tmpl_handwriting_stroke = super::web_apis::create_handwriting_stroke_template(scope, None);
@@ -674,6 +918,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Highlight", v8::Global::new(scope, tmpl_highlight));
         let tmpl_highlight_registry = super::web_apis::create_highlight_registry_template(scope, None);
         templates.insert("HighlightRegistry", v8::Global::new(scope, tmpl_highlight_registry));
+    } // end batch
+    // Batch 66: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_history = super::web_apis::create_history_template(scope, None);
         templates.insert("History", v8::Global::new(scope, tmpl_history));
         let tmpl_idb_cursor = super::idb::create_idb_cursor_template(scope, None);
@@ -684,6 +932,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("IDBIndex", v8::Global::new(scope, tmpl_idb_index));
         let tmpl_idb_key_range = super::idb::create_idb_key_range_template(scope, None);
         templates.insert("IDBKeyRange", v8::Global::new(scope, tmpl_idb_key_range));
+    } // end batch
+    // Batch 67: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_idb_object_store = super::idb::create_idb_object_store_template(scope, None);
         templates.insert("IDBObjectStore", v8::Global::new(scope, tmpl_idb_object_store));
         let tmpl_idb_record = super::idb::create_idb_record_template(scope, None);
@@ -694,6 +946,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("IdleDeadline", v8::Global::new(scope, tmpl_idle_deadline));
         let tmpl_image_bitmap = super::web_apis::create_image_bitmap_template(scope, None);
         templates.insert("ImageBitmap", v8::Global::new(scope, tmpl_image_bitmap));
+    } // end batch
+    // Batch 68: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_image_bitmap_rendering_context = super::web_apis::create_image_bitmap_rendering_context_template(scope, None);
         templates.insert("ImageBitmapRenderingContext", v8::Global::new(scope, tmpl_image_bitmap_rendering_context));
         let tmpl_image_capture = super::web_apis::create_image_capture_template(scope, None);
@@ -704,6 +960,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ImageDecoder", v8::Global::new(scope, tmpl_image_decoder));
         let tmpl_image_track = super::web_apis::create_image_track_template(scope, None);
         templates.insert("ImageTrack", v8::Global::new(scope, tmpl_image_track));
+    } // end batch
+    // Batch 69: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_image_track_list = super::web_apis::create_image_track_list_template(scope, None);
         templates.insert("ImageTrackList", v8::Global::new(scope, tmpl_image_track_list));
         let tmpl_ink = super::web_apis::create_ink_template(scope, None);
@@ -714,6 +974,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Instance", v8::Global::new(scope, tmpl_instance));
         let tmpl_intersection_observer = super::observers::create_intersection_observer_template(scope, None);
         templates.insert("IntersectionObserver", v8::Global::new(scope, tmpl_intersection_observer));
+    } // end batch
+    // Batch 70: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_intersection_observer_entry = super::observers::create_intersection_observer_entry_template(scope, None);
         templates.insert("IntersectionObserverEntry", v8::Global::new(scope, tmpl_intersection_observer_entry));
         let tmpl_intrinsic_sizes = super::web_apis::create_intrinsic_sizes_template(scope, None);
@@ -724,6 +988,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("KeyboardLayoutMap", v8::Global::new(scope, tmpl_keyboard_layout_map));
         let tmpl_language_detector = super::web_apis::create_language_detector_template(scope, None);
         templates.insert("LanguageDetector", v8::Global::new(scope, tmpl_language_detector));
+    } // end batch
+    // Batch 71: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_language_model_params = super::web_apis::create_language_model_params_template(scope, None);
         templates.insert("LanguageModelParams", v8::Global::new(scope, tmpl_language_model_params));
         let tmpl_launch_params = super::web_apis::create_launch_params_template(scope, None);
@@ -734,6 +1002,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("LayoutChild", v8::Global::new(scope, tmpl_layout_child));
         let tmpl_layout_constraints = super::web_apis::create_layout_constraints_template(scope, None);
         templates.insert("LayoutConstraints", v8::Global::new(scope, tmpl_layout_constraints));
+    } // end batch
+    // Batch 72: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_layout_edges = super::web_apis::create_layout_edges_template(scope, None);
         templates.insert("LayoutEdges", v8::Global::new(scope, tmpl_layout_edges));
         let tmpl_layout_fragment = super::web_apis::create_layout_fragment_template(scope, None);
@@ -744,6 +1016,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Location", v8::Global::new(scope, tmpl_location));
         let tmpl_lock = super::web_apis::create_lock_template(scope, None);
         templates.insert("Lock", v8::Global::new(scope, tmpl_lock));
+    } // end batch
+    // Batch 73: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_lock_manager = super::web_apis::create_lock_manager_template(scope, None);
         templates.insert("LockManager", v8::Global::new(scope, tmpl_lock_manager));
         let tmpl_midi_input_map = super::midi::create_midi_input_map_template(scope, None);
@@ -754,6 +1030,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ML", v8::Global::new(scope, tmpl_ml));
         let tmpl_ml_context = super::web_apis::create_ml_context_template(scope, None);
         templates.insert("MLContext", v8::Global::new(scope, tmpl_ml_context));
+    } // end batch
+    // Batch 74: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_ml_graph = super::web_apis::create_ml_graph_template(scope, None);
         templates.insert("MLGraph", v8::Global::new(scope, tmpl_ml_graph));
         let tmpl_ml_graph_builder = super::web_apis::create_ml_graph_builder_template(scope, None);
@@ -764,6 +1044,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MLTensor", v8::Global::new(scope, tmpl_ml_tensor));
         let tmpl_media_capabilities = super::media_apis::create_media_capabilities_template(scope, None);
         templates.insert("MediaCapabilities", v8::Global::new(scope, tmpl_media_capabilities));
+    } // end batch
+    // Batch 75: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_media_device_info = super::media_apis::create_media_device_info_template(scope, None);
         templates.insert("MediaDeviceInfo", v8::Global::new(scope, tmpl_media_device_info));
         let tmpl_media_error = super::media_apis::create_media_error_template(scope, None);
@@ -774,6 +1058,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MediaKeySystemAccess", v8::Global::new(scope, tmpl_media_key_system_access));
         let tmpl_media_keys = super::media_apis::create_media_keys_template(scope, None);
         templates.insert("MediaKeys", v8::Global::new(scope, tmpl_media_keys));
+    } // end batch
+    // Batch 76: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_media_list = super::css_om::create_media_list_template(scope, None);
         templates.insert("MediaList", v8::Global::new(scope, tmpl_media_list));
         let tmpl_media_metadata = super::media_apis::create_media_metadata_template(scope, None);
@@ -784,6 +1072,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MediaSourceHandle", v8::Global::new(scope, tmpl_media_source_handle));
         let tmpl_media_stream_track_handle = super::media_apis::create_media_stream_track_handle_template(scope, None);
         templates.insert("MediaStreamTrackHandle", v8::Global::new(scope, tmpl_media_stream_track_handle));
+    } // end batch
+    // Batch 77: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_media_stream_track_processor = super::media_apis::create_media_stream_track_processor_template(scope, None);
         templates.insert("MediaStreamTrackProcessor", v8::Global::new(scope, tmpl_media_stream_track_processor));
         let tmpl_memory = super::web_apis::create_memory_template(scope, None);
@@ -794,6 +1086,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MimeType", v8::Global::new(scope, tmpl_mime_type));
         let tmpl_mime_type_array = super::web_apis::create_mime_type_array_template(scope, None);
         templates.insert("MimeTypeArray", v8::Global::new(scope, tmpl_mime_type_array));
+    } // end batch
+    // Batch 78: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_model_context_client = super::web_apis::create_model_context_client_template(scope, None);
         templates.insert("ModelContextClient", v8::Global::new(scope, tmpl_model_context_client));
         let tmpl_module = super::web_apis::create_module_template(scope, None);
@@ -804,6 +1100,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MutationRecord", v8::Global::new(scope, tmpl_mutation_record));
         let tmpl_ndef_message = super::web_apis::create_ndef_message_template(scope, None);
         templates.insert("NDEFMessage", v8::Global::new(scope, tmpl_ndef_message));
+    } // end batch
+    // Batch 79: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_ndef_record = super::web_apis::create_ndef_record_template(scope, None);
         templates.insert("NDEFRecord", v8::Global::new(scope, tmpl_ndef_record));
         let tmpl_named_flow_map = super::web_apis::create_named_flow_map_template(scope, None);
@@ -814,6 +1114,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("NavigationActivation", v8::Global::new(scope, tmpl_navigation_activation));
         let tmpl_navigation_destination = super::web_apis::create_navigation_destination_template(scope, None);
         templates.insert("NavigationDestination", v8::Global::new(scope, tmpl_navigation_destination));
+    } // end batch
+    // Batch 80: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_navigation_precommit_controller = super::web_apis::create_navigation_precommit_controller_template(scope, None);
         templates.insert("NavigationPrecommitController", v8::Global::new(scope, tmpl_navigation_precommit_controller));
         let tmpl_navigation_preload_manager = super::web_apis::create_navigation_preload_manager_template(scope, None);
@@ -825,7 +1129,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_navigator_login = super::web_apis::create_navigator_login_template(scope, None);
         templates.insert("NavigatorLogin", v8::Global::new(scope, tmpl_navigator_login));
     } // end batch
-    // Batch 5: 100 templates
+    // Batch 81: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_navigator_ua_data = super::web_apis::create_navigator_ua_data_template(scope, None);
@@ -838,6 +1142,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("NodeList", v8::Global::new(scope, tmpl_node_list));
         let tmpl_not_restored_reason_details = super::web_apis::create_not_restored_reason_details_template(scope, None);
         templates.insert("NotRestoredReasonDetails", v8::Global::new(scope, tmpl_not_restored_reason_details));
+    } // end batch
+    // Batch 82: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_not_restored_reasons = super::web_apis::create_not_restored_reasons_template(scope, None);
         templates.insert("NotRestoredReasons", v8::Global::new(scope, tmpl_not_restored_reasons));
         let tmpl_oes_draw_buffers_indexed = super::web_apis::create_oes_draw_buffers_indexed_template(scope, None);
@@ -848,6 +1156,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("OES_fbo_render_mipmap", v8::Global::new(scope, tmpl_oes_fbo_render_mipmap));
         let tmpl_oes_standard_derivatives = super::web_apis::create_oes_standard_derivatives_template(scope, None);
         templates.insert("OES_standard_derivatives", v8::Global::new(scope, tmpl_oes_standard_derivatives));
+    } // end batch
+    // Batch 83: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_oes_texture_float = super::web_apis::create_oes_texture_float_template(scope, None);
         templates.insert("OES_texture_float", v8::Global::new(scope, tmpl_oes_texture_float));
         let tmpl_oes_texture_float_linear = super::web_apis::create_oes_texture_float_linear_template(scope, None);
@@ -858,6 +1170,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("OES_texture_half_float_linear", v8::Global::new(scope, tmpl_oes_texture_half_float_linear));
         let tmpl_oes_vertex_array_object = super::web_apis::create_oes_vertex_array_object_template(scope, None);
         templates.insert("OES_vertex_array_object", v8::Global::new(scope, tmpl_oes_vertex_array_object));
+    } // end batch
+    // Batch 84: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_ovr_multiview2 = super::web_apis::create_ovr_multiview2_template(scope, None);
         templates.insert("OVR_multiview2", v8::Global::new(scope, tmpl_ovr_multiview2));
         let tmpl_observable = super::web_apis::create_observable_template(scope, None);
@@ -868,6 +1184,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Origin", v8::Global::new(scope, tmpl_origin));
         let tmpl_paint_rendering_context2d = super::web_apis::create_paint_rendering_context2d_template(scope, None);
         templates.insert("PaintRenderingContext2D", v8::Global::new(scope, tmpl_paint_rendering_context2d));
+    } // end batch
+    // Batch 85: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_paint_size = super::web_apis::create_paint_size_template(scope, None);
         templates.insert("PaintSize", v8::Global::new(scope, tmpl_paint_size));
         let tmpl_path2d = super::web_apis::create_path2d_template(scope, None);
@@ -878,6 +1198,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PerformanceEntry", v8::Global::new(scope, tmpl_performance_entry));
         let tmpl_performance_navigation = super::web_apis::create_performance_navigation_template(scope, None);
         templates.insert("PerformanceNavigation", v8::Global::new(scope, tmpl_performance_navigation));
+    } // end batch
+    // Batch 86: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_performance_observer = super::observers::create_performance_observer_template(scope, None);
         templates.insert("PerformanceObserver", v8::Global::new(scope, tmpl_performance_observer));
         let tmpl_performance_observer_entry_list = super::web_apis::create_performance_observer_entry_list_template(scope, None);
@@ -888,6 +1212,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PerformanceTiming", v8::Global::new(scope, tmpl_performance_timing));
         let tmpl_performance_timing_confidence = super::web_apis::create_performance_timing_confidence_template(scope, None);
         templates.insert("PerformanceTimingConfidence", v8::Global::new(scope, tmpl_performance_timing_confidence));
+    } // end batch
+    // Batch 87: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_periodic_sync_manager = super::web_apis::create_periodic_sync_manager_template(scope, None);
         templates.insert("PeriodicSyncManager", v8::Global::new(scope, tmpl_periodic_sync_manager));
         let tmpl_periodic_wave = super::web_apis::create_periodic_wave_template(scope, None);
@@ -898,6 +1226,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PermissionsPolicy", v8::Global::new(scope, tmpl_permissions_policy));
         let tmpl_plugin = super::web_apis::create_plugin_template(scope, None);
         templates.insert("Plugin", v8::Global::new(scope, tmpl_plugin));
+    } // end batch
+    // Batch 88: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_plugin_array = super::web_apis::create_plugin_array_template(scope, None);
         templates.insert("PluginArray", v8::Global::new(scope, tmpl_plugin_array));
         let tmpl_preference_manager = super::web_apis::create_preference_manager_template(scope, None);
@@ -908,6 +1240,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PresentationReceiver", v8::Global::new(scope, tmpl_presentation_receiver));
         let tmpl_pressure_observer = super::observers::create_pressure_observer_template(scope, None);
         templates.insert("PressureObserver", v8::Global::new(scope, tmpl_pressure_observer));
+    } // end batch
+    // Batch 89: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_pressure_record = super::web_apis::create_pressure_record_template(scope, None);
         templates.insert("PressureRecord", v8::Global::new(scope, tmpl_pressure_record));
         let tmpl_push_manager = super::web_apis::create_push_manager_template(scope, None);
@@ -918,6 +1254,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PushSubscription", v8::Global::new(scope, tmpl_push_subscription));
         let tmpl_push_subscription_options = super::web_apis::create_push_subscription_options_template(scope, None);
         templates.insert("PushSubscriptionOptions", v8::Global::new(scope, tmpl_push_subscription_options));
+    } // end batch
+    // Batch 90: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_rtc_certificate = super::webrtc::create_rtc_certificate_template(scope, None);
         templates.insert("RTCCertificate", v8::Global::new(scope, tmpl_rtc_certificate));
         let tmpl_rtc_encoded_audio_frame = super::webrtc::create_rtc_encoded_audio_frame_template(scope, None);
@@ -928,6 +1268,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("RTCIceCandidate", v8::Global::new(scope, tmpl_rtc_ice_candidate));
         let tmpl_rtc_ice_candidate_pair = super::webrtc::create_rtc_ice_candidate_pair_template(scope, None);
         templates.insert("RTCIceCandidatePair", v8::Global::new(scope, tmpl_rtc_ice_candidate_pair));
+    } // end batch
+    // Batch 91: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_rtc_identity_assertion = super::webrtc::create_rtc_identity_assertion_template(scope, None);
         templates.insert("RTCIdentityAssertion", v8::Global::new(scope, tmpl_rtc_identity_assertion));
         let tmpl_rtc_identity_provider_registrar = super::webrtc::create_rtc_identity_provider_registrar_template(scope, None);
@@ -938,6 +1282,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("RTCRtpSFrameEncrypter", v8::Global::new(scope, tmpl_rtc_rtp_s_frame_encrypter));
         let tmpl_rtc_rtp_script_transform = super::webrtc::create_rtc_rtp_script_transform_template(scope, None);
         templates.insert("RTCRtpScriptTransform", v8::Global::new(scope, tmpl_rtc_rtp_script_transform));
+    } // end batch
+    // Batch 92: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_rtc_rtp_sender = super::webrtc::create_rtc_rtp_sender_template(scope, None);
         templates.insert("RTCRtpSender", v8::Global::new(scope, tmpl_rtc_rtp_sender));
         let tmpl_rtc_rtp_transceiver = super::webrtc::create_rtc_rtp_transceiver_template(scope, None);
@@ -948,6 +1296,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("RTCStatsReport", v8::Global::new(scope, tmpl_rtc_stats_report));
         let tmpl_readable_byte_stream_controller = super::streams::create_readable_byte_stream_controller_template(scope, None);
         templates.insert("ReadableByteStreamController", v8::Global::new(scope, tmpl_readable_byte_stream_controller));
+    } // end batch
+    // Batch 93: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_readable_stream = super::streams::create_readable_stream_template(scope, None);
         templates.insert("ReadableStream", v8::Global::new(scope, tmpl_readable_stream));
         let tmpl_readable_stream_byob_reader = super::streams::create_readable_stream_byob_reader_template(scope, None);
@@ -958,6 +1310,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ReadableStreamDefaultController", v8::Global::new(scope, tmpl_readable_stream_default_controller));
         let tmpl_readable_stream_default_reader = super::streams::create_readable_stream_default_reader_template(scope, None);
         templates.insert("ReadableStreamDefaultReader", v8::Global::new(scope, tmpl_readable_stream_default_reader));
+    } // end batch
+    // Batch 94: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_reporting_observer = super::observers::create_reporting_observer_template(scope, None);
         templates.insert("ReportingObserver", v8::Global::new(scope, tmpl_reporting_observer));
         let tmpl_request = super::fetch::create_request_template(scope, None);
@@ -968,6 +1324,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ResizeObserverEntry", v8::Global::new(scope, tmpl_resize_observer_entry));
         let tmpl_resize_observer_size = super::observers::create_resize_observer_size_template(scope, None);
         templates.insert("ResizeObserverSize", v8::Global::new(scope, tmpl_resize_observer_size));
+    } // end batch
+    // Batch 95: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_response = super::fetch::create_response_template(scope, None);
         templates.insert("Response", v8::Global::new(scope, tmpl_response));
         let tmpl_restriction_target = super::web_apis::create_restriction_target_template(scope, None);
@@ -978,6 +1338,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SFrameEncrypterStream", v8::Global::new(scope, tmpl_s_frame_encrypter_stream));
         let tmpl_svg_angle = super::svg::create_svg_angle_template(scope, None);
         templates.insert("SVGAngle", v8::Global::new(scope, tmpl_svg_angle));
+    } // end batch
+    // Batch 96: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_animated_angle = super::svg::create_svg_animated_angle_template(scope, None);
         templates.insert("SVGAnimatedAngle", v8::Global::new(scope, tmpl_svg_animated_angle));
         let tmpl_svg_animated_boolean = super::svg::create_svg_animated_boolean_template(scope, None);
@@ -988,6 +1352,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGAnimatedInteger", v8::Global::new(scope, tmpl_svg_animated_integer));
         let tmpl_svg_animated_length = super::svg::create_svg_animated_length_template(scope, None);
         templates.insert("SVGAnimatedLength", v8::Global::new(scope, tmpl_svg_animated_length));
+    } // end batch
+    // Batch 97: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_animated_length_list = super::svg::create_svg_animated_length_list_template(scope, None);
         templates.insert("SVGAnimatedLengthList", v8::Global::new(scope, tmpl_svg_animated_length_list));
         let tmpl_svg_animated_number = super::svg::create_svg_animated_number_template(scope, None);
@@ -998,6 +1366,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGAnimatedPreserveAspectRatio", v8::Global::new(scope, tmpl_svg_animated_preserve_aspect_ratio));
         let tmpl_svg_animated_rect = super::svg::create_svg_animated_rect_template(scope, None);
         templates.insert("SVGAnimatedRect", v8::Global::new(scope, tmpl_svg_animated_rect));
+    } // end batch
+    // Batch 98: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_animated_string = super::svg::create_svg_animated_string_template(scope, None);
         templates.insert("SVGAnimatedString", v8::Global::new(scope, tmpl_svg_animated_string));
         let tmpl_svg_animated_transform_list = super::svg::create_svg_animated_transform_list_template(scope, None);
@@ -1008,6 +1380,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGLengthList", v8::Global::new(scope, tmpl_svg_length_list));
         let tmpl_svg_number = super::svg::create_svg_number_template(scope, None);
         templates.insert("SVGNumber", v8::Global::new(scope, tmpl_svg_number));
+    } // end batch
+    // Batch 99: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_number_list = super::svg::create_svg_number_list_template(scope, None);
         templates.insert("SVGNumberList", v8::Global::new(scope, tmpl_svg_number_list));
         let tmpl_svg_path_segment = super::svg::create_svg_path_segment_template(scope, None);
@@ -1018,6 +1394,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGPreserveAspectRatio", v8::Global::new(scope, tmpl_svg_preserve_aspect_ratio));
         let tmpl_svg_string_list = super::svg::create_svg_string_list_template(scope, None);
         templates.insert("SVGStringList", v8::Global::new(scope, tmpl_svg_string_list));
+    } // end batch
+    // Batch 100: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_transform = super::svg::create_svg_transform_template(scope, None);
         templates.insert("SVGTransform", v8::Global::new(scope, tmpl_svg_transform));
         let tmpl_svg_transform_list = super::svg::create_svg_transform_list_template(scope, None);
@@ -1029,7 +1409,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_scheduler = super::web_apis::create_scheduler_template(scope, None);
         templates.insert("Scheduler", v8::Global::new(scope, tmpl_scheduler));
     } // end batch
-    // Batch 6: 100 templates
+    // Batch 101: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_scheduling = super::web_apis::create_scheduling_template(scope, None);
@@ -1042,6 +1422,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SpeechGrammar", v8::Global::new(scope, tmpl_speech_grammar));
         let tmpl_speech_grammar_list = super::web_apis::create_speech_grammar_list_template(scope, None);
         templates.insert("SpeechGrammarList", v8::Global::new(scope, tmpl_speech_grammar_list));
+    } // end batch
+    // Batch 102: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_speech_recognition_alternative = super::web_apis::create_speech_recognition_alternative_template(scope, None);
         templates.insert("SpeechRecognitionAlternative", v8::Global::new(scope, tmpl_speech_recognition_alternative));
         let tmpl_speech_recognition_phrase = super::web_apis::create_speech_recognition_phrase_template(scope, None);
@@ -1052,6 +1436,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SpeechRecognitionResultList", v8::Global::new(scope, tmpl_speech_recognition_result_list));
         let tmpl_speech_synthesis_voice = super::web_apis::create_speech_synthesis_voice_template(scope, None);
         templates.insert("SpeechSynthesisVoice", v8::Global::new(scope, tmpl_speech_synthesis_voice));
+    } // end batch
+    // Batch 103: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_storage = super::web_apis::create_storage_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Storage", v8::Global::new(scope, tmpl_storage));
         let tmpl_storage_access_handle = super::web_apis::create_storage_access_handle_template(scope, None);
@@ -1062,6 +1450,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("StorageBucketManager", v8::Global::new(scope, tmpl_storage_bucket_manager));
         let tmpl_storage_manager = super::web_apis::create_storage_manager_template(scope, None);
         templates.insert("StorageManager", v8::Global::new(scope, tmpl_storage_manager));
+    } // end batch
+    // Batch 104: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_style_property_map_read_only = super::web_apis::create_style_property_map_read_only_template(scope, None);
         templates.insert("StylePropertyMapReadOnly", v8::Global::new(scope, tmpl_style_property_map_read_only));
         let tmpl_style_sheet = super::css_om::create_style_sheet_template(scope, None);
@@ -1072,6 +1464,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Subscriber", v8::Global::new(scope, tmpl_subscriber));
         let tmpl_subtle_crypto = super::crypto::create_subtle_crypto_template(scope, None);
         templates.insert("SubtleCrypto", v8::Global::new(scope, tmpl_subtle_crypto));
+    } // end batch
+    // Batch 105: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_summarizer = super::web_apis::create_summarizer_template(scope, None);
         templates.insert("Summarizer", v8::Global::new(scope, tmpl_summarizer));
         let tmpl_sync_manager = super::web_apis::create_sync_manager_template(scope, None);
@@ -1082,6 +1478,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Tag", v8::Global::new(scope, tmpl_tag));
         let tmpl_text_decoder = super::encoding::create_text_decoder_template(scope, None);
         templates.insert("TextDecoder", v8::Global::new(scope, tmpl_text_decoder));
+    } // end batch
+    // Batch 106: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_text_decoder_stream = super::encoding::create_text_decoder_stream_template(scope, None);
         templates.insert("TextDecoderStream", v8::Global::new(scope, tmpl_text_decoder_stream));
         let tmpl_text_detector = super::web_apis::create_text_detector_template(scope, None);
@@ -1092,6 +1492,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("TextEncoderStream", v8::Global::new(scope, tmpl_text_encoder_stream));
         let tmpl_text_format = super::web_apis::create_text_format_template(scope, None);
         templates.insert("TextFormat", v8::Global::new(scope, tmpl_text_format));
+    } // end batch
+    // Batch 107: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_text_metrics = super::web_apis::create_text_metrics_template(scope, None);
         templates.insert("TextMetrics", v8::Global::new(scope, tmpl_text_metrics));
         let tmpl_text_track_cue_list = super::web_apis::create_text_track_cue_list_template(scope, None);
@@ -1102,6 +1506,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Touch", v8::Global::new(scope, tmpl_touch));
         let tmpl_touch_list = super::web_apis::create_touch_list_template(scope, None);
         templates.insert("TouchList", v8::Global::new(scope, tmpl_touch_list));
+    } // end batch
+    // Batch 108: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_transform_stream = super::streams::create_transform_stream_template(scope, None);
         templates.insert("TransformStream", v8::Global::new(scope, tmpl_transform_stream));
         let tmpl_transform_stream_default_controller = super::streams::create_transform_stream_default_controller_template(scope, None);
@@ -1112,6 +1520,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("TreeWalker", v8::Global::new(scope, tmpl_tree_walker));
         let tmpl_trusted_html = super::web_apis::create_trusted_html_template(scope, None);
         templates.insert("TrustedHTML", v8::Global::new(scope, tmpl_trusted_html));
+    } // end batch
+    // Batch 109: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_trusted_script = super::web_apis::create_trusted_script_template(scope, None);
         templates.insert("TrustedScript", v8::Global::new(scope, tmpl_trusted_script));
         let tmpl_trusted_script_url = super::web_apis::create_trusted_script_url_template(scope, None);
@@ -1122,6 +1534,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("TrustedTypePolicyFactory", v8::Global::new(scope, tmpl_trusted_type_policy_factory));
         let tmpl_url = super::url::create_url_template(scope, None);
         templates.insert("URL", v8::Global::new(scope, tmpl_url));
+    } // end batch
+    // Batch 110: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_url_pattern = super::web_apis::create_url_pattern_template(scope, None);
         templates.insert("URLPattern", v8::Global::new(scope, tmpl_url_pattern));
         let tmpl_url_search_params = super::url::create_url_search_params_template(scope, None);
@@ -1132,6 +1548,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("USBConfiguration", v8::Global::new(scope, tmpl_usb_configuration));
         let tmpl_usb_device = super::usb::create_usb_device_template(scope, None);
         templates.insert("USBDevice", v8::Global::new(scope, tmpl_usb_device));
+    } // end batch
+    // Batch 111: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_usb_endpoint = super::usb::create_usb_endpoint_template(scope, None);
         templates.insert("USBEndpoint", v8::Global::new(scope, tmpl_usb_endpoint));
         let tmpl_usb_in_transfer_result = super::usb::create_usb_in_transfer_result_template(scope, None);
@@ -1142,6 +1562,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("USBIsochronousInTransferPacket", v8::Global::new(scope, tmpl_usb_isochronous_in_transfer_packet));
         let tmpl_usb_isochronous_in_transfer_result = super::usb::create_usb_isochronous_in_transfer_result_template(scope, None);
         templates.insert("USBIsochronousInTransferResult", v8::Global::new(scope, tmpl_usb_isochronous_in_transfer_result));
+    } // end batch
+    // Batch 112: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_usb_isochronous_out_transfer_packet = super::usb::create_usb_isochronous_out_transfer_packet_template(scope, None);
         templates.insert("USBIsochronousOutTransferPacket", v8::Global::new(scope, tmpl_usb_isochronous_out_transfer_packet));
         let tmpl_usb_isochronous_out_transfer_result = super::usb::create_usb_isochronous_out_transfer_result_template(scope, None);
@@ -1152,6 +1576,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("UserActivation", v8::Global::new(scope, tmpl_user_activation));
         let tmpl_vtt_region = super::web_apis::create_vtt_region_template(scope, None);
         templates.insert("VTTRegion", v8::Global::new(scope, tmpl_vtt_region));
+    } // end batch
+    // Batch 113: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_validity_state = super::web_apis::create_validity_state_template(scope, None);
         templates.insert("ValidityState", v8::Global::new(scope, tmpl_validity_state));
         let tmpl_video_color_space = super::web_apis::create_video_color_space_template(scope, None);
@@ -1162,6 +1590,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("VideoPlaybackQuality", v8::Global::new(scope, tmpl_video_playback_quality));
         let tmpl_video_track = super::web_apis::create_video_track_template(scope, None);
         templates.insert("VideoTrack", v8::Global::new(scope, tmpl_video_track));
+    } // end batch
+    // Batch 114: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_video_track_generator = super::web_apis::create_video_track_generator_template(scope, None);
         templates.insert("VideoTrackGenerator", v8::Global::new(scope, tmpl_video_track_generator));
         let tmpl_view_transition = super::web_apis::create_view_transition_template(scope, None);
@@ -1172,6 +1604,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Viewport", v8::Global::new(scope, tmpl_viewport));
         let tmpl_webgl_blend_equation_advanced_coherent = super::web_apis::create_webgl_blend_equation_advanced_coherent_template(scope, None);
         templates.insert("WEBGL_blend_equation_advanced_coherent", v8::Global::new(scope, tmpl_webgl_blend_equation_advanced_coherent));
+    } // end batch
+    // Batch 115: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webgl_clip_cull_distance = super::web_apis::create_webgl_clip_cull_distance_template(scope, None);
         templates.insert("WEBGL_clip_cull_distance", v8::Global::new(scope, tmpl_webgl_clip_cull_distance));
         let tmpl_webgl_color_buffer_float = super::web_apis::create_webgl_color_buffer_float_template(scope, None);
@@ -1182,6 +1618,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WEBGL_compressed_texture_etc", v8::Global::new(scope, tmpl_webgl_compressed_texture_etc));
         let tmpl_webgl_compressed_texture_etc1 = super::web_apis::create_webgl_compressed_texture_etc1_template(scope, None);
         templates.insert("WEBGL_compressed_texture_etc1", v8::Global::new(scope, tmpl_webgl_compressed_texture_etc1));
+    } // end batch
+    // Batch 116: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webgl_compressed_texture_pvrtc = super::web_apis::create_webgl_compressed_texture_pvrtc_template(scope, None);
         templates.insert("WEBGL_compressed_texture_pvrtc", v8::Global::new(scope, tmpl_webgl_compressed_texture_pvrtc));
         let tmpl_webgl_compressed_texture_s3tc = super::web_apis::create_webgl_compressed_texture_s3tc_template(scope, None);
@@ -1192,6 +1632,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WEBGL_debug_renderer_info", v8::Global::new(scope, tmpl_webgl_debug_renderer_info));
         let tmpl_webgl_debug_shaders = super::web_apis::create_webgl_debug_shaders_template(scope, None);
         templates.insert("WEBGL_debug_shaders", v8::Global::new(scope, tmpl_webgl_debug_shaders));
+    } // end batch
+    // Batch 117: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webgl_depth_texture = super::web_apis::create_webgl_depth_texture_template(scope, None);
         templates.insert("WEBGL_depth_texture", v8::Global::new(scope, tmpl_webgl_depth_texture));
         let tmpl_webgl_draw_buffers = super::web_apis::create_webgl_draw_buffers_template(scope, None);
@@ -1202,6 +1646,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WEBGL_lose_context", v8::Global::new(scope, tmpl_webgl_lose_context));
         let tmpl_webgl_multi_draw = super::web_apis::create_webgl_multi_draw_template(scope, None);
         templates.insert("WEBGL_multi_draw", v8::Global::new(scope, tmpl_webgl_multi_draw));
+    } // end batch
+    // Batch 118: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webgl_multi_draw_instanced_base_vertex_base_instance = super::web_apis::create_webgl_multi_draw_instanced_base_vertex_base_instance_template(scope, None);
         templates.insert("WEBGL_multi_draw_instanced_base_vertex_base_instance", v8::Global::new(scope, tmpl_webgl_multi_draw_instanced_base_vertex_base_instance));
         let tmpl_webgl_provoking_vertex = super::web_apis::create_webgl_provoking_vertex_template(scope, None);
@@ -1212,6 +1660,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WakeLock", v8::Global::new(scope, tmpl_wake_lock));
         let tmpl_web_gl2rendering_context = super::webgl::create_web_gl2rendering_context_template(scope, None);
         templates.insert("WebGL2RenderingContext", v8::Global::new(scope, tmpl_web_gl2rendering_context));
+    } // end batch
+    // Batch 119: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_web_gl_active_info = super::webgl::create_web_gl_active_info_template(scope, None);
         templates.insert("WebGLActiveInfo", v8::Global::new(scope, tmpl_web_gl_active_info));
         let tmpl_web_gl_object = super::webgl::create_web_gl_object_template(scope, None);
@@ -1222,6 +1674,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WebGLShaderPrecisionFormat", v8::Global::new(scope, tmpl_web_gl_shader_precision_format));
         let tmpl_web_gl_uniform_location = super::webgl::create_web_gl_uniform_location_template(scope, None);
         templates.insert("WebGLUniformLocation", v8::Global::new(scope, tmpl_web_gl_uniform_location));
+    } // end batch
+    // Batch 120: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_web_transport = super::web_apis::create_web_transport_template(scope, None);
         templates.insert("WebTransport", v8::Global::new(scope, tmpl_web_transport));
         let tmpl_web_transport_bidirectional_stream = super::web_apis::create_web_transport_bidirectional_stream_template(scope, None);
@@ -1233,7 +1689,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_worker_location = super::workers::create_worker_location_template(scope, None);
         templates.insert("WorkerLocation", v8::Global::new(scope, tmpl_worker_location));
     } // end batch
-    // Batch 7: 100 templates
+    // Batch 121: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_worker_navigator = super::workers::create_worker_navigator_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1246,6 +1702,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WorkletGlobalScope", v8::Global::new(scope, tmpl_worklet_global_scope));
         let tmpl_worklet_group_effect = super::web_apis::create_worklet_group_effect_template(scope, None);
         templates.insert("WorkletGroupEffect", v8::Global::new(scope, tmpl_worklet_group_effect));
+    } // end batch
+    // Batch 122: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_writable_stream = super::streams::create_writable_stream_template(scope, None);
         templates.insert("WritableStream", v8::Global::new(scope, tmpl_writable_stream));
         let tmpl_writable_stream_default_controller = super::streams::create_writable_stream_default_controller_template(scope, None);
@@ -1256,6 +1716,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Writer", v8::Global::new(scope, tmpl_writer));
         let tmpl_xml_serializer = super::web_apis::create_xml_serializer_template(scope, None);
         templates.insert("XMLSerializer", v8::Global::new(scope, tmpl_xml_serializer));
+    } // end batch
+    // Batch 123: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_x_path_evaluator = super::web_apis::create_x_path_evaluator_template(scope, None);
         templates.insert("XPathEvaluator", v8::Global::new(scope, tmpl_x_path_evaluator));
         let tmpl_x_path_expression = super::web_apis::create_x_path_expression_template(scope, None);
@@ -1266,6 +1730,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XPathResult", v8::Global::new(scope, tmpl_x_path_result));
         let tmpl_xr_anchor = super::webxr::create_xr_anchor_template(scope, None);
         templates.insert("XRAnchor", v8::Global::new(scope, tmpl_xr_anchor));
+    } // end batch
+    // Batch 124: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_anchor_set = super::webxr::create_xr_anchor_set_template(scope, None);
         templates.insert("XRAnchorSet", v8::Global::new(scope, tmpl_xr_anchor_set));
         let tmpl_xr_body = super::webxr::create_xr_body_template(scope, None);
@@ -1276,6 +1744,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRDepthInformation", v8::Global::new(scope, tmpl_xr_depth_information));
         let tmpl_xr_frame = super::webxr::create_xr_frame_template(scope, None);
         templates.insert("XRFrame", v8::Global::new(scope, tmpl_xr_frame));
+    } // end batch
+    // Batch 125: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_hand = super::webxr::create_xr_hand_template(scope, None);
         templates.insert("XRHand", v8::Global::new(scope, tmpl_xr_hand));
         let tmpl_xr_hit_test_result = super::webxr::create_xr_hit_test_result_template(scope, None);
@@ -1286,6 +1758,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRInputSource", v8::Global::new(scope, tmpl_xr_input_source));
         let tmpl_xr_input_source_array = super::webxr::create_xr_input_source_array_template(scope, None);
         templates.insert("XRInputSourceArray", v8::Global::new(scope, tmpl_xr_input_source_array));
+    } // end batch
+    // Batch 126: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_light_estimate = super::webxr::create_xr_light_estimate_template(scope, None);
         templates.insert("XRLightEstimate", v8::Global::new(scope, tmpl_xr_light_estimate));
         let tmpl_xr_media_binding = super::webxr::create_xr_media_binding_template(scope, None);
@@ -1296,6 +1772,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRMeshSet", v8::Global::new(scope, tmpl_xr_mesh_set));
         let tmpl_xr_plane = super::webxr::create_xr_plane_template(scope, None);
         templates.insert("XRPlane", v8::Global::new(scope, tmpl_xr_plane));
+    } // end batch
+    // Batch 127: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_plane_set = super::webxr::create_xr_plane_set_template(scope, None);
         templates.insert("XRPlaneSet", v8::Global::new(scope, tmpl_xr_plane_set));
         let tmpl_xr_pose = super::webxr::create_xr_pose_template(scope, None);
@@ -1306,6 +1786,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRRenderState", v8::Global::new(scope, tmpl_xr_render_state));
         let tmpl_xr_rigid_transform = super::webxr::create_xr_rigid_transform_template(scope, None);
         templates.insert("XRRigidTransform", v8::Global::new(scope, tmpl_xr_rigid_transform));
+    } // end batch
+    // Batch 128: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_sub_image = super::webxr::create_xr_sub_image_template(scope, None);
         templates.insert("XRSubImage", v8::Global::new(scope, tmpl_xr_sub_image));
         let tmpl_xr_transient_input_hit_test_result = super::webxr::create_xr_transient_input_hit_test_result_template(scope, None);
@@ -1316,6 +1800,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRView", v8::Global::new(scope, tmpl_xr_view));
         let tmpl_xr_viewport = super::webxr::create_xr_viewport_template(scope, None);
         templates.insert("XRViewport", v8::Global::new(scope, tmpl_xr_viewport));
+    } // end batch
+    // Batch 129: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_web_gl_binding = super::webxr::create_xr_web_gl_binding_template(scope, None);
         templates.insert("XRWebGLBinding", v8::Global::new(scope, tmpl_xr_web_gl_binding));
         let tmpl_xslt_processor = super::web_apis::create_xslt_processor_template(scope, None);
@@ -1326,6 +1814,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("webkitConvertPointFromNodeToPage", v8::Global::new(scope, tmpl_webkit_convert_point_from_node_to_page));
         let tmpl_webkit_convert_point_from_page_to_node = super::chrome_extensions::create_webkit_convert_point_from_page_to_node_template(scope, None);
         templates.insert("webkitConvertPointFromPageToNode", v8::Global::new(scope, tmpl_webkit_convert_point_from_page_to_node));
+    } // end batch
+    // Batch 130: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webkit_get_gamepads = super::chrome_extensions::create_webkit_get_gamepads_template(scope, None);
         templates.insert("webkitGetGamepads", v8::Global::new(scope, tmpl_webkit_get_gamepads));
         let tmpl_webkit_get_user_media = super::chrome_extensions::create_webkit_get_user_media_template(scope, None);
@@ -1336,6 +1828,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("webkitIndexedDB", v8::Global::new(scope, tmpl_webkit_indexed_db));
         let tmpl_webkit_match_media = super::chrome_extensions::create_webkit_match_media_template(scope, None);
         templates.insert("webkitMatchMedia", v8::Global::new(scope, tmpl_webkit_match_media));
+    } // end batch
+    // Batch 131: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webkit_media_stream = super::chrome_extensions::create_webkit_media_stream_template(scope, None);
         templates.insert("webkitMediaStream", v8::Global::new(scope, tmpl_webkit_media_stream));
         let tmpl_webkit_notifications = super::chrome_extensions::create_webkit_notifications_template(scope, None);
@@ -1346,6 +1842,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("webkitRTCPeerConnection", v8::Global::new(scope, tmpl_webkit_rtc_peer_connection));
         let tmpl_webkit_request_animation_frame = super::chrome_extensions::create_webkit_request_animation_frame_template(scope, None);
         templates.insert("webkitRequestAnimationFrame", v8::Global::new(scope, tmpl_webkit_request_animation_frame));
+    } // end batch
+    // Batch 132: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webkit_request_file_system = super::chrome_extensions::create_webkit_request_file_system_template(scope, None);
         templates.insert("webkitRequestFileSystem", v8::Global::new(scope, tmpl_webkit_request_file_system));
         let tmpl_webkit_resolve_local_file_system_url = super::chrome_extensions::create_webkit_resolve_local_file_system_url_template(scope, None);
@@ -1356,6 +1856,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("webkitSpeechRecognition", v8::Global::new(scope, tmpl_webkit_speech_recognition));
         let tmpl_webkit_speech_recognition_error = super::chrome_extensions::create_webkit_speech_recognition_error_template(scope, None);
         templates.insert("webkitSpeechRecognitionError", v8::Global::new(scope, tmpl_webkit_speech_recognition_error));
+    } // end batch
+    // Batch 133: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webkit_speech_recognition_event = super::events::create_webkit_speech_recognition_event_template(scope, None);
         templates.insert("webkitSpeechRecognitionEvent", v8::Global::new(scope, tmpl_webkit_speech_recognition_event));
         let tmpl_webkit_storage_info = super::chrome_extensions::create_webkit_storage_info_template(scope, None);
@@ -1366,6 +1870,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("TaskController", v8::Global::new(scope, tmpl_task_controller));
         let tmpl_range = super::dom_core::create_range_template(scope, templates.get("AbstractRange").map(|g| v8::Local::new(scope, g)));
         templates.insert("Range", v8::Global::new(scope, tmpl_range));
+    } // end batch
+    // Batch 134: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_static_range = super::dom_core::create_static_range_template(scope, templates.get("AbstractRange").map(|g| v8::Local::new(scope, g)));
         templates.insert("StaticRange", v8::Global::new(scope, tmpl_static_range));
         let tmpl_keyframe_effect = super::web_apis::create_keyframe_effect_template(scope, templates.get("AnimationEffect").map(|g| v8::Local::new(scope, g)));
@@ -1376,6 +1884,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PointerTimeline", v8::Global::new(scope, tmpl_pointer_timeline));
         let tmpl_scroll_timeline = super::web_apis::create_scroll_timeline_template(scope, templates.get("AnimationTimeline").map(|g| v8::Local::new(scope, g)));
         templates.insert("ScrollTimeline", v8::Global::new(scope, tmpl_scroll_timeline));
+    } // end batch
+    // Batch 135: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_authenticator_assertion_response = super::credentials::create_authenticator_assertion_response_template(scope, templates.get("AuthenticatorResponse").map(|g| v8::Local::new(scope, g)));
         templates.insert("AuthenticatorAssertionResponse", v8::Global::new(scope, tmpl_authenticator_assertion_response));
         let tmpl_authenticator_attestation_response = super::credentials::create_authenticator_attestation_response_template(scope, templates.get("AuthenticatorResponse").map(|g| v8::Local::new(scope, g)));
@@ -1386,6 +1898,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSParserAtRule", v8::Global::new(scope, tmpl_css_parser_at_rule));
         let tmpl_css_parser_declaration = super::css_om::create_css_parser_declaration_template(scope, templates.get("CSSParserRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSParserDeclaration", v8::Global::new(scope, tmpl_css_parser_declaration));
+    } // end batch
+    // Batch 136: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_parser_qualified_rule = super::css_om::create_css_parser_qualified_rule_template(scope, templates.get("CSSParserRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSParserQualifiedRule", v8::Global::new(scope, tmpl_css_parser_qualified_rule));
         let tmpl_css_parser_block = super::css_om::create_css_parser_block_template(scope, templates.get("CSSParserValue").map(|g| v8::Local::new(scope, g)));
@@ -1396,6 +1912,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSApplyStatementRule", v8::Global::new(scope, tmpl_css_apply_statement_rule));
         let tmpl_css_color_profile_rule = super::css_om::create_css_color_profile_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSColorProfileRule", v8::Global::new(scope, tmpl_css_color_profile_rule));
+    } // end batch
+    // Batch 137: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_contents_statement_rule = super::css_om::create_css_contents_statement_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSContentsStatementRule", v8::Global::new(scope, tmpl_css_contents_statement_rule));
         let tmpl_css_counter_style_rule = super::css_om::create_css_counter_style_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
@@ -1406,6 +1926,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSFontFaceRule", v8::Global::new(scope, tmpl_css_font_face_rule));
         let tmpl_css_font_feature_values_rule = super::css_om::create_css_font_feature_values_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSFontFeatureValuesRule", v8::Global::new(scope, tmpl_css_font_feature_values_rule));
+    } // end batch
+    // Batch 138: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_font_palette_values_rule = super::css_om::create_css_font_palette_values_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSFontPaletteValuesRule", v8::Global::new(scope, tmpl_css_font_palette_values_rule));
         let tmpl_css_function_declarations = super::css_om::create_css_function_declarations_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
@@ -1416,6 +1940,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSImportRule", v8::Global::new(scope, tmpl_css_import_rule));
         let tmpl_css_keyframe_rule = super::css_om::create_css_keyframe_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSKeyframeRule", v8::Global::new(scope, tmpl_css_keyframe_rule));
+    } // end batch
+    // Batch 139: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_keyframes_rule = super::css_om::create_css_keyframes_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSKeyframesRule", v8::Global::new(scope, tmpl_css_keyframes_rule));
         let tmpl_css_layer_statement_rule = super::css_om::create_css_layer_statement_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
@@ -1426,6 +1954,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSNamespaceRule", v8::Global::new(scope, tmpl_css_namespace_rule));
         let tmpl_css_nested_declarations = super::css_om::create_css_nested_declarations_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSNestedDeclarations", v8::Global::new(scope, tmpl_css_nested_declarations));
+    } // end batch
+    // Batch 140: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_position_try_rule = super::css_om::create_css_position_try_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSPositionTryRule", v8::Global::new(scope, tmpl_css_position_try_rule));
         let tmpl_css_property_rule = super::css_om::create_css_property_rule_template(scope, templates.get("CSSRule").map(|g| v8::Local::new(scope, g)));
@@ -1437,7 +1969,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_css_function_descriptors = super::css_om::create_css_function_descriptors_template(scope, templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSFunctionDescriptors", v8::Global::new(scope, tmpl_css_function_descriptors));
     } // end batch
-    // Batch 8: 100 templates
+    // Batch 141: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_css_page_descriptors = super::css_om::create_css_page_descriptors_template(scope, templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)));
@@ -1450,6 +1982,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSColorValue", v8::Global::new(scope, tmpl_css_color_value));
         let tmpl_css_image_value = super::css_om::create_css_image_value_template(scope, templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSImageValue", v8::Global::new(scope, tmpl_css_image_value));
+    } // end batch
+    // Batch 142: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_keyword_value = super::css_om::create_css_keyword_value_template(scope, templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSKeywordValue", v8::Global::new(scope, tmpl_css_keyword_value));
         let tmpl_css_numeric_value = super::css_om::create_css_numeric_value_template(scope, templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)));
@@ -1460,6 +1996,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSUnparsedValue", v8::Global::new(scope, tmpl_css_unparsed_value));
         let tmpl_css_matrix_component = super::css_om::create_css_matrix_component_template(scope, templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSMatrixComponent", v8::Global::new(scope, tmpl_css_matrix_component));
+    } // end batch
+    // Batch 143: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_perspective = super::css_om::create_css_perspective_template(scope, templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSPerspective", v8::Global::new(scope, tmpl_css_perspective));
         let tmpl_css_rotate = super::css_om::create_css_rotate_template(scope, templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)));
@@ -1470,6 +2010,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSSkew", v8::Global::new(scope, tmpl_css_skew));
         let tmpl_css_skew_x = super::css_om::create_css_skew_x_template(scope, templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSSkewX", v8::Global::new(scope, tmpl_css_skew_x));
+    } // end batch
+    // Batch 144: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_skew_y = super::css_om::create_css_skew_y_template(scope, templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSSkewY", v8::Global::new(scope, tmpl_css_skew_y));
         let tmpl_css_translate = super::css_om::create_css_translate_template(scope, templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)));
@@ -1480,6 +2024,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("DigitalCredential", v8::Global::new(scope, tmpl_digital_credential));
         let tmpl_federated_credential = super::web_apis::create_federated_credential_template(scope, templates.get("Credential").map(|g| v8::Local::new(scope, g)));
         templates.insert("FederatedCredential", v8::Global::new(scope, tmpl_federated_credential));
+    } // end batch
+    // Batch 145: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_identity_credential = super::web_apis::create_identity_credential_template(scope, templates.get("Credential").map(|g| v8::Local::new(scope, g)));
         templates.insert("IdentityCredential", v8::Global::new(scope, tmpl_identity_credential));
         let tmpl_otp_credential = super::web_apis::create_otp_credential_template(scope, templates.get("Credential").map(|g| v8::Local::new(scope, g)));
@@ -1490,6 +2038,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PublicKeyCredential", v8::Global::new(scope, tmpl_public_key_credential));
         let tmpl_gpu_pipeline_error = super::gpu::create_gpu_pipeline_error_template(scope, templates.get("DOMException").map(|g| v8::Local::new(scope, g)));
         templates.insert("GPUPipelineError", v8::Global::new(scope, tmpl_gpu_pipeline_error));
+    } // end batch
+    // Batch 146: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_identity_credential_error = super::web_apis::create_identity_credential_error_template(scope, templates.get("DOMException").map(|g| v8::Local::new(scope, g)));
         templates.insert("IdentityCredentialError", v8::Global::new(scope, tmpl_identity_credential_error));
         let tmpl_overconstrained_error = super::web_apis::create_overconstrained_error_template(scope, templates.get("DOMException").map(|g| v8::Local::new(scope, g)));
@@ -1500,6 +2052,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("RTCError", v8::Global::new(scope, tmpl_rtc_error));
         let tmpl_web_transport_error = super::web_apis::create_web_transport_error_template(scope, templates.get("DOMException").map(|g| v8::Local::new(scope, g)));
         templates.insert("WebTransportError", v8::Global::new(scope, tmpl_web_transport_error));
+    } // end batch
+    // Batch 147: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_dom_matrix = super::dom_core::create_dom_matrix_template(scope, templates.get("DOMMatrixReadOnly").map(|g| v8::Local::new(scope, g)));
         templates.insert("DOMMatrix", v8::Global::new(scope, tmpl_dom_matrix));
         let tmpl_dom_point = super::dom_core::create_dom_point_template(scope, templates.get("DOMPointReadOnly").map(|g| v8::Local::new(scope, g)));
@@ -1510,6 +2066,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AnimationEvent", v8::Global::new(scope, tmpl_animation_event));
         let tmpl_animation_playback_event = super::events::create_animation_playback_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("AnimationPlaybackEvent", v8::Global::new(scope, tmpl_animation_playback_event));
+    } // end batch
+    // Batch 148: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_audio_processing_event = super::events::create_audio_processing_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("AudioProcessingEvent", v8::Global::new(scope, tmpl_audio_processing_event));
         let tmpl_autofill_event = super::events::create_autofill_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1520,6 +2080,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("BeforeUnloadEvent", v8::Global::new(scope, tmpl_before_unload_event));
         let tmpl_blob_event = super::events::create_blob_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("BlobEvent", v8::Global::new(scope, tmpl_blob_event));
+    } // end batch
+    // Batch 149: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_bluetooth_advertising_event = super::events::create_bluetooth_advertising_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("BluetoothAdvertisingEvent", v8::Global::new(scope, tmpl_bluetooth_advertising_event));
         let tmpl_buffered_change_event = super::events::create_buffered_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1530,6 +2094,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CapturedMouseEvent", v8::Global::new(scope, tmpl_captured_mouse_event));
         let tmpl_character_bounds_update_event = super::events::create_character_bounds_update_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("CharacterBoundsUpdateEvent", v8::Global::new(scope, tmpl_character_bounds_update_event));
+    } // end batch
+    // Batch 150: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_clipboard_change_event = super::events::create_clipboard_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("ClipboardChangeEvent", v8::Global::new(scope, tmpl_clipboard_change_event));
         let tmpl_clipboard_event = super::events::create_clipboard_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1540,6 +2108,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CommandEvent", v8::Global::new(scope, tmpl_command_event));
         let tmpl_content_visibility_auto_state_change_event = super::events::create_content_visibility_auto_state_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("ContentVisibilityAutoStateChangeEvent", v8::Global::new(scope, tmpl_content_visibility_auto_state_change_event));
+    } // end batch
+    // Batch 151: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_cookie_change_event = super::events::create_cookie_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("CookieChangeEvent", v8::Global::new(scope, tmpl_cookie_change_event));
         let tmpl_custom_event = super::events::create_custom_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1550,6 +2122,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("DeviceMotionEvent", v8::Global::new(scope, tmpl_device_motion_event));
         let tmpl_device_orientation_event = super::events::create_device_orientation_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("DeviceOrientationEvent", v8::Global::new(scope, tmpl_device_orientation_event));
+    } // end batch
+    // Batch 152: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_document_picture_in_picture_event = super::events::create_document_picture_in_picture_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("DocumentPictureInPictureEvent", v8::Global::new(scope, tmpl_document_picture_in_picture_event));
         let tmpl_error_event = super::events::create_error_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1560,6 +2136,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("FontFaceSetLoadEvent", v8::Global::new(scope, tmpl_font_face_set_load_event));
         let tmpl_form_data_event = super::events::create_form_data_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("FormDataEvent", v8::Global::new(scope, tmpl_form_data_event));
+    } // end batch
+    // Batch 153: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_gpu_uncaptured_error_event = super::events::create_gpu_uncaptured_error_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("GPUUncapturedErrorEvent", v8::Global::new(scope, tmpl_gpu_uncaptured_error_event));
         let tmpl_gamepad_event = super::events::create_gamepad_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1570,6 +2150,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HIDInputReportEvent", v8::Global::new(scope, tmpl_hid_input_report_event));
         let tmpl_hash_change_event = super::events::create_hash_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("HashChangeEvent", v8::Global::new(scope, tmpl_hash_change_event));
+    } // end batch
+    // Batch 154: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_idb_version_change_event = super::events::create_idb_version_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("IDBVersionChangeEvent", v8::Global::new(scope, tmpl_idb_version_change_event));
         let tmpl_key_frame_request_event = super::events::create_key_frame_request_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1580,6 +2164,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MIDIMessageEvent", v8::Global::new(scope, tmpl_midi_message_event));
         let tmpl_media_encrypted_event = super::events::create_media_encrypted_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("MediaEncryptedEvent", v8::Global::new(scope, tmpl_media_encrypted_event));
+    } // end batch
+    // Batch 155: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_media_key_message_event = super::events::create_media_key_message_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("MediaKeyMessageEvent", v8::Global::new(scope, tmpl_media_key_message_event));
         let tmpl_media_query_list_event = super::events::create_media_query_list_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1590,6 +2178,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MessageEvent", v8::Global::new(scope, tmpl_message_event));
         let tmpl_ndef_reading_event = super::events::create_ndef_reading_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("NDEFReadingEvent", v8::Global::new(scope, tmpl_ndef_reading_event));
+    } // end batch
+    // Batch 156: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_navigate_event = super::events::create_navigate_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("NavigateEvent", v8::Global::new(scope, tmpl_navigate_event));
         let tmpl_navigation_current_entry_change_event = super::events::create_navigation_current_entry_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1600,6 +2192,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PageRevealEvent", v8::Global::new(scope, tmpl_page_reveal_event));
         let tmpl_page_swap_event = super::events::create_page_swap_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("PageSwapEvent", v8::Global::new(scope, tmpl_page_swap_event));
+    } // end batch
+    // Batch 157: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_page_transition_event = super::events::create_page_transition_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("PageTransitionEvent", v8::Global::new(scope, tmpl_page_transition_event));
         let tmpl_payment_request_update_event = super::events::create_payment_request_update_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1610,6 +2206,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PopStateEvent", v8::Global::new(scope, tmpl_pop_state_event));
         let tmpl_portal_activate_event = super::events::create_portal_activate_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("PortalActivateEvent", v8::Global::new(scope, tmpl_portal_activate_event));
+    } // end batch
+    // Batch 158: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_presentation_connection_available_event = super::events::create_presentation_connection_available_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("PresentationConnectionAvailableEvent", v8::Global::new(scope, tmpl_presentation_connection_available_event));
         let tmpl_presentation_connection_close_event = super::events::create_presentation_connection_close_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1620,6 +2220,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PromiseRejectionEvent", v8::Global::new(scope, tmpl_promise_rejection_event));
         let tmpl_rtcdtmf_tone_change_event = super::events::create_rtcdtmf_tone_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("RTCDTMFToneChangeEvent", v8::Global::new(scope, tmpl_rtcdtmf_tone_change_event));
+    } // end batch
+    // Batch 159: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_rtc_data_channel_event = super::events::create_rtc_data_channel_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("RTCDataChannelEvent", v8::Global::new(scope, tmpl_rtc_data_channel_event));
         let tmpl_rtc_error_event = super::events::create_rtc_error_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1630,6 +2234,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("RTCPeerConnectionIceEvent", v8::Global::new(scope, tmpl_rtc_peer_connection_ice_event));
         let tmpl_rtc_track_event = super::events::create_rtc_track_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("RTCTrackEvent", v8::Global::new(scope, tmpl_rtc_track_event));
+    } // end batch
+    // Batch 160: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_rtc_transform_event = super::events::create_rtc_transform_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("RTCTransformEvent", v8::Global::new(scope, tmpl_rtc_transform_event));
         let tmpl_s_frame_transform_error_event = super::events::create_s_frame_transform_error_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1641,7 +2249,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_snap_event = super::events::create_snap_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("SnapEvent", v8::Global::new(scope, tmpl_snap_event));
     } // end batch
-    // Batch 9: 100 templates
+    // Batch 161: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_speech_recognition_error_event = super::events::create_speech_recognition_error_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1654,6 +2262,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("StorageEvent", v8::Global::new(scope, tmpl_storage_event));
         let tmpl_submit_event = super::events::create_submit_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("SubmitEvent", v8::Global::new(scope, tmpl_submit_event));
+    } // end batch
+    // Batch 162: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_task_priority_change_event = super::events::create_task_priority_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("TaskPriorityChangeEvent", v8::Global::new(scope, tmpl_task_priority_change_event));
         let tmpl_text_format_update_event = super::events::create_text_format_update_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1664,6 +2276,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("TimeEvent", v8::Global::new(scope, tmpl_time_event));
         let tmpl_toggle_event = super::events::create_toggle_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("ToggleEvent", v8::Global::new(scope, tmpl_toggle_event));
+    } // end batch
+    // Batch 163: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_track_event = super::events::create_track_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("TrackEvent", v8::Global::new(scope, tmpl_track_event));
         let tmpl_transition_event = super::events::create_transition_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1674,6 +2290,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("USBConnectionEvent", v8::Global::new(scope, tmpl_usb_connection_event));
         let tmpl_value_event = super::events::create_value_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("ValueEvent", v8::Global::new(scope, tmpl_value_event));
+    } // end batch
+    // Batch 164: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_web_gl_context_event = super::events::create_web_gl_context_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("WebGLContextEvent", v8::Global::new(scope, tmpl_web_gl_context_event));
         let tmpl_window_controls_overlay_geometry_change_event = super::events::create_window_controls_overlay_geometry_change_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1684,6 +2304,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRInputSourcesChangeEvent", v8::Global::new(scope, tmpl_xr_input_sources_change_event));
         let tmpl_xr_layer_event = super::webxr::create_xr_layer_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRLayerEvent", v8::Global::new(scope, tmpl_xr_layer_event));
+    } // end batch
+    // Batch 165: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_reference_space_event = super::webxr::create_xr_reference_space_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRReferenceSpaceEvent", v8::Global::new(scope, tmpl_xr_reference_space_event));
         let tmpl_xr_session_event = super::webxr::create_xr_session_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1694,6 +2318,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AbortSignal", v8::Global::new(scope, tmpl_abort_signal));
         let tmpl_animation = super::web_apis::create_animation_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Animation", v8::Global::new(scope, tmpl_animation));
+    } // end batch
+    // Batch 166: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_audio_decoder = super::web_audio::create_audio_decoder_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("AudioDecoder", v8::Global::new(scope, tmpl_audio_decoder));
         let tmpl_audio_encoder = super::web_audio::create_audio_encoder_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1704,6 +2332,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AudioSession", v8::Global::new(scope, tmpl_audio_session));
         let tmpl_audio_track_list = super::web_audio::create_audio_track_list_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("AudioTrackList", v8::Global::new(scope, tmpl_audio_track_list));
+    } // end batch
+    // Batch 167: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_background_fetch_registration = super::web_apis::create_background_fetch_registration_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("BackgroundFetchRegistration", v8::Global::new(scope, tmpl_background_fetch_registration));
         let tmpl_base_audio_context = super::web_audio::create_base_audio_context_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1714,6 +2346,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Bluetooth", v8::Global::new(scope, tmpl_bluetooth));
         let tmpl_bluetooth_device = super::bluetooth::create_bluetooth_device_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("BluetoothDevice", v8::Global::new(scope, tmpl_bluetooth_device));
+    } // end batch
+    // Batch 168: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_bluetooth_remote_gatt_characteristic = super::bluetooth::create_bluetooth_remote_gatt_characteristic_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("BluetoothRemoteGATTCharacteristic", v8::Global::new(scope, tmpl_bluetooth_remote_gatt_characteristic));
         let tmpl_bluetooth_remote_gatt_service = super::bluetooth::create_bluetooth_remote_gatt_service_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1724,6 +2360,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CaptureController", v8::Global::new(scope, tmpl_capture_controller));
         let tmpl_clipboard = super::web_apis::create_clipboard_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Clipboard", v8::Global::new(scope, tmpl_clipboard));
+    } // end batch
+    // Batch 169: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_close_watcher = super::web_apis::create_close_watcher_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("CloseWatcher", v8::Global::new(scope, tmpl_close_watcher));
         let tmpl_cookie_store = super::web_apis::create_cookie_store_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1734,6 +2374,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("DevicePosture", v8::Global::new(scope, tmpl_device_posture));
         let tmpl_document_picture_in_picture = super::web_apis::create_document_picture_in_picture_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("DocumentPictureInPicture", v8::Global::new(scope, tmpl_document_picture_in_picture));
+    } // end batch
+    // Batch 170: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_edit_context = super::web_apis::create_edit_context_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("EditContext", v8::Global::new(scope, tmpl_edit_context));
         let tmpl_event_source = super::events::create_event_source_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1744,6 +2388,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("FontFaceSet", v8::Global::new(scope, tmpl_font_face_set));
         let tmpl_gpu_device = super::gpu::create_gpu_device_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("GPUDevice", v8::Global::new(scope, tmpl_gpu_device));
+    } // end batch
+    // Batch 171: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_hid = super::hid::create_hid_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("HID", v8::Global::new(scope, tmpl_hid));
         let tmpl_hid_device = super::hid::create_hid_device_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1754,6 +2402,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("IDBRequest", v8::Global::new(scope, tmpl_idb_request));
         let tmpl_idb_transaction = super::idb::create_idb_transaction_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("IDBTransaction", v8::Global::new(scope, tmpl_idb_transaction));
+    } // end batch
+    // Batch 172: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_idle_detector = super::web_apis::create_idle_detector_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("IdleDetector", v8::Global::new(scope, tmpl_idle_detector));
         let tmpl_keyboard = super::web_apis::create_keyboard_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1764,6 +2416,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MIDIAccess", v8::Global::new(scope, tmpl_midi_access));
         let tmpl_midi_port = super::midi::create_midi_port_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("MIDIPort", v8::Global::new(scope, tmpl_midi_port));
+    } // end batch
+    // Batch 173: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_media_devices = super::media_apis::create_media_devices_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("MediaDevices", v8::Global::new(scope, tmpl_media_devices));
         let tmpl_media_key_session = super::media_apis::create_media_key_session_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1774,6 +2430,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MediaRecorder", v8::Global::new(scope, tmpl_media_recorder));
         let tmpl_media_source = super::media_apis::create_media_source_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("MediaSource", v8::Global::new(scope, tmpl_media_source));
+    } // end batch
+    // Batch 174: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_media_stream = super::media_apis::create_media_stream_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("MediaStream", v8::Global::new(scope, tmpl_media_stream));
         let tmpl_media_stream_track = super::media_apis::create_media_stream_track_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1784,6 +2444,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ModelContext", v8::Global::new(scope, tmpl_model_context));
         let tmpl_ndef_reader = super::web_apis::create_ndef_reader_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("NDEFReader", v8::Global::new(scope, tmpl_ndef_reader));
+    } // end batch
+    // Batch 175: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_named_flow = super::web_apis::create_named_flow_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("NamedFlow", v8::Global::new(scope, tmpl_named_flow));
         let tmpl_navigation = super::web_apis::create_navigation_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1794,6 +2458,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("NavigatorManagedData", v8::Global::new(scope, tmpl_navigator_managed_data));
         let tmpl_network_information = super::web_apis::create_network_information_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("NetworkInformation", v8::Global::new(scope, tmpl_network_information));
+    } // end batch
+    // Batch 176: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_node = super::dom_core::create_node_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Node", v8::Global::new(scope, tmpl_node));
         let tmpl_notification = super::web_apis::create_notification_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1804,6 +2472,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PaymentRequest", v8::Global::new(scope, tmpl_payment_request));
         let tmpl_payment_response = super::payment::create_payment_response_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("PaymentResponse", v8::Global::new(scope, tmpl_payment_response));
+    } // end batch
+    // Batch 177: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_performance = super::web_apis::create_performance_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Performance", v8::Global::new(scope, tmpl_performance));
         let tmpl_permission_status = super::media_apis::create_permission_status_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1814,6 +2486,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PortalHost", v8::Global::new(scope, tmpl_portal_host));
         let tmpl_preference_object = super::web_apis::create_preference_object_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("PreferenceObject", v8::Global::new(scope, tmpl_preference_object));
+    } // end batch
+    // Batch 178: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_presentation_availability = super::presentation::create_presentation_availability_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("PresentationAvailability", v8::Global::new(scope, tmpl_presentation_availability));
         let tmpl_presentation_connection = super::presentation::create_presentation_connection_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1824,6 +2500,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PresentationRequest", v8::Global::new(scope, tmpl_presentation_request));
         let tmpl_profiler = super::web_apis::create_profiler_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Profiler", v8::Global::new(scope, tmpl_profiler));
+    } // end batch
+    // Batch 179: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_rtcdtmf_sender = super::webrtc::create_rtcdtmf_sender_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("RTCDTMFSender", v8::Global::new(scope, tmpl_rtcdtmf_sender));
         let tmpl_rtc_data_channel = super::webrtc::create_rtc_data_channel_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1834,6 +2514,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("RTCIceTransport", v8::Global::new(scope, tmpl_rtc_ice_transport));
         let tmpl_rtc_peer_connection = super::webrtc::create_rtc_peer_connection_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("RTCPeerConnection", v8::Global::new(scope, tmpl_rtc_peer_connection));
+    } // end batch
+    // Batch 180: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_rtc_rtp_s_frame_decrypter = super::webrtc::create_rtc_rtp_s_frame_decrypter_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("RTCRtpSFrameDecrypter", v8::Global::new(scope, tmpl_rtc_rtp_s_frame_decrypter));
         let tmpl_rtc_rtp_script_transformer = super::webrtc::create_rtc_rtp_script_transformer_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1845,7 +2529,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_s_frame_decrypter_stream = super::web_apis::create_s_frame_decrypter_stream_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("SFrameDecrypterStream", v8::Global::new(scope, tmpl_s_frame_decrypter_stream));
     } // end batch
-    // Batch 10: 100 templates
+    // Batch 181: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_screen_details = super::web_apis::create_screen_details_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1858,6 +2542,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Serial", v8::Global::new(scope, tmpl_serial));
         let tmpl_serial_port = super::web_apis::create_serial_port_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("SerialPort", v8::Global::new(scope, tmpl_serial_port));
+    } // end batch
+    // Batch 182: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_service_worker = super::workers::create_service_worker_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("ServiceWorker", v8::Global::new(scope, tmpl_service_worker));
         let tmpl_service_worker_container = super::workers::create_service_worker_container_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1868,6 +2556,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SharedWorker", v8::Global::new(scope, tmpl_shared_worker));
         let tmpl_source_buffer = super::web_apis::create_source_buffer_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("SourceBuffer", v8::Global::new(scope, tmpl_source_buffer));
+    } // end batch
+    // Batch 183: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_source_buffer_list = super::web_apis::create_source_buffer_list_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("SourceBufferList", v8::Global::new(scope, tmpl_source_buffer_list));
         let tmpl_speech_recognition = super::web_apis::create_speech_recognition_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1878,6 +2570,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SpeechSynthesisUtterance", v8::Global::new(scope, tmpl_speech_synthesis_utterance));
         let tmpl_text_track = super::web_apis::create_text_track_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("TextTrack", v8::Global::new(scope, tmpl_text_track));
+    } // end batch
+    // Batch 184: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_text_track_cue = super::web_apis::create_text_track_cue_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("TextTrackCue", v8::Global::new(scope, tmpl_text_track_cue));
         let tmpl_text_track_list = super::web_apis::create_text_track_list_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1888,6 +2584,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("VideoDecoder", v8::Global::new(scope, tmpl_video_decoder));
         let tmpl_video_encoder = super::web_apis::create_video_encoder_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("VideoEncoder", v8::Global::new(scope, tmpl_video_encoder));
+    } // end batch
+    // Batch 185: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_video_track_list = super::web_apis::create_video_track_list_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("VideoTrackList", v8::Global::new(scope, tmpl_video_track_list));
         let tmpl_virtual_keyboard = super::web_apis::create_virtual_keyboard_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1898,6 +2598,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WakeLockSentinel", v8::Global::new(scope, tmpl_wake_lock_sentinel));
         let tmpl_web_socket = super::web_apis::create_web_socket_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("WebSocket", v8::Global::new(scope, tmpl_web_socket));
+    } // end batch
+    // Batch 186: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_window = super::web_apis::create_window_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Window", v8::Global::new(scope, tmpl_window));
         let tmpl_window_controls_overlay = super::web_apis::create_window_controls_overlay_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1908,6 +2612,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WorkerGlobalScope", v8::Global::new(scope, tmpl_worker_global_scope));
         let tmpl_xml_http_request_event_target = super::web_apis::create_xml_http_request_event_target_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("XMLHttpRequestEventTarget", v8::Global::new(scope, tmpl_xml_http_request_event_target));
+    } // end batch
+    // Batch 187: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_layer = super::webxr::create_xr_layer_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRLayer", v8::Global::new(scope, tmpl_xr_layer));
         let tmpl_xr_light_probe = super::webxr::create_xr_light_probe_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -1918,6 +2626,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRSpace", v8::Global::new(scope, tmpl_xr_space));
         let tmpl_xr_system = super::webxr::create_xr_system_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRSystem", v8::Global::new(scope, tmpl_xr_system));
+    } // end batch
+    // Batch 188: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_file_system_directory_entry = super::web_apis::create_file_system_directory_entry_template(scope, templates.get("FileSystemEntry").map(|g| v8::Local::new(scope, g)));
         templates.insert("FileSystemDirectoryEntry", v8::Global::new(scope, tmpl_file_system_directory_entry));
         let tmpl_file_system_file_entry = super::web_apis::create_file_system_file_entry_template(scope, templates.get("FileSystemEntry").map(|g| v8::Local::new(scope, g)));
@@ -1928,6 +2640,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("FileSystemFileHandle", v8::Global::new(scope, tmpl_file_system_file_handle));
         let tmpl_gpu_internal_error = super::gpu::create_gpu_internal_error_template(scope, templates.get("GPUError").map(|g| v8::Local::new(scope, g)));
         templates.insert("GPUInternalError", v8::Global::new(scope, tmpl_gpu_internal_error));
+    } // end batch
+    // Batch 189: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_gpu_out_of_memory_error = super::gpu::create_gpu_out_of_memory_error_template(scope, templates.get("GPUError").map(|g| v8::Local::new(scope, g)));
         templates.insert("GPUOutOfMemoryError", v8::Global::new(scope, tmpl_gpu_out_of_memory_error));
         let tmpl_gpu_validation_error = super::gpu::create_gpu_validation_error_template(scope, templates.get("GPUError").map(|g| v8::Local::new(scope, g)));
@@ -1938,6 +2654,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLFormControlsCollection", v8::Global::new(scope, tmpl_html_form_controls_collection));
         let tmpl_html_options_collection = super::html_elements::create_html_options_collection_template(scope, templates.get("HTMLCollection").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLOptionsCollection", v8::Global::new(scope, tmpl_html_options_collection));
+    } // end batch
+    // Batch 190: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_idb_cursor_with_value = super::idb::create_idb_cursor_with_value_template(scope, templates.get("IDBCursor").map(|g| v8::Local::new(scope, g)));
         templates.insert("IDBCursorWithValue", v8::Global::new(scope, tmpl_idb_cursor_with_value));
         let tmpl_input_device_info = super::web_apis::create_input_device_info_template(scope, templates.get("MediaDeviceInfo").map(|g| v8::Local::new(scope, g)));
@@ -1948,6 +2668,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("LargestContentfulPaint", v8::Global::new(scope, tmpl_largest_contentful_paint));
         let tmpl_layout_shift = super::web_apis::create_layout_shift_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
         templates.insert("LayoutShift", v8::Global::new(scope, tmpl_layout_shift));
+    } // end batch
+    // Batch 191: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_performance_container_timing = super::web_apis::create_performance_container_timing_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
         templates.insert("PerformanceContainerTiming", v8::Global::new(scope, tmpl_performance_container_timing));
         let tmpl_performance_element_timing = super::web_apis::create_performance_element_timing_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
@@ -1958,6 +2682,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PerformanceLongAnimationFrameTiming", v8::Global::new(scope, tmpl_performance_long_animation_frame_timing));
         let tmpl_performance_long_task_timing = super::web_apis::create_performance_long_task_timing_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
         templates.insert("PerformanceLongTaskTiming", v8::Global::new(scope, tmpl_performance_long_task_timing));
+    } // end batch
+    // Batch 192: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_performance_mark = super::web_apis::create_performance_mark_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
         templates.insert("PerformanceMark", v8::Global::new(scope, tmpl_performance_mark));
         let tmpl_performance_measure = super::web_apis::create_performance_measure_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
@@ -1968,6 +2696,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PerformanceResourceTiming", v8::Global::new(scope, tmpl_performance_resource_timing));
         let tmpl_performance_script_timing = super::web_apis::create_performance_script_timing_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
         templates.insert("PerformanceScriptTiming", v8::Global::new(scope, tmpl_performance_script_timing));
+    } // end batch
+    // Batch 193: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_task_attribution_timing = super::web_apis::create_task_attribution_timing_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
         templates.insert("TaskAttributionTiming", v8::Global::new(scope, tmpl_task_attribution_timing));
         let tmpl_visibility_state_entry = super::web_apis::create_visibility_state_entry_template(scope, templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)));
@@ -1978,6 +2710,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ScreenDetailed", v8::Global::new(scope, tmpl_screen_detailed));
         let tmpl_style_property_map = super::web_apis::create_style_property_map_template(scope, templates.get("StylePropertyMapReadOnly").map(|g| v8::Local::new(scope, g)));
         templates.insert("StylePropertyMap", v8::Global::new(scope, tmpl_style_property_map));
+    } // end batch
+    // Batch 194: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_style_sheet = super::css_om::create_css_style_sheet_template(scope, templates.get("StyleSheet").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSStyleSheet", v8::Global::new(scope, tmpl_css_style_sheet));
         let tmpl_web_gl_buffer = super::webgl::create_web_gl_buffer_template(scope, templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)));
@@ -1988,6 +2724,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WebGLProgram", v8::Global::new(scope, tmpl_web_gl_program));
         let tmpl_web_gl_query = super::webgl::create_web_gl_query_template(scope, templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)));
         templates.insert("WebGLQuery", v8::Global::new(scope, tmpl_web_gl_query));
+    } // end batch
+    // Batch 195: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_web_gl_renderbuffer = super::webgl::create_web_gl_renderbuffer_template(scope, templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)));
         templates.insert("WebGLRenderbuffer", v8::Global::new(scope, tmpl_web_gl_renderbuffer));
         let tmpl_web_gl_sampler = super::webgl::create_web_gl_sampler_template(scope, templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)));
@@ -1998,6 +2738,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WebGLSync", v8::Global::new(scope, tmpl_web_gl_sync));
         let tmpl_web_gl_texture = super::webgl::create_web_gl_texture_template(scope, templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)));
         templates.insert("WebGLTexture", v8::Global::new(scope, tmpl_web_gl_texture));
+    } // end batch
+    // Batch 196: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_web_gl_timer_query_ext = super::webgl::create_web_gl_timer_query_ext_template(scope, templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)));
         templates.insert("WebGLTimerQueryEXT", v8::Global::new(scope, tmpl_web_gl_timer_query_ext));
         let tmpl_web_gl_transform_feedback = super::webgl::create_web_gl_transform_feedback_template(scope, templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)));
@@ -2008,6 +2752,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WebGLVertexArrayObjectOES", v8::Global::new(scope, tmpl_web_gl_vertex_array_object_oes));
         let tmpl_audio_worklet = super::web_audio::create_audio_worklet_template(scope, templates.get("Worklet").map(|g| v8::Local::new(scope, g)));
         templates.insert("AudioWorklet", v8::Global::new(scope, tmpl_audio_worklet));
+    } // end batch
+    // Batch 197: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_animation_worklet_global_scope = super::web_apis::create_animation_worklet_global_scope_template(scope, templates.get("WorkletGlobalScope").map(|g| v8::Local::new(scope, g)));
         templates.insert("AnimationWorkletGlobalScope", v8::Global::new(scope, tmpl_animation_worklet_global_scope));
         let tmpl_audio_worklet_global_scope = super::web_audio::create_audio_worklet_global_scope_template(scope, templates.get("WorkletGlobalScope").map(|g| v8::Local::new(scope, g)));
@@ -2018,6 +2766,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PaintWorkletGlobalScope", v8::Global::new(scope, tmpl_paint_worklet_global_scope));
         let tmpl_file_system_writable_file_stream = super::web_apis::create_file_system_writable_file_stream_template(scope, templates.get("WritableStream").map(|g| v8::Local::new(scope, g)));
         templates.insert("FileSystemWritableFileStream", v8::Global::new(scope, tmpl_file_system_writable_file_stream));
+    } // end batch
+    // Batch 198: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_web_transport_datagrams_writable = super::web_apis::create_web_transport_datagrams_writable_template(scope, templates.get("WritableStream").map(|g| v8::Local::new(scope, g)));
         templates.insert("WebTransportDatagramsWritable", v8::Global::new(scope, tmpl_web_transport_datagrams_writable));
         let tmpl_web_transport_send_stream = super::web_apis::create_web_transport_send_stream_template(scope, templates.get("WritableStream").map(|g| v8::Local::new(scope, g)));
@@ -2028,6 +2780,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRCPUDepthInformation", v8::Global::new(scope, tmpl_xrcpu_depth_information));
         let tmpl_xr_web_gl_depth_information = super::webxr::create_xr_web_gl_depth_information_template(scope, templates.get("XRDepthInformation").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRWebGLDepthInformation", v8::Global::new(scope, tmpl_xr_web_gl_depth_information));
+    } // end batch
+    // Batch 199: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_joint_pose = super::webxr::create_xr_joint_pose_template(scope, templates.get("XRPose").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRJointPose", v8::Global::new(scope, tmpl_xr_joint_pose));
         let tmpl_xr_viewer_pose = super::webxr::create_xr_viewer_pose_template(scope, templates.get("XRPose").map(|g| v8::Local::new(scope, g)));
@@ -2038,6 +2794,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ViewTimeline", v8::Global::new(scope, tmpl_view_timeline));
         let tmpl_css_apply_block_rule = super::css_om::create_css_apply_block_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSApplyBlockRule", v8::Global::new(scope, tmpl_css_apply_block_rule));
+    } // end batch
+    // Batch 200: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_condition_rule = super::css_om::create_css_condition_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSConditionRule", v8::Global::new(scope, tmpl_css_condition_rule));
         let tmpl_css_contents_block_rule = super::css_om::create_css_contents_block_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
@@ -2049,7 +2809,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_css_mixin_rule = super::css_om::create_css_mixin_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSMixinRule", v8::Global::new(scope, tmpl_css_mixin_rule));
     } // end batch
-    // Batch 11: 100 templates
+    // Batch 201: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_css_page_rule = super::css_om::create_css_page_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
@@ -2062,6 +2822,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSStyleRule", v8::Global::new(scope, tmpl_css_style_rule));
         let tmpl_css_supports_condition_rule = super::css_om::create_css_supports_condition_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSSupportsConditionRule", v8::Global::new(scope, tmpl_css_supports_condition_rule));
+    } // end batch
+    // Batch 202: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_color = super::css_om::create_css_color_template(scope, templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSColor", v8::Global::new(scope, tmpl_css_color));
         let tmpl_csshsl = super::css_om::create_csshsl_template(scope, templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)));
@@ -2072,6 +2836,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSLCH", v8::Global::new(scope, tmpl_csslch));
         let tmpl_css_lab = super::css_om::create_css_lab_template(scope, templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSLab", v8::Global::new(scope, tmpl_css_lab));
+    } // end batch
+    // Batch 203: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_cssoklch = super::css_om::create_cssoklch_template(scope, templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSOKLCH", v8::Global::new(scope, tmpl_cssoklch));
         let tmpl_cssok_lab = super::css_om::create_cssok_lab_template(scope, templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)));
@@ -2082,6 +2850,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSMathValue", v8::Global::new(scope, tmpl_css_math_value));
         let tmpl_css_unit_value = super::css_om::create_css_unit_value_template(scope, templates.get("CSSNumericValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSUnitValue", v8::Global::new(scope, tmpl_css_unit_value));
+    } // end batch
+    // Batch 204: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_background_fetch_event = super::events::create_background_fetch_event_template(scope, templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("BackgroundFetchEvent", v8::Global::new(scope, tmpl_background_fetch_event));
         let tmpl_can_make_payment_event = super::events::create_can_make_payment_event_template(scope, templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)));
@@ -2092,6 +2864,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ExtendableCookieChangeEvent", v8::Global::new(scope, tmpl_extendable_cookie_change_event));
         let tmpl_extendable_message_event = super::events::create_extendable_message_event_template(scope, templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("ExtendableMessageEvent", v8::Global::new(scope, tmpl_extendable_message_event));
+    } // end batch
+    // Batch 205: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_fetch_event = super::events::create_fetch_event_template(scope, templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("FetchEvent", v8::Global::new(scope, tmpl_fetch_event));
         let tmpl_install_event = super::events::create_install_event_template(scope, templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)));
@@ -2102,6 +2878,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PaymentRequestEvent", v8::Global::new(scope, tmpl_payment_request_event));
         let tmpl_periodic_sync_event = super::events::create_periodic_sync_event_template(scope, templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("PeriodicSyncEvent", v8::Global::new(scope, tmpl_periodic_sync_event));
+    } // end batch
+    // Batch 206: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_push_event = super::events::create_push_event_template(scope, templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("PushEvent", v8::Global::new(scope, tmpl_push_event));
         let tmpl_push_subscription_change_event = super::events::create_push_subscription_change_event_template(scope, templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)));
@@ -2112,6 +2892,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("PaymentMethodChangeEvent", v8::Global::new(scope, tmpl_payment_method_change_event));
         let tmpl_speech_synthesis_error_event = super::events::create_speech_synthesis_error_event_template(scope, templates.get("SpeechSynthesisEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("SpeechSynthesisErrorEvent", v8::Global::new(scope, tmpl_speech_synthesis_error_event));
+    } // end batch
+    // Batch 207: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_composition_event = super::events::create_composition_event_template(scope, templates.get("UIEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("CompositionEvent", v8::Global::new(scope, tmpl_composition_event));
         let tmpl_focus_event = super::events::create_focus_event_template(scope, templates.get("UIEvent").map(|g| v8::Local::new(scope, g)));
@@ -2122,6 +2906,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("KeyboardEvent", v8::Global::new(scope, tmpl_keyboard_event));
         let tmpl_mouse_event = super::events::create_mouse_event_template(scope, templates.get("UIEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("MouseEvent", v8::Global::new(scope, tmpl_mouse_event));
+    } // end batch
+    // Batch 208: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_navigation_event = super::events::create_navigation_event_template(scope, templates.get("UIEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("NavigationEvent", v8::Global::new(scope, tmpl_navigation_event));
         let tmpl_text_event = super::events::create_text_event_template(scope, templates.get("UIEvent").map(|g| v8::Local::new(scope, g)));
@@ -2132,6 +2920,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("TaskSignal", v8::Global::new(scope, tmpl_task_signal));
         let tmpl_css_animation = super::css_om::create_css_animation_template(scope, templates.get("Animation").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSAnimation", v8::Global::new(scope, tmpl_css_animation));
+    } // end batch
+    // Batch 209: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_transition = super::css_om::create_css_transition_template(scope, templates.get("Animation").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSTransition", v8::Global::new(scope, tmpl_css_transition));
         let tmpl_shadow_animation = super::web_apis::create_shadow_animation_template(scope, templates.get("Animation").map(|g| v8::Local::new(scope, g)));
@@ -2142,6 +2934,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AnalyserNode", v8::Global::new(scope, tmpl_analyser_node));
         let tmpl_audio_destination_node = super::web_audio::create_audio_destination_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("AudioDestinationNode", v8::Global::new(scope, tmpl_audio_destination_node));
+    } // end batch
+    // Batch 210: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_audio_scheduled_source_node = super::web_audio::create_audio_scheduled_source_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("AudioScheduledSourceNode", v8::Global::new(scope, tmpl_audio_scheduled_source_node));
         let tmpl_audio_worklet_node = super::web_audio::create_audio_worklet_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
@@ -2152,6 +2948,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ChannelMergerNode", v8::Global::new(scope, tmpl_channel_merger_node));
         let tmpl_channel_splitter_node = super::web_apis::create_channel_splitter_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("ChannelSplitterNode", v8::Global::new(scope, tmpl_channel_splitter_node));
+    } // end batch
+    // Batch 211: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_convolver_node = super::web_apis::create_convolver_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("ConvolverNode", v8::Global::new(scope, tmpl_convolver_node));
         let tmpl_delay_node = super::web_audio::create_delay_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
@@ -2162,6 +2962,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GainNode", v8::Global::new(scope, tmpl_gain_node));
         let tmpl_iir_filter_node = super::web_apis::create_iir_filter_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("IIRFilterNode", v8::Global::new(scope, tmpl_iir_filter_node));
+    } // end batch
+    // Batch 212: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_media_element_audio_source_node = super::media_apis::create_media_element_audio_source_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("MediaElementAudioSourceNode", v8::Global::new(scope, tmpl_media_element_audio_source_node));
         let tmpl_media_stream_audio_destination_node = super::media_apis::create_media_stream_audio_destination_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
@@ -2172,6 +2976,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("MediaStreamTrackAudioSourceNode", v8::Global::new(scope, tmpl_media_stream_track_audio_source_node));
         let tmpl_panner_node = super::web_apis::create_panner_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("PannerNode", v8::Global::new(scope, tmpl_panner_node));
+    } // end batch
+    // Batch 213: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_script_processor_node = super::web_apis::create_script_processor_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("ScriptProcessorNode", v8::Global::new(scope, tmpl_script_processor_node));
         let tmpl_stereo_panner_node = super::web_apis::create_stereo_panner_node_template(scope, templates.get("AudioNode").map(|g| v8::Local::new(scope, g)));
@@ -2182,6 +2990,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("AudioContext", v8::Global::new(scope, tmpl_audio_context));
         let tmpl_offline_audio_context = super::web_audio::create_offline_audio_context_template(scope, templates.get("BaseAudioContext").map(|g| v8::Local::new(scope, g)));
         templates.insert("OfflineAudioContext", v8::Global::new(scope, tmpl_offline_audio_context));
+    } // end batch
+    // Batch 214: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_idb_open_db_request = super::idb::create_idb_open_db_request_template(scope, templates.get("IDBRequest").map(|g| v8::Local::new(scope, g)));
         templates.insert("IDBOpenDBRequest", v8::Global::new(scope, tmpl_idb_open_db_request));
         let tmpl_midi_input = super::midi::create_midi_input_template(scope, templates.get("MIDIPort").map(|g| v8::Local::new(scope, g)));
@@ -2192,6 +3004,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ManagedMediaSource", v8::Global::new(scope, tmpl_managed_media_source));
         let tmpl_browser_capture_media_stream_track = super::media_apis::create_browser_capture_media_stream_track_template(scope, templates.get("MediaStreamTrack").map(|g| v8::Local::new(scope, g)));
         templates.insert("BrowserCaptureMediaStreamTrack", v8::Global::new(scope, tmpl_browser_capture_media_stream_track));
+    } // end batch
+    // Batch 215: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_canvas_capture_media_stream_track = super::media_apis::create_canvas_capture_media_stream_track_template(scope, templates.get("MediaStreamTrack").map(|g| v8::Local::new(scope, g)));
         templates.insert("CanvasCaptureMediaStreamTrack", v8::Global::new(scope, tmpl_canvas_capture_media_stream_track));
         let tmpl_attr = super::dom_core::create_attr_template(scope, templates.get("Node").map(|g| v8::Local::new(scope, g)));
@@ -2202,6 +3018,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Document", v8::Global::new(scope, tmpl_document));
         let tmpl_document_fragment = super::dom_core::create_document_fragment_template(scope, templates.get("Node").map(|g| v8::Local::new(scope, g)));
         templates.insert("DocumentFragment", v8::Global::new(scope, tmpl_document_fragment));
+    } // end batch
+    // Batch 216: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_document_type = super::dom_core::create_document_type_template(scope, templates.get("Node").map(|g| v8::Local::new(scope, g)));
         templates.insert("DocumentType", v8::Global::new(scope, tmpl_document_type));
         let tmpl_element = super::dom_core::create_element_template(scope, templates.get("Node").map(|g| v8::Local::new(scope, g)));
@@ -2212,6 +3032,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("BluetoothPermissionResult", v8::Global::new(scope, tmpl_bluetooth_permission_result));
         let tmpl_usb_permission_result = super::usb::create_usb_permission_result_template(scope, templates.get("PermissionStatus").map(|g| v8::Local::new(scope, g)));
         templates.insert("USBPermissionResult", v8::Global::new(scope, tmpl_usb_permission_result));
+    } // end batch
+    // Batch 217: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_permission_status = super::webxr::create_xr_permission_status_template(scope, templates.get("PermissionStatus").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRPermissionStatus", v8::Global::new(scope, tmpl_xr_permission_status));
         let tmpl_accelerometer = super::sensors::create_accelerometer_template(scope, templates.get("Sensor").map(|g| v8::Local::new(scope, g)));
@@ -2222,6 +3046,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Gyroscope", v8::Global::new(scope, tmpl_gyroscope));
         let tmpl_magnetometer = super::sensors::create_magnetometer_template(scope, templates.get("Sensor").map(|g| v8::Local::new(scope, g)));
         templates.insert("Magnetometer", v8::Global::new(scope, tmpl_magnetometer));
+    } // end batch
+    // Batch 218: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_orientation_sensor = super::sensors::create_orientation_sensor_template(scope, templates.get("Sensor").map(|g| v8::Local::new(scope, g)));
         templates.insert("OrientationSensor", v8::Global::new(scope, tmpl_orientation_sensor));
         let tmpl_proximity_sensor = super::sensors::create_proximity_sensor_template(scope, templates.get("Sensor").map(|g| v8::Local::new(scope, g)));
@@ -2232,6 +3060,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ManagedSourceBuffer", v8::Global::new(scope, tmpl_managed_source_buffer));
         let tmpl_data_cue = super::web_apis::create_data_cue_template(scope, templates.get("TextTrackCue").map(|g| v8::Local::new(scope, g)));
         templates.insert("DataCue", v8::Global::new(scope, tmpl_data_cue));
+    } // end batch
+    // Batch 219: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_vtt_cue = super::web_apis::create_vtt_cue_template(scope, templates.get("TextTrackCue").map(|g| v8::Local::new(scope, g)));
         templates.insert("VTTCue", v8::Global::new(scope, tmpl_vtt_cue));
         let tmpl_dedicated_worker_global_scope = super::web_apis::create_dedicated_worker_global_scope_template(scope, templates.get("WorkerGlobalScope").map(|g| v8::Local::new(scope, g)));
@@ -2242,6 +3074,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ServiceWorkerGlobalScope", v8::Global::new(scope, tmpl_service_worker_global_scope));
         let tmpl_shared_worker_global_scope = super::web_apis::create_shared_worker_global_scope_template(scope, templates.get("WorkerGlobalScope").map(|g| v8::Local::new(scope, g)));
         templates.insert("SharedWorkerGlobalScope", v8::Global::new(scope, tmpl_shared_worker_global_scope));
+    } // end batch
+    // Batch 220: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xml_http_request = super::web_apis::create_xml_http_request_template(scope, templates.get("XMLHttpRequestEventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("XMLHttpRequest", v8::Global::new(scope, tmpl_xml_http_request));
         let tmpl_xml_http_request_upload = super::web_apis::create_xml_http_request_upload_template(scope, templates.get("XMLHttpRequestEventTarget").map(|g| v8::Local::new(scope, g)));
@@ -2253,7 +3089,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_xr_body_space = super::webxr::create_xr_body_space_template(scope, templates.get("XRSpace").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRBodySpace", v8::Global::new(scope, tmpl_xr_body_space));
     } // end batch
-    // Batch 12: 100 templates
+    // Batch 221: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_xr_joint_space = super::webxr::create_xr_joint_space_template(scope, templates.get("XRSpace").map(|g| v8::Local::new(scope, g)));
@@ -2266,6 +3102,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSContainerRule", v8::Global::new(scope, tmpl_css_container_rule));
         let tmpl_css_media_rule = super::css_om::create_css_media_rule_template(scope, templates.get("CSSConditionRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSMediaRule", v8::Global::new(scope, tmpl_css_media_rule));
+    } // end batch
+    // Batch 222: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_supports_rule = super::css_om::create_css_supports_rule_template(scope, templates.get("CSSConditionRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSSupportsRule", v8::Global::new(scope, tmpl_css_supports_rule));
         let tmpl_css_math_clamp = super::css_om::create_css_math_clamp_template(scope, templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)));
@@ -2276,6 +3116,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSMathMax", v8::Global::new(scope, tmpl_css_math_max));
         let tmpl_css_math_min = super::css_om::create_css_math_min_template(scope, templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSMathMin", v8::Global::new(scope, tmpl_css_math_min));
+    } // end batch
+    // Batch 223: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_math_negate = super::css_om::create_css_math_negate_template(scope, templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSMathNegate", v8::Global::new(scope, tmpl_css_math_negate));
         let tmpl_css_math_product = super::css_om::create_css_math_product_template(scope, templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)));
@@ -2286,6 +3130,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("BackgroundFetchUpdateUIEvent", v8::Global::new(scope, tmpl_background_fetch_update_ui_event));
         let tmpl_drag_event = super::events::create_drag_event_template(scope, templates.get("MouseEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("DragEvent", v8::Global::new(scope, tmpl_drag_event));
+    } // end batch
+    // Batch 224: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_pointer_event = super::events::create_pointer_event_template(scope, templates.get("MouseEvent").map(|g| v8::Local::new(scope, g)));
         templates.insert("PointerEvent", v8::Global::new(scope, tmpl_pointer_event));
         let tmpl_wheel_event = super::events::create_wheel_event_template(scope, templates.get("MouseEvent").map(|g| v8::Local::new(scope, g)));
@@ -2296,6 +3144,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("ConstantSourceNode", v8::Global::new(scope, tmpl_constant_source_node));
         let tmpl_oscillator_node = super::web_audio::create_oscillator_node_template(scope, templates.get("AudioScheduledSourceNode").map(|g| v8::Local::new(scope, g)));
         templates.insert("OscillatorNode", v8::Global::new(scope, tmpl_oscillator_node));
+    } // end batch
+    // Batch 225: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_webkit_audio_context = super::chrome_extensions::create_webkit_audio_context_template(scope, templates.get("AudioContext").map(|g| v8::Local::new(scope, g)));
         templates.insert("webkitAudioContext", v8::Global::new(scope, tmpl_webkit_audio_context));
         let tmpl_comment = super::dom_core::create_comment_template(scope, templates.get("CharacterData").map(|g| v8::Local::new(scope, g)));
@@ -2306,6 +3158,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Text", v8::Global::new(scope, tmpl_text));
         let tmpl_xml_document = super::web_apis::create_xml_document_template(scope, templates.get("Document").map(|g| v8::Local::new(scope, g)));
         templates.insert("XMLDocument", v8::Global::new(scope, tmpl_xml_document));
+    } // end batch
+    // Batch 226: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_shadow_root = super::dom_core::create_shadow_root_template(scope, templates.get("DocumentFragment").map(|g| v8::Local::new(scope, g)));
         templates.insert("ShadowRoot", v8::Global::new(scope, tmpl_shadow_root));
         let tmpl_html_element = super::html_elements::create_html_element_template(scope, templates.get("Element").map(|g| v8::Local::new(scope, g)));
@@ -2316,6 +3172,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGElement", v8::Global::new(scope, tmpl_svg_element));
         let tmpl_gravity_sensor = super::sensors::create_gravity_sensor_template(scope, templates.get("Accelerometer").map(|g| v8::Local::new(scope, g)));
         templates.insert("GravitySensor", v8::Global::new(scope, tmpl_gravity_sensor));
+    } // end batch
+    // Batch 227: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_linear_acceleration_sensor = super::sensors::create_linear_acceleration_sensor_template(scope, templates.get("Accelerometer").map(|g| v8::Local::new(scope, g)));
         templates.insert("LinearAccelerationSensor", v8::Global::new(scope, tmpl_linear_acceleration_sensor));
         let tmpl_absolute_orientation_sensor = super::sensors::create_absolute_orientation_sensor_template(scope, templates.get("OrientationSensor").map(|g| v8::Local::new(scope, g)));
@@ -2326,6 +3186,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRCubeLayer", v8::Global::new(scope, tmpl_xr_cube_layer));
         let tmpl_xr_cylinder_layer = super::webxr::create_xr_cylinder_layer_template(scope, templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRCylinderLayer", v8::Global::new(scope, tmpl_xr_cylinder_layer));
+    } // end batch
+    // Batch 228: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_equirect_layer = super::webxr::create_xr_equirect_layer_template(scope, templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)));
         templates.insert("XREquirectLayer", v8::Global::new(scope, tmpl_xr_equirect_layer));
         let tmpl_xr_projection_layer = super::webxr::create_xr_projection_layer_template(scope, templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)));
@@ -2336,6 +3200,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRBoundedReferenceSpace", v8::Global::new(scope, tmpl_xr_bounded_reference_space));
         let tmpl_cdata_section = super::web_apis::create_cdata_section_template(scope, templates.get("Text").map(|g| v8::Local::new(scope, g)));
         templates.insert("CDATASection", v8::Global::new(scope, tmpl_cdata_section));
+    } // end batch
+    // Batch 229: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_use_element_shadow_root = super::svg::create_svg_use_element_shadow_root_template(scope, templates.get("ShadowRoot").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGUseElementShadowRoot", v8::Global::new(scope, tmpl_svg_use_element_shadow_root));
         let tmpl_html_anchor_element = super::html_elements::create_html_anchor_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2346,6 +3214,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLBRElement", v8::Global::new(scope, tmpl_htmlbr_element));
         let tmpl_html_base_element = super::html_elements::create_html_base_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLBaseElement", v8::Global::new(scope, tmpl_html_base_element));
+    } // end batch
+    // Batch 230: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_body_element = super::html_elements::create_html_body_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLBodyElement", v8::Global::new(scope, tmpl_html_body_element));
         let tmpl_html_button_element = super::html_elements::create_html_button_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2356,6 +3228,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLDListElement", v8::Global::new(scope, tmpl_htmld_list_element));
         let tmpl_html_data_element = super::html_elements::create_html_data_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLDataElement", v8::Global::new(scope, tmpl_html_data_element));
+    } // end batch
+    // Batch 231: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_data_list_element = super::html_elements::create_html_data_list_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLDataListElement", v8::Global::new(scope, tmpl_html_data_list_element));
         let tmpl_html_details_element = super::html_elements::create_html_details_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2366,6 +3242,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLDirectoryElement", v8::Global::new(scope, tmpl_html_directory_element));
         let tmpl_html_div_element = super::html_elements::create_html_div_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLDivElement", v8::Global::new(scope, tmpl_html_div_element));
+    } // end batch
+    // Batch 232: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_embed_element = super::html_elements::create_html_embed_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLEmbedElement", v8::Global::new(scope, tmpl_html_embed_element));
         let tmpl_html_fenced_frame_element = super::html_elements::create_html_fenced_frame_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2376,6 +3256,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLFontElement", v8::Global::new(scope, tmpl_html_font_element));
         let tmpl_html_form_element = super::html_elements::create_html_form_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLFormElement", v8::Global::new(scope, tmpl_html_form_element));
+    } // end batch
+    // Batch 233: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_frame_element = super::html_elements::create_html_frame_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLFrameElement", v8::Global::new(scope, tmpl_html_frame_element));
         let tmpl_html_frame_set_element = super::html_elements::create_html_frame_set_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2386,6 +3270,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLHRElement", v8::Global::new(scope, tmpl_htmlhr_element));
         let tmpl_html_head_element = super::html_elements::create_html_head_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLHeadElement", v8::Global::new(scope, tmpl_html_head_element));
+    } // end batch
+    // Batch 234: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_heading_element = super::html_elements::create_html_heading_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLHeadingElement", v8::Global::new(scope, tmpl_html_heading_element));
         let tmpl_html_html_element = super::html_elements::create_html_html_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2396,6 +3284,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLImageElement", v8::Global::new(scope, tmpl_html_image_element));
         let tmpl_html_input_element = super::html_elements::create_html_input_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLInputElement", v8::Global::new(scope, tmpl_html_input_element));
+    } // end batch
+    // Batch 235: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_htmlli_element = super::html_elements::create_htmlli_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLLIElement", v8::Global::new(scope, tmpl_htmlli_element));
         let tmpl_html_label_element = super::html_elements::create_html_label_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2406,6 +3298,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLLinkElement", v8::Global::new(scope, tmpl_html_link_element));
         let tmpl_html_map_element = super::html_elements::create_html_map_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLMapElement", v8::Global::new(scope, tmpl_html_map_element));
+    } // end batch
+    // Batch 236: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_marquee_element = super::html_elements::create_html_marquee_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLMarqueeElement", v8::Global::new(scope, tmpl_html_marquee_element));
         let tmpl_html_media_element = super::html_elements::create_html_media_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2416,6 +3312,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLMetaElement", v8::Global::new(scope, tmpl_html_meta_element));
         let tmpl_html_meter_element = super::html_elements::create_html_meter_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLMeterElement", v8::Global::new(scope, tmpl_html_meter_element));
+    } // end batch
+    // Batch 237: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_mod_element = super::html_elements::create_html_mod_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLModElement", v8::Global::new(scope, tmpl_html_mod_element));
         let tmpl_html_model_element = super::html_elements::create_html_model_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2426,6 +3326,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLObjectElement", v8::Global::new(scope, tmpl_html_object_element));
         let tmpl_html_opt_group_element = super::html_elements::create_html_opt_group_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLOptGroupElement", v8::Global::new(scope, tmpl_html_opt_group_element));
+    } // end batch
+    // Batch 238: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_option_element = super::html_elements::create_html_option_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLOptionElement", v8::Global::new(scope, tmpl_html_option_element));
         let tmpl_html_output_element = super::html_elements::create_html_output_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2436,6 +3340,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLParamElement", v8::Global::new(scope, tmpl_html_param_element));
         let tmpl_html_picture_element = super::html_elements::create_html_picture_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLPictureElement", v8::Global::new(scope, tmpl_html_picture_element));
+    } // end batch
+    // Batch 239: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_portal_element = super::html_elements::create_html_portal_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLPortalElement", v8::Global::new(scope, tmpl_html_portal_element));
         let tmpl_html_pre_element = super::html_elements::create_html_pre_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2446,6 +3354,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLQuoteElement", v8::Global::new(scope, tmpl_html_quote_element));
         let tmpl_html_script_element = super::html_elements::create_html_script_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLScriptElement", v8::Global::new(scope, tmpl_html_script_element));
+    } // end batch
+    // Batch 240: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_select_element = super::html_elements::create_html_select_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLSelectElement", v8::Global::new(scope, tmpl_html_select_element));
         let tmpl_html_selected_content_element = super::html_elements::create_html_selected_content_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2457,7 +3369,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         let tmpl_html_span_element = super::html_elements::create_html_span_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLSpanElement", v8::Global::new(scope, tmpl_html_span_element));
     } // end batch
-    // Batch 13: 100 templates
+    // Batch 241: 5 templates
     {
         v8::scope!(let scope, scope);
         let tmpl_html_style_element = super::html_elements::create_html_style_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2470,6 +3382,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLTableColElement", v8::Global::new(scope, tmpl_html_table_col_element));
         let tmpl_html_table_element = super::html_elements::create_html_table_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLTableElement", v8::Global::new(scope, tmpl_html_table_element));
+    } // end batch
+    // Batch 242: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_table_row_element = super::html_elements::create_html_table_row_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLTableRowElement", v8::Global::new(scope, tmpl_html_table_row_element));
         let tmpl_html_table_section_element = super::html_elements::create_html_table_section_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2480,6 +3396,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLTextAreaElement", v8::Global::new(scope, tmpl_html_text_area_element));
         let tmpl_html_time_element = super::html_elements::create_html_time_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLTimeElement", v8::Global::new(scope, tmpl_html_time_element));
+    } // end batch
+    // Batch 243: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_title_element = super::html_elements::create_html_title_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLTitleElement", v8::Global::new(scope, tmpl_html_title_element));
         let tmpl_html_track_element = super::html_elements::create_html_track_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2490,6 +3410,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLUnknownElement", v8::Global::new(scope, tmpl_html_unknown_element));
         let tmpl_math_ml_anchor_element = super::web_apis::create_math_ml_anchor_element_template(scope, templates.get("MathMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("MathMLAnchorElement", v8::Global::new(scope, tmpl_math_ml_anchor_element));
+    } // end batch
+    // Batch 244: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_animation_element = super::svg::create_svg_animation_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGAnimationElement", v8::Global::new(scope, tmpl_svg_animation_element));
         let tmpl_svg_clip_path_element = super::svg::create_svg_clip_path_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
@@ -2500,6 +3424,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGDescElement", v8::Global::new(scope, tmpl_svg_desc_element));
         let tmpl_svgfe_blend_element = super::svg::create_svgfe_blend_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEBlendElement", v8::Global::new(scope, tmpl_svgfe_blend_element));
+    } // end batch
+    // Batch 245: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svgfe_color_matrix_element = super::svg::create_svgfe_color_matrix_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEColorMatrixElement", v8::Global::new(scope, tmpl_svgfe_color_matrix_element));
         let tmpl_svgfe_component_transfer_element = super::svg::create_svgfe_component_transfer_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
@@ -2510,6 +3438,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGFEConvolveMatrixElement", v8::Global::new(scope, tmpl_svgfe_convolve_matrix_element));
         let tmpl_svgfe_diffuse_lighting_element = super::svg::create_svgfe_diffuse_lighting_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEDiffuseLightingElement", v8::Global::new(scope, tmpl_svgfe_diffuse_lighting_element));
+    } // end batch
+    // Batch 246: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svgfe_displacement_map_element = super::svg::create_svgfe_displacement_map_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEDisplacementMapElement", v8::Global::new(scope, tmpl_svgfe_displacement_map_element));
         let tmpl_svgfe_distant_light_element = super::svg::create_svgfe_distant_light_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
@@ -2520,6 +3452,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGFEFloodElement", v8::Global::new(scope, tmpl_svgfe_flood_element));
         let tmpl_svgfe_gaussian_blur_element = super::svg::create_svgfe_gaussian_blur_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEGaussianBlurElement", v8::Global::new(scope, tmpl_svgfe_gaussian_blur_element));
+    } // end batch
+    // Batch 247: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svgfe_image_element = super::svg::create_svgfe_image_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEImageElement", v8::Global::new(scope, tmpl_svgfe_image_element));
         let tmpl_svgfe_merge_element = super::svg::create_svgfe_merge_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
@@ -2530,6 +3466,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGFEMorphologyElement", v8::Global::new(scope, tmpl_svgfe_morphology_element));
         let tmpl_svgfe_offset_element = super::svg::create_svgfe_offset_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEOffsetElement", v8::Global::new(scope, tmpl_svgfe_offset_element));
+    } // end batch
+    // Batch 248: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svgfe_point_light_element = super::svg::create_svgfe_point_light_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEPointLightElement", v8::Global::new(scope, tmpl_svgfe_point_light_element));
         let tmpl_svgfe_specular_lighting_element = super::svg::create_svgfe_specular_lighting_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
@@ -2540,6 +3480,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGFETileElement", v8::Global::new(scope, tmpl_svgfe_tile_element));
         let tmpl_svgfe_turbulence_element = super::svg::create_svgfe_turbulence_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFETurbulenceElement", v8::Global::new(scope, tmpl_svgfe_turbulence_element));
+    } // end batch
+    // Batch 249: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_filter_element = super::svg::create_svg_filter_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFilterElement", v8::Global::new(scope, tmpl_svg_filter_element));
         let tmpl_svg_gradient_element = super::svg::create_svg_gradient_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
@@ -2550,6 +3494,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGMPathElement", v8::Global::new(scope, tmpl_svgm_path_element));
         let tmpl_svg_marker_element = super::svg::create_svg_marker_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGMarkerElement", v8::Global::new(scope, tmpl_svg_marker_element));
+    } // end batch
+    // Batch 250: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_mask_element = super::svg::create_svg_mask_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGMaskElement", v8::Global::new(scope, tmpl_svg_mask_element));
         let tmpl_svg_metadata_element = super::svg::create_svg_metadata_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
@@ -2560,6 +3508,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGScriptElement", v8::Global::new(scope, tmpl_svg_script_element));
         let tmpl_svg_stop_element = super::svg::create_svg_stop_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGStopElement", v8::Global::new(scope, tmpl_svg_stop_element));
+    } // end batch
+    // Batch 251: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_style_element = super::svg::create_svg_style_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGStyleElement", v8::Global::new(scope, tmpl_svg_style_element));
         let tmpl_svg_title_element = super::svg::create_svg_title_element_template(scope, templates.get("SVGElement").map(|g| v8::Local::new(scope, g)));
@@ -2570,6 +3522,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLAudioElement", v8::Global::new(scope, tmpl_html_audio_element));
         let tmpl_html_video_element = super::html_elements::create_html_video_element_template(scope, templates.get("HTMLMediaElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLVideoElement", v8::Global::new(scope, tmpl_html_video_element));
+    } // end batch
+    // Batch 252: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_animate_element = super::svg::create_svg_animate_element_template(scope, templates.get("SVGAnimationElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGAnimateElement", v8::Global::new(scope, tmpl_svg_animate_element));
         let tmpl_svg_animate_motion_element = super::svg::create_svg_animate_motion_element_template(scope, templates.get("SVGAnimationElement").map(|g| v8::Local::new(scope, g)));
@@ -2580,6 +3536,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGSetElement", v8::Global::new(scope, tmpl_svg_set_element));
         let tmpl_svgfe_func_a_element = super::svg::create_svgfe_func_a_element_template(scope, templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEFuncAElement", v8::Global::new(scope, tmpl_svgfe_func_a_element));
+    } // end batch
+    // Batch 253: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svgfe_func_b_element = super::svg::create_svgfe_func_b_element_template(scope, templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGFEFuncBElement", v8::Global::new(scope, tmpl_svgfe_func_b_element));
         let tmpl_svgfe_func_g_element = super::svg::create_svgfe_func_g_element_template(scope, templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)));
@@ -2590,6 +3550,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGLinearGradientElement", v8::Global::new(scope, tmpl_svg_linear_gradient_element));
         let tmpl_svg_radial_gradient_element = super::svg::create_svg_radial_gradient_element_template(scope, templates.get("SVGGradientElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGRadialGradientElement", v8::Global::new(scope, tmpl_svg_radial_gradient_element));
+    } // end batch
+    // Batch 254: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svga_element = super::svg::create_svga_element_template(scope, templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGAElement", v8::Global::new(scope, tmpl_svga_element));
         let tmpl_svg_defs_element = super::svg::create_svg_defs_element_template(scope, templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)));
@@ -2600,6 +3564,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGGElement", v8::Global::new(scope, tmpl_svgg_element));
         let tmpl_svg_geometry_element = super::svg::create_svg_geometry_element_template(scope, templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGGeometryElement", v8::Global::new(scope, tmpl_svg_geometry_element));
+    } // end batch
+    // Batch 255: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_image_element = super::svg::create_svg_image_element_template(scope, templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGImageElement", v8::Global::new(scope, tmpl_svg_image_element));
         let tmpl_svgsvg_element = super::svg::create_svgsvg_element_template(scope, templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)));
@@ -2610,6 +3578,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGSymbolElement", v8::Global::new(scope, tmpl_svg_symbol_element));
         let tmpl_svg_text_content_element = super::svg::create_svg_text_content_element_template(scope, templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGTextContentElement", v8::Global::new(scope, tmpl_svg_text_content_element));
+    } // end batch
+    // Batch 256: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_use_element = super::svg::create_svg_use_element_template(scope, templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGUseElement", v8::Global::new(scope, tmpl_svg_use_element));
         let tmpl_svg_circle_element = super::svg::create_svg_circle_element_template(scope, templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)));
@@ -2620,6 +3592,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGLineElement", v8::Global::new(scope, tmpl_svg_line_element));
         let tmpl_svg_path_element = super::svg::create_svg_path_element_template(scope, templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGPathElement", v8::Global::new(scope, tmpl_svg_path_element));
+    } // end batch
+    // Batch 257: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svg_polygon_element = super::svg::create_svg_polygon_element_template(scope, templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGPolygonElement", v8::Global::new(scope, tmpl_svg_polygon_element));
         let tmpl_svg_polyline_element = super::svg::create_svg_polyline_element_template(scope, templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)));
@@ -2630,6 +3606,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SVGTextPathElement", v8::Global::new(scope, tmpl_svg_text_path_element));
         let tmpl_svg_text_positioning_element = super::svg::create_svg_text_positioning_element_template(scope, templates.get("SVGTextContentElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGTextPositioningElement", v8::Global::new(scope, tmpl_svg_text_positioning_element));
+    } // end batch
+    // Batch 258: 5 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_svgt_span_element = super::svg::create_svgt_span_element_template(scope, templates.get("SVGTextPositioningElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("SVGTSpanElement", v8::Global::new(scope, tmpl_svgt_span_element));
         let tmpl_svg_text_element = super::svg::create_svg_text_element_template(scope, templates.get("SVGTextPositioningElement").map(|g| v8::Local::new(scope, g)));

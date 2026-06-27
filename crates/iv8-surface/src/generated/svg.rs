@@ -87,6 +87,13 @@ pub fn create_svg_angle_template<'s>(
         let tag_val = v8::String::new(scope, "SVGAngle").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_angle_members_1(scope, proto);
+    install_svg_angle_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_angle_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_ANGLETYPE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_ANGLETYPE_UNKNOWN").unwrap();
@@ -151,6 +158,9 @@ pub fn create_svg_angle_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_svg_angle_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: convertToSpecifiedUnits()
     {
         let name = v8::String::new(scope, "convertToSpecifiedUnits").unwrap();
@@ -158,9 +168,8 @@ pub fn create_svg_angle_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svg_animated_angle_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -856,6 +865,13 @@ pub fn create_svg_length_template<'s>(
         let tag_val = v8::String::new(scope, "SVGLength").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_length_members_1(scope, proto);
+    install_svg_length_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_length_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_LENGTHTYPE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_UNKNOWN").unwrap();
@@ -916,6 +932,9 @@ pub fn create_svg_length_template<'s>(
         let val = v8::Number::new(scope, 9.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_svg_length_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_LENGTHTYPE_PC
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_PC").unwrap();
@@ -963,9 +982,8 @@ pub fn create_svg_length_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svg_length_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1637,6 +1655,13 @@ pub fn create_svg_preserve_aspect_ratio_template<'s>(
         let tag_val = v8::String::new(scope, "SVGPreserveAspectRatio").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_preserve_aspect_ratio_members_1(scope, proto);
+    install_svg_preserve_aspect_ratio_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_preserve_aspect_ratio_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_PRESERVEASPECTRATIO_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_UNKNOWN").unwrap();
@@ -1697,6 +1722,9 @@ pub fn create_svg_preserve_aspect_ratio_template<'s>(
         let val = v8::Number::new(scope, 9.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_svg_preserve_aspect_ratio_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_PRESERVEASPECTRATIO_XMAXYMAX
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMAX").unwrap();
@@ -1735,9 +1763,8 @@ pub fn create_svg_preserve_aspect_ratio_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_set_2).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svg_string_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2012,6 +2039,13 @@ pub fn create_svg_transform_template<'s>(
         let tag_val = v8::String::new(scope, "SVGTransform").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_transform_members_1(scope, proto);
+    install_svg_transform_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_transform_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_TRANSFORM_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_TRANSFORM_UNKNOWN").unwrap();
@@ -2072,6 +2106,9 @@ pub fn create_svg_transform_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_transform_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_transform_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: setMatrix()
     {
         let name = v8::String::new(scope, "setMatrix").unwrap();
@@ -2114,9 +2151,8 @@ pub fn create_svg_transform_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svg_transform_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2241,6 +2277,13 @@ pub fn create_svg_transform_list_template<'s>(
         let tag_val = v8::String::new(scope, "SVGTransformList").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_transform_list_members_1(scope, proto);
+    install_svg_transform_list_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_transform_list_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
@@ -2309,6 +2352,9 @@ pub fn create_svg_transform_list_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_svg_transform_list_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createSVGTransformFromMatrix()
     {
         let name = v8::String::new(scope, "createSVGTransformFromMatrix").unwrap();
@@ -2323,9 +2369,8 @@ pub fn create_svg_transform_list_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for SVGUnitTypes.
 pub fn create_svg_unit_types_template<'s>(
@@ -3472,6 +3517,20 @@ pub fn create_svg_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_element_members_1(scope, proto);
+    install_svg_element_members_2(scope, proto);
+    install_svg_element_members_3(scope, proto);
+    install_svg_element_members_4(scope, proto);
+    install_svg_element_members_5(scope, proto);
+    install_svg_element_members_6(scope, proto);
+    install_svg_element_members_7(scope, proto);
+    install_svg_element_members_8(scope, proto);
+    install_svg_element_members_9(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: className
     {
         let name = v8::String::new(scope, "className").unwrap();
@@ -3538,6 +3597,9 @@ pub fn create_svg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oncancel
     {
         let name = v8::String::new(scope, "oncancel").unwrap();
@@ -3608,6 +3670,9 @@ pub fn create_svg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_element_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oncopy
     {
         let name = v8::String::new(scope, "oncopy").unwrap();
@@ -3678,6 +3743,9 @@ pub fn create_svg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_element_set_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ondrop
     {
         let name = v8::String::new(scope, "ondrop").unwrap();
@@ -3748,6 +3816,9 @@ pub fn create_svg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_element_set_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onkeypress
     {
         let name = v8::String::new(scope, "onkeypress").unwrap();
@@ -3818,6 +3889,9 @@ pub fn create_svg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_element_set_50).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onmouseout
     {
         let name = v8::String::new(scope, "onmouseout").unwrap();
@@ -3888,6 +3962,9 @@ pub fn create_svg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_element_set_60).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_element_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onresize
     {
         let name = v8::String::new(scope, "onresize").unwrap();
@@ -3958,6 +4035,9 @@ pub fn create_svg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_element_set_70).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_element_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onsuspend
     {
         let name = v8::String::new(scope, "onsuspend").unwrap();
@@ -4028,6 +4108,9 @@ pub fn create_svg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_element_set_80).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_element_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: dataset
     {
         let name = v8::String::new(scope, "dataset").unwrap();
@@ -4069,9 +4152,8 @@ pub fn create_svg_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for SVGUseElementShadowRoot.
 pub fn create_svg_use_element_shadow_root_template<'s>(
@@ -4242,6 +4324,13 @@ pub fn create_svg_animation_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGAnimationElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_animation_element_members_1(scope, proto);
+    install_svg_animation_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_animation_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: targetElement
     {
         let name = v8::String::new(scope, "targetElement").unwrap();
@@ -4311,6 +4400,9 @@ pub fn create_svg_animation_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_svg_animation_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: endElementAt()
     {
         let name = v8::String::new(scope, "endElementAt").unwrap();
@@ -4330,9 +4422,8 @@ pub fn create_svg_animation_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svg_clip_path_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -4467,6 +4558,13 @@ pub fn create_svg_component_transfer_function_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGComponentTransferFunctionElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_component_transfer_function_element_members_1(scope, proto);
+    install_svg_component_transfer_function_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_component_transfer_function_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN").unwrap();
@@ -4527,6 +4625,9 @@ pub fn create_svg_component_transfer_function_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_4).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_component_transfer_function_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: amplitude
     {
         let name = v8::String::new(scope, "amplitude").unwrap();
@@ -4545,9 +4646,8 @@ pub fn create_svg_component_transfer_function_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_7).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for SVGDescElement.
 pub fn create_svg_desc_element_template<'s>(
@@ -4661,6 +4761,14 @@ pub fn create_svgfe_blend_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFEBlendElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_blend_element_members_1(scope, proto);
+    install_svgfe_blend_element_members_2(scope, proto);
+    install_svgfe_blend_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_blend_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_FEBLEND_MODE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_UNKNOWN").unwrap();
@@ -4721,6 +4829,9 @@ pub fn create_svgfe_blend_element_template<'s>(
         let val = v8::Number::new(scope, 9.0).into();
         proto.set(name.into(), val);
     }
+}
+
+fn install_svgfe_blend_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_FEBLEND_MODE_SOFT_LIGHT
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SOFT_LIGHT").unwrap();
@@ -4781,6 +4892,9 @@ pub fn create_svgfe_blend_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_blend_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
@@ -4811,9 +4925,8 @@ pub fn create_svgfe_blend_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_8).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_color_matrix_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -4905,6 +5018,13 @@ pub fn create_svgfe_color_matrix_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFEColorMatrixElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_color_matrix_element_members_1(scope, proto);
+    install_svgfe_color_matrix_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_color_matrix_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_FECOLORMATRIX_TYPE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_UNKNOWN").unwrap();
@@ -4965,6 +5085,9 @@ pub fn create_svgfe_color_matrix_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_5).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_color_matrix_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
@@ -4983,9 +5106,8 @@ pub fn create_svgfe_color_matrix_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_8).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_component_transfer_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -5225,6 +5347,13 @@ pub fn create_svgfe_composite_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFECompositeElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_composite_element_members_1(scope, proto);
+    install_svgfe_composite_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_composite_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_FECOMPOSITE_OPERATOR_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_UNKNOWN").unwrap();
@@ -5285,6 +5414,9 @@ pub fn create_svgfe_composite_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_composite_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: k1
     {
         let name = v8::String::new(scope, "k1").unwrap();
@@ -5339,9 +5471,8 @@ pub fn create_svgfe_composite_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_convolve_matrix_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -5514,6 +5645,14 @@ pub fn create_svgfe_convolve_matrix_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFEConvolveMatrixElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_convolve_matrix_element_members_1(scope, proto);
+    install_svgfe_convolve_matrix_element_members_2(scope, proto);
+    install_svgfe_convolve_matrix_element_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_convolve_matrix_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_EDGEMODE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap();
@@ -5574,6 +5713,9 @@ pub fn create_svgfe_convolve_matrix_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_convolve_matrix_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: targetX
     {
         let name = v8::String::new(scope, "targetX").unwrap();
@@ -5634,15 +5776,17 @@ pub fn create_svgfe_convolve_matrix_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_16).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_convolve_matrix_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_17).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_diffuse_lighting_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -5924,6 +6068,13 @@ pub fn create_svgfe_displacement_map_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFEDisplacementMapElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_displacement_map_element_members_1(scope, proto);
+    install_svgfe_displacement_map_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_displacement_map_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_CHANNEL_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_CHANNEL_UNKNOWN").unwrap();
@@ -5984,6 +6135,9 @@ pub fn create_svgfe_displacement_map_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_5).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_displacement_map_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
@@ -6014,9 +6168,8 @@ pub fn create_svgfe_displacement_map_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_distant_light_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -6187,6 +6340,13 @@ pub fn create_svgfe_drop_shadow_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFEDropShadowElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_drop_shadow_element_members_1(scope, proto);
+    install_svgfe_drop_shadow_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_drop_shadow_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
@@ -6248,15 +6408,17 @@ pub fn create_svgfe_drop_shadow_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_drop_shadow_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_flood_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -6463,6 +6625,13 @@ pub fn create_svgfe_gaussian_blur_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFEGaussianBlurElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_gaussian_blur_element_members_1(scope, proto);
+    install_svgfe_gaussian_blur_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_gaussian_blur_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_EDGEMODE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap();
@@ -6524,6 +6693,9 @@ pub fn create_svgfe_gaussian_blur_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_gaussian_blur_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
@@ -6548,9 +6720,8 @@ pub fn create_svgfe_gaussian_blur_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_image_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -6927,6 +7098,13 @@ pub fn create_svgfe_morphology_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFEMorphologyElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_morphology_element_members_1(scope, proto);
+    install_svgfe_morphology_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_morphology_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_MORPHOLOGY_OPERATOR_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_UNKNOWN").unwrap();
@@ -6987,6 +7165,9 @@ pub fn create_svgfe_morphology_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_7).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_morphology_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
@@ -6999,9 +7180,8 @@ pub fn create_svgfe_morphology_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_9).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_offset_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -7329,6 +7509,13 @@ pub fn create_svgfe_specular_lighting_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFESpecularLightingElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_specular_lighting_element_members_1(scope, proto);
+    install_svgfe_specular_lighting_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_specular_lighting_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
@@ -7389,15 +7576,17 @@ pub fn create_svgfe_specular_lighting_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_specular_lighting_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svgfe_spot_light_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -7770,6 +7959,13 @@ pub fn create_svgfe_turbulence_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGFETurbulenceElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgfe_turbulence_element_members_1(scope, proto);
+    install_svgfe_turbulence_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svgfe_turbulence_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_TURBULENCE_TYPE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_UNKNOWN").unwrap();
@@ -7830,6 +8026,9 @@ pub fn create_svgfe_turbulence_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_4).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgfe_turbulence_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: stitchTiles
     {
         let name = v8::String::new(scope, "stitchTiles").unwrap();
@@ -7872,9 +8071,8 @@ pub fn create_svgfe_turbulence_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svg_filter_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -8391,6 +8589,13 @@ pub fn create_svg_marker_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGMarkerElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_marker_element_members_1(scope, proto);
+    install_svg_marker_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_marker_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: SVG_MARKERUNITS_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_MARKERUNITS_UNKNOWN").unwrap();
@@ -8451,6 +8656,9 @@ pub fn create_svg_marker_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svg_marker_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: markerWidth
     {
         let name = v8::String::new(scope, "markerWidth").unwrap();
@@ -8508,9 +8716,8 @@ pub fn create_svg_marker_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svg_mask_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -9742,6 +9949,13 @@ pub fn create_svga_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGAElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svga_element_members_1(scope, proto);
+    install_svga_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svga_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
@@ -9809,6 +10023,9 @@ pub fn create_svga_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svga_element_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svga_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: username
     {
         let name = v8::String::new(scope, "username").unwrap();
@@ -9871,9 +10088,8 @@ pub fn create_svga_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svga_element_get_19).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for SVGDefsElement.
 pub fn create_svg_defs_element_template<'s>(
@@ -10769,6 +10985,16 @@ pub fn create_svgsvg_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGSVGElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svgsvg_element_members_1(scope, proto);
+    install_svgsvg_element_members_2(scope, proto);
+    install_svgsvg_element_members_3(scope, proto);
+    install_svgsvg_element_members_4(scope, proto);
+    install_svgsvg_element_members_5(scope, proto);
+
+    tmpl
+}
+
+fn install_svgsvg_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
@@ -10834,6 +11060,9 @@ pub fn create_svgsvg_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_svgsvg_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: deselectAll()
     {
         let name = v8::String::new(scope, "deselectAll").unwrap();
@@ -10904,6 +11133,9 @@ pub fn create_svgsvg_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_svgsvg_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: suspendRedraw()
     {
         let name = v8::String::new(scope, "suspendRedraw").unwrap();
@@ -10973,6 +11205,9 @@ pub fn create_svgsvg_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgsvg_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: preserveAspectRatio
     {
         let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
@@ -11042,6 +11277,9 @@ pub fn create_svgsvg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_40).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_svgsvg_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onpagehide
     {
         let name = v8::String::new(scope, "onpagehide").unwrap();
@@ -11105,9 +11343,8 @@ pub fn create_svgsvg_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_49).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for SVGSwitchElement.
 pub fn create_svg_switch_element_template<'s>(
@@ -11300,6 +11537,13 @@ pub fn create_svg_text_content_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGTextContentElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_svg_text_content_element_members_1(scope, proto);
+    install_svg_text_content_element_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_svg_text_content_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // const: LENGTHADJUST_UNKNOWN
     {
         let name = v8::String::new(scope, "LENGTHADJUST_UNKNOWN").unwrap();
@@ -11365,6 +11609,9 @@ pub fn create_svg_text_content_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_svg_text_content_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getExtentOfChar()
     {
         let name = v8::String::new(scope, "getExtentOfChar").unwrap();
@@ -11393,9 +11640,8 @@ pub fn create_svg_text_content_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn svg_use_element_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

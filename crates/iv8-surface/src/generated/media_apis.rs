@@ -1161,6 +1161,13 @@ pub fn create_media_key_session_template<'s>(
         let tag_val = v8::String::new(scope, "MediaKeySession").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_media_key_session_members_1(scope, proto);
+    install_media_key_session_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_media_key_session_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: sessionId
     {
         let name = v8::String::new(scope, "sessionId").unwrap();
@@ -1227,6 +1234,9 @@ pub fn create_media_key_session_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_media_key_session_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: remove()
     {
         let name = v8::String::new(scope, "remove").unwrap();
@@ -1234,9 +1244,8 @@ pub fn create_media_key_session_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn media_query_list_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1546,6 +1555,13 @@ pub fn create_media_recorder_template<'s>(
         let tag_val = v8::String::new(scope, "MediaRecorder").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_media_recorder_members_1(scope, proto);
+    install_media_recorder_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_media_recorder_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: stream
     {
         let name = v8::String::new(scope, "stream").unwrap();
@@ -1612,6 +1628,9 @@ pub fn create_media_recorder_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_media_recorder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: audioBitsPerSecond
     {
         let name = v8::String::new(scope, "audioBitsPerSecond").unwrap();
@@ -1666,9 +1685,8 @@ pub fn create_media_recorder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn media_source_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1839,6 +1857,13 @@ pub fn create_media_source_template<'s>(
         let tag_val = v8::String::new(scope, "MediaSource").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_media_source_members_1(scope, proto);
+    install_media_source_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_media_source_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: handle
     {
         let name = v8::String::new(scope, "handle").unwrap();
@@ -1904,6 +1929,9 @@ pub fn create_media_source_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_media_source_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: removeSourceBuffer()
     {
         let name = v8::String::new(scope, "removeSourceBuffer").unwrap();
@@ -1939,9 +1967,8 @@ pub fn create_media_source_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn media_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2068,6 +2095,13 @@ pub fn create_media_stream_template<'s>(
         let tag_val = v8::String::new(scope, "MediaStream").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_media_stream_members_1(scope, proto);
+    install_media_stream_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_media_stream_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
@@ -2136,6 +2170,9 @@ pub fn create_media_stream_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(media_stream_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_media_stream_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onremovetrack
     {
         let name = v8::String::new(scope, "onremovetrack").unwrap();
@@ -2143,9 +2180,8 @@ pub fn create_media_stream_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(media_stream_set_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn media_stream_track_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2391,6 +2427,14 @@ pub fn create_media_stream_track_template<'s>(
         let tag_val = v8::String::new(scope, "MediaStreamTrack").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_media_stream_track_members_1(scope, proto);
+    install_media_stream_track_members_2(scope, proto);
+    install_media_stream_track_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_media_stream_track_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: kind
     {
         let name = v8::String::new(scope, "kind").unwrap();
@@ -2456,6 +2500,9 @@ pub fn create_media_stream_track_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_media_stream_track_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: stop()
     {
         let name = v8::String::new(scope, "stop").unwrap();
@@ -2526,6 +2573,9 @@ pub fn create_media_stream_track_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_media_stream_track_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: isolated
     {
         let name = v8::String::new(scope, "isolated").unwrap();
@@ -2539,9 +2589,8 @@ pub fn create_media_stream_track_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_22).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn permission_status_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

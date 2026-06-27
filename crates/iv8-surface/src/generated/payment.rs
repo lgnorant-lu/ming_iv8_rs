@@ -199,6 +199,13 @@ pub fn create_payment_request_template<'s>(
         let tag_val = v8::String::new(scope, "PaymentRequest").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_payment_request_members_1(scope, proto);
+    install_payment_request_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_payment_request_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: show()
     {
         let name = v8::String::new(scope, "show").unwrap();
@@ -265,6 +272,9 @@ pub fn create_payment_request_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(payment_request_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_payment_request_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: securePaymentConfirmationAvailability()
     {
         let name = v8::String::new(scope, "securePaymentConfirmationAvailability").unwrap();
@@ -279,9 +289,8 @@ pub fn create_payment_request_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn payment_response_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -413,6 +422,13 @@ pub fn create_payment_response_template<'s>(
         let tag_val = v8::String::new(scope, "PaymentResponse").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_payment_response_members_1(scope, proto);
+    install_payment_response_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_payment_response_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: toJSON()
     {
         let name = v8::String::new(scope, "toJSON").unwrap();
@@ -475,6 +491,9 @@ pub fn create_payment_response_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_payment_response_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: retry()
     {
         let name = v8::String::new(scope, "retry").unwrap();
@@ -489,7 +508,6 @@ pub fn create_payment_response_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(payment_response_set_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 

@@ -1668,6 +1668,13 @@ pub fn create_chrome_load_times_template<'s>(
         let tag_val = v8::String::new(scope, "ChromeLoadTimes").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_chrome_load_times_members_1(scope, proto);
+    install_chrome_load_times_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_chrome_load_times_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: requestTime
     {
         let name = v8::String::new(scope, "requestTime").unwrap();
@@ -1738,6 +1745,9 @@ pub fn create_chrome_load_times_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_chrome_load_times_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: npnNegotiatedProtocol
     {
         let name = v8::String::new(scope, "npnNegotiatedProtocol").unwrap();
@@ -1759,9 +1769,8 @@ pub fn create_chrome_load_times_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for ChromeLocation.
 pub fn create_chrome_location_template<'s>(
@@ -2687,6 +2696,14 @@ pub fn create_chrome_runtime_template<'s>(
         let tag_val = v8::String::new(scope, "ChromeRuntime").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_chrome_runtime_members_1(scope, proto);
+    install_chrome_runtime_members_2(scope, proto);
+    install_chrome_runtime_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_chrome_runtime_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onMessage
     {
         let name = v8::String::new(scope, "onMessage").unwrap();
@@ -2757,6 +2774,9 @@ pub fn create_chrome_runtime_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_chrome_runtime_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: sendMessage()
     {
         let name = v8::String::new(scope, "sendMessage").unwrap();
@@ -2827,6 +2847,9 @@ pub fn create_chrome_runtime_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_chrome_runtime_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: requestUpdateCheck()
     {
         let name = v8::String::new(scope, "requestUpdateCheck").unwrap();
@@ -2848,9 +2871,8 @@ pub fn create_chrome_runtime_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for ChromeRuntimeOnInstalled.
 pub fn create_chrome_runtime_on_installed_template<'s>(

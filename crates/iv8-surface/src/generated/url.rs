@@ -214,6 +214,13 @@ pub fn create_url_template<'s>(
         let tag_val = v8::String::new(scope, "URL").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_url_members_1(scope, proto);
+    install_url_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_url_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: parse()
     {
         let name = v8::String::new(scope, "parse").unwrap();
@@ -283,6 +290,9 @@ pub fn create_url_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(url_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_url_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: pathname
     {
         let name = v8::String::new(scope, "pathname").unwrap();
@@ -331,9 +341,8 @@ pub fn create_url_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn url_search_params_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

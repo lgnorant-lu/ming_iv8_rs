@@ -784,6 +784,13 @@ pub fn create_gpu_command_encoder_template<'s>(
         let tag_val = v8::String::new(scope, "GPUCommandEncoder").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_gpu_command_encoder_members_1(scope, proto);
+    install_gpu_command_encoder_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_gpu_command_encoder_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: beginRenderPass()
     {
         let name = v8::String::new(scope, "beginRenderPass").unwrap();
@@ -854,6 +861,9 @@ pub fn create_gpu_command_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_gpu_command_encoder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
@@ -882,9 +892,8 @@ pub fn create_gpu_command_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn gpu_compilation_info_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1816,6 +1825,13 @@ pub fn create_gpu_render_bundle_encoder_template<'s>(
         let tag_val = v8::String::new(scope, "GPURenderBundleEncoder").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_gpu_render_bundle_encoder_members_1(scope, proto);
+    install_gpu_render_bundle_encoder_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_gpu_render_bundle_encoder_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: finish()
     {
         let name = v8::String::new(scope, "finish").unwrap();
@@ -1886,6 +1902,9 @@ pub fn create_gpu_render_bundle_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_gpu_render_bundle_encoder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: draw()
     {
         let name = v8::String::new(scope, "draw").unwrap();
@@ -1914,9 +1933,8 @@ pub fn create_gpu_render_bundle_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn gpu_render_pass_encoder_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2126,6 +2144,14 @@ pub fn create_gpu_render_pass_encoder_template<'s>(
         let tag_val = v8::String::new(scope, "GPURenderPassEncoder").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_gpu_render_pass_encoder_members_1(scope, proto);
+    install_gpu_render_pass_encoder_members_2(scope, proto);
+    install_gpu_render_pass_encoder_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_gpu_render_pass_encoder_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: setViewport()
     {
         let name = v8::String::new(scope, "setViewport").unwrap();
@@ -2196,6 +2222,9 @@ pub fn create_gpu_render_pass_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_gpu_render_pass_encoder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: popDebugGroup()
     {
         let name = v8::String::new(scope, "popDebugGroup").unwrap();
@@ -2266,6 +2295,9 @@ pub fn create_gpu_render_pass_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_gpu_render_pass_encoder_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: drawIndexedIndirect()
     {
         let name = v8::String::new(scope, "drawIndexedIndirect").unwrap();
@@ -2273,9 +2305,8 @@ pub fn create_gpu_render_pass_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn gpu_render_pipeline_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -2784,6 +2815,15 @@ pub fn create_gpu_supported_limits_template<'s>(
         let tag_val = v8::String::new(scope, "GPUSupportedLimits").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_gpu_supported_limits_members_1(scope, proto);
+    install_gpu_supported_limits_members_2(scope, proto);
+    install_gpu_supported_limits_members_3(scope, proto);
+    install_gpu_supported_limits_members_4(scope, proto);
+
+    tmpl
+}
+
+fn install_gpu_supported_limits_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: maxTextureDimension1D
     {
         let name = v8::String::new(scope, "maxTextureDimension1D").unwrap();
@@ -2844,6 +2884,9 @@ pub fn create_gpu_supported_limits_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_gpu_supported_limits_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: maxSampledTexturesPerShaderStage
     {
         let name = v8::String::new(scope, "maxSampledTexturesPerShaderStage").unwrap();
@@ -2904,6 +2947,9 @@ pub fn create_gpu_supported_limits_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_20).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_gpu_supported_limits_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: maxStorageBufferBindingSize
     {
         let name = v8::String::new(scope, "maxStorageBufferBindingSize").unwrap();
@@ -2964,6 +3010,9 @@ pub fn create_gpu_supported_limits_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_30).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_gpu_supported_limits_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: maxComputeWorkgroupStorageSize
     {
         let name = v8::String::new(scope, "maxComputeWorkgroupStorageSize").unwrap();
@@ -3000,9 +3049,8 @@ pub fn create_gpu_supported_limits_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_36).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn gpu_texture_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -3131,6 +3179,13 @@ pub fn create_gpu_texture_template<'s>(
         let tag_val = v8::String::new(scope, "GPUTexture").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_gpu_texture_members_1(scope, proto);
+    install_gpu_texture_members_2(scope, proto);
+
+    tmpl
+}
+
+fn install_gpu_texture_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createView()
     {
         let name = v8::String::new(scope, "createView").unwrap();
@@ -3193,6 +3248,9 @@ pub fn create_gpu_texture_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_gpu_texture_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: textureBindingViewDimension
     {
         let name = v8::String::new(scope, "textureBindingViewDimension").unwrap();
@@ -3206,9 +3264,8 @@ pub fn create_gpu_texture_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(gpu_texture_set_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 unsafe extern "C" fn gpu_texture_view_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -3537,6 +3594,14 @@ pub fn create_gpu_device_template<'s>(
         let tag_val = v8::String::new(scope, "GPUDevice").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    install_gpu_device_members_1(scope, proto);
+    install_gpu_device_members_2(scope, proto);
+    install_gpu_device_members_3(scope, proto);
+
+    tmpl
+}
+
+fn install_gpu_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: features
     {
         let name = v8::String::new(scope, "features").unwrap();
@@ -3603,6 +3668,9 @@ pub fn create_gpu_device_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_gpu_device_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createPipelineLayout()
     {
         let name = v8::String::new(scope, "createPipelineLayout").unwrap();
@@ -3673,6 +3741,9 @@ pub fn create_gpu_device_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_gpu_device_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: lost
     {
         let name = v8::String::new(scope, "lost").unwrap();
@@ -3707,9 +3778,8 @@ pub fn create_gpu_device_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(gpu_device_set_25).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-
-    tmpl
 }
+
 
 /// Create FunctionTemplate for GPUInternalError.
 pub fn create_gpu_internal_error_template<'s>(
