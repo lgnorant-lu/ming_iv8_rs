@@ -110,6 +110,7 @@ fn make_template<'s>(
     ctor: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) -> v8::Local<'s, v8::FunctionTemplate> {
     let tmpl = v8::FunctionTemplate::builder_raw(ctor).build(scope);
+    tmpl.read_only_prototype();
     let name = crate::v8_utils::v8_string(scope, class_name);
     tmpl.set_class_name(name);
     let inst = tmpl.instance_template(scope);
@@ -181,7 +182,7 @@ fn set_to_string_tag(
 /// Must be called once per Isolate, with the isolate entered.
 pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     // ── 1. EventTarget ──────────────────────────────────────────────────────
-    let event_target = make_template(scope, "EventTarget", illegal_dom_constructor);
+    let event_target = make_template(scope, "EventTarget", empty_dom_constructor);
     {
         let proto = event_target.prototype_template(scope);
         install_proto_method(scope, proto, "addEventListener", add_event_listener_cb);
@@ -225,6 +226,56 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_method(scope, proto, "contains", contains_cb);
         install_proto_method(scope, proto, "hasChildNodes", has_child_nodes_cb);
         install_proto_method(scope, proto, "normalize", normalize_cb);
+
+        let node_consts = [
+            ("ELEMENT_NODE", 1i32), ("ATTRIBUTE_NODE", 2), ("TEXT_NODE", 3),
+            ("CDATA_SECTION_NODE", 4), ("ENTITY_REFERENCE_NODE", 5), ("ENTITY_NODE", 6),
+            ("PROCESSING_INSTRUCTION_NODE", 7), ("COMMENT_NODE", 8), ("DOCUMENT_NODE", 9),
+            ("DOCUMENT_TYPE_NODE", 10), ("DOCUMENT_FRAGMENT_NODE", 11), ("NOTATION_NODE", 12),
+        ];
+        for (cname, cval) in node_consts {
+            let key = v8::String::new(scope, cname).unwrap();
+            let val = v8::Integer::new(scope, cval);
+            proto.set(key.into(), val.into());
+        }
+        let node_hex_consts = [
+            ("DOCUMENT_POSITION_DISCONNECTED", 0x01u32),
+            ("DOCUMENT_POSITION_PRECEDING", 0x02),
+            ("DOCUMENT_POSITION_FOLLOWING", 0x04),
+            ("DOCUMENT_POSITION_CONTAINS", 0x08),
+            ("DOCUMENT_POSITION_CONTAINED_BY", 0x10),
+            ("DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC", 0x20),
+        ];
+        for (cname, cval) in node_hex_consts {
+            let key = v8::String::new(scope, cname).unwrap();
+            let val = v8::Integer::new_from_unsigned(scope, cval);
+            proto.set(key.into(), val.into());
+        }
+    }
+
+    if let Some(node_fn) = node.get_function(scope) {
+        for (cname, cval) in [
+            ("ELEMENT_NODE", 1i32), ("ATTRIBUTE_NODE", 2), ("TEXT_NODE", 3),
+            ("CDATA_SECTION_NODE", 4), ("PROCESSING_INSTRUCTION_NODE", 7),
+            ("COMMENT_NODE", 8), ("DOCUMENT_NODE", 9),
+            ("DOCUMENT_TYPE_NODE", 10), ("DOCUMENT_FRAGMENT_NODE", 11),
+        ] {
+            let key = v8::String::new(scope, cname).unwrap();
+            let val = v8::Integer::new(scope, cval);
+            let _ = node_fn.set(scope, key.into(), val.into());
+        }
+        for (cname, cval) in [
+            ("DOCUMENT_POSITION_DISCONNECTED", 0x01u32),
+            ("DOCUMENT_POSITION_PRECEDING", 0x02),
+            ("DOCUMENT_POSITION_FOLLOWING", 0x04),
+            ("DOCUMENT_POSITION_CONTAINS", 0x08),
+            ("DOCUMENT_POSITION_CONTAINED_BY", 0x10),
+            ("DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC", 0x20),
+        ] {
+            let key = v8::String::new(scope, cname).unwrap();
+            let val = v8::Integer::new_from_unsigned(scope, cval);
+            let _ = node_fn.set(scope, key.into(), val.into());
+        }
     }
 
     // ── 3. Element (inherits Node) ──────────────────────────────────────────
@@ -873,6 +924,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     // ── 14. Headers ─────────────────────────────────────────────────────────
     let headers = {
         let tmpl = v8::FunctionTemplate::builder_raw(headers_constructor_cb).build(scope);
+        tmpl.read_only_prototype();
         let name = crate::v8_utils::v8_string(scope, "Headers");
         tmpl.set_class_name(name);
         tmpl.instance_template(scope).set_internal_field_count(1);
