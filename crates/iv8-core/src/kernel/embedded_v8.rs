@@ -467,12 +467,14 @@ impl EmbeddedV8Kernel {
         // Run microtasks after each eval (matches browser behavior)
         self.isolate.perform_microtask_checkpoint();
 
+        // Drain worker messages while still inside the isolate scope,
+        // so onmessage callbacks can access JS variables from the eval.
+        self.drain_worker_messages();
+
         // Exit isolate after operation
         unsafe {
             self.isolate.exit();
         }
-
-        self.drain_worker_messages();
 
         result
     }
@@ -713,6 +715,14 @@ impl EmbeddedV8Kernel {
             for handle in workers.iter() {
                 while let Ok(bytes) = handle.rx.try_recv() {
                     collected.push((handle.worker_id, bytes));
+                }
+                if collected.is_empty() {
+                    if let Ok(bytes) = handle.rx.recv_timeout(std::time::Duration::from_millis(100)) {
+                        collected.push((handle.worker_id, bytes));
+                        while let Ok(bytes) = handle.rx.try_recv() {
+                            collected.push((handle.worker_id, bytes));
+                        }
+                    }
                 }
             }
             collected

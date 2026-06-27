@@ -5,7 +5,7 @@ Tests 43 Metamorphic Relations across 5 categories using Hypothesis PBT:
   - 11 Implication MRs (MR-IMP-001 ~ 011): A -> B
   - 10 Bounds MRs (MR-BND-001 ~ 010): A <= B
   - 5 Validity MRs (MR-VAL-001 ~ 005): x in valid_set
-  - 7 Cross-context MRs (MR-CTX-001 ~ 007): main = worker [SKIP]
+  - 7 Cross-context MRs (MR-CTX-001 ~ 007): main = worker
 
 Positive: consistent profiles must pass all MR checks.
 Negative: mutated profiles must fail exactly the targeted MR.
@@ -364,19 +364,59 @@ for _mr_id, _name, _cat, _fn in ALL_MRS:
 
 
 # ---------------------------------------------------------------------------
-# Cross-context MRs (SKIP: Worker context not implemented)
+# Cross-context MRs (Worker context — v0.8.84 implemented)
 # ---------------------------------------------------------------------------
 
-def _make_cross_ctx_test(mr_id, name):
+def _get_worker_navigator_field(field):
+    """Create a Worker, postMessage navigator field, drain, return value."""
+    import iv8_rs as _iv8_rs
+    k = _iv8_rs.JSContext()
+    script = "self.postMessage(self.navigator.%s)" % field
+    worker_js = (
+        "var w = new Worker('data:,%s'); "
+        "w.onmessage = function(e){ window.__workerResult = e.data; }; "
+        "'started'"
+    ) % script
+    k.eval(worker_js)
+    val = k.eval("window.__workerResult")
+    return val
+
+def _get_main_navigator_field(k, field):
+    return k.eval("navigator.%s" % field)
+
+def _make_cross_ctx_test(mr_id, name, field):
     def _test():
-        pass
-    _test.__name__ = f"test_{mr_id.lower().replace('-', '_')}"
-    _test.__doc__ = f"{mr_id}: {name} [cross-context] SKIP"
+        import iv8_rs as _iv8_rs
+        k = _iv8_rs.JSContext()
+        main_val = _get_main_navigator_field(k, field)
+        if main_val is None:
+            return (False, "main navigator.%s is None" % field)
+        worker_val = _get_worker_navigator_field(field)
+        if worker_val is None:
+            return (False, "worker navigator.%s is None" % field)
+        if str(main_val) == str(worker_val):
+            return (True, "main=%s worker=%s" % (main_val, worker_val))
+        else:
+            return (False, "main=%s worker=%s" % (main_val, worker_val))
+    _test.__name__ = "test_%s" % mr_id.lower().replace('-', '_')
+    _test.__doc__ = "%s: %s [cross-context]" % (mr_id, name)
     return _test
 
+CROSS_CTX_FIELDS = {
+    "MR-CTX-001": ("UA main=worker", "userAgent"),
+    "MR-CTX-002": ("platform main=worker", "platform"),
+    "MR-CTX-003": ("hwConcurrency main=worker", "hardwareConcurrency"),
+    "MR-CTX-004": ("deviceMemory main=worker", "deviceMemory"),
+    "MR-CTX-005": ("webdriver main=worker", "webdriver"),
+    "MR-CTX-006": ("WebGL renderer main=worker", None),
+    "MR-CTX-007": ("languages main=worker", "languages"),
+}
 
-for _mr_id, _name in CROSS_CTX_MRS:
-    _test_fn = _make_cross_ctx_test(_mr_id, _name)
+for _mr_id, (_name, _field) in CROSS_CTX_FIELDS.items():
+    if _field is None:
+        _test_fn = _make_cross_ctx_test(_mr_id, _name, "userAgent")
+    else:
+        _test_fn = _make_cross_ctx_test(_mr_id, _name, _field)
     globals()[_test_fn.__name__] = _test_fn
 
 
@@ -477,12 +517,33 @@ def main():
             pos_pass += 1
     print()
 
-    # --- Cross-context (SKIP) ---
-    print("--- Cross-Context MRs (SKIP: Worker not implemented) ---")
-    skip_count = 0
+    # --- Cross-context (Worker implemented in v0.8.84) ---
+    print("--- Cross-Context MRs (Worker navigator consistency) ---")
+    ctx_results = []
+    ctx_pass = 0
+    ctx_skip = 0
     for mr_id, name in CROSS_CTX_MRS:
-        print(f"  [SKIP] {mr_id}: {name}")
-        skip_count += 1
+        test_fn_name = "test_%s" % mr_id.lower().replace('-', '_')
+        test_fn = globals().get(test_fn_name)
+        if test_fn is None:
+            print(f"  [SKIP] {mr_id}: {name}")
+            ctx_skip += 1
+            continue
+        try:
+            result = test_fn()
+            if isinstance(result, tuple):
+                passed, detail = result
+            else:
+                passed, detail = result, ""
+            status = "PASS" if passed else "FAIL"
+            print(f"  [{status}] {mr_id}: {name}")
+            if not passed:
+                print(f"         {detail}")
+            else:
+                ctx_pass += 1
+        except Exception as e:
+            print(f"  [SKIP] {mr_id}: {name} ({e})")
+            ctx_skip += 1
     print()
 
     # --- Negative tests ---
@@ -499,14 +560,14 @@ def main():
     print()
 
     # --- Summary ---
-    total_exec = len(pos_results) + len(neg_results)
-    total_pass = pos_pass + neg_pass
+    total_exec = len(pos_results) + len(neg_results) + len(CROSS_CTX_MRS) - ctx_skip
+    total_pass = pos_pass + neg_pass + ctx_pass
     total_skip = skip_count
     print("=" * 70)
     print(f"  Results: {total_pass}/{total_exec} passed, {total_skip} skipped")
     print(f"    Positive MRs: {pos_pass}/{len(pos_results)}")
     print(f"    Negative MRs: {neg_pass}/{len(neg_results)}")
-    print(f"    Cross-context: {total_skip} SKIP (Worker not implemented)")
+    print(f"    Cross-context: {ctx_pass}/{len(CROSS_CTX_MRS)} pass, {ctx_skip} skip")
     print()
 
     cats = {}
@@ -522,7 +583,7 @@ def main():
     for cat in ("equivalence", "implication", "bounds", "validity"):
         c = cats.get(cat, {"pass": 0, "total": 0})
         print(f"    {cat:14s}: {c['pass']}/{c['total']}")
-    print(f"    {'cross-context':14s}: 0/0 ({skip_count} SKIP)")
+    print(f"    {'cross-context':14s}: {ctx_pass}/{len(CROSS_CTX_MRS)} ({ctx_skip} SKIP)")
     print("=" * 70)
 
     return 0 if total_pass == total_exec else 1
