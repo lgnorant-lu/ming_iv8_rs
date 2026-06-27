@@ -1621,12 +1621,14 @@ impl EmbeddedV8Kernel {
             v8::scope_with_context!(scope, handle_scope, context);
             let global = context.global(scope);
 
-            let dom_templates = crate::dom::template::build_dom_templates(scope);
-
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
                     let state = RuntimeState::get(&*scope);
+                    let codegen_protos =
+                        crate::dom::template::capture_codegen_prototypes(scope, global);
+                    let dom_templates = crate::dom::template::build_dom_templates(scope);
                     crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
+                    crate::dom::template::chain_dom_prototypes(scope, global, &codegen_protos);
 
                     // Event system
                     install_behavior_via_bcr(

@@ -1084,6 +1084,86 @@ pub fn install_dom_constructors(
     }
 }
 
+/// Capture codegen prototype objects for the 39 DOM interfaces before
+/// install_dom_constructors overwrites them. This allows chaining
+/// dom/template.rs prototypes to codegen prototypes so that IDL
+/// attributes, constants, and inheritance from codegen are preserved.
+pub fn capture_codegen_prototypes(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+) -> HashMap<String, v8::Global<v8::Object>> {
+    let names = [
+        "EventTarget", "Node", "Element", "HTMLElement",
+        "HTMLDivElement", "HTMLSpanElement", "HTMLAnchorElement",
+        "HTMLInputElement", "HTMLButtonElement", "HTMLFormElement",
+        "HTMLCanvasElement", "HTMLScriptElement", "HTMLImageElement",
+        "HTMLVideoElement", "HTMLAudioElement", "HTMLSelectElement",
+        "HTMLTextAreaElement", "HTMLHeadElement", "HTMLBodyElement",
+        "HTMLHtmlElement", "HTMLParagraphElement", "HTMLHeadingElement",
+        "HTMLUListElement", "HTMLOListElement", "HTMLLIElement",
+        "HTMLTableElement", "HTMLStyleElement", "HTMLLinkElement",
+        "HTMLMetaElement", "HTMLUnknownElement",
+        "NodeList", "DOMTokenList", "CSSStyleDeclaration",
+        "Headers", "Response", "Request", "Text", "Comment", "Document",
+    ];
+    let mut map = HashMap::new();
+    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+    for name in names {
+        let key = crate::v8_utils::v8_string(scope, name);
+        if let Some(ctor_val) = global.get(scope, key.into()) {
+            if ctor_val.is_function() {
+                let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                    if proto_val.is_object() && !proto_val.is_null_or_undefined() {
+                        let proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(proto_val) };
+                        map.insert(name.to_string(), v8::Global::new(scope, proto));
+                    }
+                }
+            }
+        }
+    }
+    map
+}
+
+/// Chain dom/template.rs root prototype (EventTarget) to codegen prototype.
+/// Only the root of the dom/template.rs chain needs to be linked — the
+/// internal inherit() calls (Node→EventTarget, Element→Node, etc.) already
+/// form the dom/template.rs prototype chain. By linking only EventTarget,
+/// the full chain becomes: dom HTMLDivElement → dom HTMLElement → ...
+/// → dom EventTarget → codegen EventTarget → codegen Node → codegen Element
+/// → ... → Object.prototype. This preserves both native callbacks (dom side)
+/// and IDL attributes/constants (codegen side).
+pub fn chain_dom_prototypes(
+    scope: &v8::PinScope<'_, '_>,
+    global: v8::Local<v8::Object>,
+    codegen_protos: &HashMap<String, v8::Global<v8::Object>>,
+) {
+    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+    let root_names = ["EventTarget"];
+    for name in root_names {
+        let Some(codegen_proto_global) = codegen_protos.get(name) else {
+            continue;
+        };
+        let key = crate::v8_utils::v8_string(scope, name);
+        let Some(ctor_val) = global.get(scope, key.into()) else {
+            continue;
+        };
+        if !ctor_val.is_function() {
+            continue;
+        }
+        let dom_ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+        let Some(dom_proto_val) = dom_ctor.get(scope, proto_key.into()) else {
+            continue;
+        };
+        if !dom_proto_val.is_object() || dom_proto_val.is_null_or_undefined() {
+            continue;
+        }
+        let dom_proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(dom_proto_val) };
+        let codegen_proto = v8::Local::new(scope, codegen_proto_global);
+        let _ = dom_proto.set_prototype(scope, codegen_proto.into());
+    }
+}
+
 /// Select the correct FunctionTemplate for a given tag name.
 /// Returns the most specific template available.
 pub fn template_for_tag<'s>(
