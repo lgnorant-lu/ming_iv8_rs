@@ -241,6 +241,8 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
         });
     }
 
+    let definitions = process_includes_and_partials(definitions);
+
     let stats = JsonStats {
         definitions: defs_raw.len(),
         interfaces: *counts.get("interface").unwrap_or(&0),
@@ -253,6 +255,115 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
     };
 
     Ok((definitions, stats))
+}
+
+fn process_includes_and_partials(mut definitions: Vec<Definition>) -> Vec<Definition> {
+    let includes_stmts: Vec<(String, String)> = definitions
+        .iter()
+        .filter(|d| d.kind == "includes")
+        .filter_map(|d| {
+            let target = d.target.clone()?;
+            let mixin = d.includes.clone()?;
+            Some((target, mixin))
+        })
+        .collect();
+
+    let mixin_members: HashMap<String, Vec<MemberData>> = definitions
+        .iter()
+        .filter(|d| {
+            d.kind == "interface_mixin" || d.kind == "mixin" || d.kind == "callback_interface"
+        })
+        .filter_map(|d| {
+            let name = d.name.clone()?;
+            Some((name, d.members.clone()))
+        })
+        .collect();
+
+    if !includes_stmts.is_empty() {
+        let mut by_name: HashMap<String, usize> = HashMap::new();
+        for (i, d) in definitions.iter().enumerate() {
+            if let Some(ref name) = d.name {
+                if d.kind != "includes" && !d.partial {
+                    by_name.entry(name.clone()).or_insert(i);
+                }
+            }
+        }
+
+        for (target, mixin_name) in &includes_stmts {
+            let target_idx = match by_name.get(target) {
+                Some(&idx) => idx,
+                None => continue,
+            };
+            let members_to_copy = match mixin_members.get(mixin_name) {
+                Some(m) => m.clone(),
+                None => continue,
+            };
+
+            let existing_names: std::collections::HashSet<String> = definitions[target_idx]
+                .members
+                .iter()
+                .filter_map(|m| m.name.clone())
+                .collect();
+
+            for member in members_to_copy {
+                if let Some(ref mname) = member.name {
+                    if existing_names.contains(mname) {
+                        continue;
+                    }
+                }
+                definitions[target_idx].members.push(member);
+            }
+        }
+    }
+
+    let mut partial_indices: Vec<usize> = Vec::new();
+    let mut partial_merges: Vec<(usize, Vec<MemberData>)> = Vec::new();
+    {
+        let mut base_by_name: HashMap<String, usize> = HashMap::new();
+        for (i, d) in definitions.iter().enumerate() {
+            if d.kind == "includes" {
+                continue;
+            }
+            if d.partial {
+                if let Some(ref name) = d.name {
+                    if let Some(&base_idx) = base_by_name.get(name) {
+                        partial_merges.push((base_idx, d.members.clone()));
+                        partial_indices.push(i);
+                    }
+                }
+            } else {
+                if let Some(ref name) = d.name {
+                    base_by_name.entry(name.clone()).or_insert(i);
+                }
+            }
+        }
+    }
+    for (base_idx, members_to_merge) in partial_merges {
+        for member in members_to_merge {
+            definitions[base_idx].members.push(member);
+        }
+    }
+
+    let mut remove_set: std::collections::HashSet<usize> = std::collections::HashSet::new();
+    for (i, d) in definitions.iter().enumerate() {
+        if d.kind == "includes" {
+            remove_set.insert(i);
+        }
+    }
+    for &i in &partial_indices {
+        remove_set.insert(i);
+    }
+
+    if remove_set.is_empty() {
+        definitions
+    } else {
+        definitions
+            .into_iter()
+            .enumerate()
+            .filter(|(i, _)| !remove_set.contains(i))
+            .map(|(_, d)| d)
+            .collect()
+    }
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -288,5 +399,168 @@ mod tests {
     fn test_extract_type_name_none() {
         let v = serde_json::Value::Bool(true);
         assert_eq!(extract_type_name(&v), None);
+    }
+
+    fn make_member(kind: &str, name: &str) -> MemberData {
+        MemberData {
+            kind: kind.into(),
+            name: Some(name.into()),
+            idl_type: None,
+            readonly: false,
+            return_type: None,
+            arguments: vec![],
+            const_value: None,
+            required_arg_count: 0,
+        }
+    }
+
+    fn make_def(kind: &str, name: &str, members: Vec<MemberData>) -> Definition {
+        Definition {
+            kind: kind.into(),
+            name: Some(name.into()),
+            source: None,
+            inheritance: None,
+            ext_attrs: vec![],
+            members,
+            partial: false,
+            values: vec![],
+            target: None,
+            includes: None,
+        }
+    }
+
+    #[test]
+    fn test_includes_merges_mixin_members_into_target() {
+        let mixin = make_def(
+            "interface_mixin",
+            "GlobalEventHandlers",
+            vec![make_member("attribute", "onclick")],
+        );
+        let target = make_def("interface", "Window", vec![]);
+        let mut includes_def = make_def("includes", "", vec![]);
+        includes_def.target = Some("Window".into());
+        includes_def.includes = Some("GlobalEventHandlers".into());
+
+        let result = process_includes_and_partials(vec![mixin, target, includes_def]);
+
+        assert_eq!(result.len(), 2);
+        let window = result.iter().find(|d| d.name.as_deref() == Some("Window")).unwrap();
+        assert_eq!(window.members.len(), 1);
+        assert_eq!(window.members[0].name.as_deref(), Some("onclick"));
+        assert!(result.iter().all(|d| d.kind != "includes"));
+    }
+
+    #[test]
+    fn test_includes_does_not_overwrite_existing_members() {
+        let mixin = make_def(
+            "interface_mixin",
+            "GlobalEventHandlers",
+            vec![make_member("attribute", "onclick")],
+        );
+        let target = make_def(
+            "interface",
+            "Window",
+            vec![make_member("attribute", "onclick")],
+        );
+        let mut includes_def = make_def("includes", "", vec![]);
+        includes_def.target = Some("Window".into());
+        includes_def.includes = Some("GlobalEventHandlers".into());
+
+        let result = process_includes_and_partials(vec![mixin, target, includes_def]);
+
+        let window = result.iter().find(|d| d.name.as_deref() == Some("Window")).unwrap();
+        assert_eq!(window.members.len(), 1);
+    }
+
+    #[test]
+    fn test_partial_merges_into_base() {
+        let base = make_def("interface", "Element", vec![make_member("attribute", "id")]);
+        let mut partial = make_def(
+            "interface",
+            "Element",
+            vec![make_member("attribute", "className")],
+        );
+        partial.partial = true;
+
+        let result = process_includes_and_partials(vec![base, partial]);
+
+        assert_eq!(result.len(), 1);
+        let element = &result[0];
+        assert!(!element.partial);
+        assert_eq!(element.members.len(), 2);
+    }
+
+    #[test]
+    fn test_partial_without_base_is_kept() {
+        let mut partial = make_def(
+            "interface",
+            "FooPartial",
+            vec![make_member("attribute", "bar")],
+        );
+        partial.partial = true;
+
+        let result = process_includes_and_partials(vec![partial]);
+
+        assert_eq!(result.len(), 1);
+        assert!(result[0].partial);
+    }
+
+    #[test]
+    fn test_includes_with_missing_mixin_is_skipped() {
+        let target = make_def("interface", "Window", vec![]);
+        let mut includes_def = make_def("includes", "", vec![]);
+        includes_def.target = Some("Window".into());
+        includes_def.includes = Some("NonExistentMixin".into());
+
+        let result = process_includes_and_partials(vec![target, includes_def]);
+
+        assert_eq!(result.len(), 1);
+        let window = &result[0];
+        assert_eq!(window.members.len(), 0);
+    }
+
+    #[test]
+    fn test_required_arg_count_all_required() {
+        let json = serde_json::json!([
+            {"name": "a", "optional": false, "variadic": false},
+            {"name": "b", "optional": false, "variadic": false}
+        ]);
+        let count = json.as_array().unwrap().iter()
+            .take_while(|a| {
+                !a.get("optional").and_then(|v| v.as_bool()).unwrap_or(false)
+                    && !a.get("variadic").and_then(|v| v.as_bool()).unwrap_or(false)
+            })
+            .count();
+        assert_eq!(count, 2);
+    }
+
+    #[test]
+    fn test_required_arg_count_with_optional() {
+        let json = serde_json::json!([
+            {"name": "a", "optional": false, "variadic": false},
+            {"name": "b", "optional": true, "variadic": false}
+        ]);
+        let count = json.as_array().unwrap().iter()
+            .take_while(|a| {
+                !a.get("optional").and_then(|v| v.as_bool()).unwrap_or(false)
+                    && !a.get("variadic").and_then(|v| v.as_bool()).unwrap_or(false)
+            })
+            .count();
+        assert_eq!(count, 1);
+    }
+
+    #[test]
+    fn test_required_arg_count_with_variadic() {
+        let json = serde_json::json!([
+            {"name": "a", "optional": false, "variadic": false},
+            {"name": "b", "optional": false, "variadic": true}
+        ]);
+        let count = json.as_array().unwrap().iter()
+            .take_while(|a| {
+                !a.get("optional").and_then(|v| v.as_bool()).unwrap_or(false)
+                    && !a.get("variadic").and_then(|v| v.as_bool()).unwrap_or(false)
+            })
+            .count();
+        assert_eq!(count, 1);
     }
 }

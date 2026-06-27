@@ -49,184 +49,40 @@ fn should_skip_attribute(interface_name: &str, attr_name: &str) -> bool {
         .any(|(iface, attr)| *iface == interface_name && *attr == attr_name)
 }
 
-/// Web IDL interfaces that are NOT constructable from JavaScript in real
-/// browsers (Chrome). `new XxxInterface()` must throw TypeError
-/// "Illegal constructor".
-///
-/// Derived from the v0.8.82 illegal-constructor audit
-/// (`data/illicit_constructor_audit.json`, 167 potential_issues) minus the
-/// legitimately-constructable exclusions listed in `KNOWN_CONSTRUCTABLE`
-/// (Headers, FontFace, SecurityPolicyViolationEvent, VTTCue, MediaStream,
-/// PerformanceMark, PerformanceMeasure, AbortSignal, ClipboardItem,
-/// CSSStyleSheet). Historical constructor aliases such as Image, Option,
-/// and Audio are also excluded — they are constructable by design.
-const NON_CONSTRUCTABLE: &[&str] = &[
-    "AbstractRange",
-    "AnalyserNode",
-    "Attr",
-    "AudioBufferSourceNode",
-    "AudioDestinationNode",
-    "AudioListener",
-    "AudioParam",
-    "AudioParamMap",
-    "AudioTrackList",
-    "BarProp",
-    "BiquadFilterNode",
-    "Cache",
-    "CacheStorage",
-    "CanvasGradient",
-    "CanvasPattern",
-    "CanvasRenderingContext2D",
-    "CDATASection",
-    "ChannelMergerNode",
-    "ChannelSplitterNode",
-    "CharacterData",
-    "Clipboard",
-    "Comment",
-    "ConstantSourceNode",
-    "ConvolverNode",
-    "Crypto",
-    "CryptoKey",
-    "CSSConditionRule",
-    "CSSContainerRule",
-    "CSSFontFaceRule",
-    "CSSGroupingRule",
-    "CSSImportRule",
-    "CSSKeyframeRule",
-    "CSSKeyframesRule",
-    "CSSLayerBlockRule",
-    "CSSLayerStatementRule",
-    "CSSMarginRule",
-    "CSSMediaRule",
-    "CSSNamespaceRule",
-    "CSSPageRule",
-    "CSSRule",
-    "CSSRuleList",
-    "CSSStartingStyleRule",
-    "CSSStyleDeclaration",
-    "CSSStyleRule",
-    "CSSSupportsRule",
-    "CustomElementRegistry",
-    "DataTransfer",
-    "DataTransferItem",
-    "DataTransferItemList",
-    "DelayNode",
-    "Document",
-    "DocumentFragment",
-    "DocumentType",
-    "DOMImplementation",
-    "DOMStringMap",
-    "DOMTokenList",
-    "DynamicsCompressorNode",
-    "Element",
-    "FontFaceSet",
-    "GainNode",
-    "History",
-    "HTMLCollection",
-    "HTMLDocument",
-    "HTMLElement",
-    "HTMLFormControlsCollection",
-    "HTMLOptionsCollection",
-    "IIRFilterNode",
-    "IntersectionObserverEntry",
-    "LayoutShiftAttribution",
-    "MediaElementAudioSourceNode",
-    "MediaList",
-    "MediaQueryList",
-    "MediaStreamAudioDestinationNode",
-    "MediaStreamAudioSourceNode",
-    "MediaStreamTrack",
-    "MediaStreamTrackAudioSourceNode",
-    "MimeType",
-    "MutationRecord",
-    "NamedNodeMap",
-    "Node",
-    "NodeIterator",
-    "NodeList",
-    "OffscreenCanvasRenderingContext2D",
-    "OscillatorNode",
-    "PannerNode",
-    "Performance",
-    "PerformanceEntry",
-    "PerformanceEventTiming",
-    "PerformanceLongTaskTiming",
-    "PerformanceNavigationTiming",
-    "PerformanceObserverEntryList",
-    "PerformancePaintTiming",
-    "PerformanceResourceTiming",
-    "PeriodicWave",
-    "Plugin",
-    "PluginArray",
-    "ProcessingInstruction",
-    "PushManager",
-    "PushSubscription",
-    "RadioNodeList",
-    "Range",
-    "ResizeObserverEntry",
-    "ScreenDetailed",
-    "ScreenDetails",
-    "ScreenOrientation",
-    "ScriptProcessorNode",
-    "ServiceWorker",
-    "ShadowRoot",
-    "StereoPannerNode",
-    "Storage",
-    "StyleSheet",
-    "StyleSheetList",
-    "SubtleCrypto",
-    "SVGAngle",
-    "SVGAnimatedAngle",
-    "SVGAnimatedBoolean",
-    "SVGAnimatedEnumeration",
-    "SVGAnimatedInteger",
-    "SVGAnimatedLength",
-    "SVGAnimatedLengthList",
-    "SVGAnimatedNumber",
-    "SVGAnimatedNumberList",
-    "SVGAnimatedPreserveAspectRatio",
-    "SVGAnimatedRect",
-    "SVGAnimatedString",
-    "SVGAnimatedTransformList",
-    "SVGLength",
-    "SVGLengthList",
-    "SVGNumber",
-    "SVGNumberList",
-    "SVGPointList",
-    "SVGStringList",
-    "SVGTransform",
-    "SVGTransformList",
-    "TaskAttributionTiming",
-    "Text",
-    "TextMetrics",
-    "TextTrack",
-    "TextTrackCueList",
-    "TextTrackList",
-    "TreeWalker",
-    "ValidityState",
-    "VideoTrackList",
-    "VisualViewport",
-    "WaveShaperNode",
-    "WebGL2RenderingContext",
-    "WebGLActiveInfo",
-    "WebGLBuffer",
-    "WebGLFramebuffer",
-    "WebGLProgram",
-    "WebGLQuery",
-    "WebGLRenderbuffer",
-    "WebGLRenderingContext",
-    "WebGLSampler",
-    "WebGLShader",
-    "WebGLShaderPrecisionFormat",
-    "WebGLSync",
-    "WebGLTexture",
-    "WebGLTransformFeedback",
-    "WebGLUniformLocation",
-    "WebGLVertexArrayObject",
-    "Window",
+/// Interfaces that are constructable via JS alias constructors not
+/// represented as [Constructor] members in the IDL. These have
+/// [LegacyFactoryFunction] or [NamedConstructor] ext_attrs, or are
+/// historically constructable in browsers without IDL annotation.
+const KNOWN_CONSTRUCTABLE: &[&str] = &[
+    "HTMLImageElement",
+    "HTMLAudioElement",
+    "HTMLOptionElement",
 ];
 
-fn is_non_constructable(interface_name: &str) -> bool {
-    NON_CONSTRUCTABLE.iter().any(|n| *n == interface_name)
+fn is_constructable(def: &Definition) -> bool {
+    if def.kind == "callback_interface" {
+        return false;
+    }
+    if let Some(ref name) = def.name {
+        if KNOWN_CONSTRUCTABLE.iter().any(|n| *n == name) {
+            return true;
+        }
+    }
+    if def
+        .ext_attrs
+        .iter()
+        .any(|ea| ea.starts_with("Constructor"))
+    {
+        return true;
+    }
+    if def
+        .ext_attrs
+        .iter()
+        .any(|ea| ea.starts_with("NamedConstructor") || ea.starts_with("LegacyFactoryFunction"))
+    {
+        return true;
+    }
+    def.members.iter().any(|m| m.kind == "constructor")
 }
 
 fn parse_const_value(raw: &str) -> Option<f64> {
@@ -324,12 +180,7 @@ fn generate_domain_file(
     out.push_str(&format!("//! Generated stubs: {}\n", domain));
     out.push_str("//! Auto-generated by iv8-surface-codegen.\n");
     out.push_str("#![allow(unused_imports)]\n\n");
-    let needs_illegal = defs.iter().any(|d| {
-        d.name
-            .as_deref()
-            .map(is_non_constructable)
-            .unwrap_or(false)
-    });
+    let needs_illegal = defs.iter().any(|d| !is_constructable(d));
     if needs_illegal {
         out.push_str("use super::{construct_only, illegal_constructor};\n");
     } else {
@@ -458,10 +309,10 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     out.push_str("    scope: &v8::PinScope<'s, '_>,\n");
     out.push_str("    _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,\n");
     out.push_str(") -> v8::Local<'s, v8::FunctionTemplate> {\n");
-    let ctor_cb = if is_non_constructable(name) {
-        "illegal_constructor"
-    } else {
+    let ctor_cb = if is_constructable(def) {
         "construct_only"
+    } else {
+        "illegal_constructor"
     };
     out.push_str(&format!(
         "    let tmpl = v8::FunctionTemplate::builder_raw({}).build(scope);\n",
@@ -895,19 +746,64 @@ mod tests {
         }
     }
 
+    fn make_constructable_def(name: &str) -> Definition {
+        let mut def = make_empty_def(name);
+        def.members.push(MemberData {
+            kind: "constructor".into(),
+            name: None,
+            idl_type: None,
+            readonly: false,
+            return_type: None,
+            arguments: vec![],
+            const_value: None,
+            required_arg_count: 0,
+        });
+        def
+    }
+
     #[test]
     fn test_constructable_uses_construct_only() {
-        for name in &["AbortController", "Foo", "UnknownInterface"] {
-            let def = make_empty_def(name);
-            let fn_name = type_mapper::idl_name_to_rust(name);
-            let ea = process_interface_ea(&def);
-            let code = generate_template_function(&def, &ea, &fn_name);
-            assert!(
-                code.contains("builder_raw(construct_only)"),
-                "{} should use construct_only",
-                name
-            );
-        }
+        let def = make_constructable_def("AbortController");
+        let fn_name = type_mapper::idl_name_to_rust("AbortController");
+        let ea = process_interface_ea(&def);
+        let code = generate_template_function(&def, &ea, &fn_name);
+        assert!(
+            code.contains("builder_raw(construct_only)"),
+            "interface with constructor member should use construct_only"
+        );
+
+        let mut def2 = make_empty_def("HTMLImageElement");
+        def2.ext_attrs.push("LegacyFactoryFunction=Image".into());
+        let fn_name2 = type_mapper::idl_name_to_rust("HTMLImageElement");
+        let ea2 = process_interface_ea(&def2);
+        let code2 = generate_template_function(&def2, &ea2, &fn_name2);
+        assert!(
+            code2.contains("builder_raw(construct_only)"),
+            "interface with LegacyFactoryFunction should use construct_only"
+        );
+    }
+
+    #[test]
+    fn test_callback_interface_is_non_constructable() {
+        let mut def = make_empty_def("NodeFilter");
+        def.kind = "callback_interface".into();
+        def.members.push(MemberData {
+            kind: "const".into(),
+            name: Some("FILTER_ACCEPT".into()),
+            idl_type: Some("unsigned short".into()),
+            readonly: false,
+            return_type: None,
+            arguments: vec![],
+            const_value: Some("1".into()),
+            required_arg_count: 0,
+        });
+        let fn_name = type_mapper::idl_name_to_rust("NodeFilter");
+        let ea = process_interface_ea(&def);
+        let code = generate_template_function(&def, &ea, &fn_name);
+        assert!(
+            code.contains("builder_raw(illegal_constructor)"),
+            "callback_interface must use illegal_constructor even with consts"
+        );
     }
 
     #[test]
@@ -944,7 +840,7 @@ mod tests {
 
     #[test]
     fn test_domain_file_omits_illegal_when_not_needed() {
-        let defs = vec![make_empty_def("AbortController")];
+        let defs = vec![make_constructable_def("AbortController")];
         let def_refs: Vec<&Definition> = defs.iter().collect();
         let by_name: BTreeMap<String, &Definition> = defs
             .iter()

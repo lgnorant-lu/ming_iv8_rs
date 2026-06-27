@@ -2623,7 +2623,7 @@ pub fn create_range_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "Range").unwrap());
     if let Some(p) = _parent {
@@ -3870,7 +3870,7 @@ pub fn create_abort_signal_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "AbortSignal").unwrap());
     if let Some(p) = _parent {
@@ -5691,7 +5691,7 @@ pub fn create_document_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "Document").unwrap());
     if let Some(p) = _parent {
@@ -6352,7 +6352,7 @@ pub fn create_document_fragment_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "DocumentFragment").unwrap());
     if let Some(p) = _parent {
@@ -7758,7 +7758,7 @@ pub fn create_comment_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "Comment").unwrap());
     if let Some(p) = _parent {
@@ -7798,7 +7798,7 @@ pub fn create_text_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(illegal_constructor).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "Text").unwrap());
     if let Some(p) = _parent {
