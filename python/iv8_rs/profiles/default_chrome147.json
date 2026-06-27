@@ -30,11 +30,11 @@
   "screen.availHeight": 1040,
   "screen.colorDepth": 24,
   "screen.pixelDepth": 24,
-  "window.innerWidth": 1920,
-  "window.innerHeight": 969,
+  "window.innerWidth": 1476,
+  "window.innerHeight": 1040,
   "window.outerWidth": 1920,
   "window.outerHeight": 1080,
-  "window.devicePixelRatio": 1,
+  "window.devicePixelRatio": 1.25,
   "webgl.UNMASKED_VENDOR_WEBGL": "Google Inc. (NVIDIA)",
   "webgl.UNMASKED_RENDERER_WEBGL": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 (0x00002882) Direct3D11 vs_5_0 ps_5_0, D3D11)"
 }
