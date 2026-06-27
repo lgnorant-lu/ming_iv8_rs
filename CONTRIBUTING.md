@@ -81,6 +81,10 @@
   3. 已执行审阅：验证命令及结果（test/check/clippy 通过数）
 - **禁止 emoji**：body 中严禁出现 emoji（包括 `[OK]` 等替代标记仅在状态文档中使用，不在 commit message 中使用）
 - **链接 REQ ID**：如果与某条需求相关，标注 `Refs: REQ-DOM-009` 或 `Closes: REQ-CORE-005`
+- **提交信息文件方式**：当 body 包含中文或特殊字符可能导致 shell 解析问题时，
+  将提交信息写入临时文件，使用 `git commit -F <file>` 提交。临时文件放在
+  系统临时目录（`C:\Users\Lenovo\AppData\Local\Temp\opencode\`）或 gitignored
+  项目目录。这避免了中文文本、引号和特殊字符在 shell 中的转义问题。
 
 ### 1.7 footer 规则（可选）
 
