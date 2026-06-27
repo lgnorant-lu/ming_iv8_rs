@@ -40,9 +40,11 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     } catch(e) {}
 
     // HTMLDocument constructor (RS VMP checks document instanceof HTMLDocument)
-    if (typeof HTMLDocument === 'undefined' && typeof document !== 'undefined') {
-        function HTMLDocument() {}
-        HTMLDocument.prototype = Object.getPrototypeOf(document) || {};
+    if (typeof HTMLDocument === 'undefined' && typeof document !== 'undefined' && typeof Document !== 'undefined') {
+        function HTMLDocument() { throw new TypeError('Illegal constructor'); }
+        HTMLDocument.prototype = Object.create(Document.prototype);
+        HTMLDocument.prototype.constructor = HTMLDocument;
+        Object.defineProperty(document, '__proto__', { value: HTMLDocument.prototype, configurable: true });
         Object.defineProperty(document, 'constructor', { value: HTMLDocument, writable: true, configurable: true });
         globalThis.HTMLDocument = HTMLDocument;
     }
@@ -529,19 +531,6 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     // Real browsers without the extension return net::ERR_FAILED.
     // We intercept fetch/XHR to chrome-extension:// to return rejection.
     if (typeof window !== 'undefined' && !window.__iv8ExtDetectionGuard) {
-        var _origFetch = typeof fetch !== 'undefined' ? fetch : null;
-        if (_origFetch) {
-            var _wrappedFetch = function(input, init) {
-                var url = typeof input === 'string' ? input : (input && input.url) || '';
-                if (url.indexOf('chrome-extension://') === 0) {
-                    return Promise.reject(new TypeError('Failed to fetch'));
-                }
-                return _origFetch.call(this, input, init);
-            };
-            // Preserve native code toString for anti-detection
-            _wrappedFetch.toString = function() { return _origFetch.toString(); };
-            fetch = _wrappedFetch;
-        }
         Object.defineProperty(window, '__iv8ExtDetectionGuard', {
             value: true, writable: false, configurable: false, enumerable: false,
         });

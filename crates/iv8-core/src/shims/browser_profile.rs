@@ -73,8 +73,8 @@ pub struct BrowserProfile {
 }
 
 pub const DEFAULT_PROFILE: BrowserProfile = BrowserProfile {
-    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-    app_version: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+    app_version: "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
     platform: "Win32",
     vendor: "Google Inc.",
     vendor_sub: "",
@@ -104,7 +104,7 @@ pub const DEFAULT_PROFILE: BrowserProfile = BrowserProfile {
     screen_avail_left: 0.0,
     screen_avail_top: 0.0,
 
-    ua_brands_json: r#"[{"brand":"Google Chrome","version":"131"},{"brand":"Chromium","version":"131"}]"#,
+    ua_brands_json: r#"[{"brand":"Chromium","version":"147"},{"brand":"Google Chrome","version":"147"}]"#,
     ua_mobile: false,
     ua_platform: "Windows",
     ua_architecture: "x86",
@@ -112,18 +112,18 @@ pub const DEFAULT_PROFILE: BrowserProfile = BrowserProfile {
     ua_model: "",
     ua_platform_version: "10.0.0",
     ua_wow64: false,
-    ua_full_version_list_json: r#"[{"brand":"Google Chrome","version":"131.0.6778.86"},{"brand":"Chromium","version":"131.0.6778.86"}]"#,
+    ua_full_version_list_json: r#"[{"brand":"Chromium","version":"147.0.7727.116"},{"brand":"Google Chrome","version":"147.0.7727.116"}]"#,
 
-    device_pixel_ratio: 1.0,
+    device_pixel_ratio: 1.25,
 
-    window_inner_width: 1920.0,
-    window_inner_height: 969.0,
+    window_inner_width: 1476.0,
+    window_inner_height: 1040.0,
     window_outer_width: 1920.0,
-    window_outer_height: 1040.0,
+    window_outer_height: 1080.0,
 
     // v0.8.62 conditional exposure defaults
     mobile_profile: false,       // desktop profile
-    chrome_version: 131,         // Chrome 131
+    chrome_version: 147,         // Chrome 147
     platform_webview: false,     // standalone browser (not WebView)
 };
 
@@ -133,7 +133,7 @@ mod tests {
 
     #[test]
     fn test_default_profile_user_agent_contains_chrome() {
-        assert!(DEFAULT_PROFILE.user_agent.contains("Chrome/131"));
+        assert!(DEFAULT_PROFILE.user_agent.contains("Chrome/147"));
         assert!(DEFAULT_PROFILE.user_agent.contains("Windows NT 10.0"));
     }
 
@@ -181,10 +181,10 @@ mod tests {
 
     #[test]
     fn test_default_profile_window_dimensions() {
-        assert_eq!(DEFAULT_PROFILE.window_inner_width, 1920.0);
-        assert_eq!(DEFAULT_PROFILE.window_inner_height, 969.0);
+        assert_eq!(DEFAULT_PROFILE.window_inner_width, 1476.0);
+        assert_eq!(DEFAULT_PROFILE.window_inner_height, 1040.0);
         assert_eq!(DEFAULT_PROFILE.window_outer_width, 1920.0);
-        assert_eq!(DEFAULT_PROFILE.window_outer_height, 1040.0);
+        assert_eq!(DEFAULT_PROFILE.window_outer_height, 1080.0);
     }
 
     #[test]

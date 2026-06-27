@@ -59,56 +59,62 @@
     }, 'loadTimes');
 
     // --- chrome.runtime ---
-    chrome.runtime = {
-        OnInstalledReason: {
-            CHROME_UPDATE: "chrome_update",
-            INSTALL: "install",
-            SHARED_MODULE_UPDATE: "shared_module_update",
-            UPDATE: "update"
-        },
-        OnRestartRequiredReason: {
-            APP_UPDATE: "app_update",
-            OS_UPDATE: "os_update",
-            PERIODIC: "periodic"
-        },
-        PlatformArch: {
-            ARM: "arm",
-            ARM64: "arm64",
-            MIPS: "mips",
-            MIPS64: "mips64",
-            X86_32: "x86-32",
-            X86_64: "x86-64"
-        },
-        PlatformNaclArch: {
-            ARM: "arm",
-            ARM64: "arm64",
-            MIPS: "mips",
-            MIPS64: "mips64",
-            X86_32: "x86-32",
-            X86_64: "x86-64"
-        },
-        PlatformOs: {
-            ANDROID: "android",
-            CROS: "cros",
-            LINUX: "linux",
-            MAC: "mac",
-            OPENBSD: "openbsd",
-            WIN: "win"
-        },
-        RequestUpdateCheckStatus: {
-            NO_UPDATE: "no_update",
-            THROTTLED: "throttled",
-            UPDATE_AVAILABLE: "update_available"
-        },
-        get id() { return undefined; }
-    };
+    // Real Chrome: chrome.runtime exists but is non-enumerable (Object.keys(chrome) returns ["loadTimes", "csi", "app"]).
+    Object.defineProperty(chrome, 'runtime', {
+        enumerable: false,
+        configurable: true,
+        value: {
+            OnInstalledReason: {
+                CHROME_UPDATE: "chrome_update",
+                INSTALL: "install",
+                SHARED_MODULE_UPDATE: "shared_module_update",
+                UPDATE: "update"
+            },
+            OnRestartRequiredReason: {
+                APP_UPDATE: "app_update",
+                OS_UPDATE: "os_update",
+                PERIODIC: "periodic"
+            },
+            PlatformArch: {
+                ARM: "arm",
+                ARM64: "arm64",
+                MIPS: "mips",
+                MIPS64: "mips64",
+                X86_32: "x86-32",
+                X86_64: "x86-64"
+            },
+            PlatformNaclArch: {
+                ARM: "arm",
+                ARM64: "arm64",
+                MIPS: "mips",
+                MIPS64: "mips64",
+                X86_32: "x86-32",
+                X86_64: "x86-64"
+            },
+            PlatformOs: {
+                ANDROID: "android",
+                CROS: "cros",
+                LINUX: "linux",
+                MAC: "mac",
+                OPENBSD: "openbsd",
+                WIN: "win"
+            },
+            RequestUpdateCheckStatus: {
+                NO_UPDATE: "no_update",
+                THROTTLED: "throttled",
+                UPDATE_AVAILABLE: "update_available"
+            },
+            get id() { return undefined; }
+        }
+    });
+    var _runtime = chrome.runtime;
 
     // --- chrome.runtime.connect ---
     var _isValidExtensionID = function(str) {
         return typeof str === 'string' && str.length === 32 && /^[a-p]+$/.test(str.toLowerCase());
     };
 
-    chrome.runtime.connect = wrapNative(function connect() {
+    _runtime.connect = wrapNative(function connect() {
         var args = Array.prototype.slice.call(arguments);
         var extensionId = args[0];
         var preamble = 'Error in invocation of runtime.connect(optional string extensionId, optional object connectInfo): ';
@@ -124,7 +130,7 @@
     }, 'connect');
 
     // --- chrome.runtime.sendMessage ---
-    chrome.runtime.sendMessage = wrapNative(function sendMessage() {
+    _runtime.sendMessage = wrapNative(function sendMessage() {
         var args = Array.prototype.slice.call(arguments);
         var preamble = 'Error in invocation of runtime.sendMessage(optional string extensionId, any message, optional object options, optional function responseCallback): ';
 

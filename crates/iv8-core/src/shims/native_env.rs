@@ -215,6 +215,82 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
     nav_getter!("clipboard", nav_clipboard);
     nav_getter!("credentials", nav_credentials);
 
+    nav_getter!("storageBuckets", nav_storage_buckets);
+    nav_getter!("storage", nav_storage);
+    nav_getter!("locks", nav_locks);
+    nav_getter!("gpu", nav_gpu);
+    nav_getter!("mediaCapabilities", nav_media_capabilities);
+    nav_getter!("mediaSession", nav_media_session);
+    nav_getter!("presentation", nav_presentation);
+    nav_getter!("bluetooth", nav_bluetooth);
+    nav_getter!("usb", nav_usb);
+    nav_getter!("wakeLock", nav_wake_lock);
+    nav_getter!("hid", nav_hid);
+    nav_getter!("serial", nav_serial);
+    nav_getter!("ink", nav_ink);
+    nav_getter!("xr", nav_xr);
+    nav_getter!("keyboard", nav_keyboard);
+    nav_getter!("managed", nav_managed);
+    nav_getter!("taintEnabled", nav_taint_enabled);
+    nav_getter!("buildID", nav_build_id);
+    nav_getter!("protectedAudience", nav_protected_audience);
+    nav_getter!("webkitPersistentStorage", nav_webkit_persistent_storage);
+    nav_getter!("webkitTemporaryStorage", nav_webkit_temporary_storage);
+
+    let gum_fn = v8::FunctionTemplate::builder_raw(nav_get_user_media).build(scope);
+    let gum_name = crate::v8_utils::v8_string(scope, "getUserMedia");
+    gum_fn.set_class_name(gum_name);
+    gum_fn.remove_prototype();
+    proto.set(gum_name.into(), gum_fn.into());
+
+    let wgum_fn = v8::FunctionTemplate::builder_raw(nav_get_user_media).build(scope);
+    let wgum_name = crate::v8_utils::v8_string(scope, "webkitGetUserMedia");
+    wgum_fn.set_class_name(wgum_name);
+    wgum_fn.remove_prototype();
+    proto.set(wgum_name.into(), wgum_fn.into());
+
+    let vibrate_fn = v8::FunctionTemplate::builder_raw(nav_vibrate).build(scope);
+    let vibrate_name = crate::v8_utils::v8_string(scope, "vibrate");
+    vibrate_fn.set_class_name(vibrate_name);
+    vibrate_fn.remove_prototype();
+    proto.set(vibrate_name.into(), vibrate_fn.into());
+
+    let share_fn = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+    let share_name = crate::v8_utils::v8_string(scope, "share");
+    share_fn.set_class_name(share_name);
+    share_fn.remove_prototype();
+    proto.set(share_name.into(), share_fn.into());
+
+    let canshare_fn = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+    let canshare_name = crate::v8_utils::v8_string(scope, "canShare");
+    canshare_fn.set_class_name(canshare_name);
+    canshare_fn.remove_prototype();
+    proto.set(canshare_name.into(), canshare_fn.into());
+
+    macro_rules! nav_method_stub {
+        ($name:literal, $cb:ident) => {
+            let f = v8::FunctionTemplate::builder_raw($cb).build(scope);
+            let n = crate::v8_utils::v8_string(scope, $name);
+            f.set_class_name(n);
+            f.remove_prototype();
+            proto.set(n.into(), f.into());
+        };
+    }
+    nav_method_stub!("registerProtocolHandler", stub_noop);
+    nav_method_stub!("unregisterProtocolHandler", stub_noop);
+    nav_method_stub!("runAdAuction", stub_promise_resolve_null);
+    nav_method_stub!("joinAdInterestGroup", stub_noop);
+    nav_method_stub!("leaveAdInterestGroup", stub_noop);
+    nav_method_stub!("updateAdInterestGroups", stub_noop);
+    nav_method_stub!("clearOriginJoinedAdInterestGroups", stub_noop);
+    nav_method_stub!("createAuctionNonce", nav_create_auction_nonce);
+    nav_method_stub!("deprecatedURNToURL", stub_promise_resolve_null);
+    nav_method_stub!("deprecatedRunAdAuctionEnforcesKAnonymity", stub_promise_resolve);
+    nav_method_stub!("getInterestGroupAdAuctionData", stub_promise_resolve_null);
+    nav_method_stub!("canLoadAdAuctionFencedFrame", nav_can_load_ad_auction_fenced_frame);
+    nav_method_stub!("setAppBadge", stub_promise_resolve);
+    nav_method_stub!("clearAppBadge", stub_promise_resolve);
+
     let java_fn = v8::FunctionTemplate::builder_raw(nav_java_enabled).build(scope);
     let java_name = crate::v8_utils::v8_string(scope, "javaEnabled");
     java_fn.set_class_name(java_name);
@@ -289,6 +365,27 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                                         ("geolocation", nav_geolocation),
                                         ("clipboard", nav_clipboard),
                                         ("credentials", nav_credentials),
+                                        ("storageBuckets", nav_storage_buckets),
+                                        ("storage", nav_storage),
+                                        ("locks", nav_locks),
+                                        ("gpu", nav_gpu),
+                                        ("mediaCapabilities", nav_media_capabilities),
+                                        ("mediaSession", nav_media_session),
+                                        ("presentation", nav_presentation),
+                                        ("bluetooth", nav_bluetooth),
+                                        ("usb", nav_usb),
+                                        ("wakeLock", nav_wake_lock),
+                                        ("hid", nav_hid),
+                                        ("serial", nav_serial),
+                                        ("ink", nav_ink),
+                                        ("xr", nav_xr),
+                                        ("keyboard", nav_keyboard),
+                                        ("managed", nav_managed),
+                                        ("taintEnabled", nav_taint_enabled),
+                                        ("buildID", nav_build_id),
+                                        ("protectedAudience", nav_protected_audience),
+                                        ("webkitPersistentStorage", nav_webkit_persistent_storage),
+                                        ("webkitTemporaryStorage", nav_webkit_temporary_storage),
                                     ]);
                                     install_methods_on_proto(scope, install_all_proto, &[
                                         ("getBattery", nav_get_battery),
@@ -297,6 +394,25 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
                                         ("getGamepads", nav_get_gamepads),
                                         ("requestMediaKeySystemAccess", nav_request_media_key_system_access),
                                         ("requestMIDIAccess", nav_request_midi_access),
+                                        ("getUserMedia", nav_get_user_media),
+                                        ("webkitGetUserMedia", nav_get_user_media),
+                                        ("vibrate", nav_vibrate),
+                                        ("share", stub_promise_resolve),
+                                        ("canShare", stub_promise_resolve),
+                                        ("registerProtocolHandler", stub_noop),
+                                        ("unregisterProtocolHandler", stub_noop),
+                                        ("runAdAuction", stub_promise_resolve_null),
+                                        ("joinAdInterestGroup", stub_noop),
+                                        ("leaveAdInterestGroup", stub_noop),
+                                        ("updateAdInterestGroups", stub_noop),
+                                        ("clearOriginJoinedAdInterestGroups", stub_noop),
+                                        ("createAuctionNonce", nav_create_auction_nonce),
+                                        ("deprecatedURNToURL", stub_promise_resolve_null),
+                                        ("deprecatedRunAdAuctionEnforcesKAnonymity", stub_promise_resolve),
+                                        ("getInterestGroupAdAuctionData", stub_promise_resolve_null),
+                                        ("canLoadAdAuctionFencedFrame", nav_can_load_ad_auction_fenced_frame),
+                                        ("setAppBadge", stub_promise_resolve),
+                                        ("clearAppBadge", stub_promise_resolve),
                                     ]);
                                 }
                             }
@@ -1148,6 +1264,33 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
     screen_getter!("pixelDepth", screen_pixel_depth);
     screen_getter!("availLeft", screen_avail_left);
     screen_getter!("availTop", screen_avail_top);
+    screen_getter!("isExtended", screen_is_extended);
+    screen_getter!("orientation", screen_orientation);
+    screen_getter!("onchange", screen_onchange);
+
+    let et_add = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+    let et_add_name = crate::v8_utils::v8_string(scope, "addEventListener");
+    et_add.set_class_name(et_add_name);
+    et_add.remove_prototype();
+    proto.set(et_add_name.into(), et_add.into());
+
+    let et_disp = v8::FunctionTemplate::builder_raw(screen_dispatch_event).build(scope);
+    let et_disp_name = crate::v8_utils::v8_string(scope, "dispatchEvent");
+    et_disp.set_class_name(et_disp_name);
+    et_disp.remove_prototype();
+    proto.set(et_disp_name.into(), et_disp.into());
+
+    let et_rem = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+    let et_rem_name = crate::v8_utils::v8_string(scope, "removeEventListener");
+    et_rem.set_class_name(et_rem_name);
+    et_rem.remove_prototype();
+    proto.set(et_rem_name.into(), et_rem.into());
+
+    let when_fn = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+    let when_name = crate::v8_utils::v8_string(scope, "when");
+    when_fn.set_class_name(when_name);
+    when_fn.remove_prototype();
+    proto.set(when_name.into(), when_fn.into());
 
     let inst_tmpl = screen_tmpl.instance_template(scope);
     if let Some(screen_obj) = inst_tmpl.new_instance(scope) {
@@ -1290,6 +1433,437 @@ fn v8_str<'s>(scope: &'s v8::PinScope<'s, '_>, s: &str) -> v8::Local<'s, v8::Str
     crate::v8_utils::v8_string(scope, s)
 }
 
+unsafe extern "C" fn nav_storage_buckets(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let open_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("open"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("open").into(), open_fn.into());
+        let ts = v8::Symbol::get_to_string_tag(scope);
+        obj.set(scope, ts.into(), s("StorageBucketManager").into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_storage(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let estimate_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(storage_estimate_cb).build(scope);
+            tmpl.set_class_name(s("estimate"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("estimate").into(), estimate_fn.into());
+        obj.set(scope, s("persist").into(), {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("persist"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        }.into());
+        obj.set(scope, s("persisted").into(), {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("persisted"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        }.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn storage_estimate_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let global = scope.get_current_context().global(scope);
+        if let Some(promise_ctor) = global.get(scope, v8_str(scope, "Promise").into()) {
+            if promise_ctor.is_function() {
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(promise_ctor) };
+                let resolve_key = v8_str(scope, "resolve");
+                if let Some(resolve_fn) = ctor.get(scope, resolve_key.into()) {
+                    if resolve_fn.is_function() {
+                        let resolve: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(resolve_fn) };
+                        let result = v8::Object::new(scope);
+                        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+                        result.set(scope, s("quota").into(), v8::Number::new(scope, 2997060666368.0).into());
+                        result.set(scope, s("usage").into(), v8::Number::new(scope, 0.0).into());
+                        let _undefined = v8::undefined(scope);
+                        if let Some(promise) = resolve.call(scope, ctor.into(), &[result.into()]) {
+                            rv.set(promise);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn nav_locks(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let request_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("request"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("request").into(), request_fn.into());
+        let query_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("query"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("query").into(), query_fn.into());
+        let ts = v8::Symbol::get_to_string_tag(scope);
+        obj.set(scope, ts.into(), s("LockManager").into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_gpu(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let request_adapter_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("requestAdapter"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("requestAdapter").into(), request_adapter_fn.into());
+        let ts = v8::Symbol::get_to_string_tag(scope);
+        obj.set(scope, ts.into(), s("GPU").into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_media_capabilities(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let decoding_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("decodingInfo"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("decodingInfo").into(), decoding_fn.into());
+        let encoding_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("encodingInfo"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("encodingInfo").into(), encoding_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_media_session(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        obj.set(scope, s("metadata").into(), v8::null(scope).into());
+        obj.set(scope, s("playbackState").into(), s("none").into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_presentation(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        obj.set(scope, s("defaultRequest").into(), v8::null(scope).into());
+        obj.set(scope, s("receiver").into(), v8::null(scope).into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_bluetooth(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let getavail_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("getAvailability"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("getAvailability").into(), getavail_fn.into());
+        let request_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("requestDevice"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("requestDevice").into(), request_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_usb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let getdevices_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_empty_array).build(scope);
+            tmpl.set_class_name(s("getDevices"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("getDevices").into(), getdevices_fn.into());
+        let request_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("requestDevice"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("requestDevice").into(), request_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_wake_lock(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let request_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("request"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("request").into(), request_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_hid(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let getdevices_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_empty_array).build(scope);
+            tmpl.set_class_name(s("getDevices"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("getDevices").into(), getdevices_fn.into());
+        let request_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("requestDevice"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("requestDevice").into(), request_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_serial(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let getports_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_empty_array).build(scope);
+            tmpl.set_class_name(s("getPorts"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("getPorts").into(), getports_fn.into());
+        let request_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("requestPort"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("requestPort").into(), request_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_ink(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let request_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("requestPresenter"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("requestPresenter").into(), request_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_xr(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let issession_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("isSessionSupported"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("isSessionSupported").into(), issession_fn.into());
+        let request_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve_null).build(scope);
+            tmpl.set_class_name(s("requestSession"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("requestSession").into(), request_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_keyboard(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let lock_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_promise_resolve).build(scope);
+            tmpl.set_class_name(s("lock"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("lock").into(), lock_fn.into());
+        let unlock_fn = {
+            let tmpl = v8::FunctionTemplate::builder_raw(stub_noop).build(scope);
+            tmpl.set_class_name(s("unlock"));
+            tmpl.remove_prototype();
+            crate::v8_utils::v8_fn(scope, &tmpl)
+        };
+        obj.set(scope, s("unlock").into(), unlock_fn.into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_managed(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_taint_enabled(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn nav_build_id(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn nav_get_user_media(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let global = scope.get_current_context().global(scope);
+        if let Some(promise_ctor) = global.get(scope, v8_str(scope, "Promise").into()) {
+            if promise_ctor.is_function() {
+                let ctor: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(promise_ctor) };
+                let reject_key = v8_str(scope, "reject");
+                if let Some(reject_fn) = ctor.get(scope, reject_key.into()) {
+                    if reject_fn.is_function() {
+                        let reject: v8::Local<v8::Function> =
+                            unsafe { v8::Local::cast_unchecked(reject_fn) };
+                        let err_obj = build_dom_exception(scope, &global, "Permission denied", "NotAllowedError");
+                        if let Some(promise) = reject.call(scope, ctor.into(), &[err_obj.into()]) {
+                            rv.set(promise);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn nav_vibrate(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
 env_f64_getter!(
     screen_width,
     "screen.width",
@@ -1338,3 +1912,106 @@ env_f64_getter!(
     screen_avail_top,
     DEFAULT_PROFILE.screen_avail_top
 );
+
+unsafe extern "C" fn screen_is_extended(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn screen_orientation(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        let env = &state.environment;
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        let otype = env.get_str("screen.orientation.type").unwrap_or("landscape-primary");
+        obj.set(scope, s("type").into(), s(otype).into());
+        let angle = env.get_f64("screen.orientation.angle").unwrap_or(0.0);
+        obj.set(scope, s("angle").into(), v8::Number::new(scope, angle).into());
+        obj.set(scope, s("onchange").into(), v8::null(scope).into());
+        let ts = v8::Symbol::get_to_string_tag(scope);
+        obj.set(scope, ts.into(), s("ScreenOrientation").into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn screen_onchange(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::null(scope).into());
+    }));
+}
+
+unsafe extern "C" fn nav_protected_audience(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_webkit_persistent_storage(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        obj.set(scope, s("queryUsageAndQuota").into(), v8::null(scope).into());
+        obj.set(scope, s("requestQuota").into(), v8::null(scope).into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_webkit_temporary_storage(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let obj = v8::Object::new(scope);
+        let s = |k: &str| crate::v8_utils::v8_string(scope, k);
+        obj.set(scope, s("queryUsageAndQuota").into(), v8::null(scope).into());
+        obj.set(scope, s("requestQuota").into(), v8::null(scope).into());
+        rv.set(obj.into());
+    }));
+}
+
+unsafe extern "C" fn nav_create_auction_nonce(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let s = crate::v8_utils::v8_string(scope, "");
+        rv.set(s.into());
+    }));
+}
+
+unsafe extern "C" fn nav_can_load_ad_auction_fenced_frame(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn screen_dispatch_event(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, true).into());
+    }));
+}

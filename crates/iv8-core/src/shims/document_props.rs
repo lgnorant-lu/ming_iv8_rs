@@ -292,6 +292,9 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     Object.defineProperty(document, 'ownerDocument', { get: function() { return null; }, configurable: true });
     Object.defineProperty(document, 'baseURI', { get: function() { return location.href; }, configurable: true });
     Object.defineProperty(document, 'characterSet', { get: function() { return 'UTF-8'; }, configurable: true });
+    Object.defineProperty(document, 'charset', { get: function() { return 'UTF-8'; }, configurable: true });
+    Object.defineProperty(document, 'inputEncoding', { get: function() { return 'UTF-8'; }, configurable: true });
+    Object.defineProperty(document, 'designMode', { get: function() { return 'off'; }, set: function() {}, configurable: true });
     Object.defineProperty(document, 'contentType', { get: function() { return 'text/html'; }, configurable: true });
     Object.defineProperty(document, 'compatMode', { get: function() { return 'CSS1Compat'; }, configurable: true });
     // Cache lastModified at install time using a non-Intl date format to

@@ -31,6 +31,13 @@ pub fn install_console(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Objec
         ("countReset", console_count_reset_cb),
         ("assert", console_assert_cb),
         ("clear", console_clear_cb),
+        ("dirxml", console_noop_cb),
+        ("profile", console_noop_cb),
+        ("profileEnd", console_noop_cb),
+        ("timeLog", console_noop_cb),
+        ("timeStamp", console_noop_cb),
+        ("context", console_noop_cb),
+        ("createTask", console_noop_cb),
     ] {
         let fn_tmpl = v8::FunctionTemplate::builder_raw(*cb).build(scope);
         let func = crate::v8_utils::v8_fn(scope, &fn_tmpl);
@@ -46,6 +53,16 @@ pub fn install_console(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Objec
         console_obj.into(),
         v8::PropertyAttribute::DONT_ENUM,
     );
+
+    let memory_obj = v8::Object::new(scope);
+    let js_heap_size_limit = crate::v8_utils::v8_string(scope, "jsHeapSizeLimit");
+    let total_js_heap_size = crate::v8_utils::v8_string(scope, "totalJSHeapSize");
+    let used_js_heap_size = crate::v8_utils::v8_string(scope, "usedJSHeapSize");
+    memory_obj.set(scope, js_heap_size_limit.into(), v8::Number::new(scope, 4294705152.0).into());
+    memory_obj.set(scope, total_js_heap_size.into(), v8::Number::new(scope, 4294705152.0).into());
+    memory_obj.set(scope, used_js_heap_size.into(), v8::Number::new(scope, 4294705152.0).into());
+    let memory_key = crate::v8_utils::v8_string(scope, "memory");
+    console_obj.set(scope, memory_key.into(), memory_obj.into());
 }
 
 /// Format console arguments to a string.
@@ -237,6 +254,8 @@ unsafe extern "C" fn console_assert_cb(info: *const v8::FunctionCallbackInfo) {
 }
 
 unsafe extern "C" fn console_clear_cb(_info: *const v8::FunctionCallbackInfo) {}
+
+unsafe extern "C" fn console_noop_cb(_info: *const v8::FunctionCallbackInfo) {}
 
 /// A single console message.
 #[derive(Debug, Clone)]

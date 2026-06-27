@@ -186,6 +186,13 @@ unsafe extern "C" fn fetch_callback(info: *const v8::FunctionCallbackInfo) {
         let url_arg = args.get(0);
         let url_str = url_arg.to_rust_string_lossy(scope);
 
+        if url_str.starts_with("chrome-extension://") {
+            let msg = crate::v8_utils::v8_string(scope, "TypeError: Failed to fetch");
+            let err = v8::Exception::type_error(scope, msg);
+            resolver.reject(scope, err);
+            return;
+        }
+
         // Parse optional init parameter (method/headers/body)
         let (method, headers, body) = if args.length() >= 2 {
             parse_fetch_init(scope, args.get(1))

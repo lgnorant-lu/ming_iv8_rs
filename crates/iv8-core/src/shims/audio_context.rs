@@ -66,7 +66,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initOscillatorNode(this, ctx, options);
     }
     function _initOscillatorNode(self, ctx, options) {
-        AudioNode.call(self, ctx);
+        _initAudioNode(self, ctx);
         self.type = (options && options.type) || 'sine';
         self.frequency = _createAudioParam((options && options.frequency) || 440);
         self.detune = _createAudioParam(0);
@@ -87,7 +87,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initDynamicsCompressorNode(this, ctx, options);
     }
     function _initDynamicsCompressorNode(self, ctx, options) {
-        AudioNode.call(self, ctx);
+        _initAudioNode(self, ctx);
         var _comp = (_audioPrefs && _audioPrefs.compressor) ? _audioPrefs.compressor : {};
         self.threshold = _createAudioParam((options && options.threshold !== undefined) ? options.threshold : (_comp.threshold !== undefined ? _comp.threshold : -24));
         self.knee = _createAudioParam((options && options.knee !== undefined) ? options.knee : (_comp.knee !== undefined ? _comp.knee : 30));
@@ -109,7 +109,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initAnalyserNode(this, ctx, options);
     }
     function _initAnalyserNode(self, ctx, options) {
-        AudioNode.call(self, ctx);
+        _initAudioNode(self, ctx);
         self.fftSize = (options && options.fftSize) || 2048;
         self.frequencyBinCount = self.fftSize / 2;
         self.minDecibels = -100;
@@ -133,7 +133,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initGainNode(this, ctx, options);
     }
     function _initGainNode(self, ctx, options) {
-        AudioNode.call(self, ctx);
+        _initAudioNode(self, ctx);
         self.gain = _createAudioParam((options && options.gain !== undefined) ? options.gain : 1);
     }
     function _createGainNode(ctx, options) {
@@ -167,7 +167,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initAudioBuffer(this, options);
     }
     function _initAudioBuffer(self, options) {
-        self.sampleRate = (options && options.sampleRate) || 44100;
+        self.sampleRate = (options && options.sampleRate) || 48000;
         self.length = (options && options.length) || 0;
         self.duration = self.length / self.sampleRate;
         self.numberOfChannels = (options && options.numberOfChannels) || 1;
@@ -208,7 +208,7 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
         _initBaseAudioContext(this, sampleRate);
     }
     function _initBaseAudioContext(self, sampleRate) {
-        self._sampleRate = sampleRate || 44100;
+        self._sampleRate = sampleRate || 48000;
         self._currentTime = 0;
         self._destination = _createAudioDestinationNode(self);
         self._listener = {};
@@ -331,8 +331,8 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     var _audioPrefs = (typeof globalThis.__iv8AudioPrefs === 'object' && globalThis.__iv8AudioPrefs) ? globalThis.__iv8AudioPrefs : {};
     function AudioContext(options) {
         _initBaseAudioContext(this, options && options.sampleRate);
-        this._baseLatency = _audioPrefs.baseLatency || 0.005;
-        this._outputLatency = _audioPrefs.outputLatency || 0.01;
+        this._baseLatency = _audioPrefs.baseLatency != null ? _audioPrefs.baseLatency : 0.05;
+        this._outputLatency = _audioPrefs.outputLatency != null ? _audioPrefs.outputLatency : 0;
     }
     AudioContext.prototype = Object.create(BaseAudioContext.prototype);
     AudioContext.prototype.constructor = AudioContext;
@@ -349,13 +349,33 @@ pub const AUDIO_CONTEXT_JS: &str = r#"
     };
     AudioContext.prototype.createMediaElementSource = function(el) { return _createAudioNode(this); };
 
+    AudioContext.prototype.audioWorklet = undefined;
+    AudioContext.prototype.createConstantSource = function() {
+        var node = _createAudioNode(this);
+        node.offset = _createAudioParam(0);
+        return node;
+    };
+    AudioContext.prototype.createIIRFilter = function(feedforward, feedback) {
+        var node = _createAudioNode(this);
+        return node;
+    };
+    AudioContext.prototype.createPeriodicWave = function(real, imag, constraints) {
+        var wave = { _real: real, _imag: imag };
+        return wave;
+    };
+    Object.defineProperty(AudioContext.prototype, 'onerror', { get: function() { return this._onerror || null; }, set: function(v) { this._onerror = v; }, enumerable: true, configurable: true });
+    Object.defineProperty(AudioContext.prototype, 'onsinkchange', { get: function() { return this._onsinkchange || null; }, set: function(v) { this._onsinkchange = v; }, enumerable: true, configurable: true });
+    Object.defineProperty(AudioContext.prototype, 'playbackStats', { get: function() { return {}; }, enumerable: true, configurable: true });
+    AudioContext.prototype.setSinkId = function(sinkId) { return Promise.resolve(); };
+    Object.defineProperty(AudioContext.prototype, 'sinkId', { get: function() { return ''; }, enumerable: true, configurable: true });
+
     // OfflineAudioContext
     function OfflineAudioContext(numberOfChannels, length, sampleRate) {
         if (typeof numberOfChannels === 'object') {
             var opts = numberOfChannels;
             numberOfChannels = opts.numberOfChannels || 1;
             length = opts.length || 44100;
-            sampleRate = opts.sampleRate || 44100;
+            sampleRate = opts.sampleRate || 48000;
         }
         _initBaseAudioContext(this, sampleRate);
         this.length = length;
