@@ -154,6 +154,133 @@ window_f64_getter_cb!(
     DEFAULT_PROFILE.device_pixel_ratio
 );
 
+unsafe extern "C" fn worker_constructor_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+        if !args.is_construct_call() {
+            let msg = crate::v8_utils::v8_string(scope, "Failed to construct 'Worker': Please use the 'new' operator");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(scope, "Failed to construct 'Worker': 1 argument required");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let script_url = args.get(0).to_rust_string_lossy(scope);
+        let script_source = resolve_worker_script(isolate, &script_url);
+        let profile = state.profile.unwrap_or(&DEFAULT_PROFILE);
+        let worker_id = state.workers.borrow().len() as u64;
+        let handle = crate::shims::worker::spawn_worker(script_source, script_url, profile, worker_id);
+        let worker_obj = v8::Object::new(scope);
+        let new_target = args.new_target();
+        if new_target.is_object() {
+            let nt_obj: v8::Local<v8::Object> = unsafe { v8::Local::cast_unchecked(new_target) };
+            let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+            if let Some(proto_val) = nt_obj.get(scope, proto_key.into()) {
+                if proto_val.is_object() {
+                    let _ = worker_obj.set_prototype(scope, proto_val);
+                }
+            }
+        }
+        let id_key = crate::v8_utils::v8_string(scope, "__iv8WorkerId");
+        let _ = worker_obj.set(scope, id_key.into(), v8::Number::new(scope, worker_id as f64).into());
+        let onmsg_key = crate::v8_utils::v8_string(scope, "onmessage");
+        let _ = worker_obj.set(scope, onmsg_key.into(), v8::null(scope).into());
+        let onerror_key = crate::v8_utils::v8_string(scope, "onerror");
+        let _ = worker_obj.set(scope, onerror_key.into(), v8::null(scope).into());
+        state.workers.borrow_mut().push(handle);
+        let worker_global = v8::Global::new(scope, worker_obj);
+        state.worker_objects.borrow_mut().insert(worker_id, worker_global);
+        let worker_obj_local = v8::Local::new(scope, state.worker_objects.borrow().get(&worker_id).unwrap());
+        rv.set(worker_obj_local.into());
+    }));
+}
+
+unsafe extern "C" fn worker_post_message_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+        if args.length() < 1 {
+            let msg = crate::v8_utils::v8_string(scope, "Failed to execute 'postMessage' on 'Worker': 1 argument required");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
+            return;
+        }
+        let this = args.this();
+        let id_key = crate::v8_utils::v8_string(scope, "__iv8WorkerId");
+        let id_val = this.get(scope, id_key.into());
+        let worker_id = match id_val.and_then(|v| v.number_value(scope)) {
+            Some(n) => n as u64,
+            None => return,
+        };
+        let data = args.get(0);
+        let context = scope.get_current_context();
+        match crate::shims::structured_clone::serialize_value(scope, context, data) {
+            Ok(bytes) => {
+                let workers = state.workers.borrow();
+                for handle in workers.iter() {
+                    if handle.worker_id == worker_id {
+                        let _ = handle.tx.send(crate::shims::worker::WorkerMessage::PostMessage(bytes));
+                        break;
+                    }
+                }
+            }
+            Err(e) => {
+                let msg = crate::v8_utils::v8_string(scope, &e);
+                let exc = v8::Exception::type_error(scope, msg);
+                scope.throw_exception(exc);
+            }
+        }
+    }));
+}
+
+unsafe extern "C" fn worker_terminate_cb(info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let isolate: &v8::Isolate = &*scope;
+        let state = crate::state::RuntimeState::get(isolate);
+        let this = args.this();
+        let id_key = crate::v8_utils::v8_string(scope, "__iv8WorkerId");
+        let id_val = this.get(scope, id_key.into());
+        if let Some(n) = id_val.and_then(|v| v.number_value(scope)) {
+            let worker_id = n as u64;
+            let mut workers = state.workers.borrow_mut();
+            if let Some(idx) = workers.iter().position(|h| h.worker_id == worker_id) {
+                let mut handle = workers.remove(idx);
+                handle.terminate();
+            }
+            state.worker_objects.borrow_mut().remove(&worker_id);
+        }
+    }));
+}
+
+fn resolve_worker_script(isolate: &v8::Isolate, url: &str) -> String {
+    let state = crate::state::RuntimeState::get(isolate);
+    let bundle = state.resource_bundle.borrow();
+    if let Some(resource) = bundle.get(url) {
+        return String::from_utf8_lossy(&resource.body).to_string();
+    }
+    if url.starts_with("blob:") || url.starts_with("data:") {
+        if let Some(src) = url.split(',').nth(1) {
+            return src.to_string();
+        }
+    }
+    String::new()
+}
+
 impl EmbeddedV8Kernel {
     /// Create a new embedded V8 kernel with the given configuration.
     pub fn new(config: KernelConfig) -> Result<Self, IV8Error> {
@@ -259,6 +386,8 @@ impl EmbeddedV8Kernel {
         // — already installed by install_browser_surface_init above).
         kernel.install_undetect_shims(true);
 
+        kernel.install_worker_constructor();
+
         // Note: XHR_SHIM_JS is eval'd twice (install_xhr in install_browser_surface_init
         // + step 8 in install_undetect_shims). The second eval overwrites the codegen
         // constructor but prototype chain remains intact (fix_prototype_chains ran
@@ -342,6 +471,8 @@ impl EmbeddedV8Kernel {
         unsafe {
             self.isolate.exit();
         }
+
+        self.drain_worker_messages();
 
         result
     }
@@ -515,6 +646,121 @@ impl EmbeddedV8Kernel {
             self.isolate.exit();
         }
         result
+    }
+
+    /// Install the Worker constructor on the global object.
+    /// Creates a FunctionTemplate with worker_constructor_cb, installs
+    /// postMessage and terminate on the prototype, and registers on global
+    /// as "Worker" with DONT_ENUM.
+    pub fn install_worker_constructor(&mut self) {
+        unsafe {
+            self.isolate.enter();
+        }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+            let global = context.global(scope);
+
+            let tmpl = v8::FunctionTemplate::builder_raw(worker_constructor_cb).build(scope);
+            tmpl.set_class_name(crate::v8_utils::v8_string(scope, "Worker"));
+
+            let proto = tmpl.prototype_template(scope);
+
+            let post_msg_tmpl = v8::FunctionTemplate::builder_raw(worker_post_message_cb).build(scope);
+            let post_msg_name = crate::v8_utils::v8_string(scope, "postMessage");
+            post_msg_tmpl.set_class_name(post_msg_name);
+            proto.set(post_msg_name.into(), post_msg_tmpl.into());
+
+            let term_tmpl = v8::FunctionTemplate::builder_raw(worker_terminate_cb).build(scope);
+            let term_name = crate::v8_utils::v8_string(scope, "terminate");
+            term_tmpl.set_class_name(term_name);
+            proto.set(term_name.into(), term_tmpl.into());
+
+            let onmsg_name = crate::v8_utils::v8_string(scope, "onmessage");
+            proto.set(onmsg_name.into(), v8::null(scope).into());
+
+            let onerror_name = crate::v8_utils::v8_string(scope, "onerror");
+            proto.set(onerror_name.into(), v8::null(scope).into());
+
+            let tag_sym = v8::Symbol::get_to_string_tag(scope);
+            let tag_val = crate::v8_utils::v8_string(scope, "Worker");
+            proto.set(tag_sym.into(), tag_val.into());
+
+            if let Some(func) = tmpl.get_function(scope) {
+                let name_key = crate::v8_utils::v8_string(scope, "Worker");
+                global.define_own_property(
+                    scope,
+                    name_key.into(),
+                    func.into(),
+                    v8::PropertyAttribute::DONT_ENUM,
+                );
+            }
+        }
+        unsafe {
+            self.isolate.exit();
+        }
+    }
+
+    /// Drain worker-to-main messages from all worker handles.
+    /// Deserializes via structured_clone, creates MessageEvent objects,
+    /// and dispatches to worker.onmessage callbacks.
+    pub fn drain_worker_messages(&mut self) {
+        let pending: Vec<(u64, Vec<u8>)> = {
+            let state = crate::state::RuntimeState::get(&self.isolate);
+            let workers = state.workers.borrow();
+            let mut collected = Vec::new();
+            for handle in workers.iter() {
+                while let Ok(bytes) = handle.rx.try_recv() {
+                    collected.push((handle.worker_id, bytes));
+                }
+            }
+            collected
+        };
+        if pending.is_empty() {
+            return;
+        }
+
+        unsafe {
+            self.isolate.enter();
+        }
+        {
+            v8::scope!(handle_scope, &mut self.isolate);
+            let context = v8::Local::new(handle_scope, &self.context);
+            v8::scope_with_context!(scope, handle_scope, context);
+
+            let state = crate::state::RuntimeState::get(&*scope);
+            for (worker_id, bytes) in pending {
+                let worker_global = match state.worker_objects.borrow().get(&worker_id) {
+                    Some(g) => g.clone(),
+                    None => continue,
+                };
+                let worker_obj = v8::Local::new(scope, &worker_global);
+
+                let data = crate::shims::structured_clone::deserialize_value(scope, context, &bytes);
+                let event = v8::Object::new(scope);
+                let data_key = crate::v8_utils::v8_string(scope, "data");
+                let data_val = data.unwrap_or_else(|| v8::undefined(scope).into());
+                let _ = event.set(scope, data_key.into(), data_val);
+                let type_key = crate::v8_utils::v8_string(scope, "type");
+                let type_val = crate::v8_utils::v8_string(scope, "message");
+                let _ = event.set(scope, type_key.into(), type_val.into());
+                let tag_sym = v8::Symbol::get_to_string_tag(scope);
+                let tag_val = crate::v8_utils::v8_string(scope, "MessageEvent");
+                let _ = event.set(scope, tag_sym.into(), tag_val.into());
+
+                let onmsg_key = crate::v8_utils::v8_string(scope, "onmessage");
+                if let Some(handler) = worker_obj.get(scope, onmsg_key.into()) {
+                    if handler.is_function() {
+                        let func: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(handler) };
+                        let _ = func.call(scope, worker_obj.into(), &[event.into()]);
+                    }
+                }
+            }
+        }
+        unsafe {
+            self.isolate.exit();
+        }
     }
 
     /// Install deterministic overrides for Math.random, crypto, and time.
@@ -1124,8 +1370,8 @@ impl EmbeddedV8Kernel {
     fn inject_audio_prefs(&mut self) {
         let state = RuntimeState::get(&self.isolate);
         let env = &state.environment;
-        let base_latency = env.get_f64("audio.baseLatency").unwrap_or(0.005);
-        let output_latency = env.get_f64("audio.outputLatency").unwrap_or(0.01);
+        let base_latency = env.get_f64("audio.baseLatency").unwrap_or(0.05);
+        let output_latency = env.get_f64("audio.outputLatency").unwrap_or(0.0);
         let channel_data_seed = env.get_f64("audio.channelDataSeed").unwrap_or(0.0);
         let comp_threshold = env.get_f64("audio.compressor.threshold").unwrap_or(-24.0);
         let comp_knee = env.get_f64("audio.compressor.knee").unwrap_or(30.0);

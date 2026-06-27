@@ -118,6 +118,9 @@ pub struct RuntimeState {
     /// loop do not return identical diffs (bot-tell). See
     /// date_interceptor.rs::performance_now_callback.
     pub perf_now_last: std::cell::Cell<f64>,
+
+    pub workers: RefCell<Vec<crate::shims::worker::WorkerHandle>>,
+    pub worker_objects: RefCell<std::collections::HashMap<u64, v8::Global<v8::Object>>>,
 }
 
 /// Quantized, per-page-stable `performance.memory` snapshot.
@@ -220,6 +223,8 @@ impl RuntimeState {
             codegen_templates: RefCell::new(std::collections::HashMap::new()),
             perf_memory: RefCell::new(None),
             perf_now_last: std::cell::Cell::new(f64::NEG_INFINITY),
+            workers: RefCell::new(Vec::new()),
+            worker_objects: RefCell::new(std::collections::HashMap::new()),
         }
     }
 
