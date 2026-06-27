@@ -1091,7 +1091,7 @@ pub fn install_dom_constructors(
 pub fn capture_codegen_prototypes(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
-) -> HashMap<String, v8::Global<v8::Object>> {
+) -> HashMap<String, v8::Global<v8::Function>> {
     let names = [
         "EventTarget", "Node", "Element", "HTMLElement",
         "HTMLDivElement", "HTMLSpanElement", "HTMLAnchorElement",
@@ -1107,60 +1107,119 @@ pub fn capture_codegen_prototypes(
         "Headers", "Response", "Request", "Text", "Comment", "Document",
     ];
     let mut map = HashMap::new();
-    let proto_key = crate::v8_utils::v8_string(scope, "prototype");
     for name in names {
         let key = crate::v8_utils::v8_string(scope, name);
         if let Some(ctor_val) = global.get(scope, key.into()) {
             if ctor_val.is_function() {
                 let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
-                if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
-                    if proto_val.is_object() && !proto_val.is_null_or_undefined() {
-                        let proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(proto_val) };
-                        map.insert(name.to_string(), v8::Global::new(scope, proto));
-                    }
-                }
+                map.insert(name.to_string(), v8::Global::new(scope, ctor));
             }
         }
     }
     map
 }
 
-/// Chain dom/template.rs root prototype (EventTarget) to codegen prototype.
-/// Only the root of the dom/template.rs chain needs to be linked — the
-/// internal inherit() calls (Node→EventTarget, Element→Node, etc.) already
-/// form the dom/template.rs prototype chain. By linking only EventTarget,
-/// the full chain becomes: dom HTMLDivElement → dom HTMLElement → ...
-/// → dom EventTarget → codegen EventTarget → codegen Node → codegen Element
-/// → ... → Object.prototype. This preserves both native callbacks (dom side)
-/// and IDL attributes/constants (codegen side).
+/// Merge codegen prototype properties into dom/template.rs prototypes.
+///
+/// For each of the 39 DOM interfaces, copy all own properties from the
+/// codegen prototype to the dom/template.rs prototype. This ensures
+/// codegen IDL attributes, constants, and methods (with correct .length)
+/// are visible on the dom/template.rs prototype, alongside the native
+/// callbacks (appendChild, etc.) that dom/template.rs installs.
+///
+/// Properties already present on the dom prototype are NOT overwritten
+/// (dom/template.rs native callbacks take priority).
+///
+/// Additionally, the dom EventTarget prototype's __proto__ is set to the
+/// codegen EventTarget prototype, connecting the two prototype chains.
 pub fn chain_dom_prototypes(
     scope: &v8::PinScope<'_, '_>,
     global: v8::Local<v8::Object>,
-    codegen_protos: &HashMap<String, v8::Global<v8::Object>>,
+    codegen_ctors: &HashMap<String, v8::Global<v8::Function>>,
 ) {
     let proto_key = crate::v8_utils::v8_string(scope, "prototype");
-    let root_names = ["EventTarget"];
-    for name in root_names {
-        let Some(codegen_proto_global) = codegen_protos.get(name) else {
+    for (name, codegen_ctor_global) in codegen_ctors {
+        let key = crate::v8_utils::v8_string(scope, name.as_str());
+        let Some(dom_ctor_val) = global.get(scope, key.into()) else {
             continue;
         };
-        let key = crate::v8_utils::v8_string(scope, name);
-        let Some(ctor_val) = global.get(scope, key.into()) else {
-            continue;
-        };
-        if !ctor_val.is_function() {
+        if !dom_ctor_val.is_function() {
             continue;
         }
-        let dom_ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
-        let Some(dom_proto_val) = dom_ctor.get(scope, proto_key.into()) else {
-            continue;
-        };
-        if !dom_proto_val.is_object() || dom_proto_val.is_null_or_undefined() {
-            continue;
-        }
+        let dom_ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(dom_ctor_val) };
+        let codegen_ctor = v8::Local::new(scope, codegen_ctor_global);
+
+        let Some(dom_proto_val) = dom_ctor.get(scope, proto_key.into()) else { continue };
+        if !dom_proto_val.is_object() || dom_proto_val.is_null_or_undefined() { continue; }
         let dom_proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(dom_proto_val) };
-        let codegen_proto = v8::Local::new(scope, codegen_proto_global);
-        let _ = dom_proto.set_prototype(scope, codegen_proto.into());
+
+        let Some(codegen_proto_val) = codegen_ctor.get(scope, proto_key.into()) else { continue };
+        if !codegen_proto_val.is_object() || codegen_proto_val.is_null_or_undefined() { continue; }
+        let codegen_proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(codegen_proto_val) };
+
+        if name == "EventTarget" {
+            let _ = dom_proto.set_prototype(scope, codegen_proto.into());
+        }
+
+        let prop_names = codegen_proto.get_own_property_names(scope, Default::default());
+        if let Some(names) = prop_names {
+            let len = names.length();
+            for i in 0..len {
+                let Some(prop_name_val) = names.get_index(scope, i) else { continue };
+                if dom_proto.has(scope, prop_name_val).unwrap_or(false) { continue; }
+                let prop_name = if prop_name_val.is_name() {
+                    unsafe { v8::Local::<v8::Name>::cast_unchecked(prop_name_val) }
+                } else { continue };
+                let Some(descriptor) = codegen_proto.get_own_property_descriptor(scope, prop_name) else { continue };
+                if descriptor.is_object() && !descriptor.is_null_or_undefined() {
+                    let desc_obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(descriptor) };
+                    let getter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "get").into());
+                    let setter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "set").into());
+                    let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
+                    let pd = if let (Some(g), Some(s)) = (getter, setter) {
+                        if g.is_undefined() && s.is_undefined() {
+                            v8::PropertyDescriptor::new_from_value(value.unwrap_or(v8::undefined(scope).into()))
+                        } else {
+                            v8::PropertyDescriptor::new_from_get_set(g, s)
+                        }
+                    } else if let Some(g) = getter {
+                        if g.is_undefined() {
+                            v8::PropertyDescriptor::new_from_value(value.unwrap_or(v8::undefined(scope).into()))
+                        } else {
+                            v8::PropertyDescriptor::new_from_get_set(g, v8::undefined(scope).into())
+                        }
+                    } else {
+                        v8::PropertyDescriptor::new_from_value(value.unwrap_or(v8::undefined(scope).into()))
+                    };
+                    let _ = dom_proto.define_property(scope, prop_name, &pd);
+                }
+            }
+        }
+
+        let ctor_names = codegen_ctor.get_own_property_names(scope, Default::default());
+        if let Some(names) = ctor_names {
+            let len = names.length();
+            for i in 0..len {
+                let Some(prop_name_val) = names.get_index(scope, i) else { continue };
+                let prop_name_str = prop_name_val.to_rust_string_lossy(scope);
+                if prop_name_str == "length" || prop_name_str == "name" || prop_name_str == "prototype" { continue; }
+                let prop_name = if prop_name_val.is_name() {
+                    unsafe { v8::Local::<v8::Name>::cast_unchecked(prop_name_val) }
+                } else { continue };
+                let dom_ctor_obj: v8::Local<v8::Object> = dom_ctor.into();
+                if dom_ctor_obj.has_own_property(scope, prop_name).unwrap_or(false) { continue; }
+                let Some(descriptor) = codegen_ctor.get_own_property_descriptor(scope, prop_name) else { continue };
+                if descriptor.is_object() && !descriptor.is_null_or_undefined() {
+                    let desc_obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(descriptor) };
+                    let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
+                    let pd = v8::PropertyDescriptor::new_from_value_writable(
+                        value.unwrap_or(v8::undefined(scope).into()),
+                        false,
+                    );
+                    let _ = dom_ctor.define_property(scope, prop_name, &pd);
+                }
+            }
+        }
     }
 }
 
