@@ -430,6 +430,87 @@ unsafe extern "C" fn request_get_18(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn request_get_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn request_get_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn request_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn request_op_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn request_op_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn request_op_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn request_op_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn request_op_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn request_op_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Request.
 pub fn create_request_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -554,6 +635,67 @@ pub fn create_request_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(request_get_18).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: body
+    {
+        let name = v8::String::new(scope, "body").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(request_get_19).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: bodyUsed
+    {
+        let name = v8::String::new(scope, "bodyUsed").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(request_get_20).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: arrayBuffer()
+    {
+        let name = v8::String::new(scope, "arrayBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(request_op_21).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blob()
+    {
+        let name = v8::String::new(scope, "blob").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(request_op_22).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bytes()
+    {
+        let name = v8::String::new(scope, "bytes").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(request_op_23).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: formData()
+    {
+        let name = v8::String::new(scope, "formData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(request_op_24).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: json()
+    {
+        let name = v8::String::new(scope, "json").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(request_op_25).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: text()
+    {
+        let name = v8::String::new(scope, "text").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(request_op_26).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: textStream()
+    {
+        let name = v8::String::new(scope, "textStream").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(request_op_27).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
 
     tmpl
 }
@@ -657,6 +799,78 @@ unsafe extern "C" fn response_op_11(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn response_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn response_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn response_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn response_op_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn response_op_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn response_op_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn response_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn response_op_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Response.
 pub fn create_response_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -739,6 +953,60 @@ pub fn create_response_template<'s>(
     {
         let name = v8::String::new(scope, "clone").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_11).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: body
+    {
+        let name = v8::String::new(scope, "body").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(response_get_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: bodyUsed
+    {
+        let name = v8::String::new(scope, "bodyUsed").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(response_get_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: arrayBuffer()
+    {
+        let name = v8::String::new(scope, "arrayBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_14).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blob()
+    {
+        let name = v8::String::new(scope, "blob").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_15).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bytes()
+    {
+        let name = v8::String::new(scope, "bytes").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_16).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: formData()
+    {
+        let name = v8::String::new(scope, "formData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_17).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: text()
+    {
+        let name = v8::String::new(scope, "text").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_18).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: textStream()
+    {
+        let name = v8::String::new(scope, "textStream").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_19).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

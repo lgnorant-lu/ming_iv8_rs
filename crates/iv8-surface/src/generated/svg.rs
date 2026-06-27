@@ -2391,6 +2391,1069 @@ unsafe extern "C" fn svg_element_get_3(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn svg_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_5(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_6(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_7(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_8(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_9(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_10(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_11(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_12(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_13(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_14(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_15(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_16(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_17(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_18(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_19(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_20(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_21(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_22(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_23(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_24(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_25(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_26(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_27(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_28(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_29(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_30(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_31(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_32(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_33(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_34(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_35(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_36(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_37(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_38(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_39(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_40(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_41(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_42(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_43(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_44(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_45(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_46(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_47(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_48(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_49(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_50(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_51(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_52(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_53(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_53(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_54(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_54(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_55(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_55(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_56(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_56(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_57(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_57(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_58(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_58(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_59(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_60(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_61(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_61(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_62(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_62(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_63(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_63(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_64(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_64(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_65(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_65(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_66(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_66(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_67(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_67(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_68(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_68(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_69(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_69(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_70(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_70(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_71(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_71(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_72(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_72(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_73(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_73(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_74(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_74(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_75(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_75(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_76(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_76(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_77(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_77(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_78(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_78(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_79(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_79(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_80(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_80(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_81(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_get_82(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_82(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_83(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_83(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_get_84(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_set_84(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svg_element_op_85(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_element_op_86(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGElement.
 pub fn create_svg_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -2426,6 +3489,585 @@ pub fn create_svg_element_template<'s>(
         let name = v8::String::new(scope, "viewportElement").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svg_element_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: style
+    {
+        let name = v8::String::new(scope, "style").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: onabort
+    {
+        let name = v8::String::new(scope, "onabort").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_5).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onauxclick
+    {
+        let name = v8::String::new(scope, "onauxclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_6).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforeinput
+    {
+        let name = v8::String::new(scope, "onbeforeinput").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_7).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforematch
+    {
+        let name = v8::String::new(scope, "onbeforematch").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_8).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforetoggle
+    {
+        let name = v8::String::new(scope, "onbeforetoggle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_9).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onblur
+    {
+        let name = v8::String::new(scope, "onblur").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_10).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncancel
+    {
+        let name = v8::String::new(scope, "oncancel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_11).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncanplay
+    {
+        let name = v8::String::new(scope, "oncanplay").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_12).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncanplaythrough
+    {
+        let name = v8::String::new(scope, "oncanplaythrough").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_13).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onchange
+    {
+        let name = v8::String::new(scope, "onchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_14).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onclick
+    {
+        let name = v8::String::new(scope, "onclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_15).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_15).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onclose
+    {
+        let name = v8::String::new(scope, "onclose").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_16).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_16).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncommand
+    {
+        let name = v8::String::new(scope, "oncommand").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_17).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_17).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextlost
+    {
+        let name = v8::String::new(scope, "oncontextlost").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_18).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_18).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextmenu
+    {
+        let name = v8::String::new(scope, "oncontextmenu").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_19).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_19).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextrestored
+    {
+        let name = v8::String::new(scope, "oncontextrestored").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_20).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_20).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncopy
+    {
+        let name = v8::String::new(scope, "oncopy").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_21).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_21).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncuechange
+    {
+        let name = v8::String::new(scope, "oncuechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_22).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_22).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncut
+    {
+        let name = v8::String::new(scope, "oncut").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_23).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_23).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondblclick
+    {
+        let name = v8::String::new(scope, "ondblclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_24).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_24).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondrag
+    {
+        let name = v8::String::new(scope, "ondrag").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_25).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_25).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragend
+    {
+        let name = v8::String::new(scope, "ondragend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_26).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_26).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragenter
+    {
+        let name = v8::String::new(scope, "ondragenter").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_27).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_27).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragleave
+    {
+        let name = v8::String::new(scope, "ondragleave").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_28).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_28).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragover
+    {
+        let name = v8::String::new(scope, "ondragover").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_29).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_29).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragstart
+    {
+        let name = v8::String::new(scope, "ondragstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_30).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_30).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondrop
+    {
+        let name = v8::String::new(scope, "ondrop").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_31).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_31).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondurationchange
+    {
+        let name = v8::String::new(scope, "ondurationchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_32).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_32).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onemptied
+    {
+        let name = v8::String::new(scope, "onemptied").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_33).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_33).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onended
+    {
+        let name = v8::String::new(scope, "onended").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_34).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_34).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onerror
+    {
+        let name = v8::String::new(scope, "onerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_35).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_35).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onfocus
+    {
+        let name = v8::String::new(scope, "onfocus").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_36).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_36).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onformdata
+    {
+        let name = v8::String::new(scope, "onformdata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_37).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_37).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oninput
+    {
+        let name = v8::String::new(scope, "oninput").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_38).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_38).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oninvalid
+    {
+        let name = v8::String::new(scope, "oninvalid").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_39).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_39).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeydown
+    {
+        let name = v8::String::new(scope, "onkeydown").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_40).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_40).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeypress
+    {
+        let name = v8::String::new(scope, "onkeypress").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_41).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_41).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeyup
+    {
+        let name = v8::String::new(scope, "onkeyup").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_42).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_42).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onload
+    {
+        let name = v8::String::new(scope, "onload").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_43).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_43).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadeddata
+    {
+        let name = v8::String::new(scope, "onloadeddata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_44).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_44).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadedmetadata
+    {
+        let name = v8::String::new(scope, "onloadedmetadata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_45).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_45).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadstart
+    {
+        let name = v8::String::new(scope, "onloadstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_46).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_46).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmousedown
+    {
+        let name = v8::String::new(scope, "onmousedown").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_47).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_47).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseenter
+    {
+        let name = v8::String::new(scope, "onmouseenter").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_48).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_48).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseleave
+    {
+        let name = v8::String::new(scope, "onmouseleave").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_49).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_49).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmousemove
+    {
+        let name = v8::String::new(scope, "onmousemove").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_50).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_50).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseout
+    {
+        let name = v8::String::new(scope, "onmouseout").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_51).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_51).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseover
+    {
+        let name = v8::String::new(scope, "onmouseover").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_52).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_52).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseup
+    {
+        let name = v8::String::new(scope, "onmouseup").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_53).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_53).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpaste
+    {
+        let name = v8::String::new(scope, "onpaste").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_54).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_54).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpause
+    {
+        let name = v8::String::new(scope, "onpause").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_55).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_55).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onplay
+    {
+        let name = v8::String::new(scope, "onplay").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_56).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_56).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onplaying
+    {
+        let name = v8::String::new(scope, "onplaying").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_57).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_57).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onprogress
+    {
+        let name = v8::String::new(scope, "onprogress").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_58).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_58).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onratechange
+    {
+        let name = v8::String::new(scope, "onratechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_59).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_59).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onreset
+    {
+        let name = v8::String::new(scope, "onreset").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_60).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_60).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onresize
+    {
+        let name = v8::String::new(scope, "onresize").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_61).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_61).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onscroll
+    {
+        let name = v8::String::new(scope, "onscroll").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_62).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_62).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onscrollend
+    {
+        let name = v8::String::new(scope, "onscrollend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_63).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_63).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsecuritypolicyviolation
+    {
+        let name = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_64).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_64).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onseeked
+    {
+        let name = v8::String::new(scope, "onseeked").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_65).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_65).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onseeking
+    {
+        let name = v8::String::new(scope, "onseeking").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_66).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_66).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onselect
+    {
+        let name = v8::String::new(scope, "onselect").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_67).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_67).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onslotchange
+    {
+        let name = v8::String::new(scope, "onslotchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_68).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_68).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onstalled
+    {
+        let name = v8::String::new(scope, "onstalled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_69).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_69).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsubmit
+    {
+        let name = v8::String::new(scope, "onsubmit").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_70).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_70).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsuspend
+    {
+        let name = v8::String::new(scope, "onsuspend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_71).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_71).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ontimeupdate
+    {
+        let name = v8::String::new(scope, "ontimeupdate").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_72).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_72).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ontoggle
+    {
+        let name = v8::String::new(scope, "ontoggle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_73).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_73).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onvolumechange
+    {
+        let name = v8::String::new(scope, "onvolumechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_74).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_74).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwaiting
+    {
+        let name = v8::String::new(scope, "onwaiting").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_75).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_75).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationend
+    {
+        let name = v8::String::new(scope, "onwebkitanimationend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_76).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_76).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationiteration
+    {
+        let name = v8::String::new(scope, "onwebkitanimationiteration").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_77).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_77).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationstart
+    {
+        let name = v8::String::new(scope, "onwebkitanimationstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_78).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_78).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkittransitionend
+    {
+        let name = v8::String::new(scope, "onwebkittransitionend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_79).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_79).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwheel
+    {
+        let name = v8::String::new(scope, "onwheel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_80).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_80).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: dataset
+    {
+        let name = v8::String::new(scope, "dataset").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_81).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: nonce
+    {
+        let name = v8::String::new(scope, "nonce").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_82).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_82).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: autofocus
+    {
+        let name = v8::String::new(scope, "autofocus").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_83).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_83).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: tabIndex
+    {
+        let name = v8::String::new(scope, "tabIndex").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_84).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_84).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: focus()
+    {
+        let name = v8::String::new(scope, "focus").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(svg_element_op_85).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blur()
+    {
+        let name = v8::String::new(scope, "blur").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(svg_element_op_86).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -2564,6 +4206,24 @@ unsafe extern "C" fn svg_animation_element_op_11(_info: *const v8::FunctionCallb
     }));
 }
 
+unsafe extern "C" fn svg_animation_element_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_animation_element_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGAnimationElement.
 pub fn create_svg_animation_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -2657,6 +4317,18 @@ pub fn create_svg_animation_element_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(svg_animation_element_op_11).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: requiredExtensions
+    {
+        let name = v8::String::new(scope, "requiredExtensions").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: systemLanguage
+    {
+        let name = v8::String::new(scope, "systemLanguage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -2926,6 +4598,51 @@ unsafe extern "C" fn svgfe_blend_element_get_3(_info: *const v8::FunctionCallbac
     }));
 }
 
+unsafe extern "C" fn svgfe_blend_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_blend_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_blend_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_blend_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_blend_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGFEBlendElement.
 pub fn create_svgfe_blend_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -3064,6 +4781,36 @@ pub fn create_svgfe_blend_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -3087,6 +4834,51 @@ unsafe extern "C" fn svgfe_color_matrix_element_get_2(_info: *const v8::Function
 }
 
 unsafe extern "C" fn svgfe_color_matrix_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_color_matrix_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_color_matrix_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_color_matrix_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_color_matrix_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_color_matrix_element_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3161,11 +4953,86 @@ pub fn create_svgfe_color_matrix_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
 
 unsafe extern "C" fn svgfe_component_transfer_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_component_transfer_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_component_transfer_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_component_transfer_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_component_transfer_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_component_transfer_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3196,6 +5063,36 @@ pub fn create_svgfe_component_transfer_element_template<'s>(
     {
         let name = v8::String::new(scope, "in1").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3257,6 +5154,51 @@ unsafe extern "C" fn svgfe_composite_element_get_6(_info: *const v8::FunctionCal
 }
 
 unsafe extern "C" fn svgfe_composite_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_composite_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_composite_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_composite_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_composite_element_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_composite_element_get_12(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3367,6 +5309,36 @@ pub fn create_svgfe_composite_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_7).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -3471,6 +5443,51 @@ unsafe extern "C" fn svgfe_convolve_matrix_element_get_11(_info: *const v8::Func
 }
 
 unsafe extern "C" fn svgfe_convolve_matrix_element_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_convolve_matrix_element_get_17(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3593,6 +5610,36 @@ pub fn create_svgfe_convolve_matrix_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_12).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_15).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_16).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_17).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -3634,6 +5681,51 @@ unsafe extern "C" fn svgfe_diffuse_lighting_element_get_4(_info: *const v8::Func
 }
 
 unsafe extern "C" fn svgfe_diffuse_lighting_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_diffuse_lighting_element_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3690,6 +5782,36 @@ pub fn create_svgfe_diffuse_lighting_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_5).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -3731,6 +5853,51 @@ unsafe extern "C" fn svgfe_displacement_map_element_get_4(_info: *const v8::Func
 }
 
 unsafe extern "C" fn svgfe_displacement_map_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_displacement_map_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_displacement_map_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_displacement_map_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_displacement_map_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_displacement_map_element_get_10(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -3815,6 +5982,36 @@ pub fn create_svgfe_displacement_map_element_template<'s>(
     {
         let name = v8::String::new(scope, "yChannelSelector").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3927,6 +6124,51 @@ unsafe extern "C" fn svgfe_drop_shadow_element_op_6(_info: *const v8::FunctionCa
     }));
 }
 
+unsafe extern "C" fn svgfe_drop_shadow_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_drop_shadow_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_drop_shadow_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_drop_shadow_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_drop_shadow_element_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGFEDropShadowElement.
 pub fn create_svgfe_drop_shadow_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -3982,8 +6224,83 @@ pub fn create_svgfe_drop_shadow_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
+}
+
+unsafe extern "C" fn svgfe_flood_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_flood_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_flood_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_flood_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_flood_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for SVGFEFloodElement.
@@ -4003,6 +6320,36 @@ pub fn create_svgfe_flood_element_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEFloodElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -4050,6 +6397,51 @@ unsafe extern "C" fn svgfe_gaussian_blur_element_op_5(_info: *const v8::Function
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_gaussian_blur_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -4126,6 +6518,36 @@ pub fn create_svgfe_gaussian_blur_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -4140,6 +6562,60 @@ unsafe extern "C" fn svgfe_image_element_get_1(_info: *const v8::FunctionCallbac
 }
 
 unsafe extern "C" fn svgfe_image_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_image_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_image_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_image_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_image_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_image_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_image_element_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4178,8 +6654,89 @@ pub fn create_svgfe_image_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_2).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
+}
+
+unsafe extern "C" fn svgfe_merge_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_merge_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_merge_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_merge_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_merge_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for SVGFEMergeElement.
@@ -4199,6 +6756,36 @@ pub fn create_svgfe_merge_element_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEMergeElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -4277,6 +6864,51 @@ unsafe extern "C" fn svgfe_morphology_element_get_4(_info: *const v8::FunctionCa
     }));
 }
 
+unsafe extern "C" fn svgfe_morphology_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_morphology_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_morphology_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_morphology_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_morphology_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGFEMorphologyElement.
 pub fn create_svgfe_morphology_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -4337,6 +6969,36 @@ pub fn create_svgfe_morphology_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_4).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -4360,6 +7022,51 @@ unsafe extern "C" fn svgfe_offset_element_get_2(_info: *const v8::FunctionCallba
 }
 
 unsafe extern "C" fn svgfe_offset_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_offset_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_offset_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_offset_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_offset_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_offset_element_get_8(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4402,6 +7109,36 @@ pub fn create_svgfe_offset_element_template<'s>(
     {
         let name = v8::String::new(scope, "dy").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_8).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -4529,6 +7266,51 @@ unsafe extern "C" fn svgfe_specular_lighting_element_get_6(_info: *const v8::Fun
     }));
 }
 
+unsafe extern "C" fn svgfe_specular_lighting_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_specular_lighting_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_specular_lighting_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_specular_lighting_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_specular_lighting_element_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGFESpecularLightingElement.
 pub fn create_svgfe_specular_lighting_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -4581,6 +7363,36 @@ pub fn create_svgfe_specular_lighting_element_template<'s>(
     {
         let name = v8::String::new(scope, "kernelUnitLengthY").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -4738,6 +7550,51 @@ unsafe extern "C" fn svgfe_tile_element_get_1(_info: *const v8::FunctionCallback
     }));
 }
 
+unsafe extern "C" fn svgfe_tile_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_tile_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_tile_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_tile_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_tile_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGFETileElement.
 pub fn create_svgfe_tile_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -4760,6 +7617,36 @@ pub fn create_svgfe_tile_element_template<'s>(
     {
         let name = v8::String::new(scope, "in1").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -4812,6 +7699,51 @@ unsafe extern "C" fn svgfe_turbulence_element_get_5(_info: *const v8::FunctionCa
 }
 
 unsafe extern "C" fn svgfe_turbulence_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_turbulence_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_turbulence_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_turbulence_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_turbulence_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgfe_turbulence_element_get_11(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -4910,6 +7842,36 @@ pub fn create_svgfe_turbulence_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: x
+    {
+        let name = v8::String::new(scope, "x").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: y
+    {
+        let name = v8::String::new(scope, "y").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: width
+    {
+        let name = v8::String::new(scope, "width").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: height
+    {
+        let name = v8::String::new(scope, "height").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: result
+    {
+        let name = v8::String::new(scope, "result").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -4960,6 +7922,15 @@ unsafe extern "C" fn svg_filter_element_get_5(_info: *const v8::FunctionCallback
 }
 
 unsafe extern "C" fn svg_filter_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_filter_element_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5022,6 +7993,12 @@ pub fn create_svg_filter_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -5045,6 +8022,15 @@ unsafe extern "C" fn svg_gradient_element_get_2(_info: *const v8::FunctionCallba
 }
 
 unsafe extern "C" fn svg_gradient_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_gradient_element_get_4(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5113,6 +8099,12 @@ pub fn create_svg_gradient_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -5145,6 +8137,24 @@ unsafe extern "C" fn svg_graphics_element_op_3(_info: *const v8::FunctionCallbac
 }
 
 unsafe extern "C" fn svg_graphics_element_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_graphics_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_graphics_element_get_6(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
@@ -5198,8 +8208,29 @@ pub fn create_svg_graphics_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // attribute: requiredExtensions
+    {
+        let name = v8::String::new(scope, "requiredExtensions").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_graphics_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: systemLanguage
+    {
+        let name = v8::String::new(scope, "systemLanguage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_graphics_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
+}
+
+unsafe extern "C" fn svgm_path_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for SVGMPathElement.
@@ -5219,6 +8250,12 @@ pub fn create_svgm_path_element_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGMPathElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgm_path_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -5315,6 +8352,24 @@ unsafe extern "C" fn svg_marker_element_op_10(_info: *const v8::FunctionCallback
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_marker_element_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_marker_element_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -5440,6 +8495,18 @@ pub fn create_svg_marker_element_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(svg_marker_element_op_10).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: viewBox
+    {
+        let name = v8::String::new(scope, "viewBox").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: preserveAspectRatio
+    {
+        let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -5642,6 +8709,33 @@ unsafe extern "C" fn svg_pattern_element_get_7(_info: *const v8::FunctionCallbac
     }));
 }
 
+unsafe extern "C" fn svg_pattern_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_pattern_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_pattern_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGPatternElement.
 pub fn create_svg_pattern_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -5702,6 +8796,24 @@ pub fn create_svg_pattern_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_7).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: viewBox
+    {
+        let name = v8::String::new(scope, "viewBox").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: preserveAspectRatio
+    {
+        let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -5730,6 +8842,15 @@ unsafe extern "C" fn svg_script_element_get_2(_info: *const v8::FunctionCallback
 
 unsafe extern "C" fn svg_script_element_set_2(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
+}
+
+unsafe extern "C" fn svg_script_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for SVGScriptElement.
@@ -5763,6 +8884,12 @@ pub fn create_svg_script_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_script_element_get_2).build(scope);
         let setter = v8::FunctionTemplate::builder_raw(svg_script_element_set_2).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_script_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -5857,6 +8984,15 @@ unsafe extern "C" fn svg_style_element_set_4(_info: *const v8::FunctionCallbackI
     // no-op setter stub
 }
 
+unsafe extern "C" fn svg_style_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGStyleElement.
 pub fn create_svg_style_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -5903,6 +9039,12 @@ pub fn create_svg_style_element_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_4).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+    // attribute: sheet
+    {
+        let name = v8::String::new(scope, "sheet").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -5929,6 +9071,24 @@ pub fn create_svg_title_element_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn svg_view_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_view_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGViewElement.
 pub fn create_svg_view_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -5946,6 +9106,18 @@ pub fn create_svg_view_element_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGViewElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: viewBox
+    {
+        let name = v8::String::new(scope, "viewBox").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_view_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: preserveAspectRatio
+    {
+        let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_view_element_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -6543,6 +9715,15 @@ unsafe extern "C" fn svga_element_set_18(_info: *const v8::FunctionCallbackInfo)
     // no-op setter stub
 }
 
+unsafe extern "C" fn svga_element_get_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGAElement.
 pub fn create_svga_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -6683,6 +9864,12 @@ pub fn create_svga_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svga_element_get_18).build(scope);
         let setter = v8::FunctionTemplate::builder_raw(svga_element_set_18).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_19).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -6973,6 +10160,15 @@ unsafe extern "C" fn svg_image_element_set_6(_info: *const v8::FunctionCallbackI
     // no-op setter stub
 }
 
+unsafe extern "C" fn svg_image_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGImageElement.
 pub fn create_svg_image_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -7027,6 +10223,12 @@ pub fn create_svg_image_element_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_6).build(scope);
         let setter = v8::FunctionTemplate::builder_raw(svg_image_element_set_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -7297,6 +10499,258 @@ unsafe extern "C" fn svgsvg_element_op_29(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
+unsafe extern "C" fn svgsvg_element_get_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_get_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_get_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_32(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_33(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_34(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_35(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_36(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_37(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_38(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_39(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_40(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_41(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_42(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_43(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_44(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_45(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_46(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_47(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_48(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn svgsvg_element_get_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svgsvg_element_set_49(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for SVGSVGElement.
 pub fn create_svgsvg_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -7513,6 +10967,144 @@ pub fn create_svgsvg_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // attribute: viewBox
+    {
+        let name = v8::String::new(scope, "viewBox").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_30).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: preserveAspectRatio
+    {
+        let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_31).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: onafterprint
+    {
+        let name = v8::String::new(scope, "onafterprint").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_32).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_32).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforeprint
+    {
+        let name = v8::String::new(scope, "onbeforeprint").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_33).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_33).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforeunload
+    {
+        let name = v8::String::new(scope, "onbeforeunload").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_34).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_34).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onhashchange
+    {
+        let name = v8::String::new(scope, "onhashchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_35).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_35).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onlanguagechange
+    {
+        let name = v8::String::new(scope, "onlanguagechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_36).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_36).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmessage
+    {
+        let name = v8::String::new(scope, "onmessage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_37).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_37).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmessageerror
+    {
+        let name = v8::String::new(scope, "onmessageerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_38).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_38).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onoffline
+    {
+        let name = v8::String::new(scope, "onoffline").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_39).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_39).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ononline
+    {
+        let name = v8::String::new(scope, "ononline").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_40).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_40).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpagehide
+    {
+        let name = v8::String::new(scope, "onpagehide").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_41).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_41).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpagereveal
+    {
+        let name = v8::String::new(scope, "onpagereveal").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_42).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_42).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpageshow
+    {
+        let name = v8::String::new(scope, "onpageshow").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_43).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_43).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpageswap
+    {
+        let name = v8::String::new(scope, "onpageswap").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_44).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_44).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpopstate
+    {
+        let name = v8::String::new(scope, "onpopstate").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_45).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_45).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onrejectionhandled
+    {
+        let name = v8::String::new(scope, "onrejectionhandled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_46).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_46).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onstorage
+    {
+        let name = v8::String::new(scope, "onstorage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_47).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_47).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onunhandledrejection
+    {
+        let name = v8::String::new(scope, "onunhandledrejection").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_48).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_48).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onunload
+    {
+        let name = v8::String::new(scope, "onunload").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_49).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_49).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -7539,6 +11131,24 @@ pub fn create_svg_switch_element_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn svg_symbol_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_symbol_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGSymbolElement.
 pub fn create_svg_symbol_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -7556,6 +11166,18 @@ pub fn create_svg_symbol_element_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGSymbolElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: viewBox
+    {
+        let name = v8::String::new(scope, "viewBox").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_symbol_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: preserveAspectRatio
+    {
+        let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_symbol_element_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -7829,6 +11451,15 @@ unsafe extern "C" fn svg_use_element_get_6(_info: *const v8::FunctionCallbackInf
     }));
 }
 
+unsafe extern "C" fn svg_use_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGUseElement.
 pub fn create_svg_use_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -7881,6 +11512,12 @@ pub fn create_svg_use_element_template<'s>(
     {
         let name = v8::String::new(scope, "animatedInstanceRoot").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_7).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -8154,6 +11791,24 @@ unsafe extern "C" fn svg_path_element_op_4(_info: *const v8::FunctionCallbackInf
     }));
 }
 
+unsafe extern "C" fn svg_path_element_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_path_element_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGPathElement.
 pub fn create_svg_path_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -8199,8 +11854,40 @@ pub fn create_svg_path_element_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // method: getPathData()
+    {
+        let name = v8::String::new(scope, "getPathData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(svg_path_element_op_5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: setPathData()
+    {
+        let name = v8::String::new(scope, "setPathData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(svg_path_element_op_6).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
 
     tmpl
+}
+
+unsafe extern "C" fn svg_polygon_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_polygon_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for SVGPolygonElement.
@@ -8221,8 +11908,38 @@ pub fn create_svg_polygon_element_template<'s>(
         let tag_val = v8::String::new(scope, "SVGPolygonElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
+    // attribute: points
+    {
+        let name = v8::String::new(scope, "points").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_polygon_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: animatedPoints
+    {
+        let name = v8::String::new(scope, "animatedPoints").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_polygon_element_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
+}
+
+unsafe extern "C" fn svg_polyline_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn svg_polyline_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for SVGPolylineElement.
@@ -8242,6 +11959,18 @@ pub fn create_svg_polyline_element_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGPolylineElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: points
+    {
+        let name = v8::String::new(scope, "points").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_polyline_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: animatedPoints
+    {
+        let name = v8::String::new(scope, "animatedPoints").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_polyline_element_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -8386,6 +12115,15 @@ unsafe extern "C" fn svg_text_path_element_get_3(_info: *const v8::FunctionCallb
     }));
 }
 
+unsafe extern "C" fn svg_text_path_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for SVGTextPathElement.
 pub fn create_svg_text_path_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -8456,6 +12194,12 @@ pub fn create_svg_text_path_element_template<'s>(
     {
         let name = v8::String::new(scope, "spacing").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: href
+    {
+        let name = v8::String::new(scope, "href").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_4).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

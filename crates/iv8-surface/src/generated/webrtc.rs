@@ -768,6 +768,15 @@ pub fn create_rtc_rtp_receiver_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn rtc_rtp_s_frame_encrypter_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for RTCRtpSFrameEncrypter.
 pub fn create_rtc_rtp_s_frame_encrypter_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -782,6 +791,13 @@ pub fn create_rtc_rtp_s_frame_encrypter_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpSFrameEncrypter").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // method: setEncryptionKey()
+    {
+        let name = v8::String::new(scope, "setEncryptionKey").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_encrypter_op_1).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -3074,6 +3090,37 @@ pub fn create_rtc_peer_connection_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn rtc_rtp_s_frame_decrypter_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn rtc_rtp_s_frame_decrypter_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn rtc_rtp_s_frame_decrypter_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn rtc_rtp_s_frame_decrypter_set_3(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for RTCRtpSFrameDecrypter.
 pub fn create_rtc_rtp_s_frame_decrypter_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -3091,6 +3138,27 @@ pub fn create_rtc_rtp_s_frame_decrypter_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpSFrameDecrypter").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // method: addDecryptionKey()
+    {
+        let name = v8::String::new(scope, "addDecryptionKey").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_decrypter_op_1).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: removeDecryptionKey()
+    {
+        let name = v8::String::new(scope, "removeDecryptionKey").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_decrypter_op_2).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: onerror
+    {
+        let name = v8::String::new(scope, "onerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_decrypter_get_3).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_decrypter_set_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl

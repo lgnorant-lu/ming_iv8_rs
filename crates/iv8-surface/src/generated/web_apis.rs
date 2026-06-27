@@ -1117,6 +1117,762 @@ unsafe extern "C" fn canvas_rendering_context2d_get_1(_info: *const v8::Function
     }));
 }
 
+unsafe extern "C" fn canvas_rendering_context2d_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_14(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_15(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_16(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_17(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_18(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_19(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_24(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_25(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_26(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_27(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_28(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_46(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_47(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_48(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_49(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_52(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_53(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_53(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_54(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_54(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_55(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_55(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_56(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_56(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_57(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_57(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_58(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_58(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_59(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_60(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_61(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_61(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_62(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_62(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_get_63(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_set_63(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_64(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_65(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_66(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_67(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_68(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_69(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_70(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_71(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_72(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn canvas_rendering_context2d_op_73(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for CanvasRenderingContext2D.
 pub fn create_canvas_rendering_context2d_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -1137,6 +1893,510 @@ pub fn create_canvas_rendering_context2d_template<'s>(
         let name = v8::String::new(scope, "canvas").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_1).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: getContextAttributes()
+    {
+        let name = v8::String::new(scope, "getContextAttributes").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: save()
+    {
+        let name = v8::String::new(scope, "save").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: restore()
+    {
+        let name = v8::String::new(scope, "restore").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: reset()
+    {
+        let name = v8::String::new(scope, "reset").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isContextLost()
+    {
+        let name = v8::String::new(scope, "isContextLost").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: scale()
+    {
+        let name = v8::String::new(scope, "scale").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_7).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: rotate()
+    {
+        let name = v8::String::new(scope, "rotate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_8).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: translate()
+    {
+        let name = v8::String::new(scope, "translate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_9).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: transform()
+    {
+        let name = v8::String::new(scope, "transform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_10).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getTransform()
+    {
+        let name = v8::String::new(scope, "getTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_11).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: setTransform()
+    {
+        let name = v8::String::new(scope, "setTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_12).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: resetTransform()
+    {
+        let name = v8::String::new(scope, "resetTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_13).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: globalAlpha
+    {
+        let name = v8::String::new(scope, "globalAlpha").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_14).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: globalCompositeOperation
+    {
+        let name = v8::String::new(scope, "globalCompositeOperation").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_15).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_15).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: imageSmoothingEnabled
+    {
+        let name = v8::String::new(scope, "imageSmoothingEnabled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_16).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_16).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: imageSmoothingQuality
+    {
+        let name = v8::String::new(scope, "imageSmoothingQuality").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_17).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_17).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: strokeStyle
+    {
+        let name = v8::String::new(scope, "strokeStyle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_18).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_18).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fillStyle
+    {
+        let name = v8::String::new(scope, "fillStyle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_19).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_19).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: createLinearGradient()
+    {
+        let name = v8::String::new(scope, "createLinearGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_20).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createRadialGradient()
+    {
+        let name = v8::String::new(scope, "createRadialGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_21).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createConicGradient()
+    {
+        let name = v8::String::new(scope, "createConicGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_22).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createPattern()
+    {
+        let name = v8::String::new(scope, "createPattern").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_23).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: shadowOffsetX
+    {
+        let name = v8::String::new(scope, "shadowOffsetX").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_24).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_24).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowOffsetY
+    {
+        let name = v8::String::new(scope, "shadowOffsetY").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_25).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_25).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowBlur
+    {
+        let name = v8::String::new(scope, "shadowBlur").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_26).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_26).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowColor
+    {
+        let name = v8::String::new(scope, "shadowColor").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_27).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_27).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: filter
+    {
+        let name = v8::String::new(scope, "filter").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_28).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_28).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: clearRect()
+    {
+        let name = v8::String::new(scope, "clearRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_29).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fillRect()
+    {
+        let name = v8::String::new(scope, "fillRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_30).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: strokeRect()
+    {
+        let name = v8::String::new(scope, "strokeRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_31).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: beginPath()
+    {
+        let name = v8::String::new(scope, "beginPath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_32).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fill()
+    {
+        let name = v8::String::new(scope, "fill").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_33).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stroke()
+    {
+        let name = v8::String::new(scope, "stroke").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_34).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clip()
+    {
+        let name = v8::String::new(scope, "clip").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_35).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isPointInPath()
+    {
+        let name = v8::String::new(scope, "isPointInPath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_36).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isPointInStroke()
+    {
+        let name = v8::String::new(scope, "isPointInStroke").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_37).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawFocusIfNeeded()
+    {
+        let name = v8::String::new(scope, "drawFocusIfNeeded").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_38).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fillText()
+    {
+        let name = v8::String::new(scope, "fillText").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_39).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: strokeText()
+    {
+        let name = v8::String::new(scope, "strokeText").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_40).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: measureText()
+    {
+        let name = v8::String::new(scope, "measureText").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_41).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawImage()
+    {
+        let name = v8::String::new(scope, "drawImage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_42).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createImageData()
+    {
+        let name = v8::String::new(scope, "createImageData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_43).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getImageData()
+    {
+        let name = v8::String::new(scope, "getImageData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_44).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: putImageData()
+    {
+        let name = v8::String::new(scope, "putImageData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_45).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: lineWidth
+    {
+        let name = v8::String::new(scope, "lineWidth").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_46).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_46).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: lineCap
+    {
+        let name = v8::String::new(scope, "lineCap").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_47).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_47).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: lineJoin
+    {
+        let name = v8::String::new(scope, "lineJoin").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_48).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_48).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: miterLimit
+    {
+        let name = v8::String::new(scope, "miterLimit").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_49).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_49).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: setLineDash()
+    {
+        let name = v8::String::new(scope, "setLineDash").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_50).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getLineDash()
+    {
+        let name = v8::String::new(scope, "getLineDash").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_51).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: lineDashOffset
+    {
+        let name = v8::String::new(scope, "lineDashOffset").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_52).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_52).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: lang
+    {
+        let name = v8::String::new(scope, "lang").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_53).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_53).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: font
+    {
+        let name = v8::String::new(scope, "font").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_54).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_54).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: textAlign
+    {
+        let name = v8::String::new(scope, "textAlign").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_55).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_55).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: textBaseline
+    {
+        let name = v8::String::new(scope, "textBaseline").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_56).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_56).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: direction
+    {
+        let name = v8::String::new(scope, "direction").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_57).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_57).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: letterSpacing
+    {
+        let name = v8::String::new(scope, "letterSpacing").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_58).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_58).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fontKerning
+    {
+        let name = v8::String::new(scope, "fontKerning").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_59).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_59).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fontStretch
+    {
+        let name = v8::String::new(scope, "fontStretch").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_60).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_60).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fontVariantCaps
+    {
+        let name = v8::String::new(scope, "fontVariantCaps").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_61).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_61).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: textRendering
+    {
+        let name = v8::String::new(scope, "textRendering").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_62).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_62).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: wordSpacing
+    {
+        let name = v8::String::new(scope, "wordSpacing").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_get_63).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_set_63).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: closePath()
+    {
+        let name = v8::String::new(scope, "closePath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_64).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: moveTo()
+    {
+        let name = v8::String::new(scope, "moveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_65).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: lineTo()
+    {
+        let name = v8::String::new(scope, "lineTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_66).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: quadraticCurveTo()
+    {
+        let name = v8::String::new(scope, "quadraticCurveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_67).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bezierCurveTo()
+    {
+        let name = v8::String::new(scope, "bezierCurveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_68).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: arcTo()
+    {
+        let name = v8::String::new(scope, "arcTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_69).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: rect()
+    {
+        let name = v8::String::new(scope, "rect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_70).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: roundRect()
+    {
+        let name = v8::String::new(scope, "roundRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_71).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: arc()
+    {
+        let name = v8::String::new(scope, "arc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_72).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: ellipse()
+    {
+        let name = v8::String::new(scope, "ellipse").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(canvas_rendering_context2d_op_73).length(7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -1610,6 +2870,24 @@ pub fn create_clipboard_item_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn compression_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn compression_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for CompressionStream.
 pub fn create_compression_stream_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -1624,6 +2902,18 @@ pub fn create_compression_stream_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CompressionStream").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: readable
+    {
+        let name = v8::String::new(scope, "readable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(compression_stream_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: writable
+    {
+        let name = v8::String::new(scope, "writable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(compression_stream_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -2996,6 +4286,24 @@ pub fn create_data_transfer_item_list_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn decompression_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn decompression_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for DecompressionStream.
 pub fn create_decompression_stream_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -3010,6 +4318,18 @@ pub fn create_decompression_stream_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DecompressionStream").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: readable
+    {
+        let name = v8::String::new(scope, "readable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(decompression_stream_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: writable
+    {
+        let name = v8::String::new(scope, "writable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(decompression_stream_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -4000,6 +5320,682 @@ unsafe extern "C" fn element_internals_get_11(_info: *const v8::FunctionCallback
     }));
 }
 
+unsafe extern "C" fn element_internals_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_12(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_13(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_14(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_15(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_16(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_17(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_18(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_19(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_20(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_21(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_22(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_23(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_24(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_25(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_26(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_27(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_28(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_29(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_30(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_31(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_32(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_33(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_34(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_35(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_36(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_37(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_38(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_39(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_40(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_41(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_42(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_43(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_44(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_45(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_46(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_47(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_48(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_49(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_50(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_51(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_52(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_53(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_53(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_54(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_54(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_55(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_55(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_56(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_56(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_57(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_57(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_58(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_58(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_59(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_60(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_61(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_61(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_62(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_62(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn element_internals_get_63(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn element_internals_set_63(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for ElementInternals.
 pub fn create_element_internals_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -4084,6 +6080,370 @@ pub fn create_element_internals_template<'s>(
         let name = v8::String::new(scope, "states").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(element_internals_get_11).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: role
+    {
+        let name = v8::String::new(scope, "role").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_12).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaActiveDescendantElement
+    {
+        let name = v8::String::new(scope, "ariaActiveDescendantElement").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_13).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaAtomic
+    {
+        let name = v8::String::new(scope, "ariaAtomic").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_14).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaAutoComplete
+    {
+        let name = v8::String::new(scope, "ariaAutoComplete").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_15).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_15).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaBrailleLabel
+    {
+        let name = v8::String::new(scope, "ariaBrailleLabel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_16).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_16).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaBrailleRoleDescription
+    {
+        let name = v8::String::new(scope, "ariaBrailleRoleDescription").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_17).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_17).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaBusy
+    {
+        let name = v8::String::new(scope, "ariaBusy").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_18).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_18).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaChecked
+    {
+        let name = v8::String::new(scope, "ariaChecked").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_19).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_19).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaColCount
+    {
+        let name = v8::String::new(scope, "ariaColCount").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_20).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_20).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaColIndex
+    {
+        let name = v8::String::new(scope, "ariaColIndex").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_21).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_21).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaColIndexText
+    {
+        let name = v8::String::new(scope, "ariaColIndexText").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_22).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_22).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaColSpan
+    {
+        let name = v8::String::new(scope, "ariaColSpan").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_23).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_23).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaControlsElements
+    {
+        let name = v8::String::new(scope, "ariaControlsElements").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_24).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_24).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaCurrent
+    {
+        let name = v8::String::new(scope, "ariaCurrent").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_25).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_25).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaDescribedByElements
+    {
+        let name = v8::String::new(scope, "ariaDescribedByElements").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_26).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_26).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaDescription
+    {
+        let name = v8::String::new(scope, "ariaDescription").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_27).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_27).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaDetailsElements
+    {
+        let name = v8::String::new(scope, "ariaDetailsElements").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_28).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_28).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaDisabled
+    {
+        let name = v8::String::new(scope, "ariaDisabled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_29).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_29).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaErrorMessageElements
+    {
+        let name = v8::String::new(scope, "ariaErrorMessageElements").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_30).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_30).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaExpanded
+    {
+        let name = v8::String::new(scope, "ariaExpanded").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_31).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_31).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaFlowToElements
+    {
+        let name = v8::String::new(scope, "ariaFlowToElements").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_32).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_32).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaHasPopup
+    {
+        let name = v8::String::new(scope, "ariaHasPopup").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_33).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_33).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaHidden
+    {
+        let name = v8::String::new(scope, "ariaHidden").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_34).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_34).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaInvalid
+    {
+        let name = v8::String::new(scope, "ariaInvalid").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_35).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_35).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaKeyShortcuts
+    {
+        let name = v8::String::new(scope, "ariaKeyShortcuts").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_36).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_36).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaLabel
+    {
+        let name = v8::String::new(scope, "ariaLabel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_37).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_37).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaLabelledByElements
+    {
+        let name = v8::String::new(scope, "ariaLabelledByElements").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_38).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_38).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaLevel
+    {
+        let name = v8::String::new(scope, "ariaLevel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_39).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_39).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaLive
+    {
+        let name = v8::String::new(scope, "ariaLive").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_40).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_40).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaModal
+    {
+        let name = v8::String::new(scope, "ariaModal").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_41).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_41).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaMultiLine
+    {
+        let name = v8::String::new(scope, "ariaMultiLine").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_42).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_42).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaMultiSelectable
+    {
+        let name = v8::String::new(scope, "ariaMultiSelectable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_43).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_43).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaOrientation
+    {
+        let name = v8::String::new(scope, "ariaOrientation").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_44).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_44).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaOwnsElements
+    {
+        let name = v8::String::new(scope, "ariaOwnsElements").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_45).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_45).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaPlaceholder
+    {
+        let name = v8::String::new(scope, "ariaPlaceholder").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_46).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_46).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaPosInSet
+    {
+        let name = v8::String::new(scope, "ariaPosInSet").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_47).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_47).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaPressed
+    {
+        let name = v8::String::new(scope, "ariaPressed").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_48).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_48).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaReadOnly
+    {
+        let name = v8::String::new(scope, "ariaReadOnly").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_49).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_49).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaRelevant
+    {
+        let name = v8::String::new(scope, "ariaRelevant").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_50).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_50).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaRequired
+    {
+        let name = v8::String::new(scope, "ariaRequired").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_51).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_51).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaRoleDescription
+    {
+        let name = v8::String::new(scope, "ariaRoleDescription").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_52).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_52).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaRowCount
+    {
+        let name = v8::String::new(scope, "ariaRowCount").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_53).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_53).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaRowIndex
+    {
+        let name = v8::String::new(scope, "ariaRowIndex").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_54).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_54).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaRowIndexText
+    {
+        let name = v8::String::new(scope, "ariaRowIndexText").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_55).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_55).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaRowSpan
+    {
+        let name = v8::String::new(scope, "ariaRowSpan").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_56).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_56).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaSelected
+    {
+        let name = v8::String::new(scope, "ariaSelected").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_57).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_57).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaSetSize
+    {
+        let name = v8::String::new(scope, "ariaSetSize").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_58).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_58).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaSort
+    {
+        let name = v8::String::new(scope, "ariaSort").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_59).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_59).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaValueMax
+    {
+        let name = v8::String::new(scope, "ariaValueMax").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_60).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_60).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaValueMin
+    {
+        let name = v8::String::new(scope, "ariaValueMin").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_61).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_61).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaValueNow
+    {
+        let name = v8::String::new(scope, "ariaValueNow").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_62).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_62).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ariaValueText
+    {
+        let name = v8::String::new(scope, "ariaValueText").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(element_internals_get_63).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(element_internals_set_63).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -8132,6 +10492,15 @@ unsafe extern "C" fn language_detector_get_6(_info: *const v8::FunctionCallbackI
     }));
 }
 
+unsafe extern "C" fn language_detector_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for LanguageDetector.
 pub fn create_language_detector_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -8186,6 +10555,13 @@ pub fn create_language_detector_template<'s>(
         let name = v8::String::new(scope, "inputQuota").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(language_detector_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: destroy()
+    {
+        let name = v8::String::new(scope, "destroy").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(language_detector_op_7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -12603,6 +14979,294 @@ unsafe extern "C" fn navigator_get_46(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn navigator_op_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_op_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_53(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_54(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_55(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_56(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_57(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_58(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn navigator_get_61(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_62(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_op_63(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_op_64(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_65(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_66(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_67(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_op_68(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_69(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_70(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_71(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_72(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_73(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_74(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_75(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_76(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_77(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn navigator_get_78(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Navigator.
 pub fn create_navigator_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -12912,6 +15576,203 @@ pub fn create_navigator_template<'s>(
     {
         let name = v8::String::new(scope, "windowControlsOverlay").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(navigator_get_46).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: setAppBadge()
+    {
+        let name = v8::String::new(scope, "setAppBadge").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(navigator_op_47).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearAppBadge()
+    {
+        let name = v8::String::new(scope, "clearAppBadge").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(navigator_op_48).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: deviceMemory
+    {
+        let name = v8::String::new(scope, "deviceMemory").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_49).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: globalPrivacyControl
+    {
+        let name = v8::String::new(scope, "globalPrivacyControl").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_50).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: appCodeName
+    {
+        let name = v8::String::new(scope, "appCodeName").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_51).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: appName
+    {
+        let name = v8::String::new(scope, "appName").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_52).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: appVersion
+    {
+        let name = v8::String::new(scope, "appVersion").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_53).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: platform
+    {
+        let name = v8::String::new(scope, "platform").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_54).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: product
+    {
+        let name = v8::String::new(scope, "product").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_55).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: productSub
+    {
+        let name = v8::String::new(scope, "productSub").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_56).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: userAgent
+    {
+        let name = v8::String::new(scope, "userAgent").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_57).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: vendor
+    {
+        let name = v8::String::new(scope, "vendor").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_58).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: vendorSub
+    {
+        let name = v8::String::new(scope, "vendorSub").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_59).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: language
+    {
+        let name = v8::String::new(scope, "language").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_60).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: languages
+    {
+        let name = v8::String::new(scope, "languages").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_61).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: onLine
+    {
+        let name = v8::String::new(scope, "onLine").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_62).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: registerProtocolHandler()
+    {
+        let name = v8::String::new(scope, "registerProtocolHandler").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(navigator_op_63).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: unregisterProtocolHandler()
+    {
+        let name = v8::String::new(scope, "unregisterProtocolHandler").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(navigator_op_64).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: cookieEnabled
+    {
+        let name = v8::String::new(scope, "cookieEnabled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_65).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: plugins
+    {
+        let name = v8::String::new(scope, "plugins").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_66).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: mimeTypes
+    {
+        let name = v8::String::new(scope, "mimeTypes").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_67).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: javaEnabled()
+    {
+        let name = v8::String::new(scope, "javaEnabled").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(navigator_op_68).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: pdfViewerEnabled
+    {
+        let name = v8::String::new(scope, "pdfViewerEnabled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_69).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: hardwareConcurrency
+    {
+        let name = v8::String::new(scope, "hardwareConcurrency").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_70).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: connection
+    {
+        let name = v8::String::new(scope, "connection").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_71).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: storageBuckets
+    {
+        let name = v8::String::new(scope, "storageBuckets").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_72).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: storage
+    {
+        let name = v8::String::new(scope, "storage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_73).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: userAgentData
+    {
+        let name = v8::String::new(scope, "userAgentData").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_74).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: locks
+    {
+        let name = v8::String::new(scope, "locks").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_75).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: webdriver
+    {
+        let name = v8::String::new(scope, "webdriver").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_76).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: gpu
+    {
+        let name = v8::String::new(scope, "gpu").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_77).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: ml
+    {
+        let name = v8::String::new(scope, "ml").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(navigator_get_78).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -14015,6 +16876,753 @@ unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_1(_info: *const v8
     }));
 }
 
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_14(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_15(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_16(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_17(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_18(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_19(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_24(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_25(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_26(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_27(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_28(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_45(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_46(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_47(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_48(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_51(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_52(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_53(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_53(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_54(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_54(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_55(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_55(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_56(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_56(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_57(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_57(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_58(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_58(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_59(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_60(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_61(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_61(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_get_62(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_set_62(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_63(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_64(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_65(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_66(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_67(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_68(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_69(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_70(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_71(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn offscreen_canvas_rendering_context2d_op_72(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for OffscreenCanvasRenderingContext2D.
 pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -14035,6 +17643,503 @@ pub fn create_offscreen_canvas_rendering_context2d_template<'s>(
         let name = v8::String::new(scope, "canvas").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_1).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: getContextAttributes()
+    {
+        let name = v8::String::new(scope, "getContextAttributes").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: save()
+    {
+        let name = v8::String::new(scope, "save").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: restore()
+    {
+        let name = v8::String::new(scope, "restore").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: reset()
+    {
+        let name = v8::String::new(scope, "reset").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isContextLost()
+    {
+        let name = v8::String::new(scope, "isContextLost").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: scale()
+    {
+        let name = v8::String::new(scope, "scale").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_7).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: rotate()
+    {
+        let name = v8::String::new(scope, "rotate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_8).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: translate()
+    {
+        let name = v8::String::new(scope, "translate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_9).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: transform()
+    {
+        let name = v8::String::new(scope, "transform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_10).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getTransform()
+    {
+        let name = v8::String::new(scope, "getTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_11).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: setTransform()
+    {
+        let name = v8::String::new(scope, "setTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_12).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: resetTransform()
+    {
+        let name = v8::String::new(scope, "resetTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_13).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: globalAlpha
+    {
+        let name = v8::String::new(scope, "globalAlpha").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_14).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: globalCompositeOperation
+    {
+        let name = v8::String::new(scope, "globalCompositeOperation").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_15).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_15).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: imageSmoothingEnabled
+    {
+        let name = v8::String::new(scope, "imageSmoothingEnabled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_16).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_16).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: imageSmoothingQuality
+    {
+        let name = v8::String::new(scope, "imageSmoothingQuality").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_17).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_17).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: strokeStyle
+    {
+        let name = v8::String::new(scope, "strokeStyle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_18).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_18).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fillStyle
+    {
+        let name = v8::String::new(scope, "fillStyle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_19).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_19).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: createLinearGradient()
+    {
+        let name = v8::String::new(scope, "createLinearGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_20).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createRadialGradient()
+    {
+        let name = v8::String::new(scope, "createRadialGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_21).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createConicGradient()
+    {
+        let name = v8::String::new(scope, "createConicGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_22).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createPattern()
+    {
+        let name = v8::String::new(scope, "createPattern").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_23).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: shadowOffsetX
+    {
+        let name = v8::String::new(scope, "shadowOffsetX").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_24).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_24).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowOffsetY
+    {
+        let name = v8::String::new(scope, "shadowOffsetY").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_25).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_25).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowBlur
+    {
+        let name = v8::String::new(scope, "shadowBlur").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_26).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_26).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowColor
+    {
+        let name = v8::String::new(scope, "shadowColor").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_27).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_27).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: filter
+    {
+        let name = v8::String::new(scope, "filter").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_28).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_28).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: clearRect()
+    {
+        let name = v8::String::new(scope, "clearRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_29).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fillRect()
+    {
+        let name = v8::String::new(scope, "fillRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_30).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: strokeRect()
+    {
+        let name = v8::String::new(scope, "strokeRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_31).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: beginPath()
+    {
+        let name = v8::String::new(scope, "beginPath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_32).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fill()
+    {
+        let name = v8::String::new(scope, "fill").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_33).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stroke()
+    {
+        let name = v8::String::new(scope, "stroke").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_34).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clip()
+    {
+        let name = v8::String::new(scope, "clip").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_35).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isPointInPath()
+    {
+        let name = v8::String::new(scope, "isPointInPath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_36).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isPointInStroke()
+    {
+        let name = v8::String::new(scope, "isPointInStroke").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_37).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fillText()
+    {
+        let name = v8::String::new(scope, "fillText").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_38).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: strokeText()
+    {
+        let name = v8::String::new(scope, "strokeText").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_39).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: measureText()
+    {
+        let name = v8::String::new(scope, "measureText").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_40).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawImage()
+    {
+        let name = v8::String::new(scope, "drawImage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_41).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createImageData()
+    {
+        let name = v8::String::new(scope, "createImageData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_42).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getImageData()
+    {
+        let name = v8::String::new(scope, "getImageData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_43).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: putImageData()
+    {
+        let name = v8::String::new(scope, "putImageData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_44).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: lineWidth
+    {
+        let name = v8::String::new(scope, "lineWidth").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_45).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_45).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: lineCap
+    {
+        let name = v8::String::new(scope, "lineCap").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_46).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_46).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: lineJoin
+    {
+        let name = v8::String::new(scope, "lineJoin").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_47).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_47).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: miterLimit
+    {
+        let name = v8::String::new(scope, "miterLimit").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_48).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_48).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: setLineDash()
+    {
+        let name = v8::String::new(scope, "setLineDash").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_49).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getLineDash()
+    {
+        let name = v8::String::new(scope, "getLineDash").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_50).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: lineDashOffset
+    {
+        let name = v8::String::new(scope, "lineDashOffset").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_51).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_51).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: lang
+    {
+        let name = v8::String::new(scope, "lang").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_52).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_52).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: font
+    {
+        let name = v8::String::new(scope, "font").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_53).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_53).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: textAlign
+    {
+        let name = v8::String::new(scope, "textAlign").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_54).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_54).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: textBaseline
+    {
+        let name = v8::String::new(scope, "textBaseline").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_55).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_55).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: direction
+    {
+        let name = v8::String::new(scope, "direction").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_56).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_56).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: letterSpacing
+    {
+        let name = v8::String::new(scope, "letterSpacing").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_57).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_57).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fontKerning
+    {
+        let name = v8::String::new(scope, "fontKerning").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_58).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_58).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fontStretch
+    {
+        let name = v8::String::new(scope, "fontStretch").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_59).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_59).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fontVariantCaps
+    {
+        let name = v8::String::new(scope, "fontVariantCaps").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_60).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_60).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: textRendering
+    {
+        let name = v8::String::new(scope, "textRendering").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_61).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_61).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: wordSpacing
+    {
+        let name = v8::String::new(scope, "wordSpacing").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_get_62).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_set_62).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: closePath()
+    {
+        let name = v8::String::new(scope, "closePath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_63).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: moveTo()
+    {
+        let name = v8::String::new(scope, "moveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_64).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: lineTo()
+    {
+        let name = v8::String::new(scope, "lineTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_65).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: quadraticCurveTo()
+    {
+        let name = v8::String::new(scope, "quadraticCurveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_66).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bezierCurveTo()
+    {
+        let name = v8::String::new(scope, "bezierCurveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_67).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: arcTo()
+    {
+        let name = v8::String::new(scope, "arcTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_68).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: rect()
+    {
+        let name = v8::String::new(scope, "rect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_69).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: roundRect()
+    {
+        let name = v8::String::new(scope, "roundRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_70).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: arc()
+    {
+        let name = v8::String::new(scope, "arc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_71).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: ellipse()
+    {
+        let name = v8::String::new(scope, "ellipse").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(offscreen_canvas_rendering_context2d_op_72).length(7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -14122,6 +18227,534 @@ pub fn create_origin_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn paint_rendering_context2d_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_12(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_13(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_14(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_15(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_16(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_17(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_22(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_23(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_24(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_25(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_36(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_37(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_38(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_39(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_get_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_set_42(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn paint_rendering_context2d_op_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for PaintRenderingContext2D.
 pub fn create_paint_rendering_context2d_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -14136,6 +18769,370 @@ pub fn create_paint_rendering_context2d_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PaintRenderingContext2D").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // method: save()
+    {
+        let name = v8::String::new(scope, "save").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: restore()
+    {
+        let name = v8::String::new(scope, "restore").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: reset()
+    {
+        let name = v8::String::new(scope, "reset").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isContextLost()
+    {
+        let name = v8::String::new(scope, "isContextLost").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: scale()
+    {
+        let name = v8::String::new(scope, "scale").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_5).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: rotate()
+    {
+        let name = v8::String::new(scope, "rotate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_6).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: translate()
+    {
+        let name = v8::String::new(scope, "translate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_7).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: transform()
+    {
+        let name = v8::String::new(scope, "transform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_8).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getTransform()
+    {
+        let name = v8::String::new(scope, "getTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: setTransform()
+    {
+        let name = v8::String::new(scope, "setTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_10).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: resetTransform()
+    {
+        let name = v8::String::new(scope, "resetTransform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_11).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: globalAlpha
+    {
+        let name = v8::String::new(scope, "globalAlpha").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_12).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: globalCompositeOperation
+    {
+        let name = v8::String::new(scope, "globalCompositeOperation").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_13).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: imageSmoothingEnabled
+    {
+        let name = v8::String::new(scope, "imageSmoothingEnabled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_14).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: imageSmoothingQuality
+    {
+        let name = v8::String::new(scope, "imageSmoothingQuality").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_15).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_15).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: strokeStyle
+    {
+        let name = v8::String::new(scope, "strokeStyle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_16).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_16).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fillStyle
+    {
+        let name = v8::String::new(scope, "fillStyle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_17).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_17).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: createLinearGradient()
+    {
+        let name = v8::String::new(scope, "createLinearGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_18).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createRadialGradient()
+    {
+        let name = v8::String::new(scope, "createRadialGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_19).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createConicGradient()
+    {
+        let name = v8::String::new(scope, "createConicGradient").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_20).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createPattern()
+    {
+        let name = v8::String::new(scope, "createPattern").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_21).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: shadowOffsetX
+    {
+        let name = v8::String::new(scope, "shadowOffsetX").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_22).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_22).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowOffsetY
+    {
+        let name = v8::String::new(scope, "shadowOffsetY").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_23).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_23).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowBlur
+    {
+        let name = v8::String::new(scope, "shadowBlur").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_24).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_24).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: shadowColor
+    {
+        let name = v8::String::new(scope, "shadowColor").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_25).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_25).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: clearRect()
+    {
+        let name = v8::String::new(scope, "clearRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_26).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fillRect()
+    {
+        let name = v8::String::new(scope, "fillRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_27).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: strokeRect()
+    {
+        let name = v8::String::new(scope, "strokeRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_28).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: beginPath()
+    {
+        let name = v8::String::new(scope, "beginPath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_29).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fill()
+    {
+        let name = v8::String::new(scope, "fill").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_30).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stroke()
+    {
+        let name = v8::String::new(scope, "stroke").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_31).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clip()
+    {
+        let name = v8::String::new(scope, "clip").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_32).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isPointInPath()
+    {
+        let name = v8::String::new(scope, "isPointInPath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_33).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isPointInStroke()
+    {
+        let name = v8::String::new(scope, "isPointInStroke").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_34).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawImage()
+    {
+        let name = v8::String::new(scope, "drawImage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_35).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: lineWidth
+    {
+        let name = v8::String::new(scope, "lineWidth").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_36).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_36).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: lineCap
+    {
+        let name = v8::String::new(scope, "lineCap").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_37).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_37).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: lineJoin
+    {
+        let name = v8::String::new(scope, "lineJoin").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_38).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_38).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: miterLimit
+    {
+        let name = v8::String::new(scope, "miterLimit").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_39).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_39).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: setLineDash()
+    {
+        let name = v8::String::new(scope, "setLineDash").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_40).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getLineDash()
+    {
+        let name = v8::String::new(scope, "getLineDash").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_41).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: lineDashOffset
+    {
+        let name = v8::String::new(scope, "lineDashOffset").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_get_42).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_set_42).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: closePath()
+    {
+        let name = v8::String::new(scope, "closePath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_43).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: moveTo()
+    {
+        let name = v8::String::new(scope, "moveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_44).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: lineTo()
+    {
+        let name = v8::String::new(scope, "lineTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_45).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: quadraticCurveTo()
+    {
+        let name = v8::String::new(scope, "quadraticCurveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_46).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bezierCurveTo()
+    {
+        let name = v8::String::new(scope, "bezierCurveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_47).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: arcTo()
+    {
+        let name = v8::String::new(scope, "arcTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_48).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: rect()
+    {
+        let name = v8::String::new(scope, "rect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_49).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: roundRect()
+    {
+        let name = v8::String::new(scope, "roundRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_50).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: arc()
+    {
+        let name = v8::String::new(scope, "arc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_51).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: ellipse()
+    {
+        let name = v8::String::new(scope, "ellipse").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(paint_rendering_context2d_op_52).length(7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -14199,6 +19196,96 @@ unsafe extern "C" fn path2d_op_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn path2d_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn path2d_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Path2D.
 pub fn create_path2d_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -14218,6 +19305,76 @@ pub fn create_path2d_template<'s>(
     {
         let name = v8::String::new(scope, "addPath").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_1).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: closePath()
+    {
+        let name = v8::String::new(scope, "closePath").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: moveTo()
+    {
+        let name = v8::String::new(scope, "moveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_3).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: lineTo()
+    {
+        let name = v8::String::new(scope, "lineTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_4).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: quadraticCurveTo()
+    {
+        let name = v8::String::new(scope, "quadraticCurveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_5).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bezierCurveTo()
+    {
+        let name = v8::String::new(scope, "bezierCurveTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_6).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: arcTo()
+    {
+        let name = v8::String::new(scope, "arcTo").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_7).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: rect()
+    {
+        let name = v8::String::new(scope, "rect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_8).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: roundRect()
+    {
+        let name = v8::String::new(scope, "roundRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_9).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: arc()
+    {
+        let name = v8::String::new(scope, "arc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_10).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: ellipse()
+    {
+        let name = v8::String::new(scope, "ellipse").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(path2d_op_11).length(7).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -16031,6 +21188,15 @@ unsafe extern "C" fn rewriter_get_13(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn rewriter_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Rewriter.
 pub fn create_rewriter_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -16129,8 +21295,42 @@ pub fn create_rewriter_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(rewriter_get_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // method: destroy()
+    {
+        let name = v8::String::new(scope, "destroy").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rewriter_op_14).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
 
     tmpl
+}
+
+unsafe extern "C" fn s_frame_encrypter_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn s_frame_encrypter_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn s_frame_encrypter_stream_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for SFrameEncrypterStream.
@@ -16147,6 +21347,25 @@ pub fn create_s_frame_encrypter_stream_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SFrameEncrypterStream").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: readable
+    {
+        let name = v8::String::new(scope, "readable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(s_frame_encrypter_stream_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: writable
+    {
+        let name = v8::String::new(scope, "writable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(s_frame_encrypter_stream_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: setEncryptionKey()
+    {
+        let name = v8::String::new(scope, "setEncryptionKey").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(s_frame_encrypter_stream_op_3).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -18230,6 +23449,15 @@ unsafe extern "C" fn summarizer_get_14(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn summarizer_op_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Summarizer.
 pub fn create_summarizer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -18333,6 +23561,13 @@ pub fn create_summarizer_template<'s>(
         let name = v8::String::new(scope, "inputQuota").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(summarizer_get_14).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: destroy()
+    {
+        let name = v8::String::new(scope, "destroy").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(summarizer_op_15).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -19333,6 +24568,15 @@ unsafe extern "C" fn translator_get_8(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn translator_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Translator.
 pub fn create_translator_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -19400,6 +24644,13 @@ pub fn create_translator_template<'s>(
         let name = v8::String::new(scope, "inputQuota").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(translator_get_8).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: destroy()
+    {
+        let name = v8::String::new(scope, "destroy").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(translator_op_9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -23379,6 +28630,15 @@ unsafe extern "C" fn writer_get_13(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn writer_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Writer.
 pub fn create_writer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -23477,6 +28737,13 @@ pub fn create_writer_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(writer_get_13).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // method: destroy()
+    {
+        let name = v8::String::new(scope, "destroy").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(writer_op_14).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
 
     tmpl
 }
@@ -23516,6 +28783,33 @@ pub fn create_xml_serializer_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn x_path_evaluator_op_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn x_path_evaluator_op_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn x_path_evaluator_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for XPathEvaluator.
 pub fn create_x_path_evaluator_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -23530,6 +28824,27 @@ pub fn create_x_path_evaluator_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XPathEvaluator").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // method: createExpression()
+    {
+        let name = v8::String::new(scope, "createExpression").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(x_path_evaluator_op_1).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createNSResolver()
+    {
+        let name = v8::String::new(scope, "createNSResolver").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(x_path_evaluator_op_2).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: evaluate()
+    {
+        let name = v8::String::new(scope, "evaluate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(x_path_evaluator_op_3).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -24518,6 +29833,24 @@ unsafe extern "C" fn federated_credential_get_2(_info: *const v8::FunctionCallba
     }));
 }
 
+unsafe extern "C" fn federated_credential_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn federated_credential_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
 /// Create FunctionTemplate for FederatedCredential.
 pub fn create_federated_credential_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -24546,6 +29879,18 @@ pub fn create_federated_credential_template<'s>(
     {
         let name = v8::String::new(scope, "protocol").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(federated_credential_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: name
+    {
+        let name = v8::String::new(scope, "name").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(federated_credential_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: iconURL
+    {
+        let name = v8::String::new(scope, "iconURL").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(federated_credential_get_4).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -24681,6 +30026,24 @@ unsafe extern "C" fn password_credential_get_1(_info: *const v8::FunctionCallbac
     }));
 }
 
+unsafe extern "C" fn password_credential_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn password_credential_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
 /// Create FunctionTemplate for PasswordCredential.
 pub fn create_password_credential_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -24703,6 +30066,18 @@ pub fn create_password_credential_template<'s>(
     {
         let name = v8::String::new(scope, "password").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(password_credential_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: name
+    {
+        let name = v8::String::new(scope, "name").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(password_credential_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: iconURL
+    {
+        let name = v8::String::new(scope, "iconURL").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(password_credential_get_3).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -27660,6 +33035,15 @@ unsafe extern "C" fn language_model_op_17(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
+unsafe extern "C" fn language_model_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for LanguageModel.
 pub fn create_language_model_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -27788,6 +33172,13 @@ pub fn create_language_model_template<'s>(
     {
         let name = v8::String::new(scope, "clone").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(language_model_op_17).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: destroy()
+    {
+        let name = v8::String::new(scope, "destroy").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(language_model_op_18).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -28696,6 +34087,15 @@ unsafe extern "C" fn network_information_set_6(_info: *const v8::FunctionCallbac
     // no-op setter stub
 }
 
+unsafe extern "C" fn network_information_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
 /// Create FunctionTemplate for NetworkInformation.
 pub fn create_network_information_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -28750,6 +34150,12 @@ pub fn create_network_information_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(network_information_get_6).build(scope);
         let setter = v8::FunctionTemplate::builder_raw(network_information_set_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: saveData
+    {
+        let name = v8::String::new(scope, "saveData").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(network_information_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -30100,6 +35506,55 @@ pub fn create_remote_playback_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn s_frame_decrypter_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn s_frame_decrypter_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn s_frame_decrypter_stream_op_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn s_frame_decrypter_stream_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn s_frame_decrypter_stream_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn s_frame_decrypter_stream_set_5(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for SFrameDecrypterStream.
 pub fn create_s_frame_decrypter_stream_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -30117,6 +35572,39 @@ pub fn create_s_frame_decrypter_stream_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SFrameDecrypterStream").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: readable
+    {
+        let name = v8::String::new(scope, "readable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(s_frame_decrypter_stream_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: writable
+    {
+        let name = v8::String::new(scope, "writable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(s_frame_decrypter_stream_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: addDecryptionKey()
+    {
+        let name = v8::String::new(scope, "addDecryptionKey").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(s_frame_decrypter_stream_op_3).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: removeDecryptionKey()
+    {
+        let name = v8::String::new(scope, "removeDecryptionKey").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(s_frame_decrypter_stream_op_4).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: onerror
+    {
+        let name = v8::String::new(scope, "onerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(s_frame_decrypter_stream_get_5).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(s_frame_decrypter_stream_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -30624,6 +36112,19 @@ unsafe extern "C" fn shared_worker_get_1(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
+unsafe extern "C" fn shared_worker_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn shared_worker_set_2(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for SharedWorker.
 pub fn create_shared_worker_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -30647,6 +36148,13 @@ pub fn create_shared_worker_template<'s>(
         let name = v8::String::new(scope, "port").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(shared_worker_get_1).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: onerror
+    {
+        let name = v8::String::new(scope, "onerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(shared_worker_get_2).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(shared_worker_set_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -34372,6 +39880,1390 @@ unsafe extern "C" fn window_op_97(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn window_get_98(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_98(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_99(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_99(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_100(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_100(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_101(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_101(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_102(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_102(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_103(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_103(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_104(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_104(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_105(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_105(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_106(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_106(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_107(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_107(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_108(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_108(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_109(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_109(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_110(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_110(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_111(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_111(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_112(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_112(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_113(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_113(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_114(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_114(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_115(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_115(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_116(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_116(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_117(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_117(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_118(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_118(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_119(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_119(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_120(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_120(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_121(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_121(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_122(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_122(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_123(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_123(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_124(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_124(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_125(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_125(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_126(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_126(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_127(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_127(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_128(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_128(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_129(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_129(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_130(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_130(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_131(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_131(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_132(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_132(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_133(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_133(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_134(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_134(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_135(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_135(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_136(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_136(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_137(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_137(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_138(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_138(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_139(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_139(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_140(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_140(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_141(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_141(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_142(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_142(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_143(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_143(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_144(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_144(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_145(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_145(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_146(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_146(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_147(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_147(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_148(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_148(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_149(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_149(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_150(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_150(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_151(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_151(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_152(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_152(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_153(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_153(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_154(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_154(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_155(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_155(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_156(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_156(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_157(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_157(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_158(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_158(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_159(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_159(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_160(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_160(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_161(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_161(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_162(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_162(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_163(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_163(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_164(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_164(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_165(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_165(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_166(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_166(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_167(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_167(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_168(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_168(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_169(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_169(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_170(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_170(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_171(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_171(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_172(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_172(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_173(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_173(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_174(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_174(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_175(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_175(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_176(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_176(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_177(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_177(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_178(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_178(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_179(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_179(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_180(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_180(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_181(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_181(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_182(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_182(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_183(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_183(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_184(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_184(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_185(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_185(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_186(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_186(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_187(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_187(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_188(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_188(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_189(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_189(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_190(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_190(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_191(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_set_191(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn window_get_192(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn window_get_193(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn window_get_194(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_195(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_196(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn window_op_197(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn window_op_198(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_199(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_200(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_201(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_202(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_203(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_204(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_205(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn window_op_206(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_get_207(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_get_208(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn window_get_209(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for Window.
 pub fn create_window_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -35019,6 +41911,784 @@ pub fn create_window_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_97).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: onabort
+    {
+        let name = v8::String::new(scope, "onabort").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_98).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_98).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onauxclick
+    {
+        let name = v8::String::new(scope, "onauxclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_99).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_99).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforeinput
+    {
+        let name = v8::String::new(scope, "onbeforeinput").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_100).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_100).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforematch
+    {
+        let name = v8::String::new(scope, "onbeforematch").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_101).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_101).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforetoggle
+    {
+        let name = v8::String::new(scope, "onbeforetoggle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_102).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_102).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onblur
+    {
+        let name = v8::String::new(scope, "onblur").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_103).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_103).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncancel
+    {
+        let name = v8::String::new(scope, "oncancel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_104).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_104).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncanplay
+    {
+        let name = v8::String::new(scope, "oncanplay").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_105).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_105).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncanplaythrough
+    {
+        let name = v8::String::new(scope, "oncanplaythrough").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_106).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_106).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onchange
+    {
+        let name = v8::String::new(scope, "onchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_107).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_107).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onclick
+    {
+        let name = v8::String::new(scope, "onclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_108).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_108).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onclose
+    {
+        let name = v8::String::new(scope, "onclose").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_109).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_109).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncommand
+    {
+        let name = v8::String::new(scope, "oncommand").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_110).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_110).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextlost
+    {
+        let name = v8::String::new(scope, "oncontextlost").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_111).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_111).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextmenu
+    {
+        let name = v8::String::new(scope, "oncontextmenu").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_112).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_112).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextrestored
+    {
+        let name = v8::String::new(scope, "oncontextrestored").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_113).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_113).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncopy
+    {
+        let name = v8::String::new(scope, "oncopy").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_114).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_114).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncuechange
+    {
+        let name = v8::String::new(scope, "oncuechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_115).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_115).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncut
+    {
+        let name = v8::String::new(scope, "oncut").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_116).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_116).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondblclick
+    {
+        let name = v8::String::new(scope, "ondblclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_117).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_117).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondrag
+    {
+        let name = v8::String::new(scope, "ondrag").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_118).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_118).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragend
+    {
+        let name = v8::String::new(scope, "ondragend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_119).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_119).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragenter
+    {
+        let name = v8::String::new(scope, "ondragenter").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_120).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_120).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragleave
+    {
+        let name = v8::String::new(scope, "ondragleave").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_121).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_121).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragover
+    {
+        let name = v8::String::new(scope, "ondragover").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_122).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_122).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragstart
+    {
+        let name = v8::String::new(scope, "ondragstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_123).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_123).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondrop
+    {
+        let name = v8::String::new(scope, "ondrop").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_124).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_124).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondurationchange
+    {
+        let name = v8::String::new(scope, "ondurationchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_125).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_125).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onemptied
+    {
+        let name = v8::String::new(scope, "onemptied").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_126).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_126).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onended
+    {
+        let name = v8::String::new(scope, "onended").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_127).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_127).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onerror
+    {
+        let name = v8::String::new(scope, "onerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_128).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_128).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onfocus
+    {
+        let name = v8::String::new(scope, "onfocus").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_129).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_129).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onformdata
+    {
+        let name = v8::String::new(scope, "onformdata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_130).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_130).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oninput
+    {
+        let name = v8::String::new(scope, "oninput").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_131).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_131).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oninvalid
+    {
+        let name = v8::String::new(scope, "oninvalid").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_132).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_132).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeydown
+    {
+        let name = v8::String::new(scope, "onkeydown").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_133).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_133).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeypress
+    {
+        let name = v8::String::new(scope, "onkeypress").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_134).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_134).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeyup
+    {
+        let name = v8::String::new(scope, "onkeyup").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_135).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_135).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onload
+    {
+        let name = v8::String::new(scope, "onload").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_136).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_136).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadeddata
+    {
+        let name = v8::String::new(scope, "onloadeddata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_137).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_137).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadedmetadata
+    {
+        let name = v8::String::new(scope, "onloadedmetadata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_138).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_138).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadstart
+    {
+        let name = v8::String::new(scope, "onloadstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_139).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_139).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmousedown
+    {
+        let name = v8::String::new(scope, "onmousedown").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_140).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_140).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseenter
+    {
+        let name = v8::String::new(scope, "onmouseenter").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_141).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_141).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseleave
+    {
+        let name = v8::String::new(scope, "onmouseleave").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_142).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_142).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmousemove
+    {
+        let name = v8::String::new(scope, "onmousemove").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_143).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_143).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseout
+    {
+        let name = v8::String::new(scope, "onmouseout").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_144).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_144).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseover
+    {
+        let name = v8::String::new(scope, "onmouseover").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_145).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_145).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseup
+    {
+        let name = v8::String::new(scope, "onmouseup").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_146).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_146).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpaste
+    {
+        let name = v8::String::new(scope, "onpaste").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_147).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_147).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpause
+    {
+        let name = v8::String::new(scope, "onpause").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_148).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_148).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onplay
+    {
+        let name = v8::String::new(scope, "onplay").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_149).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_149).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onplaying
+    {
+        let name = v8::String::new(scope, "onplaying").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_150).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_150).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onprogress
+    {
+        let name = v8::String::new(scope, "onprogress").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_151).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_151).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onratechange
+    {
+        let name = v8::String::new(scope, "onratechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_152).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_152).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onreset
+    {
+        let name = v8::String::new(scope, "onreset").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_153).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_153).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onresize
+    {
+        let name = v8::String::new(scope, "onresize").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_154).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_154).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onscroll
+    {
+        let name = v8::String::new(scope, "onscroll").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_155).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_155).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onscrollend
+    {
+        let name = v8::String::new(scope, "onscrollend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_156).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_156).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsecuritypolicyviolation
+    {
+        let name = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_157).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_157).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onseeked
+    {
+        let name = v8::String::new(scope, "onseeked").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_158).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_158).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onseeking
+    {
+        let name = v8::String::new(scope, "onseeking").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_159).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_159).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onselect
+    {
+        let name = v8::String::new(scope, "onselect").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_160).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_160).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onslotchange
+    {
+        let name = v8::String::new(scope, "onslotchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_161).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_161).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onstalled
+    {
+        let name = v8::String::new(scope, "onstalled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_162).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_162).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsubmit
+    {
+        let name = v8::String::new(scope, "onsubmit").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_163).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_163).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsuspend
+    {
+        let name = v8::String::new(scope, "onsuspend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_164).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_164).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ontimeupdate
+    {
+        let name = v8::String::new(scope, "ontimeupdate").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_165).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_165).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ontoggle
+    {
+        let name = v8::String::new(scope, "ontoggle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_166).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_166).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onvolumechange
+    {
+        let name = v8::String::new(scope, "onvolumechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_167).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_167).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwaiting
+    {
+        let name = v8::String::new(scope, "onwaiting").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_168).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_168).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationend
+    {
+        let name = v8::String::new(scope, "onwebkitanimationend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_169).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_169).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationiteration
+    {
+        let name = v8::String::new(scope, "onwebkitanimationiteration").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_170).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_170).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationstart
+    {
+        let name = v8::String::new(scope, "onwebkitanimationstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_171).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_171).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkittransitionend
+    {
+        let name = v8::String::new(scope, "onwebkittransitionend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_172).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_172).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwheel
+    {
+        let name = v8::String::new(scope, "onwheel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_173).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_173).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onafterprint
+    {
+        let name = v8::String::new(scope, "onafterprint").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_174).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_174).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforeprint
+    {
+        let name = v8::String::new(scope, "onbeforeprint").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_175).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_175).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforeunload
+    {
+        let name = v8::String::new(scope, "onbeforeunload").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_176).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_176).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onhashchange
+    {
+        let name = v8::String::new(scope, "onhashchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_177).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_177).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onlanguagechange
+    {
+        let name = v8::String::new(scope, "onlanguagechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_178).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_178).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmessage
+    {
+        let name = v8::String::new(scope, "onmessage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_179).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_179).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmessageerror
+    {
+        let name = v8::String::new(scope, "onmessageerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_180).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_180).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onoffline
+    {
+        let name = v8::String::new(scope, "onoffline").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_181).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_181).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ononline
+    {
+        let name = v8::String::new(scope, "ononline").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_182).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_182).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpagehide
+    {
+        let name = v8::String::new(scope, "onpagehide").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_183).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_183).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpagereveal
+    {
+        let name = v8::String::new(scope, "onpagereveal").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_184).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_184).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpageshow
+    {
+        let name = v8::String::new(scope, "onpageshow").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_185).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_185).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpageswap
+    {
+        let name = v8::String::new(scope, "onpageswap").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_186).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_186).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpopstate
+    {
+        let name = v8::String::new(scope, "onpopstate").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_187).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_187).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onrejectionhandled
+    {
+        let name = v8::String::new(scope, "onrejectionhandled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_188).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_188).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onstorage
+    {
+        let name = v8::String::new(scope, "onstorage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_189).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_189).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onunhandledrejection
+    {
+        let name = v8::String::new(scope, "onunhandledrejection").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_190).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_190).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onunload
+    {
+        let name = v8::String::new(scope, "onunload").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_191).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(window_set_191).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: origin
+    {
+        let name = v8::String::new(scope, "origin").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_192).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: isSecureContext
+    {
+        let name = v8::String::new(scope, "isSecureContext").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_193).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: crossOriginIsolated
+    {
+        let name = v8::String::new(scope, "crossOriginIsolated").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_194).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: reportError()
+    {
+        let name = v8::String::new(scope, "reportError").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_195).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: btoa()
+    {
+        let name = v8::String::new(scope, "btoa").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_196).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: atob()
+    {
+        let name = v8::String::new(scope, "atob").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_197).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: setTimeout()
+    {
+        let name = v8::String::new(scope, "setTimeout").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_198).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearTimeout()
+    {
+        let name = v8::String::new(scope, "clearTimeout").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_199).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: setInterval()
+    {
+        let name = v8::String::new(scope, "setInterval").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_200).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearInterval()
+    {
+        let name = v8::String::new(scope, "clearInterval").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_201).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: queueMicrotask()
+    {
+        let name = v8::String::new(scope, "queueMicrotask").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_202).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createImageBitmap()
+    {
+        let name = v8::String::new(scope, "createImageBitmap").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_203).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: structuredClone()
+    {
+        let name = v8::String::new(scope, "structuredClone").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_204).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: requestAnimationFrame()
+    {
+        let name = v8::String::new(scope, "requestAnimationFrame").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_205).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: cancelAnimationFrame()
+    {
+        let name = v8::String::new(scope, "cancelAnimationFrame").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(window_op_206).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: sessionStorage
+    {
+        let name = v8::String::new(scope, "sessionStorage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_207).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: localStorage
+    {
+        let name = v8::String::new(scope, "localStorage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_208).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: pushManager
+    {
+        let name = v8::String::new(scope, "pushManager").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(window_get_209).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -35704,6 +43374,24 @@ unsafe extern "C" fn largest_contentful_paint_op_7(_info: *const v8::FunctionCal
     }));
 }
 
+unsafe extern "C" fn largest_contentful_paint_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn largest_contentful_paint_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for LargestContentfulPaint.
 pub fn create_largest_contentful_paint_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -35764,6 +43452,18 @@ pub fn create_largest_contentful_paint_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(largest_contentful_paint_op_7).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: paintTime
+    {
+        let name = v8::String::new(scope, "paintTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(largest_contentful_paint_get_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: presentationTime
+    {
+        let name = v8::String::new(scope, "presentationTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(largest_contentful_paint_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -35921,6 +43621,24 @@ unsafe extern "C" fn performance_container_timing_get_6(_info: *const v8::Functi
     }));
 }
 
+unsafe extern "C" fn performance_container_timing_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn performance_container_timing_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for PerformanceContainerTiming.
 pub fn create_performance_container_timing_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -35973,6 +43691,18 @@ pub fn create_performance_container_timing_template<'s>(
     {
         let name = v8::String::new(scope, "rootElement").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(performance_container_timing_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: paintTime
+    {
+        let name = v8::String::new(scope, "paintTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(performance_container_timing_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: presentationTime
+    {
+        let name = v8::String::new(scope, "presentationTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(performance_container_timing_get_8).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -36069,6 +43799,24 @@ unsafe extern "C" fn performance_element_timing_op_10(_info: *const v8::Function
     }));
 }
 
+unsafe extern "C" fn performance_element_timing_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn performance_element_timing_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for PerformanceElementTiming.
 pub fn create_performance_element_timing_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -36147,6 +43895,18 @@ pub fn create_performance_element_timing_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(performance_element_timing_op_10).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: paintTime
+    {
+        let name = v8::String::new(scope, "paintTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(performance_element_timing_get_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: presentationTime
+    {
+        let name = v8::String::new(scope, "presentationTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(performance_element_timing_get_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -36370,6 +44130,24 @@ unsafe extern "C" fn performance_long_animation_frame_timing_op_10(_info: *const
     }));
 }
 
+unsafe extern "C" fn performance_long_animation_frame_timing_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn performance_long_animation_frame_timing_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for PerformanceLongAnimationFrameTiming.
 pub fn create_performance_long_animation_frame_timing_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -36448,6 +44226,18 @@ pub fn create_performance_long_animation_frame_timing_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(performance_long_animation_frame_timing_op_10).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: paintTime
+    {
+        let name = v8::String::new(scope, "paintTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(performance_long_animation_frame_timing_get_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: presentationTime
+    {
+        let name = v8::String::new(scope, "presentationTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(performance_long_animation_frame_timing_get_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -36649,6 +44439,24 @@ unsafe extern "C" fn performance_paint_timing_op_1(_info: *const v8::FunctionCal
     }));
 }
 
+unsafe extern "C" fn performance_paint_timing_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn performance_paint_timing_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for PerformancePaintTiming.
 pub fn create_performance_paint_timing_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -36673,6 +44481,18 @@ pub fn create_performance_paint_timing_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(performance_paint_timing_op_1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: paintTime
+    {
+        let name = v8::String::new(scope, "paintTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(performance_paint_timing_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: presentationTime
+    {
+        let name = v8::String::new(scope, "presentationTime").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(performance_paint_timing_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -40000,6 +47820,50 @@ unsafe extern "C" fn dedicated_worker_global_scope_set_5(_info: *const v8::Funct
     // no-op setter stub
 }
 
+unsafe extern "C" fn dedicated_worker_global_scope_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn dedicated_worker_global_scope_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn dedicated_worker_global_scope_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn dedicated_worker_global_scope_set_8(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn dedicated_worker_global_scope_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn dedicated_worker_global_scope_set_9(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for DedicatedWorkerGlobalScope.
 pub fn create_dedicated_worker_global_scope_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -40050,6 +47914,34 @@ pub fn create_dedicated_worker_global_scope_template<'s>(
         let name = v8::String::new(scope, "onrtctransform").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(dedicated_worker_global_scope_get_5).build(scope);
         let setter = v8::FunctionTemplate::builder_raw(dedicated_worker_global_scope_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: requestAnimationFrame()
+    {
+        let name = v8::String::new(scope, "requestAnimationFrame").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dedicated_worker_global_scope_op_6).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: cancelAnimationFrame()
+    {
+        let name = v8::String::new(scope, "cancelAnimationFrame").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dedicated_worker_global_scope_op_7).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: onmessage
+    {
+        let name = v8::String::new(scope, "onmessage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(dedicated_worker_global_scope_get_8).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(dedicated_worker_global_scope_set_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmessageerror
+    {
+        let name = v8::String::new(scope, "onmessageerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(dedicated_worker_global_scope_get_9).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(dedicated_worker_global_scope_set_9).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -40841,6 +48733,15 @@ unsafe extern "C" fn processing_instruction_get_1(_info: *const v8::FunctionCall
     }));
 }
 
+unsafe extern "C" fn processing_instruction_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for ProcessingInstruction.
 pub fn create_processing_instruction_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -40863,6 +48764,12 @@ pub fn create_processing_instruction_template<'s>(
     {
         let name = v8::String::new(scope, "target").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(processing_instruction_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: sheet
+    {
+        let name = v8::String::new(scope, "sheet").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(processing_instruction_get_2).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -40891,6 +48798,1069 @@ pub fn create_xml_document_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn math_ml_element_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_2(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_3(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_4(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_5(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_6(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_7(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_8(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_9(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_10(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_11(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_12(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_13(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_14(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_15(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_16(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_17(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_18(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_19(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_20(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_21(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_22(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_23(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_24(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_25(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_26(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_27(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_28(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_29(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_30(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_31(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_32(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_33(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_34(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_35(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_36(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_37(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_38(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_39(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_40(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_41(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_42(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_43(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_44(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_45(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_46(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_47(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_48(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_49(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_50(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_51(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_52(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_53(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_53(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_54(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_54(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_55(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_55(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_56(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_56(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_57(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_57(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_58(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_58(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_59(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_60(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_61(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_61(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_62(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_62(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_63(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_63(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_64(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_64(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_65(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_65(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_66(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_66(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_67(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_67(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_68(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_68(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_69(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_69(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_70(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_70(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_71(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_71(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_72(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_72(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_73(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_73(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_74(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_74(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_75(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_75(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_76(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_76(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_77(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_77(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_78(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_get_79(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_79(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_80(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_80(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_get_81(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_set_81(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_element_op_82(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn math_ml_element_op_83(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for MathMLElement.
 pub fn create_math_ml_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -40908,6 +49878,585 @@ pub fn create_math_ml_element_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MathMLElement").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: style
+    {
+        let name = v8::String::new(scope, "style").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: onabort
+    {
+        let name = v8::String::new(scope, "onabort").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_2).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onauxclick
+    {
+        let name = v8::String::new(scope, "onauxclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_3).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforeinput
+    {
+        let name = v8::String::new(scope, "onbeforeinput").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_4).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforematch
+    {
+        let name = v8::String::new(scope, "onbeforematch").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_5).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onbeforetoggle
+    {
+        let name = v8::String::new(scope, "onbeforetoggle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_6).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onblur
+    {
+        let name = v8::String::new(scope, "onblur").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_7).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncancel
+    {
+        let name = v8::String::new(scope, "oncancel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_8).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncanplay
+    {
+        let name = v8::String::new(scope, "oncanplay").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_9).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncanplaythrough
+    {
+        let name = v8::String::new(scope, "oncanplaythrough").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_10).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onchange
+    {
+        let name = v8::String::new(scope, "onchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_11).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onclick
+    {
+        let name = v8::String::new(scope, "onclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_12).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onclose
+    {
+        let name = v8::String::new(scope, "onclose").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_13).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncommand
+    {
+        let name = v8::String::new(scope, "oncommand").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_14).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextlost
+    {
+        let name = v8::String::new(scope, "oncontextlost").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_15).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_15).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextmenu
+    {
+        let name = v8::String::new(scope, "oncontextmenu").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_16).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_16).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncontextrestored
+    {
+        let name = v8::String::new(scope, "oncontextrestored").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_17).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_17).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncopy
+    {
+        let name = v8::String::new(scope, "oncopy").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_18).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_18).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncuechange
+    {
+        let name = v8::String::new(scope, "oncuechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_19).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_19).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncut
+    {
+        let name = v8::String::new(scope, "oncut").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_20).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_20).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondblclick
+    {
+        let name = v8::String::new(scope, "ondblclick").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_21).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_21).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondrag
+    {
+        let name = v8::String::new(scope, "ondrag").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_22).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_22).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragend
+    {
+        let name = v8::String::new(scope, "ondragend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_23).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_23).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragenter
+    {
+        let name = v8::String::new(scope, "ondragenter").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_24).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_24).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragleave
+    {
+        let name = v8::String::new(scope, "ondragleave").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_25).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_25).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragover
+    {
+        let name = v8::String::new(scope, "ondragover").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_26).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_26).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondragstart
+    {
+        let name = v8::String::new(scope, "ondragstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_27).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_27).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondrop
+    {
+        let name = v8::String::new(scope, "ondrop").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_28).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_28).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ondurationchange
+    {
+        let name = v8::String::new(scope, "ondurationchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_29).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_29).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onemptied
+    {
+        let name = v8::String::new(scope, "onemptied").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_30).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_30).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onended
+    {
+        let name = v8::String::new(scope, "onended").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_31).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_31).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onerror
+    {
+        let name = v8::String::new(scope, "onerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_32).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_32).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onfocus
+    {
+        let name = v8::String::new(scope, "onfocus").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_33).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_33).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onformdata
+    {
+        let name = v8::String::new(scope, "onformdata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_34).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_34).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oninput
+    {
+        let name = v8::String::new(scope, "oninput").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_35).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_35).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oninvalid
+    {
+        let name = v8::String::new(scope, "oninvalid").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_36).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_36).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeydown
+    {
+        let name = v8::String::new(scope, "onkeydown").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_37).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_37).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeypress
+    {
+        let name = v8::String::new(scope, "onkeypress").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_38).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_38).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onkeyup
+    {
+        let name = v8::String::new(scope, "onkeyup").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_39).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_39).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onload
+    {
+        let name = v8::String::new(scope, "onload").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_40).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_40).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadeddata
+    {
+        let name = v8::String::new(scope, "onloadeddata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_41).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_41).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadedmetadata
+    {
+        let name = v8::String::new(scope, "onloadedmetadata").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_42).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_42).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onloadstart
+    {
+        let name = v8::String::new(scope, "onloadstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_43).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_43).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmousedown
+    {
+        let name = v8::String::new(scope, "onmousedown").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_44).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_44).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseenter
+    {
+        let name = v8::String::new(scope, "onmouseenter").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_45).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_45).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseleave
+    {
+        let name = v8::String::new(scope, "onmouseleave").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_46).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_46).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmousemove
+    {
+        let name = v8::String::new(scope, "onmousemove").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_47).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_47).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseout
+    {
+        let name = v8::String::new(scope, "onmouseout").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_48).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_48).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseover
+    {
+        let name = v8::String::new(scope, "onmouseover").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_49).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_49).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmouseup
+    {
+        let name = v8::String::new(scope, "onmouseup").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_50).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_50).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpaste
+    {
+        let name = v8::String::new(scope, "onpaste").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_51).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_51).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onpause
+    {
+        let name = v8::String::new(scope, "onpause").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_52).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_52).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onplay
+    {
+        let name = v8::String::new(scope, "onplay").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_53).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_53).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onplaying
+    {
+        let name = v8::String::new(scope, "onplaying").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_54).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_54).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onprogress
+    {
+        let name = v8::String::new(scope, "onprogress").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_55).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_55).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onratechange
+    {
+        let name = v8::String::new(scope, "onratechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_56).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_56).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onreset
+    {
+        let name = v8::String::new(scope, "onreset").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_57).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_57).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onresize
+    {
+        let name = v8::String::new(scope, "onresize").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_58).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_58).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onscroll
+    {
+        let name = v8::String::new(scope, "onscroll").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_59).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_59).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onscrollend
+    {
+        let name = v8::String::new(scope, "onscrollend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_60).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_60).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsecuritypolicyviolation
+    {
+        let name = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_61).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_61).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onseeked
+    {
+        let name = v8::String::new(scope, "onseeked").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_62).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_62).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onseeking
+    {
+        let name = v8::String::new(scope, "onseeking").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_63).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_63).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onselect
+    {
+        let name = v8::String::new(scope, "onselect").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_64).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_64).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onslotchange
+    {
+        let name = v8::String::new(scope, "onslotchange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_65).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_65).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onstalled
+    {
+        let name = v8::String::new(scope, "onstalled").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_66).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_66).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsubmit
+    {
+        let name = v8::String::new(scope, "onsubmit").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_67).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_67).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onsuspend
+    {
+        let name = v8::String::new(scope, "onsuspend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_68).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_68).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ontimeupdate
+    {
+        let name = v8::String::new(scope, "ontimeupdate").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_69).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_69).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ontoggle
+    {
+        let name = v8::String::new(scope, "ontoggle").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_70).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_70).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onvolumechange
+    {
+        let name = v8::String::new(scope, "onvolumechange").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_71).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_71).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwaiting
+    {
+        let name = v8::String::new(scope, "onwaiting").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_72).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_72).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationend
+    {
+        let name = v8::String::new(scope, "onwebkitanimationend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_73).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_73).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationiteration
+    {
+        let name = v8::String::new(scope, "onwebkitanimationiteration").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_74).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_74).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkitanimationstart
+    {
+        let name = v8::String::new(scope, "onwebkitanimationstart").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_75).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_75).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwebkittransitionend
+    {
+        let name = v8::String::new(scope, "onwebkittransitionend").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_76).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_76).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onwheel
+    {
+        let name = v8::String::new(scope, "onwheel").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_77).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_77).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: dataset
+    {
+        let name = v8::String::new(scope, "dataset").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_78).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: nonce
+    {
+        let name = v8::String::new(scope, "nonce").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_79).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_79).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: autofocus
+    {
+        let name = v8::String::new(scope, "autofocus").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_80).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_80).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: tabIndex
+    {
+        let name = v8::String::new(scope, "tabIndex").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_element_get_81).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_element_set_81).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: focus()
+    {
+        let name = v8::String::new(scope, "focus").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(math_ml_element_op_82).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blur()
+    {
+        let name = v8::String::new(scope, "blur").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(math_ml_element_op_83).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -40961,6 +50510,158 @@ unsafe extern "C" fn math_ml_anchor_element_set_2(_info: *const v8::FunctionCall
     // no-op setter stub
 }
 
+unsafe extern "C" fn math_ml_anchor_element_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_4(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_5(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_6(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_7(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_8(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_9(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_10(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_11(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_12(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_13(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn math_ml_anchor_element_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn math_ml_anchor_element_set_14(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for MathMLAnchorElement.
 pub fn create_math_ml_anchor_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -40991,6 +50692,89 @@ pub fn create_math_ml_anchor_element_template<'s>(
         let name = v8::String::new(scope, "target").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_2).build(scope);
         let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: origin
+    {
+        let name = v8::String::new(scope, "origin").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: protocol
+    {
+        let name = v8::String::new(scope, "protocol").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_4).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: username
+    {
+        let name = v8::String::new(scope, "username").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_5).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: password
+    {
+        let name = v8::String::new(scope, "password").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_6).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: host
+    {
+        let name = v8::String::new(scope, "host").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_7).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: hostname
+    {
+        let name = v8::String::new(scope, "hostname").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_8).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: port
+    {
+        let name = v8::String::new(scope, "port").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_9).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: pathname
+    {
+        let name = v8::String::new(scope, "pathname").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_10).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: search
+    {
+        let name = v8::String::new(scope, "search").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_11).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: hash
+    {
+        let name = v8::String::new(scope, "hash").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_12).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: hreflang
+    {
+        let name = v8::String::new(scope, "hreflang").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_13).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: type
+    {
+        let name = v8::String::new(scope, "type").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_get_14).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(math_ml_anchor_element_set_14).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 

@@ -824,6 +824,84 @@ unsafe extern "C" fn bluetooth_op_6(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn bluetooth_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_set_7(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_set_8(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_set_9(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_set_10(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_set_11(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_set_12(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for Bluetooth.
 pub fn create_bluetooth_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -883,6 +961,48 @@ pub fn create_bluetooth_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // attribute: onadvertisementreceived
+    {
+        let name = v8::String::new(scope, "onadvertisementreceived").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_7).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ongattserverdisconnected
+    {
+        let name = v8::String::new(scope, "ongattserverdisconnected").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_8).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncharacteristicvaluechanged
+    {
+        let name = v8::String::new(scope, "oncharacteristicvaluechanged").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_9).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onserviceadded
+    {
+        let name = v8::String::new(scope, "onserviceadded").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_10).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onservicechanged
+    {
+        let name = v8::String::new(scope, "onservicechanged").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_11).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onserviceremoved
+    {
+        let name = v8::String::new(scope, "onserviceremoved").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_12).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -941,6 +1061,84 @@ unsafe extern "C" fn bluetooth_device_get_6(_info: *const v8::FunctionCallbackIn
     }));
 }
 
+unsafe extern "C" fn bluetooth_device_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_device_set_7(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_device_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_device_set_8(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_device_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_device_set_9(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_device_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_device_set_10(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_device_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_device_set_11(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_device_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_device_set_12(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for BluetoothDevice.
 pub fn create_bluetooth_device_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -996,6 +1194,48 @@ pub fn create_bluetooth_device_template<'s>(
         let name = v8::String::new(scope, "watchingAdvertisements").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: onadvertisementreceived
+    {
+        let name = v8::String::new(scope, "onadvertisementreceived").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_7).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: ongattserverdisconnected
+    {
+        let name = v8::String::new(scope, "ongattserverdisconnected").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_8).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: oncharacteristicvaluechanged
+    {
+        let name = v8::String::new(scope, "oncharacteristicvaluechanged").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_9).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onserviceadded
+    {
+        let name = v8::String::new(scope, "onserviceadded").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_10).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onservicechanged
+    {
+        let name = v8::String::new(scope, "onservicechanged").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_11).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onserviceremoved
+    {
+        let name = v8::String::new(scope, "onserviceremoved").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_12).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -1109,6 +1349,19 @@ unsafe extern "C" fn bluetooth_remote_gatt_characteristic_op_12(_info: *const v8
     }));
 }
 
+unsafe extern "C" fn bluetooth_remote_gatt_characteristic_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_remote_gatt_characteristic_set_13(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for BluetoothRemoteGATTCharacteristic.
 pub fn create_bluetooth_remote_gatt_characteristic_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -1207,6 +1460,13 @@ pub fn create_bluetooth_remote_gatt_characteristic_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // attribute: oncharacteristicvaluechanged
+    {
+        let name = v8::String::new(scope, "oncharacteristicvaluechanged").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_13).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_set_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -1274,6 +1534,58 @@ unsafe extern "C" fn bluetooth_remote_gatt_service_op_7(_info: *const v8::Functi
     }));
 }
 
+unsafe extern "C" fn bluetooth_remote_gatt_service_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_remote_gatt_service_set_8(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_remote_gatt_service_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_remote_gatt_service_set_9(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_remote_gatt_service_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_remote_gatt_service_set_10(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn bluetooth_remote_gatt_service_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn bluetooth_remote_gatt_service_set_11(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for BluetoothRemoteGATTService.
 pub fn create_bluetooth_remote_gatt_service_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -1337,6 +1649,34 @@ pub fn create_bluetooth_remote_gatt_service_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_op_7).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: oncharacteristicvaluechanged
+    {
+        let name = v8::String::new(scope, "oncharacteristicvaluechanged").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_8).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_8).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onserviceadded
+    {
+        let name = v8::String::new(scope, "onserviceadded").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_9).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onservicechanged
+    {
+        let name = v8::String::new(scope, "onservicechanged").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_10).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onserviceremoved
+    {
+        let name = v8::String::new(scope, "onserviceremoved").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_11).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl

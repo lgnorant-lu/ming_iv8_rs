@@ -174,6 +174,42 @@ unsafe extern "C" fn css_pseudo_element_op_5(_info: *const v8::FunctionCallbackI
     }));
 }
 
+unsafe extern "C" fn css_pseudo_element_op_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn css_pseudo_element_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn css_pseudo_element_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn css_pseudo_element_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for CSSPseudoElement.
 pub fn create_css_pseudo_element_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -217,6 +253,34 @@ pub fn create_css_pseudo_element_template<'s>(
     {
         let name = v8::String::new(scope, "pseudo").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_pseudo_element_op_5).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getBoxQuads()
+    {
+        let name = v8::String::new(scope, "getBoxQuads").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(css_pseudo_element_op_6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: convertQuadFromNode()
+    {
+        let name = v8::String::new(scope, "convertQuadFromNode").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(css_pseudo_element_op_7).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: convertRectFromNode()
+    {
+        let name = v8::String::new(scope, "convertRectFromNode").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(css_pseudo_element_op_8).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: convertPointFromNode()
+    {
+        let name = v8::String::new(scope, "convertPointFromNode").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(css_pseudo_element_op_9).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

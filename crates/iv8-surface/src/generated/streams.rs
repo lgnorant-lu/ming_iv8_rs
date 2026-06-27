@@ -349,6 +349,24 @@ unsafe extern "C" fn readable_stream_byob_reader_op_2(_info: *const v8::Function
     }));
 }
 
+unsafe extern "C" fn readable_stream_byob_reader_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn readable_stream_byob_reader_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for ReadableStreamBYOBReader.
 pub fn create_readable_stream_byob_reader_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -375,6 +393,19 @@ pub fn create_readable_stream_byob_reader_template<'s>(
     {
         let name = v8::String::new(scope, "releaseLock").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(readable_stream_byob_reader_op_2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: closed
+    {
+        let name = v8::String::new(scope, "closed").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(readable_stream_byob_reader_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: cancel()
+    {
+        let name = v8::String::new(scope, "cancel").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(readable_stream_byob_reader_op_4).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -548,6 +579,24 @@ unsafe extern "C" fn readable_stream_default_reader_op_2(_info: *const v8::Funct
     }));
 }
 
+unsafe extern "C" fn readable_stream_default_reader_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn readable_stream_default_reader_op_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for ReadableStreamDefaultReader.
 pub fn create_readable_stream_default_reader_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -574,6 +623,19 @@ pub fn create_readable_stream_default_reader_template<'s>(
     {
         let name = v8::String::new(scope, "releaseLock").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(readable_stream_default_reader_op_2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: closed
+    {
+        let name = v8::String::new(scope, "closed").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(readable_stream_default_reader_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: cancel()
+    {
+        let name = v8::String::new(scope, "cancel").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(readable_stream_default_reader_op_4).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

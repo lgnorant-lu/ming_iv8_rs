@@ -263,6 +263,222 @@ unsafe extern "C" fn worker_navigator_get_6(_info: *const v8::FunctionCallbackIn
     }));
 }
 
+unsafe extern "C" fn worker_navigator_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Number::new(scope, 0.0).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_navigator_get_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for WorkerNavigator.
 pub fn create_worker_navigator_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -317,6 +533,152 @@ pub fn create_worker_navigator_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // method: setAppBadge()
+    {
+        let name = v8::String::new(scope, "setAppBadge").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_navigator_op_7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearAppBadge()
+    {
+        let name = v8::String::new(scope, "clearAppBadge").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_navigator_op_8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: deviceMemory
+    {
+        let name = v8::String::new(scope, "deviceMemory").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_9).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: globalPrivacyControl
+    {
+        let name = v8::String::new(scope, "globalPrivacyControl").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_10).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: appCodeName
+    {
+        let name = v8::String::new(scope, "appCodeName").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: appName
+    {
+        let name = v8::String::new(scope, "appName").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: appVersion
+    {
+        let name = v8::String::new(scope, "appVersion").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: platform
+    {
+        let name = v8::String::new(scope, "platform").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: product
+    {
+        let name = v8::String::new(scope, "product").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_15).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: productSub
+    {
+        let name = v8::String::new(scope, "productSub").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_16).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: userAgent
+    {
+        let name = v8::String::new(scope, "userAgent").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_17).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: vendor
+    {
+        let name = v8::String::new(scope, "vendor").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_18).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: vendorSub
+    {
+        let name = v8::String::new(scope, "vendorSub").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_19).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: language
+    {
+        let name = v8::String::new(scope, "language").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_20).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: languages
+    {
+        let name = v8::String::new(scope, "languages").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_21).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: onLine
+    {
+        let name = v8::String::new(scope, "onLine").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_22).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: hardwareConcurrency
+    {
+        let name = v8::String::new(scope, "hardwareConcurrency").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_23).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: connection
+    {
+        let name = v8::String::new(scope, "connection").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_24).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: storageBuckets
+    {
+        let name = v8::String::new(scope, "storageBuckets").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_25).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: storage
+    {
+        let name = v8::String::new(scope, "storage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_26).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: userAgentData
+    {
+        let name = v8::String::new(scope, "userAgentData").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_27).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: locks
+    {
+        let name = v8::String::new(scope, "locks").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_28).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: gpu
+    {
+        let name = v8::String::new(scope, "gpu").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_29).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: ml
+    {
+        let name = v8::String::new(scope, "ml").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_navigator_get_30).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -367,6 +729,32 @@ unsafe extern "C" fn message_port_get_5(_info: *const v8::FunctionCallbackInfo) 
 }
 
 unsafe extern "C" fn message_port_set_5(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn message_port_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn message_port_set_6(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn message_port_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn message_port_set_7(_info: *const v8::FunctionCallbackInfo) {
     // no-op setter stub
 }
 
@@ -423,6 +811,20 @@ pub fn create_message_port_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(message_port_set_5).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+    // attribute: onmessage
+    {
+        let name = v8::String::new(scope, "onmessage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(message_port_get_6).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(message_port_set_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmessageerror
+    {
+        let name = v8::String::new(scope, "onmessageerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(message_port_get_7).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(message_port_set_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -476,6 +878,19 @@ unsafe extern "C" fn service_worker_set_5(_info: *const v8::FunctionCallbackInfo
     // no-op setter stub
 }
 
+unsafe extern "C" fn service_worker_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn service_worker_set_6(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
 /// Create FunctionTemplate for ServiceWorker.
 pub fn create_service_worker_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -525,6 +940,13 @@ pub fn create_service_worker_template<'s>(
         let name = v8::String::new(scope, "onstatechange").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(service_worker_get_5).build(scope);
         let setter = v8::FunctionTemplate::builder_raw(service_worker_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onerror
+    {
+        let name = v8::String::new(scope, "onerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(service_worker_get_6).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(service_worker_set_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -864,6 +1286,15 @@ unsafe extern "C" fn service_worker_registration_get_17(_info: *const v8::Functi
     }));
 }
 
+unsafe extern "C" fn service_worker_registration_get_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for ServiceWorkerRegistration.
 pub fn create_service_worker_registration_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -989,6 +1420,12 @@ pub fn create_service_worker_registration_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(service_worker_registration_get_17).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+    // attribute: pushManager
+    {
+        let name = v8::String::new(scope, "pushManager").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(service_worker_registration_get_18).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
 }
@@ -1018,6 +1455,45 @@ unsafe extern "C" fn worker_op_3(_info: *const v8::FunctionCallbackInfo) {
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
+}
+
+unsafe extern "C" fn worker_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_set_4(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn worker_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_set_5(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn worker_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_set_6(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
 }
 
 /// Create FunctionTemplate for Worker.
@@ -1058,6 +1534,27 @@ pub fn create_worker_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(worker_op_3).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    // attribute: onerror
+    {
+        let name = v8::String::new(scope, "onerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_get_4).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(worker_set_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmessage
+    {
+        let name = v8::String::new(scope, "onmessage").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_get_5).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(worker_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: onmessageerror
+    {
+        let name = v8::String::new(scope, "onmessageerror").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_get_6).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(worker_set_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -1177,6 +1674,132 @@ unsafe extern "C" fn worker_global_scope_set_10(_info: *const v8::FunctionCallba
     // no-op setter stub
 }
 
+unsafe extern "C" fn worker_global_scope_get_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_get_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_get_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_get_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Integer::new(scope, 0).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn worker_global_scope_op_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for WorkerGlobalScope.
 pub fn create_worker_global_scope_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -1261,6 +1884,100 @@ pub fn create_worker_global_scope_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_10).build(scope);
         let setter = v8::FunctionTemplate::builder_raw(worker_global_scope_set_10).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: fonts
+    {
+        let name = v8::String::new(scope, "fonts").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_11).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: origin
+    {
+        let name = v8::String::new(scope, "origin").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_12).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: isSecureContext
+    {
+        let name = v8::String::new(scope, "isSecureContext").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_13).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: crossOriginIsolated
+    {
+        let name = v8::String::new(scope, "crossOriginIsolated").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(worker_global_scope_get_14).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // method: reportError()
+    {
+        let name = v8::String::new(scope, "reportError").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_15).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: btoa()
+    {
+        let name = v8::String::new(scope, "btoa").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_16).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: atob()
+    {
+        let name = v8::String::new(scope, "atob").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_17).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: setTimeout()
+    {
+        let name = v8::String::new(scope, "setTimeout").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_18).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearTimeout()
+    {
+        let name = v8::String::new(scope, "clearTimeout").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_19).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: setInterval()
+    {
+        let name = v8::String::new(scope, "setInterval").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_20).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearInterval()
+    {
+        let name = v8::String::new(scope, "clearInterval").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_21).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: queueMicrotask()
+    {
+        let name = v8::String::new(scope, "queueMicrotask").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_22).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createImageBitmap()
+    {
+        let name = v8::String::new(scope, "createImageBitmap").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_23).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: structuredClone()
+    {
+        let name = v8::String::new(scope, "structuredClone").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(worker_global_scope_op_24).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl

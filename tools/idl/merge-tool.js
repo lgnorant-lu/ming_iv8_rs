@@ -42,7 +42,7 @@ function collectAndGroup(inputFiles) {
         continue;
       }
 
-      if (def.kind === "interface" || def.kind === "namespace" || def.kind === "dictionary") {
+      if (def.kind === "interface" || def.kind === "interface_mixin" || def.kind === "namespace" || def.kind === "dictionary") {
         const key = def.name;
         let group = byName.get(key);
         if (!group) {
@@ -51,7 +51,15 @@ function collectAndGroup(inputFiles) {
         }
 
         if (def.kind === "interface_mixin") {
-          group.mixins.push(def);
+          if (def.partial) {
+            group.partials.push(def);
+          } else {
+            if (group.primary) {
+              group.partials.push(def);
+            } else {
+              group.primary = def;
+            }
+          }
         } else if (def.partial) {
           group.partials.push(def);
         } else {

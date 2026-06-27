@@ -226,6 +226,24 @@ unsafe extern "C" fn xr_depth_information_get_4(_info: *const v8::FunctionCallba
     }));
 }
 
+unsafe extern "C" fn xr_depth_information_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::default_value_for_type(scope, "Float32Array"));
+    }));
+}
+
+unsafe extern "C" fn xr_depth_information_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for XRDepthInformation.
 pub fn create_xr_depth_information_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -263,6 +281,18 @@ pub fn create_xr_depth_information_template<'s>(
     {
         let name = v8::String::new(scope, "rawValueToMeters").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(xr_depth_information_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: projectionMatrix
+    {
+        let name = v8::String::new(scope, "projectionMatrix").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(xr_depth_information_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: transform
+    {
+        let name = v8::String::new(scope, "transform").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(xr_depth_information_get_6).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1723,6 +1753,24 @@ unsafe extern "C" fn xr_view_get_6(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn xr_view_get_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::default_value_for_type(scope, "Float32Array"));
+    }));
+}
+
+unsafe extern "C" fn xr_view_get_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for XRView.
 pub fn create_xr_view_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -1773,6 +1821,18 @@ pub fn create_xr_view_template<'s>(
     {
         let name = v8::String::new(scope, "isFirstPersonObserver").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(xr_view_get_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: projectionMatrix
+    {
+        let name = v8::String::new(scope, "projectionMatrix").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(xr_view_get_7).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: transform
+    {
+        let name = v8::String::new(scope, "transform").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(xr_view_get_8).build(scope);
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

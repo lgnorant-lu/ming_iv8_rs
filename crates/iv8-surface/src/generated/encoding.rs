@@ -15,6 +15,33 @@ unsafe extern "C" fn text_decoder_op_1(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn text_decoder_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn text_decoder_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn text_decoder_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
 /// Create FunctionTemplate for TextDecoder.
 pub fn create_text_decoder_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -37,8 +64,71 @@ pub fn create_text_decoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // attribute: encoding
+    {
+        let name = v8::String::new(scope, "encoding").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: fatal
+    {
+        let name = v8::String::new(scope, "fatal").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: ignoreBOM
+    {
+        let name = v8::String::new(scope, "ignoreBOM").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
+}
+
+unsafe extern "C" fn text_decoder_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn text_decoder_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn text_decoder_stream_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn text_decoder_stream_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn text_decoder_stream_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for TextDecoderStream.
@@ -55,6 +145,36 @@ pub fn create_text_decoder_stream_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextDecoderStream").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: encoding
+    {
+        let name = v8::String::new(scope, "encoding").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: fatal
+    {
+        let name = v8::String::new(scope, "fatal").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: ignoreBOM
+    {
+        let name = v8::String::new(scope, "ignoreBOM").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: readable
+    {
+        let name = v8::String::new(scope, "readable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: writable
+    {
+        let name = v8::String::new(scope, "writable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -75,6 +195,15 @@ unsafe extern "C" fn text_encoder_op_2(_info: *const v8::FunctionCallbackInfo) {
         v8::callback_scope!(unsafe scope, info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn text_encoder_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
     }));
 }
 
@@ -107,8 +236,41 @@ pub fn create_text_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+    // attribute: encoding
+    {
+        let name = v8::String::new(scope, "encoding").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_encoder_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
 
     tmpl
+}
+
+unsafe extern "C" fn text_encoder_stream_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn text_encoder_stream_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn text_encoder_stream_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
 }
 
 /// Create FunctionTemplate for TextEncoderStream.
@@ -125,6 +287,24 @@ pub fn create_text_encoder_stream_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextEncoderStream").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // attribute: encoding
+    {
+        let name = v8::String::new(scope, "encoding").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: readable
+    {
+        let name = v8::String::new(scope, "readable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: writable
+    {
+        let name = v8::String::new(scope, "writable").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
     tmpl

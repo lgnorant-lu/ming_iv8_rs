@@ -6,6 +6,2093 @@ use super::{construct_only, illegal_constructor};
 use v8::Local;
 use v8::FunctionTemplate;
 
+unsafe extern "C" fn web_gl2rendering_context_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_set_5(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn web_gl2rendering_context_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_set_6(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_53(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_54(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_55(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_56(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_57(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_58(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_61(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_62(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_63(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_64(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_65(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_66(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_67(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_68(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_69(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_70(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_71(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_72(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_73(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_74(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_75(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_76(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_77(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_78(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_79(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_80(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_81(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_82(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_83(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_84(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_85(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_86(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_87(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_88(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_89(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_90(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_91(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_92(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_93(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_94(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_95(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_96(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_97(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_98(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_99(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_100(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_101(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_102(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_103(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_104(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_105(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_106(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_107(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_108(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_109(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_110(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_111(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_112(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_113(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_114(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_115(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_116(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_117(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_118(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_119(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_120(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_121(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_122(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_123(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_124(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_125(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_126(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_127(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_128(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_129(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_130(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_131(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_132(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_133(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_134(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_135(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_136(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_137(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_138(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_139(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_140(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_141(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_142(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_143(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_144(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_145(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_146(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_147(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_148(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_149(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_150(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_151(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_152(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_153(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_154(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_155(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_156(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_157(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_158(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_159(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_160(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_161(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_162(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_163(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_164(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_165(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_166(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_167(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_168(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_169(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_170(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_171(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_172(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_173(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_174(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_175(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_176(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_177(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_178(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_179(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_180(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_181(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_182(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_183(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_184(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_185(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_186(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_187(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_188(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_189(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_190(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_191(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_192(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_193(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_194(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_195(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_196(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_197(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_198(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_199(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_200(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_201(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_202(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_203(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_204(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_205(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_206(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_207(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_208(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_209(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_210(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_211(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_212(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_213(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_214(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_215(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_216(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_217(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_218(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_219(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_220(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_221(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_222(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_223(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_224(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_225(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_226(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_227(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_228(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_229(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_230(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl2rendering_context_op_231(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for WebGL2RenderingContext.
 pub fn create_web_gl2rendering_context_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -20,6 +2107,4973 @@ pub fn create_web_gl2rendering_context_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGL2RenderingContext").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // const: DEPTH_BUFFER_BIT
+    {
+        let name = v8::String::new(scope, "DEPTH_BUFFER_BIT").unwrap();
+        let val = v8::Number::new(scope, 256.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BUFFER_BIT
+    {
+        let name = v8::String::new(scope, "STENCIL_BUFFER_BIT").unwrap();
+        let val = v8::Number::new(scope, 1024.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_BUFFER_BIT
+    {
+        let name = v8::String::new(scope, "COLOR_BUFFER_BIT").unwrap();
+        let val = v8::Number::new(scope, 16384.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: POINTS
+    {
+        let name = v8::String::new(scope, "POINTS").unwrap();
+        let val = v8::Number::new(scope, 0.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINES
+    {
+        let name = v8::String::new(scope, "LINES").unwrap();
+        let val = v8::Number::new(scope, 1.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINE_LOOP
+    {
+        let name = v8::String::new(scope, "LINE_LOOP").unwrap();
+        let val = v8::Number::new(scope, 2.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINE_STRIP
+    {
+        let name = v8::String::new(scope, "LINE_STRIP").unwrap();
+        let val = v8::Number::new(scope, 3.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRIANGLES
+    {
+        let name = v8::String::new(scope, "TRIANGLES").unwrap();
+        let val = v8::Number::new(scope, 4.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRIANGLE_STRIP
+    {
+        let name = v8::String::new(scope, "TRIANGLE_STRIP").unwrap();
+        let val = v8::Number::new(scope, 5.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRIANGLE_FAN
+    {
+        let name = v8::String::new(scope, "TRIANGLE_FAN").unwrap();
+        let val = v8::Number::new(scope, 6.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ZERO
+    {
+        let name = v8::String::new(scope, "ZERO").unwrap();
+        let val = v8::Number::new(scope, 0.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE
+    {
+        let name = v8::String::new(scope, "ONE").unwrap();
+        let val = v8::Number::new(scope, 1.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRC_COLOR
+    {
+        let name = v8::String::new(scope, "SRC_COLOR").unwrap();
+        let val = v8::Number::new(scope, 768.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_SRC_COLOR
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_SRC_COLOR").unwrap();
+        let val = v8::Number::new(scope, 769.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRC_ALPHA
+    {
+        let name = v8::String::new(scope, "SRC_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 770.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_SRC_ALPHA
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_SRC_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 771.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DST_ALPHA
+    {
+        let name = v8::String::new(scope, "DST_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 772.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_DST_ALPHA
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_DST_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 773.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DST_COLOR
+    {
+        let name = v8::String::new(scope, "DST_COLOR").unwrap();
+        let val = v8::Number::new(scope, 774.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_DST_COLOR
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_DST_COLOR").unwrap();
+        let val = v8::Number::new(scope, 775.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRC_ALPHA_SATURATE
+    {
+        let name = v8::String::new(scope, "SRC_ALPHA_SATURATE").unwrap();
+        let val = v8::Number::new(scope, 776.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FUNC_ADD
+    {
+        let name = v8::String::new(scope, "FUNC_ADD").unwrap();
+        let val = v8::Number::new(scope, 32774.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_EQUATION
+    {
+        let name = v8::String::new(scope, "BLEND_EQUATION").unwrap();
+        let val = v8::Number::new(scope, 32777.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_EQUATION_RGB
+    {
+        let name = v8::String::new(scope, "BLEND_EQUATION_RGB").unwrap();
+        let val = v8::Number::new(scope, 32777.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_EQUATION_ALPHA
+    {
+        let name = v8::String::new(scope, "BLEND_EQUATION_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 34877.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FUNC_SUBTRACT
+    {
+        let name = v8::String::new(scope, "FUNC_SUBTRACT").unwrap();
+        let val = v8::Number::new(scope, 32778.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FUNC_REVERSE_SUBTRACT
+    {
+        let name = v8::String::new(scope, "FUNC_REVERSE_SUBTRACT").unwrap();
+        let val = v8::Number::new(scope, 32779.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_DST_RGB
+    {
+        let name = v8::String::new(scope, "BLEND_DST_RGB").unwrap();
+        let val = v8::Number::new(scope, 32968.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_SRC_RGB
+    {
+        let name = v8::String::new(scope, "BLEND_SRC_RGB").unwrap();
+        let val = v8::Number::new(scope, 32969.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_DST_ALPHA
+    {
+        let name = v8::String::new(scope, "BLEND_DST_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 32970.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_SRC_ALPHA
+    {
+        let name = v8::String::new(scope, "BLEND_SRC_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 32971.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CONSTANT_COLOR
+    {
+        let name = v8::String::new(scope, "CONSTANT_COLOR").unwrap();
+        let val = v8::Number::new(scope, 32769.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_CONSTANT_COLOR
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_CONSTANT_COLOR").unwrap();
+        let val = v8::Number::new(scope, 32770.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CONSTANT_ALPHA
+    {
+        let name = v8::String::new(scope, "CONSTANT_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 32771.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_CONSTANT_ALPHA
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_CONSTANT_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 32772.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_COLOR
+    {
+        let name = v8::String::new(scope, "BLEND_COLOR").unwrap();
+        let val = v8::Number::new(scope, 32773.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ARRAY_BUFFER
+    {
+        let name = v8::String::new(scope, "ARRAY_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 34962.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ELEMENT_ARRAY_BUFFER
+    {
+        let name = v8::String::new(scope, "ELEMENT_ARRAY_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 34963.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ARRAY_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "ARRAY_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 34964.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ELEMENT_ARRAY_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "ELEMENT_ARRAY_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 34965.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STREAM_DRAW
+    {
+        let name = v8::String::new(scope, "STREAM_DRAW").unwrap();
+        let val = v8::Number::new(scope, 35040.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STATIC_DRAW
+    {
+        let name = v8::String::new(scope, "STATIC_DRAW").unwrap();
+        let val = v8::Number::new(scope, 35044.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DYNAMIC_DRAW
+    {
+        let name = v8::String::new(scope, "DYNAMIC_DRAW").unwrap();
+        let val = v8::Number::new(scope, 35048.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BUFFER_SIZE
+    {
+        let name = v8::String::new(scope, "BUFFER_SIZE").unwrap();
+        let val = v8::Number::new(scope, 34660.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BUFFER_USAGE
+    {
+        let name = v8::String::new(scope, "BUFFER_USAGE").unwrap();
+        let val = v8::Number::new(scope, 34661.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CURRENT_VERTEX_ATTRIB
+    {
+        let name = v8::String::new(scope, "CURRENT_VERTEX_ATTRIB").unwrap();
+        let val = v8::Number::new(scope, 34342.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRONT
+    {
+        let name = v8::String::new(scope, "FRONT").unwrap();
+        let val = v8::Number::new(scope, 1028.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BACK
+    {
+        let name = v8::String::new(scope, "BACK").unwrap();
+        let val = v8::Number::new(scope, 1029.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRONT_AND_BACK
+    {
+        let name = v8::String::new(scope, "FRONT_AND_BACK").unwrap();
+        let val = v8::Number::new(scope, 1032.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CULL_FACE
+    {
+        let name = v8::String::new(scope, "CULL_FACE").unwrap();
+        let val = v8::Number::new(scope, 2884.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND
+    {
+        let name = v8::String::new(scope, "BLEND").unwrap();
+        let val = v8::Number::new(scope, 3042.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DITHER
+    {
+        let name = v8::String::new(scope, "DITHER").unwrap();
+        let val = v8::Number::new(scope, 3024.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_TEST
+    {
+        let name = v8::String::new(scope, "STENCIL_TEST").unwrap();
+        let val = v8::Number::new(scope, 2960.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_TEST
+    {
+        let name = v8::String::new(scope, "DEPTH_TEST").unwrap();
+        let val = v8::Number::new(scope, 2929.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SCISSOR_TEST
+    {
+        let name = v8::String::new(scope, "SCISSOR_TEST").unwrap();
+        let val = v8::Number::new(scope, 3089.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: POLYGON_OFFSET_FILL
+    {
+        let name = v8::String::new(scope, "POLYGON_OFFSET_FILL").unwrap();
+        let val = v8::Number::new(scope, 32823.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_ALPHA_TO_COVERAGE
+    {
+        let name = v8::String::new(scope, "SAMPLE_ALPHA_TO_COVERAGE").unwrap();
+        let val = v8::Number::new(scope, 32926.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_COVERAGE
+    {
+        let name = v8::String::new(scope, "SAMPLE_COVERAGE").unwrap();
+        let val = v8::Number::new(scope, 32928.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NO_ERROR
+    {
+        let name = v8::String::new(scope, "NO_ERROR").unwrap();
+        let val = v8::Number::new(scope, 0.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_ENUM
+    {
+        let name = v8::String::new(scope, "INVALID_ENUM").unwrap();
+        let val = v8::Number::new(scope, 1280.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_VALUE
+    {
+        let name = v8::String::new(scope, "INVALID_VALUE").unwrap();
+        let val = v8::Number::new(scope, 1281.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_OPERATION
+    {
+        let name = v8::String::new(scope, "INVALID_OPERATION").unwrap();
+        let val = v8::Number::new(scope, 1282.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: OUT_OF_MEMORY
+    {
+        let name = v8::String::new(scope, "OUT_OF_MEMORY").unwrap();
+        let val = v8::Number::new(scope, 1285.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CW
+    {
+        let name = v8::String::new(scope, "CW").unwrap();
+        let val = v8::Number::new(scope, 2304.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CCW
+    {
+        let name = v8::String::new(scope, "CCW").unwrap();
+        let val = v8::Number::new(scope, 2305.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINE_WIDTH
+    {
+        let name = v8::String::new(scope, "LINE_WIDTH").unwrap();
+        let val = v8::Number::new(scope, 2849.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALIASED_POINT_SIZE_RANGE
+    {
+        let name = v8::String::new(scope, "ALIASED_POINT_SIZE_RANGE").unwrap();
+        let val = v8::Number::new(scope, 33901.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALIASED_LINE_WIDTH_RANGE
+    {
+        let name = v8::String::new(scope, "ALIASED_LINE_WIDTH_RANGE").unwrap();
+        let val = v8::Number::new(scope, 33902.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CULL_FACE_MODE
+    {
+        let name = v8::String::new(scope, "CULL_FACE_MODE").unwrap();
+        let val = v8::Number::new(scope, 2885.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRONT_FACE
+    {
+        let name = v8::String::new(scope, "FRONT_FACE").unwrap();
+        let val = v8::Number::new(scope, 2886.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_RANGE
+    {
+        let name = v8::String::new(scope, "DEPTH_RANGE").unwrap();
+        let val = v8::Number::new(scope, 2928.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_WRITEMASK
+    {
+        let name = v8::String::new(scope, "DEPTH_WRITEMASK").unwrap();
+        let val = v8::Number::new(scope, 2930.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_CLEAR_VALUE
+    {
+        let name = v8::String::new(scope, "DEPTH_CLEAR_VALUE").unwrap();
+        let val = v8::Number::new(scope, 2931.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_FUNC
+    {
+        let name = v8::String::new(scope, "DEPTH_FUNC").unwrap();
+        let val = v8::Number::new(scope, 2932.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_CLEAR_VALUE
+    {
+        let name = v8::String::new(scope, "STENCIL_CLEAR_VALUE").unwrap();
+        let val = v8::Number::new(scope, 2961.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_FUNC
+    {
+        let name = v8::String::new(scope, "STENCIL_FUNC").unwrap();
+        let val = v8::Number::new(scope, 2962.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_FAIL
+    {
+        let name = v8::String::new(scope, "STENCIL_FAIL").unwrap();
+        let val = v8::Number::new(scope, 2964.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_PASS_DEPTH_FAIL
+    {
+        let name = v8::String::new(scope, "STENCIL_PASS_DEPTH_FAIL").unwrap();
+        let val = v8::Number::new(scope, 2965.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_PASS_DEPTH_PASS
+    {
+        let name = v8::String::new(scope, "STENCIL_PASS_DEPTH_PASS").unwrap();
+        let val = v8::Number::new(scope, 2966.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_REF
+    {
+        let name = v8::String::new(scope, "STENCIL_REF").unwrap();
+        let val = v8::Number::new(scope, 2967.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_VALUE_MASK
+    {
+        let name = v8::String::new(scope, "STENCIL_VALUE_MASK").unwrap();
+        let val = v8::Number::new(scope, 2963.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_WRITEMASK
+    {
+        let name = v8::String::new(scope, "STENCIL_WRITEMASK").unwrap();
+        let val = v8::Number::new(scope, 2968.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_FUNC
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_FUNC").unwrap();
+        let val = v8::Number::new(scope, 34816.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_FAIL
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_FAIL").unwrap();
+        let val = v8::Number::new(scope, 34817.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_PASS_DEPTH_FAIL
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_PASS_DEPTH_FAIL").unwrap();
+        let val = v8::Number::new(scope, 34818.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_PASS_DEPTH_PASS
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_PASS_DEPTH_PASS").unwrap();
+        let val = v8::Number::new(scope, 34819.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_REF
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_REF").unwrap();
+        let val = v8::Number::new(scope, 36003.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_VALUE_MASK
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_VALUE_MASK").unwrap();
+        let val = v8::Number::new(scope, 36004.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_WRITEMASK
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_WRITEMASK").unwrap();
+        let val = v8::Number::new(scope, 36005.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VIEWPORT
+    {
+        let name = v8::String::new(scope, "VIEWPORT").unwrap();
+        let val = v8::Number::new(scope, 2978.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SCISSOR_BOX
+    {
+        let name = v8::String::new(scope, "SCISSOR_BOX").unwrap();
+        let val = v8::Number::new(scope, 3088.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_CLEAR_VALUE
+    {
+        let name = v8::String::new(scope, "COLOR_CLEAR_VALUE").unwrap();
+        let val = v8::Number::new(scope, 3106.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_WRITEMASK
+    {
+        let name = v8::String::new(scope, "COLOR_WRITEMASK").unwrap();
+        let val = v8::Number::new(scope, 3107.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_ALIGNMENT
+    {
+        let name = v8::String::new(scope, "UNPACK_ALIGNMENT").unwrap();
+        let val = v8::Number::new(scope, 3317.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PACK_ALIGNMENT
+    {
+        let name = v8::String::new(scope, "PACK_ALIGNMENT").unwrap();
+        let val = v8::Number::new(scope, 3333.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_TEXTURE_SIZE
+    {
+        let name = v8::String::new(scope, "MAX_TEXTURE_SIZE").unwrap();
+        let val = v8::Number::new(scope, 3379.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VIEWPORT_DIMS
+    {
+        let name = v8::String::new(scope, "MAX_VIEWPORT_DIMS").unwrap();
+        let val = v8::Number::new(scope, 3386.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SUBPIXEL_BITS
+    {
+        let name = v8::String::new(scope, "SUBPIXEL_BITS").unwrap();
+        let val = v8::Number::new(scope, 3408.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RED_BITS
+    {
+        let name = v8::String::new(scope, "RED_BITS").unwrap();
+        let val = v8::Number::new(scope, 3410.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: GREEN_BITS
+    {
+        let name = v8::String::new(scope, "GREEN_BITS").unwrap();
+        let val = v8::Number::new(scope, 3411.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLUE_BITS
+    {
+        let name = v8::String::new(scope, "BLUE_BITS").unwrap();
+        let val = v8::Number::new(scope, 3412.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALPHA_BITS
+    {
+        let name = v8::String::new(scope, "ALPHA_BITS").unwrap();
+        let val = v8::Number::new(scope, 3413.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_BITS
+    {
+        let name = v8::String::new(scope, "DEPTH_BITS").unwrap();
+        let val = v8::Number::new(scope, 3414.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BITS
+    {
+        let name = v8::String::new(scope, "STENCIL_BITS").unwrap();
+        let val = v8::Number::new(scope, 3415.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: POLYGON_OFFSET_UNITS
+    {
+        let name = v8::String::new(scope, "POLYGON_OFFSET_UNITS").unwrap();
+        let val = v8::Number::new(scope, 10752.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: POLYGON_OFFSET_FACTOR
+    {
+        let name = v8::String::new(scope, "POLYGON_OFFSET_FACTOR").unwrap();
+        let val = v8::Number::new(scope, 32824.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_BINDING_2D
+    {
+        let name = v8::String::new(scope, "TEXTURE_BINDING_2D").unwrap();
+        let val = v8::Number::new(scope, 32873.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_BUFFERS
+    {
+        let name = v8::String::new(scope, "SAMPLE_BUFFERS").unwrap();
+        let val = v8::Number::new(scope, 32936.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLES
+    {
+        let name = v8::String::new(scope, "SAMPLES").unwrap();
+        let val = v8::Number::new(scope, 32937.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_COVERAGE_VALUE
+    {
+        let name = v8::String::new(scope, "SAMPLE_COVERAGE_VALUE").unwrap();
+        let val = v8::Number::new(scope, 32938.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_COVERAGE_INVERT
+    {
+        let name = v8::String::new(scope, "SAMPLE_COVERAGE_INVERT").unwrap();
+        let val = v8::Number::new(scope, 32939.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COMPRESSED_TEXTURE_FORMATS
+    {
+        let name = v8::String::new(scope, "COMPRESSED_TEXTURE_FORMATS").unwrap();
+        let val = v8::Number::new(scope, 34467.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DONT_CARE
+    {
+        let name = v8::String::new(scope, "DONT_CARE").unwrap();
+        let val = v8::Number::new(scope, 4352.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FASTEST
+    {
+        let name = v8::String::new(scope, "FASTEST").unwrap();
+        let val = v8::Number::new(scope, 4353.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NICEST
+    {
+        let name = v8::String::new(scope, "NICEST").unwrap();
+        let val = v8::Number::new(scope, 4354.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: GENERATE_MIPMAP_HINT
+    {
+        let name = v8::String::new(scope, "GENERATE_MIPMAP_HINT").unwrap();
+        let val = v8::Number::new(scope, 33170.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BYTE
+    {
+        let name = v8::String::new(scope, "BYTE").unwrap();
+        let val = v8::Number::new(scope, 5120.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_BYTE
+    {
+        let name = v8::String::new(scope, "UNSIGNED_BYTE").unwrap();
+        let val = v8::Number::new(scope, 5121.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SHORT
+    {
+        let name = v8::String::new(scope, "SHORT").unwrap();
+        let val = v8::Number::new(scope, 5122.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_SHORT
+    {
+        let name = v8::String::new(scope, "UNSIGNED_SHORT").unwrap();
+        let val = v8::Number::new(scope, 5123.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT
+    {
+        let name = v8::String::new(scope, "INT").unwrap();
+        let val = v8::Number::new(scope, 5124.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT").unwrap();
+        let val = v8::Number::new(scope, 5125.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT
+    {
+        let name = v8::String::new(scope, "FLOAT").unwrap();
+        let val = v8::Number::new(scope, 5126.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_COMPONENT
+    {
+        let name = v8::String::new(scope, "DEPTH_COMPONENT").unwrap();
+        let val = v8::Number::new(scope, 6402.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALPHA
+    {
+        let name = v8::String::new(scope, "ALPHA").unwrap();
+        let val = v8::Number::new(scope, 6406.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB
+    {
+        let name = v8::String::new(scope, "RGB").unwrap();
+        let val = v8::Number::new(scope, 6407.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA
+    {
+        let name = v8::String::new(scope, "RGBA").unwrap();
+        let val = v8::Number::new(scope, 6408.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LUMINANCE
+    {
+        let name = v8::String::new(scope, "LUMINANCE").unwrap();
+        let val = v8::Number::new(scope, 6409.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LUMINANCE_ALPHA
+    {
+        let name = v8::String::new(scope, "LUMINANCE_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 6410.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_SHORT_4_4_4_4
+    {
+        let name = v8::String::new(scope, "UNSIGNED_SHORT_4_4_4_4").unwrap();
+        let val = v8::Number::new(scope, 32819.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_SHORT_5_5_5_1
+    {
+        let name = v8::String::new(scope, "UNSIGNED_SHORT_5_5_5_1").unwrap();
+        let val = v8::Number::new(scope, 32820.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_SHORT_5_6_5
+    {
+        let name = v8::String::new(scope, "UNSIGNED_SHORT_5_6_5").unwrap();
+        let val = v8::Number::new(scope, 33635.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAGMENT_SHADER
+    {
+        let name = v8::String::new(scope, "FRAGMENT_SHADER").unwrap();
+        let val = v8::Number::new(scope, 35632.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_SHADER
+    {
+        let name = v8::String::new(scope, "VERTEX_SHADER").unwrap();
+        let val = v8::Number::new(scope, 35633.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_ATTRIBS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_ATTRIBS").unwrap();
+        let val = v8::Number::new(scope, 34921.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_UNIFORM_VECTORS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_UNIFORM_VECTORS").unwrap();
+        let val = v8::Number::new(scope, 36347.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VARYING_VECTORS
+    {
+        let name = v8::String::new(scope, "MAX_VARYING_VECTORS").unwrap();
+        let val = v8::Number::new(scope, 36348.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_COMBINED_TEXTURE_IMAGE_UNITS
+    {
+        let name = v8::String::new(scope, "MAX_COMBINED_TEXTURE_IMAGE_UNITS").unwrap();
+        let val = v8::Number::new(scope, 35661.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_TEXTURE_IMAGE_UNITS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_TEXTURE_IMAGE_UNITS").unwrap();
+        let val = v8::Number::new(scope, 35660.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_TEXTURE_IMAGE_UNITS
+    {
+        let name = v8::String::new(scope, "MAX_TEXTURE_IMAGE_UNITS").unwrap();
+        let val = v8::Number::new(scope, 34930.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_FRAGMENT_UNIFORM_VECTORS
+    {
+        let name = v8::String::new(scope, "MAX_FRAGMENT_UNIFORM_VECTORS").unwrap();
+        let val = v8::Number::new(scope, 36349.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SHADER_TYPE
+    {
+        let name = v8::String::new(scope, "SHADER_TYPE").unwrap();
+        let val = v8::Number::new(scope, 35663.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DELETE_STATUS
+    {
+        let name = v8::String::new(scope, "DELETE_STATUS").unwrap();
+        let val = v8::Number::new(scope, 35712.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINK_STATUS
+    {
+        let name = v8::String::new(scope, "LINK_STATUS").unwrap();
+        let val = v8::Number::new(scope, 35714.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VALIDATE_STATUS
+    {
+        let name = v8::String::new(scope, "VALIDATE_STATUS").unwrap();
+        let val = v8::Number::new(scope, 35715.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ATTACHED_SHADERS
+    {
+        let name = v8::String::new(scope, "ATTACHED_SHADERS").unwrap();
+        let val = v8::Number::new(scope, 35717.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ACTIVE_UNIFORMS
+    {
+        let name = v8::String::new(scope, "ACTIVE_UNIFORMS").unwrap();
+        let val = v8::Number::new(scope, 35718.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ACTIVE_ATTRIBUTES
+    {
+        let name = v8::String::new(scope, "ACTIVE_ATTRIBUTES").unwrap();
+        let val = v8::Number::new(scope, 35721.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SHADING_LANGUAGE_VERSION
+    {
+        let name = v8::String::new(scope, "SHADING_LANGUAGE_VERSION").unwrap();
+        let val = v8::Number::new(scope, 35724.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CURRENT_PROGRAM
+    {
+        let name = v8::String::new(scope, "CURRENT_PROGRAM").unwrap();
+        let val = v8::Number::new(scope, 35725.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NEVER
+    {
+        let name = v8::String::new(scope, "NEVER").unwrap();
+        let val = v8::Number::new(scope, 512.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LESS
+    {
+        let name = v8::String::new(scope, "LESS").unwrap();
+        let val = v8::Number::new(scope, 513.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: EQUAL
+    {
+        let name = v8::String::new(scope, "EQUAL").unwrap();
+        let val = v8::Number::new(scope, 514.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LEQUAL
+    {
+        let name = v8::String::new(scope, "LEQUAL").unwrap();
+        let val = v8::Number::new(scope, 515.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: GREATER
+    {
+        let name = v8::String::new(scope, "GREATER").unwrap();
+        let val = v8::Number::new(scope, 516.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NOTEQUAL
+    {
+        let name = v8::String::new(scope, "NOTEQUAL").unwrap();
+        let val = v8::Number::new(scope, 517.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: GEQUAL
+    {
+        let name = v8::String::new(scope, "GEQUAL").unwrap();
+        let val = v8::Number::new(scope, 518.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALWAYS
+    {
+        let name = v8::String::new(scope, "ALWAYS").unwrap();
+        let val = v8::Number::new(scope, 519.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: KEEP
+    {
+        let name = v8::String::new(scope, "KEEP").unwrap();
+        let val = v8::Number::new(scope, 7680.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: REPLACE
+    {
+        let name = v8::String::new(scope, "REPLACE").unwrap();
+        let val = v8::Number::new(scope, 7681.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INCR
+    {
+        let name = v8::String::new(scope, "INCR").unwrap();
+        let val = v8::Number::new(scope, 7682.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DECR
+    {
+        let name = v8::String::new(scope, "DECR").unwrap();
+        let val = v8::Number::new(scope, 7683.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVERT
+    {
+        let name = v8::String::new(scope, "INVERT").unwrap();
+        let val = v8::Number::new(scope, 5386.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INCR_WRAP
+    {
+        let name = v8::String::new(scope, "INCR_WRAP").unwrap();
+        let val = v8::Number::new(scope, 34055.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DECR_WRAP
+    {
+        let name = v8::String::new(scope, "DECR_WRAP").unwrap();
+        let val = v8::Number::new(scope, 34056.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VENDOR
+    {
+        let name = v8::String::new(scope, "VENDOR").unwrap();
+        let val = v8::Number::new(scope, 7936.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERER
+    {
+        let name = v8::String::new(scope, "RENDERER").unwrap();
+        let val = v8::Number::new(scope, 7937.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERSION
+    {
+        let name = v8::String::new(scope, "VERSION").unwrap();
+        let val = v8::Number::new(scope, 7938.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NEAREST
+    {
+        let name = v8::String::new(scope, "NEAREST").unwrap();
+        let val = v8::Number::new(scope, 9728.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINEAR
+    {
+        let name = v8::String::new(scope, "LINEAR").unwrap();
+        let val = v8::Number::new(scope, 9729.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NEAREST_MIPMAP_NEAREST
+    {
+        let name = v8::String::new(scope, "NEAREST_MIPMAP_NEAREST").unwrap();
+        let val = v8::Number::new(scope, 9984.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINEAR_MIPMAP_NEAREST
+    {
+        let name = v8::String::new(scope, "LINEAR_MIPMAP_NEAREST").unwrap();
+        let val = v8::Number::new(scope, 9985.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NEAREST_MIPMAP_LINEAR
+    {
+        let name = v8::String::new(scope, "NEAREST_MIPMAP_LINEAR").unwrap();
+        let val = v8::Number::new(scope, 9986.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINEAR_MIPMAP_LINEAR
+    {
+        let name = v8::String::new(scope, "LINEAR_MIPMAP_LINEAR").unwrap();
+        let val = v8::Number::new(scope, 9987.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_MAG_FILTER
+    {
+        let name = v8::String::new(scope, "TEXTURE_MAG_FILTER").unwrap();
+        let val = v8::Number::new(scope, 10240.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_MIN_FILTER
+    {
+        let name = v8::String::new(scope, "TEXTURE_MIN_FILTER").unwrap();
+        let val = v8::Number::new(scope, 10241.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_WRAP_S
+    {
+        let name = v8::String::new(scope, "TEXTURE_WRAP_S").unwrap();
+        let val = v8::Number::new(scope, 10242.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_WRAP_T
+    {
+        let name = v8::String::new(scope, "TEXTURE_WRAP_T").unwrap();
+        let val = v8::Number::new(scope, 10243.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_2D
+    {
+        let name = v8::String::new(scope, "TEXTURE_2D").unwrap();
+        let val = v8::Number::new(scope, 3553.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE
+    {
+        let name = v8::String::new(scope, "TEXTURE").unwrap();
+        let val = v8::Number::new(scope, 5890.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP").unwrap();
+        let val = v8::Number::new(scope, 34067.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_BINDING_CUBE_MAP
+    {
+        let name = v8::String::new(scope, "TEXTURE_BINDING_CUBE_MAP").unwrap();
+        let val = v8::Number::new(scope, 34068.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_POSITIVE_X
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_POSITIVE_X").unwrap();
+        let val = v8::Number::new(scope, 34069.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_NEGATIVE_X
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_NEGATIVE_X").unwrap();
+        let val = v8::Number::new(scope, 34070.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_POSITIVE_Y
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_POSITIVE_Y").unwrap();
+        let val = v8::Number::new(scope, 34071.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_NEGATIVE_Y
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_NEGATIVE_Y").unwrap();
+        let val = v8::Number::new(scope, 34072.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_POSITIVE_Z
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_POSITIVE_Z").unwrap();
+        let val = v8::Number::new(scope, 34073.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_NEGATIVE_Z
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_NEGATIVE_Z").unwrap();
+        let val = v8::Number::new(scope, 34074.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_CUBE_MAP_TEXTURE_SIZE
+    {
+        let name = v8::String::new(scope, "MAX_CUBE_MAP_TEXTURE_SIZE").unwrap();
+        let val = v8::Number::new(scope, 34076.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE0
+    {
+        let name = v8::String::new(scope, "TEXTURE0").unwrap();
+        let val = v8::Number::new(scope, 33984.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE1
+    {
+        let name = v8::String::new(scope, "TEXTURE1").unwrap();
+        let val = v8::Number::new(scope, 33985.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE2
+    {
+        let name = v8::String::new(scope, "TEXTURE2").unwrap();
+        let val = v8::Number::new(scope, 33986.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE3
+    {
+        let name = v8::String::new(scope, "TEXTURE3").unwrap();
+        let val = v8::Number::new(scope, 33987.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE4
+    {
+        let name = v8::String::new(scope, "TEXTURE4").unwrap();
+        let val = v8::Number::new(scope, 33988.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE5
+    {
+        let name = v8::String::new(scope, "TEXTURE5").unwrap();
+        let val = v8::Number::new(scope, 33989.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE6
+    {
+        let name = v8::String::new(scope, "TEXTURE6").unwrap();
+        let val = v8::Number::new(scope, 33990.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE7
+    {
+        let name = v8::String::new(scope, "TEXTURE7").unwrap();
+        let val = v8::Number::new(scope, 33991.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE8
+    {
+        let name = v8::String::new(scope, "TEXTURE8").unwrap();
+        let val = v8::Number::new(scope, 33992.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE9
+    {
+        let name = v8::String::new(scope, "TEXTURE9").unwrap();
+        let val = v8::Number::new(scope, 33993.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE10
+    {
+        let name = v8::String::new(scope, "TEXTURE10").unwrap();
+        let val = v8::Number::new(scope, 33994.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE11
+    {
+        let name = v8::String::new(scope, "TEXTURE11").unwrap();
+        let val = v8::Number::new(scope, 33995.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE12
+    {
+        let name = v8::String::new(scope, "TEXTURE12").unwrap();
+        let val = v8::Number::new(scope, 33996.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE13
+    {
+        let name = v8::String::new(scope, "TEXTURE13").unwrap();
+        let val = v8::Number::new(scope, 33997.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE14
+    {
+        let name = v8::String::new(scope, "TEXTURE14").unwrap();
+        let val = v8::Number::new(scope, 33998.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE15
+    {
+        let name = v8::String::new(scope, "TEXTURE15").unwrap();
+        let val = v8::Number::new(scope, 33999.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE16
+    {
+        let name = v8::String::new(scope, "TEXTURE16").unwrap();
+        let val = v8::Number::new(scope, 34000.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE17
+    {
+        let name = v8::String::new(scope, "TEXTURE17").unwrap();
+        let val = v8::Number::new(scope, 34001.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE18
+    {
+        let name = v8::String::new(scope, "TEXTURE18").unwrap();
+        let val = v8::Number::new(scope, 34002.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE19
+    {
+        let name = v8::String::new(scope, "TEXTURE19").unwrap();
+        let val = v8::Number::new(scope, 34003.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE20
+    {
+        let name = v8::String::new(scope, "TEXTURE20").unwrap();
+        let val = v8::Number::new(scope, 34004.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE21
+    {
+        let name = v8::String::new(scope, "TEXTURE21").unwrap();
+        let val = v8::Number::new(scope, 34005.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE22
+    {
+        let name = v8::String::new(scope, "TEXTURE22").unwrap();
+        let val = v8::Number::new(scope, 34006.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE23
+    {
+        let name = v8::String::new(scope, "TEXTURE23").unwrap();
+        let val = v8::Number::new(scope, 34007.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE24
+    {
+        let name = v8::String::new(scope, "TEXTURE24").unwrap();
+        let val = v8::Number::new(scope, 34008.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE25
+    {
+        let name = v8::String::new(scope, "TEXTURE25").unwrap();
+        let val = v8::Number::new(scope, 34009.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE26
+    {
+        let name = v8::String::new(scope, "TEXTURE26").unwrap();
+        let val = v8::Number::new(scope, 34010.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE27
+    {
+        let name = v8::String::new(scope, "TEXTURE27").unwrap();
+        let val = v8::Number::new(scope, 34011.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE28
+    {
+        let name = v8::String::new(scope, "TEXTURE28").unwrap();
+        let val = v8::Number::new(scope, 34012.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE29
+    {
+        let name = v8::String::new(scope, "TEXTURE29").unwrap();
+        let val = v8::Number::new(scope, 34013.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE30
+    {
+        let name = v8::String::new(scope, "TEXTURE30").unwrap();
+        let val = v8::Number::new(scope, 34014.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE31
+    {
+        let name = v8::String::new(scope, "TEXTURE31").unwrap();
+        let val = v8::Number::new(scope, 34015.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ACTIVE_TEXTURE
+    {
+        let name = v8::String::new(scope, "ACTIVE_TEXTURE").unwrap();
+        let val = v8::Number::new(scope, 34016.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: REPEAT
+    {
+        let name = v8::String::new(scope, "REPEAT").unwrap();
+        let val = v8::Number::new(scope, 10497.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CLAMP_TO_EDGE
+    {
+        let name = v8::String::new(scope, "CLAMP_TO_EDGE").unwrap();
+        let val = v8::Number::new(scope, 33071.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MIRRORED_REPEAT
+    {
+        let name = v8::String::new(scope, "MIRRORED_REPEAT").unwrap();
+        let val = v8::Number::new(scope, 33648.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_VEC2
+    {
+        let name = v8::String::new(scope, "FLOAT_VEC2").unwrap();
+        let val = v8::Number::new(scope, 35664.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_VEC3
+    {
+        let name = v8::String::new(scope, "FLOAT_VEC3").unwrap();
+        let val = v8::Number::new(scope, 35665.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_VEC4
+    {
+        let name = v8::String::new(scope, "FLOAT_VEC4").unwrap();
+        let val = v8::Number::new(scope, 35666.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_VEC2
+    {
+        let name = v8::String::new(scope, "INT_VEC2").unwrap();
+        let val = v8::Number::new(scope, 35667.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_VEC3
+    {
+        let name = v8::String::new(scope, "INT_VEC3").unwrap();
+        let val = v8::Number::new(scope, 35668.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_VEC4
+    {
+        let name = v8::String::new(scope, "INT_VEC4").unwrap();
+        let val = v8::Number::new(scope, 35669.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BOOL
+    {
+        let name = v8::String::new(scope, "BOOL").unwrap();
+        let val = v8::Number::new(scope, 35670.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BOOL_VEC2
+    {
+        let name = v8::String::new(scope, "BOOL_VEC2").unwrap();
+        let val = v8::Number::new(scope, 35671.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BOOL_VEC3
+    {
+        let name = v8::String::new(scope, "BOOL_VEC3").unwrap();
+        let val = v8::Number::new(scope, 35672.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BOOL_VEC4
+    {
+        let name = v8::String::new(scope, "BOOL_VEC4").unwrap();
+        let val = v8::Number::new(scope, 35673.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT2
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT2").unwrap();
+        let val = v8::Number::new(scope, 35674.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT3
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT3").unwrap();
+        let val = v8::Number::new(scope, 35675.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT4
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT4").unwrap();
+        let val = v8::Number::new(scope, 35676.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_2D
+    {
+        let name = v8::String::new(scope, "SAMPLER_2D").unwrap();
+        let val = v8::Number::new(scope, 35678.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_CUBE
+    {
+        let name = v8::String::new(scope, "SAMPLER_CUBE").unwrap();
+        let val = v8::Number::new(scope, 35680.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_ENABLED
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_ENABLED").unwrap();
+        let val = v8::Number::new(scope, 34338.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_SIZE
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_SIZE").unwrap();
+        let val = v8::Number::new(scope, 34339.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_STRIDE
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_STRIDE").unwrap();
+        let val = v8::Number::new(scope, 34340.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_TYPE
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_TYPE").unwrap();
+        let val = v8::Number::new(scope, 34341.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_NORMALIZED
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_NORMALIZED").unwrap();
+        let val = v8::Number::new(scope, 34922.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_POINTER
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_POINTER").unwrap();
+        let val = v8::Number::new(scope, 34373.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 34975.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: IMPLEMENTATION_COLOR_READ_TYPE
+    {
+        let name = v8::String::new(scope, "IMPLEMENTATION_COLOR_READ_TYPE").unwrap();
+        let val = v8::Number::new(scope, 35738.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: IMPLEMENTATION_COLOR_READ_FORMAT
+    {
+        let name = v8::String::new(scope, "IMPLEMENTATION_COLOR_READ_FORMAT").unwrap();
+        let val = v8::Number::new(scope, 35739.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COMPILE_STATUS
+    {
+        let name = v8::String::new(scope, "COMPILE_STATUS").unwrap();
+        let val = v8::Number::new(scope, 35713.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LOW_FLOAT
+    {
+        let name = v8::String::new(scope, "LOW_FLOAT").unwrap();
+        let val = v8::Number::new(scope, 36336.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MEDIUM_FLOAT
+    {
+        let name = v8::String::new(scope, "MEDIUM_FLOAT").unwrap();
+        let val = v8::Number::new(scope, 36337.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: HIGH_FLOAT
+    {
+        let name = v8::String::new(scope, "HIGH_FLOAT").unwrap();
+        let val = v8::Number::new(scope, 36338.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LOW_INT
+    {
+        let name = v8::String::new(scope, "LOW_INT").unwrap();
+        let val = v8::Number::new(scope, 36339.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MEDIUM_INT
+    {
+        let name = v8::String::new(scope, "MEDIUM_INT").unwrap();
+        let val = v8::Number::new(scope, 36340.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: HIGH_INT
+    {
+        let name = v8::String::new(scope, "HIGH_INT").unwrap();
+        let val = v8::Number::new(scope, 36341.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER").unwrap();
+        let val = v8::Number::new(scope, 36160.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER").unwrap();
+        let val = v8::Number::new(scope, 36161.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA4
+    {
+        let name = v8::String::new(scope, "RGBA4").unwrap();
+        let val = v8::Number::new(scope, 32854.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB5_A1
+    {
+        let name = v8::String::new(scope, "RGB5_A1").unwrap();
+        let val = v8::Number::new(scope, 32855.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA8
+    {
+        let name = v8::String::new(scope, "RGBA8").unwrap();
+        let val = v8::Number::new(scope, 32856.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB565
+    {
+        let name = v8::String::new(scope, "RGB565").unwrap();
+        let val = v8::Number::new(scope, 36194.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_COMPONENT16
+    {
+        let name = v8::String::new(scope, "DEPTH_COMPONENT16").unwrap();
+        let val = v8::Number::new(scope, 33189.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_INDEX8
+    {
+        let name = v8::String::new(scope, "STENCIL_INDEX8").unwrap();
+        let val = v8::Number::new(scope, 36168.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_STENCIL
+    {
+        let name = v8::String::new(scope, "DEPTH_STENCIL").unwrap();
+        let val = v8::Number::new(scope, 34041.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_WIDTH
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_WIDTH").unwrap();
+        let val = v8::Number::new(scope, 36162.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_HEIGHT
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_HEIGHT").unwrap();
+        let val = v8::Number::new(scope, 36163.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_INTERNAL_FORMAT
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_INTERNAL_FORMAT").unwrap();
+        let val = v8::Number::new(scope, 36164.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_RED_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_RED_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36176.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_GREEN_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_GREEN_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36177.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_BLUE_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_BLUE_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36178.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_ALPHA_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_ALPHA_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36179.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_DEPTH_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_DEPTH_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36180.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_STENCIL_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_STENCIL_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36181.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE").unwrap();
+        let val = v8::Number::new(scope, 36048.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_OBJECT_NAME
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME").unwrap();
+        let val = v8::Number::new(scope, 36049.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL").unwrap();
+        let val = v8::Number::new(scope, 36050.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE").unwrap();
+        let val = v8::Number::new(scope, 36051.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT0
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT0").unwrap();
+        let val = v8::Number::new(scope, 36064.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "DEPTH_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 36096.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "STENCIL_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 36128.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_STENCIL_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "DEPTH_STENCIL_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 33306.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NONE
+    {
+        let name = v8::String::new(scope, "NONE").unwrap();
+        let val = v8::Number::new(scope, 0.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_COMPLETE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_COMPLETE").unwrap();
+        let val = v8::Number::new(scope, 36053.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_INCOMPLETE_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 36054.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 36055.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_INCOMPLETE_DIMENSIONS
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_INCOMPLETE_DIMENSIONS").unwrap();
+        let val = v8::Number::new(scope, 36057.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_UNSUPPORTED
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_UNSUPPORTED").unwrap();
+        let val = v8::Number::new(scope, 36061.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36006.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36007.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_RENDERBUFFER_SIZE
+    {
+        let name = v8::String::new(scope, "MAX_RENDERBUFFER_SIZE").unwrap();
+        let val = v8::Number::new(scope, 34024.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_FRAMEBUFFER_OPERATION
+    {
+        let name = v8::String::new(scope, "INVALID_FRAMEBUFFER_OPERATION").unwrap();
+        let val = v8::Number::new(scope, 1286.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_FLIP_Y_WEBGL
+    {
+        let name = v8::String::new(scope, "UNPACK_FLIP_Y_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37440.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_PREMULTIPLY_ALPHA_WEBGL
+    {
+        let name = v8::String::new(scope, "UNPACK_PREMULTIPLY_ALPHA_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37441.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CONTEXT_LOST_WEBGL
+    {
+        let name = v8::String::new(scope, "CONTEXT_LOST_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37442.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_COLORSPACE_CONVERSION_WEBGL
+    {
+        let name = v8::String::new(scope, "UNPACK_COLORSPACE_CONVERSION_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37443.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BROWSER_DEFAULT_WEBGL
+    {
+        let name = v8::String::new(scope, "BROWSER_DEFAULT_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37444.0).into();
+        proto.set(name.into(), val);
+    }
+    // attribute: canvas
+    {
+        let name = v8::String::new(scope, "canvas").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: drawingBufferWidth
+    {
+        let name = v8::String::new(scope, "drawingBufferWidth").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: drawingBufferHeight
+    {
+        let name = v8::String::new(scope, "drawingBufferHeight").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: drawingBufferFormat
+    {
+        let name = v8::String::new(scope, "drawingBufferFormat").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: drawingBufferColorSpace
+    {
+        let name = v8::String::new(scope, "drawingBufferColorSpace").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_5).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: unpackColorSpace
+    {
+        let name = v8::String::new(scope, "unpackColorSpace").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_6).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_set_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: getContextAttributes()
+    {
+        let name = v8::String::new(scope, "getContextAttributes").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isContextLost()
+    {
+        let name = v8::String::new(scope, "isContextLost").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getSupportedExtensions()
+    {
+        let name = v8::String::new(scope, "getSupportedExtensions").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getExtension()
+    {
+        let name = v8::String::new(scope, "getExtension").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_10).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawingBufferStorage()
+    {
+        let name = v8::String::new(scope, "drawingBufferStorage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_11).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: activeTexture()
+    {
+        let name = v8::String::new(scope, "activeTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_12).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: attachShader()
+    {
+        let name = v8::String::new(scope, "attachShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_13).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindAttribLocation()
+    {
+        let name = v8::String::new(scope, "bindAttribLocation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_14).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindBuffer()
+    {
+        let name = v8::String::new(scope, "bindBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_15).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindFramebuffer()
+    {
+        let name = v8::String::new(scope, "bindFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_16).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindRenderbuffer()
+    {
+        let name = v8::String::new(scope, "bindRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_17).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindTexture()
+    {
+        let name = v8::String::new(scope, "bindTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_18).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendColor()
+    {
+        let name = v8::String::new(scope, "blendColor").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_19).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendEquation()
+    {
+        let name = v8::String::new(scope, "blendEquation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_20).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendEquationSeparate()
+    {
+        let name = v8::String::new(scope, "blendEquationSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_21).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendFunc()
+    {
+        let name = v8::String::new(scope, "blendFunc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_22).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendFuncSeparate()
+    {
+        let name = v8::String::new(scope, "blendFuncSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_23).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: checkFramebufferStatus()
+    {
+        let name = v8::String::new(scope, "checkFramebufferStatus").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_24).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clear()
+    {
+        let name = v8::String::new(scope, "clear").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_25).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearColor()
+    {
+        let name = v8::String::new(scope, "clearColor").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_26).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearDepth()
+    {
+        let name = v8::String::new(scope, "clearDepth").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_27).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearStencil()
+    {
+        let name = v8::String::new(scope, "clearStencil").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_28).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: colorMask()
+    {
+        let name = v8::String::new(scope, "colorMask").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_29).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: compileShader()
+    {
+        let name = v8::String::new(scope, "compileShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_30).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: copyTexImage2D()
+    {
+        let name = v8::String::new(scope, "copyTexImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_31).length(8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: copyTexSubImage2D()
+    {
+        let name = v8::String::new(scope, "copyTexSubImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_32).length(8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createBuffer()
+    {
+        let name = v8::String::new(scope, "createBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_33).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createFramebuffer()
+    {
+        let name = v8::String::new(scope, "createFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_34).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createProgram()
+    {
+        let name = v8::String::new(scope, "createProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_35).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createRenderbuffer()
+    {
+        let name = v8::String::new(scope, "createRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_36).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createShader()
+    {
+        let name = v8::String::new(scope, "createShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_37).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createTexture()
+    {
+        let name = v8::String::new(scope, "createTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_38).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: cullFace()
+    {
+        let name = v8::String::new(scope, "cullFace").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_39).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteBuffer()
+    {
+        let name = v8::String::new(scope, "deleteBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_40).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteFramebuffer()
+    {
+        let name = v8::String::new(scope, "deleteFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_41).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteProgram()
+    {
+        let name = v8::String::new(scope, "deleteProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_42).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteRenderbuffer()
+    {
+        let name = v8::String::new(scope, "deleteRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_43).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteShader()
+    {
+        let name = v8::String::new(scope, "deleteShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_44).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteTexture()
+    {
+        let name = v8::String::new(scope, "deleteTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_45).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: depthFunc()
+    {
+        let name = v8::String::new(scope, "depthFunc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_46).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: depthMask()
+    {
+        let name = v8::String::new(scope, "depthMask").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_47).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: depthRange()
+    {
+        let name = v8::String::new(scope, "depthRange").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_48).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: detachShader()
+    {
+        let name = v8::String::new(scope, "detachShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_49).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: disable()
+    {
+        let name = v8::String::new(scope, "disable").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_50).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: disableVertexAttribArray()
+    {
+        let name = v8::String::new(scope, "disableVertexAttribArray").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_51).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawArrays()
+    {
+        let name = v8::String::new(scope, "drawArrays").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_52).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawElements()
+    {
+        let name = v8::String::new(scope, "drawElements").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_53).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: enable()
+    {
+        let name = v8::String::new(scope, "enable").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_54).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: enableVertexAttribArray()
+    {
+        let name = v8::String::new(scope, "enableVertexAttribArray").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_55).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: finish()
+    {
+        let name = v8::String::new(scope, "finish").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_56).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: flush()
+    {
+        let name = v8::String::new(scope, "flush").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_57).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: framebufferRenderbuffer()
+    {
+        let name = v8::String::new(scope, "framebufferRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_58).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: framebufferTexture2D()
+    {
+        let name = v8::String::new(scope, "framebufferTexture2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_59).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: frontFace()
+    {
+        let name = v8::String::new(scope, "frontFace").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_60).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: generateMipmap()
+    {
+        let name = v8::String::new(scope, "generateMipmap").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_61).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getActiveAttrib()
+    {
+        let name = v8::String::new(scope, "getActiveAttrib").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_62).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getActiveUniform()
+    {
+        let name = v8::String::new(scope, "getActiveUniform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_63).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getAttachedShaders()
+    {
+        let name = v8::String::new(scope, "getAttachedShaders").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_64).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getAttribLocation()
+    {
+        let name = v8::String::new(scope, "getAttribLocation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_65).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getBufferParameter()
+    {
+        let name = v8::String::new(scope, "getBufferParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_66).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getParameter()
+    {
+        let name = v8::String::new(scope, "getParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_67).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getError()
+    {
+        let name = v8::String::new(scope, "getError").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_68).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getFramebufferAttachmentParameter()
+    {
+        let name = v8::String::new(scope, "getFramebufferAttachmentParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_69).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getProgramParameter()
+    {
+        let name = v8::String::new(scope, "getProgramParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_70).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getProgramInfoLog()
+    {
+        let name = v8::String::new(scope, "getProgramInfoLog").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_71).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getRenderbufferParameter()
+    {
+        let name = v8::String::new(scope, "getRenderbufferParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_72).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getShaderParameter()
+    {
+        let name = v8::String::new(scope, "getShaderParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_73).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getShaderPrecisionFormat()
+    {
+        let name = v8::String::new(scope, "getShaderPrecisionFormat").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_74).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getShaderInfoLog()
+    {
+        let name = v8::String::new(scope, "getShaderInfoLog").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_75).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getShaderSource()
+    {
+        let name = v8::String::new(scope, "getShaderSource").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_76).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getTexParameter()
+    {
+        let name = v8::String::new(scope, "getTexParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_77).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getUniform()
+    {
+        let name = v8::String::new(scope, "getUniform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_78).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getUniformLocation()
+    {
+        let name = v8::String::new(scope, "getUniformLocation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_79).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getVertexAttrib()
+    {
+        let name = v8::String::new(scope, "getVertexAttrib").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_80).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getVertexAttribOffset()
+    {
+        let name = v8::String::new(scope, "getVertexAttribOffset").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_81).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: hint()
+    {
+        let name = v8::String::new(scope, "hint").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_82).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isBuffer()
+    {
+        let name = v8::String::new(scope, "isBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_83).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isEnabled()
+    {
+        let name = v8::String::new(scope, "isEnabled").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_84).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isFramebuffer()
+    {
+        let name = v8::String::new(scope, "isFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_85).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isProgram()
+    {
+        let name = v8::String::new(scope, "isProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_86).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isRenderbuffer()
+    {
+        let name = v8::String::new(scope, "isRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_87).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isShader()
+    {
+        let name = v8::String::new(scope, "isShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_88).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isTexture()
+    {
+        let name = v8::String::new(scope, "isTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_89).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: lineWidth()
+    {
+        let name = v8::String::new(scope, "lineWidth").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_90).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: linkProgram()
+    {
+        let name = v8::String::new(scope, "linkProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_91).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: pixelStorei()
+    {
+        let name = v8::String::new(scope, "pixelStorei").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_92).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: polygonOffset()
+    {
+        let name = v8::String::new(scope, "polygonOffset").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_93).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: renderbufferStorage()
+    {
+        let name = v8::String::new(scope, "renderbufferStorage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_94).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: sampleCoverage()
+    {
+        let name = v8::String::new(scope, "sampleCoverage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_95).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: scissor()
+    {
+        let name = v8::String::new(scope, "scissor").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_96).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: shaderSource()
+    {
+        let name = v8::String::new(scope, "shaderSource").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_97).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilFunc()
+    {
+        let name = v8::String::new(scope, "stencilFunc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_98).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilFuncSeparate()
+    {
+        let name = v8::String::new(scope, "stencilFuncSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_99).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilMask()
+    {
+        let name = v8::String::new(scope, "stencilMask").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_100).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilMaskSeparate()
+    {
+        let name = v8::String::new(scope, "stencilMaskSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_101).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilOp()
+    {
+        let name = v8::String::new(scope, "stencilOp").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_102).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilOpSeparate()
+    {
+        let name = v8::String::new(scope, "stencilOpSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_103).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texParameterf()
+    {
+        let name = v8::String::new(scope, "texParameterf").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_104).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texParameteri()
+    {
+        let name = v8::String::new(scope, "texParameteri").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_105).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1f()
+    {
+        let name = v8::String::new(scope, "uniform1f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_106).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2f()
+    {
+        let name = v8::String::new(scope, "uniform2f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_107).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3f()
+    {
+        let name = v8::String::new(scope, "uniform3f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_108).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4f()
+    {
+        let name = v8::String::new(scope, "uniform4f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_109).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1i()
+    {
+        let name = v8::String::new(scope, "uniform1i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_110).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2i()
+    {
+        let name = v8::String::new(scope, "uniform2i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_111).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3i()
+    {
+        let name = v8::String::new(scope, "uniform3i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_112).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4i()
+    {
+        let name = v8::String::new(scope, "uniform4i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_113).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: useProgram()
+    {
+        let name = v8::String::new(scope, "useProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_114).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: validateProgram()
+    {
+        let name = v8::String::new(scope, "validateProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_115).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib1f()
+    {
+        let name = v8::String::new(scope, "vertexAttrib1f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_116).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib2f()
+    {
+        let name = v8::String::new(scope, "vertexAttrib2f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_117).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib3f()
+    {
+        let name = v8::String::new(scope, "vertexAttrib3f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_118).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib4f()
+    {
+        let name = v8::String::new(scope, "vertexAttrib4f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_119).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib1fv()
+    {
+        let name = v8::String::new(scope, "vertexAttrib1fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_120).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib2fv()
+    {
+        let name = v8::String::new(scope, "vertexAttrib2fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_121).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib3fv()
+    {
+        let name = v8::String::new(scope, "vertexAttrib3fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_122).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib4fv()
+    {
+        let name = v8::String::new(scope, "vertexAttrib4fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_123).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttribPointer()
+    {
+        let name = v8::String::new(scope, "vertexAttribPointer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_124).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: viewport()
+    {
+        let name = v8::String::new(scope, "viewport").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_125).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // const: READ_BUFFER
+    {
+        let name = v8::String::new(scope, "READ_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 3074.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_ROW_LENGTH
+    {
+        let name = v8::String::new(scope, "UNPACK_ROW_LENGTH").unwrap();
+        let val = v8::Number::new(scope, 3314.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_SKIP_ROWS
+    {
+        let name = v8::String::new(scope, "UNPACK_SKIP_ROWS").unwrap();
+        let val = v8::Number::new(scope, 3315.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_SKIP_PIXELS
+    {
+        let name = v8::String::new(scope, "UNPACK_SKIP_PIXELS").unwrap();
+        let val = v8::Number::new(scope, 3316.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PACK_ROW_LENGTH
+    {
+        let name = v8::String::new(scope, "PACK_ROW_LENGTH").unwrap();
+        let val = v8::Number::new(scope, 3330.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PACK_SKIP_ROWS
+    {
+        let name = v8::String::new(scope, "PACK_SKIP_ROWS").unwrap();
+        let val = v8::Number::new(scope, 3331.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PACK_SKIP_PIXELS
+    {
+        let name = v8::String::new(scope, "PACK_SKIP_PIXELS").unwrap();
+        let val = v8::Number::new(scope, 3332.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR
+    {
+        let name = v8::String::new(scope, "COLOR").unwrap();
+        let val = v8::Number::new(scope, 6144.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH
+    {
+        let name = v8::String::new(scope, "DEPTH").unwrap();
+        let val = v8::Number::new(scope, 6145.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL
+    {
+        let name = v8::String::new(scope, "STENCIL").unwrap();
+        let val = v8::Number::new(scope, 6146.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RED
+    {
+        let name = v8::String::new(scope, "RED").unwrap();
+        let val = v8::Number::new(scope, 6403.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB8
+    {
+        let name = v8::String::new(scope, "RGB8").unwrap();
+        let val = v8::Number::new(scope, 32849.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB10_A2
+    {
+        let name = v8::String::new(scope, "RGB10_A2").unwrap();
+        let val = v8::Number::new(scope, 32857.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_BINDING_3D
+    {
+        let name = v8::String::new(scope, "TEXTURE_BINDING_3D").unwrap();
+        let val = v8::Number::new(scope, 32874.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_SKIP_IMAGES
+    {
+        let name = v8::String::new(scope, "UNPACK_SKIP_IMAGES").unwrap();
+        let val = v8::Number::new(scope, 32877.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_IMAGE_HEIGHT
+    {
+        let name = v8::String::new(scope, "UNPACK_IMAGE_HEIGHT").unwrap();
+        let val = v8::Number::new(scope, 32878.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_3D
+    {
+        let name = v8::String::new(scope, "TEXTURE_3D").unwrap();
+        let val = v8::Number::new(scope, 32879.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_WRAP_R
+    {
+        let name = v8::String::new(scope, "TEXTURE_WRAP_R").unwrap();
+        let val = v8::Number::new(scope, 32882.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_3D_TEXTURE_SIZE
+    {
+        let name = v8::String::new(scope, "MAX_3D_TEXTURE_SIZE").unwrap();
+        let val = v8::Number::new(scope, 32883.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_2_10_10_10_REV
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_2_10_10_10_REV").unwrap();
+        let val = v8::Number::new(scope, 33640.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_ELEMENTS_VERTICES
+    {
+        let name = v8::String::new(scope, "MAX_ELEMENTS_VERTICES").unwrap();
+        let val = v8::Number::new(scope, 33000.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_ELEMENTS_INDICES
+    {
+        let name = v8::String::new(scope, "MAX_ELEMENTS_INDICES").unwrap();
+        let val = v8::Number::new(scope, 33001.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_MIN_LOD
+    {
+        let name = v8::String::new(scope, "TEXTURE_MIN_LOD").unwrap();
+        let val = v8::Number::new(scope, 33082.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_MAX_LOD
+    {
+        let name = v8::String::new(scope, "TEXTURE_MAX_LOD").unwrap();
+        let val = v8::Number::new(scope, 33083.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_BASE_LEVEL
+    {
+        let name = v8::String::new(scope, "TEXTURE_BASE_LEVEL").unwrap();
+        let val = v8::Number::new(scope, 33084.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_MAX_LEVEL
+    {
+        let name = v8::String::new(scope, "TEXTURE_MAX_LEVEL").unwrap();
+        let val = v8::Number::new(scope, 33085.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MIN
+    {
+        let name = v8::String::new(scope, "MIN").unwrap();
+        let val = v8::Number::new(scope, 32775.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX
+    {
+        let name = v8::String::new(scope, "MAX").unwrap();
+        let val = v8::Number::new(scope, 32776.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_COMPONENT24
+    {
+        let name = v8::String::new(scope, "DEPTH_COMPONENT24").unwrap();
+        let val = v8::Number::new(scope, 33190.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_TEXTURE_LOD_BIAS
+    {
+        let name = v8::String::new(scope, "MAX_TEXTURE_LOD_BIAS").unwrap();
+        let val = v8::Number::new(scope, 34045.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_COMPARE_MODE
+    {
+        let name = v8::String::new(scope, "TEXTURE_COMPARE_MODE").unwrap();
+        let val = v8::Number::new(scope, 34892.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_COMPARE_FUNC
+    {
+        let name = v8::String::new(scope, "TEXTURE_COMPARE_FUNC").unwrap();
+        let val = v8::Number::new(scope, 34893.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CURRENT_QUERY
+    {
+        let name = v8::String::new(scope, "CURRENT_QUERY").unwrap();
+        let val = v8::Number::new(scope, 34917.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: QUERY_RESULT
+    {
+        let name = v8::String::new(scope, "QUERY_RESULT").unwrap();
+        let val = v8::Number::new(scope, 34918.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: QUERY_RESULT_AVAILABLE
+    {
+        let name = v8::String::new(scope, "QUERY_RESULT_AVAILABLE").unwrap();
+        let val = v8::Number::new(scope, 34919.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STREAM_READ
+    {
+        let name = v8::String::new(scope, "STREAM_READ").unwrap();
+        let val = v8::Number::new(scope, 35041.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STREAM_COPY
+    {
+        let name = v8::String::new(scope, "STREAM_COPY").unwrap();
+        let val = v8::Number::new(scope, 35042.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STATIC_READ
+    {
+        let name = v8::String::new(scope, "STATIC_READ").unwrap();
+        let val = v8::Number::new(scope, 35045.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STATIC_COPY
+    {
+        let name = v8::String::new(scope, "STATIC_COPY").unwrap();
+        let val = v8::Number::new(scope, 35046.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DYNAMIC_READ
+    {
+        let name = v8::String::new(scope, "DYNAMIC_READ").unwrap();
+        let val = v8::Number::new(scope, 35049.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DYNAMIC_COPY
+    {
+        let name = v8::String::new(scope, "DYNAMIC_COPY").unwrap();
+        let val = v8::Number::new(scope, 35050.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_DRAW_BUFFERS
+    {
+        let name = v8::String::new(scope, "MAX_DRAW_BUFFERS").unwrap();
+        let val = v8::Number::new(scope, 34852.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER0
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER0").unwrap();
+        let val = v8::Number::new(scope, 34853.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER1
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER1").unwrap();
+        let val = v8::Number::new(scope, 34854.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER2
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER2").unwrap();
+        let val = v8::Number::new(scope, 34855.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER3
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER3").unwrap();
+        let val = v8::Number::new(scope, 34856.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER4
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER4").unwrap();
+        let val = v8::Number::new(scope, 34857.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER5
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER5").unwrap();
+        let val = v8::Number::new(scope, 34858.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER6
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER6").unwrap();
+        let val = v8::Number::new(scope, 34859.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER7
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER7").unwrap();
+        let val = v8::Number::new(scope, 34860.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER8
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER8").unwrap();
+        let val = v8::Number::new(scope, 34861.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER9
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER9").unwrap();
+        let val = v8::Number::new(scope, 34862.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER10
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER10").unwrap();
+        let val = v8::Number::new(scope, 34863.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER11
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER11").unwrap();
+        let val = v8::Number::new(scope, 34864.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER12
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER12").unwrap();
+        let val = v8::Number::new(scope, 34865.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER13
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER13").unwrap();
+        let val = v8::Number::new(scope, 34866.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER14
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER14").unwrap();
+        let val = v8::Number::new(scope, 34867.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_BUFFER15
+    {
+        let name = v8::String::new(scope, "DRAW_BUFFER15").unwrap();
+        let val = v8::Number::new(scope, 34868.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_FRAGMENT_UNIFORM_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_FRAGMENT_UNIFORM_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 35657.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_UNIFORM_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_UNIFORM_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 35658.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_3D
+    {
+        let name = v8::String::new(scope, "SAMPLER_3D").unwrap();
+        let val = v8::Number::new(scope, 35679.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_2D_SHADOW
+    {
+        let name = v8::String::new(scope, "SAMPLER_2D_SHADOW").unwrap();
+        let val = v8::Number::new(scope, 35682.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAGMENT_SHADER_DERIVATIVE_HINT
+    {
+        let name = v8::String::new(scope, "FRAGMENT_SHADER_DERIVATIVE_HINT").unwrap();
+        let val = v8::Number::new(scope, 35723.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PIXEL_PACK_BUFFER
+    {
+        let name = v8::String::new(scope, "PIXEL_PACK_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 35051.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PIXEL_UNPACK_BUFFER
+    {
+        let name = v8::String::new(scope, "PIXEL_UNPACK_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 35052.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PIXEL_PACK_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "PIXEL_PACK_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 35053.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PIXEL_UNPACK_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "PIXEL_UNPACK_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 35055.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT2x3
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT2x3").unwrap();
+        let val = v8::Number::new(scope, 35685.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT2x4
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT2x4").unwrap();
+        let val = v8::Number::new(scope, 35686.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT3x2
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT3x2").unwrap();
+        let val = v8::Number::new(scope, 35687.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT3x4
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT3x4").unwrap();
+        let val = v8::Number::new(scope, 35688.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT4x2
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT4x2").unwrap();
+        let val = v8::Number::new(scope, 35689.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT4x3
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT4x3").unwrap();
+        let val = v8::Number::new(scope, 35690.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRGB
+    {
+        let name = v8::String::new(scope, "SRGB").unwrap();
+        let val = v8::Number::new(scope, 35904.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRGB8
+    {
+        let name = v8::String::new(scope, "SRGB8").unwrap();
+        let val = v8::Number::new(scope, 35905.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRGB8_ALPHA8
+    {
+        let name = v8::String::new(scope, "SRGB8_ALPHA8").unwrap();
+        let val = v8::Number::new(scope, 35907.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COMPARE_REF_TO_TEXTURE
+    {
+        let name = v8::String::new(scope, "COMPARE_REF_TO_TEXTURE").unwrap();
+        let val = v8::Number::new(scope, 34894.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA32F
+    {
+        let name = v8::String::new(scope, "RGBA32F").unwrap();
+        let val = v8::Number::new(scope, 34836.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB32F
+    {
+        let name = v8::String::new(scope, "RGB32F").unwrap();
+        let val = v8::Number::new(scope, 34837.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA16F
+    {
+        let name = v8::String::new(scope, "RGBA16F").unwrap();
+        let val = v8::Number::new(scope, 34842.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB16F
+    {
+        let name = v8::String::new(scope, "RGB16F").unwrap();
+        let val = v8::Number::new(scope, 34843.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_INTEGER
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_INTEGER").unwrap();
+        let val = v8::Number::new(scope, 35069.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_ARRAY_TEXTURE_LAYERS
+    {
+        let name = v8::String::new(scope, "MAX_ARRAY_TEXTURE_LAYERS").unwrap();
+        let val = v8::Number::new(scope, 35071.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MIN_PROGRAM_TEXEL_OFFSET
+    {
+        let name = v8::String::new(scope, "MIN_PROGRAM_TEXEL_OFFSET").unwrap();
+        let val = v8::Number::new(scope, 35076.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_PROGRAM_TEXEL_OFFSET
+    {
+        let name = v8::String::new(scope, "MAX_PROGRAM_TEXEL_OFFSET").unwrap();
+        let val = v8::Number::new(scope, 35077.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VARYING_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_VARYING_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 35659.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_2D_ARRAY
+    {
+        let name = v8::String::new(scope, "TEXTURE_2D_ARRAY").unwrap();
+        let val = v8::Number::new(scope, 35866.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_BINDING_2D_ARRAY
+    {
+        let name = v8::String::new(scope, "TEXTURE_BINDING_2D_ARRAY").unwrap();
+        let val = v8::Number::new(scope, 35869.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R11F_G11F_B10F
+    {
+        let name = v8::String::new(scope, "R11F_G11F_B10F").unwrap();
+        let val = v8::Number::new(scope, 35898.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_10F_11F_11F_REV
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_10F_11F_11F_REV").unwrap();
+        let val = v8::Number::new(scope, 35899.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB9_E5
+    {
+        let name = v8::String::new(scope, "RGB9_E5").unwrap();
+        let val = v8::Number::new(scope, 35901.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_5_9_9_9_REV
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_5_9_9_9_REV").unwrap();
+        let val = v8::Number::new(scope, 35902.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_BUFFER_MODE
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_BUFFER_MODE").unwrap();
+        let val = v8::Number::new(scope, 35967.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 35968.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_VARYINGS
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_VARYINGS").unwrap();
+        let val = v8::Number::new(scope, 35971.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_BUFFER_START
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_BUFFER_START").unwrap();
+        let val = v8::Number::new(scope, 35972.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_BUFFER_SIZE
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_BUFFER_SIZE").unwrap();
+        let val = v8::Number::new(scope, 35973.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN").unwrap();
+        let val = v8::Number::new(scope, 35976.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RASTERIZER_DISCARD
+    {
+        let name = v8::String::new(scope, "RASTERIZER_DISCARD").unwrap();
+        let val = v8::Number::new(scope, 35977.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 35978.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS
+    {
+        let name = v8::String::new(scope, "MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS").unwrap();
+        let val = v8::Number::new(scope, 35979.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INTERLEAVED_ATTRIBS
+    {
+        let name = v8::String::new(scope, "INTERLEAVED_ATTRIBS").unwrap();
+        let val = v8::Number::new(scope, 35980.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SEPARATE_ATTRIBS
+    {
+        let name = v8::String::new(scope, "SEPARATE_ATTRIBS").unwrap();
+        let val = v8::Number::new(scope, 35981.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_BUFFER
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 35982.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 35983.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA32UI
+    {
+        let name = v8::String::new(scope, "RGBA32UI").unwrap();
+        let val = v8::Number::new(scope, 36208.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB32UI
+    {
+        let name = v8::String::new(scope, "RGB32UI").unwrap();
+        let val = v8::Number::new(scope, 36209.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA16UI
+    {
+        let name = v8::String::new(scope, "RGBA16UI").unwrap();
+        let val = v8::Number::new(scope, 36214.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB16UI
+    {
+        let name = v8::String::new(scope, "RGB16UI").unwrap();
+        let val = v8::Number::new(scope, 36215.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA8UI
+    {
+        let name = v8::String::new(scope, "RGBA8UI").unwrap();
+        let val = v8::Number::new(scope, 36220.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB8UI
+    {
+        let name = v8::String::new(scope, "RGB8UI").unwrap();
+        let val = v8::Number::new(scope, 36221.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA32I
+    {
+        let name = v8::String::new(scope, "RGBA32I").unwrap();
+        let val = v8::Number::new(scope, 36226.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB32I
+    {
+        let name = v8::String::new(scope, "RGB32I").unwrap();
+        let val = v8::Number::new(scope, 36227.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA16I
+    {
+        let name = v8::String::new(scope, "RGBA16I").unwrap();
+        let val = v8::Number::new(scope, 36232.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB16I
+    {
+        let name = v8::String::new(scope, "RGB16I").unwrap();
+        let val = v8::Number::new(scope, 36233.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA8I
+    {
+        let name = v8::String::new(scope, "RGBA8I").unwrap();
+        let val = v8::Number::new(scope, 36238.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB8I
+    {
+        let name = v8::String::new(scope, "RGB8I").unwrap();
+        let val = v8::Number::new(scope, 36239.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RED_INTEGER
+    {
+        let name = v8::String::new(scope, "RED_INTEGER").unwrap();
+        let val = v8::Number::new(scope, 36244.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB_INTEGER
+    {
+        let name = v8::String::new(scope, "RGB_INTEGER").unwrap();
+        let val = v8::Number::new(scope, 36248.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA_INTEGER
+    {
+        let name = v8::String::new(scope, "RGBA_INTEGER").unwrap();
+        let val = v8::Number::new(scope, 36249.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_2D_ARRAY
+    {
+        let name = v8::String::new(scope, "SAMPLER_2D_ARRAY").unwrap();
+        let val = v8::Number::new(scope, 36289.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_2D_ARRAY_SHADOW
+    {
+        let name = v8::String::new(scope, "SAMPLER_2D_ARRAY_SHADOW").unwrap();
+        let val = v8::Number::new(scope, 36292.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_CUBE_SHADOW
+    {
+        let name = v8::String::new(scope, "SAMPLER_CUBE_SHADOW").unwrap();
+        let val = v8::Number::new(scope, 36293.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_VEC2
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_VEC2").unwrap();
+        let val = v8::Number::new(scope, 36294.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_VEC3
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_VEC3").unwrap();
+        let val = v8::Number::new(scope, 36295.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_VEC4
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_VEC4").unwrap();
+        let val = v8::Number::new(scope, 36296.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_SAMPLER_2D
+    {
+        let name = v8::String::new(scope, "INT_SAMPLER_2D").unwrap();
+        let val = v8::Number::new(scope, 36298.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_SAMPLER_3D
+    {
+        let name = v8::String::new(scope, "INT_SAMPLER_3D").unwrap();
+        let val = v8::Number::new(scope, 36299.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_SAMPLER_CUBE
+    {
+        let name = v8::String::new(scope, "INT_SAMPLER_CUBE").unwrap();
+        let val = v8::Number::new(scope, 36300.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_SAMPLER_2D_ARRAY
+    {
+        let name = v8::String::new(scope, "INT_SAMPLER_2D_ARRAY").unwrap();
+        let val = v8::Number::new(scope, 36303.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_SAMPLER_2D
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_SAMPLER_2D").unwrap();
+        let val = v8::Number::new(scope, 36306.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_SAMPLER_3D
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_SAMPLER_3D").unwrap();
+        let val = v8::Number::new(scope, 36307.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_SAMPLER_CUBE
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_SAMPLER_CUBE").unwrap();
+        let val = v8::Number::new(scope, 36308.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_SAMPLER_2D_ARRAY
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_SAMPLER_2D_ARRAY").unwrap();
+        let val = v8::Number::new(scope, 36311.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_COMPONENT32F
+    {
+        let name = v8::String::new(scope, "DEPTH_COMPONENT32F").unwrap();
+        let val = v8::Number::new(scope, 36012.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH32F_STENCIL8
+    {
+        let name = v8::String::new(scope, "DEPTH32F_STENCIL8").unwrap();
+        let val = v8::Number::new(scope, 36013.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_32_UNSIGNED_INT_24_8_REV
+    {
+        let name = v8::String::new(scope, "FLOAT_32_UNSIGNED_INT_24_8_REV").unwrap();
+        let val = v8::Number::new(scope, 36269.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING").unwrap();
+        let val = v8::Number::new(scope, 33296.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE").unwrap();
+        let val = v8::Number::new(scope, 33297.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_RED_SIZE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_RED_SIZE").unwrap();
+        let val = v8::Number::new(scope, 33298.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_GREEN_SIZE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_GREEN_SIZE").unwrap();
+        let val = v8::Number::new(scope, 33299.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_BLUE_SIZE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_BLUE_SIZE").unwrap();
+        let val = v8::Number::new(scope, 33300.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE").unwrap();
+        let val = v8::Number::new(scope, 33301.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE").unwrap();
+        let val = v8::Number::new(scope, 33302.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE").unwrap();
+        let val = v8::Number::new(scope, 33303.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_DEFAULT
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_DEFAULT").unwrap();
+        let val = v8::Number::new(scope, 33304.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT_24_8
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT_24_8").unwrap();
+        let val = v8::Number::new(scope, 34042.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH24_STENCIL8
+    {
+        let name = v8::String::new(scope, "DEPTH24_STENCIL8").unwrap();
+        let val = v8::Number::new(scope, 35056.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_NORMALIZED
+    {
+        let name = v8::String::new(scope, "UNSIGNED_NORMALIZED").unwrap();
+        let val = v8::Number::new(scope, 35863.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_FRAMEBUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "DRAW_FRAMEBUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36006.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: READ_FRAMEBUFFER
+    {
+        let name = v8::String::new(scope, "READ_FRAMEBUFFER").unwrap();
+        let val = v8::Number::new(scope, 36008.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DRAW_FRAMEBUFFER
+    {
+        let name = v8::String::new(scope, "DRAW_FRAMEBUFFER").unwrap();
+        let val = v8::Number::new(scope, 36009.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: READ_FRAMEBUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "READ_FRAMEBUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36010.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_SAMPLES
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_SAMPLES").unwrap();
+        let val = v8::Number::new(scope, 36011.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER").unwrap();
+        let val = v8::Number::new(scope, 36052.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_COLOR_ATTACHMENTS
+    {
+        let name = v8::String::new(scope, "MAX_COLOR_ATTACHMENTS").unwrap();
+        let val = v8::Number::new(scope, 36063.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT1
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT1").unwrap();
+        let val = v8::Number::new(scope, 36065.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT2
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT2").unwrap();
+        let val = v8::Number::new(scope, 36066.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT3
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT3").unwrap();
+        let val = v8::Number::new(scope, 36067.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT4
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT4").unwrap();
+        let val = v8::Number::new(scope, 36068.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT5
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT5").unwrap();
+        let val = v8::Number::new(scope, 36069.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT6
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT6").unwrap();
+        let val = v8::Number::new(scope, 36070.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT7
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT7").unwrap();
+        let val = v8::Number::new(scope, 36071.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT8
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT8").unwrap();
+        let val = v8::Number::new(scope, 36072.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT9
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT9").unwrap();
+        let val = v8::Number::new(scope, 36073.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT10
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT10").unwrap();
+        let val = v8::Number::new(scope, 36074.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT11
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT11").unwrap();
+        let val = v8::Number::new(scope, 36075.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT12
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT12").unwrap();
+        let val = v8::Number::new(scope, 36076.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT13
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT13").unwrap();
+        let val = v8::Number::new(scope, 36077.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT14
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT14").unwrap();
+        let val = v8::Number::new(scope, 36078.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT15
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT15").unwrap();
+        let val = v8::Number::new(scope, 36079.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_INCOMPLETE_MULTISAMPLE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_INCOMPLETE_MULTISAMPLE").unwrap();
+        let val = v8::Number::new(scope, 36182.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_SAMPLES
+    {
+        let name = v8::String::new(scope, "MAX_SAMPLES").unwrap();
+        let val = v8::Number::new(scope, 36183.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: HALF_FLOAT
+    {
+        let name = v8::String::new(scope, "HALF_FLOAT").unwrap();
+        let val = v8::Number::new(scope, 5131.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG
+    {
+        let name = v8::String::new(scope, "RG").unwrap();
+        let val = v8::Number::new(scope, 33319.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG_INTEGER
+    {
+        let name = v8::String::new(scope, "RG_INTEGER").unwrap();
+        let val = v8::Number::new(scope, 33320.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R8
+    {
+        let name = v8::String::new(scope, "R8").unwrap();
+        let val = v8::Number::new(scope, 33321.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG8
+    {
+        let name = v8::String::new(scope, "RG8").unwrap();
+        let val = v8::Number::new(scope, 33323.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R16F
+    {
+        let name = v8::String::new(scope, "R16F").unwrap();
+        let val = v8::Number::new(scope, 33325.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R32F
+    {
+        let name = v8::String::new(scope, "R32F").unwrap();
+        let val = v8::Number::new(scope, 33326.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG16F
+    {
+        let name = v8::String::new(scope, "RG16F").unwrap();
+        let val = v8::Number::new(scope, 33327.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG32F
+    {
+        let name = v8::String::new(scope, "RG32F").unwrap();
+        let val = v8::Number::new(scope, 33328.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R8I
+    {
+        let name = v8::String::new(scope, "R8I").unwrap();
+        let val = v8::Number::new(scope, 33329.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R8UI
+    {
+        let name = v8::String::new(scope, "R8UI").unwrap();
+        let val = v8::Number::new(scope, 33330.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R16I
+    {
+        let name = v8::String::new(scope, "R16I").unwrap();
+        let val = v8::Number::new(scope, 33331.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R16UI
+    {
+        let name = v8::String::new(scope, "R16UI").unwrap();
+        let val = v8::Number::new(scope, 33332.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R32I
+    {
+        let name = v8::String::new(scope, "R32I").unwrap();
+        let val = v8::Number::new(scope, 33333.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R32UI
+    {
+        let name = v8::String::new(scope, "R32UI").unwrap();
+        let val = v8::Number::new(scope, 33334.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG8I
+    {
+        let name = v8::String::new(scope, "RG8I").unwrap();
+        let val = v8::Number::new(scope, 33335.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG8UI
+    {
+        let name = v8::String::new(scope, "RG8UI").unwrap();
+        let val = v8::Number::new(scope, 33336.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG16I
+    {
+        let name = v8::String::new(scope, "RG16I").unwrap();
+        let val = v8::Number::new(scope, 33337.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG16UI
+    {
+        let name = v8::String::new(scope, "RG16UI").unwrap();
+        let val = v8::Number::new(scope, 33338.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG32I
+    {
+        let name = v8::String::new(scope, "RG32I").unwrap();
+        let val = v8::Number::new(scope, 33339.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG32UI
+    {
+        let name = v8::String::new(scope, "RG32UI").unwrap();
+        let val = v8::Number::new(scope, 33340.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ARRAY_BINDING
+    {
+        let name = v8::String::new(scope, "VERTEX_ARRAY_BINDING").unwrap();
+        let val = v8::Number::new(scope, 34229.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: R8_SNORM
+    {
+        let name = v8::String::new(scope, "R8_SNORM").unwrap();
+        let val = v8::Number::new(scope, 36756.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RG8_SNORM
+    {
+        let name = v8::String::new(scope, "RG8_SNORM").unwrap();
+        let val = v8::Number::new(scope, 36757.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB8_SNORM
+    {
+        let name = v8::String::new(scope, "RGB8_SNORM").unwrap();
+        let val = v8::Number::new(scope, 36758.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA8_SNORM
+    {
+        let name = v8::String::new(scope, "RGBA8_SNORM").unwrap();
+        let val = v8::Number::new(scope, 36759.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SIGNED_NORMALIZED
+    {
+        let name = v8::String::new(scope, "SIGNED_NORMALIZED").unwrap();
+        let val = v8::Number::new(scope, 36764.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COPY_READ_BUFFER
+    {
+        let name = v8::String::new(scope, "COPY_READ_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 36662.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COPY_WRITE_BUFFER
+    {
+        let name = v8::String::new(scope, "COPY_WRITE_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 36663.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COPY_READ_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "COPY_READ_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36662.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COPY_WRITE_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "COPY_WRITE_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36663.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BUFFER
+    {
+        let name = v8::String::new(scope, "UNIFORM_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 35345.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "UNIFORM_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 35368.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BUFFER_START
+    {
+        let name = v8::String::new(scope, "UNIFORM_BUFFER_START").unwrap();
+        let val = v8::Number::new(scope, 35369.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BUFFER_SIZE
+    {
+        let name = v8::String::new(scope, "UNIFORM_BUFFER_SIZE").unwrap();
+        let val = v8::Number::new(scope, 35370.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_UNIFORM_BLOCKS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_UNIFORM_BLOCKS").unwrap();
+        let val = v8::Number::new(scope, 35371.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_FRAGMENT_UNIFORM_BLOCKS
+    {
+        let name = v8::String::new(scope, "MAX_FRAGMENT_UNIFORM_BLOCKS").unwrap();
+        let val = v8::Number::new(scope, 35373.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_COMBINED_UNIFORM_BLOCKS
+    {
+        let name = v8::String::new(scope, "MAX_COMBINED_UNIFORM_BLOCKS").unwrap();
+        let val = v8::Number::new(scope, 35374.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_UNIFORM_BUFFER_BINDINGS
+    {
+        let name = v8::String::new(scope, "MAX_UNIFORM_BUFFER_BINDINGS").unwrap();
+        let val = v8::Number::new(scope, 35375.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_UNIFORM_BLOCK_SIZE
+    {
+        let name = v8::String::new(scope, "MAX_UNIFORM_BLOCK_SIZE").unwrap();
+        let val = v8::Number::new(scope, 35376.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 35377.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 35379.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BUFFER_OFFSET_ALIGNMENT
+    {
+        let name = v8::String::new(scope, "UNIFORM_BUFFER_OFFSET_ALIGNMENT").unwrap();
+        let val = v8::Number::new(scope, 35380.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ACTIVE_UNIFORM_BLOCKS
+    {
+        let name = v8::String::new(scope, "ACTIVE_UNIFORM_BLOCKS").unwrap();
+        let val = v8::Number::new(scope, 35382.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_TYPE
+    {
+        let name = v8::String::new(scope, "UNIFORM_TYPE").unwrap();
+        let val = v8::Number::new(scope, 35383.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_SIZE
+    {
+        let name = v8::String::new(scope, "UNIFORM_SIZE").unwrap();
+        let val = v8::Number::new(scope, 35384.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BLOCK_INDEX
+    {
+        let name = v8::String::new(scope, "UNIFORM_BLOCK_INDEX").unwrap();
+        let val = v8::Number::new(scope, 35386.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_OFFSET
+    {
+        let name = v8::String::new(scope, "UNIFORM_OFFSET").unwrap();
+        let val = v8::Number::new(scope, 35387.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_ARRAY_STRIDE
+    {
+        let name = v8::String::new(scope, "UNIFORM_ARRAY_STRIDE").unwrap();
+        let val = v8::Number::new(scope, 35388.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_MATRIX_STRIDE
+    {
+        let name = v8::String::new(scope, "UNIFORM_MATRIX_STRIDE").unwrap();
+        let val = v8::Number::new(scope, 35389.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_IS_ROW_MAJOR
+    {
+        let name = v8::String::new(scope, "UNIFORM_IS_ROW_MAJOR").unwrap();
+        let val = v8::Number::new(scope, 35390.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BLOCK_BINDING
+    {
+        let name = v8::String::new(scope, "UNIFORM_BLOCK_BINDING").unwrap();
+        let val = v8::Number::new(scope, 35391.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BLOCK_DATA_SIZE
+    {
+        let name = v8::String::new(scope, "UNIFORM_BLOCK_DATA_SIZE").unwrap();
+        let val = v8::Number::new(scope, 35392.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BLOCK_ACTIVE_UNIFORMS
+    {
+        let name = v8::String::new(scope, "UNIFORM_BLOCK_ACTIVE_UNIFORMS").unwrap();
+        let val = v8::Number::new(scope, 35394.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES
+    {
+        let name = v8::String::new(scope, "UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES").unwrap();
+        let val = v8::Number::new(scope, 35395.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER
+    {
+        let name = v8::String::new(scope, "UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER").unwrap();
+        let val = v8::Number::new(scope, 35396.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER
+    {
+        let name = v8::String::new(scope, "UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER").unwrap();
+        let val = v8::Number::new(scope, 35398.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_INDEX
+    {
+        let name = v8::String::new(scope, "INVALID_INDEX").unwrap();
+        let val = v8::Number::new(scope, 4294967295.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_OUTPUT_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_OUTPUT_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 37154.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_FRAGMENT_INPUT_COMPONENTS
+    {
+        let name = v8::String::new(scope, "MAX_FRAGMENT_INPUT_COMPONENTS").unwrap();
+        let val = v8::Number::new(scope, 37157.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_SERVER_WAIT_TIMEOUT
+    {
+        let name = v8::String::new(scope, "MAX_SERVER_WAIT_TIMEOUT").unwrap();
+        let val = v8::Number::new(scope, 37137.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: OBJECT_TYPE
+    {
+        let name = v8::String::new(scope, "OBJECT_TYPE").unwrap();
+        let val = v8::Number::new(scope, 37138.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SYNC_CONDITION
+    {
+        let name = v8::String::new(scope, "SYNC_CONDITION").unwrap();
+        let val = v8::Number::new(scope, 37139.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SYNC_STATUS
+    {
+        let name = v8::String::new(scope, "SYNC_STATUS").unwrap();
+        let val = v8::Number::new(scope, 37140.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SYNC_FLAGS
+    {
+        let name = v8::String::new(scope, "SYNC_FLAGS").unwrap();
+        let val = v8::Number::new(scope, 37141.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SYNC_FENCE
+    {
+        let name = v8::String::new(scope, "SYNC_FENCE").unwrap();
+        let val = v8::Number::new(scope, 37142.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SYNC_GPU_COMMANDS_COMPLETE
+    {
+        let name = v8::String::new(scope, "SYNC_GPU_COMMANDS_COMPLETE").unwrap();
+        let val = v8::Number::new(scope, 37143.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNALED
+    {
+        let name = v8::String::new(scope, "UNSIGNALED").unwrap();
+        let val = v8::Number::new(scope, 37144.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SIGNALED
+    {
+        let name = v8::String::new(scope, "SIGNALED").unwrap();
+        let val = v8::Number::new(scope, 37145.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALREADY_SIGNALED
+    {
+        let name = v8::String::new(scope, "ALREADY_SIGNALED").unwrap();
+        let val = v8::Number::new(scope, 37146.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TIMEOUT_EXPIRED
+    {
+        let name = v8::String::new(scope, "TIMEOUT_EXPIRED").unwrap();
+        let val = v8::Number::new(scope, 37147.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CONDITION_SATISFIED
+    {
+        let name = v8::String::new(scope, "CONDITION_SATISFIED").unwrap();
+        let val = v8::Number::new(scope, 37148.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: WAIT_FAILED
+    {
+        let name = v8::String::new(scope, "WAIT_FAILED").unwrap();
+        let val = v8::Number::new(scope, 37149.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SYNC_FLUSH_COMMANDS_BIT
+    {
+        let name = v8::String::new(scope, "SYNC_FLUSH_COMMANDS_BIT").unwrap();
+        let val = v8::Number::new(scope, 1.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_DIVISOR
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_DIVISOR").unwrap();
+        let val = v8::Number::new(scope, 35070.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ANY_SAMPLES_PASSED
+    {
+        let name = v8::String::new(scope, "ANY_SAMPLES_PASSED").unwrap();
+        let val = v8::Number::new(scope, 35887.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ANY_SAMPLES_PASSED_CONSERVATIVE
+    {
+        let name = v8::String::new(scope, "ANY_SAMPLES_PASSED_CONSERVATIVE").unwrap();
+        let val = v8::Number::new(scope, 36202.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_BINDING
+    {
+        let name = v8::String::new(scope, "SAMPLER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 35097.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB10_A2UI
+    {
+        let name = v8::String::new(scope, "RGB10_A2UI").unwrap();
+        let val = v8::Number::new(scope, 36975.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_2_10_10_10_REV
+    {
+        let name = v8::String::new(scope, "INT_2_10_10_10_REV").unwrap();
+        let val = v8::Number::new(scope, 36255.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK").unwrap();
+        let val = v8::Number::new(scope, 36386.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_PAUSED
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_PAUSED").unwrap();
+        let val = v8::Number::new(scope, 36387.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_ACTIVE
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_ACTIVE").unwrap();
+        let val = v8::Number::new(scope, 36388.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRANSFORM_FEEDBACK_BINDING
+    {
+        let name = v8::String::new(scope, "TRANSFORM_FEEDBACK_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36389.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_IMMUTABLE_FORMAT
+    {
+        let name = v8::String::new(scope, "TEXTURE_IMMUTABLE_FORMAT").unwrap();
+        let val = v8::Number::new(scope, 37167.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_ELEMENT_INDEX
+    {
+        let name = v8::String::new(scope, "MAX_ELEMENT_INDEX").unwrap();
+        let val = v8::Number::new(scope, 36203.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_IMMUTABLE_LEVELS
+    {
+        let name = v8::String::new(scope, "TEXTURE_IMMUTABLE_LEVELS").unwrap();
+        let val = v8::Number::new(scope, 33503.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TIMEOUT_IGNORED
+    {
+        let name = v8::String::new(scope, "TIMEOUT_IGNORED").unwrap();
+        let val = v8::Number::new(scope, -1.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_CLIENT_WAIT_TIMEOUT_WEBGL
+    {
+        let name = v8::String::new(scope, "MAX_CLIENT_WAIT_TIMEOUT_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37447.0).into();
+        proto.set(name.into(), val);
+    }
+    // method: copyBufferSubData()
+    {
+        let name = v8::String::new(scope, "copyBufferSubData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_126).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getBufferSubData()
+    {
+        let name = v8::String::new(scope, "getBufferSubData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_127).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blitFramebuffer()
+    {
+        let name = v8::String::new(scope, "blitFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_128).length(10).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: framebufferTextureLayer()
+    {
+        let name = v8::String::new(scope, "framebufferTextureLayer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_129).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: invalidateFramebuffer()
+    {
+        let name = v8::String::new(scope, "invalidateFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_130).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: invalidateSubFramebuffer()
+    {
+        let name = v8::String::new(scope, "invalidateSubFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_131).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: readBuffer()
+    {
+        let name = v8::String::new(scope, "readBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_132).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getInternalformatParameter()
+    {
+        let name = v8::String::new(scope, "getInternalformatParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_133).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: renderbufferStorageMultisample()
+    {
+        let name = v8::String::new(scope, "renderbufferStorageMultisample").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_134).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texStorage2D()
+    {
+        let name = v8::String::new(scope, "texStorage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_135).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texStorage3D()
+    {
+        let name = v8::String::new(scope, "texStorage3D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_136).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texImage3D()
+    {
+        let name = v8::String::new(scope, "texImage3D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_137).length(10).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texSubImage3D()
+    {
+        let name = v8::String::new(scope, "texSubImage3D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_138).length(11).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: copyTexSubImage3D()
+    {
+        let name = v8::String::new(scope, "copyTexSubImage3D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_139).length(9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: compressedTexImage3D()
+    {
+        let name = v8::String::new(scope, "compressedTexImage3D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_140).length(9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: compressedTexSubImage3D()
+    {
+        let name = v8::String::new(scope, "compressedTexSubImage3D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_141).length(11).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getFragDataLocation()
+    {
+        let name = v8::String::new(scope, "getFragDataLocation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_142).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1ui()
+    {
+        let name = v8::String::new(scope, "uniform1ui").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_143).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2ui()
+    {
+        let name = v8::String::new(scope, "uniform2ui").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_144).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3ui()
+    {
+        let name = v8::String::new(scope, "uniform3ui").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_145).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4ui()
+    {
+        let name = v8::String::new(scope, "uniform4ui").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_146).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1uiv()
+    {
+        let name = v8::String::new(scope, "uniform1uiv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_147).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2uiv()
+    {
+        let name = v8::String::new(scope, "uniform2uiv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_148).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3uiv()
+    {
+        let name = v8::String::new(scope, "uniform3uiv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_149).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4uiv()
+    {
+        let name = v8::String::new(scope, "uniform4uiv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_150).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix3x2fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix3x2fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_151).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix4x2fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix4x2fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_152).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix2x3fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix2x3fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_153).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix4x3fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix4x3fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_154).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix2x4fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix2x4fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_155).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix3x4fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix3x4fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_156).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttribI4i()
+    {
+        let name = v8::String::new(scope, "vertexAttribI4i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_157).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttribI4iv()
+    {
+        let name = v8::String::new(scope, "vertexAttribI4iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_158).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttribI4ui()
+    {
+        let name = v8::String::new(scope, "vertexAttribI4ui").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_159).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttribI4uiv()
+    {
+        let name = v8::String::new(scope, "vertexAttribI4uiv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_160).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttribIPointer()
+    {
+        let name = v8::String::new(scope, "vertexAttribIPointer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_161).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttribDivisor()
+    {
+        let name = v8::String::new(scope, "vertexAttribDivisor").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_162).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawArraysInstanced()
+    {
+        let name = v8::String::new(scope, "drawArraysInstanced").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_163).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawElementsInstanced()
+    {
+        let name = v8::String::new(scope, "drawElementsInstanced").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_164).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawRangeElements()
+    {
+        let name = v8::String::new(scope, "drawRangeElements").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_165).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawBuffers()
+    {
+        let name = v8::String::new(scope, "drawBuffers").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_166).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearBufferfv()
+    {
+        let name = v8::String::new(scope, "clearBufferfv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_167).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearBufferiv()
+    {
+        let name = v8::String::new(scope, "clearBufferiv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_168).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearBufferuiv()
+    {
+        let name = v8::String::new(scope, "clearBufferuiv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_169).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearBufferfi()
+    {
+        let name = v8::String::new(scope, "clearBufferfi").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_170).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createQuery()
+    {
+        let name = v8::String::new(scope, "createQuery").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_171).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteQuery()
+    {
+        let name = v8::String::new(scope, "deleteQuery").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_172).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isQuery()
+    {
+        let name = v8::String::new(scope, "isQuery").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_173).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: beginQuery()
+    {
+        let name = v8::String::new(scope, "beginQuery").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_174).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: endQuery()
+    {
+        let name = v8::String::new(scope, "endQuery").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_175).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getQuery()
+    {
+        let name = v8::String::new(scope, "getQuery").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_176).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getQueryParameter()
+    {
+        let name = v8::String::new(scope, "getQueryParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_177).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createSampler()
+    {
+        let name = v8::String::new(scope, "createSampler").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_178).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteSampler()
+    {
+        let name = v8::String::new(scope, "deleteSampler").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_179).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isSampler()
+    {
+        let name = v8::String::new(scope, "isSampler").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_180).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindSampler()
+    {
+        let name = v8::String::new(scope, "bindSampler").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_181).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: samplerParameteri()
+    {
+        let name = v8::String::new(scope, "samplerParameteri").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_182).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: samplerParameterf()
+    {
+        let name = v8::String::new(scope, "samplerParameterf").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_183).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getSamplerParameter()
+    {
+        let name = v8::String::new(scope, "getSamplerParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_184).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: fenceSync()
+    {
+        let name = v8::String::new(scope, "fenceSync").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_185).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isSync()
+    {
+        let name = v8::String::new(scope, "isSync").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_186).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteSync()
+    {
+        let name = v8::String::new(scope, "deleteSync").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_187).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clientWaitSync()
+    {
+        let name = v8::String::new(scope, "clientWaitSync").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_188).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: waitSync()
+    {
+        let name = v8::String::new(scope, "waitSync").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_189).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getSyncParameter()
+    {
+        let name = v8::String::new(scope, "getSyncParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_190).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createTransformFeedback()
+    {
+        let name = v8::String::new(scope, "createTransformFeedback").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_191).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteTransformFeedback()
+    {
+        let name = v8::String::new(scope, "deleteTransformFeedback").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_192).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isTransformFeedback()
+    {
+        let name = v8::String::new(scope, "isTransformFeedback").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_193).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindTransformFeedback()
+    {
+        let name = v8::String::new(scope, "bindTransformFeedback").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_194).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: beginTransformFeedback()
+    {
+        let name = v8::String::new(scope, "beginTransformFeedback").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_195).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: endTransformFeedback()
+    {
+        let name = v8::String::new(scope, "endTransformFeedback").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_196).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: transformFeedbackVaryings()
+    {
+        let name = v8::String::new(scope, "transformFeedbackVaryings").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_197).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getTransformFeedbackVarying()
+    {
+        let name = v8::String::new(scope, "getTransformFeedbackVarying").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_198).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: pauseTransformFeedback()
+    {
+        let name = v8::String::new(scope, "pauseTransformFeedback").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_199).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: resumeTransformFeedback()
+    {
+        let name = v8::String::new(scope, "resumeTransformFeedback").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_200).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindBufferBase()
+    {
+        let name = v8::String::new(scope, "bindBufferBase").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_201).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindBufferRange()
+    {
+        let name = v8::String::new(scope, "bindBufferRange").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_202).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getIndexedParameter()
+    {
+        let name = v8::String::new(scope, "getIndexedParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_203).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getUniformIndices()
+    {
+        let name = v8::String::new(scope, "getUniformIndices").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_204).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getActiveUniforms()
+    {
+        let name = v8::String::new(scope, "getActiveUniforms").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_205).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getUniformBlockIndex()
+    {
+        let name = v8::String::new(scope, "getUniformBlockIndex").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_206).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getActiveUniformBlockParameter()
+    {
+        let name = v8::String::new(scope, "getActiveUniformBlockParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_207).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getActiveUniformBlockName()
+    {
+        let name = v8::String::new(scope, "getActiveUniformBlockName").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_208).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformBlockBinding()
+    {
+        let name = v8::String::new(scope, "uniformBlockBinding").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_209).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createVertexArray()
+    {
+        let name = v8::String::new(scope, "createVertexArray").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_210).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteVertexArray()
+    {
+        let name = v8::String::new(scope, "deleteVertexArray").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_211).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isVertexArray()
+    {
+        let name = v8::String::new(scope, "isVertexArray").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_212).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindVertexArray()
+    {
+        let name = v8::String::new(scope, "bindVertexArray").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_213).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bufferData()
+    {
+        let name = v8::String::new(scope, "bufferData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_214).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bufferSubData()
+    {
+        let name = v8::String::new(scope, "bufferSubData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_215).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texImage2D()
+    {
+        let name = v8::String::new(scope, "texImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_216).length(9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texSubImage2D()
+    {
+        let name = v8::String::new(scope, "texSubImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_217).length(9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: compressedTexImage2D()
+    {
+        let name = v8::String::new(scope, "compressedTexImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_218).length(8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: compressedTexSubImage2D()
+    {
+        let name = v8::String::new(scope, "compressedTexSubImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_219).length(9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1fv()
+    {
+        let name = v8::String::new(scope, "uniform1fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_220).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2fv()
+    {
+        let name = v8::String::new(scope, "uniform2fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_221).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3fv()
+    {
+        let name = v8::String::new(scope, "uniform3fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_222).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4fv()
+    {
+        let name = v8::String::new(scope, "uniform4fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_223).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1iv()
+    {
+        let name = v8::String::new(scope, "uniform1iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_224).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2iv()
+    {
+        let name = v8::String::new(scope, "uniform2iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_225).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3iv()
+    {
+        let name = v8::String::new(scope, "uniform3iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_226).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4iv()
+    {
+        let name = v8::String::new(scope, "uniform4iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_227).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix2fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix2fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_228).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix3fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix3fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_229).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix4fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix4fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_230).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: readPixels()
+    {
+        let name = v8::String::new(scope, "readPixels").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_op_231).length(7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
@@ -128,6 +7182,1301 @@ pub fn create_web_gl_object_template<'s>(
     tmpl
 }
 
+unsafe extern "C" fn web_gl_rendering_context_get_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_get_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_get_3(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_get_4(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_get_5(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_set_5(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn web_gl_rendering_context_get_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_set_6(_info: *const v8::FunctionCallbackInfo) {
+    // no-op setter stub
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_7(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_8(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Boolean::new(scope, false).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_9(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_10(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_11(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_12(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_13(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_14(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_15(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_16(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_17(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_18(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_19(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_20(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_21(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_22(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_23(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_24(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_25(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_26(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_27(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_28(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_29(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_30(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_31(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_32(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_33(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_34(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_35(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_36(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_37(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_38(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_39(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_40(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_41(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_42(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_43(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_44(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_45(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_46(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_47(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_48(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_49(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_50(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_51(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_52(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_53(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_54(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_55(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_56(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_57(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_58(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_59(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_60(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_61(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_62(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_63(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_64(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_65(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_66(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_67(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_68(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_69(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_70(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_71(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_72(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_73(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_74(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_75(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_76(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(crate::type_conv::v8_str(scope, ""));
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_77(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_78(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_79(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_80(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_81(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_82(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_83(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_84(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_85(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_86(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_87(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_88(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_89(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::Object::new(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_90(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_91(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_92(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_93(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_94(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_95(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_96(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_97(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_98(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_99(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_100(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_101(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_102(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_103(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_104(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_105(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_106(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_107(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_108(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_109(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_110(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_111(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_112(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_113(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_114(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_115(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_116(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_117(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_118(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_119(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_120(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_121(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_122(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_123(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_124(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_125(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_126(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_127(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_128(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_129(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_130(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_131(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_132(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_133(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_134(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_135(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_136(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_137(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_138(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_139(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_140(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_141(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_142(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
+unsafe extern "C" fn web_gl_rendering_context_op_143(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(v8::undefined(scope).into());
+    }));
+}
+
 /// Create FunctionTemplate for WebGLRenderingContext.
 pub fn create_web_gl_rendering_context_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -142,6 +8491,2785 @@ pub fn create_web_gl_rendering_context_template<'s>(
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLRenderingContext").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
+    }
+    // const: DEPTH_BUFFER_BIT
+    {
+        let name = v8::String::new(scope, "DEPTH_BUFFER_BIT").unwrap();
+        let val = v8::Number::new(scope, 256.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BUFFER_BIT
+    {
+        let name = v8::String::new(scope, "STENCIL_BUFFER_BIT").unwrap();
+        let val = v8::Number::new(scope, 1024.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_BUFFER_BIT
+    {
+        let name = v8::String::new(scope, "COLOR_BUFFER_BIT").unwrap();
+        let val = v8::Number::new(scope, 16384.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: POINTS
+    {
+        let name = v8::String::new(scope, "POINTS").unwrap();
+        let val = v8::Number::new(scope, 0.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINES
+    {
+        let name = v8::String::new(scope, "LINES").unwrap();
+        let val = v8::Number::new(scope, 1.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINE_LOOP
+    {
+        let name = v8::String::new(scope, "LINE_LOOP").unwrap();
+        let val = v8::Number::new(scope, 2.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINE_STRIP
+    {
+        let name = v8::String::new(scope, "LINE_STRIP").unwrap();
+        let val = v8::Number::new(scope, 3.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRIANGLES
+    {
+        let name = v8::String::new(scope, "TRIANGLES").unwrap();
+        let val = v8::Number::new(scope, 4.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRIANGLE_STRIP
+    {
+        let name = v8::String::new(scope, "TRIANGLE_STRIP").unwrap();
+        let val = v8::Number::new(scope, 5.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TRIANGLE_FAN
+    {
+        let name = v8::String::new(scope, "TRIANGLE_FAN").unwrap();
+        let val = v8::Number::new(scope, 6.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ZERO
+    {
+        let name = v8::String::new(scope, "ZERO").unwrap();
+        let val = v8::Number::new(scope, 0.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE
+    {
+        let name = v8::String::new(scope, "ONE").unwrap();
+        let val = v8::Number::new(scope, 1.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRC_COLOR
+    {
+        let name = v8::String::new(scope, "SRC_COLOR").unwrap();
+        let val = v8::Number::new(scope, 768.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_SRC_COLOR
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_SRC_COLOR").unwrap();
+        let val = v8::Number::new(scope, 769.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRC_ALPHA
+    {
+        let name = v8::String::new(scope, "SRC_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 770.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_SRC_ALPHA
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_SRC_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 771.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DST_ALPHA
+    {
+        let name = v8::String::new(scope, "DST_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 772.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_DST_ALPHA
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_DST_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 773.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DST_COLOR
+    {
+        let name = v8::String::new(scope, "DST_COLOR").unwrap();
+        let val = v8::Number::new(scope, 774.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_DST_COLOR
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_DST_COLOR").unwrap();
+        let val = v8::Number::new(scope, 775.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SRC_ALPHA_SATURATE
+    {
+        let name = v8::String::new(scope, "SRC_ALPHA_SATURATE").unwrap();
+        let val = v8::Number::new(scope, 776.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FUNC_ADD
+    {
+        let name = v8::String::new(scope, "FUNC_ADD").unwrap();
+        let val = v8::Number::new(scope, 32774.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_EQUATION
+    {
+        let name = v8::String::new(scope, "BLEND_EQUATION").unwrap();
+        let val = v8::Number::new(scope, 32777.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_EQUATION_RGB
+    {
+        let name = v8::String::new(scope, "BLEND_EQUATION_RGB").unwrap();
+        let val = v8::Number::new(scope, 32777.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_EQUATION_ALPHA
+    {
+        let name = v8::String::new(scope, "BLEND_EQUATION_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 34877.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FUNC_SUBTRACT
+    {
+        let name = v8::String::new(scope, "FUNC_SUBTRACT").unwrap();
+        let val = v8::Number::new(scope, 32778.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FUNC_REVERSE_SUBTRACT
+    {
+        let name = v8::String::new(scope, "FUNC_REVERSE_SUBTRACT").unwrap();
+        let val = v8::Number::new(scope, 32779.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_DST_RGB
+    {
+        let name = v8::String::new(scope, "BLEND_DST_RGB").unwrap();
+        let val = v8::Number::new(scope, 32968.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_SRC_RGB
+    {
+        let name = v8::String::new(scope, "BLEND_SRC_RGB").unwrap();
+        let val = v8::Number::new(scope, 32969.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_DST_ALPHA
+    {
+        let name = v8::String::new(scope, "BLEND_DST_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 32970.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_SRC_ALPHA
+    {
+        let name = v8::String::new(scope, "BLEND_SRC_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 32971.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CONSTANT_COLOR
+    {
+        let name = v8::String::new(scope, "CONSTANT_COLOR").unwrap();
+        let val = v8::Number::new(scope, 32769.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_CONSTANT_COLOR
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_CONSTANT_COLOR").unwrap();
+        let val = v8::Number::new(scope, 32770.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CONSTANT_ALPHA
+    {
+        let name = v8::String::new(scope, "CONSTANT_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 32771.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ONE_MINUS_CONSTANT_ALPHA
+    {
+        let name = v8::String::new(scope, "ONE_MINUS_CONSTANT_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 32772.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND_COLOR
+    {
+        let name = v8::String::new(scope, "BLEND_COLOR").unwrap();
+        let val = v8::Number::new(scope, 32773.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ARRAY_BUFFER
+    {
+        let name = v8::String::new(scope, "ARRAY_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 34962.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ELEMENT_ARRAY_BUFFER
+    {
+        let name = v8::String::new(scope, "ELEMENT_ARRAY_BUFFER").unwrap();
+        let val = v8::Number::new(scope, 34963.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ARRAY_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "ARRAY_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 34964.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ELEMENT_ARRAY_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "ELEMENT_ARRAY_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 34965.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STREAM_DRAW
+    {
+        let name = v8::String::new(scope, "STREAM_DRAW").unwrap();
+        let val = v8::Number::new(scope, 35040.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STATIC_DRAW
+    {
+        let name = v8::String::new(scope, "STATIC_DRAW").unwrap();
+        let val = v8::Number::new(scope, 35044.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DYNAMIC_DRAW
+    {
+        let name = v8::String::new(scope, "DYNAMIC_DRAW").unwrap();
+        let val = v8::Number::new(scope, 35048.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BUFFER_SIZE
+    {
+        let name = v8::String::new(scope, "BUFFER_SIZE").unwrap();
+        let val = v8::Number::new(scope, 34660.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BUFFER_USAGE
+    {
+        let name = v8::String::new(scope, "BUFFER_USAGE").unwrap();
+        let val = v8::Number::new(scope, 34661.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CURRENT_VERTEX_ATTRIB
+    {
+        let name = v8::String::new(scope, "CURRENT_VERTEX_ATTRIB").unwrap();
+        let val = v8::Number::new(scope, 34342.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRONT
+    {
+        let name = v8::String::new(scope, "FRONT").unwrap();
+        let val = v8::Number::new(scope, 1028.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BACK
+    {
+        let name = v8::String::new(scope, "BACK").unwrap();
+        let val = v8::Number::new(scope, 1029.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRONT_AND_BACK
+    {
+        let name = v8::String::new(scope, "FRONT_AND_BACK").unwrap();
+        let val = v8::Number::new(scope, 1032.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CULL_FACE
+    {
+        let name = v8::String::new(scope, "CULL_FACE").unwrap();
+        let val = v8::Number::new(scope, 2884.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLEND
+    {
+        let name = v8::String::new(scope, "BLEND").unwrap();
+        let val = v8::Number::new(scope, 3042.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DITHER
+    {
+        let name = v8::String::new(scope, "DITHER").unwrap();
+        let val = v8::Number::new(scope, 3024.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_TEST
+    {
+        let name = v8::String::new(scope, "STENCIL_TEST").unwrap();
+        let val = v8::Number::new(scope, 2960.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_TEST
+    {
+        let name = v8::String::new(scope, "DEPTH_TEST").unwrap();
+        let val = v8::Number::new(scope, 2929.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SCISSOR_TEST
+    {
+        let name = v8::String::new(scope, "SCISSOR_TEST").unwrap();
+        let val = v8::Number::new(scope, 3089.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: POLYGON_OFFSET_FILL
+    {
+        let name = v8::String::new(scope, "POLYGON_OFFSET_FILL").unwrap();
+        let val = v8::Number::new(scope, 32823.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_ALPHA_TO_COVERAGE
+    {
+        let name = v8::String::new(scope, "SAMPLE_ALPHA_TO_COVERAGE").unwrap();
+        let val = v8::Number::new(scope, 32926.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_COVERAGE
+    {
+        let name = v8::String::new(scope, "SAMPLE_COVERAGE").unwrap();
+        let val = v8::Number::new(scope, 32928.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NO_ERROR
+    {
+        let name = v8::String::new(scope, "NO_ERROR").unwrap();
+        let val = v8::Number::new(scope, 0.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_ENUM
+    {
+        let name = v8::String::new(scope, "INVALID_ENUM").unwrap();
+        let val = v8::Number::new(scope, 1280.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_VALUE
+    {
+        let name = v8::String::new(scope, "INVALID_VALUE").unwrap();
+        let val = v8::Number::new(scope, 1281.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_OPERATION
+    {
+        let name = v8::String::new(scope, "INVALID_OPERATION").unwrap();
+        let val = v8::Number::new(scope, 1282.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: OUT_OF_MEMORY
+    {
+        let name = v8::String::new(scope, "OUT_OF_MEMORY").unwrap();
+        let val = v8::Number::new(scope, 1285.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CW
+    {
+        let name = v8::String::new(scope, "CW").unwrap();
+        let val = v8::Number::new(scope, 2304.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CCW
+    {
+        let name = v8::String::new(scope, "CCW").unwrap();
+        let val = v8::Number::new(scope, 2305.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINE_WIDTH
+    {
+        let name = v8::String::new(scope, "LINE_WIDTH").unwrap();
+        let val = v8::Number::new(scope, 2849.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALIASED_POINT_SIZE_RANGE
+    {
+        let name = v8::String::new(scope, "ALIASED_POINT_SIZE_RANGE").unwrap();
+        let val = v8::Number::new(scope, 33901.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALIASED_LINE_WIDTH_RANGE
+    {
+        let name = v8::String::new(scope, "ALIASED_LINE_WIDTH_RANGE").unwrap();
+        let val = v8::Number::new(scope, 33902.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CULL_FACE_MODE
+    {
+        let name = v8::String::new(scope, "CULL_FACE_MODE").unwrap();
+        let val = v8::Number::new(scope, 2885.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRONT_FACE
+    {
+        let name = v8::String::new(scope, "FRONT_FACE").unwrap();
+        let val = v8::Number::new(scope, 2886.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_RANGE
+    {
+        let name = v8::String::new(scope, "DEPTH_RANGE").unwrap();
+        let val = v8::Number::new(scope, 2928.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_WRITEMASK
+    {
+        let name = v8::String::new(scope, "DEPTH_WRITEMASK").unwrap();
+        let val = v8::Number::new(scope, 2930.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_CLEAR_VALUE
+    {
+        let name = v8::String::new(scope, "DEPTH_CLEAR_VALUE").unwrap();
+        let val = v8::Number::new(scope, 2931.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_FUNC
+    {
+        let name = v8::String::new(scope, "DEPTH_FUNC").unwrap();
+        let val = v8::Number::new(scope, 2932.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_CLEAR_VALUE
+    {
+        let name = v8::String::new(scope, "STENCIL_CLEAR_VALUE").unwrap();
+        let val = v8::Number::new(scope, 2961.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_FUNC
+    {
+        let name = v8::String::new(scope, "STENCIL_FUNC").unwrap();
+        let val = v8::Number::new(scope, 2962.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_FAIL
+    {
+        let name = v8::String::new(scope, "STENCIL_FAIL").unwrap();
+        let val = v8::Number::new(scope, 2964.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_PASS_DEPTH_FAIL
+    {
+        let name = v8::String::new(scope, "STENCIL_PASS_DEPTH_FAIL").unwrap();
+        let val = v8::Number::new(scope, 2965.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_PASS_DEPTH_PASS
+    {
+        let name = v8::String::new(scope, "STENCIL_PASS_DEPTH_PASS").unwrap();
+        let val = v8::Number::new(scope, 2966.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_REF
+    {
+        let name = v8::String::new(scope, "STENCIL_REF").unwrap();
+        let val = v8::Number::new(scope, 2967.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_VALUE_MASK
+    {
+        let name = v8::String::new(scope, "STENCIL_VALUE_MASK").unwrap();
+        let val = v8::Number::new(scope, 2963.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_WRITEMASK
+    {
+        let name = v8::String::new(scope, "STENCIL_WRITEMASK").unwrap();
+        let val = v8::Number::new(scope, 2968.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_FUNC
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_FUNC").unwrap();
+        let val = v8::Number::new(scope, 34816.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_FAIL
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_FAIL").unwrap();
+        let val = v8::Number::new(scope, 34817.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_PASS_DEPTH_FAIL
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_PASS_DEPTH_FAIL").unwrap();
+        let val = v8::Number::new(scope, 34818.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_PASS_DEPTH_PASS
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_PASS_DEPTH_PASS").unwrap();
+        let val = v8::Number::new(scope, 34819.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_REF
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_REF").unwrap();
+        let val = v8::Number::new(scope, 36003.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_VALUE_MASK
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_VALUE_MASK").unwrap();
+        let val = v8::Number::new(scope, 36004.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BACK_WRITEMASK
+    {
+        let name = v8::String::new(scope, "STENCIL_BACK_WRITEMASK").unwrap();
+        let val = v8::Number::new(scope, 36005.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VIEWPORT
+    {
+        let name = v8::String::new(scope, "VIEWPORT").unwrap();
+        let val = v8::Number::new(scope, 2978.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SCISSOR_BOX
+    {
+        let name = v8::String::new(scope, "SCISSOR_BOX").unwrap();
+        let val = v8::Number::new(scope, 3088.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_CLEAR_VALUE
+    {
+        let name = v8::String::new(scope, "COLOR_CLEAR_VALUE").unwrap();
+        let val = v8::Number::new(scope, 3106.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_WRITEMASK
+    {
+        let name = v8::String::new(scope, "COLOR_WRITEMASK").unwrap();
+        let val = v8::Number::new(scope, 3107.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_ALIGNMENT
+    {
+        let name = v8::String::new(scope, "UNPACK_ALIGNMENT").unwrap();
+        let val = v8::Number::new(scope, 3317.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: PACK_ALIGNMENT
+    {
+        let name = v8::String::new(scope, "PACK_ALIGNMENT").unwrap();
+        let val = v8::Number::new(scope, 3333.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_TEXTURE_SIZE
+    {
+        let name = v8::String::new(scope, "MAX_TEXTURE_SIZE").unwrap();
+        let val = v8::Number::new(scope, 3379.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VIEWPORT_DIMS
+    {
+        let name = v8::String::new(scope, "MAX_VIEWPORT_DIMS").unwrap();
+        let val = v8::Number::new(scope, 3386.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SUBPIXEL_BITS
+    {
+        let name = v8::String::new(scope, "SUBPIXEL_BITS").unwrap();
+        let val = v8::Number::new(scope, 3408.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RED_BITS
+    {
+        let name = v8::String::new(scope, "RED_BITS").unwrap();
+        let val = v8::Number::new(scope, 3410.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: GREEN_BITS
+    {
+        let name = v8::String::new(scope, "GREEN_BITS").unwrap();
+        let val = v8::Number::new(scope, 3411.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BLUE_BITS
+    {
+        let name = v8::String::new(scope, "BLUE_BITS").unwrap();
+        let val = v8::Number::new(scope, 3412.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALPHA_BITS
+    {
+        let name = v8::String::new(scope, "ALPHA_BITS").unwrap();
+        let val = v8::Number::new(scope, 3413.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_BITS
+    {
+        let name = v8::String::new(scope, "DEPTH_BITS").unwrap();
+        let val = v8::Number::new(scope, 3414.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_BITS
+    {
+        let name = v8::String::new(scope, "STENCIL_BITS").unwrap();
+        let val = v8::Number::new(scope, 3415.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: POLYGON_OFFSET_UNITS
+    {
+        let name = v8::String::new(scope, "POLYGON_OFFSET_UNITS").unwrap();
+        let val = v8::Number::new(scope, 10752.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: POLYGON_OFFSET_FACTOR
+    {
+        let name = v8::String::new(scope, "POLYGON_OFFSET_FACTOR").unwrap();
+        let val = v8::Number::new(scope, 32824.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_BINDING_2D
+    {
+        let name = v8::String::new(scope, "TEXTURE_BINDING_2D").unwrap();
+        let val = v8::Number::new(scope, 32873.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_BUFFERS
+    {
+        let name = v8::String::new(scope, "SAMPLE_BUFFERS").unwrap();
+        let val = v8::Number::new(scope, 32936.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLES
+    {
+        let name = v8::String::new(scope, "SAMPLES").unwrap();
+        let val = v8::Number::new(scope, 32937.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_COVERAGE_VALUE
+    {
+        let name = v8::String::new(scope, "SAMPLE_COVERAGE_VALUE").unwrap();
+        let val = v8::Number::new(scope, 32938.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLE_COVERAGE_INVERT
+    {
+        let name = v8::String::new(scope, "SAMPLE_COVERAGE_INVERT").unwrap();
+        let val = v8::Number::new(scope, 32939.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COMPRESSED_TEXTURE_FORMATS
+    {
+        let name = v8::String::new(scope, "COMPRESSED_TEXTURE_FORMATS").unwrap();
+        let val = v8::Number::new(scope, 34467.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DONT_CARE
+    {
+        let name = v8::String::new(scope, "DONT_CARE").unwrap();
+        let val = v8::Number::new(scope, 4352.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FASTEST
+    {
+        let name = v8::String::new(scope, "FASTEST").unwrap();
+        let val = v8::Number::new(scope, 4353.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NICEST
+    {
+        let name = v8::String::new(scope, "NICEST").unwrap();
+        let val = v8::Number::new(scope, 4354.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: GENERATE_MIPMAP_HINT
+    {
+        let name = v8::String::new(scope, "GENERATE_MIPMAP_HINT").unwrap();
+        let val = v8::Number::new(scope, 33170.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BYTE
+    {
+        let name = v8::String::new(scope, "BYTE").unwrap();
+        let val = v8::Number::new(scope, 5120.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_BYTE
+    {
+        let name = v8::String::new(scope, "UNSIGNED_BYTE").unwrap();
+        let val = v8::Number::new(scope, 5121.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SHORT
+    {
+        let name = v8::String::new(scope, "SHORT").unwrap();
+        let val = v8::Number::new(scope, 5122.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_SHORT
+    {
+        let name = v8::String::new(scope, "UNSIGNED_SHORT").unwrap();
+        let val = v8::Number::new(scope, 5123.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT
+    {
+        let name = v8::String::new(scope, "INT").unwrap();
+        let val = v8::Number::new(scope, 5124.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_INT
+    {
+        let name = v8::String::new(scope, "UNSIGNED_INT").unwrap();
+        let val = v8::Number::new(scope, 5125.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT
+    {
+        let name = v8::String::new(scope, "FLOAT").unwrap();
+        let val = v8::Number::new(scope, 5126.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_COMPONENT
+    {
+        let name = v8::String::new(scope, "DEPTH_COMPONENT").unwrap();
+        let val = v8::Number::new(scope, 6402.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALPHA
+    {
+        let name = v8::String::new(scope, "ALPHA").unwrap();
+        let val = v8::Number::new(scope, 6406.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB
+    {
+        let name = v8::String::new(scope, "RGB").unwrap();
+        let val = v8::Number::new(scope, 6407.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA
+    {
+        let name = v8::String::new(scope, "RGBA").unwrap();
+        let val = v8::Number::new(scope, 6408.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LUMINANCE
+    {
+        let name = v8::String::new(scope, "LUMINANCE").unwrap();
+        let val = v8::Number::new(scope, 6409.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LUMINANCE_ALPHA
+    {
+        let name = v8::String::new(scope, "LUMINANCE_ALPHA").unwrap();
+        let val = v8::Number::new(scope, 6410.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_SHORT_4_4_4_4
+    {
+        let name = v8::String::new(scope, "UNSIGNED_SHORT_4_4_4_4").unwrap();
+        let val = v8::Number::new(scope, 32819.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_SHORT_5_5_5_1
+    {
+        let name = v8::String::new(scope, "UNSIGNED_SHORT_5_5_5_1").unwrap();
+        let val = v8::Number::new(scope, 32820.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNSIGNED_SHORT_5_6_5
+    {
+        let name = v8::String::new(scope, "UNSIGNED_SHORT_5_6_5").unwrap();
+        let val = v8::Number::new(scope, 33635.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAGMENT_SHADER
+    {
+        let name = v8::String::new(scope, "FRAGMENT_SHADER").unwrap();
+        let val = v8::Number::new(scope, 35632.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_SHADER
+    {
+        let name = v8::String::new(scope, "VERTEX_SHADER").unwrap();
+        let val = v8::Number::new(scope, 35633.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_ATTRIBS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_ATTRIBS").unwrap();
+        let val = v8::Number::new(scope, 34921.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_UNIFORM_VECTORS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_UNIFORM_VECTORS").unwrap();
+        let val = v8::Number::new(scope, 36347.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VARYING_VECTORS
+    {
+        let name = v8::String::new(scope, "MAX_VARYING_VECTORS").unwrap();
+        let val = v8::Number::new(scope, 36348.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_COMBINED_TEXTURE_IMAGE_UNITS
+    {
+        let name = v8::String::new(scope, "MAX_COMBINED_TEXTURE_IMAGE_UNITS").unwrap();
+        let val = v8::Number::new(scope, 35661.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_VERTEX_TEXTURE_IMAGE_UNITS
+    {
+        let name = v8::String::new(scope, "MAX_VERTEX_TEXTURE_IMAGE_UNITS").unwrap();
+        let val = v8::Number::new(scope, 35660.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_TEXTURE_IMAGE_UNITS
+    {
+        let name = v8::String::new(scope, "MAX_TEXTURE_IMAGE_UNITS").unwrap();
+        let val = v8::Number::new(scope, 34930.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_FRAGMENT_UNIFORM_VECTORS
+    {
+        let name = v8::String::new(scope, "MAX_FRAGMENT_UNIFORM_VECTORS").unwrap();
+        let val = v8::Number::new(scope, 36349.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SHADER_TYPE
+    {
+        let name = v8::String::new(scope, "SHADER_TYPE").unwrap();
+        let val = v8::Number::new(scope, 35663.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DELETE_STATUS
+    {
+        let name = v8::String::new(scope, "DELETE_STATUS").unwrap();
+        let val = v8::Number::new(scope, 35712.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINK_STATUS
+    {
+        let name = v8::String::new(scope, "LINK_STATUS").unwrap();
+        let val = v8::Number::new(scope, 35714.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VALIDATE_STATUS
+    {
+        let name = v8::String::new(scope, "VALIDATE_STATUS").unwrap();
+        let val = v8::Number::new(scope, 35715.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ATTACHED_SHADERS
+    {
+        let name = v8::String::new(scope, "ATTACHED_SHADERS").unwrap();
+        let val = v8::Number::new(scope, 35717.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ACTIVE_UNIFORMS
+    {
+        let name = v8::String::new(scope, "ACTIVE_UNIFORMS").unwrap();
+        let val = v8::Number::new(scope, 35718.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ACTIVE_ATTRIBUTES
+    {
+        let name = v8::String::new(scope, "ACTIVE_ATTRIBUTES").unwrap();
+        let val = v8::Number::new(scope, 35721.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SHADING_LANGUAGE_VERSION
+    {
+        let name = v8::String::new(scope, "SHADING_LANGUAGE_VERSION").unwrap();
+        let val = v8::Number::new(scope, 35724.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CURRENT_PROGRAM
+    {
+        let name = v8::String::new(scope, "CURRENT_PROGRAM").unwrap();
+        let val = v8::Number::new(scope, 35725.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NEVER
+    {
+        let name = v8::String::new(scope, "NEVER").unwrap();
+        let val = v8::Number::new(scope, 512.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LESS
+    {
+        let name = v8::String::new(scope, "LESS").unwrap();
+        let val = v8::Number::new(scope, 513.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: EQUAL
+    {
+        let name = v8::String::new(scope, "EQUAL").unwrap();
+        let val = v8::Number::new(scope, 514.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LEQUAL
+    {
+        let name = v8::String::new(scope, "LEQUAL").unwrap();
+        let val = v8::Number::new(scope, 515.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: GREATER
+    {
+        let name = v8::String::new(scope, "GREATER").unwrap();
+        let val = v8::Number::new(scope, 516.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NOTEQUAL
+    {
+        let name = v8::String::new(scope, "NOTEQUAL").unwrap();
+        let val = v8::Number::new(scope, 517.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: GEQUAL
+    {
+        let name = v8::String::new(scope, "GEQUAL").unwrap();
+        let val = v8::Number::new(scope, 518.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ALWAYS
+    {
+        let name = v8::String::new(scope, "ALWAYS").unwrap();
+        let val = v8::Number::new(scope, 519.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: KEEP
+    {
+        let name = v8::String::new(scope, "KEEP").unwrap();
+        let val = v8::Number::new(scope, 7680.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: REPLACE
+    {
+        let name = v8::String::new(scope, "REPLACE").unwrap();
+        let val = v8::Number::new(scope, 7681.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INCR
+    {
+        let name = v8::String::new(scope, "INCR").unwrap();
+        let val = v8::Number::new(scope, 7682.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DECR
+    {
+        let name = v8::String::new(scope, "DECR").unwrap();
+        let val = v8::Number::new(scope, 7683.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVERT
+    {
+        let name = v8::String::new(scope, "INVERT").unwrap();
+        let val = v8::Number::new(scope, 5386.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INCR_WRAP
+    {
+        let name = v8::String::new(scope, "INCR_WRAP").unwrap();
+        let val = v8::Number::new(scope, 34055.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DECR_WRAP
+    {
+        let name = v8::String::new(scope, "DECR_WRAP").unwrap();
+        let val = v8::Number::new(scope, 34056.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VENDOR
+    {
+        let name = v8::String::new(scope, "VENDOR").unwrap();
+        let val = v8::Number::new(scope, 7936.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERER
+    {
+        let name = v8::String::new(scope, "RENDERER").unwrap();
+        let val = v8::Number::new(scope, 7937.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERSION
+    {
+        let name = v8::String::new(scope, "VERSION").unwrap();
+        let val = v8::Number::new(scope, 7938.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NEAREST
+    {
+        let name = v8::String::new(scope, "NEAREST").unwrap();
+        let val = v8::Number::new(scope, 9728.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINEAR
+    {
+        let name = v8::String::new(scope, "LINEAR").unwrap();
+        let val = v8::Number::new(scope, 9729.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NEAREST_MIPMAP_NEAREST
+    {
+        let name = v8::String::new(scope, "NEAREST_MIPMAP_NEAREST").unwrap();
+        let val = v8::Number::new(scope, 9984.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINEAR_MIPMAP_NEAREST
+    {
+        let name = v8::String::new(scope, "LINEAR_MIPMAP_NEAREST").unwrap();
+        let val = v8::Number::new(scope, 9985.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NEAREST_MIPMAP_LINEAR
+    {
+        let name = v8::String::new(scope, "NEAREST_MIPMAP_LINEAR").unwrap();
+        let val = v8::Number::new(scope, 9986.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LINEAR_MIPMAP_LINEAR
+    {
+        let name = v8::String::new(scope, "LINEAR_MIPMAP_LINEAR").unwrap();
+        let val = v8::Number::new(scope, 9987.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_MAG_FILTER
+    {
+        let name = v8::String::new(scope, "TEXTURE_MAG_FILTER").unwrap();
+        let val = v8::Number::new(scope, 10240.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_MIN_FILTER
+    {
+        let name = v8::String::new(scope, "TEXTURE_MIN_FILTER").unwrap();
+        let val = v8::Number::new(scope, 10241.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_WRAP_S
+    {
+        let name = v8::String::new(scope, "TEXTURE_WRAP_S").unwrap();
+        let val = v8::Number::new(scope, 10242.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_WRAP_T
+    {
+        let name = v8::String::new(scope, "TEXTURE_WRAP_T").unwrap();
+        let val = v8::Number::new(scope, 10243.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_2D
+    {
+        let name = v8::String::new(scope, "TEXTURE_2D").unwrap();
+        let val = v8::Number::new(scope, 3553.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE
+    {
+        let name = v8::String::new(scope, "TEXTURE").unwrap();
+        let val = v8::Number::new(scope, 5890.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP").unwrap();
+        let val = v8::Number::new(scope, 34067.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_BINDING_CUBE_MAP
+    {
+        let name = v8::String::new(scope, "TEXTURE_BINDING_CUBE_MAP").unwrap();
+        let val = v8::Number::new(scope, 34068.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_POSITIVE_X
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_POSITIVE_X").unwrap();
+        let val = v8::Number::new(scope, 34069.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_NEGATIVE_X
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_NEGATIVE_X").unwrap();
+        let val = v8::Number::new(scope, 34070.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_POSITIVE_Y
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_POSITIVE_Y").unwrap();
+        let val = v8::Number::new(scope, 34071.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_NEGATIVE_Y
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_NEGATIVE_Y").unwrap();
+        let val = v8::Number::new(scope, 34072.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_POSITIVE_Z
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_POSITIVE_Z").unwrap();
+        let val = v8::Number::new(scope, 34073.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE_CUBE_MAP_NEGATIVE_Z
+    {
+        let name = v8::String::new(scope, "TEXTURE_CUBE_MAP_NEGATIVE_Z").unwrap();
+        let val = v8::Number::new(scope, 34074.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_CUBE_MAP_TEXTURE_SIZE
+    {
+        let name = v8::String::new(scope, "MAX_CUBE_MAP_TEXTURE_SIZE").unwrap();
+        let val = v8::Number::new(scope, 34076.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE0
+    {
+        let name = v8::String::new(scope, "TEXTURE0").unwrap();
+        let val = v8::Number::new(scope, 33984.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE1
+    {
+        let name = v8::String::new(scope, "TEXTURE1").unwrap();
+        let val = v8::Number::new(scope, 33985.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE2
+    {
+        let name = v8::String::new(scope, "TEXTURE2").unwrap();
+        let val = v8::Number::new(scope, 33986.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE3
+    {
+        let name = v8::String::new(scope, "TEXTURE3").unwrap();
+        let val = v8::Number::new(scope, 33987.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE4
+    {
+        let name = v8::String::new(scope, "TEXTURE4").unwrap();
+        let val = v8::Number::new(scope, 33988.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE5
+    {
+        let name = v8::String::new(scope, "TEXTURE5").unwrap();
+        let val = v8::Number::new(scope, 33989.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE6
+    {
+        let name = v8::String::new(scope, "TEXTURE6").unwrap();
+        let val = v8::Number::new(scope, 33990.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE7
+    {
+        let name = v8::String::new(scope, "TEXTURE7").unwrap();
+        let val = v8::Number::new(scope, 33991.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE8
+    {
+        let name = v8::String::new(scope, "TEXTURE8").unwrap();
+        let val = v8::Number::new(scope, 33992.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE9
+    {
+        let name = v8::String::new(scope, "TEXTURE9").unwrap();
+        let val = v8::Number::new(scope, 33993.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE10
+    {
+        let name = v8::String::new(scope, "TEXTURE10").unwrap();
+        let val = v8::Number::new(scope, 33994.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE11
+    {
+        let name = v8::String::new(scope, "TEXTURE11").unwrap();
+        let val = v8::Number::new(scope, 33995.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE12
+    {
+        let name = v8::String::new(scope, "TEXTURE12").unwrap();
+        let val = v8::Number::new(scope, 33996.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE13
+    {
+        let name = v8::String::new(scope, "TEXTURE13").unwrap();
+        let val = v8::Number::new(scope, 33997.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE14
+    {
+        let name = v8::String::new(scope, "TEXTURE14").unwrap();
+        let val = v8::Number::new(scope, 33998.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE15
+    {
+        let name = v8::String::new(scope, "TEXTURE15").unwrap();
+        let val = v8::Number::new(scope, 33999.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE16
+    {
+        let name = v8::String::new(scope, "TEXTURE16").unwrap();
+        let val = v8::Number::new(scope, 34000.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE17
+    {
+        let name = v8::String::new(scope, "TEXTURE17").unwrap();
+        let val = v8::Number::new(scope, 34001.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE18
+    {
+        let name = v8::String::new(scope, "TEXTURE18").unwrap();
+        let val = v8::Number::new(scope, 34002.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE19
+    {
+        let name = v8::String::new(scope, "TEXTURE19").unwrap();
+        let val = v8::Number::new(scope, 34003.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE20
+    {
+        let name = v8::String::new(scope, "TEXTURE20").unwrap();
+        let val = v8::Number::new(scope, 34004.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE21
+    {
+        let name = v8::String::new(scope, "TEXTURE21").unwrap();
+        let val = v8::Number::new(scope, 34005.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE22
+    {
+        let name = v8::String::new(scope, "TEXTURE22").unwrap();
+        let val = v8::Number::new(scope, 34006.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE23
+    {
+        let name = v8::String::new(scope, "TEXTURE23").unwrap();
+        let val = v8::Number::new(scope, 34007.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE24
+    {
+        let name = v8::String::new(scope, "TEXTURE24").unwrap();
+        let val = v8::Number::new(scope, 34008.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE25
+    {
+        let name = v8::String::new(scope, "TEXTURE25").unwrap();
+        let val = v8::Number::new(scope, 34009.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE26
+    {
+        let name = v8::String::new(scope, "TEXTURE26").unwrap();
+        let val = v8::Number::new(scope, 34010.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE27
+    {
+        let name = v8::String::new(scope, "TEXTURE27").unwrap();
+        let val = v8::Number::new(scope, 34011.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE28
+    {
+        let name = v8::String::new(scope, "TEXTURE28").unwrap();
+        let val = v8::Number::new(scope, 34012.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE29
+    {
+        let name = v8::String::new(scope, "TEXTURE29").unwrap();
+        let val = v8::Number::new(scope, 34013.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE30
+    {
+        let name = v8::String::new(scope, "TEXTURE30").unwrap();
+        let val = v8::Number::new(scope, 34014.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: TEXTURE31
+    {
+        let name = v8::String::new(scope, "TEXTURE31").unwrap();
+        let val = v8::Number::new(scope, 34015.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: ACTIVE_TEXTURE
+    {
+        let name = v8::String::new(scope, "ACTIVE_TEXTURE").unwrap();
+        let val = v8::Number::new(scope, 34016.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: REPEAT
+    {
+        let name = v8::String::new(scope, "REPEAT").unwrap();
+        let val = v8::Number::new(scope, 10497.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CLAMP_TO_EDGE
+    {
+        let name = v8::String::new(scope, "CLAMP_TO_EDGE").unwrap();
+        let val = v8::Number::new(scope, 33071.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MIRRORED_REPEAT
+    {
+        let name = v8::String::new(scope, "MIRRORED_REPEAT").unwrap();
+        let val = v8::Number::new(scope, 33648.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_VEC2
+    {
+        let name = v8::String::new(scope, "FLOAT_VEC2").unwrap();
+        let val = v8::Number::new(scope, 35664.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_VEC3
+    {
+        let name = v8::String::new(scope, "FLOAT_VEC3").unwrap();
+        let val = v8::Number::new(scope, 35665.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_VEC4
+    {
+        let name = v8::String::new(scope, "FLOAT_VEC4").unwrap();
+        let val = v8::Number::new(scope, 35666.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_VEC2
+    {
+        let name = v8::String::new(scope, "INT_VEC2").unwrap();
+        let val = v8::Number::new(scope, 35667.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_VEC3
+    {
+        let name = v8::String::new(scope, "INT_VEC3").unwrap();
+        let val = v8::Number::new(scope, 35668.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INT_VEC4
+    {
+        let name = v8::String::new(scope, "INT_VEC4").unwrap();
+        let val = v8::Number::new(scope, 35669.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BOOL
+    {
+        let name = v8::String::new(scope, "BOOL").unwrap();
+        let val = v8::Number::new(scope, 35670.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BOOL_VEC2
+    {
+        let name = v8::String::new(scope, "BOOL_VEC2").unwrap();
+        let val = v8::Number::new(scope, 35671.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BOOL_VEC3
+    {
+        let name = v8::String::new(scope, "BOOL_VEC3").unwrap();
+        let val = v8::Number::new(scope, 35672.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BOOL_VEC4
+    {
+        let name = v8::String::new(scope, "BOOL_VEC4").unwrap();
+        let val = v8::Number::new(scope, 35673.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT2
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT2").unwrap();
+        let val = v8::Number::new(scope, 35674.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT3
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT3").unwrap();
+        let val = v8::Number::new(scope, 35675.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FLOAT_MAT4
+    {
+        let name = v8::String::new(scope, "FLOAT_MAT4").unwrap();
+        let val = v8::Number::new(scope, 35676.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_2D
+    {
+        let name = v8::String::new(scope, "SAMPLER_2D").unwrap();
+        let val = v8::Number::new(scope, 35678.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: SAMPLER_CUBE
+    {
+        let name = v8::String::new(scope, "SAMPLER_CUBE").unwrap();
+        let val = v8::Number::new(scope, 35680.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_ENABLED
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_ENABLED").unwrap();
+        let val = v8::Number::new(scope, 34338.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_SIZE
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_SIZE").unwrap();
+        let val = v8::Number::new(scope, 34339.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_STRIDE
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_STRIDE").unwrap();
+        let val = v8::Number::new(scope, 34340.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_TYPE
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_TYPE").unwrap();
+        let val = v8::Number::new(scope, 34341.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_NORMALIZED
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_NORMALIZED").unwrap();
+        let val = v8::Number::new(scope, 34922.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_POINTER
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_POINTER").unwrap();
+        let val = v8::Number::new(scope, 34373.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 34975.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: IMPLEMENTATION_COLOR_READ_TYPE
+    {
+        let name = v8::String::new(scope, "IMPLEMENTATION_COLOR_READ_TYPE").unwrap();
+        let val = v8::Number::new(scope, 35738.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: IMPLEMENTATION_COLOR_READ_FORMAT
+    {
+        let name = v8::String::new(scope, "IMPLEMENTATION_COLOR_READ_FORMAT").unwrap();
+        let val = v8::Number::new(scope, 35739.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COMPILE_STATUS
+    {
+        let name = v8::String::new(scope, "COMPILE_STATUS").unwrap();
+        let val = v8::Number::new(scope, 35713.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LOW_FLOAT
+    {
+        let name = v8::String::new(scope, "LOW_FLOAT").unwrap();
+        let val = v8::Number::new(scope, 36336.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MEDIUM_FLOAT
+    {
+        let name = v8::String::new(scope, "MEDIUM_FLOAT").unwrap();
+        let val = v8::Number::new(scope, 36337.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: HIGH_FLOAT
+    {
+        let name = v8::String::new(scope, "HIGH_FLOAT").unwrap();
+        let val = v8::Number::new(scope, 36338.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: LOW_INT
+    {
+        let name = v8::String::new(scope, "LOW_INT").unwrap();
+        let val = v8::Number::new(scope, 36339.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MEDIUM_INT
+    {
+        let name = v8::String::new(scope, "MEDIUM_INT").unwrap();
+        let val = v8::Number::new(scope, 36340.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: HIGH_INT
+    {
+        let name = v8::String::new(scope, "HIGH_INT").unwrap();
+        let val = v8::Number::new(scope, 36341.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER").unwrap();
+        let val = v8::Number::new(scope, 36160.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER").unwrap();
+        let val = v8::Number::new(scope, 36161.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA4
+    {
+        let name = v8::String::new(scope, "RGBA4").unwrap();
+        let val = v8::Number::new(scope, 32854.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB5_A1
+    {
+        let name = v8::String::new(scope, "RGB5_A1").unwrap();
+        let val = v8::Number::new(scope, 32855.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGBA8
+    {
+        let name = v8::String::new(scope, "RGBA8").unwrap();
+        let val = v8::Number::new(scope, 32856.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RGB565
+    {
+        let name = v8::String::new(scope, "RGB565").unwrap();
+        let val = v8::Number::new(scope, 36194.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_COMPONENT16
+    {
+        let name = v8::String::new(scope, "DEPTH_COMPONENT16").unwrap();
+        let val = v8::Number::new(scope, 33189.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_INDEX8
+    {
+        let name = v8::String::new(scope, "STENCIL_INDEX8").unwrap();
+        let val = v8::Number::new(scope, 36168.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_STENCIL
+    {
+        let name = v8::String::new(scope, "DEPTH_STENCIL").unwrap();
+        let val = v8::Number::new(scope, 34041.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_WIDTH
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_WIDTH").unwrap();
+        let val = v8::Number::new(scope, 36162.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_HEIGHT
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_HEIGHT").unwrap();
+        let val = v8::Number::new(scope, 36163.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_INTERNAL_FORMAT
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_INTERNAL_FORMAT").unwrap();
+        let val = v8::Number::new(scope, 36164.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_RED_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_RED_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36176.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_GREEN_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_GREEN_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36177.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_BLUE_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_BLUE_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36178.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_ALPHA_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_ALPHA_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36179.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_DEPTH_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_DEPTH_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36180.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_STENCIL_SIZE
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_STENCIL_SIZE").unwrap();
+        let val = v8::Number::new(scope, 36181.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE").unwrap();
+        let val = v8::Number::new(scope, 36048.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_OBJECT_NAME
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME").unwrap();
+        let val = v8::Number::new(scope, 36049.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL").unwrap();
+        let val = v8::Number::new(scope, 36050.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE").unwrap();
+        let val = v8::Number::new(scope, 36051.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: COLOR_ATTACHMENT0
+    {
+        let name = v8::String::new(scope, "COLOR_ATTACHMENT0").unwrap();
+        let val = v8::Number::new(scope, 36064.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "DEPTH_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 36096.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: STENCIL_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "STENCIL_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 36128.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: DEPTH_STENCIL_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "DEPTH_STENCIL_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 33306.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: NONE
+    {
+        let name = v8::String::new(scope, "NONE").unwrap();
+        let val = v8::Number::new(scope, 0.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_COMPLETE
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_COMPLETE").unwrap();
+        let val = v8::Number::new(scope, 36053.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_INCOMPLETE_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_INCOMPLETE_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 36054.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT").unwrap();
+        let val = v8::Number::new(scope, 36055.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_INCOMPLETE_DIMENSIONS
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_INCOMPLETE_DIMENSIONS").unwrap();
+        let val = v8::Number::new(scope, 36057.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_UNSUPPORTED
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_UNSUPPORTED").unwrap();
+        let val = v8::Number::new(scope, 36061.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: FRAMEBUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "FRAMEBUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36006.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: RENDERBUFFER_BINDING
+    {
+        let name = v8::String::new(scope, "RENDERBUFFER_BINDING").unwrap();
+        let val = v8::Number::new(scope, 36007.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: MAX_RENDERBUFFER_SIZE
+    {
+        let name = v8::String::new(scope, "MAX_RENDERBUFFER_SIZE").unwrap();
+        let val = v8::Number::new(scope, 34024.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: INVALID_FRAMEBUFFER_OPERATION
+    {
+        let name = v8::String::new(scope, "INVALID_FRAMEBUFFER_OPERATION").unwrap();
+        let val = v8::Number::new(scope, 1286.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_FLIP_Y_WEBGL
+    {
+        let name = v8::String::new(scope, "UNPACK_FLIP_Y_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37440.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_PREMULTIPLY_ALPHA_WEBGL
+    {
+        let name = v8::String::new(scope, "UNPACK_PREMULTIPLY_ALPHA_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37441.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: CONTEXT_LOST_WEBGL
+    {
+        let name = v8::String::new(scope, "CONTEXT_LOST_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37442.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: UNPACK_COLORSPACE_CONVERSION_WEBGL
+    {
+        let name = v8::String::new(scope, "UNPACK_COLORSPACE_CONVERSION_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37443.0).into();
+        proto.set(name.into(), val);
+    }
+    // const: BROWSER_DEFAULT_WEBGL
+    {
+        let name = v8::String::new(scope, "BROWSER_DEFAULT_WEBGL").unwrap();
+        let val = v8::Number::new(scope, 37444.0).into();
+        proto.set(name.into(), val);
+    }
+    // attribute: canvas
+    {
+        let name = v8::String::new(scope, "canvas").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_1).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: drawingBufferWidth
+    {
+        let name = v8::String::new(scope, "drawingBufferWidth").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_2).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: drawingBufferHeight
+    {
+        let name = v8::String::new(scope, "drawingBufferHeight").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_3).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: drawingBufferFormat
+    {
+        let name = v8::String::new(scope, "drawingBufferFormat").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_4).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    // attribute: drawingBufferColorSpace
+    {
+        let name = v8::String::new(scope, "drawingBufferColorSpace").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_5).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_set_5).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // attribute: unpackColorSpace
+    {
+        let name = v8::String::new(scope, "unpackColorSpace").unwrap();
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_6).build(scope);
+        let setter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_set_6).build(scope);
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    // method: getContextAttributes()
+    {
+        let name = v8::String::new(scope, "getContextAttributes").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isContextLost()
+    {
+        let name = v8::String::new(scope, "isContextLost").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getSupportedExtensions()
+    {
+        let name = v8::String::new(scope, "getSupportedExtensions").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getExtension()
+    {
+        let name = v8::String::new(scope, "getExtension").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_10).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawingBufferStorage()
+    {
+        let name = v8::String::new(scope, "drawingBufferStorage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_11).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: activeTexture()
+    {
+        let name = v8::String::new(scope, "activeTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_12).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: attachShader()
+    {
+        let name = v8::String::new(scope, "attachShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_13).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindAttribLocation()
+    {
+        let name = v8::String::new(scope, "bindAttribLocation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_14).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindBuffer()
+    {
+        let name = v8::String::new(scope, "bindBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_15).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindFramebuffer()
+    {
+        let name = v8::String::new(scope, "bindFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_16).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindRenderbuffer()
+    {
+        let name = v8::String::new(scope, "bindRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_17).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bindTexture()
+    {
+        let name = v8::String::new(scope, "bindTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_18).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendColor()
+    {
+        let name = v8::String::new(scope, "blendColor").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_19).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendEquation()
+    {
+        let name = v8::String::new(scope, "blendEquation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_20).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendEquationSeparate()
+    {
+        let name = v8::String::new(scope, "blendEquationSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_21).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendFunc()
+    {
+        let name = v8::String::new(scope, "blendFunc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_22).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: blendFuncSeparate()
+    {
+        let name = v8::String::new(scope, "blendFuncSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_23).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: checkFramebufferStatus()
+    {
+        let name = v8::String::new(scope, "checkFramebufferStatus").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_24).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clear()
+    {
+        let name = v8::String::new(scope, "clear").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_25).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearColor()
+    {
+        let name = v8::String::new(scope, "clearColor").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_26).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearDepth()
+    {
+        let name = v8::String::new(scope, "clearDepth").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_27).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: clearStencil()
+    {
+        let name = v8::String::new(scope, "clearStencil").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_28).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: colorMask()
+    {
+        let name = v8::String::new(scope, "colorMask").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_29).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: compileShader()
+    {
+        let name = v8::String::new(scope, "compileShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_30).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: copyTexImage2D()
+    {
+        let name = v8::String::new(scope, "copyTexImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_31).length(8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: copyTexSubImage2D()
+    {
+        let name = v8::String::new(scope, "copyTexSubImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_32).length(8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createBuffer()
+    {
+        let name = v8::String::new(scope, "createBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_33).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createFramebuffer()
+    {
+        let name = v8::String::new(scope, "createFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_34).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createProgram()
+    {
+        let name = v8::String::new(scope, "createProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_35).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createRenderbuffer()
+    {
+        let name = v8::String::new(scope, "createRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_36).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createShader()
+    {
+        let name = v8::String::new(scope, "createShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_37).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: createTexture()
+    {
+        let name = v8::String::new(scope, "createTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_38).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: cullFace()
+    {
+        let name = v8::String::new(scope, "cullFace").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_39).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteBuffer()
+    {
+        let name = v8::String::new(scope, "deleteBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_40).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteFramebuffer()
+    {
+        let name = v8::String::new(scope, "deleteFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_41).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteProgram()
+    {
+        let name = v8::String::new(scope, "deleteProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_42).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteRenderbuffer()
+    {
+        let name = v8::String::new(scope, "deleteRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_43).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteShader()
+    {
+        let name = v8::String::new(scope, "deleteShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_44).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: deleteTexture()
+    {
+        let name = v8::String::new(scope, "deleteTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_45).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: depthFunc()
+    {
+        let name = v8::String::new(scope, "depthFunc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_46).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: depthMask()
+    {
+        let name = v8::String::new(scope, "depthMask").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_47).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: depthRange()
+    {
+        let name = v8::String::new(scope, "depthRange").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_48).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: detachShader()
+    {
+        let name = v8::String::new(scope, "detachShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_49).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: disable()
+    {
+        let name = v8::String::new(scope, "disable").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_50).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: disableVertexAttribArray()
+    {
+        let name = v8::String::new(scope, "disableVertexAttribArray").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_51).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawArrays()
+    {
+        let name = v8::String::new(scope, "drawArrays").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_52).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: drawElements()
+    {
+        let name = v8::String::new(scope, "drawElements").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_53).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: enable()
+    {
+        let name = v8::String::new(scope, "enable").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_54).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: enableVertexAttribArray()
+    {
+        let name = v8::String::new(scope, "enableVertexAttribArray").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_55).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: finish()
+    {
+        let name = v8::String::new(scope, "finish").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_56).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: flush()
+    {
+        let name = v8::String::new(scope, "flush").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_57).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: framebufferRenderbuffer()
+    {
+        let name = v8::String::new(scope, "framebufferRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_58).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: framebufferTexture2D()
+    {
+        let name = v8::String::new(scope, "framebufferTexture2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_59).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: frontFace()
+    {
+        let name = v8::String::new(scope, "frontFace").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_60).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: generateMipmap()
+    {
+        let name = v8::String::new(scope, "generateMipmap").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_61).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getActiveAttrib()
+    {
+        let name = v8::String::new(scope, "getActiveAttrib").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_62).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getActiveUniform()
+    {
+        let name = v8::String::new(scope, "getActiveUniform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_63).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getAttachedShaders()
+    {
+        let name = v8::String::new(scope, "getAttachedShaders").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_64).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getAttribLocation()
+    {
+        let name = v8::String::new(scope, "getAttribLocation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_65).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getBufferParameter()
+    {
+        let name = v8::String::new(scope, "getBufferParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_66).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getParameter()
+    {
+        let name = v8::String::new(scope, "getParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_67).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getError()
+    {
+        let name = v8::String::new(scope, "getError").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_68).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getFramebufferAttachmentParameter()
+    {
+        let name = v8::String::new(scope, "getFramebufferAttachmentParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_69).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getProgramParameter()
+    {
+        let name = v8::String::new(scope, "getProgramParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_70).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getProgramInfoLog()
+    {
+        let name = v8::String::new(scope, "getProgramInfoLog").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_71).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getRenderbufferParameter()
+    {
+        let name = v8::String::new(scope, "getRenderbufferParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_72).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getShaderParameter()
+    {
+        let name = v8::String::new(scope, "getShaderParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_73).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getShaderPrecisionFormat()
+    {
+        let name = v8::String::new(scope, "getShaderPrecisionFormat").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_74).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getShaderInfoLog()
+    {
+        let name = v8::String::new(scope, "getShaderInfoLog").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_75).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getShaderSource()
+    {
+        let name = v8::String::new(scope, "getShaderSource").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_76).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getTexParameter()
+    {
+        let name = v8::String::new(scope, "getTexParameter").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_77).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getUniform()
+    {
+        let name = v8::String::new(scope, "getUniform").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_78).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getUniformLocation()
+    {
+        let name = v8::String::new(scope, "getUniformLocation").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_79).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getVertexAttrib()
+    {
+        let name = v8::String::new(scope, "getVertexAttrib").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_80).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: getVertexAttribOffset()
+    {
+        let name = v8::String::new(scope, "getVertexAttribOffset").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_81).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: hint()
+    {
+        let name = v8::String::new(scope, "hint").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_82).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isBuffer()
+    {
+        let name = v8::String::new(scope, "isBuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_83).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isEnabled()
+    {
+        let name = v8::String::new(scope, "isEnabled").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_84).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isFramebuffer()
+    {
+        let name = v8::String::new(scope, "isFramebuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_85).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isProgram()
+    {
+        let name = v8::String::new(scope, "isProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_86).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isRenderbuffer()
+    {
+        let name = v8::String::new(scope, "isRenderbuffer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_87).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isShader()
+    {
+        let name = v8::String::new(scope, "isShader").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_88).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: isTexture()
+    {
+        let name = v8::String::new(scope, "isTexture").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_89).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: lineWidth()
+    {
+        let name = v8::String::new(scope, "lineWidth").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_90).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: linkProgram()
+    {
+        let name = v8::String::new(scope, "linkProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_91).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: pixelStorei()
+    {
+        let name = v8::String::new(scope, "pixelStorei").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_92).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: polygonOffset()
+    {
+        let name = v8::String::new(scope, "polygonOffset").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_93).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: renderbufferStorage()
+    {
+        let name = v8::String::new(scope, "renderbufferStorage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_94).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: sampleCoverage()
+    {
+        let name = v8::String::new(scope, "sampleCoverage").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_95).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: scissor()
+    {
+        let name = v8::String::new(scope, "scissor").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_96).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: shaderSource()
+    {
+        let name = v8::String::new(scope, "shaderSource").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_97).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilFunc()
+    {
+        let name = v8::String::new(scope, "stencilFunc").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_98).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilFuncSeparate()
+    {
+        let name = v8::String::new(scope, "stencilFuncSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_99).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilMask()
+    {
+        let name = v8::String::new(scope, "stencilMask").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_100).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilMaskSeparate()
+    {
+        let name = v8::String::new(scope, "stencilMaskSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_101).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilOp()
+    {
+        let name = v8::String::new(scope, "stencilOp").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_102).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: stencilOpSeparate()
+    {
+        let name = v8::String::new(scope, "stencilOpSeparate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_103).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texParameterf()
+    {
+        let name = v8::String::new(scope, "texParameterf").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_104).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texParameteri()
+    {
+        let name = v8::String::new(scope, "texParameteri").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_105).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1f()
+    {
+        let name = v8::String::new(scope, "uniform1f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_106).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2f()
+    {
+        let name = v8::String::new(scope, "uniform2f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_107).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3f()
+    {
+        let name = v8::String::new(scope, "uniform3f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_108).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4f()
+    {
+        let name = v8::String::new(scope, "uniform4f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_109).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1i()
+    {
+        let name = v8::String::new(scope, "uniform1i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_110).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2i()
+    {
+        let name = v8::String::new(scope, "uniform2i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_111).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3i()
+    {
+        let name = v8::String::new(scope, "uniform3i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_112).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4i()
+    {
+        let name = v8::String::new(scope, "uniform4i").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_113).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: useProgram()
+    {
+        let name = v8::String::new(scope, "useProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_114).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: validateProgram()
+    {
+        let name = v8::String::new(scope, "validateProgram").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_115).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib1f()
+    {
+        let name = v8::String::new(scope, "vertexAttrib1f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_116).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib2f()
+    {
+        let name = v8::String::new(scope, "vertexAttrib2f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_117).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib3f()
+    {
+        let name = v8::String::new(scope, "vertexAttrib3f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_118).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib4f()
+    {
+        let name = v8::String::new(scope, "vertexAttrib4f").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_119).length(5).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib1fv()
+    {
+        let name = v8::String::new(scope, "vertexAttrib1fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_120).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib2fv()
+    {
+        let name = v8::String::new(scope, "vertexAttrib2fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_121).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib3fv()
+    {
+        let name = v8::String::new(scope, "vertexAttrib3fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_122).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttrib4fv()
+    {
+        let name = v8::String::new(scope, "vertexAttrib4fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_123).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: vertexAttribPointer()
+    {
+        let name = v8::String::new(scope, "vertexAttribPointer").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_124).length(6).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: viewport()
+    {
+        let name = v8::String::new(scope, "viewport").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_125).length(4).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bufferData()
+    {
+        let name = v8::String::new(scope, "bufferData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_126).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: bufferSubData()
+    {
+        let name = v8::String::new(scope, "bufferSubData").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_127).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: compressedTexImage2D()
+    {
+        let name = v8::String::new(scope, "compressedTexImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_128).length(7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: compressedTexSubImage2D()
+    {
+        let name = v8::String::new(scope, "compressedTexSubImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_129).length(8).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: readPixels()
+    {
+        let name = v8::String::new(scope, "readPixels").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_130).length(7).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texImage2D()
+    {
+        let name = v8::String::new(scope, "texImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_131).length(9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: texSubImage2D()
+    {
+        let name = v8::String::new(scope, "texSubImage2D").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_132).length(9).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1fv()
+    {
+        let name = v8::String::new(scope, "uniform1fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_133).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2fv()
+    {
+        let name = v8::String::new(scope, "uniform2fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_134).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3fv()
+    {
+        let name = v8::String::new(scope, "uniform3fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_135).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4fv()
+    {
+        let name = v8::String::new(scope, "uniform4fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_136).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform1iv()
+    {
+        let name = v8::String::new(scope, "uniform1iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_137).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform2iv()
+    {
+        let name = v8::String::new(scope, "uniform2iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_138).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform3iv()
+    {
+        let name = v8::String::new(scope, "uniform3iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_139).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniform4iv()
+    {
+        let name = v8::String::new(scope, "uniform4iv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_140).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix2fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix2fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_141).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix3fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix3fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_142).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
+    }
+    // method: uniformMatrix4fv()
+    {
+        let name = v8::String::new(scope, "uniformMatrix4fv").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_op_143).length(3).build(scope);
+        func_tmpl.set_class_name(name);
+        proto.set(name.into(), func_tmpl.into());
     }
 
     tmpl
