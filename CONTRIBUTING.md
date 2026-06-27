@@ -162,6 +162,9 @@ Refs: REQ-CORE-013, REQ-ENG-004
 - **行尾**：LF（Unix 风格），不使用 CRLF
 - **缩进**：根据语言惯例（Rust/Python 4 空格，YAML/TOML 2 空格）
 - **行宽**：建议 ≤ 100 字符，硬限制 120 字符
+- **临时文件**：临时测试/调试脚本不得提交到仓库。放在系统临时目录
+  （`C:\Users\Lenovo\AppData\Local\Temp\opencode\`）或 gitignored 项目目录。
+  `.gitignore` 已有 `_tmp_*` 模式。不得在项目根目录放置临时文件。
 
 ### 2.2 Rust
 
