@@ -90,6 +90,8 @@ logs/
 *.orig
 scratch/
 tmp/
+_tmp_*
+_tmp*
 
 # ── iv8 reference (参考代码，不提交)─────────────────────────────────────────
 tests/iv8-ref/
@@ -154,3 +156,4 @@ _ref/rs-reverse/
 
 # Archive/test artifacts
 tests/_archive/
+data/chromium-idl/
