@@ -3,7 +3,7 @@
 High-fidelity browser runtime Python extension, built on V8 + Rust.
 For Web JS reverse engineering / anti-bot environment simulation.
 
-**Current**: v0.8.79 (XHR robustness + CreepJS 0 lies + matchMedia + WebGL 49 params + deep environment audit + 28 TODO items delivered) — [Progress](docs/PROGRESS.md)
+**Current**: v0.8.84 (Web Worker 方案A + codegen G+F+H+A+E + Chrome 147 profile统一 + 架构深度审计 + MR-CTX 7/7 PASS) — [Progress](docs/PROGRESS.md)
 
 ## Features
 
@@ -23,6 +23,10 @@ For Web JS reverse engineering / anti-bot environment simulation.
 - **M7 gate audit**: TODO recount (grep-verified 316 items); detection surface reclassification (11+2 categories, ~92% avg); residual risk register (21 items R01-R21); v0.9 entry gate OPEN with conditions (v0.8 精装≈100%; ~8 v0.8.76 patch items identified) (v0.8.75)
 - **M7 residual patch aggregation**: R01-R21 closure (8 closed, 13 deferred); TODO-infra recount 36/85; stale entry cleanup (v0.8.76)
 - **Navigator consistency + WorkerNavigator**: 10 new integration tests for Navigator cross-property coherence and WorkerNavigator runtime shape; WorkerNavigator illegal_constructor fix (v0.8.70)
+- **Profile-driven environment deepening**: Permissions profile 接入 (28+ HashMap); MediaQueries 16 fields; Intl OOM fix; GPU RTX 4060; Canvas toDataURL consistency; AudioContext fingerprint injection; Font metrics from profile; H02 env consistency harness (v0.8.80)
+- **Verification infrastructure**: H02 runtime 接入 (16/16 real PASS); bcd-collector 13615 entries; IDL 覆盖率审计 (72.8%); Hypothesis PBT 框架; mutation testing 10/10 KILLED; performance.memory 量化; illegal_constructor 审计; POST 三轮调研 D-095~D-108 (v0.8.82)
+- **Behavior truth + verification expansion**: illegal_constructor 167→1; D1/D5 114/117; idlharness 2922/10222; BrowserForge 229/229 98%; MR43 38+7SKIP 36/36; CDP diff 1059 MATCHED; FP-Inconsistent 25 D-rules; D-109 交叉验证; D-110 Worker 属 v0.8 (v0.8.83)
+- **Web Worker execution environment**: 独立 V8 isolate + 独立 OS 线程 + ValueSerializer structured clone (方案A); 5 源交叉验证; MR-CTX 7/7 PASS; codegen construct_only + read_only_prototype + set_length + IDL constants; Chrome 147 profile 统一; Navigator 23 + Screen 7 + AudioContext 9 缺失属性补全; Development Principles 规范 (v0.8.84)
 - **Generated Navigator skeletons**: 46 IDL properties via codegen + native template unification (v0.8.58/0.8.60)
 - **Native Navigator stubs**: connection, getBattery, sendBeacon, geolocation, clipboard, credentials (v0.8.55); getGamepads, requestMediaKeySystemAccess, requestMIDIAccess (v0.8.61)
 - **DOM**: html5ever parsing + ego-tree + selectors CSS Level 4 + EventTarget 3-phase dispatch

@@ -53,6 +53,53 @@ This project adheres to [Semantic Versioning](https://semver.org/) and
 - CDP diff 修补 deferred (D-115, v0.8.85-86 根因修复).
 - 配置层 4 套源统一 deferred (D-111, v0.8.85).
 
+## [v0.8.83] - 2026-06-26
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Added
+- illegal_constructor 167→1 (codegen NON_CONSTRUCTABLE 157 names + DOM template 34 + Audio factory _create pattern).
+- D1/D5 行为探真 (114/117 PASS, 5 Observer takeRecords→[], Notification/wakeLock 修复).
+- idlharness V8 shim (D-100, 2 shims only, P0 setup 0 FAIL, 2922/10222 PASS, 505 FAIL classified).
+- BrowserForge 集成 ProfileSource (229/229 PASS, 49/50 字段映射 98%).
+- Metamorphic MR43 (38 PASS + 7 SKIP, 36/36 mutation KILLED).
+- FP-Inconsistent 25 D-class (H02 41/41, 22/25 mutation KILLED).
+- CDP diff 值+描述符 diff (Chrome 2081 + IV8 1989 properties, 1059 MATCHED).
+- codegen-upgrade-plan.md 设计文档 (505 FAIL → 3 版本修复计划).
+- D-109 交叉验证原则 (>=3 独立来源).
+- D-110 Worker 属 v0.8 (D-091 修正, 5 源交叉验证设计).
+
+### Changed
+- 9 mutation 补全 (27→36, M28-M36).
+- idlharness P0 mixin FAIL 修复 (5→0 setup FAIL).
+- AudioContext 描述符修复 (417→409 DESCRIPTOR_MISMATCH).
+- 3 个脚本 test_→_ 重命名 (_d1_d5_behavior.py / _metamorphic.py / _browserforge_adapter.py).
+- AGENTS.md 新增 Naming And Testing Conventions (Enforced) 章节.
+
+### Quality Gates
+- Rust 319 lib; H02 41/41; PBT 38+7SKIP; mutation 36/36; D1/D5 114/117; illegal_constructor 224 THROWS / 1 issue; FP mutation 22 KILLED / 2 SURVIVED / 1 SKIP; idlharness 2922/10222 (28.6%).
+
+## [v0.8.82] - 2026-06-26
+
+> Local milestone tag (not a package release). Package metadata remains 0.8.11.
+> Mode: Lightweight Increment.
+
+### Added
+- H02 runtime 接入修复 (D-098, 16/16 真实 runtime PASS, 非 stub).
+- bcd-collector 接入 (13615 API 条目, D-096 主数据源 9.5/10).
+- Chromium IDL parse-chromium-idl.js enhanced.
+- IDL 覆盖率审计 (26 MISSING / 906 MATCHED / 72.8% avg member coverage).
+- Hypothesis PBT 框架 (12/12 MR PASS, D-101 D-105).
+- harness 变异脚本 (10/10 KILLED, 100% mutation score).
+- performance.memory 量化 (100KB bucket + per-page stable + now() jitter, D-106).
+- illegal_constructor 审计 (1369 tested, 167 potential issues).
+- POST research summary (3-round 23-subagent survey, D-095~D-108).
+
+### Quality Gates
+- 319 iv8-core lib + integration; H02 16/16; PBT 12/12; mutation 10/10.
+- Tag at `350acbe`.
+
 ## [0.8.81] - 2026-06-25
 
 > Local milestone tag (not a package release). Package metadata remains 0.8.11.
