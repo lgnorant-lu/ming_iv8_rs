@@ -28,6 +28,8 @@ pub struct MemberData {
     pub readonly: bool,
     pub return_type: Option<String>,
     pub arguments: Vec<String>,
+    pub const_value: Option<String>,
+    pub required_arg_count: usize,
 }
 
 /// Extract the type name from an IDL type JSON value (recursive).
@@ -172,6 +174,23 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
                                     .collect()
                             })
                             .unwrap_or_default();
+                        let required_arg_count = mobj
+                            .and_then(|o| o.get("arguments"))
+                            .and_then(|v| v.as_array())
+                            .map(|arr| {
+                                arr.iter()
+                                    .take_while(|a| {
+                                        !a.get("optional").and_then(|v| v.as_bool()).unwrap_or(false)
+                                            && !a.get("variadic").and_then(|v| v.as_bool()).unwrap_or(false)
+                                    })
+                                    .count()
+                            })
+                            .unwrap_or(0);
+                        let const_value = mobj
+                            .and_then(|o| o.get("value"))
+                            .and_then(|v| v.get("value"))
+                            .and_then(|v| v.as_str())
+                            .map(|s| s.to_string());
 
                         MemberData {
                             kind,
@@ -180,6 +199,8 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
                             readonly,
                             return_type,
                             arguments: args,
+                            const_value,
+                            required_arg_count,
                         }
                     })
                     .collect()

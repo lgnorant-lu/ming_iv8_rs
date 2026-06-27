@@ -520,6 +520,8 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Event", v8::Global::new(scope, tmpl_event));
         let tmpl_event_counts = super::events::create_event_counts_template(scope, None);
         templates.insert("EventCounts", v8::Global::new(scope, tmpl_event_counts));
+        let tmpl_event_listener = super::events::create_event_listener_template(scope, None);
+        templates.insert("EventListener", v8::Global::new(scope, tmpl_event_listener));
         let tmpl_event_target = super::dom_core::create_event_target_template(scope, None);
         templates.insert("EventTarget", v8::Global::new(scope, tmpl_event_target));
         let tmpl_exception = super::web_apis::create_exception_template(scope, None);
@@ -618,12 +620,12 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("GPURenderBundleEncoder", v8::Global::new(scope, tmpl_gpu_render_bundle_encoder));
         let tmpl_gpu_render_pass_encoder = super::gpu::create_gpu_render_pass_encoder_template(scope, None);
         templates.insert("GPURenderPassEncoder", v8::Global::new(scope, tmpl_gpu_render_pass_encoder));
-        let tmpl_gpu_render_pipeline = super::gpu::create_gpu_render_pipeline_template(scope, None);
-        templates.insert("GPURenderPipeline", v8::Global::new(scope, tmpl_gpu_render_pipeline));
     } // end batch
     // Batch 4: 100 templates
     {
         v8::scope!(let scope, scope);
+        let tmpl_gpu_render_pipeline = super::gpu::create_gpu_render_pipeline_template(scope, None);
+        templates.insert("GPURenderPipeline", v8::Global::new(scope, tmpl_gpu_render_pipeline));
         let tmpl_gpu_sampler = super::gpu::create_gpu_sampler_template(scope, None);
         templates.insert("GPUSampler", v8::Global::new(scope, tmpl_gpu_sampler));
         let tmpl_gpu_shader_module = super::gpu::create_gpu_shader_module_template(scope, None);
@@ -822,12 +824,14 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Navigator", v8::Global::new(scope, tmpl_navigator));
         let tmpl_navigator_login = super::web_apis::create_navigator_login_template(scope, None);
         templates.insert("NavigatorLogin", v8::Global::new(scope, tmpl_navigator_login));
-        let tmpl_navigator_ua_data = super::web_apis::create_navigator_ua_data_template(scope, None);
-        templates.insert("NavigatorUAData", v8::Global::new(scope, tmpl_navigator_ua_data));
     } // end batch
     // Batch 5: 100 templates
     {
         v8::scope!(let scope, scope);
+        let tmpl_navigator_ua_data = super::web_apis::create_navigator_ua_data_template(scope, None);
+        templates.insert("NavigatorUAData", v8::Global::new(scope, tmpl_navigator_ua_data));
+        let tmpl_node_filter = super::web_apis::create_node_filter_template(scope, None);
+        templates.insert("NodeFilter", v8::Global::new(scope, tmpl_node_filter));
         let tmpl_node_iterator = super::dom_core::create_node_iterator_template(scope, None);
         templates.insert("NodeIterator", v8::Global::new(scope, tmpl_node_iterator));
         let tmpl_node_list = super::dom_core::create_node_list_template(scope, None);
@@ -1024,14 +1028,14 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("Sanitizer", v8::Global::new(scope, tmpl_sanitizer));
         let tmpl_scheduler = super::web_apis::create_scheduler_template(scope, None);
         templates.insert("Scheduler", v8::Global::new(scope, tmpl_scheduler));
-        let tmpl_scheduling = super::web_apis::create_scheduling_template(scope, None);
-        templates.insert("Scheduling", v8::Global::new(scope, tmpl_scheduling));
-        let tmpl_screen = super::css_om::create_screen_template(scope, None);
-        templates.insert("Screen", v8::Global::new(scope, tmpl_screen));
     } // end batch
     // Batch 6: 100 templates
     {
         v8::scope!(let scope, scope);
+        let tmpl_scheduling = super::web_apis::create_scheduling_template(scope, None);
+        templates.insert("Scheduling", v8::Global::new(scope, tmpl_scheduling));
+        let tmpl_screen = super::css_om::create_screen_template(scope, None);
+        templates.insert("Screen", v8::Global::new(scope, tmpl_screen));
         let tmpl_selection = super::web_apis::create_selection_template(scope, None);
         templates.insert("Selection", v8::Global::new(scope, tmpl_selection));
         let tmpl_speech_grammar = super::web_apis::create_speech_grammar_template(scope, None);
@@ -1228,14 +1232,14 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("WebTransportSendGroup", v8::Global::new(scope, tmpl_web_transport_send_group));
         let tmpl_worker_location = super::workers::create_worker_location_template(scope, None);
         templates.insert("WorkerLocation", v8::Global::new(scope, tmpl_worker_location));
-        let tmpl_worker_navigator = super::workers::create_worker_navigator_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
-        templates.insert("WorkerNavigator", v8::Global::new(scope, tmpl_worker_navigator));
-        let tmpl_worklet = super::web_apis::create_worklet_template(scope, None);
-        templates.insert("Worklet", v8::Global::new(scope, tmpl_worklet));
     } // end batch
     // Batch 7: 100 templates
     {
         v8::scope!(let scope, scope);
+        let tmpl_worker_navigator = super::workers::create_worker_navigator_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
+        templates.insert("WorkerNavigator", v8::Global::new(scope, tmpl_worker_navigator));
+        let tmpl_worklet = super::web_apis::create_worklet_template(scope, None);
+        templates.insert("Worklet", v8::Global::new(scope, tmpl_worklet));
         let tmpl_worklet_animation_effect = super::web_apis::create_worklet_animation_effect_template(scope, None);
         templates.insert("WorkletAnimationEffect", v8::Global::new(scope, tmpl_worklet_animation_effect));
         let tmpl_worklet_global_scope = super::web_apis::create_worklet_global_scope_template(scope, None);
@@ -1256,6 +1260,8 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XPathEvaluator", v8::Global::new(scope, tmpl_x_path_evaluator));
         let tmpl_x_path_expression = super::web_apis::create_x_path_expression_template(scope, None);
         templates.insert("XPathExpression", v8::Global::new(scope, tmpl_x_path_expression));
+        let tmpl_x_path_ns_resolver = super::web_apis::create_x_path_ns_resolver_template(scope, None);
+        templates.insert("XPathNSResolver", v8::Global::new(scope, tmpl_x_path_ns_resolver));
         let tmpl_x_path_result = super::web_apis::create_x_path_result_template(scope, None);
         templates.insert("XPathResult", v8::Global::new(scope, tmpl_x_path_result));
         let tmpl_xr_anchor = super::webxr::create_xr_anchor_template(scope, None);
@@ -1430,16 +1436,16 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSFontFaceDescriptors", v8::Global::new(scope, tmpl_css_font_face_descriptors));
         let tmpl_css_function_descriptors = super::css_om::create_css_function_descriptors_template(scope, templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSFunctionDescriptors", v8::Global::new(scope, tmpl_css_function_descriptors));
+    } // end batch
+    // Batch 8: 100 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_page_descriptors = super::css_om::create_css_page_descriptors_template(scope, templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSPageDescriptors", v8::Global::new(scope, tmpl_css_page_descriptors));
         let tmpl_css_position_try_descriptors = super::css_om::create_css_position_try_descriptors_template(scope, templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSPositionTryDescriptors", v8::Global::new(scope, tmpl_css_position_try_descriptors));
         let tmpl_css_style_properties = super::css_om::create_css_style_properties_template(scope, templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSStyleProperties", v8::Global::new(scope, tmpl_css_style_properties));
-    } // end batch
-    // Batch 8: 100 templates
-    {
-        v8::scope!(let scope, scope);
         let tmpl_css_color_value = super::css_om::create_css_color_value_template(scope, templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSColorValue", v8::Global::new(scope, tmpl_css_color_value));
         let tmpl_css_image_value = super::css_om::create_css_image_value_template(scope, templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)));
@@ -1634,16 +1640,16 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("SensorErrorEvent", v8::Global::new(scope, tmpl_sensor_error_event));
         let tmpl_snap_event = super::events::create_snap_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("SnapEvent", v8::Global::new(scope, tmpl_snap_event));
+    } // end batch
+    // Batch 9: 100 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_speech_recognition_error_event = super::events::create_speech_recognition_error_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("SpeechRecognitionErrorEvent", v8::Global::new(scope, tmpl_speech_recognition_error_event));
         let tmpl_speech_recognition_event = super::events::create_speech_recognition_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("SpeechRecognitionEvent", v8::Global::new(scope, tmpl_speech_recognition_event));
         let tmpl_speech_synthesis_event = super::events::create_speech_synthesis_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("SpeechSynthesisEvent", v8::Global::new(scope, tmpl_speech_synthesis_event));
-    } // end batch
-    // Batch 9: 100 templates
-    {
-        v8::scope!(let scope, scope);
         let tmpl_storage_event = super::events::create_storage_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
         templates.insert("StorageEvent", v8::Global::new(scope, tmpl_storage_event));
         let tmpl_submit_event = super::events::create_submit_event_template(scope, templates.get("Event").map(|g| v8::Local::new(scope, g)));
@@ -1838,16 +1844,16 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("RemotePlayback", v8::Global::new(scope, tmpl_remote_playback));
         let tmpl_s_frame_decrypter_stream = super::web_apis::create_s_frame_decrypter_stream_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("SFrameDecrypterStream", v8::Global::new(scope, tmpl_s_frame_decrypter_stream));
+    } // end batch
+    // Batch 10: 100 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_screen_details = super::web_apis::create_screen_details_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("ScreenDetails", v8::Global::new(scope, tmpl_screen_details));
         let tmpl_screen_orientation = super::web_apis::create_screen_orientation_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("ScreenOrientation", v8::Global::new(scope, tmpl_screen_orientation));
         let tmpl_sensor = super::sensors::create_sensor_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Sensor", v8::Global::new(scope, tmpl_sensor));
-    } // end batch
-    // Batch 10: 100 templates
-    {
-        v8::scope!(let scope, scope);
         let tmpl_serial = super::web_apis::create_serial_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
         templates.insert("Serial", v8::Global::new(scope, tmpl_serial));
         let tmpl_serial_port = super::web_apis::create_serial_port_template(scope, templates.get("EventTarget").map(|g| v8::Local::new(scope, g)));
@@ -2042,16 +2048,16 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("CSSLayerBlockRule", v8::Global::new(scope, tmpl_css_layer_block_rule));
         let tmpl_css_mixin_rule = super::css_om::create_css_mixin_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSMixinRule", v8::Global::new(scope, tmpl_css_mixin_rule));
+    } // end batch
+    // Batch 11: 100 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_css_page_rule = super::css_om::create_css_page_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSPageRule", v8::Global::new(scope, tmpl_css_page_rule));
         let tmpl_css_scope_rule = super::css_om::create_css_scope_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSScopeRule", v8::Global::new(scope, tmpl_css_scope_rule));
         let tmpl_css_starting_style_rule = super::css_om::create_css_starting_style_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSStartingStyleRule", v8::Global::new(scope, tmpl_css_starting_style_rule));
-    } // end batch
-    // Batch 11: 100 templates
-    {
-        v8::scope!(let scope, scope);
         let tmpl_css_style_rule = super::css_om::create_css_style_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSStyleRule", v8::Global::new(scope, tmpl_css_style_rule));
         let tmpl_css_supports_condition_rule = super::css_om::create_css_supports_condition_rule_template(scope, templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)));
@@ -2246,16 +2252,16 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("XRWebGLLayer", v8::Global::new(scope, tmpl_xr_web_gl_layer));
         let tmpl_xr_body_space = super::webxr::create_xr_body_space_template(scope, templates.get("XRSpace").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRBodySpace", v8::Global::new(scope, tmpl_xr_body_space));
+    } // end batch
+    // Batch 12: 100 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_xr_joint_space = super::webxr::create_xr_joint_space_template(scope, templates.get("XRSpace").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRJointSpace", v8::Global::new(scope, tmpl_xr_joint_space));
         let tmpl_xr_reference_space = super::webxr::create_xr_reference_space_template(scope, templates.get("XRSpace").map(|g| v8::Local::new(scope, g)));
         templates.insert("XRReferenceSpace", v8::Global::new(scope, tmpl_xr_reference_space));
         let tmpl_performance_navigation_timing = super::web_apis::create_performance_navigation_timing_template(scope, templates.get("PerformanceResourceTiming").map(|g| v8::Local::new(scope, g)));
         templates.insert("PerformanceNavigationTiming", v8::Global::new(scope, tmpl_performance_navigation_timing));
-    } // end batch
-    // Batch 12: 100 templates
-    {
-        v8::scope!(let scope, scope);
         let tmpl_css_container_rule = super::css_om::create_css_container_rule_template(scope, templates.get("CSSConditionRule").map(|g| v8::Local::new(scope, g)));
         templates.insert("CSSContainerRule", v8::Global::new(scope, tmpl_css_container_rule));
         let tmpl_css_media_rule = super::css_om::create_css_media_rule_template(scope, templates.get("CSSConditionRule").map(|g| v8::Local::new(scope, g)));
@@ -2450,16 +2456,16 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         templates.insert("HTMLSourceElement", v8::Global::new(scope, tmpl_html_source_element));
         let tmpl_html_span_element = super::html_elements::create_html_span_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLSpanElement", v8::Global::new(scope, tmpl_html_span_element));
+    } // end batch
+    // Batch 13: 100 templates
+    {
+        v8::scope!(let scope, scope);
         let tmpl_html_style_element = super::html_elements::create_html_style_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLStyleElement", v8::Global::new(scope, tmpl_html_style_element));
         let tmpl_html_table_caption_element = super::html_elements::create_html_table_caption_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLTableCaptionElement", v8::Global::new(scope, tmpl_html_table_caption_element));
         let tmpl_html_table_cell_element = super::html_elements::create_html_table_cell_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLTableCellElement", v8::Global::new(scope, tmpl_html_table_cell_element));
-    } // end batch
-    // Batch 13: 100 templates
-    {
-        v8::scope!(let scope, scope);
         let tmpl_html_table_col_element = super::html_elements::create_html_table_col_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
         templates.insert("HTMLTableColElement", v8::Global::new(scope, tmpl_html_table_col_element));
         let tmpl_html_table_element = super::html_elements::create_html_table_element_template(scope, templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)));
@@ -2636,6 +2642,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_angle_instanced_arrays) = templates.get("ANGLE_instanced_arrays").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_angle_instanced_arrays = v8::String::new(scope, "ANGLE_instanced_arrays").unwrap();
             global.define_own_property(scope, name_angle_instanced_arrays.into(), ctor_angle_instanced_arrays.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE").unwrap(); let cv = v8::Number::new(scope, 35070.0).into(); ctor_angle_instanced_arrays.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_abort_controller) = templates.get("AbortController").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_abort_controller = v8::String::new(scope, "AbortController").unwrap();
@@ -2808,6 +2815,19 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_css_rule) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_rule = v8::String::new(scope, "CSSRule").unwrap();
             global.define_own_property(scope, name_css_rule.into(), ctor_css_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "STYLE_RULE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CHARSET_RULE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "IMPORT_RULE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MEDIA_RULE").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "FONT_FACE_RULE").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "PAGE_RULE").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MARGIN_RULE").unwrap(); let cv = v8::Number::new(scope, 9.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NAMESPACE_RULE").unwrap(); let cv = v8::Number::new(scope, 10.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "KEYFRAMES_RULE").unwrap(); let cv = v8::Number::new(scope, 7.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "KEYFRAME_RULE").unwrap(); let cv = v8::Number::new(scope, 8.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SUPPORTS_RULE").unwrap(); let cv = v8::Number::new(scope, 12.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COUNTER_STYLE_RULE").unwrap(); let cv = v8::Number::new(scope, 11.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "FONT_FEATURE_VALUES_RULE").unwrap(); let cv = v8::Number::new(scope, 14.0).into(); ctor_css_rule.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_css_rule_list) = templates.get("CSSRuleList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_rule_list = v8::String::new(scope, "CSSRuleList").unwrap();
@@ -3494,6 +3514,31 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_dom_exception) = templates.get("DOMException").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_dom_exception = v8::String::new(scope, "DOMException").unwrap();
             global.define_own_property(scope, name_dom_exception.into(), ctor_dom_exception.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "INDEX_SIZE_ERR").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOMSTRING_SIZE_ERR").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HIERARCHY_REQUEST_ERR").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "WRONG_DOCUMENT_ERR").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "INVALID_CHARACTER_ERR").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NO_DATA_ALLOWED_ERR").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NO_MODIFICATION_ALLOWED_ERR").unwrap(); let cv = v8::Number::new(scope, 7.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NOT_FOUND_ERR").unwrap(); let cv = v8::Number::new(scope, 8.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NOT_SUPPORTED_ERR").unwrap(); let cv = v8::Number::new(scope, 9.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "INUSE_ATTRIBUTE_ERR").unwrap(); let cv = v8::Number::new(scope, 10.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "INVALID_STATE_ERR").unwrap(); let cv = v8::Number::new(scope, 11.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SYNTAX_ERR").unwrap(); let cv = v8::Number::new(scope, 12.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "INVALID_MODIFICATION_ERR").unwrap(); let cv = v8::Number::new(scope, 13.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NAMESPACE_ERR").unwrap(); let cv = v8::Number::new(scope, 14.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "INVALID_ACCESS_ERR").unwrap(); let cv = v8::Number::new(scope, 15.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "VALIDATION_ERR").unwrap(); let cv = v8::Number::new(scope, 16.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TYPE_MISMATCH_ERR").unwrap(); let cv = v8::Number::new(scope, 17.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SECURITY_ERR").unwrap(); let cv = v8::Number::new(scope, 18.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NETWORK_ERR").unwrap(); let cv = v8::Number::new(scope, 19.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "ABORT_ERR").unwrap(); let cv = v8::Number::new(scope, 20.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "URL_MISMATCH_ERR").unwrap(); let cv = v8::Number::new(scope, 21.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "QUOTA_EXCEEDED_ERR").unwrap(); let cv = v8::Number::new(scope, 22.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TIMEOUT_ERR").unwrap(); let cv = v8::Number::new(scope, 23.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "INVALID_NODE_TYPE_ERR").unwrap(); let cv = v8::Number::new(scope, 24.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DATA_CLONE_ERR").unwrap(); let cv = v8::Number::new(scope, 25.0).into(); ctor_dom_exception.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_dom_implementation) = templates.get("DOMImplementation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_dom_implementation = v8::String::new(scope, "DOMImplementation").unwrap();
@@ -3570,6 +3615,8 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_ext_blend_minmax) = templates.get("EXT_blend_minmax").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_blend_minmax = v8::String::new(scope, "EXT_blend_minmax").unwrap();
             global.define_own_property(scope, name_ext_blend_minmax.into(), ctor_ext_blend_minmax.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "MIN_EXT").unwrap(); let cv = v8::Number::new(scope, 32775.0).into(); ctor_ext_blend_minmax.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MAX_EXT").unwrap(); let cv = v8::Number::new(scope, 32776.0).into(); ctor_ext_blend_minmax.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ext_color_buffer_float) = templates.get("EXT_color_buffer_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_color_buffer_float = v8::String::new(scope, "EXT_color_buffer_float").unwrap();
@@ -3578,14 +3625,29 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_ext_color_buffer_half_float) = templates.get("EXT_color_buffer_half_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_color_buffer_half_float = v8::String::new(scope, "EXT_color_buffer_half_float").unwrap();
             global.define_own_property(scope, name_ext_color_buffer_half_float.into(), ctor_ext_color_buffer_half_float.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "RGBA16F_EXT").unwrap(); let cv = v8::Number::new(scope, 34842.0).into(); ctor_ext_color_buffer_half_float.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "RGB16F_EXT").unwrap(); let cv = v8::Number::new(scope, 34843.0).into(); ctor_ext_color_buffer_half_float.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT").unwrap(); let cv = v8::Number::new(scope, 33297.0).into(); ctor_ext_color_buffer_half_float.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "UNSIGNED_NORMALIZED_EXT").unwrap(); let cv = v8::Number::new(scope, 35863.0).into(); ctor_ext_color_buffer_half_float.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ext_disjoint_timer_query) = templates.get("EXT_disjoint_timer_query").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_disjoint_timer_query = v8::String::new(scope, "EXT_disjoint_timer_query").unwrap();
             global.define_own_property(scope, name_ext_disjoint_timer_query.into(), ctor_ext_disjoint_timer_query.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "QUERY_COUNTER_BITS_EXT").unwrap(); let cv = v8::Number::new(scope, 34916.0).into(); ctor_ext_disjoint_timer_query.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CURRENT_QUERY_EXT").unwrap(); let cv = v8::Number::new(scope, 34917.0).into(); ctor_ext_disjoint_timer_query.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "QUERY_RESULT_EXT").unwrap(); let cv = v8::Number::new(scope, 34918.0).into(); ctor_ext_disjoint_timer_query.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "QUERY_RESULT_AVAILABLE_EXT").unwrap(); let cv = v8::Number::new(scope, 34919.0).into(); ctor_ext_disjoint_timer_query.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TIME_ELAPSED_EXT").unwrap(); let cv = v8::Number::new(scope, 35007.0).into(); ctor_ext_disjoint_timer_query.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TIMESTAMP_EXT").unwrap(); let cv = v8::Number::new(scope, 36392.0).into(); ctor_ext_disjoint_timer_query.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "GPU_DISJOINT_EXT").unwrap(); let cv = v8::Number::new(scope, 36795.0).into(); ctor_ext_disjoint_timer_query.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ext_disjoint_timer_query_webgl2) = templates.get("EXT_disjoint_timer_query_webgl2").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_disjoint_timer_query_webgl2 = v8::String::new(scope, "EXT_disjoint_timer_query_webgl2").unwrap();
             global.define_own_property(scope, name_ext_disjoint_timer_query_webgl2.into(), ctor_ext_disjoint_timer_query_webgl2.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "QUERY_COUNTER_BITS_EXT").unwrap(); let cv = v8::Number::new(scope, 34916.0).into(); ctor_ext_disjoint_timer_query_webgl2.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TIME_ELAPSED_EXT").unwrap(); let cv = v8::Number::new(scope, 35007.0).into(); ctor_ext_disjoint_timer_query_webgl2.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TIMESTAMP_EXT").unwrap(); let cv = v8::Number::new(scope, 36392.0).into(); ctor_ext_disjoint_timer_query_webgl2.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "GPU_DISJOINT_EXT").unwrap(); let cv = v8::Number::new(scope, 36795.0).into(); ctor_ext_disjoint_timer_query_webgl2.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ext_float_blend) = templates.get("EXT_float_blend").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_float_blend = v8::String::new(scope, "EXT_float_blend").unwrap();
@@ -3598,6 +3660,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_ext_s_rgb) = templates.get("EXT_sRGB").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_s_rgb = v8::String::new(scope, "EXT_sRGB").unwrap();
             global.define_own_property(scope, name_ext_s_rgb.into(), ctor_ext_s_rgb.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SRGB_EXT").unwrap(); let cv = v8::Number::new(scope, 35904.0).into(); ctor_ext_s_rgb.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SRGB_ALPHA_EXT").unwrap(); let cv = v8::Number::new(scope, 35906.0).into(); ctor_ext_s_rgb.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SRGB8_ALPHA8_EXT").unwrap(); let cv = v8::Number::new(scope, 35907.0).into(); ctor_ext_s_rgb.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT").unwrap(); let cv = v8::Number::new(scope, 33296.0).into(); ctor_ext_s_rgb.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ext_shader_texture_lod) = templates.get("EXT_shader_texture_lod").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_shader_texture_lod = v8::String::new(scope, "EXT_shader_texture_lod").unwrap();
@@ -3606,18 +3672,36 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_ext_texture_compression_bptc) = templates.get("EXT_texture_compression_bptc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_texture_compression_bptc = v8::String::new(scope, "EXT_texture_compression_bptc").unwrap();
             global.define_own_property(scope, name_ext_texture_compression_bptc.into(), ctor_ext_texture_compression_bptc.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_BPTC_UNORM_EXT").unwrap(); let cv = v8::Number::new(scope, 36492.0).into(); ctor_ext_texture_compression_bptc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT").unwrap(); let cv = v8::Number::new(scope, 36493.0).into(); ctor_ext_texture_compression_bptc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT").unwrap(); let cv = v8::Number::new(scope, 36494.0).into(); ctor_ext_texture_compression_bptc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT").unwrap(); let cv = v8::Number::new(scope, 36495.0).into(); ctor_ext_texture_compression_bptc.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ext_texture_compression_rgtc) = templates.get("EXT_texture_compression_rgtc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_texture_compression_rgtc = v8::String::new(scope, "EXT_texture_compression_rgtc").unwrap();
             global.define_own_property(scope, name_ext_texture_compression_rgtc.into(), ctor_ext_texture_compression_rgtc.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPRESSED_RED_RGTC1_EXT").unwrap(); let cv = v8::Number::new(scope, 36283.0).into(); ctor_ext_texture_compression_rgtc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SIGNED_RED_RGTC1_EXT").unwrap(); let cv = v8::Number::new(scope, 36284.0).into(); ctor_ext_texture_compression_rgtc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RED_GREEN_RGTC2_EXT").unwrap(); let cv = v8::Number::new(scope, 36285.0).into(); ctor_ext_texture_compression_rgtc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT").unwrap(); let cv = v8::Number::new(scope, 36286.0).into(); ctor_ext_texture_compression_rgtc.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ext_texture_filter_anisotropic) = templates.get("EXT_texture_filter_anisotropic").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_texture_filter_anisotropic = v8::String::new(scope, "EXT_texture_filter_anisotropic").unwrap();
             global.define_own_property(scope, name_ext_texture_filter_anisotropic.into(), ctor_ext_texture_filter_anisotropic.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "TEXTURE_MAX_ANISOTROPY_EXT").unwrap(); let cv = v8::Number::new(scope, 34046.0).into(); ctor_ext_texture_filter_anisotropic.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MAX_TEXTURE_MAX_ANISOTROPY_EXT").unwrap(); let cv = v8::Number::new(scope, 34047.0).into(); ctor_ext_texture_filter_anisotropic.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ext_texture_norm16) = templates.get("EXT_texture_norm16").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ext_texture_norm16 = v8::String::new(scope, "EXT_texture_norm16").unwrap();
             global.define_own_property(scope, name_ext_texture_norm16.into(), ctor_ext_texture_norm16.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "R16_EXT").unwrap(); let cv = v8::Number::new(scope, 33322.0).into(); ctor_ext_texture_norm16.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "RG16_EXT").unwrap(); let cv = v8::Number::new(scope, 33324.0).into(); ctor_ext_texture_norm16.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "RGB16_EXT").unwrap(); let cv = v8::Number::new(scope, 32852.0).into(); ctor_ext_texture_norm16.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "RGBA16_EXT").unwrap(); let cv = v8::Number::new(scope, 32859.0).into(); ctor_ext_texture_norm16.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "R16_SNORM_EXT").unwrap(); let cv = v8::Number::new(scope, 36760.0).into(); ctor_ext_texture_norm16.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "RG16_SNORM_EXT").unwrap(); let cv = v8::Number::new(scope, 36761.0).into(); ctor_ext_texture_norm16.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "RGB16_SNORM_EXT").unwrap(); let cv = v8::Number::new(scope, 36762.0).into(); ctor_ext_texture_norm16.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "RGBA16_SNORM_EXT").unwrap(); let cv = v8::Number::new(scope, 36763.0).into(); ctor_ext_texture_norm16.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_element_internals) = templates.get("ElementInternals").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_element_internals = v8::String::new(scope, "ElementInternals").unwrap();
@@ -3634,10 +3718,18 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_event) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_event = v8::String::new(scope, "Event").unwrap();
             global.define_own_property(scope, name_event.into(), ctor_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "NONE").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_event.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CAPTURING_PHASE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_event.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "AT_TARGET").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_event.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "BUBBLING_PHASE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_event.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_event_counts) = templates.get("EventCounts").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_event_counts = v8::String::new(scope, "EventCounts").unwrap();
             global.define_own_property(scope, name_event_counts.into(), ctor_event_counts.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
+        if let Some(ctor_event_listener) = templates.get("EventListener").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_event_listener = v8::String::new(scope, "EventListener").unwrap();
+            global.define_own_property(scope, name_event_listener.into(), ctor_event_listener.into(), v8::PropertyAttribute::DONT_ENUM);
         }
         if let Some(ctor_event_target) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_event_target = v8::String::new(scope, "EventTarget").unwrap();
@@ -3835,13 +3927,13 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_gpu_render_pass_encoder = v8::String::new(scope, "GPURenderPassEncoder").unwrap();
             global.define_own_property(scope, name_gpu_render_pass_encoder.into(), ctor_gpu_render_pass_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_gpu_render_pipeline) = templates.get("GPURenderPipeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_render_pipeline = v8::String::new(scope, "GPURenderPipeline").unwrap();
             global.define_own_property(scope, name_gpu_render_pipeline.into(), ctor_gpu_render_pipeline.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_gpu_sampler) = templates.get("GPUSampler").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_sampler = v8::String::new(scope, "GPUSampler").unwrap();
             global.define_own_property(scope, name_gpu_sampler.into(), ctor_gpu_sampler.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -3897,6 +3989,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_geolocation_position_error) = templates.get("GeolocationPositionError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_geolocation_position_error = v8::String::new(scope, "GeolocationPositionError").unwrap();
             global.define_own_property(scope, name_geolocation_position_error.into(), ctor_geolocation_position_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "PERMISSION_DENIED").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_geolocation_position_error.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "POSITION_UNAVAILABLE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_geolocation_position_error.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TIMEOUT").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_geolocation_position_error.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_global) = templates.get("Global").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_global = v8::String::new(scope, "Global").unwrap();
@@ -4029,6 +4124,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_khr_parallel_shader_compile) = templates.get("KHR_parallel_shader_compile").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_khr_parallel_shader_compile = v8::String::new(scope, "KHR_parallel_shader_compile").unwrap();
             global.define_own_property(scope, name_khr_parallel_shader_compile.into(), ctor_khr_parallel_shader_compile.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPLETION_STATUS_KHR").unwrap(); let cv = v8::Number::new(scope, 37297.0).into(); ctor_khr_parallel_shader_compile.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_keyboard_layout_map) = templates.get("KeyboardLayoutMap").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_keyboard_layout_map = v8::String::new(scope, "KeyboardLayoutMap").unwrap();
@@ -4125,6 +4221,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_media_error) = templates.get("MediaError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_error = v8::String::new(scope, "MediaError").unwrap();
             global.define_own_property(scope, name_media_error.into(), ctor_media_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "MEDIA_ERR_ABORTED").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_media_error.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MEDIA_ERR_NETWORK").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_media_error.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MEDIA_ERR_DECODE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_media_error.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MEDIA_ERR_SRC_NOT_SUPPORTED").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_media_error.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_media_key_status_map) = templates.get("MediaKeyStatusMap").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_key_status_map = v8::String::new(scope, "MediaKeyStatusMap").unwrap();
@@ -4238,13 +4338,17 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_navigator_login = v8::String::new(scope, "NavigatorLogin").unwrap();
             global.define_own_property(scope, name_navigator_login.into(), ctor_navigator_login.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_navigator_ua_data) = templates.get("NavigatorUAData").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigator_ua_data = v8::String::new(scope, "NavigatorUAData").unwrap();
             global.define_own_property(scope, name_navigator_ua_data.into(), ctor_navigator_ua_data.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
+        if let Some(ctor_node_filter) = templates.get("NodeFilter").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_node_filter = v8::String::new(scope, "NodeFilter").unwrap();
+            global.define_own_property(scope, name_node_filter.into(), ctor_node_filter.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_node_iterator) = templates.get("NodeIterator").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_node_iterator = v8::String::new(scope, "NodeIterator").unwrap();
             global.define_own_property(scope, name_node_iterator.into(), ctor_node_iterator.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4276,6 +4380,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_oes_standard_derivatives) = templates.get("OES_standard_derivatives").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_oes_standard_derivatives = v8::String::new(scope, "OES_standard_derivatives").unwrap();
             global.define_own_property(scope, name_oes_standard_derivatives.into(), ctor_oes_standard_derivatives.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "FRAGMENT_SHADER_DERIVATIVE_HINT_OES").unwrap(); let cv = v8::Number::new(scope, 35723.0).into(); ctor_oes_standard_derivatives.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_oes_texture_float) = templates.get("OES_texture_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_oes_texture_float = v8::String::new(scope, "OES_texture_float").unwrap();
@@ -4288,6 +4393,7 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_oes_texture_half_float) = templates.get("OES_texture_half_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_oes_texture_half_float = v8::String::new(scope, "OES_texture_half_float").unwrap();
             global.define_own_property(scope, name_oes_texture_half_float.into(), ctor_oes_texture_half_float.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "HALF_FLOAT_OES").unwrap(); let cv = v8::Number::new(scope, 36193.0).into(); ctor_oes_texture_half_float.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_oes_texture_half_float_linear) = templates.get("OES_texture_half_float_linear").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_oes_texture_half_float_linear = v8::String::new(scope, "OES_texture_half_float_linear").unwrap();
@@ -4296,10 +4402,15 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_oes_vertex_array_object) = templates.get("OES_vertex_array_object").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_oes_vertex_array_object = v8::String::new(scope, "OES_vertex_array_object").unwrap();
             global.define_own_property(scope, name_oes_vertex_array_object.into(), ctor_oes_vertex_array_object.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "VERTEX_ARRAY_BINDING_OES").unwrap(); let cv = v8::Number::new(scope, 34229.0).into(); ctor_oes_vertex_array_object.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_ovr_multiview2) = templates.get("OVR_multiview2").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ovr_multiview2 = v8::String::new(scope, "OVR_multiview2").unwrap();
             global.define_own_property(scope, name_ovr_multiview2.into(), ctor_ovr_multiview2.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_OVR").unwrap(); let cv = v8::Number::new(scope, 38448.0).into(); ctor_ovr_multiview2.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_OVR").unwrap(); let cv = v8::Number::new(scope, 38450.0).into(); ctor_ovr_multiview2.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MAX_VIEWS_OVR").unwrap(); let cv = v8::Number::new(scope, 38449.0).into(); ctor_ovr_multiview2.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR").unwrap(); let cv = v8::Number::new(scope, 38451.0).into(); ctor_ovr_multiview2.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_observable) = templates.get("Observable").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_observable = v8::String::new(scope, "Observable").unwrap();
@@ -4336,6 +4447,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_performance_navigation) = templates.get("PerformanceNavigation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_navigation = v8::String::new(scope, "PerformanceNavigation").unwrap();
             global.define_own_property(scope, name_performance_navigation.into(), ctor_performance_navigation.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "TYPE_NAVIGATE").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_performance_navigation.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TYPE_RELOAD").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_performance_navigation.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TYPE_BACK_FORWARD").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_performance_navigation.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TYPE_RESERVED").unwrap(); let cv = v8::Number::new(scope, 255.0).into(); ctor_performance_navigation.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_performance_observer) = templates.get("PerformanceObserver").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_observer = v8::String::new(scope, "PerformanceObserver").unwrap();
@@ -4536,6 +4651,11 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_angle) = templates.get("SVGAngle").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_angle = v8::String::new(scope, "SVGAngle").unwrap();
             global.define_own_property(scope, name_svg_angle.into(), ctor_svg_angle.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_ANGLETYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_angle.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_ANGLETYPE_UNSPECIFIED").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_angle.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_ANGLETYPE_DEG").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_angle.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_ANGLETYPE_RAD").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svg_angle.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_ANGLETYPE_GRAD").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svg_angle.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_animated_angle) = templates.get("SVGAnimatedAngle").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_animated_angle = v8::String::new(scope, "SVGAnimatedAngle").unwrap();
@@ -4588,6 +4708,17 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_length) = templates.get("SVGLength").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_length = v8::String::new(scope, "SVGLength").unwrap();
             global.define_own_property(scope, name_svg_length.into(), ctor_svg_length.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_NUMBER").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_PERCENTAGE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_EMS").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_EXS").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_PX").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_CM").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_MM").unwrap(); let cv = v8::Number::new(scope, 7.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_IN").unwrap(); let cv = v8::Number::new(scope, 8.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_PT").unwrap(); let cv = v8::Number::new(scope, 9.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_LENGTHTYPE_PC").unwrap(); let cv = v8::Number::new(scope, 10.0).into(); ctor_svg_length.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_length_list) = templates.get("SVGLengthList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_length_list = v8::String::new(scope, "SVGLengthList").unwrap();
@@ -4612,6 +4743,20 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_preserve_aspect_ratio) = templates.get("SVGPreserveAspectRatio").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_preserve_aspect_ratio = v8::String::new(scope, "SVGPreserveAspectRatio").unwrap();
             global.define_own_property(scope, name_svg_preserve_aspect_ratio.into(), ctor_svg_preserve_aspect_ratio.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_NONE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMIN").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMIN").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMIN").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMID").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMID").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMID").unwrap(); let cv = v8::Number::new(scope, 7.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMAX").unwrap(); let cv = v8::Number::new(scope, 8.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMAX").unwrap(); let cv = v8::Number::new(scope, 9.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMAX").unwrap(); let cv = v8::Number::new(scope, 10.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MEETORSLICE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MEETORSLICE_MEET").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MEETORSLICE_SLICE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_preserve_aspect_ratio.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_string_list) = templates.get("SVGStringList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_string_list = v8::String::new(scope, "SVGStringList").unwrap();
@@ -4620,6 +4765,13 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_transform) = templates.get("SVGTransform").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_transform = v8::String::new(scope, "SVGTransform").unwrap();
             global.define_own_property(scope, name_svg_transform.into(), ctor_svg_transform.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_TRANSFORM_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_transform.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_TRANSFORM_MATRIX").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_transform.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_TRANSFORM_TRANSLATE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_transform.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_TRANSFORM_SCALE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svg_transform.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_TRANSFORM_ROTATE").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svg_transform.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_TRANSFORM_SKEWX").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_svg_transform.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_TRANSFORM_SKEWY").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_svg_transform.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_transform_list) = templates.get("SVGTransformList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_transform_list = v8::String::new(scope, "SVGTransformList").unwrap();
@@ -4628,6 +4780,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_unit_types) = templates.get("SVGUnitTypes").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_unit_types = v8::String::new(scope, "SVGUnitTypes").unwrap();
             global.define_own_property(scope, name_svg_unit_types.into(), ctor_svg_unit_types.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_UNIT_TYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_unit_types.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_UNIT_TYPE_USERSPACEONUSE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_unit_types.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_unit_types.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_sanitizer) = templates.get("Sanitizer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_sanitizer = v8::String::new(scope, "Sanitizer").unwrap();
@@ -4637,6 +4792,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_scheduler = v8::String::new(scope, "Scheduler").unwrap();
             global.define_own_property(scope, name_scheduler.into(), ctor_scheduler.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_scheduling) = templates.get("Scheduling").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_scheduling = v8::String::new(scope, "Scheduling").unwrap();
             global.define_own_property(scope, name_scheduling.into(), ctor_scheduling.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4645,9 +4803,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_screen = v8::String::new(scope, "Screen").unwrap();
             global.define_own_property(scope, name_screen.into(), ctor_screen.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_selection) = templates.get("Selection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_selection = v8::String::new(scope, "Selection").unwrap();
             global.define_own_property(scope, name_selection.into(), ctor_selection.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -4919,42 +5074,124 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_webgl_blend_equation_advanced_coherent) = templates.get("WEBGL_blend_equation_advanced_coherent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_blend_equation_advanced_coherent = v8::String::new(scope, "WEBGL_blend_equation_advanced_coherent").unwrap();
             global.define_own_property(scope, name_webgl_blend_equation_advanced_coherent.into(), ctor_webgl_blend_equation_advanced_coherent.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "MULTIPLY").unwrap(); let cv = v8::Number::new(scope, 37524.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SCREEN").unwrap(); let cv = v8::Number::new(scope, 37525.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "OVERLAY").unwrap(); let cv = v8::Number::new(scope, 37526.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DARKEN").unwrap(); let cv = v8::Number::new(scope, 37527.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "LIGHTEN").unwrap(); let cv = v8::Number::new(scope, 37528.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLORDODGE").unwrap(); let cv = v8::Number::new(scope, 37529.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLORBURN").unwrap(); let cv = v8::Number::new(scope, 37530.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HARDLIGHT").unwrap(); let cv = v8::Number::new(scope, 37531.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SOFTLIGHT").unwrap(); let cv = v8::Number::new(scope, 37532.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DIFFERENCE").unwrap(); let cv = v8::Number::new(scope, 37534.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "EXCLUSION").unwrap(); let cv = v8::Number::new(scope, 37536.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HSL_HUE").unwrap(); let cv = v8::Number::new(scope, 37549.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HSL_SATURATION").unwrap(); let cv = v8::Number::new(scope, 37550.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HSL_COLOR").unwrap(); let cv = v8::Number::new(scope, 37551.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HSL_LUMINOSITY").unwrap(); let cv = v8::Number::new(scope, 37552.0).into(); ctor_webgl_blend_equation_advanced_coherent.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_clip_cull_distance) = templates.get("WEBGL_clip_cull_distance").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_clip_cull_distance = v8::String::new(scope, "WEBGL_clip_cull_distance").unwrap();
             global.define_own_property(scope, name_webgl_clip_cull_distance.into(), ctor_webgl_clip_cull_distance.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "MAX_CLIP_DISTANCES_WEBGL").unwrap(); let cv = v8::Number::new(scope, 3378.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MAX_CULL_DISTANCES_WEBGL").unwrap(); let cv = v8::Number::new(scope, 33529.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MAX_COMBINED_CLIP_AND_CULL_DISTANCES_WEBGL").unwrap(); let cv = v8::Number::new(scope, 33530.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLIP_DISTANCE0_WEBGL").unwrap(); let cv = v8::Number::new(scope, 12288.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLIP_DISTANCE1_WEBGL").unwrap(); let cv = v8::Number::new(scope, 12289.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLIP_DISTANCE2_WEBGL").unwrap(); let cv = v8::Number::new(scope, 12290.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLIP_DISTANCE3_WEBGL").unwrap(); let cv = v8::Number::new(scope, 12291.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLIP_DISTANCE4_WEBGL").unwrap(); let cv = v8::Number::new(scope, 12292.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLIP_DISTANCE5_WEBGL").unwrap(); let cv = v8::Number::new(scope, 12293.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLIP_DISTANCE6_WEBGL").unwrap(); let cv = v8::Number::new(scope, 12294.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLIP_DISTANCE7_WEBGL").unwrap(); let cv = v8::Number::new(scope, 12295.0).into(); ctor_webgl_clip_cull_distance.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_color_buffer_float) = templates.get("WEBGL_color_buffer_float").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_color_buffer_float = v8::String::new(scope, "WEBGL_color_buffer_float").unwrap();
             global.define_own_property(scope, name_webgl_color_buffer_float.into(), ctor_webgl_color_buffer_float.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "RGBA32F_EXT").unwrap(); let cv = v8::Number::new(scope, 34836.0).into(); ctor_webgl_color_buffer_float.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT").unwrap(); let cv = v8::Number::new(scope, 33297.0).into(); ctor_webgl_color_buffer_float.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "UNSIGNED_NORMALIZED_EXT").unwrap(); let cv = v8::Number::new(scope, 35863.0).into(); ctor_webgl_color_buffer_float.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_compressed_texture_astc) = templates.get("WEBGL_compressed_texture_astc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_compressed_texture_astc = v8::String::new(scope, "WEBGL_compressed_texture_astc").unwrap();
             global.define_own_property(scope, name_webgl_compressed_texture_astc.into(), ctor_webgl_compressed_texture_astc.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_4x4_KHR").unwrap(); let cv = v8::Number::new(scope, 37808.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_5x4_KHR").unwrap(); let cv = v8::Number::new(scope, 37809.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_5x5_KHR").unwrap(); let cv = v8::Number::new(scope, 37810.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_6x5_KHR").unwrap(); let cv = v8::Number::new(scope, 37811.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_6x6_KHR").unwrap(); let cv = v8::Number::new(scope, 37812.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_8x5_KHR").unwrap(); let cv = v8::Number::new(scope, 37813.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_8x6_KHR").unwrap(); let cv = v8::Number::new(scope, 37814.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_8x8_KHR").unwrap(); let cv = v8::Number::new(scope, 37815.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_10x5_KHR").unwrap(); let cv = v8::Number::new(scope, 37816.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_10x6_KHR").unwrap(); let cv = v8::Number::new(scope, 37817.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_10x8_KHR").unwrap(); let cv = v8::Number::new(scope, 37818.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_10x10_KHR").unwrap(); let cv = v8::Number::new(scope, 37819.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_12x10_KHR").unwrap(); let cv = v8::Number::new(scope, 37820.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_ASTC_12x12_KHR").unwrap(); let cv = v8::Number::new(scope, 37821.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR").unwrap(); let cv = v8::Number::new(scope, 37840.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR").unwrap(); let cv = v8::Number::new(scope, 37841.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR").unwrap(); let cv = v8::Number::new(scope, 37842.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR").unwrap(); let cv = v8::Number::new(scope, 37843.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR").unwrap(); let cv = v8::Number::new(scope, 37844.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR").unwrap(); let cv = v8::Number::new(scope, 37845.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR").unwrap(); let cv = v8::Number::new(scope, 37846.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR").unwrap(); let cv = v8::Number::new(scope, 37847.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR").unwrap(); let cv = v8::Number::new(scope, 37848.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR").unwrap(); let cv = v8::Number::new(scope, 37849.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR").unwrap(); let cv = v8::Number::new(scope, 37850.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR").unwrap(); let cv = v8::Number::new(scope, 37851.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR").unwrap(); let cv = v8::Number::new(scope, 37852.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR").unwrap(); let cv = v8::Number::new(scope, 37853.0).into(); ctor_webgl_compressed_texture_astc.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_compressed_texture_etc) = templates.get("WEBGL_compressed_texture_etc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_compressed_texture_etc = v8::String::new(scope, "WEBGL_compressed_texture_etc").unwrap();
             global.define_own_property(scope, name_webgl_compressed_texture_etc.into(), ctor_webgl_compressed_texture_etc.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPRESSED_R11_EAC").unwrap(); let cv = v8::Number::new(scope, 37488.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SIGNED_R11_EAC").unwrap(); let cv = v8::Number::new(scope, 37489.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RG11_EAC").unwrap(); let cv = v8::Number::new(scope, 37490.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SIGNED_RG11_EAC").unwrap(); let cv = v8::Number::new(scope, 37491.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGB8_ETC2").unwrap(); let cv = v8::Number::new(scope, 37492.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ETC2").unwrap(); let cv = v8::Number::new(scope, 37493.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2").unwrap(); let cv = v8::Number::new(scope, 37494.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2").unwrap(); let cv = v8::Number::new(scope, 37495.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA8_ETC2_EAC").unwrap(); let cv = v8::Number::new(scope, 37496.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB8_ALPHA8_ETC2_EAC").unwrap(); let cv = v8::Number::new(scope, 37497.0).into(); ctor_webgl_compressed_texture_etc.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_compressed_texture_etc1) = templates.get("WEBGL_compressed_texture_etc1").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_compressed_texture_etc1 = v8::String::new(scope, "WEBGL_compressed_texture_etc1").unwrap();
             global.define_own_property(scope, name_webgl_compressed_texture_etc1.into(), ctor_webgl_compressed_texture_etc1.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPRESSED_RGB_ETC1_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36196.0).into(); ctor_webgl_compressed_texture_etc1.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_compressed_texture_pvrtc) = templates.get("WEBGL_compressed_texture_pvrtc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_compressed_texture_pvrtc = v8::String::new(scope, "WEBGL_compressed_texture_pvrtc").unwrap();
             global.define_own_property(scope, name_webgl_compressed_texture_pvrtc.into(), ctor_webgl_compressed_texture_pvrtc.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPRESSED_RGB_PVRTC_4BPPV1_IMG").unwrap(); let cv = v8::Number::new(scope, 35840.0).into(); ctor_webgl_compressed_texture_pvrtc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGB_PVRTC_2BPPV1_IMG").unwrap(); let cv = v8::Number::new(scope, 35841.0).into(); ctor_webgl_compressed_texture_pvrtc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_PVRTC_4BPPV1_IMG").unwrap(); let cv = v8::Number::new(scope, 35842.0).into(); ctor_webgl_compressed_texture_pvrtc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_PVRTC_2BPPV1_IMG").unwrap(); let cv = v8::Number::new(scope, 35843.0).into(); ctor_webgl_compressed_texture_pvrtc.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_compressed_texture_s3tc) = templates.get("WEBGL_compressed_texture_s3tc").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_compressed_texture_s3tc = v8::String::new(scope, "WEBGL_compressed_texture_s3tc").unwrap();
             global.define_own_property(scope, name_webgl_compressed_texture_s3tc.into(), ctor_webgl_compressed_texture_s3tc.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPRESSED_RGB_S3TC_DXT1_EXT").unwrap(); let cv = v8::Number::new(scope, 33776.0).into(); ctor_webgl_compressed_texture_s3tc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_S3TC_DXT1_EXT").unwrap(); let cv = v8::Number::new(scope, 33777.0).into(); ctor_webgl_compressed_texture_s3tc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_S3TC_DXT3_EXT").unwrap(); let cv = v8::Number::new(scope, 33778.0).into(); ctor_webgl_compressed_texture_s3tc.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_RGBA_S3TC_DXT5_EXT").unwrap(); let cv = v8::Number::new(scope, 33779.0).into(); ctor_webgl_compressed_texture_s3tc.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_compressed_texture_s3tc_srgb) = templates.get("WEBGL_compressed_texture_s3tc_srgb").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_compressed_texture_s3tc_srgb = v8::String::new(scope, "WEBGL_compressed_texture_s3tc_srgb").unwrap();
             global.define_own_property(scope, name_webgl_compressed_texture_s3tc_srgb.into(), ctor_webgl_compressed_texture_s3tc_srgb.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB_S3TC_DXT1_EXT").unwrap(); let cv = v8::Number::new(scope, 35916.0).into(); ctor_webgl_compressed_texture_s3tc_srgb.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT").unwrap(); let cv = v8::Number::new(scope, 35917.0).into(); ctor_webgl_compressed_texture_s3tc_srgb.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT").unwrap(); let cv = v8::Number::new(scope, 35918.0).into(); ctor_webgl_compressed_texture_s3tc_srgb.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT").unwrap(); let cv = v8::Number::new(scope, 35919.0).into(); ctor_webgl_compressed_texture_s3tc_srgb.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_debug_renderer_info) = templates.get("WEBGL_debug_renderer_info").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_debug_renderer_info = v8::String::new(scope, "WEBGL_debug_renderer_info").unwrap();
             global.define_own_property(scope, name_webgl_debug_renderer_info.into(), ctor_webgl_debug_renderer_info.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "UNMASKED_VENDOR_WEBGL").unwrap(); let cv = v8::Number::new(scope, 37445.0).into(); ctor_webgl_debug_renderer_info.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "UNMASKED_RENDERER_WEBGL").unwrap(); let cv = v8::Number::new(scope, 37446.0).into(); ctor_webgl_debug_renderer_info.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_debug_shaders) = templates.get("WEBGL_debug_shaders").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_debug_shaders = v8::String::new(scope, "WEBGL_debug_shaders").unwrap();
@@ -4963,10 +5200,45 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_webgl_depth_texture) = templates.get("WEBGL_depth_texture").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_depth_texture = v8::String::new(scope, "WEBGL_depth_texture").unwrap();
             global.define_own_property(scope, name_webgl_depth_texture.into(), ctor_webgl_depth_texture.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "UNSIGNED_INT_24_8_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34042.0).into(); ctor_webgl_depth_texture.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_draw_buffers) = templates.get("WEBGL_draw_buffers").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_draw_buffers = v8::String::new(scope, "WEBGL_draw_buffers").unwrap();
             global.define_own_property(scope, name_webgl_draw_buffers.into(), ctor_webgl_draw_buffers.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT0_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36064.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT1_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36065.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT2_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36066.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT3_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36067.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT4_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36068.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT5_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36069.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT6_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36070.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT7_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36071.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT8_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36072.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT9_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36073.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT10_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36074.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT11_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36075.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT12_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36076.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT13_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36077.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT14_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36078.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COLOR_ATTACHMENT15_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36079.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER0_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34853.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER1_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34854.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER2_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34855.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER3_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34856.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER4_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34857.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER5_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34858.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER6_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34859.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER7_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34860.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER8_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34861.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER9_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34862.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER10_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34863.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER11_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34864.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER12_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34865.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER13_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34866.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER14_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34867.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DRAW_BUFFER15_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34868.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MAX_COLOR_ATTACHMENTS_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36063.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "MAX_DRAW_BUFFERS_WEBGL").unwrap(); let cv = v8::Number::new(scope, 34852.0).into(); ctor_webgl_draw_buffers.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_webgl_draw_instanced_base_vertex_base_instance) = templates.get("WEBGL_draw_instanced_base_vertex_base_instance").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_draw_instanced_base_vertex_base_instance = v8::String::new(scope, "WEBGL_draw_instanced_base_vertex_base_instance").unwrap();
@@ -4987,6 +5259,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_webgl_provoking_vertex) = templates.get("WEBGL_provoking_vertex").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webgl_provoking_vertex = v8::String::new(scope, "WEBGL_provoking_vertex").unwrap();
             global.define_own_property(scope, name_webgl_provoking_vertex.into(), ctor_webgl_provoking_vertex.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "FIRST_VERTEX_CONVENTION_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36429.0).into(); ctor_webgl_provoking_vertex.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "LAST_VERTEX_CONVENTION_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36430.0).into(); ctor_webgl_provoking_vertex.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "PROVOKING_VERTEX_WEBGL").unwrap(); let cv = v8::Number::new(scope, 36431.0).into(); ctor_webgl_provoking_vertex.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_wgsl_language_features) = templates.get("WGSLLanguageFeatures").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_wgsl_language_features = v8::String::new(scope, "WGSLLanguageFeatures").unwrap();
@@ -5040,6 +5315,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_worker_location = v8::String::new(scope, "WorkerLocation").unwrap();
             global.define_own_property(scope, name_worker_location.into(), ctor_worker_location.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_worker_navigator) = templates.get("WorkerNavigator").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_worker_navigator = v8::String::new(scope, "WorkerNavigator").unwrap();
             global.define_own_property(scope, name_worker_navigator.into(), ctor_worker_navigator.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5048,9 +5326,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_worklet = v8::String::new(scope, "Worklet").unwrap();
             global.define_own_property(scope, name_worklet.into(), ctor_worklet.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_worklet_animation_effect) = templates.get("WorkletAnimationEffect").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_worklet_animation_effect = v8::String::new(scope, "WorkletAnimationEffect").unwrap();
             global.define_own_property(scope, name_worklet_animation_effect.into(), ctor_worklet_animation_effect.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5091,9 +5366,23 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_x_path_expression = v8::String::new(scope, "XPathExpression").unwrap();
             global.define_own_property(scope, name_x_path_expression.into(), ctor_x_path_expression.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+        if let Some(ctor_x_path_ns_resolver) = templates.get("XPathNSResolver").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+            let name_x_path_ns_resolver = v8::String::new(scope, "XPathNSResolver").unwrap();
+            global.define_own_property(scope, name_x_path_ns_resolver.into(), ctor_x_path_ns_resolver.into(), v8::PropertyAttribute::DONT_ENUM);
+        }
         if let Some(ctor_x_path_result) = templates.get("XPathResult").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_x_path_result = v8::String::new(scope, "XPathResult").unwrap();
             global.define_own_property(scope, name_x_path_result.into(), ctor_x_path_result.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "ANY_TYPE").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NUMBER_TYPE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "STRING_TYPE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "BOOLEAN_TYPE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "UNORDERED_NODE_ITERATOR_TYPE").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "ORDERED_NODE_ITERATOR_TYPE").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "UNORDERED_NODE_SNAPSHOT_TYPE").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "ORDERED_NODE_SNAPSHOT_TYPE").unwrap(); let cv = v8::Number::new(scope, 7.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "ANY_UNORDERED_NODE_TYPE").unwrap(); let cv = v8::Number::new(scope, 8.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "FIRST_ORDERED_NODE_TYPE").unwrap(); let cv = v8::Number::new(scope, 9.0).into(); ctor_x_path_result.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_xr_anchor) = templates.get("XRAnchor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_anchor = v8::String::new(scope, "XRAnchor").unwrap();
@@ -5298,6 +5587,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_range) = templates.get("Range").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_range = v8::String::new(scope, "Range").unwrap();
             global.define_own_property(scope, name_range.into(), ctor_range.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "START_TO_START").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_range.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "START_TO_END").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_range.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "END_TO_END").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_range.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "END_TO_START").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_range.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_static_range) = templates.get("StaticRange").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_static_range = v8::String::new(scope, "StaticRange").unwrap();
@@ -5439,6 +5732,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_css_function_descriptors = v8::String::new(scope, "CSSFunctionDescriptors").unwrap();
             global.define_own_property(scope, name_css_function_descriptors.into(), ctor_css_function_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_css_page_descriptors) = templates.get("CSSPageDescriptors").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_page_descriptors = v8::String::new(scope, "CSSPageDescriptors").unwrap();
             global.define_own_property(scope, name_css_page_descriptors.into(), ctor_css_page_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5451,9 +5747,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_css_style_properties = v8::String::new(scope, "CSSStyleProperties").unwrap();
             global.define_own_property(scope, name_css_style_properties.into(), ctor_css_style_properties.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_css_color_value) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_color_value = v8::String::new(scope, "CSSColorValue").unwrap();
             global.define_own_property(scope, name_css_color_value.into(), ctor_css_color_value.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5842,6 +6135,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_snap_event = v8::String::new(scope, "SnapEvent").unwrap();
             global.define_own_property(scope, name_snap_event.into(), ctor_snap_event.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_speech_recognition_error_event) = templates.get("SpeechRecognitionErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_speech_recognition_error_event = v8::String::new(scope, "SpeechRecognitionErrorEvent").unwrap();
             global.define_own_property(scope, name_speech_recognition_error_event.into(), ctor_speech_recognition_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -5854,9 +6150,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_speech_synthesis_event = v8::String::new(scope, "SpeechSynthesisEvent").unwrap();
             global.define_own_property(scope, name_speech_synthesis_event.into(), ctor_speech_synthesis_event.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_storage_event) = templates.get("StorageEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_storage_event = v8::String::new(scope, "StorageEvent").unwrap();
             global.define_own_property(scope, name_storage_event.into(), ctor_storage_event.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6032,10 +6325,16 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_event_source) = templates.get("EventSource").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_event_source = v8::String::new(scope, "EventSource").unwrap();
             global.define_own_property(scope, name_event_source.into(), ctor_event_source.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "CONNECTING").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_event_source.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "OPEN").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_event_source.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLOSED").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_event_source.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_file_reader) = templates.get("FileReader").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file_reader = v8::String::new(scope, "FileReader").unwrap();
             global.define_own_property(scope, name_file_reader.into(), ctor_file_reader.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "EMPTY").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_file_reader.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "LOADING").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_file_reader.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DONE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_file_reader.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_font_face_set) = templates.get("FontFaceSet").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_font_face_set = v8::String::new(scope, "FontFaceSet").unwrap();
@@ -6148,6 +6447,24 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_node) = templates.get("Node").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_node = v8::String::new(scope, "Node").unwrap();
             global.define_own_property(scope, name_node.into(), ctor_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "ELEMENT_NODE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "ATTRIBUTE_NODE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TEXT_NODE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CDATA_SECTION_NODE").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "ENTITY_REFERENCE_NODE").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "ENTITY_NODE").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "PROCESSING_INSTRUCTION_NODE").unwrap(); let cv = v8::Number::new(scope, 7.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "COMMENT_NODE").unwrap(); let cv = v8::Number::new(scope, 8.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_NODE").unwrap(); let cv = v8::Number::new(scope, 9.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_TYPE_NODE").unwrap(); let cv = v8::Number::new(scope, 10.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_FRAGMENT_NODE").unwrap(); let cv = v8::Number::new(scope, 11.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NOTATION_NODE").unwrap(); let cv = v8::Number::new(scope, 12.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_POSITION_DISCONNECTED").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_POSITION_PRECEDING").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_POSITION_FOLLOWING").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_POSITION_CONTAINS").unwrap(); let cv = v8::Number::new(scope, 8.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_POSITION_CONTAINED_BY").unwrap(); let cv = v8::Number::new(scope, 16.0).into(); ctor_node.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC").unwrap(); let cv = v8::Number::new(scope, 32.0).into(); ctor_node.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_notification) = templates.get("Notification").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_notification = v8::String::new(scope, "Notification").unwrap();
@@ -6245,6 +6562,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_s_frame_decrypter_stream = v8::String::new(scope, "SFrameDecrypterStream").unwrap();
             global.define_own_property(scope, name_s_frame_decrypter_stream.into(), ctor_s_frame_decrypter_stream.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_screen_details) = templates.get("ScreenDetails").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_screen_details = v8::String::new(scope, "ScreenDetails").unwrap();
             global.define_own_property(scope, name_screen_details.into(), ctor_screen_details.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6257,9 +6577,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_sensor = v8::String::new(scope, "Sensor").unwrap();
             global.define_own_property(scope, name_sensor.into(), ctor_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_serial) = templates.get("Serial").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_serial = v8::String::new(scope, "Serial").unwrap();
             global.define_own_property(scope, name_serial.into(), ctor_serial.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6347,6 +6664,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_web_socket) = templates.get("WebSocket").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_socket = v8::String::new(scope, "WebSocket").unwrap();
             global.define_own_property(scope, name_web_socket.into(), ctor_web_socket.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "CONNECTING").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_web_socket.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "OPEN").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_web_socket.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLOSING").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_web_socket.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "CLOSED").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_web_socket.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_window) = templates.get("Window").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_window = v8::String::new(scope, "Window").unwrap();
@@ -6648,6 +6969,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_css_mixin_rule = v8::String::new(scope, "CSSMixinRule").unwrap();
             global.define_own_property(scope, name_css_mixin_rule.into(), ctor_css_mixin_rule.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_css_page_rule) = templates.get("CSSPageRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_page_rule = v8::String::new(scope, "CSSPageRule").unwrap();
             global.define_own_property(scope, name_css_page_rule.into(), ctor_css_page_rule.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6660,9 +6984,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_css_starting_style_rule = v8::String::new(scope, "CSSStartingStyleRule").unwrap();
             global.define_own_property(scope, name_css_starting_style_rule.into(), ctor_css_starting_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_css_style_rule) = templates.get("CSSStyleRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_style_rule = v8::String::new(scope, "CSSStyleRule").unwrap();
             global.define_own_property(scope, name_css_style_rule.into(), ctor_css_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -6786,6 +7107,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_keyboard_event) = templates.get("KeyboardEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_keyboard_event = v8::String::new(scope, "KeyboardEvent").unwrap();
             global.define_own_property(scope, name_keyboard_event.into(), ctor_keyboard_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "DOM_KEY_LOCATION_STANDARD").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_keyboard_event.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOM_KEY_LOCATION_LEFT").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_keyboard_event.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOM_KEY_LOCATION_RIGHT").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_keyboard_event.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOM_KEY_LOCATION_NUMPAD").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_keyboard_event.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_mouse_event) = templates.get("MouseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_mouse_event = v8::String::new(scope, "MouseEvent").unwrap();
@@ -7034,6 +7359,11 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_xml_http_request) = templates.get("XMLHttpRequest").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xml_http_request = v8::String::new(scope, "XMLHttpRequest").unwrap();
             global.define_own_property(scope, name_xml_http_request.into(), ctor_xml_http_request.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "UNSENT").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_xml_http_request.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "OPENED").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_xml_http_request.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HEADERS_RECEIVED").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_xml_http_request.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "LOADING").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_xml_http_request.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DONE").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_xml_http_request.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_xml_http_request_upload) = templates.get("XMLHttpRequestUpload").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xml_http_request_upload = v8::String::new(scope, "XMLHttpRequestUpload").unwrap();
@@ -7051,6 +7381,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_xr_body_space = v8::String::new(scope, "XRBodySpace").unwrap();
             global.define_own_property(scope, name_xr_body_space.into(), ctor_xr_body_space.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_xr_joint_space) = templates.get("XRJointSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_joint_space = v8::String::new(scope, "XRJointSpace").unwrap();
             global.define_own_property(scope, name_xr_joint_space.into(), ctor_xr_joint_space.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7063,9 +7396,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_performance_navigation_timing = v8::String::new(scope, "PerformanceNavigationTiming").unwrap();
             global.define_own_property(scope, name_performance_navigation_timing.into(), ctor_performance_navigation_timing.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_css_container_rule) = templates.get("CSSContainerRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_container_rule = v8::String::new(scope, "CSSContainerRule").unwrap();
             global.define_own_property(scope, name_css_container_rule.into(), ctor_css_container_rule.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7121,6 +7451,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_wheel_event) = templates.get("WheelEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_wheel_event = v8::String::new(scope, "WheelEvent").unwrap();
             global.define_own_property(scope, name_wheel_event.into(), ctor_wheel_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "DOM_DELTA_PIXEL").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_wheel_event.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOM_DELTA_LINE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_wheel_event.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "DOM_DELTA_PAGE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_wheel_event.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_audio_buffer_source_node) = templates.get("AudioBufferSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_buffer_source_node = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
@@ -7366,6 +7699,15 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_media_element) = templates.get("HTMLMediaElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_media_element = v8::String::new(scope, "HTMLMediaElement").unwrap();
             global.define_own_property(scope, name_html_media_element.into(), ctor_html_media_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "NETWORK_EMPTY").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NETWORK_IDLE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NETWORK_LOADING").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "NETWORK_NO_SOURCE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HAVE_NOTHING").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HAVE_METADATA").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HAVE_CURRENT_DATA").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HAVE_FUTURE_DATA").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "HAVE_ENOUGH_DATA").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_html_media_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_html_menu_element) = templates.get("HTMLMenuElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_menu_element = v8::String::new(scope, "HTMLMenuElement").unwrap();
@@ -7464,6 +7806,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_html_span_element = v8::String::new(scope, "HTMLSpanElement").unwrap();
             global.define_own_property(scope, name_html_span_element.into(), ctor_html_span_element.into(), v8::PropertyAttribute::DONT_ENUM);
         }
+    } // end registration batch
+    {
+        v8::scope!(let scope, scope);
         if let Some(ctor_html_style_element) = templates.get("HTMLStyleElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_style_element = v8::String::new(scope, "HTMLStyleElement").unwrap();
             global.define_own_property(scope, name_html_style_element.into(), ctor_html_style_element.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7476,9 +7821,6 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
             let name_html_table_cell_element = v8::String::new(scope, "HTMLTableCellElement").unwrap();
             global.define_own_property(scope, name_html_table_cell_element.into(), ctor_html_table_cell_element.into(), v8::PropertyAttribute::DONT_ENUM);
         }
-    } // end registration batch
-    {
-        v8::scope!(let scope, scope);
         if let Some(ctor_html_table_col_element) = templates.get("HTMLTableColElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_table_col_element = v8::String::new(scope, "HTMLTableColElement").unwrap();
             global.define_own_property(scope, name_html_table_col_element.into(), ctor_html_table_col_element.into(), v8::PropertyAttribute::DONT_ENUM);
@@ -7514,6 +7856,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_track_element) = templates.get("HTMLTrackElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_track_element = v8::String::new(scope, "HTMLTrackElement").unwrap();
             global.define_own_property(scope, name_html_track_element.into(), ctor_html_track_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "NONE").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_html_track_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "LOADING").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_html_track_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "LOADED").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_html_track_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "ERROR").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_html_track_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_htmlu_list_element) = templates.get("HTMLUListElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_htmlu_list_element = v8::String::new(scope, "HTMLUListElement").unwrap();
@@ -7538,6 +7884,12 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_component_transfer_function_element) = templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_component_transfer_function_element = v8::String::new(scope, "SVGComponentTransferFunctionElement").unwrap();
             global.define_own_property(scope, name_svg_component_transfer_function_element.into(), ctor_svg_component_transfer_function_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_component_transfer_function_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_component_transfer_function_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_TABLE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_component_transfer_function_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svg_component_transfer_function_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_LINEAR").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svg_component_transfer_function_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_GAMMA").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_svg_component_transfer_function_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_desc_element) = templates.get("SVGDescElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_desc_element = v8::String::new(scope, "SVGDescElement").unwrap();
@@ -7546,10 +7898,32 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_blend_element) = templates.get("SVGFEBlendElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_blend_element = v8::String::new(scope, "SVGFEBlendElement").unwrap();
             global.define_own_property(scope, name_svgfe_blend_element.into(), ctor_svgfe_blend_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_NORMAL").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_MULTIPLY").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_SCREEN").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_DARKEN").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_LIGHTEN").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_OVERLAY").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR_DODGE").unwrap(); let cv = v8::Number::new(scope, 7.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR_BURN").unwrap(); let cv = v8::Number::new(scope, 8.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_HARD_LIGHT").unwrap(); let cv = v8::Number::new(scope, 9.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_SOFT_LIGHT").unwrap(); let cv = v8::Number::new(scope, 10.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_DIFFERENCE").unwrap(); let cv = v8::Number::new(scope, 11.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_EXCLUSION").unwrap(); let cv = v8::Number::new(scope, 12.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_HUE").unwrap(); let cv = v8::Number::new(scope, 13.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_SATURATION").unwrap(); let cv = v8::Number::new(scope, 14.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR").unwrap(); let cv = v8::Number::new(scope, 15.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_LUMINOSITY").unwrap(); let cv = v8::Number::new(scope, 16.0).into(); ctor_svgfe_blend_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svgfe_color_matrix_element) = templates.get("SVGFEColorMatrixElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_color_matrix_element = v8::String::new(scope, "SVGFEColorMatrixElement").unwrap();
             global.define_own_property(scope, name_svgfe_color_matrix_element.into(), ctor_svgfe_color_matrix_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_color_matrix_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_MATRIX").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_color_matrix_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_SATURATE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_color_matrix_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_HUEROTATE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svgfe_color_matrix_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svgfe_color_matrix_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svgfe_component_transfer_element) = templates.get("SVGFEComponentTransferElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_component_transfer_element = v8::String::new(scope, "SVGFEComponentTransferElement").unwrap();
@@ -7558,10 +7932,21 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_composite_element) = templates.get("SVGFECompositeElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_composite_element = v8::String::new(scope, "SVGFECompositeElement").unwrap();
             global.define_own_property(scope, name_svgfe_composite_element.into(), ctor_svgfe_composite_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_composite_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OVER").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_composite_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_IN").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_composite_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OUT").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svgfe_composite_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_ATOP").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svgfe_composite_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_XOR").unwrap(); let cv = v8::Number::new(scope, 5.0).into(); ctor_svgfe_composite_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC").unwrap(); let cv = v8::Number::new(scope, 6.0).into(); ctor_svgfe_composite_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svgfe_convolve_matrix_element) = templates.get("SVGFEConvolveMatrixElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_convolve_matrix_element = v8::String::new(scope, "SVGFEConvolveMatrixElement").unwrap();
             global.define_own_property(scope, name_svgfe_convolve_matrix_element.into(), ctor_svgfe_convolve_matrix_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_convolve_matrix_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_convolve_matrix_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_convolve_matrix_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_EDGEMODE_NONE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svgfe_convolve_matrix_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svgfe_diffuse_lighting_element) = templates.get("SVGFEDiffuseLightingElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_diffuse_lighting_element = v8::String::new(scope, "SVGFEDiffuseLightingElement").unwrap();
@@ -7570,6 +7955,11 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_displacement_map_element) = templates.get("SVGFEDisplacementMapElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_displacement_map_element = v8::String::new(scope, "SVGFEDisplacementMapElement").unwrap();
             global.define_own_property(scope, name_svgfe_displacement_map_element.into(), ctor_svgfe_displacement_map_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_CHANNEL_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_displacement_map_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_CHANNEL_R").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_displacement_map_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_CHANNEL_G").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_displacement_map_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_CHANNEL_B").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svgfe_displacement_map_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_CHANNEL_A").unwrap(); let cv = v8::Number::new(scope, 4.0).into(); ctor_svgfe_displacement_map_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svgfe_distant_light_element) = templates.get("SVGFEDistantLightElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_distant_light_element = v8::String::new(scope, "SVGFEDistantLightElement").unwrap();
@@ -7586,6 +7976,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_gaussian_blur_element) = templates.get("SVGFEGaussianBlurElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_gaussian_blur_element = v8::String::new(scope, "SVGFEGaussianBlurElement").unwrap();
             global.define_own_property(scope, name_svgfe_gaussian_blur_element.into(), ctor_svgfe_gaussian_blur_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_gaussian_blur_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_gaussian_blur_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_gaussian_blur_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_EDGEMODE_NONE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svgfe_gaussian_blur_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svgfe_image_element) = templates.get("SVGFEImageElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_image_element = v8::String::new(scope, "SVGFEImageElement").unwrap();
@@ -7602,6 +7996,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_morphology_element) = templates.get("SVGFEMorphologyElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_morphology_element = v8::String::new(scope, "SVGFEMorphologyElement").unwrap();
             global.define_own_property(scope, name_svgfe_morphology_element.into(), ctor_svgfe_morphology_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_morphology_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_ERODE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_morphology_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_DILATE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_morphology_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svgfe_offset_element) = templates.get("SVGFEOffsetElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_offset_element = v8::String::new(scope, "SVGFEOffsetElement").unwrap();
@@ -7626,6 +8023,12 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_turbulence_element) = templates.get("SVGFETurbulenceElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_turbulence_element = v8::String::new(scope, "SVGFETurbulenceElement").unwrap();
             global.define_own_property(scope, name_svgfe_turbulence_element.into(), ctor_svgfe_turbulence_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_TURBULENCE_TYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_turbulence_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_TURBULENCE_TYPE_FRACTALNOISE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_turbulence_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_TURBULENCE_TYPE_TURBULENCE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_turbulence_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_STITCHTYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_turbulence_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_STITCHTYPE_STITCH").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_turbulence_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_STITCHTYPE_NOSTITCH").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_turbulence_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_filter_element) = templates.get("SVGFilterElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_filter_element = v8::String::new(scope, "SVGFilterElement").unwrap();
@@ -7634,6 +8037,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_gradient_element) = templates.get("SVGGradientElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_gradient_element = v8::String::new(scope, "SVGGradientElement").unwrap();
             global.define_own_property(scope, name_svg_gradient_element.into(), ctor_svg_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_SPREADMETHOD_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_gradient_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_SPREADMETHOD_PAD").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_gradient_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_SPREADMETHOD_REFLECT").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_gradient_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_SPREADMETHOD_REPEAT").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svg_gradient_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_graphics_element) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_graphics_element = v8::String::new(scope, "SVGGraphicsElement").unwrap();
@@ -7646,6 +8053,13 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_marker_element) = templates.get("SVGMarkerElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_marker_element = v8::String::new(scope, "SVGMarkerElement").unwrap();
             global.define_own_property(scope, name_svg_marker_element.into(), ctor_svg_marker_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "SVG_MARKERUNITS_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_marker_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MARKERUNITS_USERSPACEONUSE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_marker_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MARKERUNITS_STROKEWIDTH").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_marker_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MARKER_ORIENT_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_marker_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MARKER_ORIENT_AUTO").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_marker_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MARKER_ORIENT_ANGLE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_marker_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "SVG_MARKER_ORIENT_AUTO_START_REVERSE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_svg_marker_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_mask_element) = templates.get("SVGMaskElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_mask_element = v8::String::new(scope, "SVGMaskElement").unwrap();
@@ -7771,6 +8185,9 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_text_content_element) = templates.get("SVGTextContentElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_text_content_element = v8::String::new(scope, "SVGTextContentElement").unwrap();
             global.define_own_property(scope, name_svg_text_content_element.into(), ctor_svg_text_content_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "LENGTHADJUST_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_text_content_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "LENGTHADJUST_SPACING").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_text_content_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "LENGTHADJUST_SPACINGANDGLYPHS").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_text_content_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_use_element) = templates.get("SVGUseElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_use_element = v8::String::new(scope, "SVGUseElement").unwrap();
@@ -7807,6 +8224,12 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_text_path_element) = templates.get("SVGTextPathElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_text_path_element = v8::String::new(scope, "SVGTextPathElement").unwrap();
             global.define_own_property(scope, name_svg_text_path_element.into(), ctor_svg_text_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            { let ck = v8::String::new(scope, "TEXTPATH_METHODTYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_text_path_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TEXTPATH_METHODTYPE_ALIGN").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_text_path_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TEXTPATH_METHODTYPE_STRETCH").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_text_path_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_text_path_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_AUTO").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_text_path_element.set(scope, ck.into(), cv); }
+            { let ck = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_EXACT").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_text_path_element.set(scope, ck.into(), cv); }
         }
         if let Some(ctor_svg_text_positioning_element) = templates.get("SVGTextPositioningElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_text_positioning_element = v8::String::new(scope, "SVGTextPositioningElement").unwrap();

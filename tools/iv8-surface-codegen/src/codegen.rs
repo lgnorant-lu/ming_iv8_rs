@@ -119,7 +119,6 @@ const NON_CONSTRUCTABLE: &[&str] = &[
     "DOMTokenList",
     "DynamicsCompressorNode",
     "Element",
-    "EventTarget",
     "FontFaceSet",
     "GainNode",
     "History",
@@ -230,6 +229,28 @@ fn is_non_constructable(interface_name: &str) -> bool {
     NON_CONSTRUCTABLE.iter().any(|n| *n == interface_name)
 }
 
+fn parse_const_value(raw: &str) -> Option<f64> {
+    let trimmed = raw.trim();
+    if trimmed.is_empty() {
+        return None;
+    }
+    if let Some(hex) = trimmed.strip_prefix("0x").or_else(|| trimmed.strip_prefix("0X")) {
+        let neg = trimmed.starts_with('-');
+        let clean = hex.trim_start_matches('-');
+        return i64::from_str_radix(clean, 16)
+            .ok()
+            .map(|v| if neg { -(v as f64) } else { v as f64 });
+    }
+    trimmed.parse::<f64>().ok()
+}
+
+fn format_const_v8_value(raw: &str) -> String {
+    match parse_const_value(raw) {
+        Some(v) => format!("v8::Number::new(scope, {}.0).into()", v),
+        None => format!("v8::String::new(scope, \"{}\").unwrap().into()", raw.replace('"', "\\\"")),
+    }
+}
+
 pub struct GeneratedFile {
     pub domain: String,
     pub content: String,
@@ -251,7 +272,7 @@ pub fn generate_all(
     let mut by_name: BTreeMap<String, &Definition> = BTreeMap::new();
     for def in definitions {
         if let Some(name) = &def.name {
-            if def.kind != "interface" {
+            if def.kind != "interface" && def.kind != "callback_interface" {
                 continue;
             }
             by_name.insert(name.clone(), def);
@@ -310,9 +331,9 @@ fn generate_domain_file(
             .unwrap_or(false)
     });
     if needs_illegal {
-        out.push_str("use super::{empty_constructor, illegal_constructor};\n");
+        out.push_str("use super::{construct_only, illegal_constructor};\n");
     } else {
-        out.push_str("use super::empty_constructor;\n");
+        out.push_str("use super::construct_only;\n");
     }
     out.push_str("use v8::Local;\n");
     out.push_str("use v8::FunctionTemplate;\n\n");
@@ -440,12 +461,13 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     let ctor_cb = if is_non_constructable(name) {
         "illegal_constructor"
     } else {
-        "empty_constructor"
+        "construct_only"
     };
     out.push_str(&format!(
         "    let tmpl = v8::FunctionTemplate::builder_raw({}).build(scope);\n",
         ctor_cb
     ));
+    out.push_str("    tmpl.read_only_prototype();\n");
     out.push_str(&format!(
         "    tmpl.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n",
         name
@@ -472,9 +494,24 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     out.push_str("        proto.set(tag_sym.into(), tag_val.into());\n");
     out.push_str("    }\n");
 
-    // Members — only generate for attribute and operation
+    // Members — generate for attribute, operation, and const
     let mut idx = 0;
     for m in &def.members {
+        if m.kind == "const" {
+            if let (Some(cname), Some(cval)) = (&m.name, &m.const_value) {
+                let v8_val = format_const_v8_value(cval);
+                out.push_str(&format!("    // const: {}\n", cname));
+                out.push_str("    {\n");
+                out.push_str(&format!(
+                    "        let name = v8::String::new(scope, \"{}\").unwrap();\n",
+                    cname
+                ));
+                out.push_str(&format!("        let val = {};\n", v8_val));
+                out.push_str("        proto.set(name.into(), val);\n");
+                out.push_str("    }\n");
+            }
+            continue;
+        }
         if m.kind != "attribute" && m.kind != "operation" {
             continue;
         }
@@ -509,14 +546,21 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
 
         if m.kind == "operation" {
             let op_name = m.name.as_deref().unwrap_or("unknown");
+            let arg_count = m.required_arg_count;
             out.push_str(&format!("    // method: {}()\n", op_name));
             out.push_str("    {\n");
             out.push_str(&format!(
                 "        let name = v8::String::new(scope, \"{}\").unwrap();\n",
                 op_name
             ));
-            out.push_str(&format!(
-                "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).build(scope);\n", fn_name, idx));
+            if arg_count > 0 {
+                out.push_str(&format!(
+                    "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).length({}).build(scope);\n",
+                    fn_name, idx, arg_count));
+            } else {
+                out.push_str(&format!(
+                    "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).build(scope);\n", fn_name, idx));
+            }
             out.push_str("        func_tmpl.set_class_name(name);\n");
             out.push_str("        proto.set(name.into(), func_tmpl.into());\n");
             out.push_str("    }\n");
@@ -539,7 +583,7 @@ pub fn generate_install_all(
     let mut by_name: BTreeMap<String, &Definition> = BTreeMap::new();
     for def in definitions {
         if let Some(name) = &def.name {
-            if def.kind == "interface" {
+            if def.kind == "interface" || def.kind == "callback_interface" {
                 by_name.insert(name.clone(), def);
             }
         }
@@ -662,6 +706,26 @@ pub fn generate_install_all(
             "            global.define_own_property(scope, name_{0}.into(), ctor_{0}.into(), v8::PropertyAttribute::DONT_ENUM);\n",
             fn_name,
         ));
+
+        let const_members: Vec<(&String, &String)> = def
+            .members
+            .iter()
+            .filter_map(|m| {
+                if m.kind == "const" {
+                    m.name.as_ref().and_then(|n| m.const_value.as_ref().map(|v| (n, v)))
+                } else {
+                    None
+                }
+            })
+            .collect();
+        for (cname, cval) in &const_members {
+            let v8_val = format_const_v8_value(cval);
+            out.push_str(&format!(
+                "            {{ let ck = v8::String::new(scope, \"{}\").unwrap(); let cv = {}; ctor_{}.set(scope, ck.into(), cv); }}\n",
+                cname, v8_val, fn_name,
+            ));
+        }
+
         out.push_str("        }\n");
 
         if let Some(ref alias) = ea.named_constructor {
@@ -699,6 +763,21 @@ pub fn generate_mod_rs(domains: &[String]) -> String {
     out.push_str("//! Generated FunctionTemplate stubs.\n\n");
     out.push_str("/// Empty constructor shared by all generated templates.\n");
     out.push_str("pub(crate) unsafe extern \"C\" fn empty_constructor(_info: *const v8::FunctionCallbackInfo) {}\n\n");
+    out.push_str("/// Construct-only constructor — creates an empty object via `new`.\n");
+    out.push_str("/// Used for constructable interfaces (EventTarget, etc.) so that\n");
+    out.push_str("/// `new EventTarget()` does not throw.\n");
+    out.push_str("pub(crate) unsafe extern \"C\" fn construct_only(info: *const v8::FunctionCallbackInfo) {\n");
+    out.push_str("    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {\n");
+    out.push_str("        let info_ref = unsafe { &*info };\n");
+    out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
+    out.push_str("        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);\n");
+    out.push_str("        if !args.is_construct_call() {\n");
+    out.push_str("            let msg = v8::String::new(scope, \"Failed to construct: Please use the 'new' operator\").unwrap();\n");
+    out.push_str("            let exc = v8::Exception::type_error(scope, msg);\n");
+    out.push_str("            scope.throw_exception(exc);\n");
+    out.push_str("        }\n");
+    out.push_str("    }));\n");
+    out.push_str("}\n\n");
     out.push_str("/// Illegal constructor — throws TypeError, matching real browser behavior for\n");
     out.push_str("/// non-constructable Web IDL interfaces.\n");
     out.push_str("pub(crate) unsafe extern \"C\" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) {\n");
@@ -739,6 +818,8 @@ mod tests {
                 readonly: false,
                 return_type: None,
                 arguments: vec![],
+                const_value: None,
+                required_arg_count: 0,
             }],
         };
         let fn_name = type_mapper::idl_name_to_rust("Foo");
@@ -767,6 +848,8 @@ mod tests {
                 readonly: false,
                 return_type: Some("undefined".into()),
                 arguments: vec![],
+                const_value: None,
+                required_arg_count: 0,
             }],
         };
         let cb = generate_callbacks(&def, "bar");
@@ -805,23 +888,23 @@ mod tests {
                 name
             );
             assert!(
-                !code.contains("builder_raw(empty_constructor)"),
-                "{} must not use empty_constructor",
+                !code.contains("builder_raw(construct_only)"),
+                "{} must not use construct_only",
                 name
             );
         }
     }
 
     #[test]
-    fn test_constructable_uses_empty_constructor() {
+    fn test_constructable_uses_construct_only() {
         for name in &["AbortController", "Foo", "UnknownInterface"] {
             let def = make_empty_def(name);
             let fn_name = type_mapper::idl_name_to_rust(name);
             let ea = process_interface_ea(&def);
             let code = generate_template_function(&def, &ea, &fn_name);
             assert!(
-                code.contains("builder_raw(empty_constructor)"),
-                "{} should use empty_constructor",
+                code.contains("builder_raw(construct_only)"),
+                "{} should use construct_only",
                 name
             );
         }
@@ -839,8 +922,8 @@ mod tests {
             "mod.rs illegal_constructor must throw"
         );
         assert!(
-            mod_content.contains("fn empty_constructor"),
-            "mod.rs must still define empty_constructor"
+            mod_content.contains("fn construct_only"),
+            "mod.rs must define construct_only"
         );
     }
 
@@ -854,7 +937,7 @@ mod tests {
             .collect();
         let content = generate_domain_file("dom_core", &def_refs, &by_name);
         assert!(
-            content.contains("use super::{empty_constructor, illegal_constructor};"),
+            content.contains("use super::{construct_only, illegal_constructor};"),
             "domain with non-constructable interface must import illegal_constructor"
         );
     }
@@ -869,7 +952,7 @@ mod tests {
             .collect();
         let content = generate_domain_file("dom_core", &def_refs, &by_name);
         assert!(
-            content.contains("use super::empty_constructor;")
+            content.contains("use super::construct_only;")
                 && !content.contains("illegal_constructor"),
             "domain without non-constructable interface must not import illegal_constructor"
         );
