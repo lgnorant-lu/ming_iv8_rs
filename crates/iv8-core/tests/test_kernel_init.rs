@@ -1042,3 +1042,13 @@ fn test_cookie_max_age_zero_removes() {
     let after = common::to_str(&kernel.eval_to_rust_value("document.cookie"));
     assert!(!after.contains("x=42"), "cookie not removed: {}", after);
 }
+
+#[tracing_test::traced_test]
+#[test]
+fn test_init_emits_telemetry_events() {
+    let _kernel = make_new_chain_kernel();
+    assert!(logs_contain("codegen prototypes captured"), "expected codegen capture event");
+    assert!(logs_contain("dom templates built"), "expected dom templates event");
+    assert!(logs_contain("prototype property merge"), "expected proto merge event");
+    assert!(logs_contain("chain_dom_prototypes complete"), "expected merge complete event");
+}
