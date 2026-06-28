@@ -61,6 +61,7 @@ path = "../iv8-profile"
 
 [dev-dependencies]
 tracing-subscriber = { workspace = true }
+tracing-test = "0.2"
 criterion = { version = "0.5", features = ["html_reports"] }
 
 [[bench]]

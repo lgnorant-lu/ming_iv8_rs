@@ -25,7 +25,7 @@ v8 = "147"
 pyo3 = { version = "0.23", features = ["extension-module"] }
 
 # Logging
-tracing = { version = "0.1", features = ["release_max_level_debug"] }
+tracing = { version = "0.1", features = ["release_max_level_debug", "log"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
 
 # Error handling

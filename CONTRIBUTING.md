@@ -176,6 +176,11 @@ Refs: REQ-CORE-013, REQ-ENG-004
 - 用 `cargo clippy` 检查 lint
 - 业务代码禁止 `unwrap()` / `expect()` / `panic!()`，例外用 `// SAFETY: <理由>` 注释豁免
 - V8 callback 必须用 `safe_callback!` macro 包裹
+- **禁止 `eprintln!` / `println!`**：生产代码中禁止使用 `eprintln!` 或 `println!`
+  输出诊断信息（`build.rs` 例外）。使用 `tracing::debug!` / `tracing::warn!` /
+  `tracing::error!` 代替。详见 `docs/conventions/logging-conventions.md`。
+- **结构化日志**：tracing 调用必须使用结构化字段（`key = value`），不使用
+  字符串拼接。如 `tracing::debug!(interface = %name, count = n, "merge")`。
 
 ### 2.3 Python
 

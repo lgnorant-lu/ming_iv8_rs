@@ -7,27 +7,75 @@
 
 ## Purpose
 
-Define how structured logging and tracing is used across the IV8 project.
-IV8 uses the `tracing` crate (already a workspace dependency) for all
-diagnostic output. This document standardizes module hierarchy, log level
-semantics, and structured field conventions.
+Define how structured logging is used across the IV8 project. IV8 uses the
+`tracing` crate directly — no custom abstraction layer. This document
+standardizes module hierarchy, log level semantics, structured field
+conventions, and security considerations.
+
+## Architecture Decision
+
+### Why `tracing` (not `log` or custom)
+
+| Factor | `tracing` | `log` | Custom |
+|--------|-----------|-------|--------|
+| Structured fields | Yes (`key = value`) | No | Manual |
+| Compile-time elimination | `release_max_level_debug` | `release_max_level_*` | Manual |
+| Test assertions | `tracing-test` crate | Manual | Manual |
+| Already a dependency | Yes | No | No |
+| `log` interop | Via `log` feature | Native | Manual |
+| Overhead when disabled | Near-zero | Near-zero | Varies |
+
+`tracing` is retained because:
+1. Structured fields proved critical for debugging (interface=, proto_copied=, same_ctor=)
+2. `release_max_level_debug` eliminates TRACE in release builds at compile time
+3. `tracing-test` enables log assertion in tests without manual capture
+4. The `log` feature flag allows interop with `log`-based consumers
+5. IV8 is compiled as cdylib — owns its tracing global, no subscriber conflict
+
+### Why no abstraction layer
+
+The previous iteration created `telemetry.rs` with custom span helper macros
+(`iv8_merge_span!`, etc.). This was **premature abstraction**:
+- `tracing::debug!(interface = %name, "merge")` is as readable as a custom macro
+- Custom macros add maintenance burden and indirection
+- The Rust community convention is to use `tracing` directly
+- Removed in favor of direct `tracing` usage
+
+### Why no `#[instrument]` (for now)
+
+`#[instrument]` creates spans automatically, but IV8 is single-threaded
+synchronous — span context propagation adds overhead without async benefit.
+Use `tracing::debug!` events for most code paths. Use `tracing::debug_span!`
+only for the kernel init phase (which has a clear hierarchy worth tracking).
+
+## Security Consideration
+
+IV8 is an anti-detection tool. Logging to stderr in production could itself
+be a detection signal if a monitoring script inspects process output.
+
+**Mitigations** (all already in place):
+1. `release_max_level_debug`: TRACE and DEBUG compiled out in release builds
+2. Subscriber is NOT auto-initialized — only when user calls `enable_logging()`
+3. In production (no `enable_logging()` call), zero logging output
+4. INFO/WARN/ERROR events are minimal in hot paths (eval, callbacks)
+
+**Rule**: Never log in V8 callback hot paths at INFO or above. Use DEBUG or
+TRACE for callback diagnostics, which are compiled out in release.
 
 ## Module Hierarchy
 
-The `target` (module path) follows the source tree. Each module has a
-clear scope:
+The `target` (module path) follows the source tree automatically via
+`module_path!()`. No manual target specification needed.
 
 | Target | Scope | Key events |
 |--------|-------|------------|
-| `iv8_core::kernel` | Isolate lifecycle, eval, context | init, eval, close |
 | `iv8_core::kernel::embedded_v8` | Kernel init phases | install_all, build_dom, chain_protos |
 | `iv8_core::dom::template` | DOM template creation/merge | template built, property merged |
-| `iv8_core::dom::binding` | DOM callbacks | createElement, appendChild, etc. |
+| `iv8_core::dom::binding` | DOM callbacks | createElement, appendChild |
 | `iv8_core::shims::native_env` | Navigator/Screen getters | config resolution, value fallback |
 | `iv8_core::shims::worker` | Worker lifecycle | spawn, message, terminate |
 | `iv8_core::events::binding` | Event loop, timers | advance, setTimeout, rAF |
-| `iv8_core::events::timers` | Timer callbacks | fire, cancel |
-| `iv8_core::convert` | Rust ↔ V8 conversion | type mismatch, fallback |
+| `iv8_core::convert` | Rust <-> V8 conversion | type mismatch, fallback |
 | `iv8_core::safe_callback` | Panic catching | callback panic |
 | `iv8_core::inspector` | DevTools protocol | connect, disconnect |
 | `iv8_core::shims::console` | JS console.* | console.log/warn/error |
@@ -39,14 +87,12 @@ clear scope:
 
 ### TRACE
 
-Per-element detail inside a larger operation. Disabled in release builds
-by default (`release_max_level_debug` in Cargo.toml).
+Per-element detail inside a larger operation. Compiled out in release builds.
 
 Examples:
 - Per-property descriptor copy in chain_dom_prototypes
 - Per-member installation in codegen template creation
 - Per-argument conversion in eval
-- Per-timer fire in event loop
 
 ### DEBUG
 
@@ -54,60 +100,53 @@ Per-operation summary. The primary debugging level. Enabled via
 `IV8_LOG=iv8=debug` or `enable_logging("debug")`.
 
 Examples:
-- Template created for interface X with N members
-- Property merge: copied=N skipped=N failed=N for interface X
-- Config resolved: key=path source=env/profile/default value=...
-- Worker spawned with URL=...
-- BrowserSurface installed: N interfaces across M files
+- `chain_dom_prototypes start interfaces=39`
+- `prototype property merge interface=Document proto_copied=191 same_ctor=false`
+- `dom templates built`
+- `BrowserSurface installation complete interfaces=1287`
 
 ### INFO
 
 Lifecycle events visible in production. Enabled by default.
 
 Examples:
-- Kernel initialized (isolate created, context built)
-- BrowserSurface installation complete (N interfaces)
+- Kernel initialized
 - DevTools inspector connected
 - Worker spawned/terminated
-- GC threshold reached
 
 ### WARN
 
 Fallback or degraded behavior. Always visible.
 
 Examples:
+- `dom constructor equals codegen; override may have failed`
 - Config key not found, using default value
-- Codegen mixin not found for interface
 - External script load failed, skipping
-- Thread stack size insufficient, using fallback
 
 ### ERROR
 
-Failures that should be investigated. Always visible.
+Failures requiring investigation. Always visible.
 
 Examples:
 - V8 callback panic (caught by safe_callback)
 - Template creation failed
-- BrowserSurface installation error
 - JSContext dropped from wrong thread
 
 ## Structured Fields
 
-Always use structured fields (`key = value`) instead of string
-interpolation. This enables filtering and aggregation in log tools.
+Always use structured fields (`key = value`) instead of string interpolation.
 
 ```rust
 // Correct
 tracing::debug!(
-    interface = name,
-    codegen_props = codegen_count,
-    dom_props = dom_count,
+    interface = %name,
+    proto_copied = copied,
     same_ctor = same_ctor,
-    "prototype merge"
+    "prototype property merge"
 );
 
 // Wrong
-tracing::debug!("prototype merge for {}: codegen={} dom={} same={}", name, codegen_count, dom_count, same_ctor);
+tracing::debug!("merge for {}: copied={} same={}", name, copied, same_ctor);
 ```
 
 ### Standard Field Names
@@ -116,36 +155,26 @@ tracing::debug!("prototype merge for {}: codegen={} dom={} same={}", name, codeg
 |-------|------|-------|
 | `interface` | &str | Interface name (Document, Element, etc.) |
 | `count` | usize | Item count |
-| `duration_ms` | u64 | Elapsed time |
 | `source` | &str | Value source (env, profile, default) |
 | `result` | &str | Operation result (ok, fail, skip) |
 | `error` | &str | Error message |
+| `same_ctor` | bool | Constructor identity check result |
 
-## Spans
+## Init Phase Spans
 
-Use `#[instrument]` on public API functions and key internal operations.
-Use `tracing::debug_span!` for sub-operations.
-
-```rust
-#[tracing::instrument(skip_all, fields(interface = %def.name.as_deref().unwrap_or("unknown")))]
-pub fn generate_template_function(def: &Definition, ...) -> String {
-    // ...
-}
-```
-
-### Span Hierarchy
+The kernel init phase uses `tracing::debug_span!` for hierarchical context:
 
 ```
-kernel_init (INFO span)
-  install_all (DEBUG span)
-    create_template:Document (DEBUG span)
-    create_template:Element (DEBUG span)
-  build_dom_templates (DEBUG span)
-  install_dom_constructors (DEBUG span)
-  chain_dom_prototypes (DEBUG span)
-    merge:Document (TRACE span)
-    merge:Element (TRACE span)
+kernel_init
+  install_all (1287 templates)
+  build_dom_templates (39 templates)
+  install_dom_constructors
+  chain_dom_prototypes
+    merge:Document (191 properties)
+    merge:Element (119 properties)
 ```
+
+Other phases (eval, callbacks, config resolution) use events only, not spans.
 
 ## Runtime Control
 
@@ -170,7 +199,6 @@ IV8_LOG=warn
 ```python
 import iv8_rs
 iv8_rs.enable_logging("debug")  # or "trace", "info", "warn", "error"
-ctx = iv8_rs.JSContext()
 ```
 
 ### Rust Tests
@@ -179,27 +207,47 @@ ctx = iv8_rs.JSContext()
 RUST_MIN_STACK=67108864 IV8_LOG=iv8=debug cargo test -p iv8-core --lib
 ```
 
+## Test Log Assertions
+
+Use `tracing-test` crate to assert that expected log events occur:
+
+```rust
+use tracing_test::traced_test;
+
+#[traced_test]
+#[test]
+fn test_kernel_init_produces_debug_logs() {
+    let mut kernel = common::make_kernel();
+    assert!(logs_contain("chain_dom_prototypes"));
+    assert!(logs_contain("dom templates built"));
+}
+```
+
+This provides **logging coverage** — assertions that key operations produce
+expected tracing events. Not a formal harness (H<NN>), but a test-level
+convention that can be formalized later if valuable.
+
 ## Performance
 
-- `tracing` with `release_max_level_debug`: TRACE calls are compiled out in release
-- `tracing` with `release_max_level_info`: DEBUG and TRACE compiled out in release
-- Structured fields are only evaluated if the level is enabled
-- `#[instrument]` creates spans only if the level is enabled
-- No measurable overhead when logging is disabled
+- `release_max_level_debug`: TRACE calls compiled out in release
+- Structured fields evaluated only if level is enabled (tracing lazy eval)
+- No spans in hot paths (eval, callbacks) — events only
+- No measurable overhead when logging is disabled (no subscriber set)
 
-## Migration Guide
+## Migration Rules
 
-1. Replace all `eprintln!` with `tracing::warn!` or `tracing::error!`
-2. Replace all `println!` (non-build.rs) with `tracing::info!`
-3. Add `#[instrument]` to public API functions
-4. Add `tracing::debug!` to operations that needed manual eprintln! debugging
-5. Use structured fields consistently
+1. **No `eprintln!` or `println!`** in production code (build.rs exempt)
+2. Use `tracing::debug!` / `tracing::warn!` / `tracing::error!` directly
+3. Use structured fields, not string interpolation
+4. Use `tracing::debug_span!` only for init phase hierarchy
+5. Do not create custom logging abstraction layers
 
 ## Review Checklist
 
 - [ ] No `eprintln!` or `println!` in production code (build.rs exempt)
 - [ ] All tracing calls use structured fields
-- [ ] Key functions have `#[instrument]`
-- [ ] Module hierarchy matches source tree
+- [ ] Init phase has `tracing::debug!` events at each stage
 - [ ] Log levels follow the semantics in this document
-- [ ] IV8_LOG env var documented and tested
+- [ ] No logging in V8 callback hot paths at INFO or above
+- [ ] `IV8_LOG` env var documented and tested
+- [ ] Key tests have `#[traced_test]` log assertions
