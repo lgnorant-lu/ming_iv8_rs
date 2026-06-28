@@ -30,6 +30,7 @@ pub mod kernel;
 pub mod network;
 pub mod shims;
 pub mod state;
+pub mod telemetry;
 pub mod user_overrides;
 pub mod v8_extra;
 pub mod v8_init;

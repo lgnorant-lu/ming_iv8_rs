@@ -281,7 +281,7 @@ fn worker_thread_main(
         if tc.has_caught() {
             if let Some(exc) = tc.exception() {
                 let msg = exc.to_rust_string_lossy(tc);
-                eprintln!("[iv8-worker] script error: {}", msg);
+                tracing::error!(error = %msg, "worker script error");
             }
         }
     }

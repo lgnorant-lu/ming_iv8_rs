@@ -1129,8 +1129,8 @@ pub fn capture_codegen_prototypes(
 /// are visible on the dom/template.rs prototype, alongside the native
 /// callbacks (appendChild, etc.) that dom/template.rs installs.
 ///
-/// Properties already present on the dom prototype are NOT overwritten
-/// (dom/template.rs native callbacks take priority).
+/// Properties already present on the dom prototype (via inheritance) are
+/// NOT overwritten (dom/template.rs native callbacks take priority).
 ///
 /// Additionally, the dom EventTarget prototype's __proto__ is set to the
 /// codegen EventTarget prototype, connecting the two prototype chains.
@@ -1140,12 +1140,18 @@ pub fn chain_dom_prototypes(
     codegen_ctors: &HashMap<String, v8::Global<v8::Function>>,
 ) {
     let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+    tracing::debug!(interfaces = codegen_ctors.len(), "chain_dom_prototypes start");
     for (name, codegen_ctor_global) in codegen_ctors {
         let key = crate::v8_utils::v8_string(scope, name.as_str());
         let Some(dom_ctor_val) = global.get(scope, key.into()) else { continue };
         if !dom_ctor_val.is_function() { continue; }
         let dom_ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(dom_ctor_val) };
         let codegen_ctor = v8::Local::new(scope, codegen_ctor_global);
+
+        let same_ctor = dom_ctor_val.strict_equals(codegen_ctor.into());
+        if same_ctor {
+            tracing::warn!(interface = %name, "dom constructor equals codegen; override may have failed");
+        }
 
         let Some(dom_proto_val) = dom_ctor.get(scope, proto_key.into()) else { continue };
         if !dom_proto_val.is_object() || dom_proto_val.is_null_or_undefined() { continue; }
@@ -1159,6 +1165,8 @@ pub fn chain_dom_prototypes(
             let _ = dom_proto.set_prototype(scope, codegen_proto.into());
         }
 
+        let mut proto_copied = 0u32;
+        let mut proto_skipped = 0u32;
         let prop_names = codegen_proto.get_own_property_names(scope, Default::default());
         if let Some(names) = prop_names {
             let len = names.length();
@@ -1167,7 +1175,7 @@ pub fn chain_dom_prototypes(
                 let prop_name = if prop_name_val.is_name() {
                     unsafe { v8::Local::<v8::Name>::cast_unchecked(prop_name_val) }
                 } else { continue };
-                if dom_proto.has(scope, prop_name_val).unwrap_or(false) { continue; }
+                if dom_proto.has(scope, prop_name_val).unwrap_or(false) { proto_skipped += 1; continue; }
                 let Some(descriptor) = codegen_proto.get_own_property_descriptor(scope, prop_name) else { continue };
                 if descriptor.is_object() && !descriptor.is_null_or_undefined() {
                     let desc_obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(descriptor) };
@@ -1190,11 +1198,13 @@ pub fn chain_dom_prototypes(
                         v8::PropertyDescriptor::new_from_value(value.unwrap_or(v8::undefined(scope).into()))
                     };
                     let _ = dom_proto.define_property(scope, prop_name, &pd);
+                    proto_copied += 1;
                 }
             }
         }
 
         let ctor_names = codegen_ctor.get_own_property_names(scope, Default::default());
+        let mut ctor_copied = 0u32;
         if let Some(names) = ctor_names {
             let len = names.length();
             for i in 0..len {
@@ -1215,10 +1225,21 @@ pub fn chain_dom_prototypes(
                         false,
                     );
                     let _ = dom_ctor.define_property(scope, prop_name, &pd);
+                    ctor_copied += 1;
                 }
             }
         }
+
+        tracing::debug!(
+            interface = %name,
+            proto_copied = proto_copied,
+            proto_skipped = proto_skipped,
+            ctor_copied = ctor_copied,
+            same_ctor = same_ctor,
+            "prototype property merge"
+        );
     }
+    tracing::debug!("chain_dom_prototypes complete");
 }
 
 /// Select the correct FunctionTemplate for a given tag name.

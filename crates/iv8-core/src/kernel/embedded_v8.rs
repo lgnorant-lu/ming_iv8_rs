@@ -1662,11 +1662,16 @@ impl EmbeddedV8Kernel {
             match iv8_surface::install_browser_surface(scope, global, &callbacks) {
                 Ok(registry) => {
                     let state = RuntimeState::get(&*scope);
+                    tracing::debug!("capturing codegen prototypes");
                     let codegen_protos =
                         crate::dom::template::capture_codegen_prototypes(scope, global);
+                    tracing::debug!(count = codegen_protos.len(), "codegen prototypes captured");
                     let dom_templates = crate::dom::template::build_dom_templates(scope);
+                    tracing::debug!("dom templates built");
                     crate::dom::template::install_dom_constructors(scope, global, &dom_templates);
+                    tracing::debug!("dom constructors installed");
                     crate::dom::template::chain_dom_prototypes(scope, global, &codegen_protos);
+                    tracing::debug!("dom prototypes chained");
 
                     // Event system
                     install_behavior_via_bcr(
