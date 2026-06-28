@@ -1068,18 +1068,20 @@ pub fn install_dom_constructors(
         ("Request", &templates.request),
         ("Text", &templates.text_node),
         ("Comment", &templates.comment_node),
+        ("Document", &templates.document_node),
     ];
 
     for (name, tmpl_global) in pairs {
         let tmpl = v8::Local::new(scope, *tmpl_global);
         if let Some(func) = tmpl.get_function(scope) {
             let key = crate::v8_utils::v8_string(scope, name);
-            global.define_own_property(
+            let ok = global.define_own_property(
                 scope,
                 key.into(),
                 func.into(),
                 v8::PropertyAttribute::DONT_ENUM,
             );
+            let _ = ok;
         }
     }
 }
@@ -1140,12 +1142,8 @@ pub fn chain_dom_prototypes(
     let proto_key = crate::v8_utils::v8_string(scope, "prototype");
     for (name, codegen_ctor_global) in codegen_ctors {
         let key = crate::v8_utils::v8_string(scope, name.as_str());
-        let Some(dom_ctor_val) = global.get(scope, key.into()) else {
-            continue;
-        };
-        if !dom_ctor_val.is_function() {
-            continue;
-        }
+        let Some(dom_ctor_val) = global.get(scope, key.into()) else { continue };
+        if !dom_ctor_val.is_function() { continue; }
         let dom_ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(dom_ctor_val) };
         let codegen_ctor = v8::Local::new(scope, codegen_ctor_global);
 
@@ -1166,10 +1164,10 @@ pub fn chain_dom_prototypes(
             let len = names.length();
             for i in 0..len {
                 let Some(prop_name_val) = names.get_index(scope, i) else { continue };
-                if dom_proto.has(scope, prop_name_val).unwrap_or(false) { continue; }
                 let prop_name = if prop_name_val.is_name() {
                     unsafe { v8::Local::<v8::Name>::cast_unchecked(prop_name_val) }
                 } else { continue };
+                if dom_proto.has(scope, prop_name_val).unwrap_or(false) { continue; }
                 let Some(descriptor) = codegen_proto.get_own_property_descriptor(scope, prop_name) else { continue };
                 if descriptor.is_object() && !descriptor.is_null_or_undefined() {
                     let desc_obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(descriptor) };
