@@ -1140,7 +1140,7 @@ pub fn chain_dom_prototypes(
     codegen_ctors: &HashMap<String, v8::Global<v8::Function>>,
 ) {
     let proto_key = crate::v8_utils::v8_string(scope, "prototype");
-    tracing::debug!(interfaces = codegen_ctors.len(), "chain_dom_prototypes start");
+    crate::telemetry::init_proto_merge_start(codegen_ctors.len());
     for (name, codegen_ctor_global) in codegen_ctors {
         let key = crate::v8_utils::v8_string(scope, name.as_str());
         let Some(dom_ctor_val) = global.get(scope, key.into()) else { continue };
@@ -1150,7 +1150,7 @@ pub fn chain_dom_prototypes(
 
         let same_ctor = dom_ctor_val.strict_equals(codegen_ctor.into());
         if same_ctor {
-            tracing::warn!(interface = %name, "dom constructor equals codegen; override may have failed");
+            crate::telemetry::init_same_ctor_warning(name);
         }
 
         let Some(dom_proto_val) = dom_ctor.get(scope, proto_key.into()) else { continue };
@@ -1172,10 +1172,10 @@ pub fn chain_dom_prototypes(
             let len = names.length();
             for i in 0..len {
                 let Some(prop_name_val) = names.get_index(scope, i) else { continue };
+                if dom_proto.has(scope, prop_name_val).unwrap_or(false) { proto_skipped += 1; continue; }
                 let prop_name = if prop_name_val.is_name() {
                     unsafe { v8::Local::<v8::Name>::cast_unchecked(prop_name_val) }
                 } else { continue };
-                if dom_proto.has(scope, prop_name_val).unwrap_or(false) { proto_skipped += 1; continue; }
                 let Some(descriptor) = codegen_proto.get_own_property_descriptor(scope, prop_name) else { continue };
                 if descriptor.is_object() && !descriptor.is_null_or_undefined() {
                     let desc_obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(descriptor) };
@@ -1230,16 +1230,15 @@ pub fn chain_dom_prototypes(
             }
         }
 
-        tracing::debug!(
-            interface = %name,
-            proto_copied = proto_copied,
-            proto_skipped = proto_skipped,
-            ctor_copied = ctor_copied,
-            same_ctor = same_ctor,
-            "prototype property merge"
+        crate::telemetry::init_proto_merge(
+            name,
+            proto_copied,
+            proto_skipped,
+            ctor_copied,
+            same_ctor,
         );
     }
-    tracing::debug!("chain_dom_prototypes complete");
+    crate::telemetry::init_proto_merge_complete();
 }
 
 /// Select the correct FunctionTemplate for a given tag name.

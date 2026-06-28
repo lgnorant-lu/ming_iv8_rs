@@ -8,187 +8,113 @@
 ## Purpose
 
 Define how structured logging is used across the IV8 project. IV8 uses the
-`tracing` crate directly — no custom abstraction layer. This document
-standardizes module hierarchy, log level semantics, structured field
-conventions, and security considerations.
+`tracing` crate with a **typed log event catalog** (`telemetry.rs`) that
+provides category-based filtering, schema enforcement, and test coverage.
 
-## Architecture Decision
+## Architecture
 
-### Why `tracing` (not `log` or custom)
+### Design sources
 
-| Factor | `tracing` | `log` | Custom |
-|--------|-----------|-------|--------|
-| Structured fields | Yes (`key = value`) | No | Manual |
-| Compile-time elimination | `release_max_level_debug` | `release_max_level_*` | Manual |
-| Test assertions | `tracing-test` crate | Manual | Manual |
-| Already a dependency | Yes | No | No |
-| `log` interop | Via `log` feature | Native | Manual |
-| Overhead when disabled | Near-zero | Near-zero | Varies |
+The catalog design synthesizes patterns from:
 
-`tracing` is retained because:
-1. Structured fields proved critical for debugging (interface=, proto_copied=, same_ctor=)
-2. `release_max_level_debug` eliminates TRACE in release builds at compile time
-3. `tracing-test` enables log assertion in tests without manual capture
-4. The `log` feature flag allows interop with `log`-based consumers
-5. IV8 is compiled as cdylib — owns its tracing global, no subscriber conflict
+| Source | Pattern borrowed |
+|--------|-----------------|
+| V8 `TRACE_EVENT` | Category-based filtering (`v8`, `v8.runtime`, `v8.gc`) |
+| OpenTelemetry Events | Event name = schema identity; same name = same fields |
+| Node.js `trace_events` | Programmatic category enable/disable |
+| tracing `Targets` | Prefix-based target filtering (`iv8.dom` matches `iv8.dom.template`) |
+| `tracing-test` | `#[traced_test]` for log assertion in tests |
 
-### Why no abstraction layer
+### Why `tracing` (not `log`)
 
-The previous iteration created `telemetry.rs` with custom span helper macros
-(`iv8_merge_span!`, etc.). This was **premature abstraction**:
-- `tracing::debug!(interface = %name, "merge")` is as readable as a custom macro
-- Custom macros add maintenance burden and indirection
-- The Rust community convention is to use `tracing` directly
-- Removed in favor of direct `tracing` usage
+- Structured fields proved critical for debugging (`interface=`, `proto_copied=`, `same_ctor=`)
+- `release_max_level_debug` eliminates TRACE at compile time
+- `tracing-test` enables log assertion in tests
+- `log` feature flag allows interop with `log`-based consumers
+- IV8 is cdylib — owns its tracing global, no subscriber conflict
 
-### Why no `#[instrument]` (for now)
+### Why typed catalog (not direct tracing calls)
 
-`#[instrument]` creates spans automatically, but IV8 is single-threaded
-synchronous — span context propagation adds overhead without async benefit.
-Use `tracing::debug!` events for most code paths. Use `tracing::debug_span!`
-only for the kernel init phase (which has a clear hierarchy worth tracking).
+| Direct `tracing::debug!(...)` | Typed catalog `telemetry::init_proto_merge(...)` |
+|-------------------------------|--------------------------------------------------|
+| No schema enforcement | Function signature = schema (can't forget a field) |
+| Inconsistent field names | Consistent (same function = same fields) |
+| No discoverability | IDE autocomplete shows all events |
+| No test target | Each function is a testable unit |
+| No introspection | `catalog()` returns all event specs |
+| No safety annotation | Each event has Safety::Safe/Diagnostic/Sensitive |
 
-## Security Consideration
+### Why not `#[instrument]`
 
-IV8 is an anti-detection tool. Logging to stderr in production could itself
-be a detection signal if a monitoring script inspects process output.
+IV8 is single-threaded synchronous. Span context propagation adds overhead
+without async benefit. Use events (not spans) for most code paths.
 
-**Mitigations** (all already in place):
-1. `release_max_level_debug`: TRACE and DEBUG compiled out in release builds
-2. Subscriber is NOT auto-initialized — only when user calls `enable_logging()`
-3. In production (no `enable_logging()` call), zero logging output
-4. INFO/WARN/ERROR events are minimal in hot paths (eval, callbacks)
+## Categories
 
-**Rule**: Never log in V8 callback hot paths at INFO or above. Use DEBUG or
-TRACE for callback diagnostics, which are compiled out in release.
+Categories are hierarchical strings used as tracing `target` overrides.
+EnvFilter matches by prefix.
 
-## Module Hierarchy
+| Category | Scope | Example events |
+|----------|-------|----------------|
+| `iv8.init` | Kernel init phases | proto_merge, dom_templates_built |
+| `iv8.dom` | DOM template/binding | (future: element_created, append_child) |
+| `iv8.config` | Config resolution | (future: config_resolved, config_fallback) |
+| `iv8.worker` | Worker lifecycle | worker_script_error |
+| `iv8.callback` | V8 callback execution | callback_panic |
+| `iv8.eval` | JS evaluation | (future: eval_start, eval_complete) |
+| `iv8.console` | JS console.* | console.log, console.warn |
 
-The `target` (module path) follows the source tree automatically via
-`module_path!()`. No manual target specification needed.
+## Log Event Catalog
 
-| Target | Scope | Key events |
-|--------|-------|------------|
-| `iv8_core::kernel::embedded_v8` | Kernel init phases | install_all, build_dom, chain_protos |
-| `iv8_core::dom::template` | DOM template creation/merge | template built, property merged |
-| `iv8_core::dom::binding` | DOM callbacks | createElement, appendChild |
-| `iv8_core::shims::native_env` | Navigator/Screen getters | config resolution, value fallback |
-| `iv8_core::shims::worker` | Worker lifecycle | spawn, message, terminate |
-| `iv8_core::events::binding` | Event loop, timers | advance, setTimeout, rAF |
-| `iv8_core::convert` | Rust <-> V8 conversion | type mismatch, fallback |
-| `iv8_core::safe_callback` | Panic catching | callback panic |
-| `iv8_core::inspector` | DevTools protocol | connect, disconnect |
-| `iv8_core::shims::console` | JS console.* | console.log/warn/error |
-| `iv8_surface` | BrowserSurface install | template count, install result |
-| `iv8_py::context` | Python JSContext | create, eval, close, thread check |
-| `iv8_py::logging` | Logging init | enable_logging, filter |
+The catalog is defined in `crates/iv8-core/src/telemetry.rs`. Each event is
+a typed function. The function list IS the documentation.
 
-## Log Level Semantics
+### Current events
 
-### TRACE
+| Function | Category | Level | Safety | Fields |
+|----------|----------|-------|--------|--------|
+| `init_browser_surface_installed` | iv8.init | INFO | Safe | interface_count |
+| `init_codegen_prototypes_captured` | iv8.init | DEBUG | Safe | count |
+| `init_dom_templates_built` | iv8.init | DEBUG | Safe | (none) |
+| `init_dom_constructors_installed` | iv8.init | DEBUG | Safe | (none) |
+| `init_proto_merge_start` | iv8.init | DEBUG | Safe | interface_count |
+| `init_proto_merge` | iv8.init | DEBUG | Safe | interface, proto_copied, proto_skipped, ctor_copied, same_ctor |
+| `init_proto_merge_complete` | iv8.init | DEBUG | Safe | (none) |
+| `init_same_ctor_warning` | iv8.init | WARN | Diagnostic | interface |
+| `worker_script_error` | iv8.worker | ERROR | Diagnostic | error |
+| `callback_panic` | iv8.callback | ERROR | Diagnostic | callback, panic_msg |
 
-Per-element detail inside a larger operation. Compiled out in release builds.
+### Adding a new event
 
-Examples:
-- Per-property descriptor copy in chain_dom_prototypes
-- Per-member installation in codegen template creation
-- Per-argument conversion in eval
+1. Add a function to `telemetry.rs` with typed parameters
+2. Add an `EventSpec` entry to the `CATALOG` const array
+3. Add a `#[test]` if the event has non-trivial logic
+4. Call the function from the appropriate code path
 
-### DEBUG
+## Safety Levels
 
-Per-operation summary. The primary debugging level. Enabled via
-`IV8_LOG=iv8=debug` or `enable_logging("debug")`.
+| Level | Meaning | Example |
+|-------|---------|---------|
+| Safe | No sensitive data, safe in production | interface name, count |
+| Diagnostic | May contain internal state, debug-only | same_ctor, error message |
+| Sensitive | May contain user data, never log in production | config value, UA string |
 
-Examples:
-- `chain_dom_prototypes start interfaces=39`
-- `prototype property merge interface=Document proto_copied=191 same_ctor=false`
-- `dom templates built`
-- `BrowserSurface installation complete interfaces=1287`
-
-### INFO
-
-Lifecycle events visible in production. Enabled by default.
-
-Examples:
-- Kernel initialized
-- DevTools inspector connected
-- Worker spawned/terminated
-
-### WARN
-
-Fallback or degraded behavior. Always visible.
-
-Examples:
-- `dom constructor equals codegen; override may have failed`
-- Config key not found, using default value
-- External script load failed, skipping
-
-### ERROR
-
-Failures requiring investigation. Always visible.
-
-Examples:
-- V8 callback panic (caught by safe_callback)
-- Template creation failed
-- JSContext dropped from wrong thread
-
-## Structured Fields
-
-Always use structured fields (`key = value`) instead of string interpolation.
-
-```rust
-// Correct
-tracing::debug!(
-    interface = %name,
-    proto_copied = copied,
-    same_ctor = same_ctor,
-    "prototype property merge"
-);
-
-// Wrong
-tracing::debug!("merge for {}: copied={} same={}", name, copied, same_ctor);
-```
-
-### Standard Field Names
-
-| Field | Type | Usage |
-|-------|------|-------|
-| `interface` | &str | Interface name (Document, Element, etc.) |
-| `count` | usize | Item count |
-| `source` | &str | Value source (env, profile, default) |
-| `result` | &str | Operation result (ok, fail, skip) |
-| `error` | &str | Error message |
-| `same_ctor` | bool | Constructor identity check result |
-
-## Init Phase Spans
-
-The kernel init phase uses `tracing::debug_span!` for hierarchical context:
-
-```
-kernel_init
-  install_all (1287 templates)
-  build_dom_templates (39 templates)
-  install_dom_constructors
-  chain_dom_prototypes
-    merge:Document (191 properties)
-    merge:Element (119 properties)
-```
-
-Other phases (eval, callbacks, config resolution) use events only, not spans.
+**Rule**: Never log actual fingerprint values, cookie contents, or user data.
+Use `Safety::Sensitive` and only emit at TRACE level (compiled out in release).
 
 ## Runtime Control
 
 ### Environment Variable
 
 ```bash
-# All modules at debug
+# All IV8 categories at debug
 IV8_LOG=iv8=debug
 
-# Specific module at trace
-IV8_LOG=iv8_core::dom::template=trace
+# Specific category at trace
+IV8_LOG=iv8.init=trace
 
-# Multiple modules
-IV8_LOG=iv8_core::kernel=debug,iv8_core::shims=info
+# Multiple categories
+IV8_LOG=iv8.init=debug,iv8.worker=trace
 
 # Production (warnings only)
 IV8_LOG=warn
@@ -198,56 +124,54 @@ IV8_LOG=warn
 
 ```python
 import iv8_rs
-iv8_rs.enable_logging("debug")  # or "trace", "info", "warn", "error"
+iv8_rs.enable_logging("debug")  # all categories
 ```
 
 ### Rust Tests
 
 ```bash
-RUST_MIN_STACK=67108864 IV8_LOG=iv8=debug cargo test -p iv8-core --lib
+RUST_MIN_STACK=67108864 IV8_LOG=iv8.init=debug cargo test -p iv8-core --lib
 ```
 
 ## Test Log Assertions
 
-Use `tracing-test` crate to assert that expected log events occur:
+Use `tracing-test` crate to assert expected events:
 
 ```rust
 use tracing_test::traced_test;
 
 #[traced_test]
 #[test]
-fn test_kernel_init_produces_debug_logs() {
-    let mut kernel = common::make_kernel();
-    assert!(logs_contain("chain_dom_prototypes"));
-    assert!(logs_contain("dom templates built"));
+fn test_init_emits_proto_merge_events() {
+    let _ = common::make_kernel();
+    assert!(logs_contain("iv8.init"));
+    assert!(logs_contain("proto_merge"));
 }
 ```
 
-This provides **logging coverage** — assertions that key operations produce
-expected tracing events. Not a formal harness (H<NN>), but a test-level
-convention that can be formalized later if valuable.
-
 ## Performance
 
-- `release_max_level_debug`: TRACE calls compiled out in release
-- Structured fields evaluated only if level is enabled (tracing lazy eval)
-- No spans in hot paths (eval, callbacks) — events only
-- No measurable overhead when logging is disabled (no subscriber set)
+- `release_max_level_debug`: TRACE compiled out in release
+- No subscriber = zero output, near-zero overhead (atomic load)
+- Catalog functions are inlined (zero function call overhead)
+- Structured fields evaluated only if level is enabled
 
-## Migration Rules
+## Security
 
-1. **No `eprintln!` or `println!`** in production code (build.rs exempt)
-2. Use `tracing::debug!` / `tracing::warn!` / `tracing::error!` directly
-3. Use structured fields, not string interpolation
-4. Use `tracing::debug_span!` only for init phase hierarchy
-5. Do not create custom logging abstraction layers
+IV8 is an anti-detection tool. Logging could be a detection signal.
+
+**Mitigations**:
+1. Subscriber NOT auto-initialized — only via explicit `enable_logging()`
+2. `release_max_level_debug`: DEBUG/TRACE compiled out in release
+3. No logging in V8 callback hot paths at INFO+ (DEBUG only)
+4. Safety annotations prevent sensitive data in log fields
 
 ## Review Checklist
 
+- [ ] All log events go through `telemetry.rs` catalog functions
 - [ ] No `eprintln!` or `println!` in production code (build.rs exempt)
-- [ ] All tracing calls use structured fields
-- [ ] Init phase has `tracing::debug!` events at each stage
-- [ ] Log levels follow the semantics in this document
-- [ ] No logging in V8 callback hot paths at INFO or above
-- [ ] `IV8_LOG` env var documented and tested
+- [ ] No direct `tracing::debug!` calls outside `telemetry.rs`
+- [ ] Each catalog event has an `EventSpec` entry
+- [ ] Safety level set for each event
+- [ ] `IV8_LOG` filtering tested for at least one category
 - [ ] Key tests have `#[traced_test]` log assertions
