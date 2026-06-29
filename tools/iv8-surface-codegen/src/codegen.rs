@@ -213,6 +213,70 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
     let mut out = String::new();
     let mut idx = 0;
 
+    let iface_name = def.name.as_deref().unwrap_or("Unknown");
+
+    // Prototype chain traversal check: verifies that `this` is an instance of
+    // the interface by walking the prototype chain. This is semantically
+    // equivalent to `instanceof` and matches Chrome's "Illegal invocation"
+    // behavior for WebIDL receiver checks.
+    //
+    // Algorithm:
+    // 1. Look up global[iface_name] → constructor Function
+    // 2. Get constructor["prototype"] → prototype Object
+    // 3. If this === prototype → throw TypeError (prototype is not its own instance)
+    // 4. Walk this.__proto__ chain; if prototype found → PASS; else → throw TypeError
+    //
+    // This approach is required because rusty-v8 does not expose:
+    // - FunctionCallbackInfo::Holder()
+    // - FunctionTemplate::HasInstance()
+    // - Object::instance_of()
+    // - Signature on AccessorConfiguration (FFI omits signature param)
+    //
+    // See: docs/roadmap/v0.8/analysis/codegen-null-this-design.md Section 12
+    let prototype_chain_check = format!(
+        "        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);\n\
+         \x20       let __this = __args.this();\n\
+         \x20       let __ctx = scope.get_current_context();\n\
+         \x20       let __global = __ctx.global(scope);\n\
+         \x20       let __iface_name = v8::String::new(scope, \"{iface}\").unwrap();\n\
+         \x20       if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {{\n\
+         \x20           if __ctor_val.is_function() {{\n\
+         \x20               let __ctor = unsafe {{ v8::Local::<v8::Function>::cast_unchecked(__ctor_val) }};\n\
+         \x20               let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n\
+         \x20               if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {{\n\
+         \x20                   if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {{\n\
+         \x20                       let __proto = unsafe {{ v8::Local::<v8::Object>::cast_unchecked(__proto_val) }};\n\
+         \x20                       if __this.strict_equals(__proto.into()) {{\n\
+         \x20                           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20                           let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20                           scope.throw_exception(__exc);\n\
+         \x20                           return;\n\
+         \x20                       }}\n\
+         \x20                       let mut __current: v8::Local<v8::Value> = __this.into();\n\
+         \x20                       let mut __found = false;\n\
+         \x20                       for _ in 0..20usize {{\n\
+         \x20                           let Some(__cur_obj) = __current.to_object(scope) else {{ break; }};\n\
+         \x20                           let Some(__parent) = __cur_obj.get_prototype(scope) else {{ break; }};\n\
+         \x20                           if __parent.is_null_or_undefined() || !__parent.is_object() {{ break; }}\n\
+         \x20                           if __parent.strict_equals(__proto.into()) {{ __found = true; break; }}\n\
+         \x20                           __current = __parent;\n\
+         \x20                       }}\n\
+         \x20                       if !__found {{\n\
+         \x20                           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20                           let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20                           scope.throw_exception(__exc);\n\
+         \x20                           return;\n\
+         \x20                       }}\n\
+         \x20                   }}\n\
+         \x20               }}\n\
+         \x20           }}\n\
+         \x20       }}\n",
+        iface = iface_name,
+    );
+
+    let receiver_check = &prototype_chain_check;
+    let op_receiver_check = &prototype_chain_check;
+
     for m in &def.members {
         if m.kind == "attribute" {
             let attr_name = m.name.as_deref().unwrap_or("");
@@ -223,7 +287,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             let type_name = m.idl_type.as_deref().unwrap_or("any");
             let tm = type_mapper::map_idl_type(type_name);
 
-            // Getter
+            // Getter — receiver check for null-this (accessor properties pass raw receiver)
             out.push_str(&format!(
                 "unsafe extern \"C\" fn {}_get_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                 fn_name, idx
@@ -233,6 +297,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             );
             out.push_str("        let info_ref = unsafe { &*_info };\n");
             out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
+            out.push_str(receiver_check);
             out.push_str(
                 "        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
             );
@@ -240,13 +305,19 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             out.push_str("    }));\n");
             out.push_str("}\n\n");
 
-            // Setter for non-readonly attributes
+            // Setter — receiver check for null-this
             if !m.readonly {
                 out.push_str(&format!(
                     "unsafe extern \"C\" fn {}_set_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                     fn_name, idx
                 ));
-                out.push_str("    // no-op setter stub\n");
+                out.push_str(
+                    "    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {\n",
+                );
+                out.push_str("        let info_ref = unsafe { &*_info };\n");
+                out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
+                out.push_str(receiver_check);
+                out.push_str("    }));\n");
                 out.push_str("}\n\n");
             }
         }
@@ -255,6 +326,9 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             idx += 1;
             let ret_name = m.return_type.as_deref().unwrap_or("undefined");
             let tm = type_mapper::map_idl_type(ret_name);
+            // Operations use global-object check: when .call(null) is used,
+            // V8 converts null to globalThis in non-strict mode. We check if
+            // this is the global object and throw TypeError.
             out.push_str(&format!(
                 "unsafe extern \"C\" fn {}_op_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                 fn_name, idx
@@ -264,6 +338,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             );
             out.push_str("        let info_ref = unsafe { &*_info };\n");
             out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
+            out.push_str(op_receiver_check);
             out.push_str(
                 "        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
             );
@@ -349,6 +424,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     // Large interfaces are split into helper functions to avoid stack overflow.
     const MEMBER_BATCH_SIZE: usize = 10;
     let mut member_blocks: Vec<String> = Vec::new();
+    let mut const_blocks: Vec<String> = Vec::new();
     let mut idx = 0;
     for m in &def.members {
         if m.kind == "const" {
@@ -365,6 +441,13 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
                 block.push_str("        proto.set(name.into(), val);\n");
                 block.push_str("    }\n");
                 member_blocks.push(block);
+
+                let mut ctor_block = String::new();
+                ctor_block.push_str(&format!(
+                    "    {{ let name = v8::String::new(scope, \"{}\").unwrap(); let val = {}; ctor.set(scope, name.into(), val); }}\n",
+                    cname, v8_val
+                ));
+                const_blocks.push(ctor_block);
             }
             continue;
         }
@@ -445,12 +528,26 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
             }
             helper_fns.push_str("}\n\n");
         }
+        if !const_blocks.is_empty() {
+            out.push_str("    if let Some(ctor) = tmpl.get_function(scope) {\n");
+            for block in &const_blocks {
+                out.push_str(block);
+            }
+            out.push_str("    }\n");
+        }
         out.push_str("\n    tmpl\n");
         out.push_str("}\n\n");
         out.push_str(&helper_fns);
         return out;
     }
 
+    if !const_blocks.is_empty() {
+        out.push_str("    if let Some(ctor) = tmpl.get_function(scope) {\n");
+        for block in &const_blocks {
+            out.push_str(block);
+        }
+        out.push_str("    }\n");
+    }
     out.push_str("\n    tmpl\n");
     out.push_str("}\n");
     out
