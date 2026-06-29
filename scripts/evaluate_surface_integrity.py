@@ -265,6 +265,9 @@ def evaluate(report: dict) -> dict:
             "L2": "scripts/evaluate_env_consistency.py",
             "L5": "(not yet implemented)",
             "L8": "(not yet implemented)",
+            "L14": "scripts/run_creepjs_lies.py (stack trace)",
+            "L15": "(not yet implemented)",
+            "L16": "scripts/run_creepjs_lies.py (resistance)",
             "D1": "scripts/_d1_d5_behavior.py",
             "D2": "scripts/_d1_d5_behavior.py",
             "D3": "scripts/_d1_d5_behavior.py",
@@ -309,13 +312,16 @@ def print_report(result: dict) -> None:
         ("L4", "toString completeness"),
         ("L5", "Recursive toString"),
         ("L6", "TypeError behavior"),
-        ("L7", "Prototype chain correctness"),
+        ("L7", "Prototype chain + Proxy detection"),
         ("L8", "Cross-context (Worker vs Window)"),
         ("L9", "Interface object properties"),
         ("L10", "Named constructor"),
         ("L11", "Static operations"),
         ("L12", "Stringifier"),
         ("L13", "Iterable/Setlike/Maplike"),
+        ("L14", "Stack trace shape"),
+        ("L15", "Enumeration order"),
+        ("L16", "Timing resolution"),
         ("D1", "Method return value semantics"),
         ("D2", "Promise semantics"),
         ("D3", "Event trigger timing"),
@@ -324,7 +330,8 @@ def print_report(result: dict) -> None:
         ("D6", "Async ordering"),
     ]
     # Layers not covered by idlharness (need separate scripts)
-    separate_script_layers = {"L2", "L5", "L8", "D1", "D2", "D3", "D4", "D5", "D6"}
+    separate_script_layers = {"L2", "L5", "L8", "L14", "L15", "L16",
+                              "D1", "D2", "D3", "D4", "D5", "D6"}
 
     print("--- Layer Breakdown (idlharness) ---")
     print(f"{'Layer':<6} {'Name':<40} {'Pass':>6} {'Fail':>6} {'Rate':>8}")

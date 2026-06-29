@@ -28,7 +28,7 @@ Matrix[interface, layer, source] -> Cell{status, evidence[], confidence}
 ```
 
 - **轴 1 — 接口**: P0/P1/P2/P3 四优先级，~80 个浏览器接口
-- **轴 2 — 检测层**: L0-L13 十四层（属性探真，spec-grounded）+ D1-D6 六维度（行为探真）
+- **轴 2 — 检测层**: L0-L16 十七层（属性探真，spec-grounded + CreepJS-validated）+ D1-D6 六维度（行为探真）
 - **轴 3 — 数据源**: bcd-collector / Chromium IDL / webref / CDP 采样 / CreepJS
 
 矩阵采用**稀疏策略**：高优先级接口做属性级全层多源深查，低优先级接口做接口级单源浅查。
@@ -115,17 +115,20 @@ H04 注册于 `HARNESS-CHARTER.md` §7 Harness 注册表：
 | L0 | 存在性 | interface object 在 global 上? prototype 存在? 属性/方法在 prototype 上? (`in`, `hasOwnProperty`) | §3.7 interface on global; §3.7.3 prototype exists | 95% |
 | L1 | 值正确性 | 返回值是正确类型和值吗? (类型 + 值匹配真实 Chrome) | §3.2 type mapping; §3.7.6 getter steps | 60% |
 | L2 | 值一致性 | 值与其他信号一致吗? (UA<->platform<->Client Hints 等跨字段) | (非 spec 层 — 检测器经验) | 40% |
-| L3 | 描述符正确性 | attribute accessor: get.name="get X", get.length=0, set.name="set X", set.length=1; operation data: writable=true, enumerable=true, configurable=true, .name=id, .length=shortest overload; constant data: writable=false, enumerable=true, configurable=false; prototype.constructor: writable=true, enumerable=false, configurable=true | §3.7.5 const {W:F,E:T,C:F}; §3.7.6 attr getter/setter name+length; §3.7.7 op {W:T,E:T,C:T}+name+length; §3.7.3 constructor {W:T,E:F,C:T} | 90% |
-| L4 | toString 完整性 | `getter.toString()` -> `function get X() { [native code] }`? operation `function X() { [native code] }`? | §3.7.6/3.7.7 CreateBuiltinFunction name; ECMA-262 §22.1.3 Function.prototype.toString | 95% |
+| L3 | 描述符正确性 | attribute accessor: get.name="get X", get.length=0, set.name="set X", set.length=1; operation data: writable=true, enumerable=true, configurable=true, .name=id, .length=shortest overload; constant data: writable=false, enumerable=true, configurable=false; prototype.constructor: writable=true, enumerable=false, configurable=true; **function own keys = ['length','name'] (无 'arguments'/'caller'/'prototype')**; **getter 不应有 'prototype' 属性**; **accessor descriptor.value 必须 undefined**; **Object.getOwnPropertyNames(fn).sort() = 'length,name'** | §3.7.5 const; §3.7.6 attr; §3.7.7 op; §3.7.3 constructor; CreepJS `failed descriptor`/`failed own property`/`failed descriptor keys`/`failed own property names`/`failed own keys names`/`failed prototype in function` | 90% |
+| L4 | toString 完整性 | `getter.toString()` -> `function get X() { [native code] }`? operation `function X() { [native code] }`? **Function.prototype.toString.call(fn) 精确格式匹配 (6 种变体)**? **toString.toString() 本身也是 native**? | §3.7.6/3.7.7 CreateBuiltinFunction name; ECMA-262 §22.1.3; CreepJS `failed toString` + `hasKnownToString` 6 变体 | 95% |
 | L5 | 递归 toString | `Function.prototype.toString.toString()` 递归检测 | ECMA-262 §22.1.3 | 100% |
-| L6 | TypeError 行为 | constructor called as function throws? non-constructable called/constructed throws? attribute getter on wrong receiver throws? operation on wrong receiver throws? | §3.7.1 constructor behavior; §3.7.6 attr receiver check; §3.7.7 op receiver check | 70% |
-| L7 | 原型链正确性 | interface object .__proto__ = parent interface object? prototype .__proto__ = parent prototype? instance .__proto__ = interface prototype? | §3.7.1 constructorProto = parent interface object; §3.7.3 proto = parent prototype | 85% |
+| L6 | TypeError 行为 | constructor called as function throws? non-constructable called/constructed throws? attribute getter on wrong receiver throws? operation on wrong receiver throws? **Object.create(fn).toString() throws? fn.arguments/fn.caller throws? class extends fn throws? Object.setPrototypeOf(fn, null).toString() throws?** | §3.7.1 constructor behavior; §3.7.6 attr receiver check; §3.7.7 op receiver check; CreepJS `failed illegal error`/`failed call interface`/`failed apply interface`/`failed new instance`/`failed class extends`/`failed null conversion`/`failed object toString error`/`failed at incompatible proxy` | 70% |
+| L7 | 原型链 + Proxy 检测 | interface object .__proto__ = parent interface object? prototype .__proto__ = parent prototype? instance .__proto__ = interface prototype? **prototype cycle: setPrototypeOf(fn, Object.create(fn)).toString() throws?** **Proxy 创建后递归检测? Reflect.setPrototypeOf 行为?** | §3.7.1 constructorProto; §3.7.3 proto = parent prototype; CreepJS `failed at too much recursion error` + Proxy detection | 85% |
 | L8 | 跨上下文 | Worker vs Window navigator 一致? | (非 spec 层 — 实现一致性) | 20% |
 | L9 | 接口对象属性 | .name = interface id? .length = constructor shortest overload? .prototype = proto object {W:F,E:F,C:F}? constants on interface object {W:F,E:T,C:F}? | §3.7.1 CreateBuiltinFunction(steps, length, id); "prototype" {W:F,E:F,C:F}; §3.7.5 const on interface object | 80% |
 | L10 | 命名构造函数 | LegacyFactoryFunction: .name = factory id? .length = shortest overload? .prototype = interface prototype object? exists on global? | §3.7.2 legacy factory function; §3.4.1 [LegacyFactoryFunction] | 0% |
 | L11 | 静态操作 | static operation exists on interface object? .name=id? .length=shortest overload? {W:T,E:T,C:T}? | §3.7.7 static operations on interface object; op descriptor {W:T,E:T,C:T} | 0% |
 | L12 | Stringifier | "toString" property on prototype? .name="toString"? .length=0? {W:B,E:T,C:B}? returns correct string? | §3.7.8 stringifier; CreateBuiltinFunction(steps, 0, "toString") | 0% |
 | L13 | Iterable/Setlike/Maplike | value iterator: Symbol.iterator=Array.prototype.values, entries/keys/values/forEach from Array.prototype? pair iterator: custom entries/keys/values/forEach, .name correct? setlike: size/add/delete/has/entries/keys/values/forEach/clear? maplike: size/get/set/has/delete/entries/keys/values/forEach/clear? | §3.7.9 iterable; §3.7.11 maplike; §3.7.12 setlike | 0% |
+| L14 | Stack trace shape | Error.stack 行模式匹配? AT_FUNCTION/AT_OBJECT regex? stack 长度? 错误消息文本? | CreepJS `src/lies/index.ts` hasValidStack; `src/errors/index.ts` captureError | 0% |
+| L15 | Enumeration order | Object.keys() 顺序? for-in 顺序? Reflect.ownKeys() 顺序? 与 Chrome 一致? | ECMA-262 §6.1.7.1 OrdinaryOwnPropertyKeys; CreepJS enumeration order checks | 0% |
+| L16 | Timing resolution | performance.now() 精度? Date.now() 末位裁剪? requestAnimationFrame 时序? | CreepJS `src/resistance/index.ts`; W3C fingerprinting-guidance §3.2 | 0% |
 
 #### 2.2.2 行为探真 D1-D6
 
@@ -1049,7 +1052,25 @@ entries/keys/values/forEach: same as pair iterator
 Symbol.iterator = entries function
 ```
 
-### C.10 Maplike declarations (§3.7.11)
+### C.11 CreepJS lie 检测映射
+
+来源：CreepJS `src/lies/index.ts` (953 行)，多源验证。
+
+| CreepJS lie | H04 层 | 检测内容 |
+|---|---|---|
+| failed illegal error | L6 | obj.prototype[name] 抛 TypeError |
+| failed undefined properties | L3 | instance getOwnPropertyDescriptor 返回 undefined |
+| failed call/apply/new/extends/null | L6 | 各种非法调用抛 TypeError |
+| failed toString | L4 | Function.toString.call(fn) 匹配 6 种 native 格式 |
+| failed prototype in function | L3 | getter/setter 不应有 prototype |
+| failed descriptor/own property/keys | L3 | fn own keys = ['length','name'] |
+| failed object toString error | L4+L6+L14 | Object.create(fn).toString() 抛 + stack |
+| failed at incompatible proxy | L6 | fn.arguments/fn.caller 抛 |
+| failed at too much recursion | L7 | prototype cycle 抛 TypeError |
+| Proxy detection | L7 | Proxy 创建后递归检测 |
+| worker scope mismatch | L8 | Worker vs Window 值一致 |
+| Stack trace validation | L14 | Error.stack 行模式匹配 |
+| Resistance (Date.now) | L16 | 计时精度裁剪检测 |### C.10 Maplike declarations (§3.7.11)
 
 ```
 size: accessor getter, .name = "get size", .length = 0
