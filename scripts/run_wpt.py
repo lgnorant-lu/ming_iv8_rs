@@ -265,7 +265,7 @@ if (typeof window !== 'undefined' && window !== globalThis) {{
         ctx.eval(resources["webidl2.js"], name="webidl2.js")
         ctx.eval(resources["idlharness.js"], name="idlharness.js")
 
-        # Post-harness shim: add result callback
+        # Post-shim: add result callback + completion callback
         post_shim = """
 add_result_callback(function(test) {
     __results.push({
@@ -273,6 +273,10 @@ add_result_callback(function(test) {
         status: test.format_status(),
         message: test.message || null
     });
+});
+var __completed = false;
+add_completion_callback(function(tests, harness_status) {
+    __completed = true;
 });
 """
         ctx.eval(post_shim, name="iv8-post-shim.js")
@@ -284,30 +288,52 @@ add_result_callback(function(test) {
         full_test_code = test_code + "\n;"
 
         try:
-            # First eval the test code (registers idl_test as promise_test)
+            # eval_promise evals the test code. idl_test() calls
+            # promise_test() which returns undefined (not a promise),
+            # so eval_promise returns immediately. The actual test
+            # execution happens asynchronously via tests.promise_tests
+            # chain, which needs microtask + macrotask draining.
             ctx.eval_promise(full_test_code, max_ticks=10000)
 
-            # Fire load callbacks — triggers testharness test execution
+            # Fire load callbacks — testharness needs load event to
+            # set all_loaded=true and call tests.complete()
+            load_count = ctx.eval("__loadCallbacks.length")
+            print(f"  Load callbacks: {load_count}")
             ctx.eval("""
                 for (var i = 0; i < __loadCallbacks.length; i++) {
                     try { __loadCallbacks[i]({ type: 'load' }); } catch(e) {}
                 }
             """)
 
-            # Drain event loop until results stabilize
+            # Drain event loop until testharness completes or stabilizes.
             prev_count = -1
-            for _ in range(200):
+            stable_ticks = 0
+            for i in range(1000):
+                # Drain microtasks
+                ctx.eval("__iv8__.eventLoop.drain()")
+                # Run one macrotask (setTimeout callbacks etc)
+                ctx.eval("__iv8__.eventLoop.tick()")
+                # Check completion
+                try:
+                    completed = ctx.eval("__completed")
+                except Exception:
+                    completed = False
+                if completed:
+                    break
+                # Check results stabilization
                 try:
                     current = ctx.eval("__results.length")
                 except Exception:
                     break
-                if current == prev_count and current > 0:
-                    break
+                if current == prev_count:
+                    stable_ticks += 1
+                    if stable_ticks >= 10 and current > 0:
+                        break
+                else:
+                    stable_ticks = 0
                 prev_count = current
-                try:
-                    ctx.eval("__iv8__.eventLoop.tick()")
-                except Exception:
-                    break
+                if i % 100 == 0:
+                    print(f"  tick {i}: results={current}, completed={completed}")
             run_status = "completed"
         except Exception as e:
             run_status = f"error: {e}"
