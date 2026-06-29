@@ -176,11 +176,11 @@ H04 注册于 `HARNESS-CHARTER.md` §7 Harness 注册表：
 
 > S6 (FP-Inconsistent) 无 license，仅提取规则逻辑自行实现，不引用原始代码。
 >
-> S8 (idlharness) 当前使用自定义 runner (run_idlharness.py, 10222 tests,
-> 5 P0 interfaces)。计划切换为 WPT 官方测试文件直接复用 (run_wpt.py,
-> 9202 tests, ~200+ interfaces)。参见
-> `docs/roadmap/v0.8/analysis/wpt-integration-design.md`。
-> Chrome 151 基线: 9023/9202 (98.1%), 来源 wpt.fyi API (2026-06-29)。
+> S8 (idlharness) Phase 1 已实现 WPT 官方测试文件直接复用
+> (run_wpt.py, 3 suites, 3952 tests, 3043 PASS 77.0%)。
+> Chrome 151 基线: 9023/9202 (98.1%), wpt.fyi API (2026-06-29)。
+> 旧 runner (run_idlharness.py, 10222 tests) 待废弃。
+> 参见 `docs/roadmap/v0.8/analysis/wpt-integration-design.md` §12。
 
 ### 2.4 矩阵规模
 
