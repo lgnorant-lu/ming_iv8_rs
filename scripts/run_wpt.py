@@ -274,6 +274,11 @@ if (typeof window !== 'undefined' && window !== globalThis) {{
         # Load WPT harness (IIFE registers load listener via our shim)
         ctx.eval(resources["testharness.js"], name="testharness.js")
         ctx.eval(resources["testharnessreport.js"], name="testharnessreport.js")
+        # Load subset-tests-by-key.js for variant filtering
+        subset_path = RESOURCES_DIR / "subset-tests-by-key.js"
+        if subset_path.exists():
+            ctx.eval(subset_path.read_text(encoding="utf-8"),
+                     name="subset-tests-by-key.js")
         ctx.eval(resources["webidl2.js"], name="webidl2.js")
         ctx.eval(resources["idlharness.js"], name="idlharness.js")
 
