@@ -1080,6 +1080,9 @@ pub fn install_dom_constructors(
         ("Document", &templates.document_node),
     ];
 
+    // Install all constructors first, then fix up __proto__ chains.
+    let mut installed_ctors: std::collections::HashMap<String, v8::Local<v8::Function>> =
+        std::collections::HashMap::new();
     for (name, tmpl_global) in pairs {
         let tmpl = v8::Local::new(scope, *tmpl_global);
         if let Some(func) = tmpl.get_function(scope) {
@@ -1091,7 +1094,64 @@ pub fn install_dom_constructors(
                 v8::PropertyAttribute::DONT_ENUM,
             );
             let _ = ok;
+            installed_ctors.insert(name.to_string(), func);
         }
+    }
+
+    // Fix up constructor __proto__ chains. V8 FunctionTemplate::inherit()
+    // sets prototype.__proto__ but NOT constructor.__proto__.
+    // We must manually set ctor.__proto__ = parent_ctor.
+    const CTOR_INHERITANCE: &[(&str, &str)] = &[
+        ("EventTarget", ""),
+        ("Node", "EventTarget"),
+        ("Element", "Node"),
+        ("HTMLElement", "Element"),
+        ("HTMLDivElement", "HTMLElement"),
+        ("HTMLSpanElement", "HTMLElement"),
+        ("HTMLAnchorElement", "HTMLElement"),
+        ("HTMLInputElement", "HTMLElement"),
+        ("HTMLButtonElement", "HTMLElement"),
+        ("HTMLFormElement", "HTMLElement"),
+        ("HTMLCanvasElement", "HTMLElement"),
+        ("HTMLScriptElement", "HTMLElement"),
+        ("HTMLImageElement", "HTMLElement"),
+        ("HTMLVideoElement", "HTMLElement"),
+        ("HTMLAudioElement", "HTMLElement"),
+        ("HTMLSelectElement", "HTMLElement"),
+        ("HTMLTextAreaElement", "HTMLElement"),
+        ("HTMLHeadElement", "HTMLElement"),
+        ("HTMLBodyElement", "HTMLElement"),
+        ("HTMLHtmlElement", "HTMLElement"),
+        ("HTMLParagraphElement", "HTMLElement"),
+        ("HTMLHeadingElement", "HTMLElement"),
+        ("HTMLUListElement", "HTMLElement"),
+        ("HTMLOListElement", "HTMLElement"),
+        ("HTMLLIElement", "HTMLElement"),
+        ("HTMLTableElement", "HTMLElement"),
+        ("HTMLStyleElement", "HTMLElement"),
+        ("HTMLLinkElement", "HTMLElement"),
+        ("HTMLMetaElement", "HTMLElement"),
+        ("HTMLUnknownElement", "HTMLElement"),
+        ("Text", "CharacterData"),
+        ("Comment", "CharacterData"),
+        ("Document", "Node"),
+        ("NodeList", ""),
+        ("DOMTokenList", ""),
+        ("CSSStyleDeclaration", ""),
+        ("Headers", ""),
+        ("Response", ""),
+        ("Request", ""),
+    ];
+    for (child, parent) in CTOR_INHERITANCE {
+        if parent.is_empty() { continue; }
+        let Some(child_func) = installed_ctors.get(*child) else { continue };
+        // Parent may be a codegen constructor (e.g., CharacterData) not in
+        // installed_ctors. Look it up from global.
+        let parent_key = crate::v8_utils::v8_string(scope, *parent);
+        let Some(parent_val) = global.get(scope, parent_key.into()) else { continue };
+        if !parent_val.is_function() { continue; }
+        let child_obj: v8::Local<v8::Object> = (*child_func).into();
+        let _ = child_obj.set_prototype(scope, parent_val);
     }
 }
 
@@ -1172,6 +1232,18 @@ pub fn chain_dom_prototypes(
 
         if name == "EventTarget" {
             let _ = dom_proto.set_prototype(scope, codegen_proto.into());
+        } else {
+            // For non-EventTarget interfaces, set dom_proto.__proto__ to
+            // codegen_proto so the inheritance chain is correct.
+            // codegen_proto already has correct __proto__ chain via tmpl.inherit(parent).
+            // Only set if dom_proto doesn't already have a non-null __proto__
+            // pointing to a codegen prototype (avoid double-chaining).
+            let current_proto = dom_proto.get_prototype(scope);
+            let need_chain = current_proto.is_none()
+                || current_proto.is_some_and(|p| p.is_null_or_undefined());
+            if need_chain {
+                let _ = dom_proto.set_prototype(scope, codegen_proto.into());
+            }
         }
 
         let mut proto_copied = 0u32;
