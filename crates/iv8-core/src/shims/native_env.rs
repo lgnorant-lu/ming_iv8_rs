@@ -536,9 +536,10 @@ macro_rules! env_str_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
+                // D-111: user_overrides > profile > DEFAULT_PROFILE
                 let val = state
                     .environment
-                    .get_str($path)
+                    .get_user_str($path)
                     .unwrap_or_else(|| state.profile.map(|p| p.$field).unwrap_or($default));
                 if let Some(s) = v8::String::new(scope, val) {
                     rv.set(s.into());
@@ -557,9 +558,10 @@ macro_rules! env_f64_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
+                // D-111: user_overrides > profile > DEFAULT_PROFILE
                 let val = state
                     .environment
-                    .get_f64($path)
+                    .get_user_f64($path)
                     .unwrap_or_else(|| state.profile.map(|p| p.$field).unwrap_or($default));
                 rv.set(v8::Number::new(scope, val).into());
             }));
@@ -576,9 +578,10 @@ macro_rules! env_bool_getter {
                 let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
                 let isolate: &v8::Isolate = &*scope;
                 let state = RuntimeState::get(isolate);
+                // D-111: user_overrides > profile > DEFAULT_PROFILE
                 let val = state
                     .environment
-                    .get_bool($path)
+                    .get_user_bool($path)
                     .unwrap_or_else(|| state.profile.map(|p| p.$field).unwrap_or($default));
                 rv.set(v8::Boolean::new(scope, val).into());
             }));

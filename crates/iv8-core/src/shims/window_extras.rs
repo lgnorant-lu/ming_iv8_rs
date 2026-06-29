@@ -107,7 +107,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
 
     // Canvas context factory
     if (!window.__getCanvasContext__) {
-        window.__getCanvasContext__ = function(type) {
+        var _getCanvasContext = function(type) {
             if (type === '2d') {
                 return {
                     canvas: null,
@@ -166,6 +166,9 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             }
             return null;
         };
+        Object.defineProperty(window, '__getCanvasContext__', {
+            value: _getCanvasContext, writable: true, configurable: true, enumerable: false,
+        });
     }
 
     // WebSocket stub

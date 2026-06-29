@@ -28,15 +28,18 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
 
     // Fixture hook: store a rect directly on the element object.
     // The native getBoundingClientRect callback reads this.__iv8Rect__.
-    globalThis.__iv8SetElementRect = function(element, rect) {
-        if (!element || typeof element !== 'object') return;
-        element.__iv8Rect__ = {
-            x: ('x' in rect) ? Number(rect.x) : 0,
-            y: ('y' in rect) ? Number(rect.y) : 0,
-            width: ('width' in rect) ? Number(rect.width) : 0,
-            height: ('height' in rect) ? Number(rect.height) : 0,
-        };
-    };
+    Object.defineProperty(globalThis, '__iv8SetElementRect', {
+        value: function(element, rect) {
+            if (!element || typeof element !== 'object') return;
+            element.__iv8Rect__ = {
+                x: ('x' in rect) ? Number(rect.x) : 0,
+                y: ('y' in rect) ? Number(rect.y) : 0,
+                width: ('width' in rect) ? Number(rect.width) : 0,
+                height: ('height' in rect) ? Number(rect.height) : 0,
+            };
+        },
+        writable: true, configurable: true, enumerable: false,
+    });
 
     // getComputedStyle stub — returns a CSSStyleDeclaration-like object
     // with Chrome-default computed values for common properties.

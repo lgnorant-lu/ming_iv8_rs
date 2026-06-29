@@ -12,7 +12,9 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
 
     // IV8 logical mode treats all contexts as secure.
     if (window.__iv8IsSecureContext === undefined) {
-        window.__iv8IsSecureContext = true;
+        Object.defineProperty(window, '__iv8IsSecureContext', {
+            value: true, writable: true, configurable: true, enumerable: false,
+        });
     }
 
     // document.cookie (v0.8.72 Track B: attribute parsing + filtering)
@@ -382,7 +384,9 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             if (typeof HTMLVideoElement !== 'undefined' && HTMLVideoElement.prototype.canPlayType !== _canPlayOverride) {
                 HTMLVideoElement.prototype.canPlayType = _canPlayOverride;
             }
-            HTMLMediaElement.prototype.__iv8CanPlayPatched = true;
+            Object.defineProperty(HTMLMediaElement.prototype, '__iv8CanPlayPatched', {
+                value: true, writable: true, configurable: true, enumerable: false,
+            });
         }
     } catch(e) {}
 
@@ -595,7 +599,9 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
                 }
                 return el;
             };
-            _wrapper.__iv8ElemPatched = true;
+            Object.defineProperty(_wrapper, '__iv8ElemPatched', {
+                value: true, writable: true, configurable: true, enumerable: false,
+            });
             document.createElement = _wrapper;
         }
     } catch(e) {}

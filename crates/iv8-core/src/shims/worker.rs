@@ -307,7 +307,12 @@ fn install_worker_globals<'s>(
         Some(v) => v,
         None => return,
     };
-    let _ = global.set(scope, profile_key.into(), profile_val);
+    let _ = global.define_own_property(
+        scope,
+        profile_key.into(),
+        profile_val,
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     let bootstrap_src = crate::v8_utils::v8_string(scope, WORKER_BOOTSTRAP_JS);
     let bootstrap_script = v8::Script::compile(scope, bootstrap_src, None);
@@ -320,17 +325,32 @@ fn install_worker_callbacks<'s>(scope: &v8::PinScope<'s, '_>, global: v8::Local<
     let post_msg_tmpl = v8::FunctionTemplate::builder_raw(worker_post_message_cb).build(scope);
     let post_msg_fn = crate::v8_utils::v8_fn(scope, &post_msg_tmpl);
     let post_msg_key = crate::v8_utils::v8_string(scope, "__iv8WorkerPostMessage");
-    let _ = global.set(scope, post_msg_key.into(), post_msg_fn.into());
+    let _ = global.define_own_property(
+        scope,
+        post_msg_key.into(),
+        post_msg_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     let close_tmpl = v8::FunctionTemplate::builder_raw(worker_close_cb).build(scope);
     let close_fn = crate::v8_utils::v8_fn(scope, &close_tmpl);
     let close_key = crate::v8_utils::v8_string(scope, "__iv8WorkerClose");
-    let _ = global.set(scope, close_key.into(), close_fn.into());
+    let _ = global.define_own_property(
+        scope,
+        close_key.into(),
+        close_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 
     let import_tmpl = v8::FunctionTemplate::builder_raw(worker_import_script_cb).build(scope);
     let import_fn = crate::v8_utils::v8_fn(scope, &import_tmpl);
     let import_key = crate::v8_utils::v8_string(scope, "__iv8ImportScript");
-    let _ = global.set(scope, import_key.into(), import_fn.into());
+    let _ = global.define_own_property(
+        scope,
+        import_key.into(),
+        import_fn.into(),
+        v8::PropertyAttribute::DONT_ENUM,
+    );
 }
 
 unsafe extern "C" fn worker_post_message_cb(info: *const v8::FunctionCallbackInfo) {
