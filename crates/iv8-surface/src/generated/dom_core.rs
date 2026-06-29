@@ -8670,10 +8670,10 @@ pub fn create_range_template<'s>(
     install_range_members_2(scope, proto);
     install_range_members_3(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "START_TO_START").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "START_TO_END").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "END_TO_END").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "END_TO_START").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "START_TO_START").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "START_TO_END").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "END_TO_END").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "END_TO_START").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -8756,25 +8756,25 @@ fn install_range_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s
     {
         let name = v8::String::new(scope, "START_TO_START").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: START_TO_END
     {
         let name = v8::String::new(scope, "START_TO_END").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: END_TO_END
     {
         let name = v8::String::new(scope, "END_TO_END").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: END_TO_START
     {
         let name = v8::String::new(scope, "END_TO_START").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // method: compareBoundaryPoints()
     {
@@ -14592,24 +14592,24 @@ pub fn create_node_template<'s>(
     install_node_members_4(scope, proto);
     install_node_members_5(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "ELEMENT_NODE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "ATTRIBUTE_NODE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "TEXT_NODE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "CDATA_SECTION_NODE").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "ENTITY_REFERENCE_NODE").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "ENTITY_NODE").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "PROCESSING_INSTRUCTION_NODE").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "COMMENT_NODE").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_NODE").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_TYPE_NODE").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_FRAGMENT_NODE").unwrap(); let val = v8::Number::new(scope, 11.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "NOTATION_NODE").unwrap(); let val = v8::Number::new(scope, 12.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_POSITION_DISCONNECTED").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_POSITION_PRECEDING").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_POSITION_FOLLOWING").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_POSITION_CONTAINS").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_POSITION_CONTAINED_BY").unwrap(); let val = v8::Number::new(scope, 16.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC").unwrap(); let val = v8::Number::new(scope, 32.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "ELEMENT_NODE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "ATTRIBUTE_NODE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "TEXT_NODE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "CDATA_SECTION_NODE").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "ENTITY_REFERENCE_NODE").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "ENTITY_NODE").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "PROCESSING_INSTRUCTION_NODE").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "COMMENT_NODE").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_NODE").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_TYPE_NODE").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_FRAGMENT_NODE").unwrap(); let val = v8::Number::new(scope, 11.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "NOTATION_NODE").unwrap(); let val = v8::Number::new(scope, 12.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_POSITION_DISCONNECTED").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_POSITION_PRECEDING").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_POSITION_FOLLOWING").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_POSITION_CONTAINS").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_POSITION_CONTAINED_BY").unwrap(); let val = v8::Number::new(scope, 16.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC").unwrap(); let val = v8::Number::new(scope, 32.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -14620,61 +14620,61 @@ fn install_node_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s,
     {
         let name = v8::String::new(scope, "ELEMENT_NODE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: ATTRIBUTE_NODE
     {
         let name = v8::String::new(scope, "ATTRIBUTE_NODE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: TEXT_NODE
     {
         let name = v8::String::new(scope, "TEXT_NODE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: CDATA_SECTION_NODE
     {
         let name = v8::String::new(scope, "CDATA_SECTION_NODE").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: ENTITY_REFERENCE_NODE
     {
         let name = v8::String::new(scope, "ENTITY_REFERENCE_NODE").unwrap();
         let val = v8::Number::new(scope, 5.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: ENTITY_NODE
     {
         let name = v8::String::new(scope, "ENTITY_NODE").unwrap();
         let val = v8::Number::new(scope, 6.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: PROCESSING_INSTRUCTION_NODE
     {
         let name = v8::String::new(scope, "PROCESSING_INSTRUCTION_NODE").unwrap();
         let val = v8::Number::new(scope, 7.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: COMMENT_NODE
     {
         let name = v8::String::new(scope, "COMMENT_NODE").unwrap();
         let val = v8::Number::new(scope, 8.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOCUMENT_NODE
     {
         let name = v8::String::new(scope, "DOCUMENT_NODE").unwrap();
         let val = v8::Number::new(scope, 9.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOCUMENT_TYPE_NODE
     {
         let name = v8::String::new(scope, "DOCUMENT_TYPE_NODE").unwrap();
         let val = v8::Number::new(scope, 10.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
 }
 
@@ -14683,13 +14683,13 @@ fn install_node_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s,
     {
         let name = v8::String::new(scope, "DOCUMENT_FRAGMENT_NODE").unwrap();
         let val = v8::Number::new(scope, 11.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: NOTATION_NODE
     {
         let name = v8::String::new(scope, "NOTATION_NODE").unwrap();
         let val = v8::Number::new(scope, 12.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: nodeType
     {
@@ -14817,37 +14817,37 @@ fn install_node_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s,
     {
         let name = v8::String::new(scope, "DOCUMENT_POSITION_DISCONNECTED").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOCUMENT_POSITION_PRECEDING
     {
         let name = v8::String::new(scope, "DOCUMENT_POSITION_PRECEDING").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOCUMENT_POSITION_FOLLOWING
     {
         let name = v8::String::new(scope, "DOCUMENT_POSITION_FOLLOWING").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOCUMENT_POSITION_CONTAINS
     {
         let name = v8::String::new(scope, "DOCUMENT_POSITION_CONTAINS").unwrap();
         let val = v8::Number::new(scope, 8.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOCUMENT_POSITION_CONTAINED_BY
     {
         let name = v8::String::new(scope, "DOCUMENT_POSITION_CONTAINED_BY").unwrap();
         let val = v8::Number::new(scope, 16.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC
     {
         let name = v8::String::new(scope, "DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC").unwrap();
         let val = v8::Number::new(scope, 32.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // method: compareDocumentPosition()
     {

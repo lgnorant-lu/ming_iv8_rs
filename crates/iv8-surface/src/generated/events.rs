@@ -1278,10 +1278,10 @@ pub fn create_event_template<'s>(
     install_event_members_2(scope, proto);
     install_event_members_3(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "NONE").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "CAPTURING_PHASE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "AT_TARGET").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "BUBBLING_PHASE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "NONE").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "CAPTURING_PHASE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "AT_TARGET").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "BUBBLING_PHASE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -1323,25 +1323,25 @@ fn install_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s
     {
         let name = v8::String::new(scope, "NONE").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: CAPTURING_PHASE
     {
         let name = v8::String::new(scope, "CAPTURING_PHASE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: AT_TARGET
     {
         let name = v8::String::new(scope, "AT_TARGET").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: BUBBLING_PHASE
     {
         let name = v8::String::new(scope, "BUBBLING_PHASE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: eventPhase
     {
@@ -14462,19 +14462,19 @@ pub fn create_event_source_template<'s>(
     {
         let name = v8::String::new(scope, "CONNECTING").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: OPEN
     {
         let name = v8::String::new(scope, "OPEN").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: CLOSED
     {
         let name = v8::String::new(scope, "CLOSED").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: readyState
     {
@@ -14511,9 +14511,9 @@ pub fn create_event_source_template<'s>(
         proto.set(name.into(), func_tmpl.into());
     }
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "CONNECTING").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "OPEN").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "CLOSED").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "CONNECTING").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "OPEN").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "CLOSED").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -18205,10 +18205,10 @@ pub fn create_keyboard_event_template<'s>(
     install_keyboard_event_members_1(scope, proto);
     install_keyboard_event_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "DOM_KEY_LOCATION_STANDARD").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOM_KEY_LOCATION_LEFT").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOM_KEY_LOCATION_RIGHT").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOM_KEY_LOCATION_NUMPAD").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "DOM_KEY_LOCATION_STANDARD").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOM_KEY_LOCATION_LEFT").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOM_KEY_LOCATION_RIGHT").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOM_KEY_LOCATION_NUMPAD").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -18219,25 +18219,25 @@ fn install_keyboard_event_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     {
         let name = v8::String::new(scope, "DOM_KEY_LOCATION_STANDARD").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOM_KEY_LOCATION_LEFT
     {
         let name = v8::String::new(scope, "DOM_KEY_LOCATION_LEFT").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOM_KEY_LOCATION_RIGHT
     {
         let name = v8::String::new(scope, "DOM_KEY_LOCATION_RIGHT").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOM_KEY_LOCATION_NUMPAD
     {
         let name = v8::String::new(scope, "DOM_KEY_LOCATION_NUMPAD").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: key
     {
@@ -21464,19 +21464,19 @@ pub fn create_wheel_event_template<'s>(
     {
         let name = v8::String::new(scope, "DOM_DELTA_PIXEL").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOM_DELTA_LINE
     {
         let name = v8::String::new(scope, "DOM_DELTA_LINE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: DOM_DELTA_PAGE
     {
         let name = v8::String::new(scope, "DOM_DELTA_PAGE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: deltaX
     {
@@ -21509,9 +21509,9 @@ pub fn create_wheel_event_template<'s>(
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "DOM_DELTA_PIXEL").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOM_DELTA_LINE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "DOM_DELTA_PAGE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "DOM_DELTA_PIXEL").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOM_DELTA_LINE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "DOM_DELTA_PAGE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl

@@ -438,13 +438,13 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
                     cname
                 ));
                 block.push_str(&format!("        let val = {};\n", v8_val));
-                block.push_str("        proto.set(name.into(), val);\n");
+                block.push_str("        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);\n");
                 block.push_str("    }\n");
                 member_blocks.push(block);
 
                 let mut ctor_block = String::new();
                 ctor_block.push_str(&format!(
-                    "    {{ let name = v8::String::new(scope, \"{}\").unwrap(); let val = {}; ctor.set(scope, name.into(), val); }}\n",
+                    "    {{ let name = v8::String::new(scope, \"{}\").unwrap(); let val = {}; ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }}\n",
                     cname, v8_val
                 ));
                 const_blocks.push(ctor_block);
@@ -702,7 +702,7 @@ pub fn generate_install_all(
         for (cname, cval) in &const_members {
             let v8_val = format_const_v8_value(cval);
             out.push_str(&format!(
-                "            {{ let ck = v8::String::new(scope, \"{}\").unwrap(); let cv = {}; ctor_{}.set(scope, ck.into(), cv); }}\n",
+                "            {{ let ck = v8::String::new(scope, \"{}\").unwrap(); let cv = {}; ctor_{}.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }}\n",
                 cname, v8_val, fn_name,
             ));
         }

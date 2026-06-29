@@ -1193,18 +1193,33 @@ pub fn chain_dom_prototypes(
                     let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
                     let pd = if let (Some(g), Some(s)) = (getter, setter) {
                         if g.is_undefined() && s.is_undefined() {
-                            v8::PropertyDescriptor::new_from_value(value.unwrap_or(v8::undefined(scope).into()))
+                            let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), true);
+                            p.set_configurable(true);
+                            p.set_enumerable(true);
+                            p
                         } else {
-                            v8::PropertyDescriptor::new_from_get_set(g, s)
+                            let mut p = v8::PropertyDescriptor::new_from_get_set(g, s);
+                            p.set_configurable(true);
+                            p.set_enumerable(true);
+                            p
                         }
                     } else if let Some(g) = getter {
                         if g.is_undefined() {
-                            v8::PropertyDescriptor::new_from_value(value.unwrap_or(v8::undefined(scope).into()))
+                            let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), true);
+                            p.set_configurable(true);
+                            p.set_enumerable(true);
+                            p
                         } else {
-                            v8::PropertyDescriptor::new_from_get_set(g, v8::undefined(scope).into())
+                            let mut p = v8::PropertyDescriptor::new_from_get_set(g, v8::undefined(scope).into());
+                            p.set_configurable(true);
+                            p.set_enumerable(true);
+                            p
                         }
                     } else {
-                        v8::PropertyDescriptor::new_from_value(value.unwrap_or(v8::undefined(scope).into()))
+                        let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), true);
+                        p.set_configurable(true);
+                        p.set_enumerable(true);
+                        p
                     };
                     let _ = dom_proto.define_property(scope, prop_name, &pd);
                     proto_copied += 1;
@@ -1229,10 +1244,11 @@ pub fn chain_dom_prototypes(
                 if descriptor.is_object() && !descriptor.is_null_or_undefined() {
                     let desc_obj = unsafe { v8::Local::<v8::Object>::cast_unchecked(descriptor) };
                     let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
-                    let pd = v8::PropertyDescriptor::new_from_value_writable(
+                    let mut pd = v8::PropertyDescriptor::new_from_value_writable(
                         value.unwrap_or(v8::undefined(scope).into()),
                         false,
                     );
+                    pd.set_configurable(false);
                     let _ = dom_ctor.define_property(scope, prop_name, &pd);
                     ctor_copied += 1;
                 }

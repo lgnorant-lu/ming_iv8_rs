@@ -47123,15 +47123,15 @@ pub fn create_html_media_element_template<'s>(
     install_html_media_element_members_5(scope, proto);
     install_html_media_element_members_6(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "NETWORK_EMPTY").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "NETWORK_IDLE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "NETWORK_LOADING").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "NETWORK_NO_SOURCE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "HAVE_NOTHING").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "HAVE_METADATA").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "HAVE_CURRENT_DATA").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "HAVE_FUTURE_DATA").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "HAVE_ENOUGH_DATA").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "NETWORK_EMPTY").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "NETWORK_IDLE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "NETWORK_LOADING").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "NETWORK_NO_SOURCE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "HAVE_NOTHING").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "HAVE_METADATA").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "HAVE_CURRENT_DATA").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "HAVE_FUTURE_DATA").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "HAVE_ENOUGH_DATA").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -47175,25 +47175,25 @@ fn install_html_media_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     {
         let name = v8::String::new(scope, "NETWORK_EMPTY").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: NETWORK_IDLE
     {
         let name = v8::String::new(scope, "NETWORK_IDLE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: NETWORK_LOADING
     {
         let name = v8::String::new(scope, "NETWORK_LOADING").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: NETWORK_NO_SOURCE
     {
         let name = v8::String::new(scope, "NETWORK_NO_SOURCE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: networkState
     {
@@ -47235,31 +47235,31 @@ fn install_html_media_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     {
         let name = v8::String::new(scope, "HAVE_NOTHING").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: HAVE_METADATA
     {
         let name = v8::String::new(scope, "HAVE_METADATA").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: HAVE_CURRENT_DATA
     {
         let name = v8::String::new(scope, "HAVE_CURRENT_DATA").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: HAVE_FUTURE_DATA
     {
         let name = v8::String::new(scope, "HAVE_FUTURE_DATA").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: HAVE_ENOUGH_DATA
     {
         let name = v8::String::new(scope, "HAVE_ENOUGH_DATA").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: readyState
     {
@@ -69294,10 +69294,10 @@ pub fn create_html_track_element_template<'s>(
     install_html_track_element_members_1(scope, proto);
     install_html_track_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "NONE").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "LOADING").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "LOADED").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "ERROR").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "NONE").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "LOADING").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "LOADED").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "ERROR").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -69343,25 +69343,25 @@ fn install_html_track_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     {
         let name = v8::String::new(scope, "NONE").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: LOADING
     {
         let name = v8::String::new(scope, "LOADING").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: LOADED
     {
         let name = v8::String::new(scope, "LOADED").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: ERROR
     {
         let name = v8::String::new(scope, "ERROR").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: readyState
     {

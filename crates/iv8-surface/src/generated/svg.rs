@@ -432,11 +432,11 @@ pub fn create_svg_angle_template<'s>(
     install_svg_angle_members_1(scope, proto);
     install_svg_angle_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_ANGLETYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_ANGLETYPE_UNSPECIFIED").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_ANGLETYPE_DEG").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_ANGLETYPE_RAD").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_ANGLETYPE_GRAD").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_ANGLETYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_ANGLETYPE_UNSPECIFIED").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_ANGLETYPE_DEG").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_ANGLETYPE_RAD").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_ANGLETYPE_GRAD").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -447,31 +447,31 @@ fn install_svg_angle_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     {
         let name = v8::String::new(scope, "SVG_ANGLETYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_ANGLETYPE_UNSPECIFIED
     {
         let name = v8::String::new(scope, "SVG_ANGLETYPE_UNSPECIFIED").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_ANGLETYPE_DEG
     {
         let name = v8::String::new(scope, "SVG_ANGLETYPE_DEG").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_ANGLETYPE_RAD
     {
         let name = v8::String::new(scope, "SVG_ANGLETYPE_RAD").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_ANGLETYPE_GRAD
     {
         let name = v8::String::new(scope, "SVG_ANGLETYPE_GRAD").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: unitType
     {
@@ -2647,17 +2647,17 @@ pub fn create_svg_length_template<'s>(
     install_svg_length_members_1(scope, proto);
     install_svg_length_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_NUMBER").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_PERCENTAGE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_EMS").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_EXS").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_PX").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_CM").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_MM").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_IN").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_PT").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_PC").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_NUMBER").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_PERCENTAGE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_EMS").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_EXS").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_PX").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_CM").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_MM").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_IN").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_PT").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_LENGTHTYPE_PC").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -2668,61 +2668,61 @@ fn install_svg_length_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_NUMBER
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_NUMBER").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_PERCENTAGE
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_PERCENTAGE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_EMS
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_EMS").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_EXS
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_EXS").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_PX
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_PX").unwrap();
         let val = v8::Number::new(scope, 5.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_CM
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_CM").unwrap();
         let val = v8::Number::new(scope, 6.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_MM
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_MM").unwrap();
         let val = v8::Number::new(scope, 7.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_IN
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_IN").unwrap();
         let val = v8::Number::new(scope, 8.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_LENGTHTYPE_PT
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_PT").unwrap();
         let val = v8::Number::new(scope, 9.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
 }
 
@@ -2731,7 +2731,7 @@ fn install_svg_length_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     {
         let name = v8::String::new(scope, "SVG_LENGTHTYPE_PC").unwrap();
         let val = v8::Number::new(scope, 10.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: unitType
     {
@@ -4945,20 +4945,20 @@ pub fn create_svg_preserve_aspect_ratio_template<'s>(
     install_svg_preserve_aspect_ratio_members_1(scope, proto);
     install_svg_preserve_aspect_ratio_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_NONE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMIN").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMIN").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMIN").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMID").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMID").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMID").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMAX").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMAX").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMAX").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MEETORSLICE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MEETORSLICE_MEET").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MEETORSLICE_SLICE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_NONE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMIN").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMIN").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMIN").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMID").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMID").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMID").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMAX").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMAX").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMAX").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MEETORSLICE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MEETORSLICE_MEET").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MEETORSLICE_SLICE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -4969,61 +4969,61 @@ fn install_svg_preserve_aspect_ratio_members_1<'s>(scope: &v8::PinScope<'s, '_>,
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_NONE
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_NONE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_XMINYMIN
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMIN").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_XMIDYMIN
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMIN").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_XMAXYMIN
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMIN").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_XMINYMID
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMID").unwrap();
         let val = v8::Number::new(scope, 5.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_XMIDYMID
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMID").unwrap();
         let val = v8::Number::new(scope, 6.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_XMAXYMID
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMID").unwrap();
         let val = v8::Number::new(scope, 7.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_XMINYMAX
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMINYMAX").unwrap();
         let val = v8::Number::new(scope, 8.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_PRESERVEASPECTRATIO_XMIDYMAX
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMIDYMAX").unwrap();
         let val = v8::Number::new(scope, 9.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
 }
 
@@ -5032,25 +5032,25 @@ fn install_svg_preserve_aspect_ratio_members_2<'s>(scope: &v8::PinScope<'s, '_>,
     {
         let name = v8::String::new(scope, "SVG_PRESERVEASPECTRATIO_XMAXYMAX").unwrap();
         let val = v8::Number::new(scope, 10.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MEETORSLICE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_MEETORSLICE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MEETORSLICE_MEET
     {
         let name = v8::String::new(scope, "SVG_MEETORSLICE_MEET").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MEETORSLICE_SLICE
     {
         let name = v8::String::new(scope, "SVG_MEETORSLICE_SLICE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: align
     {
@@ -6048,13 +6048,13 @@ pub fn create_svg_transform_template<'s>(
     install_svg_transform_members_1(scope, proto);
     install_svg_transform_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_TRANSFORM_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_TRANSFORM_MATRIX").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_TRANSFORM_TRANSLATE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_TRANSFORM_SCALE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_TRANSFORM_ROTATE").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_TRANSFORM_SKEWX").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_TRANSFORM_SKEWY").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_TRANSFORM_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_TRANSFORM_MATRIX").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_TRANSFORM_TRANSLATE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_TRANSFORM_SCALE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_TRANSFORM_ROTATE").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_TRANSFORM_SKEWX").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_TRANSFORM_SKEWY").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -6065,43 +6065,43 @@ fn install_svg_transform_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     {
         let name = v8::String::new(scope, "SVG_TRANSFORM_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_TRANSFORM_MATRIX
     {
         let name = v8::String::new(scope, "SVG_TRANSFORM_MATRIX").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_TRANSFORM_TRANSLATE
     {
         let name = v8::String::new(scope, "SVG_TRANSFORM_TRANSLATE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_TRANSFORM_SCALE
     {
         let name = v8::String::new(scope, "SVG_TRANSFORM_SCALE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_TRANSFORM_ROTATE
     {
         let name = v8::String::new(scope, "SVG_TRANSFORM_ROTATE").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_TRANSFORM_SKEWX
     {
         let name = v8::String::new(scope, "SVG_TRANSFORM_SKEWX").unwrap();
         let val = v8::Number::new(scope, 5.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_TRANSFORM_SKEWY
     {
         let name = v8::String::new(scope, "SVG_TRANSFORM_SKEWY").unwrap();
         let val = v8::Number::new(scope, 6.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: type
     {
@@ -6850,24 +6850,24 @@ pub fn create_svg_unit_types_template<'s>(
     {
         let name = v8::String::new(scope, "SVG_UNIT_TYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_UNIT_TYPE_USERSPACEONUSE
     {
         let name = v8::String::new(scope, "SVG_UNIT_TYPE_USERSPACEONUSE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_UNIT_TYPE_OBJECTBOUNDINGBOX
     {
         let name = v8::String::new(scope, "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_UNIT_TYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_UNIT_TYPE_USERSPACEONUSE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_UNIT_TYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_UNIT_TYPE_USERSPACEONUSE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -16301,12 +16301,12 @@ pub fn create_svg_component_transfer_function_element_template<'s>(
     install_svg_component_transfer_function_element_members_1(scope, proto);
     install_svg_component_transfer_function_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_TABLE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_LINEAR").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_GAMMA").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_TABLE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_LINEAR").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_GAMMA").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -16317,37 +16317,37 @@ fn install_svg_component_transfer_function_element_members_1<'s>(scope: &v8::Pin
     {
         let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY
     {
         let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPONENTTRANSFER_TYPE_TABLE
     {
         let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_TABLE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE
     {
         let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPONENTTRANSFER_TYPE_LINEAR
     {
         let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_LINEAR").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPONENTTRANSFER_TYPE_GAMMA
     {
         let name = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_GAMMA").unwrap();
         let val = v8::Number::new(scope, 5.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: type
     {
@@ -16809,23 +16809,23 @@ pub fn create_svgfe_blend_element_template<'s>(
     install_svgfe_blend_element_members_2(scope, proto);
     install_svgfe_blend_element_members_3(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_NORMAL").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_MULTIPLY").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SCREEN").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_DARKEN").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_LIGHTEN").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_OVERLAY").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR_DODGE").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR_BURN").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_HARD_LIGHT").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SOFT_LIGHT").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_DIFFERENCE").unwrap(); let val = v8::Number::new(scope, 11.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_EXCLUSION").unwrap(); let val = v8::Number::new(scope, 12.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_HUE").unwrap(); let val = v8::Number::new(scope, 13.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SATURATION").unwrap(); let val = v8::Number::new(scope, 14.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR").unwrap(); let val = v8::Number::new(scope, 15.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_LUMINOSITY").unwrap(); let val = v8::Number::new(scope, 16.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_NORMAL").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_MULTIPLY").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SCREEN").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_DARKEN").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_LIGHTEN").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_OVERLAY").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR_DODGE").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR_BURN").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_HARD_LIGHT").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SOFT_LIGHT").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_DIFFERENCE").unwrap(); let val = v8::Number::new(scope, 11.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_EXCLUSION").unwrap(); let val = v8::Number::new(scope, 12.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_HUE").unwrap(); let val = v8::Number::new(scope, 13.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SATURATION").unwrap(); let val = v8::Number::new(scope, 14.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR").unwrap(); let val = v8::Number::new(scope, 15.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FEBLEND_MODE_LUMINOSITY").unwrap(); let val = v8::Number::new(scope, 16.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -16836,61 +16836,61 @@ fn install_svgfe_blend_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_NORMAL
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_NORMAL").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_MULTIPLY
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_MULTIPLY").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_SCREEN
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SCREEN").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_DARKEN
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_DARKEN").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_LIGHTEN
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_LIGHTEN").unwrap();
         let val = v8::Number::new(scope, 5.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_OVERLAY
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_OVERLAY").unwrap();
         let val = v8::Number::new(scope, 6.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_COLOR_DODGE
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR_DODGE").unwrap();
         let val = v8::Number::new(scope, 7.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_COLOR_BURN
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR_BURN").unwrap();
         let val = v8::Number::new(scope, 8.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_HARD_LIGHT
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_HARD_LIGHT").unwrap();
         let val = v8::Number::new(scope, 9.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
 }
 
@@ -16899,43 +16899,43 @@ fn install_svgfe_blend_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SOFT_LIGHT").unwrap();
         let val = v8::Number::new(scope, 10.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_DIFFERENCE
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_DIFFERENCE").unwrap();
         let val = v8::Number::new(scope, 11.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_EXCLUSION
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_EXCLUSION").unwrap();
         let val = v8::Number::new(scope, 12.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_HUE
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_HUE").unwrap();
         let val = v8::Number::new(scope, 13.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_SATURATION
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_SATURATION").unwrap();
         let val = v8::Number::new(scope, 14.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_COLOR
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_COLOR").unwrap();
         let val = v8::Number::new(scope, 15.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FEBLEND_MODE_LUMINOSITY
     {
         let name = v8::String::new(scope, "SVG_FEBLEND_MODE_LUMINOSITY").unwrap();
         let val = v8::Number::new(scope, 16.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: in1
     {
@@ -17380,11 +17380,11 @@ pub fn create_svgfe_color_matrix_element_template<'s>(
     install_svgfe_color_matrix_element_members_1(scope, proto);
     install_svgfe_color_matrix_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_MATRIX").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_SATURATE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_HUEROTATE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_MATRIX").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_SATURATE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_HUEROTATE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -17395,31 +17395,31 @@ fn install_svgfe_color_matrix_element_members_1<'s>(scope: &v8::PinScope<'s, '_>
     {
         let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOLORMATRIX_TYPE_MATRIX
     {
         let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_MATRIX").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOLORMATRIX_TYPE_SATURATE
     {
         let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_SATURATE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOLORMATRIX_TYPE_HUEROTATE
     {
         let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_HUEROTATE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA
     {
         let name = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: in1
     {
@@ -18382,13 +18382,13 @@ pub fn create_svgfe_composite_element_template<'s>(
     install_svgfe_composite_element_members_1(scope, proto);
     install_svgfe_composite_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OVER").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_IN").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OUT").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_ATOP").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_XOR").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OVER").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_IN").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OUT").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_ATOP").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_XOR").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -18399,43 +18399,43 @@ fn install_svgfe_composite_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, p
     {
         let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPOSITE_OPERATOR_OVER
     {
         let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OVER").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPOSITE_OPERATOR_IN
     {
         let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_IN").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPOSITE_OPERATOR_OUT
     {
         let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OUT").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPOSITE_OPERATOR_ATOP
     {
         let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_ATOP").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPOSITE_OPERATOR_XOR
     {
         let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_XOR").unwrap();
         let val = v8::Number::new(scope, 5.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_FECOMPOSITE_OPERATOR_ARITHMETIC
     {
         let name = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC").unwrap();
         let val = v8::Number::new(scope, 6.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: in1
     {
@@ -19319,10 +19319,10 @@ pub fn create_svgfe_convolve_matrix_element_template<'s>(
     install_svgfe_convolve_matrix_element_members_2(scope, proto);
     install_svgfe_convolve_matrix_element_members_3(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_EDGEMODE_NONE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_EDGEMODE_NONE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -19333,25 +19333,25 @@ fn install_svgfe_convolve_matrix_element_members_1<'s>(scope: &v8::PinScope<'s, 
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_EDGEMODE_DUPLICATE
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_EDGEMODE_WRAP
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_EDGEMODE_NONE
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_NONE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: in1
     {
@@ -20487,11 +20487,11 @@ pub fn create_svgfe_displacement_map_element_template<'s>(
     install_svgfe_displacement_map_element_members_1(scope, proto);
     install_svgfe_displacement_map_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_CHANNEL_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_CHANNEL_R").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_CHANNEL_G").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_CHANNEL_B").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_CHANNEL_A").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_CHANNEL_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_CHANNEL_R").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_CHANNEL_G").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_CHANNEL_B").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_CHANNEL_A").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -20502,31 +20502,31 @@ fn install_svgfe_displacement_map_element_members_1<'s>(scope: &v8::PinScope<'s,
     {
         let name = v8::String::new(scope, "SVG_CHANNEL_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_CHANNEL_R
     {
         let name = v8::String::new(scope, "SVG_CHANNEL_R").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_CHANNEL_G
     {
         let name = v8::String::new(scope, "SVG_CHANNEL_G").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_CHANNEL_B
     {
         let name = v8::String::new(scope, "SVG_CHANNEL_B").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_CHANNEL_A
     {
         let name = v8::String::new(scope, "SVG_CHANNEL_A").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: in1
     {
@@ -22087,10 +22087,10 @@ pub fn create_svgfe_gaussian_blur_element_template<'s>(
     install_svgfe_gaussian_blur_element_members_1(scope, proto);
     install_svgfe_gaussian_blur_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_EDGEMODE_NONE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_EDGEMODE_NONE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -22101,25 +22101,25 @@ fn install_svgfe_gaussian_blur_element_members_1<'s>(scope: &v8::PinScope<'s, '_
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_EDGEMODE_DUPLICATE
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_EDGEMODE_WRAP
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_EDGEMODE_NONE
     {
         let name = v8::String::new(scope, "SVG_EDGEMODE_NONE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: in1
     {
@@ -23417,9 +23417,9 @@ pub fn create_svgfe_morphology_element_template<'s>(
     install_svgfe_morphology_element_members_1(scope, proto);
     install_svgfe_morphology_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_ERODE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_DILATE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_ERODE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_DILATE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -23430,19 +23430,19 @@ fn install_svgfe_morphology_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, 
     {
         let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MORPHOLOGY_OPERATOR_ERODE
     {
         let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_ERODE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MORPHOLOGY_OPERATOR_DILATE
     {
         let name = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_DILATE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: in1
     {
@@ -26022,12 +26022,12 @@ pub fn create_svgfe_turbulence_element_template<'s>(
     install_svgfe_turbulence_element_members_1(scope, proto);
     install_svgfe_turbulence_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_FRACTALNOISE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_TURBULENCE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_STITCHTYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_STITCHTYPE_STITCH").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_STITCHTYPE_NOSTITCH").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_FRACTALNOISE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_TURBULENCE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_STITCHTYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_STITCHTYPE_STITCH").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_STITCHTYPE_NOSTITCH").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -26038,37 +26038,37 @@ fn install_svgfe_turbulence_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, 
     {
         let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_TURBULENCE_TYPE_FRACTALNOISE
     {
         let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_FRACTALNOISE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_TURBULENCE_TYPE_TURBULENCE
     {
         let name = v8::String::new(scope, "SVG_TURBULENCE_TYPE_TURBULENCE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_STITCHTYPE_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_STITCHTYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_STITCHTYPE_STITCH
     {
         let name = v8::String::new(scope, "SVG_STITCHTYPE_STITCH").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_STITCHTYPE_NOSTITCH
     {
         let name = v8::String::new(scope, "SVG_STITCHTYPE_NOSTITCH").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: baseFrequencyX
     {
@@ -26734,25 +26734,25 @@ pub fn create_svg_gradient_element_template<'s>(
     {
         let name = v8::String::new(scope, "SVG_SPREADMETHOD_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_SPREADMETHOD_PAD
     {
         let name = v8::String::new(scope, "SVG_SPREADMETHOD_PAD").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_SPREADMETHOD_REFLECT
     {
         let name = v8::String::new(scope, "SVG_SPREADMETHOD_REFLECT").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_SPREADMETHOD_REPEAT
     {
         let name = v8::String::new(scope, "SVG_SPREADMETHOD_REPEAT").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: gradientUnits
     {
@@ -26779,10 +26779,10 @@ pub fn create_svg_gradient_element_template<'s>(
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_SPREADMETHOD_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_SPREADMETHOD_PAD").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_SPREADMETHOD_REFLECT").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_SPREADMETHOD_REPEAT").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_SPREADMETHOD_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_SPREADMETHOD_PAD").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_SPREADMETHOD_REFLECT").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_SPREADMETHOD_REPEAT").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -27816,13 +27816,13 @@ pub fn create_svg_marker_element_template<'s>(
     install_svg_marker_element_members_1(scope, proto);
     install_svg_marker_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "SVG_MARKERUNITS_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MARKERUNITS_USERSPACEONUSE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MARKERUNITS_STROKEWIDTH").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MARKER_ORIENT_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MARKER_ORIENT_AUTO").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MARKER_ORIENT_ANGLE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SVG_MARKER_ORIENT_AUTO_START_REVERSE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "SVG_MARKERUNITS_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MARKERUNITS_USERSPACEONUSE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MARKERUNITS_STROKEWIDTH").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MARKER_ORIENT_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MARKER_ORIENT_AUTO").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MARKER_ORIENT_ANGLE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SVG_MARKER_ORIENT_AUTO_START_REVERSE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -27833,43 +27833,43 @@ fn install_svg_marker_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     {
         let name = v8::String::new(scope, "SVG_MARKERUNITS_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MARKERUNITS_USERSPACEONUSE
     {
         let name = v8::String::new(scope, "SVG_MARKERUNITS_USERSPACEONUSE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MARKERUNITS_STROKEWIDTH
     {
         let name = v8::String::new(scope, "SVG_MARKERUNITS_STROKEWIDTH").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MARKER_ORIENT_UNKNOWN
     {
         let name = v8::String::new(scope, "SVG_MARKER_ORIENT_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MARKER_ORIENT_AUTO
     {
         let name = v8::String::new(scope, "SVG_MARKER_ORIENT_AUTO").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MARKER_ORIENT_ANGLE
     {
         let name = v8::String::new(scope, "SVG_MARKER_ORIENT_ANGLE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SVG_MARKER_ORIENT_AUTO_START_REVERSE
     {
         let name = v8::String::new(scope, "SVG_MARKER_ORIENT_AUTO_START_REVERSE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: refX
     {
@@ -37371,9 +37371,9 @@ pub fn create_svg_text_content_element_template<'s>(
     install_svg_text_content_element_members_1(scope, proto);
     install_svg_text_content_element_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "LENGTHADJUST_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "LENGTHADJUST_SPACING").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "LENGTHADJUST_SPACINGANDGLYPHS").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "LENGTHADJUST_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "LENGTHADJUST_SPACING").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "LENGTHADJUST_SPACINGANDGLYPHS").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -37384,19 +37384,19 @@ fn install_svg_text_content_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, 
     {
         let name = v8::String::new(scope, "LENGTHADJUST_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: LENGTHADJUST_SPACING
     {
         let name = v8::String::new(scope, "LENGTHADJUST_SPACING").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: LENGTHADJUST_SPACINGANDGLYPHS
     {
         let name = v8::String::new(scope, "LENGTHADJUST_SPACINGANDGLYPHS").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: textLength
     {
@@ -39634,37 +39634,37 @@ pub fn create_svg_text_path_element_template<'s>(
     {
         let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: TEXTPATH_METHODTYPE_ALIGN
     {
         let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_ALIGN").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: TEXTPATH_METHODTYPE_STRETCH
     {
         let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_STRETCH").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: TEXTPATH_SPACINGTYPE_UNKNOWN
     {
         let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_UNKNOWN").unwrap();
         let val = v8::Number::new(scope, 0.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: TEXTPATH_SPACINGTYPE_AUTO
     {
         let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_AUTO").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: TEXTPATH_SPACINGTYPE_EXACT
     {
         let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_EXACT").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: startOffset
     {
@@ -39691,12 +39691,12 @@ pub fn create_svg_text_path_element_template<'s>(
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_ALIGN").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_STRETCH").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_AUTO").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_EXACT").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_ALIGN").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "TEXTPATH_METHODTYPE_STRETCH").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_UNKNOWN").unwrap(); let val = v8::Number::new(scope, 0.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_AUTO").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "TEXTPATH_SPACINGTYPE_EXACT").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl

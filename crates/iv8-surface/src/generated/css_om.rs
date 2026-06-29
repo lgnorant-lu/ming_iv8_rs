@@ -978,19 +978,19 @@ pub fn create_css_rule_template<'s>(
     install_css_rule_members_1(scope, proto);
     install_css_rule_members_2(scope, proto);
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "STYLE_RULE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "CHARSET_RULE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "IMPORT_RULE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "MEDIA_RULE").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "FONT_FACE_RULE").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "PAGE_RULE").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "MARGIN_RULE").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "NAMESPACE_RULE").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "KEYFRAMES_RULE").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "KEYFRAME_RULE").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "SUPPORTS_RULE").unwrap(); let val = v8::Number::new(scope, 12.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "COUNTER_STYLE_RULE").unwrap(); let val = v8::Number::new(scope, 11.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "FONT_FEATURE_VALUES_RULE").unwrap(); let val = v8::Number::new(scope, 14.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "STYLE_RULE").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "CHARSET_RULE").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "IMPORT_RULE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "MEDIA_RULE").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "FONT_FACE_RULE").unwrap(); let val = v8::Number::new(scope, 5.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "PAGE_RULE").unwrap(); let val = v8::Number::new(scope, 6.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "MARGIN_RULE").unwrap(); let val = v8::Number::new(scope, 9.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "NAMESPACE_RULE").unwrap(); let val = v8::Number::new(scope, 10.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "KEYFRAMES_RULE").unwrap(); let val = v8::Number::new(scope, 7.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "KEYFRAME_RULE").unwrap(); let val = v8::Number::new(scope, 8.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "SUPPORTS_RULE").unwrap(); let val = v8::Number::new(scope, 12.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "COUNTER_STYLE_RULE").unwrap(); let val = v8::Number::new(scope, 11.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "FONT_FEATURE_VALUES_RULE").unwrap(); let val = v8::Number::new(scope, 14.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
@@ -1026,37 +1026,37 @@ fn install_css_rule_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     {
         let name = v8::String::new(scope, "STYLE_RULE").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: CHARSET_RULE
     {
         let name = v8::String::new(scope, "CHARSET_RULE").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: IMPORT_RULE
     {
         let name = v8::String::new(scope, "IMPORT_RULE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: MEDIA_RULE
     {
         let name = v8::String::new(scope, "MEDIA_RULE").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: FONT_FACE_RULE
     {
         let name = v8::String::new(scope, "FONT_FACE_RULE").unwrap();
         let val = v8::Number::new(scope, 5.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: PAGE_RULE
     {
         let name = v8::String::new(scope, "PAGE_RULE").unwrap();
         let val = v8::Number::new(scope, 6.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
 }
 
@@ -1065,43 +1065,43 @@ fn install_css_rule_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     {
         let name = v8::String::new(scope, "MARGIN_RULE").unwrap();
         let val = v8::Number::new(scope, 9.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: NAMESPACE_RULE
     {
         let name = v8::String::new(scope, "NAMESPACE_RULE").unwrap();
         let val = v8::Number::new(scope, 10.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: KEYFRAMES_RULE
     {
         let name = v8::String::new(scope, "KEYFRAMES_RULE").unwrap();
         let val = v8::Number::new(scope, 7.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: KEYFRAME_RULE
     {
         let name = v8::String::new(scope, "KEYFRAME_RULE").unwrap();
         let val = v8::Number::new(scope, 8.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: SUPPORTS_RULE
     {
         let name = v8::String::new(scope, "SUPPORTS_RULE").unwrap();
         let val = v8::Number::new(scope, 12.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: COUNTER_STYLE_RULE
     {
         let name = v8::String::new(scope, "COUNTER_STYLE_RULE").unwrap();
         let val = v8::Number::new(scope, 11.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: FONT_FEATURE_VALUES_RULE
     {
         let name = v8::String::new(scope, "FONT_FEATURE_VALUES_RULE").unwrap();
         let val = v8::Number::new(scope, 14.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
 }
 

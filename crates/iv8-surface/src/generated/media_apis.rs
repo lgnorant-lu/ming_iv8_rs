@@ -522,25 +522,25 @@ pub fn create_media_error_template<'s>(
     {
         let name = v8::String::new(scope, "MEDIA_ERR_ABORTED").unwrap();
         let val = v8::Number::new(scope, 1.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: MEDIA_ERR_NETWORK
     {
         let name = v8::String::new(scope, "MEDIA_ERR_NETWORK").unwrap();
         let val = v8::Number::new(scope, 2.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: MEDIA_ERR_DECODE
     {
         let name = v8::String::new(scope, "MEDIA_ERR_DECODE").unwrap();
         let val = v8::Number::new(scope, 3.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // const: MEDIA_ERR_SRC_NOT_SUPPORTED
     {
         let name = v8::String::new(scope, "MEDIA_ERR_SRC_NOT_SUPPORTED").unwrap();
         let val = v8::Number::new(scope, 4.0).into();
-        proto.set(name.into(), val);
+        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
     }
     // attribute: code
     {
@@ -555,10 +555,10 @@ pub fn create_media_error_template<'s>(
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     if let Some(ctor) = tmpl.get_function(scope) {
-    { let name = v8::String::new(scope, "MEDIA_ERR_ABORTED").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "MEDIA_ERR_NETWORK").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "MEDIA_ERR_DECODE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.set(scope, name.into(), val); }
-    { let name = v8::String::new(scope, "MEDIA_ERR_SRC_NOT_SUPPORTED").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.set(scope, name.into(), val); }
+    { let name = v8::String::new(scope, "MEDIA_ERR_ABORTED").unwrap(); let val = v8::Number::new(scope, 1.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "MEDIA_ERR_NETWORK").unwrap(); let val = v8::Number::new(scope, 2.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "MEDIA_ERR_DECODE").unwrap(); let val = v8::Number::new(scope, 3.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
+    { let name = v8::String::new(scope, "MEDIA_ERR_SRC_NOT_SUPPORTED").unwrap(); let val = v8::Number::new(scope, 4.0).into(); ctor.define_own_property(scope, name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
     }
 
     tmpl
