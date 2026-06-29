@@ -204,6 +204,15 @@ def _merge_profile_env(profile: Optional[str], environment: Optional[Dict]) -> O
 # --- JSContext with profile support ---
 # PyO3 #[pyclass(frozen)] doesn't support Python subclassing.
 # Use a factory function approach instead.
+#
+# V8 FunctionTemplate creation (1287 interfaces, 9223 members after mixin
+# merge) requires ~4MB+ of stack. On Windows, the default thread stack
+# (1MB) is insufficient. Python's threading.stack_size() must be called
+# as a MODULE-LEVEL function (not as a thread attribute) to properly
+# set the stack reservation size. V8 isolates are thread-bound (rusty-v8
+# #643, #1467) and cannot be transferred between threads after creation.
+# Therefore JSContext must be created AND used on the same thread with
+# sufficient stack size.
 
 _RustJSContext = _JSContextRust
 
@@ -213,6 +222,12 @@ def JSContext(*args, profile=None, **kwargs):
 
     The `profile` parameter loads a JSON file and merges it with the
     environment dict. Priority: environment > profile > defaults.
+
+    Note: V8 template creation (1287 interfaces, 9223 members after mixin
+    merge) requires ~4MB+ of stack. On Windows, the default thread stack
+    (1MB) is insufficient. Use threading.stack_size(64*1024*1024) before
+    creating JSContext, or call JSContext from a thread with sufficient stack.
+    The Rust test harness uses RUST_MIN_STACK=67108864.
 
     Args:
         profile: Path to profile JSON, or "default" for built-in preset.
