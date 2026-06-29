@@ -5313,6 +5313,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_navigator) = templates.get("Navigator").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigator = v8::String::new(scope, "Navigator").unwrap();
             global.define_own_property(scope, name_navigator.into(), ctor_navigator.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_navigator.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_navigator_login) = templates.get("NavigatorLogin").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigator_login = v8::String::new(scope, "NavigatorLogin").unwrap();
@@ -5818,6 +5822,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_storage) = templates.get("Storage").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_storage = v8::String::new(scope, "Storage").unwrap();
             global.define_own_property(scope, name_storage.into(), ctor_storage.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_storage.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_storage_access_handle) = templates.get("StorageAccessHandle").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_storage_access_handle = v8::String::new(scope, "StorageAccessHandle").unwrap();
@@ -7157,6 +7165,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_worker_navigator) = templates.get("WorkerNavigator").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_worker_navigator = v8::String::new(scope, "WorkerNavigator").unwrap();
             global.define_own_property(scope, name_worker_navigator.into(), ctor_worker_navigator.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_worker_navigator.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_worklet) = templates.get("Worklet").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_worklet = v8::String::new(scope, "Worklet").unwrap();
@@ -7419,10 +7431,18 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_task_controller) = templates.get("TaskController").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_task_controller = v8::String::new(scope, "TaskController").unwrap();
             global.define_own_property(scope, name_task_controller.into(), ctor_task_controller.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AbortController").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_task_controller.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_range) = templates.get("Range").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_range = v8::String::new(scope, "Range").unwrap();
             global.define_own_property(scope, name_range.into(), ctor_range.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AbstractRange").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_range.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "START_TO_START").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_range.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "START_TO_END").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_range.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "END_TO_END").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_range.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -7431,142 +7451,282 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_static_range) = templates.get("StaticRange").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_static_range = v8::String::new(scope, "StaticRange").unwrap();
             global.define_own_property(scope, name_static_range.into(), ctor_static_range.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AbstractRange").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_static_range.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_keyframe_effect) = templates.get("KeyframeEffect").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_keyframe_effect = v8::String::new(scope, "KeyframeEffect").unwrap();
             global.define_own_property(scope, name_keyframe_effect.into(), ctor_keyframe_effect.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AnimationEffect").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_keyframe_effect.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_document_timeline) = templates.get("DocumentTimeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_document_timeline = v8::String::new(scope, "DocumentTimeline").unwrap();
             global.define_own_property(scope, name_document_timeline.into(), ctor_document_timeline.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AnimationTimeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_document_timeline.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_pointer_timeline) = templates.get("PointerTimeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_pointer_timeline = v8::String::new(scope, "PointerTimeline").unwrap();
             global.define_own_property(scope, name_pointer_timeline.into(), ctor_pointer_timeline.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AnimationTimeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_pointer_timeline.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_scroll_timeline) = templates.get("ScrollTimeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_scroll_timeline = v8::String::new(scope, "ScrollTimeline").unwrap();
             global.define_own_property(scope, name_scroll_timeline.into(), ctor_scroll_timeline.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AnimationTimeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_scroll_timeline.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_authenticator_assertion_response) = templates.get("AuthenticatorAssertionResponse").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_authenticator_assertion_response = v8::String::new(scope, "AuthenticatorAssertionResponse").unwrap();
             global.define_own_property(scope, name_authenticator_assertion_response.into(), ctor_authenticator_assertion_response.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AuthenticatorResponse").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_authenticator_assertion_response.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_authenticator_attestation_response) = templates.get("AuthenticatorAttestationResponse").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_authenticator_attestation_response = v8::String::new(scope, "AuthenticatorAttestationResponse").unwrap();
             global.define_own_property(scope, name_authenticator_attestation_response.into(), ctor_authenticator_attestation_response.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AuthenticatorResponse").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_authenticator_attestation_response.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_file) = templates.get("File").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file = v8::String::new(scope, "File").unwrap();
             global.define_own_property(scope, name_file.into(), ctor_file.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Blob").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_file.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_parser_at_rule) = templates.get("CSSParserAtRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_parser_at_rule = v8::String::new(scope, "CSSParserAtRule").unwrap();
             global.define_own_property(scope, name_css_parser_at_rule.into(), ctor_css_parser_at_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSParserRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_parser_at_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_parser_declaration) = templates.get("CSSParserDeclaration").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_parser_declaration = v8::String::new(scope, "CSSParserDeclaration").unwrap();
             global.define_own_property(scope, name_css_parser_declaration.into(), ctor_css_parser_declaration.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSParserRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_parser_declaration.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_parser_qualified_rule) = templates.get("CSSParserQualifiedRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_parser_qualified_rule = v8::String::new(scope, "CSSParserQualifiedRule").unwrap();
             global.define_own_property(scope, name_css_parser_qualified_rule.into(), ctor_css_parser_qualified_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSParserRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_parser_qualified_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_parser_block) = templates.get("CSSParserBlock").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_parser_block = v8::String::new(scope, "CSSParserBlock").unwrap();
             global.define_own_property(scope, name_css_parser_block.into(), ctor_css_parser_block.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSParserValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_parser_block.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_parser_function) = templates.get("CSSParserFunction").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_parser_function = v8::String::new(scope, "CSSParserFunction").unwrap();
             global.define_own_property(scope, name_css_parser_function.into(), ctor_css_parser_function.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSParserValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_parser_function.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_apply_statement_rule) = templates.get("CSSApplyStatementRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_apply_statement_rule = v8::String::new(scope, "CSSApplyStatementRule").unwrap();
             global.define_own_property(scope, name_css_apply_statement_rule.into(), ctor_css_apply_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_apply_statement_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_color_profile_rule) = templates.get("CSSColorProfileRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_color_profile_rule = v8::String::new(scope, "CSSColorProfileRule").unwrap();
             global.define_own_property(scope, name_css_color_profile_rule.into(), ctor_css_color_profile_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_color_profile_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_contents_statement_rule) = templates.get("CSSContentsStatementRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_contents_statement_rule = v8::String::new(scope, "CSSContentsStatementRule").unwrap();
             global.define_own_property(scope, name_css_contents_statement_rule.into(), ctor_css_contents_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_contents_statement_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_counter_style_rule) = templates.get("CSSCounterStyleRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_counter_style_rule = v8::String::new(scope, "CSSCounterStyleRule").unwrap();
             global.define_own_property(scope, name_css_counter_style_rule.into(), ctor_css_counter_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_counter_style_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_custom_media_rule) = templates.get("CSSCustomMediaRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_custom_media_rule = v8::String::new(scope, "CSSCustomMediaRule").unwrap();
             global.define_own_property(scope, name_css_custom_media_rule.into(), ctor_css_custom_media_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_custom_media_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_font_face_rule) = templates.get("CSSFontFaceRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_font_face_rule = v8::String::new(scope, "CSSFontFaceRule").unwrap();
             global.define_own_property(scope, name_css_font_face_rule.into(), ctor_css_font_face_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_font_face_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_font_feature_values_rule) = templates.get("CSSFontFeatureValuesRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_font_feature_values_rule = v8::String::new(scope, "CSSFontFeatureValuesRule").unwrap();
             global.define_own_property(scope, name_css_font_feature_values_rule.into(), ctor_css_font_feature_values_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_font_feature_values_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_font_palette_values_rule) = templates.get("CSSFontPaletteValuesRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_font_palette_values_rule = v8::String::new(scope, "CSSFontPaletteValuesRule").unwrap();
             global.define_own_property(scope, name_css_font_palette_values_rule.into(), ctor_css_font_palette_values_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_font_palette_values_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_function_declarations) = templates.get("CSSFunctionDeclarations").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_function_declarations = v8::String::new(scope, "CSSFunctionDeclarations").unwrap();
             global.define_own_property(scope, name_css_function_declarations.into(), ctor_css_function_declarations.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_function_declarations.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_grouping_rule) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_grouping_rule = v8::String::new(scope, "CSSGroupingRule").unwrap();
             global.define_own_property(scope, name_css_grouping_rule.into(), ctor_css_grouping_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_grouping_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_import_rule) = templates.get("CSSImportRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_import_rule = v8::String::new(scope, "CSSImportRule").unwrap();
             global.define_own_property(scope, name_css_import_rule.into(), ctor_css_import_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_import_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_keyframe_rule) = templates.get("CSSKeyframeRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_keyframe_rule = v8::String::new(scope, "CSSKeyframeRule").unwrap();
             global.define_own_property(scope, name_css_keyframe_rule.into(), ctor_css_keyframe_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_keyframe_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_keyframes_rule) = templates.get("CSSKeyframesRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_keyframes_rule = v8::String::new(scope, "CSSKeyframesRule").unwrap();
             global.define_own_property(scope, name_css_keyframes_rule.into(), ctor_css_keyframes_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_keyframes_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_layer_statement_rule) = templates.get("CSSLayerStatementRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_layer_statement_rule = v8::String::new(scope, "CSSLayerStatementRule").unwrap();
             global.define_own_property(scope, name_css_layer_statement_rule.into(), ctor_css_layer_statement_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_layer_statement_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_margin_rule) = templates.get("CSSMarginRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_margin_rule = v8::String::new(scope, "CSSMarginRule").unwrap();
             global.define_own_property(scope, name_css_margin_rule.into(), ctor_css_margin_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_margin_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_namespace_rule) = templates.get("CSSNamespaceRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_namespace_rule = v8::String::new(scope, "CSSNamespaceRule").unwrap();
             global.define_own_property(scope, name_css_namespace_rule.into(), ctor_css_namespace_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_namespace_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_nested_declarations) = templates.get("CSSNestedDeclarations").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_nested_declarations = v8::String::new(scope, "CSSNestedDeclarations").unwrap();
             global.define_own_property(scope, name_css_nested_declarations.into(), ctor_css_nested_declarations.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_nested_declarations.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_position_try_rule) = templates.get("CSSPositionTryRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_position_try_rule = v8::String::new(scope, "CSSPositionTryRule").unwrap();
             global.define_own_property(scope, name_css_position_try_rule.into(), ctor_css_position_try_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_position_try_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_property_rule) = templates.get("CSSPropertyRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_property_rule = v8::String::new(scope, "CSSPropertyRule").unwrap();
             global.define_own_property(scope, name_css_property_rule.into(), ctor_css_property_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_property_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_view_transition_rule) = templates.get("CSSViewTransitionRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_view_transition_rule = v8::String::new(scope, "CSSViewTransitionRule").unwrap();
             global.define_own_property(scope, name_css_view_transition_rule.into(), ctor_css_view_transition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_view_transition_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_font_face_descriptors) = templates.get("CSSFontFaceDescriptors").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_font_face_descriptors = v8::String::new(scope, "CSSFontFaceDescriptors").unwrap();
             global.define_own_property(scope, name_css_font_face_descriptors.into(), ctor_css_font_face_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_font_face_descriptors.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_function_descriptors) = templates.get("CSSFunctionDescriptors").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_function_descriptors = v8::String::new(scope, "CSSFunctionDescriptors").unwrap();
             global.define_own_property(scope, name_css_function_descriptors.into(), ctor_css_function_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_function_descriptors.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
     } // end registration batch
     {
@@ -7574,402 +7734,802 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_css_page_descriptors) = templates.get("CSSPageDescriptors").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_page_descriptors = v8::String::new(scope, "CSSPageDescriptors").unwrap();
             global.define_own_property(scope, name_css_page_descriptors.into(), ctor_css_page_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_page_descriptors.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_position_try_descriptors) = templates.get("CSSPositionTryDescriptors").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_position_try_descriptors = v8::String::new(scope, "CSSPositionTryDescriptors").unwrap();
             global.define_own_property(scope, name_css_position_try_descriptors.into(), ctor_css_position_try_descriptors.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_position_try_descriptors.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_style_properties) = templates.get("CSSStyleProperties").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_style_properties = v8::String::new(scope, "CSSStyleProperties").unwrap();
             global.define_own_property(scope, name_css_style_properties.into(), ctor_css_style_properties.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleDeclaration").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_style_properties.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_color_value) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_color_value = v8::String::new(scope, "CSSColorValue").unwrap();
             global.define_own_property(scope, name_css_color_value.into(), ctor_css_color_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_color_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_image_value) = templates.get("CSSImageValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_image_value = v8::String::new(scope, "CSSImageValue").unwrap();
             global.define_own_property(scope, name_css_image_value.into(), ctor_css_image_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_image_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_keyword_value) = templates.get("CSSKeywordValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_keyword_value = v8::String::new(scope, "CSSKeywordValue").unwrap();
             global.define_own_property(scope, name_css_keyword_value.into(), ctor_css_keyword_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_keyword_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_numeric_value) = templates.get("CSSNumericValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_numeric_value = v8::String::new(scope, "CSSNumericValue").unwrap();
             global.define_own_property(scope, name_css_numeric_value.into(), ctor_css_numeric_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_numeric_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_transform_value) = templates.get("CSSTransformValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_transform_value = v8::String::new(scope, "CSSTransformValue").unwrap();
             global.define_own_property(scope, name_css_transform_value.into(), ctor_css_transform_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_transform_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_unparsed_value) = templates.get("CSSUnparsedValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_unparsed_value = v8::String::new(scope, "CSSUnparsedValue").unwrap();
             global.define_own_property(scope, name_css_unparsed_value.into(), ctor_css_unparsed_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSStyleValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_unparsed_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_matrix_component) = templates.get("CSSMatrixComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_matrix_component = v8::String::new(scope, "CSSMatrixComponent").unwrap();
             global.define_own_property(scope, name_css_matrix_component.into(), ctor_css_matrix_component.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_matrix_component.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_perspective) = templates.get("CSSPerspective").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_perspective = v8::String::new(scope, "CSSPerspective").unwrap();
             global.define_own_property(scope, name_css_perspective.into(), ctor_css_perspective.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_perspective.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_rotate) = templates.get("CSSRotate").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_rotate = v8::String::new(scope, "CSSRotate").unwrap();
             global.define_own_property(scope, name_css_rotate.into(), ctor_css_rotate.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_rotate.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_scale) = templates.get("CSSScale").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_scale = v8::String::new(scope, "CSSScale").unwrap();
             global.define_own_property(scope, name_css_scale.into(), ctor_css_scale.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_scale.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_skew) = templates.get("CSSSkew").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_skew = v8::String::new(scope, "CSSSkew").unwrap();
             global.define_own_property(scope, name_css_skew.into(), ctor_css_skew.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_skew.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_skew_x) = templates.get("CSSSkewX").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_skew_x = v8::String::new(scope, "CSSSkewX").unwrap();
             global.define_own_property(scope, name_css_skew_x.into(), ctor_css_skew_x.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_skew_x.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_skew_y) = templates.get("CSSSkewY").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_skew_y = v8::String::new(scope, "CSSSkewY").unwrap();
             global.define_own_property(scope, name_css_skew_y.into(), ctor_css_skew_y.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_skew_y.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_translate) = templates.get("CSSTranslate").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_translate = v8::String::new(scope, "CSSTranslate").unwrap();
             global.define_own_property(scope, name_css_translate.into(), ctor_css_translate.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSTransformComponent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_translate.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_window_client) = templates.get("WindowClient").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_window_client = v8::String::new(scope, "WindowClient").unwrap();
             global.define_own_property(scope, name_window_client.into(), ctor_window_client.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Client").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_window_client.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_digital_credential) = templates.get("DigitalCredential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_digital_credential = v8::String::new(scope, "DigitalCredential").unwrap();
             global.define_own_property(scope, name_digital_credential.into(), ctor_digital_credential.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Credential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_digital_credential.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_federated_credential) = templates.get("FederatedCredential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_federated_credential = v8::String::new(scope, "FederatedCredential").unwrap();
             global.define_own_property(scope, name_federated_credential.into(), ctor_federated_credential.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Credential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_federated_credential.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_identity_credential) = templates.get("IdentityCredential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_identity_credential = v8::String::new(scope, "IdentityCredential").unwrap();
             global.define_own_property(scope, name_identity_credential.into(), ctor_identity_credential.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Credential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_identity_credential.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_otp_credential) = templates.get("OTPCredential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_otp_credential = v8::String::new(scope, "OTPCredential").unwrap();
             global.define_own_property(scope, name_otp_credential.into(), ctor_otp_credential.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Credential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_otp_credential.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_password_credential) = templates.get("PasswordCredential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_password_credential = v8::String::new(scope, "PasswordCredential").unwrap();
             global.define_own_property(scope, name_password_credential.into(), ctor_password_credential.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Credential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_password_credential.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_public_key_credential) = templates.get("PublicKeyCredential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_public_key_credential = v8::String::new(scope, "PublicKeyCredential").unwrap();
             global.define_own_property(scope, name_public_key_credential.into(), ctor_public_key_credential.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Credential").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_public_key_credential.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gpu_pipeline_error) = templates.get("GPUPipelineError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_pipeline_error = v8::String::new(scope, "GPUPipelineError").unwrap();
             global.define_own_property(scope, name_gpu_pipeline_error.into(), ctor_gpu_pipeline_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMException").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gpu_pipeline_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_identity_credential_error) = templates.get("IdentityCredentialError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_identity_credential_error = v8::String::new(scope, "IdentityCredentialError").unwrap();
             global.define_own_property(scope, name_identity_credential_error.into(), ctor_identity_credential_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMException").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_identity_credential_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_overconstrained_error) = templates.get("OverconstrainedError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_overconstrained_error = v8::String::new(scope, "OverconstrainedError").unwrap();
             global.define_own_property(scope, name_overconstrained_error.into(), ctor_overconstrained_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMException").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_overconstrained_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_quota_exceeded_error) = templates.get("QuotaExceededError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_quota_exceeded_error = v8::String::new(scope, "QuotaExceededError").unwrap();
             global.define_own_property(scope, name_quota_exceeded_error.into(), ctor_quota_exceeded_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMException").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_quota_exceeded_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_error) = templates.get("RTCError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_error = v8::String::new(scope, "RTCError").unwrap();
             global.define_own_property(scope, name_rtc_error.into(), ctor_rtc_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMException").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_transport_error) = templates.get("WebTransportError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_transport_error = v8::String::new(scope, "WebTransportError").unwrap();
             global.define_own_property(scope, name_web_transport_error.into(), ctor_web_transport_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMException").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_transport_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_dom_matrix) = templates.get("DOMMatrix").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_dom_matrix = v8::String::new(scope, "DOMMatrix").unwrap();
             global.define_own_property(scope, name_dom_matrix.into(), ctor_dom_matrix.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMMatrixReadOnly").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_dom_matrix.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_dom_point) = templates.get("DOMPoint").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_dom_point = v8::String::new(scope, "DOMPoint").unwrap();
             global.define_own_property(scope, name_dom_point.into(), ctor_dom_point.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMPointReadOnly").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_dom_point.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_dom_rect) = templates.get("DOMRect").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_dom_rect = v8::String::new(scope, "DOMRect").unwrap();
             global.define_own_property(scope, name_dom_rect.into(), ctor_dom_rect.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DOMRectReadOnly").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_dom_rect.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_animation_event) = templates.get("AnimationEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_animation_event = v8::String::new(scope, "AnimationEvent").unwrap();
             global.define_own_property(scope, name_animation_event.into(), ctor_animation_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_animation_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_animation_playback_event) = templates.get("AnimationPlaybackEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_animation_playback_event = v8::String::new(scope, "AnimationPlaybackEvent").unwrap();
             global.define_own_property(scope, name_animation_playback_event.into(), ctor_animation_playback_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_animation_playback_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_processing_event) = templates.get("AudioProcessingEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_processing_event = v8::String::new(scope, "AudioProcessingEvent").unwrap();
             global.define_own_property(scope, name_audio_processing_event.into(), ctor_audio_processing_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_processing_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_autofill_event) = templates.get("AutofillEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_autofill_event = v8::String::new(scope, "AutofillEvent").unwrap();
             global.define_own_property(scope, name_autofill_event.into(), ctor_autofill_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_autofill_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_before_install_prompt_event) = templates.get("BeforeInstallPromptEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_before_install_prompt_event = v8::String::new(scope, "BeforeInstallPromptEvent").unwrap();
             global.define_own_property(scope, name_before_install_prompt_event.into(), ctor_before_install_prompt_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_before_install_prompt_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_before_unload_event) = templates.get("BeforeUnloadEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_before_unload_event = v8::String::new(scope, "BeforeUnloadEvent").unwrap();
             global.define_own_property(scope, name_before_unload_event.into(), ctor_before_unload_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_before_unload_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_blob_event) = templates.get("BlobEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_blob_event = v8::String::new(scope, "BlobEvent").unwrap();
             global.define_own_property(scope, name_blob_event.into(), ctor_blob_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_blob_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_bluetooth_advertising_event) = templates.get("BluetoothAdvertisingEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_bluetooth_advertising_event = v8::String::new(scope, "BluetoothAdvertisingEvent").unwrap();
             global.define_own_property(scope, name_bluetooth_advertising_event.into(), ctor_bluetooth_advertising_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_bluetooth_advertising_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_buffered_change_event) = templates.get("BufferedChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_buffered_change_event = v8::String::new(scope, "BufferedChangeEvent").unwrap();
             global.define_own_property(scope, name_buffered_change_event.into(), ctor_buffered_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_buffered_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_capture_action_event) = templates.get("CaptureActionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_capture_action_event = v8::String::new(scope, "CaptureActionEvent").unwrap();
             global.define_own_property(scope, name_capture_action_event.into(), ctor_capture_action_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_capture_action_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_captured_mouse_event) = templates.get("CapturedMouseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_captured_mouse_event = v8::String::new(scope, "CapturedMouseEvent").unwrap();
             global.define_own_property(scope, name_captured_mouse_event.into(), ctor_captured_mouse_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_captured_mouse_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_character_bounds_update_event) = templates.get("CharacterBoundsUpdateEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_character_bounds_update_event = v8::String::new(scope, "CharacterBoundsUpdateEvent").unwrap();
             global.define_own_property(scope, name_character_bounds_update_event.into(), ctor_character_bounds_update_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_character_bounds_update_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_clipboard_change_event) = templates.get("ClipboardChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_clipboard_change_event = v8::String::new(scope, "ClipboardChangeEvent").unwrap();
             global.define_own_property(scope, name_clipboard_change_event.into(), ctor_clipboard_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_clipboard_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_clipboard_event) = templates.get("ClipboardEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_clipboard_event = v8::String::new(scope, "ClipboardEvent").unwrap();
             global.define_own_property(scope, name_clipboard_event.into(), ctor_clipboard_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_clipboard_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_close_event) = templates.get("CloseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_close_event = v8::String::new(scope, "CloseEvent").unwrap();
             global.define_own_property(scope, name_close_event.into(), ctor_close_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_close_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_command_event) = templates.get("CommandEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_command_event = v8::String::new(scope, "CommandEvent").unwrap();
             global.define_own_property(scope, name_command_event.into(), ctor_command_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_command_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_content_visibility_auto_state_change_event) = templates.get("ContentVisibilityAutoStateChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_content_visibility_auto_state_change_event = v8::String::new(scope, "ContentVisibilityAutoStateChangeEvent").unwrap();
             global.define_own_property(scope, name_content_visibility_auto_state_change_event.into(), ctor_content_visibility_auto_state_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_content_visibility_auto_state_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_cookie_change_event) = templates.get("CookieChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_cookie_change_event = v8::String::new(scope, "CookieChangeEvent").unwrap();
             global.define_own_property(scope, name_cookie_change_event.into(), ctor_cookie_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_cookie_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_custom_event) = templates.get("CustomEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_custom_event = v8::String::new(scope, "CustomEvent").unwrap();
             global.define_own_property(scope, name_custom_event.into(), ctor_custom_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_custom_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_device_change_event) = templates.get("DeviceChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_device_change_event = v8::String::new(scope, "DeviceChangeEvent").unwrap();
             global.define_own_property(scope, name_device_change_event.into(), ctor_device_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_device_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_device_motion_event) = templates.get("DeviceMotionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_device_motion_event = v8::String::new(scope, "DeviceMotionEvent").unwrap();
             global.define_own_property(scope, name_device_motion_event.into(), ctor_device_motion_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_device_motion_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_device_orientation_event) = templates.get("DeviceOrientationEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_device_orientation_event = v8::String::new(scope, "DeviceOrientationEvent").unwrap();
             global.define_own_property(scope, name_device_orientation_event.into(), ctor_device_orientation_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_device_orientation_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_document_picture_in_picture_event) = templates.get("DocumentPictureInPictureEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_document_picture_in_picture_event = v8::String::new(scope, "DocumentPictureInPictureEvent").unwrap();
             global.define_own_property(scope, name_document_picture_in_picture_event.into(), ctor_document_picture_in_picture_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_document_picture_in_picture_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_error_event) = templates.get("ErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_error_event = v8::String::new(scope, "ErrorEvent").unwrap();
             global.define_own_property(scope, name_error_event.into(), ctor_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_error_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_extendable_event) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_extendable_event = v8::String::new(scope, "ExtendableEvent").unwrap();
             global.define_own_property(scope, name_extendable_event.into(), ctor_extendable_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_extendable_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_font_face_set_load_event) = templates.get("FontFaceSetLoadEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_font_face_set_load_event = v8::String::new(scope, "FontFaceSetLoadEvent").unwrap();
             global.define_own_property(scope, name_font_face_set_load_event.into(), ctor_font_face_set_load_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_font_face_set_load_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_form_data_event) = templates.get("FormDataEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_form_data_event = v8::String::new(scope, "FormDataEvent").unwrap();
             global.define_own_property(scope, name_form_data_event.into(), ctor_form_data_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_form_data_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gpu_uncaptured_error_event) = templates.get("GPUUncapturedErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_uncaptured_error_event = v8::String::new(scope, "GPUUncapturedErrorEvent").unwrap();
             global.define_own_property(scope, name_gpu_uncaptured_error_event.into(), ctor_gpu_uncaptured_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gpu_uncaptured_error_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gamepad_event) = templates.get("GamepadEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gamepad_event = v8::String::new(scope, "GamepadEvent").unwrap();
             global.define_own_property(scope, name_gamepad_event.into(), ctor_gamepad_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gamepad_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_hid_connection_event) = templates.get("HIDConnectionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_hid_connection_event = v8::String::new(scope, "HIDConnectionEvent").unwrap();
             global.define_own_property(scope, name_hid_connection_event.into(), ctor_hid_connection_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_hid_connection_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_hid_input_report_event) = templates.get("HIDInputReportEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_hid_input_report_event = v8::String::new(scope, "HIDInputReportEvent").unwrap();
             global.define_own_property(scope, name_hid_input_report_event.into(), ctor_hid_input_report_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_hid_input_report_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_hash_change_event) = templates.get("HashChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_hash_change_event = v8::String::new(scope, "HashChangeEvent").unwrap();
             global.define_own_property(scope, name_hash_change_event.into(), ctor_hash_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_hash_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_idb_version_change_event) = templates.get("IDBVersionChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_idb_version_change_event = v8::String::new(scope, "IDBVersionChangeEvent").unwrap();
             global.define_own_property(scope, name_idb_version_change_event.into(), ctor_idb_version_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_idb_version_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_key_frame_request_event) = templates.get("KeyFrameRequestEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_key_frame_request_event = v8::String::new(scope, "KeyFrameRequestEvent").unwrap();
             global.define_own_property(scope, name_key_frame_request_event.into(), ctor_key_frame_request_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_key_frame_request_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_midi_connection_event) = templates.get("MIDIConnectionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_midi_connection_event = v8::String::new(scope, "MIDIConnectionEvent").unwrap();
             global.define_own_property(scope, name_midi_connection_event.into(), ctor_midi_connection_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_midi_connection_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_midi_message_event) = templates.get("MIDIMessageEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_midi_message_event = v8::String::new(scope, "MIDIMessageEvent").unwrap();
             global.define_own_property(scope, name_midi_message_event.into(), ctor_midi_message_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_midi_message_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_encrypted_event) = templates.get("MediaEncryptedEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_encrypted_event = v8::String::new(scope, "MediaEncryptedEvent").unwrap();
             global.define_own_property(scope, name_media_encrypted_event.into(), ctor_media_encrypted_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_encrypted_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_key_message_event) = templates.get("MediaKeyMessageEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_key_message_event = v8::String::new(scope, "MediaKeyMessageEvent").unwrap();
             global.define_own_property(scope, name_media_key_message_event.into(), ctor_media_key_message_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_key_message_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_query_list_event) = templates.get("MediaQueryListEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_query_list_event = v8::String::new(scope, "MediaQueryListEvent").unwrap();
             global.define_own_property(scope, name_media_query_list_event.into(), ctor_media_query_list_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_query_list_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_stream_track_event) = templates.get("MediaStreamTrackEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_stream_track_event = v8::String::new(scope, "MediaStreamTrackEvent").unwrap();
             global.define_own_property(scope, name_media_stream_track_event.into(), ctor_media_stream_track_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_stream_track_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_message_event) = templates.get("MessageEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_message_event = v8::String::new(scope, "MessageEvent").unwrap();
             global.define_own_property(scope, name_message_event.into(), ctor_message_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_message_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_ndef_reading_event) = templates.get("NDEFReadingEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ndef_reading_event = v8::String::new(scope, "NDEFReadingEvent").unwrap();
             global.define_own_property(scope, name_ndef_reading_event.into(), ctor_ndef_reading_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_ndef_reading_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_navigate_event) = templates.get("NavigateEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigate_event = v8::String::new(scope, "NavigateEvent").unwrap();
             global.define_own_property(scope, name_navigate_event.into(), ctor_navigate_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_navigate_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_navigation_current_entry_change_event) = templates.get("NavigationCurrentEntryChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigation_current_entry_change_event = v8::String::new(scope, "NavigationCurrentEntryChangeEvent").unwrap();
             global.define_own_property(scope, name_navigation_current_entry_change_event.into(), ctor_navigation_current_entry_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_navigation_current_entry_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_offline_audio_completion_event) = templates.get("OfflineAudioCompletionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_offline_audio_completion_event = v8::String::new(scope, "OfflineAudioCompletionEvent").unwrap();
             global.define_own_property(scope, name_offline_audio_completion_event.into(), ctor_offline_audio_completion_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_offline_audio_completion_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_page_reveal_event) = templates.get("PageRevealEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_page_reveal_event = v8::String::new(scope, "PageRevealEvent").unwrap();
             global.define_own_property(scope, name_page_reveal_event.into(), ctor_page_reveal_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_page_reveal_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_page_swap_event) = templates.get("PageSwapEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_page_swap_event = v8::String::new(scope, "PageSwapEvent").unwrap();
             global.define_own_property(scope, name_page_swap_event.into(), ctor_page_swap_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_page_swap_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_page_transition_event) = templates.get("PageTransitionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_page_transition_event = v8::String::new(scope, "PageTransitionEvent").unwrap();
             global.define_own_property(scope, name_page_transition_event.into(), ctor_page_transition_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_page_transition_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_payment_request_update_event) = templates.get("PaymentRequestUpdateEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_payment_request_update_event = v8::String::new(scope, "PaymentRequestUpdateEvent").unwrap();
             global.define_own_property(scope, name_payment_request_update_event.into(), ctor_payment_request_update_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_payment_request_update_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_picture_in_picture_event) = templates.get("PictureInPictureEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_picture_in_picture_event = v8::String::new(scope, "PictureInPictureEvent").unwrap();
             global.define_own_property(scope, name_picture_in_picture_event.into(), ctor_picture_in_picture_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_picture_in_picture_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_pop_state_event) = templates.get("PopStateEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_pop_state_event = v8::String::new(scope, "PopStateEvent").unwrap();
             global.define_own_property(scope, name_pop_state_event.into(), ctor_pop_state_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_pop_state_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_portal_activate_event) = templates.get("PortalActivateEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_portal_activate_event = v8::String::new(scope, "PortalActivateEvent").unwrap();
             global.define_own_property(scope, name_portal_activate_event.into(), ctor_portal_activate_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_portal_activate_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_presentation_connection_available_event) = templates.get("PresentationConnectionAvailableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_presentation_connection_available_event = v8::String::new(scope, "PresentationConnectionAvailableEvent").unwrap();
             global.define_own_property(scope, name_presentation_connection_available_event.into(), ctor_presentation_connection_available_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_presentation_connection_available_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_presentation_connection_close_event) = templates.get("PresentationConnectionCloseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_presentation_connection_close_event = v8::String::new(scope, "PresentationConnectionCloseEvent").unwrap();
             global.define_own_property(scope, name_presentation_connection_close_event.into(), ctor_presentation_connection_close_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_presentation_connection_close_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_progress_event) = templates.get("ProgressEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_progress_event = v8::String::new(scope, "ProgressEvent").unwrap();
             global.define_own_property(scope, name_progress_event.into(), ctor_progress_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_progress_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_promise_rejection_event) = templates.get("PromiseRejectionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_promise_rejection_event = v8::String::new(scope, "PromiseRejectionEvent").unwrap();
             global.define_own_property(scope, name_promise_rejection_event.into(), ctor_promise_rejection_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_promise_rejection_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtcdtmf_tone_change_event) = templates.get("RTCDTMFToneChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtcdtmf_tone_change_event = v8::String::new(scope, "RTCDTMFToneChangeEvent").unwrap();
             global.define_own_property(scope, name_rtcdtmf_tone_change_event.into(), ctor_rtcdtmf_tone_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtcdtmf_tone_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_data_channel_event) = templates.get("RTCDataChannelEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_data_channel_event = v8::String::new(scope, "RTCDataChannelEvent").unwrap();
             global.define_own_property(scope, name_rtc_data_channel_event.into(), ctor_rtc_data_channel_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_data_channel_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_error_event) = templates.get("RTCErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_error_event = v8::String::new(scope, "RTCErrorEvent").unwrap();
             global.define_own_property(scope, name_rtc_error_event.into(), ctor_rtc_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_error_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_peer_connection_ice_error_event) = templates.get("RTCPeerConnectionIceErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_peer_connection_ice_error_event = v8::String::new(scope, "RTCPeerConnectionIceErrorEvent").unwrap();
             global.define_own_property(scope, name_rtc_peer_connection_ice_error_event.into(), ctor_rtc_peer_connection_ice_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_peer_connection_ice_error_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_peer_connection_ice_event) = templates.get("RTCPeerConnectionIceEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_peer_connection_ice_event = v8::String::new(scope, "RTCPeerConnectionIceEvent").unwrap();
             global.define_own_property(scope, name_rtc_peer_connection_ice_event.into(), ctor_rtc_peer_connection_ice_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_peer_connection_ice_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_track_event) = templates.get("RTCTrackEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_track_event = v8::String::new(scope, "RTCTrackEvent").unwrap();
             global.define_own_property(scope, name_rtc_track_event.into(), ctor_rtc_track_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_track_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_transform_event) = templates.get("RTCTransformEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_transform_event = v8::String::new(scope, "RTCTransformEvent").unwrap();
             global.define_own_property(scope, name_rtc_transform_event.into(), ctor_rtc_transform_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_transform_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_s_frame_transform_error_event) = templates.get("SFrameTransformErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_s_frame_transform_error_event = v8::String::new(scope, "SFrameTransformErrorEvent").unwrap();
             global.define_own_property(scope, name_s_frame_transform_error_event.into(), ctor_s_frame_transform_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_s_frame_transform_error_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_security_policy_violation_event) = templates.get("SecurityPolicyViolationEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_security_policy_violation_event = v8::String::new(scope, "SecurityPolicyViolationEvent").unwrap();
             global.define_own_property(scope, name_security_policy_violation_event.into(), ctor_security_policy_violation_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_security_policy_violation_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_sensor_error_event) = templates.get("SensorErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_sensor_error_event = v8::String::new(scope, "SensorErrorEvent").unwrap();
             global.define_own_property(scope, name_sensor_error_event.into(), ctor_sensor_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_sensor_error_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_snap_event) = templates.get("SnapEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_snap_event = v8::String::new(scope, "SnapEvent").unwrap();
             global.define_own_property(scope, name_snap_event.into(), ctor_snap_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_snap_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
     } // end registration batch
     {
@@ -7977,190 +8537,378 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_speech_recognition_error_event) = templates.get("SpeechRecognitionErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_speech_recognition_error_event = v8::String::new(scope, "SpeechRecognitionErrorEvent").unwrap();
             global.define_own_property(scope, name_speech_recognition_error_event.into(), ctor_speech_recognition_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_speech_recognition_error_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_speech_recognition_event) = templates.get("SpeechRecognitionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_speech_recognition_event = v8::String::new(scope, "SpeechRecognitionEvent").unwrap();
             global.define_own_property(scope, name_speech_recognition_event.into(), ctor_speech_recognition_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_speech_recognition_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_speech_synthesis_event) = templates.get("SpeechSynthesisEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_speech_synthesis_event = v8::String::new(scope, "SpeechSynthesisEvent").unwrap();
             global.define_own_property(scope, name_speech_synthesis_event.into(), ctor_speech_synthesis_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_speech_synthesis_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_storage_event) = templates.get("StorageEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_storage_event = v8::String::new(scope, "StorageEvent").unwrap();
             global.define_own_property(scope, name_storage_event.into(), ctor_storage_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_storage_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_submit_event) = templates.get("SubmitEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_submit_event = v8::String::new(scope, "SubmitEvent").unwrap();
             global.define_own_property(scope, name_submit_event.into(), ctor_submit_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_submit_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_task_priority_change_event) = templates.get("TaskPriorityChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_task_priority_change_event = v8::String::new(scope, "TaskPriorityChangeEvent").unwrap();
             global.define_own_property(scope, name_task_priority_change_event.into(), ctor_task_priority_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_task_priority_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_text_format_update_event) = templates.get("TextFormatUpdateEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_text_format_update_event = v8::String::new(scope, "TextFormatUpdateEvent").unwrap();
             global.define_own_property(scope, name_text_format_update_event.into(), ctor_text_format_update_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_text_format_update_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_text_update_event) = templates.get("TextUpdateEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_text_update_event = v8::String::new(scope, "TextUpdateEvent").unwrap();
             global.define_own_property(scope, name_text_update_event.into(), ctor_text_update_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_text_update_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_time_event) = templates.get("TimeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_time_event = v8::String::new(scope, "TimeEvent").unwrap();
             global.define_own_property(scope, name_time_event.into(), ctor_time_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_time_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_toggle_event) = templates.get("ToggleEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_toggle_event = v8::String::new(scope, "ToggleEvent").unwrap();
             global.define_own_property(scope, name_toggle_event.into(), ctor_toggle_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_toggle_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_track_event) = templates.get("TrackEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_track_event = v8::String::new(scope, "TrackEvent").unwrap();
             global.define_own_property(scope, name_track_event.into(), ctor_track_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_track_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_transition_event) = templates.get("TransitionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_transition_event = v8::String::new(scope, "TransitionEvent").unwrap();
             global.define_own_property(scope, name_transition_event.into(), ctor_transition_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_transition_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_ui_event) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ui_event = v8::String::new(scope, "UIEvent").unwrap();
             global.define_own_property(scope, name_ui_event.into(), ctor_ui_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_ui_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_usb_connection_event) = templates.get("USBConnectionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_usb_connection_event = v8::String::new(scope, "USBConnectionEvent").unwrap();
             global.define_own_property(scope, name_usb_connection_event.into(), ctor_usb_connection_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_usb_connection_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_value_event) = templates.get("ValueEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_value_event = v8::String::new(scope, "ValueEvent").unwrap();
             global.define_own_property(scope, name_value_event.into(), ctor_value_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_value_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_context_event) = templates.get("WebGLContextEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_context_event = v8::String::new(scope, "WebGLContextEvent").unwrap();
             global.define_own_property(scope, name_web_gl_context_event.into(), ctor_web_gl_context_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_context_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_window_controls_overlay_geometry_change_event) = templates.get("WindowControlsOverlayGeometryChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_window_controls_overlay_geometry_change_event = v8::String::new(scope, "WindowControlsOverlayGeometryChangeEvent").unwrap();
             global.define_own_property(scope, name_window_controls_overlay_geometry_change_event.into(), ctor_window_controls_overlay_geometry_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_window_controls_overlay_geometry_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_input_source_event) = templates.get("XRInputSourceEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_input_source_event = v8::String::new(scope, "XRInputSourceEvent").unwrap();
             global.define_own_property(scope, name_xr_input_source_event.into(), ctor_xr_input_source_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_input_source_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_input_sources_change_event) = templates.get("XRInputSourcesChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_input_sources_change_event = v8::String::new(scope, "XRInputSourcesChangeEvent").unwrap();
             global.define_own_property(scope, name_xr_input_sources_change_event.into(), ctor_xr_input_sources_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_input_sources_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_layer_event) = templates.get("XRLayerEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_layer_event = v8::String::new(scope, "XRLayerEvent").unwrap();
             global.define_own_property(scope, name_xr_layer_event.into(), ctor_xr_layer_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_layer_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_reference_space_event) = templates.get("XRReferenceSpaceEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_reference_space_event = v8::String::new(scope, "XRReferenceSpaceEvent").unwrap();
             global.define_own_property(scope, name_xr_reference_space_event.into(), ctor_xr_reference_space_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_reference_space_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_session_event) = templates.get("XRSessionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_session_event = v8::String::new(scope, "XRSessionEvent").unwrap();
             global.define_own_property(scope, name_xr_session_event.into(), ctor_xr_session_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_session_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_visibility_mask_change_event) = templates.get("XRVisibilityMaskChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_visibility_mask_change_event = v8::String::new(scope, "XRVisibilityMaskChangeEvent").unwrap();
             global.define_own_property(scope, name_xr_visibility_mask_change_event.into(), ctor_xr_visibility_mask_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Event").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_visibility_mask_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_abort_signal) = templates.get("AbortSignal").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_abort_signal = v8::String::new(scope, "AbortSignal").unwrap();
             global.define_own_property(scope, name_abort_signal.into(), ctor_abort_signal.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_abort_signal.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_animation) = templates.get("Animation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_animation = v8::String::new(scope, "Animation").unwrap();
             global.define_own_property(scope, name_animation.into(), ctor_animation.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_animation.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_decoder) = templates.get("AudioDecoder").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_decoder = v8::String::new(scope, "AudioDecoder").unwrap();
             global.define_own_property(scope, name_audio_decoder.into(), ctor_audio_decoder.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_decoder.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_encoder) = templates.get("AudioEncoder").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_encoder = v8::String::new(scope, "AudioEncoder").unwrap();
             global.define_own_property(scope, name_audio_encoder.into(), ctor_audio_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_encoder.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_node) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_node = v8::String::new(scope, "AudioNode").unwrap();
             global.define_own_property(scope, name_audio_node.into(), ctor_audio_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_session) = templates.get("AudioSession").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_session = v8::String::new(scope, "AudioSession").unwrap();
             global.define_own_property(scope, name_audio_session.into(), ctor_audio_session.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_session.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_track_list) = templates.get("AudioTrackList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_track_list = v8::String::new(scope, "AudioTrackList").unwrap();
             global.define_own_property(scope, name_audio_track_list.into(), ctor_audio_track_list.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_track_list.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_background_fetch_registration) = templates.get("BackgroundFetchRegistration").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_background_fetch_registration = v8::String::new(scope, "BackgroundFetchRegistration").unwrap();
             global.define_own_property(scope, name_background_fetch_registration.into(), ctor_background_fetch_registration.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_background_fetch_registration.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_base_audio_context) = templates.get("BaseAudioContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_base_audio_context = v8::String::new(scope, "BaseAudioContext").unwrap();
             global.define_own_property(scope, name_base_audio_context.into(), ctor_base_audio_context.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_base_audio_context.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_battery_manager) = templates.get("BatteryManager").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_battery_manager = v8::String::new(scope, "BatteryManager").unwrap();
             global.define_own_property(scope, name_battery_manager.into(), ctor_battery_manager.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_battery_manager.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_bluetooth) = templates.get("Bluetooth").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_bluetooth = v8::String::new(scope, "Bluetooth").unwrap();
             global.define_own_property(scope, name_bluetooth.into(), ctor_bluetooth.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_bluetooth.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_bluetooth_device) = templates.get("BluetoothDevice").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_bluetooth_device = v8::String::new(scope, "BluetoothDevice").unwrap();
             global.define_own_property(scope, name_bluetooth_device.into(), ctor_bluetooth_device.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_bluetooth_device.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_bluetooth_remote_gatt_characteristic) = templates.get("BluetoothRemoteGATTCharacteristic").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_bluetooth_remote_gatt_characteristic = v8::String::new(scope, "BluetoothRemoteGATTCharacteristic").unwrap();
             global.define_own_property(scope, name_bluetooth_remote_gatt_characteristic.into(), ctor_bluetooth_remote_gatt_characteristic.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_bluetooth_remote_gatt_characteristic.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_bluetooth_remote_gatt_service) = templates.get("BluetoothRemoteGATTService").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_bluetooth_remote_gatt_service = v8::String::new(scope, "BluetoothRemoteGATTService").unwrap();
             global.define_own_property(scope, name_bluetooth_remote_gatt_service.into(), ctor_bluetooth_remote_gatt_service.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_bluetooth_remote_gatt_service.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_broadcast_channel) = templates.get("BroadcastChannel").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_broadcast_channel = v8::String::new(scope, "BroadcastChannel").unwrap();
             global.define_own_property(scope, name_broadcast_channel.into(), ctor_broadcast_channel.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_broadcast_channel.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_capture_controller) = templates.get("CaptureController").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_capture_controller = v8::String::new(scope, "CaptureController").unwrap();
             global.define_own_property(scope, name_capture_controller.into(), ctor_capture_controller.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_capture_controller.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_clipboard) = templates.get("Clipboard").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_clipboard = v8::String::new(scope, "Clipboard").unwrap();
             global.define_own_property(scope, name_clipboard.into(), ctor_clipboard.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_clipboard.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_close_watcher) = templates.get("CloseWatcher").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_close_watcher = v8::String::new(scope, "CloseWatcher").unwrap();
             global.define_own_property(scope, name_close_watcher.into(), ctor_close_watcher.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_close_watcher.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_cookie_store) = templates.get("CookieStore").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_cookie_store = v8::String::new(scope, "CookieStore").unwrap();
             global.define_own_property(scope, name_cookie_store.into(), ctor_cookie_store.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_cookie_store.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_create_monitor) = templates.get("CreateMonitor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_create_monitor = v8::String::new(scope, "CreateMonitor").unwrap();
             global.define_own_property(scope, name_create_monitor.into(), ctor_create_monitor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_create_monitor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_device_posture) = templates.get("DevicePosture").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_device_posture = v8::String::new(scope, "DevicePosture").unwrap();
             global.define_own_property(scope, name_device_posture.into(), ctor_device_posture.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_device_posture.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_document_picture_in_picture) = templates.get("DocumentPictureInPicture").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_document_picture_in_picture = v8::String::new(scope, "DocumentPictureInPicture").unwrap();
             global.define_own_property(scope, name_document_picture_in_picture.into(), ctor_document_picture_in_picture.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_document_picture_in_picture.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_edit_context) = templates.get("EditContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_edit_context = v8::String::new(scope, "EditContext").unwrap();
             global.define_own_property(scope, name_edit_context.into(), ctor_edit_context.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_edit_context.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_event_source) = templates.get("EventSource").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_event_source = v8::String::new(scope, "EventSource").unwrap();
             global.define_own_property(scope, name_event_source.into(), ctor_event_source.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_event_source.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "CONNECTING").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_event_source.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "OPEN").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_event_source.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "CLOSED").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_event_source.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -8168,6 +8916,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_file_reader) = templates.get("FileReader").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file_reader = v8::String::new(scope, "FileReader").unwrap();
             global.define_own_property(scope, name_file_reader.into(), ctor_file_reader.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_file_reader.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "EMPTY").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_file_reader.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "LOADING").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_file_reader.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "DONE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_file_reader.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -8175,114 +8927,226 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_font_face_set) = templates.get("FontFaceSet").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_font_face_set = v8::String::new(scope, "FontFaceSet").unwrap();
             global.define_own_property(scope, name_font_face_set.into(), ctor_font_face_set.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_font_face_set.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gpu_device) = templates.get("GPUDevice").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_device = v8::String::new(scope, "GPUDevice").unwrap();
             global.define_own_property(scope, name_gpu_device.into(), ctor_gpu_device.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gpu_device.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_hid) = templates.get("HID").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_hid = v8::String::new(scope, "HID").unwrap();
             global.define_own_property(scope, name_hid.into(), ctor_hid.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_hid.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_hid_device) = templates.get("HIDDevice").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_hid_device = v8::String::new(scope, "HIDDevice").unwrap();
             global.define_own_property(scope, name_hid_device.into(), ctor_hid_device.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_hid_device.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_idb_database) = templates.get("IDBDatabase").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_idb_database = v8::String::new(scope, "IDBDatabase").unwrap();
             global.define_own_property(scope, name_idb_database.into(), ctor_idb_database.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_idb_database.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_idb_request) = templates.get("IDBRequest").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_idb_request = v8::String::new(scope, "IDBRequest").unwrap();
             global.define_own_property(scope, name_idb_request.into(), ctor_idb_request.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_idb_request.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_idb_transaction) = templates.get("IDBTransaction").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_idb_transaction = v8::String::new(scope, "IDBTransaction").unwrap();
             global.define_own_property(scope, name_idb_transaction.into(), ctor_idb_transaction.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_idb_transaction.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_idle_detector) = templates.get("IdleDetector").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_idle_detector = v8::String::new(scope, "IdleDetector").unwrap();
             global.define_own_property(scope, name_idle_detector.into(), ctor_idle_detector.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_idle_detector.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_keyboard) = templates.get("Keyboard").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_keyboard = v8::String::new(scope, "Keyboard").unwrap();
             global.define_own_property(scope, name_keyboard.into(), ctor_keyboard.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_keyboard.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_language_model) = templates.get("LanguageModel").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_language_model = v8::String::new(scope, "LanguageModel").unwrap();
             global.define_own_property(scope, name_language_model.into(), ctor_language_model.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_language_model.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_midi_access) = templates.get("MIDIAccess").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_midi_access = v8::String::new(scope, "MIDIAccess").unwrap();
             global.define_own_property(scope, name_midi_access.into(), ctor_midi_access.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_midi_access.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_midi_port) = templates.get("MIDIPort").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_midi_port = v8::String::new(scope, "MIDIPort").unwrap();
             global.define_own_property(scope, name_midi_port.into(), ctor_midi_port.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_midi_port.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_devices) = templates.get("MediaDevices").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_devices = v8::String::new(scope, "MediaDevices").unwrap();
             global.define_own_property(scope, name_media_devices.into(), ctor_media_devices.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_devices.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_key_session) = templates.get("MediaKeySession").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_key_session = v8::String::new(scope, "MediaKeySession").unwrap();
             global.define_own_property(scope, name_media_key_session.into(), ctor_media_key_session.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_key_session.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_query_list) = templates.get("MediaQueryList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_query_list = v8::String::new(scope, "MediaQueryList").unwrap();
             global.define_own_property(scope, name_media_query_list.into(), ctor_media_query_list.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_query_list.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_recorder) = templates.get("MediaRecorder").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_recorder = v8::String::new(scope, "MediaRecorder").unwrap();
             global.define_own_property(scope, name_media_recorder.into(), ctor_media_recorder.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_recorder.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_source) = templates.get("MediaSource").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_source = v8::String::new(scope, "MediaSource").unwrap();
             global.define_own_property(scope, name_media_source.into(), ctor_media_source.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_source.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_stream) = templates.get("MediaStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_stream = v8::String::new(scope, "MediaStream").unwrap();
             global.define_own_property(scope, name_media_stream.into(), ctor_media_stream.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_stream.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_stream_track) = templates.get("MediaStreamTrack").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_stream_track = v8::String::new(scope, "MediaStreamTrack").unwrap();
             global.define_own_property(scope, name_media_stream_track.into(), ctor_media_stream_track.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_stream_track.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_message_port) = templates.get("MessagePort").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_message_port = v8::String::new(scope, "MessagePort").unwrap();
             global.define_own_property(scope, name_message_port.into(), ctor_message_port.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_message_port.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_model_context) = templates.get("ModelContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_model_context = v8::String::new(scope, "ModelContext").unwrap();
             global.define_own_property(scope, name_model_context.into(), ctor_model_context.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_model_context.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_ndef_reader) = templates.get("NDEFReader").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ndef_reader = v8::String::new(scope, "NDEFReader").unwrap();
             global.define_own_property(scope, name_ndef_reader.into(), ctor_ndef_reader.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_ndef_reader.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_named_flow) = templates.get("NamedFlow").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_named_flow = v8::String::new(scope, "NamedFlow").unwrap();
             global.define_own_property(scope, name_named_flow.into(), ctor_named_flow.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_named_flow.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_navigation) = templates.get("Navigation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigation = v8::String::new(scope, "Navigation").unwrap();
             global.define_own_property(scope, name_navigation.into(), ctor_navigation.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_navigation.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_navigation_history_entry) = templates.get("NavigationHistoryEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigation_history_entry = v8::String::new(scope, "NavigationHistoryEntry").unwrap();
             global.define_own_property(scope, name_navigation_history_entry.into(), ctor_navigation_history_entry.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_navigation_history_entry.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_navigator_managed_data) = templates.get("NavigatorManagedData").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigator_managed_data = v8::String::new(scope, "NavigatorManagedData").unwrap();
             global.define_own_property(scope, name_navigator_managed_data.into(), ctor_navigator_managed_data.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_navigator_managed_data.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_network_information) = templates.get("NetworkInformation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_network_information = v8::String::new(scope, "NetworkInformation").unwrap();
             global.define_own_property(scope, name_network_information.into(), ctor_network_information.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_network_information.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_node) = templates.get("Node").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_node = v8::String::new(scope, "Node").unwrap();
             global.define_own_property(scope, name_node.into(), ctor_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "ELEMENT_NODE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_node.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "ATTRIBUTE_NODE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_node.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "TEXT_NODE").unwrap(); let cv = v8::Number::new(scope, 3.0).into(); ctor_node.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -8305,98 +9169,194 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_notification) = templates.get("Notification").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_notification = v8::String::new(scope, "Notification").unwrap();
             global.define_own_property(scope, name_notification.into(), ctor_notification.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_notification.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_offscreen_canvas) = templates.get("OffscreenCanvas").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_offscreen_canvas = v8::String::new(scope, "OffscreenCanvas").unwrap();
             global.define_own_property(scope, name_offscreen_canvas.into(), ctor_offscreen_canvas.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_offscreen_canvas.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_payment_request) = templates.get("PaymentRequest").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_payment_request = v8::String::new(scope, "PaymentRequest").unwrap();
             global.define_own_property(scope, name_payment_request.into(), ctor_payment_request.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_payment_request.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_payment_response) = templates.get("PaymentResponse").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_payment_response = v8::String::new(scope, "PaymentResponse").unwrap();
             global.define_own_property(scope, name_payment_response.into(), ctor_payment_response.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_payment_response.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance) = templates.get("Performance").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance = v8::String::new(scope, "Performance").unwrap();
             global.define_own_property(scope, name_performance.into(), ctor_performance.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_permission_status) = templates.get("PermissionStatus").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_permission_status = v8::String::new(scope, "PermissionStatus").unwrap();
             global.define_own_property(scope, name_permission_status.into(), ctor_permission_status.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_permission_status.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_picture_in_picture_window) = templates.get("PictureInPictureWindow").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_picture_in_picture_window = v8::String::new(scope, "PictureInPictureWindow").unwrap();
             global.define_own_property(scope, name_picture_in_picture_window.into(), ctor_picture_in_picture_window.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_picture_in_picture_window.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_portal_host) = templates.get("PortalHost").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_portal_host = v8::String::new(scope, "PortalHost").unwrap();
             global.define_own_property(scope, name_portal_host.into(), ctor_portal_host.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_portal_host.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_preference_object) = templates.get("PreferenceObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_preference_object = v8::String::new(scope, "PreferenceObject").unwrap();
             global.define_own_property(scope, name_preference_object.into(), ctor_preference_object.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_preference_object.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_presentation_availability) = templates.get("PresentationAvailability").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_presentation_availability = v8::String::new(scope, "PresentationAvailability").unwrap();
             global.define_own_property(scope, name_presentation_availability.into(), ctor_presentation_availability.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_presentation_availability.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_presentation_connection) = templates.get("PresentationConnection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_presentation_connection = v8::String::new(scope, "PresentationConnection").unwrap();
             global.define_own_property(scope, name_presentation_connection.into(), ctor_presentation_connection.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_presentation_connection.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_presentation_connection_list) = templates.get("PresentationConnectionList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_presentation_connection_list = v8::String::new(scope, "PresentationConnectionList").unwrap();
             global.define_own_property(scope, name_presentation_connection_list.into(), ctor_presentation_connection_list.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_presentation_connection_list.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_presentation_request) = templates.get("PresentationRequest").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_presentation_request = v8::String::new(scope, "PresentationRequest").unwrap();
             global.define_own_property(scope, name_presentation_request.into(), ctor_presentation_request.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_presentation_request.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_profiler) = templates.get("Profiler").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_profiler = v8::String::new(scope, "Profiler").unwrap();
             global.define_own_property(scope, name_profiler.into(), ctor_profiler.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_profiler.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtcdtmf_sender) = templates.get("RTCDTMFSender").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtcdtmf_sender = v8::String::new(scope, "RTCDTMFSender").unwrap();
             global.define_own_property(scope, name_rtcdtmf_sender.into(), ctor_rtcdtmf_sender.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtcdtmf_sender.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_data_channel) = templates.get("RTCDataChannel").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_data_channel = v8::String::new(scope, "RTCDataChannel").unwrap();
             global.define_own_property(scope, name_rtc_data_channel.into(), ctor_rtc_data_channel.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_data_channel.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_dtls_transport) = templates.get("RTCDtlsTransport").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_dtls_transport = v8::String::new(scope, "RTCDtlsTransport").unwrap();
             global.define_own_property(scope, name_rtc_dtls_transport.into(), ctor_rtc_dtls_transport.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_dtls_transport.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_ice_transport) = templates.get("RTCIceTransport").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_ice_transport = v8::String::new(scope, "RTCIceTransport").unwrap();
             global.define_own_property(scope, name_rtc_ice_transport.into(), ctor_rtc_ice_transport.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_ice_transport.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_peer_connection) = templates.get("RTCPeerConnection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_peer_connection = v8::String::new(scope, "RTCPeerConnection").unwrap();
             global.define_own_property(scope, name_rtc_peer_connection.into(), ctor_rtc_peer_connection.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_peer_connection.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_rtp_s_frame_decrypter) = templates.get("RTCRtpSFrameDecrypter").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_rtp_s_frame_decrypter = v8::String::new(scope, "RTCRtpSFrameDecrypter").unwrap();
             global.define_own_property(scope, name_rtc_rtp_s_frame_decrypter.into(), ctor_rtc_rtp_s_frame_decrypter.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_rtp_s_frame_decrypter.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_rtp_script_transformer) = templates.get("RTCRtpScriptTransformer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_rtp_script_transformer = v8::String::new(scope, "RTCRtpScriptTransformer").unwrap();
             global.define_own_property(scope, name_rtc_rtp_script_transformer.into(), ctor_rtc_rtp_script_transformer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_rtp_script_transformer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_sctp_transport) = templates.get("RTCSctpTransport").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_sctp_transport = v8::String::new(scope, "RTCSctpTransport").unwrap();
             global.define_own_property(scope, name_rtc_sctp_transport.into(), ctor_rtc_sctp_transport.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_sctp_transport.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_remote_playback) = templates.get("RemotePlayback").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_remote_playback = v8::String::new(scope, "RemotePlayback").unwrap();
             global.define_own_property(scope, name_remote_playback.into(), ctor_remote_playback.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_remote_playback.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_s_frame_decrypter_stream) = templates.get("SFrameDecrypterStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_s_frame_decrypter_stream = v8::String::new(scope, "SFrameDecrypterStream").unwrap();
             global.define_own_property(scope, name_s_frame_decrypter_stream.into(), ctor_s_frame_decrypter_stream.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_s_frame_decrypter_stream.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
     } // end registration batch
     {
@@ -8404,102 +9364,202 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_screen_details) = templates.get("ScreenDetails").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_screen_details = v8::String::new(scope, "ScreenDetails").unwrap();
             global.define_own_property(scope, name_screen_details.into(), ctor_screen_details.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_screen_details.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_screen_orientation) = templates.get("ScreenOrientation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_screen_orientation = v8::String::new(scope, "ScreenOrientation").unwrap();
             global.define_own_property(scope, name_screen_orientation.into(), ctor_screen_orientation.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_screen_orientation.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_sensor) = templates.get("Sensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_sensor = v8::String::new(scope, "Sensor").unwrap();
             global.define_own_property(scope, name_sensor.into(), ctor_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_sensor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_serial) = templates.get("Serial").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_serial = v8::String::new(scope, "Serial").unwrap();
             global.define_own_property(scope, name_serial.into(), ctor_serial.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_serial.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_serial_port) = templates.get("SerialPort").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_serial_port = v8::String::new(scope, "SerialPort").unwrap();
             global.define_own_property(scope, name_serial_port.into(), ctor_serial_port.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_serial_port.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_service_worker) = templates.get("ServiceWorker").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_service_worker = v8::String::new(scope, "ServiceWorker").unwrap();
             global.define_own_property(scope, name_service_worker.into(), ctor_service_worker.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_service_worker.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_service_worker_container) = templates.get("ServiceWorkerContainer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_service_worker_container = v8::String::new(scope, "ServiceWorkerContainer").unwrap();
             global.define_own_property(scope, name_service_worker_container.into(), ctor_service_worker_container.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_service_worker_container.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_service_worker_registration) = templates.get("ServiceWorkerRegistration").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_service_worker_registration = v8::String::new(scope, "ServiceWorkerRegistration").unwrap();
             global.define_own_property(scope, name_service_worker_registration.into(), ctor_service_worker_registration.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_service_worker_registration.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_shared_worker) = templates.get("SharedWorker").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_shared_worker = v8::String::new(scope, "SharedWorker").unwrap();
             global.define_own_property(scope, name_shared_worker.into(), ctor_shared_worker.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_shared_worker.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_source_buffer) = templates.get("SourceBuffer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_source_buffer = v8::String::new(scope, "SourceBuffer").unwrap();
             global.define_own_property(scope, name_source_buffer.into(), ctor_source_buffer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_source_buffer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_source_buffer_list) = templates.get("SourceBufferList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_source_buffer_list = v8::String::new(scope, "SourceBufferList").unwrap();
             global.define_own_property(scope, name_source_buffer_list.into(), ctor_source_buffer_list.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_source_buffer_list.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_speech_recognition) = templates.get("SpeechRecognition").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_speech_recognition = v8::String::new(scope, "SpeechRecognition").unwrap();
             global.define_own_property(scope, name_speech_recognition.into(), ctor_speech_recognition.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_speech_recognition.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_speech_synthesis) = templates.get("SpeechSynthesis").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_speech_synthesis = v8::String::new(scope, "SpeechSynthesis").unwrap();
             global.define_own_property(scope, name_speech_synthesis.into(), ctor_speech_synthesis.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_speech_synthesis.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_speech_synthesis_utterance) = templates.get("SpeechSynthesisUtterance").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_speech_synthesis_utterance = v8::String::new(scope, "SpeechSynthesisUtterance").unwrap();
             global.define_own_property(scope, name_speech_synthesis_utterance.into(), ctor_speech_synthesis_utterance.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_speech_synthesis_utterance.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_text_track) = templates.get("TextTrack").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_text_track = v8::String::new(scope, "TextTrack").unwrap();
             global.define_own_property(scope, name_text_track.into(), ctor_text_track.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_text_track.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_text_track_cue) = templates.get("TextTrackCue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_text_track_cue = v8::String::new(scope, "TextTrackCue").unwrap();
             global.define_own_property(scope, name_text_track_cue.into(), ctor_text_track_cue.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_text_track_cue.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_text_track_list) = templates.get("TextTrackList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_text_track_list = v8::String::new(scope, "TextTrackList").unwrap();
             global.define_own_property(scope, name_text_track_list.into(), ctor_text_track_list.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_text_track_list.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_usb) = templates.get("USB").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_usb = v8::String::new(scope, "USB").unwrap();
             global.define_own_property(scope, name_usb.into(), ctor_usb.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_usb.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_video_decoder) = templates.get("VideoDecoder").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_video_decoder = v8::String::new(scope, "VideoDecoder").unwrap();
             global.define_own_property(scope, name_video_decoder.into(), ctor_video_decoder.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_video_decoder.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_video_encoder) = templates.get("VideoEncoder").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_video_encoder = v8::String::new(scope, "VideoEncoder").unwrap();
             global.define_own_property(scope, name_video_encoder.into(), ctor_video_encoder.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_video_encoder.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_video_track_list) = templates.get("VideoTrackList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_video_track_list = v8::String::new(scope, "VideoTrackList").unwrap();
             global.define_own_property(scope, name_video_track_list.into(), ctor_video_track_list.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_video_track_list.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_virtual_keyboard) = templates.get("VirtualKeyboard").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_virtual_keyboard = v8::String::new(scope, "VirtualKeyboard").unwrap();
             global.define_own_property(scope, name_virtual_keyboard.into(), ctor_virtual_keyboard.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_virtual_keyboard.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_visual_viewport) = templates.get("VisualViewport").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_visual_viewport = v8::String::new(scope, "VisualViewport").unwrap();
             global.define_own_property(scope, name_visual_viewport.into(), ctor_visual_viewport.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_visual_viewport.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_wake_lock_sentinel) = templates.get("WakeLockSentinel").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_wake_lock_sentinel = v8::String::new(scope, "WakeLockSentinel").unwrap();
             global.define_own_property(scope, name_wake_lock_sentinel.into(), ctor_wake_lock_sentinel.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_wake_lock_sentinel.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_socket) = templates.get("WebSocket").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_socket = v8::String::new(scope, "WebSocket").unwrap();
             global.define_own_property(scope, name_web_socket.into(), ctor_web_socket.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_socket.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "CONNECTING").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_web_socket.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "OPEN").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_web_socket.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "CLOSING").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_web_socket.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -8508,302 +9568,602 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_window) = templates.get("Window").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_window = v8::String::new(scope, "Window").unwrap();
             global.define_own_property(scope, name_window.into(), ctor_window.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_window.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_window_controls_overlay) = templates.get("WindowControlsOverlay").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_window_controls_overlay = v8::String::new(scope, "WindowControlsOverlay").unwrap();
             global.define_own_property(scope, name_window_controls_overlay.into(), ctor_window_controls_overlay.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_window_controls_overlay.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_worker) = templates.get("Worker").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_worker = v8::String::new(scope, "Worker").unwrap();
             global.define_own_property(scope, name_worker.into(), ctor_worker.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_worker.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_worker_global_scope) = templates.get("WorkerGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_worker_global_scope = v8::String::new(scope, "WorkerGlobalScope").unwrap();
             global.define_own_property(scope, name_worker_global_scope.into(), ctor_worker_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_worker_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xml_http_request_event_target) = templates.get("XMLHttpRequestEventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xml_http_request_event_target = v8::String::new(scope, "XMLHttpRequestEventTarget").unwrap();
             global.define_own_property(scope, name_xml_http_request_event_target.into(), ctor_xml_http_request_event_target.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xml_http_request_event_target.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_layer) = templates.get("XRLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_layer = v8::String::new(scope, "XRLayer").unwrap();
             global.define_own_property(scope, name_xr_layer.into(), ctor_xr_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_layer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_light_probe) = templates.get("XRLightProbe").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_light_probe = v8::String::new(scope, "XRLightProbe").unwrap();
             global.define_own_property(scope, name_xr_light_probe.into(), ctor_xr_light_probe.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_light_probe.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_session) = templates.get("XRSession").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_session = v8::String::new(scope, "XRSession").unwrap();
             global.define_own_property(scope, name_xr_session.into(), ctor_xr_session.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_session.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_space) = templates.get("XRSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_space = v8::String::new(scope, "XRSpace").unwrap();
             global.define_own_property(scope, name_xr_space.into(), ctor_xr_space.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_space.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_system) = templates.get("XRSystem").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_system = v8::String::new(scope, "XRSystem").unwrap();
             global.define_own_property(scope, name_xr_system.into(), ctor_xr_system.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("EventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_system.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_file_system_directory_entry) = templates.get("FileSystemDirectoryEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file_system_directory_entry = v8::String::new(scope, "FileSystemDirectoryEntry").unwrap();
             global.define_own_property(scope, name_file_system_directory_entry.into(), ctor_file_system_directory_entry.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("FileSystemEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_file_system_directory_entry.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_file_system_file_entry) = templates.get("FileSystemFileEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file_system_file_entry = v8::String::new(scope, "FileSystemFileEntry").unwrap();
             global.define_own_property(scope, name_file_system_file_entry.into(), ctor_file_system_file_entry.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("FileSystemEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_file_system_file_entry.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_file_system_directory_handle) = templates.get("FileSystemDirectoryHandle").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file_system_directory_handle = v8::String::new(scope, "FileSystemDirectoryHandle").unwrap();
             global.define_own_property(scope, name_file_system_directory_handle.into(), ctor_file_system_directory_handle.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("FileSystemHandle").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_file_system_directory_handle.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_file_system_file_handle) = templates.get("FileSystemFileHandle").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file_system_file_handle = v8::String::new(scope, "FileSystemFileHandle").unwrap();
             global.define_own_property(scope, name_file_system_file_handle.into(), ctor_file_system_file_handle.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("FileSystemHandle").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_file_system_file_handle.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gpu_internal_error) = templates.get("GPUInternalError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_internal_error = v8::String::new(scope, "GPUInternalError").unwrap();
             global.define_own_property(scope, name_gpu_internal_error.into(), ctor_gpu_internal_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("GPUError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gpu_internal_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gpu_out_of_memory_error) = templates.get("GPUOutOfMemoryError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_out_of_memory_error = v8::String::new(scope, "GPUOutOfMemoryError").unwrap();
             global.define_own_property(scope, name_gpu_out_of_memory_error.into(), ctor_gpu_out_of_memory_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("GPUError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gpu_out_of_memory_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gpu_validation_error) = templates.get("GPUValidationError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gpu_validation_error = v8::String::new(scope, "GPUValidationError").unwrap();
             global.define_own_property(scope, name_gpu_validation_error.into(), ctor_gpu_validation_error.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("GPUError").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gpu_validation_error.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_sequence_effect) = templates.get("SequenceEffect").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_sequence_effect = v8::String::new(scope, "SequenceEffect").unwrap();
             global.define_own_property(scope, name_sequence_effect.into(), ctor_sequence_effect.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("GroupEffect").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_sequence_effect.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_form_controls_collection) = templates.get("HTMLFormControlsCollection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_form_controls_collection = v8::String::new(scope, "HTMLFormControlsCollection").unwrap();
             global.define_own_property(scope, name_html_form_controls_collection.into(), ctor_html_form_controls_collection.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLCollection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_form_controls_collection.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_options_collection) = templates.get("HTMLOptionsCollection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_options_collection = v8::String::new(scope, "HTMLOptionsCollection").unwrap();
             global.define_own_property(scope, name_html_options_collection.into(), ctor_html_options_collection.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLCollection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_options_collection.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_idb_cursor_with_value) = templates.get("IDBCursorWithValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_idb_cursor_with_value = v8::String::new(scope, "IDBCursorWithValue").unwrap();
             global.define_own_property(scope, name_idb_cursor_with_value.into(), ctor_idb_cursor_with_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("IDBCursor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_idb_cursor_with_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_input_device_info) = templates.get("InputDeviceInfo").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_input_device_info = v8::String::new(scope, "InputDeviceInfo").unwrap();
             global.define_own_property(scope, name_input_device_info.into(), ctor_input_device_info.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MediaDeviceInfo").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_input_device_info.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_radio_node_list) = templates.get("RadioNodeList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_radio_node_list = v8::String::new(scope, "RadioNodeList").unwrap();
             global.define_own_property(scope, name_radio_node_list.into(), ctor_radio_node_list.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("NodeList").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_radio_node_list.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_largest_contentful_paint) = templates.get("LargestContentfulPaint").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_largest_contentful_paint = v8::String::new(scope, "LargestContentfulPaint").unwrap();
             global.define_own_property(scope, name_largest_contentful_paint.into(), ctor_largest_contentful_paint.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_largest_contentful_paint.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_layout_shift) = templates.get("LayoutShift").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_layout_shift = v8::String::new(scope, "LayoutShift").unwrap();
             global.define_own_property(scope, name_layout_shift.into(), ctor_layout_shift.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_layout_shift.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_container_timing) = templates.get("PerformanceContainerTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_container_timing = v8::String::new(scope, "PerformanceContainerTiming").unwrap();
             global.define_own_property(scope, name_performance_container_timing.into(), ctor_performance_container_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_container_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_element_timing) = templates.get("PerformanceElementTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_element_timing = v8::String::new(scope, "PerformanceElementTiming").unwrap();
             global.define_own_property(scope, name_performance_element_timing.into(), ctor_performance_element_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_element_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_event_timing) = templates.get("PerformanceEventTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_event_timing = v8::String::new(scope, "PerformanceEventTiming").unwrap();
             global.define_own_property(scope, name_performance_event_timing.into(), ctor_performance_event_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_event_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_long_animation_frame_timing) = templates.get("PerformanceLongAnimationFrameTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_long_animation_frame_timing = v8::String::new(scope, "PerformanceLongAnimationFrameTiming").unwrap();
             global.define_own_property(scope, name_performance_long_animation_frame_timing.into(), ctor_performance_long_animation_frame_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_long_animation_frame_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_long_task_timing) = templates.get("PerformanceLongTaskTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_long_task_timing = v8::String::new(scope, "PerformanceLongTaskTiming").unwrap();
             global.define_own_property(scope, name_performance_long_task_timing.into(), ctor_performance_long_task_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_long_task_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_mark) = templates.get("PerformanceMark").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_mark = v8::String::new(scope, "PerformanceMark").unwrap();
             global.define_own_property(scope, name_performance_mark.into(), ctor_performance_mark.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_mark.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_measure) = templates.get("PerformanceMeasure").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_measure = v8::String::new(scope, "PerformanceMeasure").unwrap();
             global.define_own_property(scope, name_performance_measure.into(), ctor_performance_measure.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_measure.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_paint_timing) = templates.get("PerformancePaintTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_paint_timing = v8::String::new(scope, "PerformancePaintTiming").unwrap();
             global.define_own_property(scope, name_performance_paint_timing.into(), ctor_performance_paint_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_paint_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_resource_timing) = templates.get("PerformanceResourceTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_resource_timing = v8::String::new(scope, "PerformanceResourceTiming").unwrap();
             global.define_own_property(scope, name_performance_resource_timing.into(), ctor_performance_resource_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_resource_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_script_timing) = templates.get("PerformanceScriptTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_script_timing = v8::String::new(scope, "PerformanceScriptTiming").unwrap();
             global.define_own_property(scope, name_performance_script_timing.into(), ctor_performance_script_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_script_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_task_attribution_timing) = templates.get("TaskAttributionTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_task_attribution_timing = v8::String::new(scope, "TaskAttributionTiming").unwrap();
             global.define_own_property(scope, name_task_attribution_timing.into(), ctor_task_attribution_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_task_attribution_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_visibility_state_entry) = templates.get("VisibilityStateEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_visibility_state_entry = v8::String::new(scope, "VisibilityStateEntry").unwrap();
             global.define_own_property(scope, name_visibility_state_entry.into(), ctor_visibility_state_entry.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceEntry").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_visibility_state_entry.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_transport_receive_stream) = templates.get("WebTransportReceiveStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_transport_receive_stream = v8::String::new(scope, "WebTransportReceiveStream").unwrap();
             global.define_own_property(scope, name_web_transport_receive_stream.into(), ctor_web_transport_receive_stream.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ReadableStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_transport_receive_stream.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_screen_detailed) = templates.get("ScreenDetailed").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_screen_detailed = v8::String::new(scope, "ScreenDetailed").unwrap();
             global.define_own_property(scope, name_screen_detailed.into(), ctor_screen_detailed.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Screen").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_screen_detailed.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_style_property_map) = templates.get("StylePropertyMap").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_style_property_map = v8::String::new(scope, "StylePropertyMap").unwrap();
             global.define_own_property(scope, name_style_property_map.into(), ctor_style_property_map.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("StylePropertyMapReadOnly").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_style_property_map.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_style_sheet) = templates.get("CSSStyleSheet").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_style_sheet = v8::String::new(scope, "CSSStyleSheet").unwrap();
             global.define_own_property(scope, name_css_style_sheet.into(), ctor_css_style_sheet.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("StyleSheet").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_style_sheet.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_buffer) = templates.get("WebGLBuffer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_buffer = v8::String::new(scope, "WebGLBuffer").unwrap();
             global.define_own_property(scope, name_web_gl_buffer.into(), ctor_web_gl_buffer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_buffer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_framebuffer) = templates.get("WebGLFramebuffer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_framebuffer = v8::String::new(scope, "WebGLFramebuffer").unwrap();
             global.define_own_property(scope, name_web_gl_framebuffer.into(), ctor_web_gl_framebuffer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_framebuffer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_program) = templates.get("WebGLProgram").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_program = v8::String::new(scope, "WebGLProgram").unwrap();
             global.define_own_property(scope, name_web_gl_program.into(), ctor_web_gl_program.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_program.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_query) = templates.get("WebGLQuery").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_query = v8::String::new(scope, "WebGLQuery").unwrap();
             global.define_own_property(scope, name_web_gl_query.into(), ctor_web_gl_query.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_query.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_renderbuffer) = templates.get("WebGLRenderbuffer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_renderbuffer = v8::String::new(scope, "WebGLRenderbuffer").unwrap();
             global.define_own_property(scope, name_web_gl_renderbuffer.into(), ctor_web_gl_renderbuffer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_renderbuffer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_sampler) = templates.get("WebGLSampler").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_sampler = v8::String::new(scope, "WebGLSampler").unwrap();
             global.define_own_property(scope, name_web_gl_sampler.into(), ctor_web_gl_sampler.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_sampler.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_shader) = templates.get("WebGLShader").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_shader = v8::String::new(scope, "WebGLShader").unwrap();
             global.define_own_property(scope, name_web_gl_shader.into(), ctor_web_gl_shader.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_shader.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_sync) = templates.get("WebGLSync").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_sync = v8::String::new(scope, "WebGLSync").unwrap();
             global.define_own_property(scope, name_web_gl_sync.into(), ctor_web_gl_sync.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_sync.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_texture) = templates.get("WebGLTexture").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_texture = v8::String::new(scope, "WebGLTexture").unwrap();
             global.define_own_property(scope, name_web_gl_texture.into(), ctor_web_gl_texture.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_texture.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_timer_query_ext) = templates.get("WebGLTimerQueryEXT").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_timer_query_ext = v8::String::new(scope, "WebGLTimerQueryEXT").unwrap();
             global.define_own_property(scope, name_web_gl_timer_query_ext.into(), ctor_web_gl_timer_query_ext.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_timer_query_ext.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_transform_feedback) = templates.get("WebGLTransformFeedback").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_transform_feedback = v8::String::new(scope, "WebGLTransformFeedback").unwrap();
             global.define_own_property(scope, name_web_gl_transform_feedback.into(), ctor_web_gl_transform_feedback.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_transform_feedback.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_vertex_array_object) = templates.get("WebGLVertexArrayObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_vertex_array_object = v8::String::new(scope, "WebGLVertexArrayObject").unwrap();
             global.define_own_property(scope, name_web_gl_vertex_array_object.into(), ctor_web_gl_vertex_array_object.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_vertex_array_object.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_gl_vertex_array_object_oes) = templates.get("WebGLVertexArrayObjectOES").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_gl_vertex_array_object_oes = v8::String::new(scope, "WebGLVertexArrayObjectOES").unwrap();
             global.define_own_property(scope, name_web_gl_vertex_array_object_oes.into(), ctor_web_gl_vertex_array_object_oes.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WebGLObject").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_gl_vertex_array_object_oes.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_worklet) = templates.get("AudioWorklet").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_worklet = v8::String::new(scope, "AudioWorklet").unwrap();
             global.define_own_property(scope, name_audio_worklet.into(), ctor_audio_worklet.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Worklet").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_worklet.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_animation_worklet_global_scope) = templates.get("AnimationWorkletGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_animation_worklet_global_scope = v8::String::new(scope, "AnimationWorkletGlobalScope").unwrap();
             global.define_own_property(scope, name_animation_worklet_global_scope.into(), ctor_animation_worklet_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WorkletGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_animation_worklet_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_worklet_global_scope) = templates.get("AudioWorkletGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_worklet_global_scope = v8::String::new(scope, "AudioWorkletGlobalScope").unwrap();
             global.define_own_property(scope, name_audio_worklet_global_scope.into(), ctor_audio_worklet_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WorkletGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_worklet_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_layout_worklet_global_scope) = templates.get("LayoutWorkletGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_layout_worklet_global_scope = v8::String::new(scope, "LayoutWorkletGlobalScope").unwrap();
             global.define_own_property(scope, name_layout_worklet_global_scope.into(), ctor_layout_worklet_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WorkletGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_layout_worklet_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_paint_worklet_global_scope) = templates.get("PaintWorkletGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_paint_worklet_global_scope = v8::String::new(scope, "PaintWorkletGlobalScope").unwrap();
             global.define_own_property(scope, name_paint_worklet_global_scope.into(), ctor_paint_worklet_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WorkletGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_paint_worklet_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_file_system_writable_file_stream) = templates.get("FileSystemWritableFileStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_file_system_writable_file_stream = v8::String::new(scope, "FileSystemWritableFileStream").unwrap();
             global.define_own_property(scope, name_file_system_writable_file_stream.into(), ctor_file_system_writable_file_stream.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WritableStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_file_system_writable_file_stream.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_transport_datagrams_writable) = templates.get("WebTransportDatagramsWritable").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_transport_datagrams_writable = v8::String::new(scope, "WebTransportDatagramsWritable").unwrap();
             global.define_own_property(scope, name_web_transport_datagrams_writable.into(), ctor_web_transport_datagrams_writable.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WritableStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_transport_datagrams_writable.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_transport_send_stream) = templates.get("WebTransportSendStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_transport_send_stream = v8::String::new(scope, "WebTransportSendStream").unwrap();
             global.define_own_property(scope, name_web_transport_send_stream.into(), ctor_web_transport_send_stream.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WritableStream").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_transport_send_stream.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_web_transport_writer) = templates.get("WebTransportWriter").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_web_transport_writer = v8::String::new(scope, "WebTransportWriter").unwrap();
             global.define_own_property(scope, name_web_transport_writer.into(), ctor_web_transport_writer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WritableStreamDefaultWriter").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_web_transport_writer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xrcpu_depth_information) = templates.get("XRCPUDepthInformation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xrcpu_depth_information = v8::String::new(scope, "XRCPUDepthInformation").unwrap();
             global.define_own_property(scope, name_xrcpu_depth_information.into(), ctor_xrcpu_depth_information.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRDepthInformation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xrcpu_depth_information.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_web_gl_depth_information) = templates.get("XRWebGLDepthInformation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_web_gl_depth_information = v8::String::new(scope, "XRWebGLDepthInformation").unwrap();
             global.define_own_property(scope, name_xr_web_gl_depth_information.into(), ctor_xr_web_gl_depth_information.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRDepthInformation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_web_gl_depth_information.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_joint_pose) = templates.get("XRJointPose").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_joint_pose = v8::String::new(scope, "XRJointPose").unwrap();
             global.define_own_property(scope, name_xr_joint_pose.into(), ctor_xr_joint_pose.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRPose").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_joint_pose.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_viewer_pose) = templates.get("XRViewerPose").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_viewer_pose = v8::String::new(scope, "XRViewerPose").unwrap();
             global.define_own_property(scope, name_xr_viewer_pose.into(), ctor_xr_viewer_pose.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRPose").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_viewer_pose.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_web_gl_sub_image) = templates.get("XRWebGLSubImage").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_web_gl_sub_image = v8::String::new(scope, "XRWebGLSubImage").unwrap();
             global.define_own_property(scope, name_xr_web_gl_sub_image.into(), ctor_xr_web_gl_sub_image.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRSubImage").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_web_gl_sub_image.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_view_timeline) = templates.get("ViewTimeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_view_timeline = v8::String::new(scope, "ViewTimeline").unwrap();
             global.define_own_property(scope, name_view_timeline.into(), ctor_view_timeline.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ScrollTimeline").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_view_timeline.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_apply_block_rule) = templates.get("CSSApplyBlockRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_apply_block_rule = v8::String::new(scope, "CSSApplyBlockRule").unwrap();
             global.define_own_property(scope, name_css_apply_block_rule.into(), ctor_css_apply_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_apply_block_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_condition_rule) = templates.get("CSSConditionRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_condition_rule = v8::String::new(scope, "CSSConditionRule").unwrap();
             global.define_own_property(scope, name_css_condition_rule.into(), ctor_css_condition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_condition_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_contents_block_rule) = templates.get("CSSContentsBlockRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_contents_block_rule = v8::String::new(scope, "CSSContentsBlockRule").unwrap();
             global.define_own_property(scope, name_css_contents_block_rule.into(), ctor_css_contents_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_contents_block_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_function_rule) = templates.get("CSSFunctionRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_function_rule = v8::String::new(scope, "CSSFunctionRule").unwrap();
             global.define_own_property(scope, name_css_function_rule.into(), ctor_css_function_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_function_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_layer_block_rule) = templates.get("CSSLayerBlockRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_layer_block_rule = v8::String::new(scope, "CSSLayerBlockRule").unwrap();
             global.define_own_property(scope, name_css_layer_block_rule.into(), ctor_css_layer_block_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_layer_block_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_mixin_rule) = templates.get("CSSMixinRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_mixin_rule = v8::String::new(scope, "CSSMixinRule").unwrap();
             global.define_own_property(scope, name_css_mixin_rule.into(), ctor_css_mixin_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_mixin_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
     } // end registration batch
     {
@@ -8811,138 +10171,274 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_css_page_rule) = templates.get("CSSPageRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_page_rule = v8::String::new(scope, "CSSPageRule").unwrap();
             global.define_own_property(scope, name_css_page_rule.into(), ctor_css_page_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_page_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_scope_rule) = templates.get("CSSScopeRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_scope_rule = v8::String::new(scope, "CSSScopeRule").unwrap();
             global.define_own_property(scope, name_css_scope_rule.into(), ctor_css_scope_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_scope_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_starting_style_rule) = templates.get("CSSStartingStyleRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_starting_style_rule = v8::String::new(scope, "CSSStartingStyleRule").unwrap();
             global.define_own_property(scope, name_css_starting_style_rule.into(), ctor_css_starting_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_starting_style_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_style_rule) = templates.get("CSSStyleRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_style_rule = v8::String::new(scope, "CSSStyleRule").unwrap();
             global.define_own_property(scope, name_css_style_rule.into(), ctor_css_style_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_style_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_supports_condition_rule) = templates.get("CSSSupportsConditionRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_supports_condition_rule = v8::String::new(scope, "CSSSupportsConditionRule").unwrap();
             global.define_own_property(scope, name_css_supports_condition_rule.into(), ctor_css_supports_condition_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSGroupingRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_supports_condition_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_color) = templates.get("CSSColor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_color = v8::String::new(scope, "CSSColor").unwrap();
             global.define_own_property(scope, name_css_color.into(), ctor_css_color.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_color.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_csshsl) = templates.get("CSSHSL").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_csshsl = v8::String::new(scope, "CSSHSL").unwrap();
             global.define_own_property(scope, name_csshsl.into(), ctor_csshsl.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_csshsl.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_csshwb) = templates.get("CSSHWB").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_csshwb = v8::String::new(scope, "CSSHWB").unwrap();
             global.define_own_property(scope, name_csshwb.into(), ctor_csshwb.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_csshwb.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_csslch) = templates.get("CSSLCH").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_csslch = v8::String::new(scope, "CSSLCH").unwrap();
             global.define_own_property(scope, name_csslch.into(), ctor_csslch.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_csslch.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_lab) = templates.get("CSSLab").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_lab = v8::String::new(scope, "CSSLab").unwrap();
             global.define_own_property(scope, name_css_lab.into(), ctor_css_lab.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_lab.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_cssoklch) = templates.get("CSSOKLCH").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_cssoklch = v8::String::new(scope, "CSSOKLCH").unwrap();
             global.define_own_property(scope, name_cssoklch.into(), ctor_cssoklch.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_cssoklch.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_cssok_lab) = templates.get("CSSOKLab").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_cssok_lab = v8::String::new(scope, "CSSOKLab").unwrap();
             global.define_own_property(scope, name_cssok_lab.into(), ctor_cssok_lab.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_cssok_lab.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_cssrgb) = templates.get("CSSRGB").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_cssrgb = v8::String::new(scope, "CSSRGB").unwrap();
             global.define_own_property(scope, name_cssrgb.into(), ctor_cssrgb.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSColorValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_cssrgb.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_math_value) = templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_math_value = v8::String::new(scope, "CSSMathValue").unwrap();
             global.define_own_property(scope, name_css_math_value.into(), ctor_css_math_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSNumericValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_math_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_unit_value) = templates.get("CSSUnitValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_unit_value = v8::String::new(scope, "CSSUnitValue").unwrap();
             global.define_own_property(scope, name_css_unit_value.into(), ctor_css_unit_value.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSNumericValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_unit_value.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_background_fetch_event) = templates.get("BackgroundFetchEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_background_fetch_event = v8::String::new(scope, "BackgroundFetchEvent").unwrap();
             global.define_own_property(scope, name_background_fetch_event.into(), ctor_background_fetch_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_background_fetch_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_can_make_payment_event) = templates.get("CanMakePaymentEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_can_make_payment_event = v8::String::new(scope, "CanMakePaymentEvent").unwrap();
             global.define_own_property(scope, name_can_make_payment_event.into(), ctor_can_make_payment_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_can_make_payment_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_content_index_event) = templates.get("ContentIndexEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_content_index_event = v8::String::new(scope, "ContentIndexEvent").unwrap();
             global.define_own_property(scope, name_content_index_event.into(), ctor_content_index_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_content_index_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_extendable_cookie_change_event) = templates.get("ExtendableCookieChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_extendable_cookie_change_event = v8::String::new(scope, "ExtendableCookieChangeEvent").unwrap();
             global.define_own_property(scope, name_extendable_cookie_change_event.into(), ctor_extendable_cookie_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_extendable_cookie_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_extendable_message_event) = templates.get("ExtendableMessageEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_extendable_message_event = v8::String::new(scope, "ExtendableMessageEvent").unwrap();
             global.define_own_property(scope, name_extendable_message_event.into(), ctor_extendable_message_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_extendable_message_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_fetch_event) = templates.get("FetchEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_fetch_event = v8::String::new(scope, "FetchEvent").unwrap();
             global.define_own_property(scope, name_fetch_event.into(), ctor_fetch_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_fetch_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_install_event) = templates.get("InstallEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_install_event = v8::String::new(scope, "InstallEvent").unwrap();
             global.define_own_property(scope, name_install_event.into(), ctor_install_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_install_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_notification_event) = templates.get("NotificationEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_notification_event = v8::String::new(scope, "NotificationEvent").unwrap();
             global.define_own_property(scope, name_notification_event.into(), ctor_notification_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_notification_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_payment_request_event) = templates.get("PaymentRequestEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_payment_request_event = v8::String::new(scope, "PaymentRequestEvent").unwrap();
             global.define_own_property(scope, name_payment_request_event.into(), ctor_payment_request_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_payment_request_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_periodic_sync_event) = templates.get("PeriodicSyncEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_periodic_sync_event = v8::String::new(scope, "PeriodicSyncEvent").unwrap();
             global.define_own_property(scope, name_periodic_sync_event.into(), ctor_periodic_sync_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_periodic_sync_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_push_event) = templates.get("PushEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_push_event = v8::String::new(scope, "PushEvent").unwrap();
             global.define_own_property(scope, name_push_event.into(), ctor_push_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_push_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_push_subscription_change_event) = templates.get("PushSubscriptionChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_push_subscription_change_event = v8::String::new(scope, "PushSubscriptionChangeEvent").unwrap();
             global.define_own_property(scope, name_push_subscription_change_event.into(), ctor_push_subscription_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_push_subscription_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_sync_event) = templates.get("SyncEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_sync_event = v8::String::new(scope, "SyncEvent").unwrap();
             global.define_own_property(scope, name_sync_event.into(), ctor_sync_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ExtendableEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_sync_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_payment_method_change_event) = templates.get("PaymentMethodChangeEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_payment_method_change_event = v8::String::new(scope, "PaymentMethodChangeEvent").unwrap();
             global.define_own_property(scope, name_payment_method_change_event.into(), ctor_payment_method_change_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PaymentRequestUpdateEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_payment_method_change_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_speech_synthesis_error_event) = templates.get("SpeechSynthesisErrorEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_speech_synthesis_error_event = v8::String::new(scope, "SpeechSynthesisErrorEvent").unwrap();
             global.define_own_property(scope, name_speech_synthesis_error_event.into(), ctor_speech_synthesis_error_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SpeechSynthesisEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_speech_synthesis_error_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_composition_event) = templates.get("CompositionEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_composition_event = v8::String::new(scope, "CompositionEvent").unwrap();
             global.define_own_property(scope, name_composition_event.into(), ctor_composition_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_composition_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_focus_event) = templates.get("FocusEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_focus_event = v8::String::new(scope, "FocusEvent").unwrap();
             global.define_own_property(scope, name_focus_event.into(), ctor_focus_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_focus_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_input_event) = templates.get("InputEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_input_event = v8::String::new(scope, "InputEvent").unwrap();
             global.define_own_property(scope, name_input_event.into(), ctor_input_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_input_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_keyboard_event) = templates.get("KeyboardEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_keyboard_event = v8::String::new(scope, "KeyboardEvent").unwrap();
             global.define_own_property(scope, name_keyboard_event.into(), ctor_keyboard_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_keyboard_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "DOM_KEY_LOCATION_STANDARD").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_keyboard_event.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "DOM_KEY_LOCATION_LEFT").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_keyboard_event.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "DOM_KEY_LOCATION_RIGHT").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_keyboard_event.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -8951,250 +10447,498 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_mouse_event) = templates.get("MouseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_mouse_event = v8::String::new(scope, "MouseEvent").unwrap();
             global.define_own_property(scope, name_mouse_event.into(), ctor_mouse_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_mouse_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_navigation_event) = templates.get("NavigationEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_navigation_event = v8::String::new(scope, "NavigationEvent").unwrap();
             global.define_own_property(scope, name_navigation_event.into(), ctor_navigation_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_navigation_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_text_event) = templates.get("TextEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_text_event = v8::String::new(scope, "TextEvent").unwrap();
             global.define_own_property(scope, name_text_event.into(), ctor_text_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_text_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_touch_event) = templates.get("TouchEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_touch_event = v8::String::new(scope, "TouchEvent").unwrap();
             global.define_own_property(scope, name_touch_event.into(), ctor_touch_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("UIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_touch_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_task_signal) = templates.get("TaskSignal").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_task_signal = v8::String::new(scope, "TaskSignal").unwrap();
             global.define_own_property(scope, name_task_signal.into(), ctor_task_signal.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AbortSignal").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_task_signal.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_animation) = templates.get("CSSAnimation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_animation = v8::String::new(scope, "CSSAnimation").unwrap();
             global.define_own_property(scope, name_css_animation.into(), ctor_css_animation.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Animation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_animation.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_transition) = templates.get("CSSTransition").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_transition = v8::String::new(scope, "CSSTransition").unwrap();
             global.define_own_property(scope, name_css_transition.into(), ctor_css_transition.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Animation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_transition.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_shadow_animation) = templates.get("ShadowAnimation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_shadow_animation = v8::String::new(scope, "ShadowAnimation").unwrap();
             global.define_own_property(scope, name_shadow_animation.into(), ctor_shadow_animation.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Animation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_shadow_animation.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_worklet_animation) = templates.get("WorkletAnimation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_worklet_animation = v8::String::new(scope, "WorkletAnimation").unwrap();
             global.define_own_property(scope, name_worklet_animation.into(), ctor_worklet_animation.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Animation").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_worklet_animation.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_analyser_node) = templates.get("AnalyserNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_analyser_node = v8::String::new(scope, "AnalyserNode").unwrap();
             global.define_own_property(scope, name_analyser_node.into(), ctor_analyser_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_analyser_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_destination_node) = templates.get("AudioDestinationNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_destination_node = v8::String::new(scope, "AudioDestinationNode").unwrap();
             global.define_own_property(scope, name_audio_destination_node.into(), ctor_audio_destination_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_destination_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_scheduled_source_node) = templates.get("AudioScheduledSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_scheduled_source_node = v8::String::new(scope, "AudioScheduledSourceNode").unwrap();
             global.define_own_property(scope, name_audio_scheduled_source_node.into(), ctor_audio_scheduled_source_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_scheduled_source_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_worklet_node) = templates.get("AudioWorkletNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_worklet_node = v8::String::new(scope, "AudioWorkletNode").unwrap();
             global.define_own_property(scope, name_audio_worklet_node.into(), ctor_audio_worklet_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_worklet_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_biquad_filter_node) = templates.get("BiquadFilterNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_biquad_filter_node = v8::String::new(scope, "BiquadFilterNode").unwrap();
             global.define_own_property(scope, name_biquad_filter_node.into(), ctor_biquad_filter_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_biquad_filter_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_channel_merger_node) = templates.get("ChannelMergerNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_channel_merger_node = v8::String::new(scope, "ChannelMergerNode").unwrap();
             global.define_own_property(scope, name_channel_merger_node.into(), ctor_channel_merger_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_channel_merger_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_channel_splitter_node) = templates.get("ChannelSplitterNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_channel_splitter_node = v8::String::new(scope, "ChannelSplitterNode").unwrap();
             global.define_own_property(scope, name_channel_splitter_node.into(), ctor_channel_splitter_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_channel_splitter_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_convolver_node) = templates.get("ConvolverNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_convolver_node = v8::String::new(scope, "ConvolverNode").unwrap();
             global.define_own_property(scope, name_convolver_node.into(), ctor_convolver_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_convolver_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_delay_node) = templates.get("DelayNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_delay_node = v8::String::new(scope, "DelayNode").unwrap();
             global.define_own_property(scope, name_delay_node.into(), ctor_delay_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_delay_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_dynamics_compressor_node) = templates.get("DynamicsCompressorNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_dynamics_compressor_node = v8::String::new(scope, "DynamicsCompressorNode").unwrap();
             global.define_own_property(scope, name_dynamics_compressor_node.into(), ctor_dynamics_compressor_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_dynamics_compressor_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gain_node) = templates.get("GainNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gain_node = v8::String::new(scope, "GainNode").unwrap();
             global.define_own_property(scope, name_gain_node.into(), ctor_gain_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gain_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_iir_filter_node) = templates.get("IIRFilterNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_iir_filter_node = v8::String::new(scope, "IIRFilterNode").unwrap();
             global.define_own_property(scope, name_iir_filter_node.into(), ctor_iir_filter_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_iir_filter_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_element_audio_source_node) = templates.get("MediaElementAudioSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_element_audio_source_node = v8::String::new(scope, "MediaElementAudioSourceNode").unwrap();
             global.define_own_property(scope, name_media_element_audio_source_node.into(), ctor_media_element_audio_source_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_element_audio_source_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_stream_audio_destination_node) = templates.get("MediaStreamAudioDestinationNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_stream_audio_destination_node = v8::String::new(scope, "MediaStreamAudioDestinationNode").unwrap();
             global.define_own_property(scope, name_media_stream_audio_destination_node.into(), ctor_media_stream_audio_destination_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_stream_audio_destination_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_stream_audio_source_node) = templates.get("MediaStreamAudioSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_stream_audio_source_node = v8::String::new(scope, "MediaStreamAudioSourceNode").unwrap();
             global.define_own_property(scope, name_media_stream_audio_source_node.into(), ctor_media_stream_audio_source_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_stream_audio_source_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_media_stream_track_audio_source_node) = templates.get("MediaStreamTrackAudioSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_media_stream_track_audio_source_node = v8::String::new(scope, "MediaStreamTrackAudioSourceNode").unwrap();
             global.define_own_property(scope, name_media_stream_track_audio_source_node.into(), ctor_media_stream_track_audio_source_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_media_stream_track_audio_source_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_panner_node) = templates.get("PannerNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_panner_node = v8::String::new(scope, "PannerNode").unwrap();
             global.define_own_property(scope, name_panner_node.into(), ctor_panner_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_panner_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_script_processor_node) = templates.get("ScriptProcessorNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_script_processor_node = v8::String::new(scope, "ScriptProcessorNode").unwrap();
             global.define_own_property(scope, name_script_processor_node.into(), ctor_script_processor_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_script_processor_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_stereo_panner_node) = templates.get("StereoPannerNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_stereo_panner_node = v8::String::new(scope, "StereoPannerNode").unwrap();
             global.define_own_property(scope, name_stereo_panner_node.into(), ctor_stereo_panner_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_stereo_panner_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_wave_shaper_node) = templates.get("WaveShaperNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_wave_shaper_node = v8::String::new(scope, "WaveShaperNode").unwrap();
             global.define_own_property(scope, name_wave_shaper_node.into(), ctor_wave_shaper_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_wave_shaper_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_audio_context) = templates.get("AudioContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_context = v8::String::new(scope, "AudioContext").unwrap();
             global.define_own_property(scope, name_audio_context.into(), ctor_audio_context.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("BaseAudioContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_context.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_offline_audio_context) = templates.get("OfflineAudioContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_offline_audio_context = v8::String::new(scope, "OfflineAudioContext").unwrap();
             global.define_own_property(scope, name_offline_audio_context.into(), ctor_offline_audio_context.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("BaseAudioContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_offline_audio_context.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_idb_open_db_request) = templates.get("IDBOpenDBRequest").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_idb_open_db_request = v8::String::new(scope, "IDBOpenDBRequest").unwrap();
             global.define_own_property(scope, name_idb_open_db_request.into(), ctor_idb_open_db_request.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("IDBRequest").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_idb_open_db_request.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_midi_input) = templates.get("MIDIInput").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_midi_input = v8::String::new(scope, "MIDIInput").unwrap();
             global.define_own_property(scope, name_midi_input.into(), ctor_midi_input.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MIDIPort").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_midi_input.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_midi_output) = templates.get("MIDIOutput").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_midi_output = v8::String::new(scope, "MIDIOutput").unwrap();
             global.define_own_property(scope, name_midi_output.into(), ctor_midi_output.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MIDIPort").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_midi_output.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_managed_media_source) = templates.get("ManagedMediaSource").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_managed_media_source = v8::String::new(scope, "ManagedMediaSource").unwrap();
             global.define_own_property(scope, name_managed_media_source.into(), ctor_managed_media_source.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MediaSource").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_managed_media_source.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_browser_capture_media_stream_track) = templates.get("BrowserCaptureMediaStreamTrack").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_browser_capture_media_stream_track = v8::String::new(scope, "BrowserCaptureMediaStreamTrack").unwrap();
             global.define_own_property(scope, name_browser_capture_media_stream_track.into(), ctor_browser_capture_media_stream_track.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MediaStreamTrack").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_browser_capture_media_stream_track.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_canvas_capture_media_stream_track) = templates.get("CanvasCaptureMediaStreamTrack").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_canvas_capture_media_stream_track = v8::String::new(scope, "CanvasCaptureMediaStreamTrack").unwrap();
             global.define_own_property(scope, name_canvas_capture_media_stream_track.into(), ctor_canvas_capture_media_stream_track.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MediaStreamTrack").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_canvas_capture_media_stream_track.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_attr) = templates.get("Attr").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_attr = v8::String::new(scope, "Attr").unwrap();
             global.define_own_property(scope, name_attr.into(), ctor_attr.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Node").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_attr.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_character_data) = templates.get("CharacterData").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_character_data = v8::String::new(scope, "CharacterData").unwrap();
             global.define_own_property(scope, name_character_data.into(), ctor_character_data.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Node").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_character_data.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_document) = templates.get("Document").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_document = v8::String::new(scope, "Document").unwrap();
             global.define_own_property(scope, name_document.into(), ctor_document.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Node").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_document.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_document_fragment) = templates.get("DocumentFragment").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_document_fragment = v8::String::new(scope, "DocumentFragment").unwrap();
             global.define_own_property(scope, name_document_fragment.into(), ctor_document_fragment.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Node").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_document_fragment.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_document_type) = templates.get("DocumentType").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_document_type = v8::String::new(scope, "DocumentType").unwrap();
             global.define_own_property(scope, name_document_type.into(), ctor_document_type.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Node").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_document_type.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_element) = templates.get("Element").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_element = v8::String::new(scope, "Element").unwrap();
             global.define_own_property(scope, name_element.into(), ctor_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Node").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_bluetooth_le_scan_permission_result) = templates.get("BluetoothLEScanPermissionResult").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_bluetooth_le_scan_permission_result = v8::String::new(scope, "BluetoothLEScanPermissionResult").unwrap();
             global.define_own_property(scope, name_bluetooth_le_scan_permission_result.into(), ctor_bluetooth_le_scan_permission_result.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PermissionStatus").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_bluetooth_le_scan_permission_result.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_bluetooth_permission_result) = templates.get("BluetoothPermissionResult").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_bluetooth_permission_result = v8::String::new(scope, "BluetoothPermissionResult").unwrap();
             global.define_own_property(scope, name_bluetooth_permission_result.into(), ctor_bluetooth_permission_result.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PermissionStatus").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_bluetooth_permission_result.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_usb_permission_result) = templates.get("USBPermissionResult").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_usb_permission_result = v8::String::new(scope, "USBPermissionResult").unwrap();
             global.define_own_property(scope, name_usb_permission_result.into(), ctor_usb_permission_result.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PermissionStatus").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_usb_permission_result.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_permission_status) = templates.get("XRPermissionStatus").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_permission_status = v8::String::new(scope, "XRPermissionStatus").unwrap();
             global.define_own_property(scope, name_xr_permission_status.into(), ctor_xr_permission_status.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PermissionStatus").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_permission_status.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_accelerometer) = templates.get("Accelerometer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_accelerometer = v8::String::new(scope, "Accelerometer").unwrap();
             global.define_own_property(scope, name_accelerometer.into(), ctor_accelerometer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Sensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_accelerometer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_ambient_light_sensor) = templates.get("AmbientLightSensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_ambient_light_sensor = v8::String::new(scope, "AmbientLightSensor").unwrap();
             global.define_own_property(scope, name_ambient_light_sensor.into(), ctor_ambient_light_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Sensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_ambient_light_sensor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gyroscope) = templates.get("Gyroscope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gyroscope = v8::String::new(scope, "Gyroscope").unwrap();
             global.define_own_property(scope, name_gyroscope.into(), ctor_gyroscope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Sensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gyroscope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_magnetometer) = templates.get("Magnetometer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_magnetometer = v8::String::new(scope, "Magnetometer").unwrap();
             global.define_own_property(scope, name_magnetometer.into(), ctor_magnetometer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Sensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_magnetometer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_orientation_sensor) = templates.get("OrientationSensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_orientation_sensor = v8::String::new(scope, "OrientationSensor").unwrap();
             global.define_own_property(scope, name_orientation_sensor.into(), ctor_orientation_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Sensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_orientation_sensor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_proximity_sensor) = templates.get("ProximitySensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_proximity_sensor = v8::String::new(scope, "ProximitySensor").unwrap();
             global.define_own_property(scope, name_proximity_sensor.into(), ctor_proximity_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Sensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_proximity_sensor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_uncalibrated_magnetometer) = templates.get("UncalibratedMagnetometer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_uncalibrated_magnetometer = v8::String::new(scope, "UncalibratedMagnetometer").unwrap();
             global.define_own_property(scope, name_uncalibrated_magnetometer.into(), ctor_uncalibrated_magnetometer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Sensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_uncalibrated_magnetometer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_managed_source_buffer) = templates.get("ManagedSourceBuffer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_managed_source_buffer = v8::String::new(scope, "ManagedSourceBuffer").unwrap();
             global.define_own_property(scope, name_managed_source_buffer.into(), ctor_managed_source_buffer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SourceBuffer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_managed_source_buffer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_data_cue) = templates.get("DataCue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_data_cue = v8::String::new(scope, "DataCue").unwrap();
             global.define_own_property(scope, name_data_cue.into(), ctor_data_cue.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("TextTrackCue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_data_cue.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_vtt_cue) = templates.get("VTTCue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_vtt_cue = v8::String::new(scope, "VTTCue").unwrap();
             global.define_own_property(scope, name_vtt_cue.into(), ctor_vtt_cue.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("TextTrackCue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_vtt_cue.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_dedicated_worker_global_scope) = templates.get("DedicatedWorkerGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_dedicated_worker_global_scope = v8::String::new(scope, "DedicatedWorkerGlobalScope").unwrap();
             global.define_own_property(scope, name_dedicated_worker_global_scope.into(), ctor_dedicated_worker_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WorkerGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_dedicated_worker_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_rtc_identity_provider_global_scope) = templates.get("RTCIdentityProviderGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_rtc_identity_provider_global_scope = v8::String::new(scope, "RTCIdentityProviderGlobalScope").unwrap();
             global.define_own_property(scope, name_rtc_identity_provider_global_scope.into(), ctor_rtc_identity_provider_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WorkerGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_rtc_identity_provider_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_service_worker_global_scope) = templates.get("ServiceWorkerGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_service_worker_global_scope = v8::String::new(scope, "ServiceWorkerGlobalScope").unwrap();
             global.define_own_property(scope, name_service_worker_global_scope.into(), ctor_service_worker_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WorkerGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_service_worker_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_shared_worker_global_scope) = templates.get("SharedWorkerGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_shared_worker_global_scope = v8::String::new(scope, "SharedWorkerGlobalScope").unwrap();
             global.define_own_property(scope, name_shared_worker_global_scope.into(), ctor_shared_worker_global_scope.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("WorkerGlobalScope").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_shared_worker_global_scope.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xml_http_request) = templates.get("XMLHttpRequest").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xml_http_request = v8::String::new(scope, "XMLHttpRequest").unwrap();
             global.define_own_property(scope, name_xml_http_request.into(), ctor_xml_http_request.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XMLHttpRequestEventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xml_http_request.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "UNSENT").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_xml_http_request.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "OPENED").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_xml_http_request.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "HEADERS_RECEIVED").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_xml_http_request.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9204,18 +10948,34 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_xml_http_request_upload) = templates.get("XMLHttpRequestUpload").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xml_http_request_upload = v8::String::new(scope, "XMLHttpRequestUpload").unwrap();
             global.define_own_property(scope, name_xml_http_request_upload.into(), ctor_xml_http_request_upload.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XMLHttpRequestEventTarget").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xml_http_request_upload.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_composition_layer) = templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_composition_layer = v8::String::new(scope, "XRCompositionLayer").unwrap();
             global.define_own_property(scope, name_xr_composition_layer.into(), ctor_xr_composition_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_composition_layer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_web_gl_layer) = templates.get("XRWebGLLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_web_gl_layer = v8::String::new(scope, "XRWebGLLayer").unwrap();
             global.define_own_property(scope, name_xr_web_gl_layer.into(), ctor_xr_web_gl_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_web_gl_layer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_body_space) = templates.get("XRBodySpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_body_space = v8::String::new(scope, "XRBodySpace").unwrap();
             global.define_own_property(scope, name_xr_body_space.into(), ctor_xr_body_space.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_body_space.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
     } // end registration batch
     {
@@ -9223,70 +10983,138 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_xr_joint_space) = templates.get("XRJointSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_joint_space = v8::String::new(scope, "XRJointSpace").unwrap();
             global.define_own_property(scope, name_xr_joint_space.into(), ctor_xr_joint_space.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_joint_space.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_reference_space) = templates.get("XRReferenceSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_reference_space = v8::String::new(scope, "XRReferenceSpace").unwrap();
             global.define_own_property(scope, name_xr_reference_space.into(), ctor_xr_reference_space.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_reference_space.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_performance_navigation_timing) = templates.get("PerformanceNavigationTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_performance_navigation_timing = v8::String::new(scope, "PerformanceNavigationTiming").unwrap();
             global.define_own_property(scope, name_performance_navigation_timing.into(), ctor_performance_navigation_timing.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("PerformanceResourceTiming").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_performance_navigation_timing.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_container_rule) = templates.get("CSSContainerRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_container_rule = v8::String::new(scope, "CSSContainerRule").unwrap();
             global.define_own_property(scope, name_css_container_rule.into(), ctor_css_container_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSConditionRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_container_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_media_rule) = templates.get("CSSMediaRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_media_rule = v8::String::new(scope, "CSSMediaRule").unwrap();
             global.define_own_property(scope, name_css_media_rule.into(), ctor_css_media_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSConditionRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_media_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_supports_rule) = templates.get("CSSSupportsRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_supports_rule = v8::String::new(scope, "CSSSupportsRule").unwrap();
             global.define_own_property(scope, name_css_supports_rule.into(), ctor_css_supports_rule.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSConditionRule").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_supports_rule.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_math_clamp) = templates.get("CSSMathClamp").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_math_clamp = v8::String::new(scope, "CSSMathClamp").unwrap();
             global.define_own_property(scope, name_css_math_clamp.into(), ctor_css_math_clamp.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_math_clamp.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_math_invert) = templates.get("CSSMathInvert").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_math_invert = v8::String::new(scope, "CSSMathInvert").unwrap();
             global.define_own_property(scope, name_css_math_invert.into(), ctor_css_math_invert.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_math_invert.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_math_max) = templates.get("CSSMathMax").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_math_max = v8::String::new(scope, "CSSMathMax").unwrap();
             global.define_own_property(scope, name_css_math_max.into(), ctor_css_math_max.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_math_max.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_math_min) = templates.get("CSSMathMin").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_math_min = v8::String::new(scope, "CSSMathMin").unwrap();
             global.define_own_property(scope, name_css_math_min.into(), ctor_css_math_min.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_math_min.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_math_negate) = templates.get("CSSMathNegate").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_math_negate = v8::String::new(scope, "CSSMathNegate").unwrap();
             global.define_own_property(scope, name_css_math_negate.into(), ctor_css_math_negate.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_math_negate.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_math_product) = templates.get("CSSMathProduct").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_math_product = v8::String::new(scope, "CSSMathProduct").unwrap();
             global.define_own_property(scope, name_css_math_product.into(), ctor_css_math_product.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_math_product.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_css_math_sum) = templates.get("CSSMathSum").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_css_math_sum = v8::String::new(scope, "CSSMathSum").unwrap();
             global.define_own_property(scope, name_css_math_sum.into(), ctor_css_math_sum.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CSSMathValue").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_css_math_sum.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_background_fetch_update_ui_event) = templates.get("BackgroundFetchUpdateUIEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_background_fetch_update_ui_event = v8::String::new(scope, "BackgroundFetchUpdateUIEvent").unwrap();
             global.define_own_property(scope, name_background_fetch_update_ui_event.into(), ctor_background_fetch_update_ui_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("BackgroundFetchEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_background_fetch_update_ui_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_drag_event) = templates.get("DragEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_drag_event = v8::String::new(scope, "DragEvent").unwrap();
             global.define_own_property(scope, name_drag_event.into(), ctor_drag_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MouseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_drag_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_pointer_event) = templates.get("PointerEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_pointer_event = v8::String::new(scope, "PointerEvent").unwrap();
             global.define_own_property(scope, name_pointer_event.into(), ctor_pointer_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MouseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_pointer_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_wheel_event) = templates.get("WheelEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_wheel_event = v8::String::new(scope, "WheelEvent").unwrap();
             global.define_own_property(scope, name_wheel_event.into(), ctor_wheel_event.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MouseEvent").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_wheel_event.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "DOM_DELTA_PIXEL").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_wheel_event.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "DOM_DELTA_LINE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_wheel_event.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "DOM_DELTA_PAGE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_wheel_event.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9294,210 +11122,418 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_audio_buffer_source_node) = templates.get("AudioBufferSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_audio_buffer_source_node = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
             global.define_own_property(scope, name_audio_buffer_source_node.into(), ctor_audio_buffer_source_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioScheduledSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_audio_buffer_source_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_constant_source_node) = templates.get("ConstantSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_constant_source_node = v8::String::new(scope, "ConstantSourceNode").unwrap();
             global.define_own_property(scope, name_constant_source_node.into(), ctor_constant_source_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioScheduledSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_constant_source_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_oscillator_node) = templates.get("OscillatorNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_oscillator_node = v8::String::new(scope, "OscillatorNode").unwrap();
             global.define_own_property(scope, name_oscillator_node.into(), ctor_oscillator_node.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioScheduledSourceNode").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_oscillator_node.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_webkit_audio_context) = templates.get("webkitAudioContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_webkit_audio_context = v8::String::new(scope, "webkitAudioContext").unwrap();
             global.define_own_property(scope, name_webkit_audio_context.into(), ctor_webkit_audio_context.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("AudioContext").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_webkit_audio_context.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_comment) = templates.get("Comment").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_comment = v8::String::new(scope, "Comment").unwrap();
             global.define_own_property(scope, name_comment.into(), ctor_comment.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CharacterData").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_comment.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_processing_instruction) = templates.get("ProcessingInstruction").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_processing_instruction = v8::String::new(scope, "ProcessingInstruction").unwrap();
             global.define_own_property(scope, name_processing_instruction.into(), ctor_processing_instruction.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CharacterData").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_processing_instruction.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_text) = templates.get("Text").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_text = v8::String::new(scope, "Text").unwrap();
             global.define_own_property(scope, name_text.into(), ctor_text.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("CharacterData").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_text.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xml_document) = templates.get("XMLDocument").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xml_document = v8::String::new(scope, "XMLDocument").unwrap();
             global.define_own_property(scope, name_xml_document.into(), ctor_xml_document.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Document").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xml_document.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_shadow_root) = templates.get("ShadowRoot").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_shadow_root = v8::String::new(scope, "ShadowRoot").unwrap();
             global.define_own_property(scope, name_shadow_root.into(), ctor_shadow_root.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("DocumentFragment").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_shadow_root.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_element) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_element = v8::String::new(scope, "HTMLElement").unwrap();
             global.define_own_property(scope, name_html_element.into(), ctor_html_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Element").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_math_ml_element) = templates.get("MathMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_math_ml_element = v8::String::new(scope, "MathMLElement").unwrap();
             global.define_own_property(scope, name_math_ml_element.into(), ctor_math_ml_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Element").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_math_ml_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_element) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_element = v8::String::new(scope, "SVGElement").unwrap();
             global.define_own_property(scope, name_svg_element.into(), ctor_svg_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Element").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_gravity_sensor) = templates.get("GravitySensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_gravity_sensor = v8::String::new(scope, "GravitySensor").unwrap();
             global.define_own_property(scope, name_gravity_sensor.into(), ctor_gravity_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Accelerometer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_gravity_sensor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_linear_acceleration_sensor) = templates.get("LinearAccelerationSensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_linear_acceleration_sensor = v8::String::new(scope, "LinearAccelerationSensor").unwrap();
             global.define_own_property(scope, name_linear_acceleration_sensor.into(), ctor_linear_acceleration_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Accelerometer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_linear_acceleration_sensor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_absolute_orientation_sensor) = templates.get("AbsoluteOrientationSensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_absolute_orientation_sensor = v8::String::new(scope, "AbsoluteOrientationSensor").unwrap();
             global.define_own_property(scope, name_absolute_orientation_sensor.into(), ctor_absolute_orientation_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("OrientationSensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_absolute_orientation_sensor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_relative_orientation_sensor) = templates.get("RelativeOrientationSensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_relative_orientation_sensor = v8::String::new(scope, "RelativeOrientationSensor").unwrap();
             global.define_own_property(scope, name_relative_orientation_sensor.into(), ctor_relative_orientation_sensor.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("OrientationSensor").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_relative_orientation_sensor.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_cube_layer) = templates.get("XRCubeLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_cube_layer = v8::String::new(scope, "XRCubeLayer").unwrap();
             global.define_own_property(scope, name_xr_cube_layer.into(), ctor_xr_cube_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_cube_layer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_cylinder_layer) = templates.get("XRCylinderLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_cylinder_layer = v8::String::new(scope, "XRCylinderLayer").unwrap();
             global.define_own_property(scope, name_xr_cylinder_layer.into(), ctor_xr_cylinder_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_cylinder_layer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_equirect_layer) = templates.get("XREquirectLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_equirect_layer = v8::String::new(scope, "XREquirectLayer").unwrap();
             global.define_own_property(scope, name_xr_equirect_layer.into(), ctor_xr_equirect_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_equirect_layer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_projection_layer) = templates.get("XRProjectionLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_projection_layer = v8::String::new(scope, "XRProjectionLayer").unwrap();
             global.define_own_property(scope, name_xr_projection_layer.into(), ctor_xr_projection_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_projection_layer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_quad_layer) = templates.get("XRQuadLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_quad_layer = v8::String::new(scope, "XRQuadLayer").unwrap();
             global.define_own_property(scope, name_xr_quad_layer.into(), ctor_xr_quad_layer.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRCompositionLayer").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_quad_layer.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_xr_bounded_reference_space) = templates.get("XRBoundedReferenceSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_xr_bounded_reference_space = v8::String::new(scope, "XRBoundedReferenceSpace").unwrap();
             global.define_own_property(scope, name_xr_bounded_reference_space.into(), ctor_xr_bounded_reference_space.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("XRReferenceSpace").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_xr_bounded_reference_space.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_cdata_section) = templates.get("CDATASection").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_cdata_section = v8::String::new(scope, "CDATASection").unwrap();
             global.define_own_property(scope, name_cdata_section.into(), ctor_cdata_section.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("Text").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_cdata_section.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_use_element_shadow_root) = templates.get("SVGUseElementShadowRoot").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_use_element_shadow_root = v8::String::new(scope, "SVGUseElementShadowRoot").unwrap();
             global.define_own_property(scope, name_svg_use_element_shadow_root.into(), ctor_svg_use_element_shadow_root.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("ShadowRoot").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_use_element_shadow_root.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_anchor_element) = templates.get("HTMLAnchorElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_anchor_element = v8::String::new(scope, "HTMLAnchorElement").unwrap();
             global.define_own_property(scope, name_html_anchor_element.into(), ctor_html_anchor_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_anchor_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_area_element) = templates.get("HTMLAreaElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_area_element = v8::String::new(scope, "HTMLAreaElement").unwrap();
             global.define_own_property(scope, name_html_area_element.into(), ctor_html_area_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_area_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_htmlbr_element) = templates.get("HTMLBRElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_htmlbr_element = v8::String::new(scope, "HTMLBRElement").unwrap();
             global.define_own_property(scope, name_htmlbr_element.into(), ctor_htmlbr_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_htmlbr_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_base_element) = templates.get("HTMLBaseElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_base_element = v8::String::new(scope, "HTMLBaseElement").unwrap();
             global.define_own_property(scope, name_html_base_element.into(), ctor_html_base_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_base_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_body_element) = templates.get("HTMLBodyElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_body_element = v8::String::new(scope, "HTMLBodyElement").unwrap();
             global.define_own_property(scope, name_html_body_element.into(), ctor_html_body_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_body_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_button_element) = templates.get("HTMLButtonElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_button_element = v8::String::new(scope, "HTMLButtonElement").unwrap();
             global.define_own_property(scope, name_html_button_element.into(), ctor_html_button_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_button_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_canvas_element) = templates.get("HTMLCanvasElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_canvas_element = v8::String::new(scope, "HTMLCanvasElement").unwrap();
             global.define_own_property(scope, name_html_canvas_element.into(), ctor_html_canvas_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_canvas_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_htmld_list_element) = templates.get("HTMLDListElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_htmld_list_element = v8::String::new(scope, "HTMLDListElement").unwrap();
             global.define_own_property(scope, name_htmld_list_element.into(), ctor_htmld_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_htmld_list_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_data_element) = templates.get("HTMLDataElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_data_element = v8::String::new(scope, "HTMLDataElement").unwrap();
             global.define_own_property(scope, name_html_data_element.into(), ctor_html_data_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_data_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_data_list_element) = templates.get("HTMLDataListElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_data_list_element = v8::String::new(scope, "HTMLDataListElement").unwrap();
             global.define_own_property(scope, name_html_data_list_element.into(), ctor_html_data_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_data_list_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_details_element) = templates.get("HTMLDetailsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_details_element = v8::String::new(scope, "HTMLDetailsElement").unwrap();
             global.define_own_property(scope, name_html_details_element.into(), ctor_html_details_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_details_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_dialog_element) = templates.get("HTMLDialogElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_dialog_element = v8::String::new(scope, "HTMLDialogElement").unwrap();
             global.define_own_property(scope, name_html_dialog_element.into(), ctor_html_dialog_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_dialog_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_directory_element) = templates.get("HTMLDirectoryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_directory_element = v8::String::new(scope, "HTMLDirectoryElement").unwrap();
             global.define_own_property(scope, name_html_directory_element.into(), ctor_html_directory_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_directory_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_div_element) = templates.get("HTMLDivElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_div_element = v8::String::new(scope, "HTMLDivElement").unwrap();
             global.define_own_property(scope, name_html_div_element.into(), ctor_html_div_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_div_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_embed_element) = templates.get("HTMLEmbedElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_embed_element = v8::String::new(scope, "HTMLEmbedElement").unwrap();
             global.define_own_property(scope, name_html_embed_element.into(), ctor_html_embed_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_embed_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_fenced_frame_element) = templates.get("HTMLFencedFrameElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_fenced_frame_element = v8::String::new(scope, "HTMLFencedFrameElement").unwrap();
             global.define_own_property(scope, name_html_fenced_frame_element.into(), ctor_html_fenced_frame_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_fenced_frame_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_field_set_element) = templates.get("HTMLFieldSetElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_field_set_element = v8::String::new(scope, "HTMLFieldSetElement").unwrap();
             global.define_own_property(scope, name_html_field_set_element.into(), ctor_html_field_set_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_field_set_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_font_element) = templates.get("HTMLFontElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_font_element = v8::String::new(scope, "HTMLFontElement").unwrap();
             global.define_own_property(scope, name_html_font_element.into(), ctor_html_font_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_font_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_form_element) = templates.get("HTMLFormElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_form_element = v8::String::new(scope, "HTMLFormElement").unwrap();
             global.define_own_property(scope, name_html_form_element.into(), ctor_html_form_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_form_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_frame_element) = templates.get("HTMLFrameElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_frame_element = v8::String::new(scope, "HTMLFrameElement").unwrap();
             global.define_own_property(scope, name_html_frame_element.into(), ctor_html_frame_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_frame_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_frame_set_element) = templates.get("HTMLFrameSetElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_frame_set_element = v8::String::new(scope, "HTMLFrameSetElement").unwrap();
             global.define_own_property(scope, name_html_frame_set_element.into(), ctor_html_frame_set_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_frame_set_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_geolocation_element) = templates.get("HTMLGeolocationElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_geolocation_element = v8::String::new(scope, "HTMLGeolocationElement").unwrap();
             global.define_own_property(scope, name_html_geolocation_element.into(), ctor_html_geolocation_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_geolocation_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_htmlhr_element) = templates.get("HTMLHRElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_htmlhr_element = v8::String::new(scope, "HTMLHRElement").unwrap();
             global.define_own_property(scope, name_htmlhr_element.into(), ctor_htmlhr_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_htmlhr_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_head_element) = templates.get("HTMLHeadElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_head_element = v8::String::new(scope, "HTMLHeadElement").unwrap();
             global.define_own_property(scope, name_html_head_element.into(), ctor_html_head_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_head_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_heading_element) = templates.get("HTMLHeadingElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_heading_element = v8::String::new(scope, "HTMLHeadingElement").unwrap();
             global.define_own_property(scope, name_html_heading_element.into(), ctor_html_heading_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_heading_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_html_element) = templates.get("HTMLHtmlElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_html_element = v8::String::new(scope, "HTMLHtmlElement").unwrap();
             global.define_own_property(scope, name_html_html_element.into(), ctor_html_html_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_html_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_htmli_frame_element) = templates.get("HTMLIFrameElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_htmli_frame_element = v8::String::new(scope, "HTMLIFrameElement").unwrap();
             global.define_own_property(scope, name_htmli_frame_element.into(), ctor_htmli_frame_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_htmli_frame_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_image_element) = templates.get("HTMLImageElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_image_element = v8::String::new(scope, "HTMLImageElement").unwrap();
             global.define_own_property(scope, name_html_image_element.into(), ctor_html_image_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_image_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         // NamedConstructor alias: Image
         if let Some(ctor_html_image_element) = templates.get("HTMLImageElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
@@ -9507,34 +11543,66 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_input_element) = templates.get("HTMLInputElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_input_element = v8::String::new(scope, "HTMLInputElement").unwrap();
             global.define_own_property(scope, name_html_input_element.into(), ctor_html_input_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_input_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_htmlli_element) = templates.get("HTMLLIElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_htmlli_element = v8::String::new(scope, "HTMLLIElement").unwrap();
             global.define_own_property(scope, name_htmlli_element.into(), ctor_htmlli_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_htmlli_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_label_element) = templates.get("HTMLLabelElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_label_element = v8::String::new(scope, "HTMLLabelElement").unwrap();
             global.define_own_property(scope, name_html_label_element.into(), ctor_html_label_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_label_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_legend_element) = templates.get("HTMLLegendElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_legend_element = v8::String::new(scope, "HTMLLegendElement").unwrap();
             global.define_own_property(scope, name_html_legend_element.into(), ctor_html_legend_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_legend_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_link_element) = templates.get("HTMLLinkElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_link_element = v8::String::new(scope, "HTMLLinkElement").unwrap();
             global.define_own_property(scope, name_html_link_element.into(), ctor_html_link_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_link_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_map_element) = templates.get("HTMLMapElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_map_element = v8::String::new(scope, "HTMLMapElement").unwrap();
             global.define_own_property(scope, name_html_map_element.into(), ctor_html_map_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_map_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_marquee_element) = templates.get("HTMLMarqueeElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_marquee_element = v8::String::new(scope, "HTMLMarqueeElement").unwrap();
             global.define_own_property(scope, name_html_marquee_element.into(), ctor_html_marquee_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_marquee_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_media_element) = templates.get("HTMLMediaElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_media_element = v8::String::new(scope, "HTMLMediaElement").unwrap();
             global.define_own_property(scope, name_html_media_element.into(), ctor_html_media_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_media_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "NETWORK_EMPTY").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_html_media_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "NETWORK_IDLE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_html_media_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "NETWORK_LOADING").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_html_media_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9548,38 +11616,74 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_menu_element) = templates.get("HTMLMenuElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_menu_element = v8::String::new(scope, "HTMLMenuElement").unwrap();
             global.define_own_property(scope, name_html_menu_element.into(), ctor_html_menu_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_menu_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_meta_element) = templates.get("HTMLMetaElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_meta_element = v8::String::new(scope, "HTMLMetaElement").unwrap();
             global.define_own_property(scope, name_html_meta_element.into(), ctor_html_meta_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_meta_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_meter_element) = templates.get("HTMLMeterElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_meter_element = v8::String::new(scope, "HTMLMeterElement").unwrap();
             global.define_own_property(scope, name_html_meter_element.into(), ctor_html_meter_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_meter_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_mod_element) = templates.get("HTMLModElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_mod_element = v8::String::new(scope, "HTMLModElement").unwrap();
             global.define_own_property(scope, name_html_mod_element.into(), ctor_html_mod_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_mod_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_model_element) = templates.get("HTMLModelElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_model_element = v8::String::new(scope, "HTMLModelElement").unwrap();
             global.define_own_property(scope, name_html_model_element.into(), ctor_html_model_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_model_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_htmlo_list_element) = templates.get("HTMLOListElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_htmlo_list_element = v8::String::new(scope, "HTMLOListElement").unwrap();
             global.define_own_property(scope, name_htmlo_list_element.into(), ctor_htmlo_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_htmlo_list_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_object_element) = templates.get("HTMLObjectElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_object_element = v8::String::new(scope, "HTMLObjectElement").unwrap();
             global.define_own_property(scope, name_html_object_element.into(), ctor_html_object_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_object_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_opt_group_element) = templates.get("HTMLOptGroupElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_opt_group_element = v8::String::new(scope, "HTMLOptGroupElement").unwrap();
             global.define_own_property(scope, name_html_opt_group_element.into(), ctor_html_opt_group_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_opt_group_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_option_element) = templates.get("HTMLOptionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_option_element = v8::String::new(scope, "HTMLOptionElement").unwrap();
             global.define_own_property(scope, name_html_option_element.into(), ctor_html_option_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_option_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         // NamedConstructor alias: Option
         if let Some(ctor_html_option_element) = templates.get("HTMLOptionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
@@ -9589,58 +11693,114 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_output_element) = templates.get("HTMLOutputElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_output_element = v8::String::new(scope, "HTMLOutputElement").unwrap();
             global.define_own_property(scope, name_html_output_element.into(), ctor_html_output_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_output_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_paragraph_element) = templates.get("HTMLParagraphElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_paragraph_element = v8::String::new(scope, "HTMLParagraphElement").unwrap();
             global.define_own_property(scope, name_html_paragraph_element.into(), ctor_html_paragraph_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_paragraph_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_param_element) = templates.get("HTMLParamElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_param_element = v8::String::new(scope, "HTMLParamElement").unwrap();
             global.define_own_property(scope, name_html_param_element.into(), ctor_html_param_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_param_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_picture_element) = templates.get("HTMLPictureElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_picture_element = v8::String::new(scope, "HTMLPictureElement").unwrap();
             global.define_own_property(scope, name_html_picture_element.into(), ctor_html_picture_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_picture_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_portal_element) = templates.get("HTMLPortalElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_portal_element = v8::String::new(scope, "HTMLPortalElement").unwrap();
             global.define_own_property(scope, name_html_portal_element.into(), ctor_html_portal_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_portal_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_pre_element) = templates.get("HTMLPreElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_pre_element = v8::String::new(scope, "HTMLPreElement").unwrap();
             global.define_own_property(scope, name_html_pre_element.into(), ctor_html_pre_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_pre_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_progress_element) = templates.get("HTMLProgressElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_progress_element = v8::String::new(scope, "HTMLProgressElement").unwrap();
             global.define_own_property(scope, name_html_progress_element.into(), ctor_html_progress_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_progress_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_quote_element) = templates.get("HTMLQuoteElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_quote_element = v8::String::new(scope, "HTMLQuoteElement").unwrap();
             global.define_own_property(scope, name_html_quote_element.into(), ctor_html_quote_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_quote_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_script_element) = templates.get("HTMLScriptElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_script_element = v8::String::new(scope, "HTMLScriptElement").unwrap();
             global.define_own_property(scope, name_html_script_element.into(), ctor_html_script_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_script_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_select_element) = templates.get("HTMLSelectElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_select_element = v8::String::new(scope, "HTMLSelectElement").unwrap();
             global.define_own_property(scope, name_html_select_element.into(), ctor_html_select_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_select_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_selected_content_element) = templates.get("HTMLSelectedContentElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_selected_content_element = v8::String::new(scope, "HTMLSelectedContentElement").unwrap();
             global.define_own_property(scope, name_html_selected_content_element.into(), ctor_html_selected_content_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_selected_content_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_slot_element) = templates.get("HTMLSlotElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_slot_element = v8::String::new(scope, "HTMLSlotElement").unwrap();
             global.define_own_property(scope, name_html_slot_element.into(), ctor_html_slot_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_slot_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_source_element) = templates.get("HTMLSourceElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_source_element = v8::String::new(scope, "HTMLSourceElement").unwrap();
             global.define_own_property(scope, name_html_source_element.into(), ctor_html_source_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_source_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_span_element) = templates.get("HTMLSpanElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_span_element = v8::String::new(scope, "HTMLSpanElement").unwrap();
             global.define_own_property(scope, name_html_span_element.into(), ctor_html_span_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_span_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
     } // end registration batch
     {
@@ -9648,50 +11808,98 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_style_element) = templates.get("HTMLStyleElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_style_element = v8::String::new(scope, "HTMLStyleElement").unwrap();
             global.define_own_property(scope, name_html_style_element.into(), ctor_html_style_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_style_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_table_caption_element) = templates.get("HTMLTableCaptionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_table_caption_element = v8::String::new(scope, "HTMLTableCaptionElement").unwrap();
             global.define_own_property(scope, name_html_table_caption_element.into(), ctor_html_table_caption_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_table_caption_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_table_cell_element) = templates.get("HTMLTableCellElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_table_cell_element = v8::String::new(scope, "HTMLTableCellElement").unwrap();
             global.define_own_property(scope, name_html_table_cell_element.into(), ctor_html_table_cell_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_table_cell_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_table_col_element) = templates.get("HTMLTableColElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_table_col_element = v8::String::new(scope, "HTMLTableColElement").unwrap();
             global.define_own_property(scope, name_html_table_col_element.into(), ctor_html_table_col_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_table_col_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_table_element) = templates.get("HTMLTableElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_table_element = v8::String::new(scope, "HTMLTableElement").unwrap();
             global.define_own_property(scope, name_html_table_element.into(), ctor_html_table_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_table_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_table_row_element) = templates.get("HTMLTableRowElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_table_row_element = v8::String::new(scope, "HTMLTableRowElement").unwrap();
             global.define_own_property(scope, name_html_table_row_element.into(), ctor_html_table_row_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_table_row_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_table_section_element) = templates.get("HTMLTableSectionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_table_section_element = v8::String::new(scope, "HTMLTableSectionElement").unwrap();
             global.define_own_property(scope, name_html_table_section_element.into(), ctor_html_table_section_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_table_section_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_template_element) = templates.get("HTMLTemplateElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_template_element = v8::String::new(scope, "HTMLTemplateElement").unwrap();
             global.define_own_property(scope, name_html_template_element.into(), ctor_html_template_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_template_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_text_area_element) = templates.get("HTMLTextAreaElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_text_area_element = v8::String::new(scope, "HTMLTextAreaElement").unwrap();
             global.define_own_property(scope, name_html_text_area_element.into(), ctor_html_text_area_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_text_area_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_time_element) = templates.get("HTMLTimeElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_time_element = v8::String::new(scope, "HTMLTimeElement").unwrap();
             global.define_own_property(scope, name_html_time_element.into(), ctor_html_time_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_time_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_title_element) = templates.get("HTMLTitleElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_title_element = v8::String::new(scope, "HTMLTitleElement").unwrap();
             global.define_own_property(scope, name_html_title_element.into(), ctor_html_title_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_title_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_track_element) = templates.get("HTMLTrackElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_track_element = v8::String::new(scope, "HTMLTrackElement").unwrap();
             global.define_own_property(scope, name_html_track_element.into(), ctor_html_track_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_track_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "NONE").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_html_track_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "LOADING").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_html_track_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "LOADED").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_html_track_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9700,26 +11908,50 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_htmlu_list_element) = templates.get("HTMLUListElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_htmlu_list_element = v8::String::new(scope, "HTMLUListElement").unwrap();
             global.define_own_property(scope, name_htmlu_list_element.into(), ctor_htmlu_list_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_htmlu_list_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_unknown_element) = templates.get("HTMLUnknownElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_unknown_element = v8::String::new(scope, "HTMLUnknownElement").unwrap();
             global.define_own_property(scope, name_html_unknown_element.into(), ctor_html_unknown_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_unknown_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_math_ml_anchor_element) = templates.get("MathMLAnchorElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_math_ml_anchor_element = v8::String::new(scope, "MathMLAnchorElement").unwrap();
             global.define_own_property(scope, name_math_ml_anchor_element.into(), ctor_math_ml_anchor_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("MathMLElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_math_ml_anchor_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_animation_element) = templates.get("SVGAnimationElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_animation_element = v8::String::new(scope, "SVGAnimationElement").unwrap();
             global.define_own_property(scope, name_svg_animation_element.into(), ctor_svg_animation_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_animation_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_clip_path_element) = templates.get("SVGClipPathElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_clip_path_element = v8::String::new(scope, "SVGClipPathElement").unwrap();
             global.define_own_property(scope, name_svg_clip_path_element.into(), ctor_svg_clip_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_clip_path_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_component_transfer_function_element) = templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_component_transfer_function_element = v8::String::new(scope, "SVGComponentTransferFunctionElement").unwrap();
             global.define_own_property(scope, name_svg_component_transfer_function_element.into(), ctor_svg_component_transfer_function_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_component_transfer_function_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_component_transfer_function_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_component_transfer_function_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_FECOMPONENTTRANSFER_TYPE_TABLE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_component_transfer_function_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9730,10 +11962,18 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_desc_element) = templates.get("SVGDescElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_desc_element = v8::String::new(scope, "SVGDescElement").unwrap();
             global.define_own_property(scope, name_svg_desc_element.into(), ctor_svg_desc_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_desc_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_blend_element) = templates.get("SVGFEBlendElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_blend_element = v8::String::new(scope, "SVGFEBlendElement").unwrap();
             global.define_own_property(scope, name_svgfe_blend_element.into(), ctor_svgfe_blend_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_blend_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_blend_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_NORMAL").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_blend_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_FEBLEND_MODE_MULTIPLY").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_blend_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9755,6 +11995,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_color_matrix_element) = templates.get("SVGFEColorMatrixElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_color_matrix_element = v8::String::new(scope, "SVGFEColorMatrixElement").unwrap();
             global.define_own_property(scope, name_svgfe_color_matrix_element.into(), ctor_svgfe_color_matrix_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_color_matrix_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_color_matrix_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_MATRIX").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_color_matrix_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_FECOLORMATRIX_TYPE_SATURATE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_color_matrix_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9764,10 +12008,18 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_component_transfer_element) = templates.get("SVGFEComponentTransferElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_component_transfer_element = v8::String::new(scope, "SVGFEComponentTransferElement").unwrap();
             global.define_own_property(scope, name_svgfe_component_transfer_element.into(), ctor_svgfe_component_transfer_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_component_transfer_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_composite_element) = templates.get("SVGFECompositeElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_composite_element = v8::String::new(scope, "SVGFECompositeElement").unwrap();
             global.define_own_property(scope, name_svgfe_composite_element.into(), ctor_svgfe_composite_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_composite_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_composite_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_OVER").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_composite_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_FECOMPOSITE_OPERATOR_IN").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_composite_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9779,6 +12031,10 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_convolve_matrix_element) = templates.get("SVGFEConvolveMatrixElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_convolve_matrix_element = v8::String::new(scope, "SVGFEConvolveMatrixElement").unwrap();
             global.define_own_property(scope, name_svgfe_convolve_matrix_element.into(), ctor_svgfe_convolve_matrix_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_convolve_matrix_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_convolve_matrix_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_convolve_matrix_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_convolve_matrix_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9787,10 +12043,18 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_diffuse_lighting_element) = templates.get("SVGFEDiffuseLightingElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_diffuse_lighting_element = v8::String::new(scope, "SVGFEDiffuseLightingElement").unwrap();
             global.define_own_property(scope, name_svgfe_diffuse_lighting_element.into(), ctor_svgfe_diffuse_lighting_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_diffuse_lighting_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_displacement_map_element) = templates.get("SVGFEDisplacementMapElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_displacement_map_element = v8::String::new(scope, "SVGFEDisplacementMapElement").unwrap();
             global.define_own_property(scope, name_svgfe_displacement_map_element.into(), ctor_svgfe_displacement_map_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_displacement_map_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_CHANNEL_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_displacement_map_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_CHANNEL_R").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_displacement_map_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_CHANNEL_G").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_displacement_map_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9800,18 +12064,34 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_distant_light_element) = templates.get("SVGFEDistantLightElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_distant_light_element = v8::String::new(scope, "SVGFEDistantLightElement").unwrap();
             global.define_own_property(scope, name_svgfe_distant_light_element.into(), ctor_svgfe_distant_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_distant_light_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_drop_shadow_element) = templates.get("SVGFEDropShadowElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_drop_shadow_element = v8::String::new(scope, "SVGFEDropShadowElement").unwrap();
             global.define_own_property(scope, name_svgfe_drop_shadow_element.into(), ctor_svgfe_drop_shadow_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_drop_shadow_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_flood_element) = templates.get("SVGFEFloodElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_flood_element = v8::String::new(scope, "SVGFEFloodElement").unwrap();
             global.define_own_property(scope, name_svgfe_flood_element.into(), ctor_svgfe_flood_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_flood_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_gaussian_blur_element) = templates.get("SVGFEGaussianBlurElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_gaussian_blur_element = v8::String::new(scope, "SVGFEGaussianBlurElement").unwrap();
             global.define_own_property(scope, name_svgfe_gaussian_blur_element.into(), ctor_svgfe_gaussian_blur_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_gaussian_blur_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_EDGEMODE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_gaussian_blur_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_EDGEMODE_DUPLICATE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_gaussian_blur_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_EDGEMODE_WRAP").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_gaussian_blur_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9820,18 +12100,34 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_image_element) = templates.get("SVGFEImageElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_image_element = v8::String::new(scope, "SVGFEImageElement").unwrap();
             global.define_own_property(scope, name_svgfe_image_element.into(), ctor_svgfe_image_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_image_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_merge_element) = templates.get("SVGFEMergeElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_merge_element = v8::String::new(scope, "SVGFEMergeElement").unwrap();
             global.define_own_property(scope, name_svgfe_merge_element.into(), ctor_svgfe_merge_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_merge_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_merge_node_element) = templates.get("SVGFEMergeNodeElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_merge_node_element = v8::String::new(scope, "SVGFEMergeNodeElement").unwrap();
             global.define_own_property(scope, name_svgfe_merge_node_element.into(), ctor_svgfe_merge_node_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_merge_node_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_morphology_element) = templates.get("SVGFEMorphologyElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_morphology_element = v8::String::new(scope, "SVGFEMorphologyElement").unwrap();
             global.define_own_property(scope, name_svgfe_morphology_element.into(), ctor_svgfe_morphology_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_morphology_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_morphology_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_ERODE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_morphology_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_MORPHOLOGY_OPERATOR_DILATE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_morphology_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9839,26 +12135,50 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svgfe_offset_element) = templates.get("SVGFEOffsetElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_offset_element = v8::String::new(scope, "SVGFEOffsetElement").unwrap();
             global.define_own_property(scope, name_svgfe_offset_element.into(), ctor_svgfe_offset_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_offset_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_point_light_element) = templates.get("SVGFEPointLightElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_point_light_element = v8::String::new(scope, "SVGFEPointLightElement").unwrap();
             global.define_own_property(scope, name_svgfe_point_light_element.into(), ctor_svgfe_point_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_point_light_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_specular_lighting_element) = templates.get("SVGFESpecularLightingElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_specular_lighting_element = v8::String::new(scope, "SVGFESpecularLightingElement").unwrap();
             global.define_own_property(scope, name_svgfe_specular_lighting_element.into(), ctor_svgfe_specular_lighting_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_specular_lighting_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_spot_light_element) = templates.get("SVGFESpotLightElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_spot_light_element = v8::String::new(scope, "SVGFESpotLightElement").unwrap();
             global.define_own_property(scope, name_svgfe_spot_light_element.into(), ctor_svgfe_spot_light_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_spot_light_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_tile_element) = templates.get("SVGFETileElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_tile_element = v8::String::new(scope, "SVGFETileElement").unwrap();
             global.define_own_property(scope, name_svgfe_tile_element.into(), ctor_svgfe_tile_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_tile_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_turbulence_element) = templates.get("SVGFETurbulenceElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_turbulence_element = v8::String::new(scope, "SVGFETurbulenceElement").unwrap();
             global.define_own_property(scope, name_svgfe_turbulence_element.into(), ctor_svgfe_turbulence_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_turbulence_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_TURBULENCE_TYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svgfe_turbulence_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_TURBULENCE_TYPE_FRACTALNOISE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svgfe_turbulence_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_TURBULENCE_TYPE_TURBULENCE").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svgfe_turbulence_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9869,10 +12189,18 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_filter_element) = templates.get("SVGFilterElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_filter_element = v8::String::new(scope, "SVGFilterElement").unwrap();
             global.define_own_property(scope, name_svg_filter_element.into(), ctor_svg_filter_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_filter_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_gradient_element) = templates.get("SVGGradientElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_gradient_element = v8::String::new(scope, "SVGGradientElement").unwrap();
             global.define_own_property(scope, name_svg_gradient_element.into(), ctor_svg_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_gradient_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_SPREADMETHOD_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_gradient_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_SPREADMETHOD_PAD").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_gradient_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_SPREADMETHOD_REFLECT").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_gradient_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9881,14 +12209,26 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_graphics_element) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_graphics_element = v8::String::new(scope, "SVGGraphicsElement").unwrap();
             global.define_own_property(scope, name_svg_graphics_element.into(), ctor_svg_graphics_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_graphics_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgm_path_element) = templates.get("SVGMPathElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgm_path_element = v8::String::new(scope, "SVGMPathElement").unwrap();
             global.define_own_property(scope, name_svgm_path_element.into(), ctor_svgm_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgm_path_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_marker_element) = templates.get("SVGMarkerElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_marker_element = v8::String::new(scope, "SVGMarkerElement").unwrap();
             global.define_own_property(scope, name_svg_marker_element.into(), ctor_svg_marker_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_marker_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "SVG_MARKERUNITS_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_marker_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_MARKERUNITS_USERSPACEONUSE").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_marker_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "SVG_MARKERUNITS_STROKEWIDTH").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_marker_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -9900,38 +12240,74 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_mask_element) = templates.get("SVGMaskElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_mask_element = v8::String::new(scope, "SVGMaskElement").unwrap();
             global.define_own_property(scope, name_svg_mask_element.into(), ctor_svg_mask_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_mask_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_metadata_element) = templates.get("SVGMetadataElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_metadata_element = v8::String::new(scope, "SVGMetadataElement").unwrap();
             global.define_own_property(scope, name_svg_metadata_element.into(), ctor_svg_metadata_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_metadata_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_pattern_element) = templates.get("SVGPatternElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_pattern_element = v8::String::new(scope, "SVGPatternElement").unwrap();
             global.define_own_property(scope, name_svg_pattern_element.into(), ctor_svg_pattern_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_pattern_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_script_element) = templates.get("SVGScriptElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_script_element = v8::String::new(scope, "SVGScriptElement").unwrap();
             global.define_own_property(scope, name_svg_script_element.into(), ctor_svg_script_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_script_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_stop_element) = templates.get("SVGStopElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_stop_element = v8::String::new(scope, "SVGStopElement").unwrap();
             global.define_own_property(scope, name_svg_stop_element.into(), ctor_svg_stop_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_stop_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_style_element) = templates.get("SVGStyleElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_style_element = v8::String::new(scope, "SVGStyleElement").unwrap();
             global.define_own_property(scope, name_svg_style_element.into(), ctor_svg_style_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_style_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_title_element) = templates.get("SVGTitleElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_title_element = v8::String::new(scope, "SVGTitleElement").unwrap();
             global.define_own_property(scope, name_svg_title_element.into(), ctor_svg_title_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_title_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_view_element) = templates.get("SVGViewElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_view_element = v8::String::new(scope, "SVGViewElement").unwrap();
             global.define_own_property(scope, name_svg_view_element.into(), ctor_svg_view_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_view_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_html_audio_element) = templates.get("HTMLAudioElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_audio_element = v8::String::new(scope, "HTMLAudioElement").unwrap();
             global.define_own_property(scope, name_html_audio_element.into(), ctor_html_audio_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLMediaElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_audio_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         // NamedConstructor alias: Audio
         if let Some(ctor_html_audio_element) = templates.get("HTMLAudioElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
@@ -9941,86 +12317,170 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_html_video_element) = templates.get("HTMLVideoElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_html_video_element = v8::String::new(scope, "HTMLVideoElement").unwrap();
             global.define_own_property(scope, name_html_video_element.into(), ctor_html_video_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("HTMLMediaElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_html_video_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_animate_element) = templates.get("SVGAnimateElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_animate_element = v8::String::new(scope, "SVGAnimateElement").unwrap();
             global.define_own_property(scope, name_svg_animate_element.into(), ctor_svg_animate_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGAnimationElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_animate_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_animate_motion_element) = templates.get("SVGAnimateMotionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_animate_motion_element = v8::String::new(scope, "SVGAnimateMotionElement").unwrap();
             global.define_own_property(scope, name_svg_animate_motion_element.into(), ctor_svg_animate_motion_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGAnimationElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_animate_motion_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_animate_transform_element) = templates.get("SVGAnimateTransformElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_animate_transform_element = v8::String::new(scope, "SVGAnimateTransformElement").unwrap();
             global.define_own_property(scope, name_svg_animate_transform_element.into(), ctor_svg_animate_transform_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGAnimationElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_animate_transform_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_set_element) = templates.get("SVGSetElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_set_element = v8::String::new(scope, "SVGSetElement").unwrap();
             global.define_own_property(scope, name_svg_set_element.into(), ctor_svg_set_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGAnimationElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_set_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_func_a_element) = templates.get("SVGFEFuncAElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_func_a_element = v8::String::new(scope, "SVGFEFuncAElement").unwrap();
             global.define_own_property(scope, name_svgfe_func_a_element.into(), ctor_svgfe_func_a_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_func_a_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_func_b_element) = templates.get("SVGFEFuncBElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_func_b_element = v8::String::new(scope, "SVGFEFuncBElement").unwrap();
             global.define_own_property(scope, name_svgfe_func_b_element.into(), ctor_svgfe_func_b_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_func_b_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_func_g_element) = templates.get("SVGFEFuncGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_func_g_element = v8::String::new(scope, "SVGFEFuncGElement").unwrap();
             global.define_own_property(scope, name_svgfe_func_g_element.into(), ctor_svgfe_func_g_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_func_g_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgfe_func_r_element) = templates.get("SVGFEFuncRElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgfe_func_r_element = v8::String::new(scope, "SVGFEFuncRElement").unwrap();
             global.define_own_property(scope, name_svgfe_func_r_element.into(), ctor_svgfe_func_r_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGComponentTransferFunctionElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgfe_func_r_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_linear_gradient_element) = templates.get("SVGLinearGradientElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_linear_gradient_element = v8::String::new(scope, "SVGLinearGradientElement").unwrap();
             global.define_own_property(scope, name_svg_linear_gradient_element.into(), ctor_svg_linear_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGradientElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_linear_gradient_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_radial_gradient_element) = templates.get("SVGRadialGradientElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_radial_gradient_element = v8::String::new(scope, "SVGRadialGradientElement").unwrap();
             global.define_own_property(scope, name_svg_radial_gradient_element.into(), ctor_svg_radial_gradient_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGradientElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_radial_gradient_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svga_element) = templates.get("SVGAElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svga_element = v8::String::new(scope, "SVGAElement").unwrap();
             global.define_own_property(scope, name_svga_element.into(), ctor_svga_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svga_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_defs_element) = templates.get("SVGDefsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_defs_element = v8::String::new(scope, "SVGDefsElement").unwrap();
             global.define_own_property(scope, name_svg_defs_element.into(), ctor_svg_defs_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_defs_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_foreign_object_element) = templates.get("SVGForeignObjectElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_foreign_object_element = v8::String::new(scope, "SVGForeignObjectElement").unwrap();
             global.define_own_property(scope, name_svg_foreign_object_element.into(), ctor_svg_foreign_object_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_foreign_object_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgg_element) = templates.get("SVGGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgg_element = v8::String::new(scope, "SVGGElement").unwrap();
             global.define_own_property(scope, name_svgg_element.into(), ctor_svgg_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgg_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_geometry_element) = templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_geometry_element = v8::String::new(scope, "SVGGeometryElement").unwrap();
             global.define_own_property(scope, name_svg_geometry_element.into(), ctor_svg_geometry_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_geometry_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_image_element) = templates.get("SVGImageElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_image_element = v8::String::new(scope, "SVGImageElement").unwrap();
             global.define_own_property(scope, name_svg_image_element.into(), ctor_svg_image_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_image_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgsvg_element) = templates.get("SVGSVGElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgsvg_element = v8::String::new(scope, "SVGSVGElement").unwrap();
             global.define_own_property(scope, name_svgsvg_element.into(), ctor_svgsvg_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgsvg_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_switch_element) = templates.get("SVGSwitchElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_switch_element = v8::String::new(scope, "SVGSwitchElement").unwrap();
             global.define_own_property(scope, name_svg_switch_element.into(), ctor_svg_switch_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_switch_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_symbol_element) = templates.get("SVGSymbolElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_symbol_element = v8::String::new(scope, "SVGSymbolElement").unwrap();
             global.define_own_property(scope, name_svg_symbol_element.into(), ctor_svg_symbol_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_symbol_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_text_content_element) = templates.get("SVGTextContentElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_text_content_element = v8::String::new(scope, "SVGTextContentElement").unwrap();
             global.define_own_property(scope, name_svg_text_content_element.into(), ctor_svg_text_content_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_text_content_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "LENGTHADJUST_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_text_content_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "LENGTHADJUST_SPACING").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_text_content_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "LENGTHADJUST_SPACINGANDGLYPHS").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_text_content_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -10028,38 +12488,74 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_use_element) = templates.get("SVGUseElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_use_element = v8::String::new(scope, "SVGUseElement").unwrap();
             global.define_own_property(scope, name_svg_use_element.into(), ctor_svg_use_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGraphicsElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_use_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_circle_element) = templates.get("SVGCircleElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_circle_element = v8::String::new(scope, "SVGCircleElement").unwrap();
             global.define_own_property(scope, name_svg_circle_element.into(), ctor_svg_circle_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_circle_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_ellipse_element) = templates.get("SVGEllipseElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_ellipse_element = v8::String::new(scope, "SVGEllipseElement").unwrap();
             global.define_own_property(scope, name_svg_ellipse_element.into(), ctor_svg_ellipse_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_ellipse_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_line_element) = templates.get("SVGLineElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_line_element = v8::String::new(scope, "SVGLineElement").unwrap();
             global.define_own_property(scope, name_svg_line_element.into(), ctor_svg_line_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_line_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_path_element) = templates.get("SVGPathElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_path_element = v8::String::new(scope, "SVGPathElement").unwrap();
             global.define_own_property(scope, name_svg_path_element.into(), ctor_svg_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_path_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_polygon_element) = templates.get("SVGPolygonElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_polygon_element = v8::String::new(scope, "SVGPolygonElement").unwrap();
             global.define_own_property(scope, name_svg_polygon_element.into(), ctor_svg_polygon_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_polygon_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_polyline_element) = templates.get("SVGPolylineElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_polyline_element = v8::String::new(scope, "SVGPolylineElement").unwrap();
             global.define_own_property(scope, name_svg_polyline_element.into(), ctor_svg_polyline_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_polyline_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_rect_element) = templates.get("SVGRectElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_rect_element = v8::String::new(scope, "SVGRectElement").unwrap();
             global.define_own_property(scope, name_svg_rect_element.into(), ctor_svg_rect_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGGeometryElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_rect_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_text_path_element) = templates.get("SVGTextPathElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_text_path_element = v8::String::new(scope, "SVGTextPathElement").unwrap();
             global.define_own_property(scope, name_svg_text_path_element.into(), ctor_svg_text_path_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGTextContentElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_text_path_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
             { let ck = v8::String::new(scope, "TEXTPATH_METHODTYPE_UNKNOWN").unwrap(); let cv = v8::Number::new(scope, 0.0).into(); ctor_svg_text_path_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "TEXTPATH_METHODTYPE_ALIGN").unwrap(); let cv = v8::Number::new(scope, 1.0).into(); ctor_svg_text_path_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
             { let ck = v8::String::new(scope, "TEXTPATH_METHODTYPE_STRETCH").unwrap(); let cv = v8::Number::new(scope, 2.0).into(); ctor_svg_text_path_element.define_own_property(scope, ck.into(), cv, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE); }
@@ -10070,14 +12566,26 @@ pub fn install_all(scope: &mut v8::PinScope<'_, '_>, global: Local<Object>) {
         if let Some(ctor_svg_text_positioning_element) = templates.get("SVGTextPositioningElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_text_positioning_element = v8::String::new(scope, "SVGTextPositioningElement").unwrap();
             global.define_own_property(scope, name_svg_text_positioning_element.into(), ctor_svg_text_positioning_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGTextContentElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_text_positioning_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svgt_span_element) = templates.get("SVGTSpanElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svgt_span_element = v8::String::new(scope, "SVGTSpanElement").unwrap();
             global.define_own_property(scope, name_svgt_span_element.into(), ctor_svgt_span_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGTextPositioningElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svgt_span_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
         if let Some(ctor_svg_text_element) = templates.get("SVGTextElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
             let name_svg_text_element = v8::String::new(scope, "SVGTextElement").unwrap();
             global.define_own_property(scope, name_svg_text_element.into(), ctor_svg_text_element.into(), v8::PropertyAttribute::DONT_ENUM);
+            if let Some(pctor) = templates.get("SVGTextPositioningElement").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {
+                let cobj: v8::Local<v8::Object> = ctor_svg_text_element.into();
+                let _ = cobj.set_prototype(scope, pctor.into());
+            }
         }
     } // end last registration batch
 }

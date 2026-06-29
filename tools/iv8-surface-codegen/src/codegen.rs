@@ -696,6 +696,36 @@ pub fn generate_install_all(
             fn_name,
         ));
 
+        // Fix constructor __proto__ chain. V8 FunctionTemplate::inherit()
+        // sets prototype.__proto__ but NOT constructor.__proto__.
+        const INHERITANCE_OVERRIDES_REG: &[(&str, &str)] = &[
+            ("Navigator", "EventTarget"),
+            ("WorkerNavigator", "EventTarget"),
+            ("Storage", "EventTarget"),
+            ("XMLHttpRequestEventTarget", "EventTarget"),
+            ("XMLHttpRequest", "XMLHttpRequestEventTarget"),
+            ("XMLHttpRequestUpload", "XMLHttpRequestEventTarget"),
+        ];
+        let effective_parent_reg = def.inheritance.as_ref().map(|s| s.as_str()).or_else(|| {
+            INHERITANCE_OVERRIDES_REG
+                .iter()
+                .find(|(iface, _)| *iface == name.as_str())
+                .map(|(_, parent)| *parent)
+        });
+        if effective_parent_reg.is_some() {
+            let parent = effective_parent_reg.unwrap();
+            out.push_str(&format!(
+                "            if let Some(pctor) = templates.get(\"{0}\").map(|g| v8::Local::new(scope, g)).and_then(|t| t.get_function(scope)) {{\n",
+                parent,
+            ));
+            out.push_str(&format!(
+                "                let cobj: v8::Local<v8::Object> = ctor_{}.into();\n",
+                fn_name,
+            ));
+            out.push_str("                let _ = cobj.set_prototype(scope, pctor.into());\n");
+            out.push_str("            }\n");
+        }
+
         let const_members: Vec<(&String, &String)> = def
             .members
             .iter()
