@@ -217,6 +217,18 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
     else:
         test_code = test_file.read_text(encoding="utf-8")
 
+    # Neutralize setup() calls that create DOM elements (video, iframe, etc.)
+    # These crash in IV8 because createElement('video') returns a div-like
+    # element without media capabilities. Replace setup(function() {...})
+    # with a no-op, preserving the idl_test() call intact.
+    # Pattern: setup(function() { ... });
+    test_code = re.sub(
+        r'setup\s*\(\s*function\s*\(\s*\)\s*\{[^}]*(?:\{[^}]*\}[^}]*)*\}\s*\)',
+        'setup(function() {})',
+        test_code,
+        count=1,
+    )
+
     # Create IV8 context
     ctx = iv8.JSContext()
 
