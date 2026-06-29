@@ -8,33 +8,46 @@
 )]
 
 use serde_json::Value as JsonValue;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 /// The 393 default entries embedded at compile time from iv8-defaults.json.
 const DEFAULTS_JSON: &str = include_str!("../../../docs/_legacy/early-research/iv8-defaults.json");
 
 /// Browser environment configuration (357 environment + 36 config entries).
 /// Immutable after construction.
+///
+/// D-111 fix: `user_keys` tracks which keys were explicitly set by the user
+/// (via `environment_overrides`). This allows native getters to distinguish
+/// between baseline values (from iv8-defaults.json) and user-provided values.
+/// Priority: user_overrides > BrowserProfile > baseline > DEFAULT_PROFILE.
 #[derive(Debug, Clone)]
 pub struct EnvironmentMap {
     entries: HashMap<String, JsonValue>,
+    /// Keys explicitly set by the user (not from iv8-defaults.json baseline).
+    user_keys: HashSet<String>,
 }
 
 impl EnvironmentMap {
     /// Build from defaults, optionally overriding with user-provided entries.
     /// `user_overrides` is a flat map of dot-path → value.
+    ///
+    /// D-111: Keys in `user_overrides` are tracked in `user_keys` so that
+    /// native getters can distinguish user-set values from baseline values.
     pub fn build(user_overrides: Option<&HashMap<String, JsonValue>>) -> Self {
         // SAFETY: DEFAULTS_JSON is compile-time embedded; build breaks if invalid
         let mut entries: HashMap<String, JsonValue> =
             serde_json::from_str(DEFAULTS_JSON).expect("iv8-defaults.json is invalid JSON");
 
+        let mut user_keys = HashSet::new();
+
         if let Some(overrides) = user_overrides {
             for (key, value) in overrides {
                 entries.insert(key.clone(), value.clone());
+                user_keys.insert(key.clone());
             }
         }
 
-        Self { entries }
+        Self { entries, user_keys }
     }
 
     /// Build with only defaults (no overrides).
@@ -45,6 +58,34 @@ impl EnvironmentMap {
     /// Get a value by dot-path.
     pub fn get(&self, path: &str) -> Option<&JsonValue> {
         self.entries.get(path)
+    }
+
+    /// Get a value by dot-path ONLY if it was explicitly set by the user
+    /// (not from iv8-defaults.json baseline).
+    ///
+    /// D-111: This allows native getters to implement the correct priority:
+    /// `user_overrides > BrowserProfile > baseline > DEFAULT_PROFILE`.
+    pub fn get_user(&self, path: &str) -> Option<&JsonValue> {
+        if self.user_keys.contains(path) {
+            self.entries.get(path)
+        } else {
+            None
+        }
+    }
+
+    /// Get a user-set string value by dot-path.
+    pub fn get_user_str(&self, path: &str) -> Option<&str> {
+        self.get_user(path).and_then(|v| v.as_str())
+    }
+
+    /// Get a user-set float value by dot-path.
+    pub fn get_user_f64(&self, path: &str) -> Option<f64> {
+        self.get_user(path).and_then(|v| v.as_f64())
+    }
+
+    /// Get a user-set bool value by dot-path.
+    pub fn get_user_bool(&self, path: &str) -> Option<bool> {
+        self.get_user(path).and_then(|v| v.as_bool())
     }
 
     /// Get a string value by dot-path.
