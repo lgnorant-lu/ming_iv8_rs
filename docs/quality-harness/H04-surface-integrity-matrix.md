@@ -28,7 +28,7 @@ Matrix[interface, layer, source] -> Cell{status, evidence[], confidence}
 ```
 
 - **轴 1 — 接口**: P0/P1/P2/P3 四优先级，~80 个浏览器接口
-- **轴 2 — 检测层**: L0-L8 九层（属性探真）+ D1-D6 六维度（行为探真）
+- **轴 2 — 检测层**: L0-L13 十四层（属性探真，spec-grounded）+ D1-D6 六维度（行为探真）
 - **轴 3 — 数据源**: bcd-collector / Chromium IDL / webref / CDP 采样 / CreepJS
 
 矩阵采用**稀疏策略**：高优先级接口做属性级全层多源深查，低优先级接口做接口级单源浅查。
@@ -106,26 +106,26 @@ H04 注册于 `HARNESS-CHARTER.md` §7 Harness 注册表：
 
 检测层分两大维度：属性探真（L0-L8）和行为探真（D1-D6）。
 
-#### 2.2.1 属性探真 L0-L8
+#### 2.2.1 属性探真 L0-L13
 
-来源：`detection-surface-taxonomy.md` §4。
+来源：`detection-surface-taxonomy.md` §4 + Web IDL spec §3.7 (authoritative-data-sources.md Tier 1)。
 
-| 层 | 名称 | 验证内容 | IV8 当前完成度 |
-|---|---|---|---|
-| L0 | 存在性 | 属性/方法在 prototype 上吗？（`in` operator, `hasOwnProperty`） | 95% |
-| L1 | 值正确性 | 返回值是正确类型和值吗？（类型 + 值匹配真实 Chrome） | 60% |
-| L2 | 值一致性 | 值与其他信号一致吗？（UA<->platform<->Client Hints 等跨字段） | 40% |
-| L3 | 描述符正确性 | writable/enumerable/configurable 正确? getter/setter .name=".get/.set attr"? getter/setter .length? const .writable=false? | 90% |
-| L4 | toString 完整性 | `getter.toString()` -> `function get X() { [native code] }`？ | 95% |
-| L5 | 递归 toString | `Function.prototype.toString.toString()` 递归检测 | 100% |
-| L6 | TypeError 行为 | `new navigator.bluetooth()` 抛 TypeError？ | 70% |
-| L7 | Proxy 检测 | prototype cycle / `__proto__` 行为 / Reflect.setPrototypeOf | 85% |
-| L8 | 跨上下文 | Worker vs Window navigator 一致？ | 20% |
-| L9 | 接口对象属性 | interface object .name/.length/.prototype 正确? .prototype writable=false? | 80% |
-| L10 | 命名构造函数 | Image/Audio/Option .name/.prototype 正确? | 0% |
-| L11 | 静态操作 | static operation 存在? .name/.length 正确? | 0% |
-| L12 | Stringifier | toString 行为正确? [LegacyUnforgeable]? | 0% |
-| L13 | Iterable/Setlike | entries/keys/values/forEach/Symbol.iterator 存在? | 0% |
+| 层 | 名称 | 验证内容 | Web IDL spec 条款 | IV8 完成度 |
+|---|---|---|---|---|
+| L0 | 存在性 | interface object 在 global 上? prototype 存在? 属性/方法在 prototype 上? (`in`, `hasOwnProperty`) | §3.7 interface on global; §3.7.3 prototype exists | 95% |
+| L1 | 值正确性 | 返回值是正确类型和值吗? (类型 + 值匹配真实 Chrome) | §3.2 type mapping; §3.7.6 getter steps | 60% |
+| L2 | 值一致性 | 值与其他信号一致吗? (UA<->platform<->Client Hints 等跨字段) | (非 spec 层 — 检测器经验) | 40% |
+| L3 | 描述符正确性 | attribute accessor: get.name="get X", get.length=0, set.name="set X", set.length=1; operation data: writable=true, enumerable=true, configurable=true, .name=id, .length=shortest overload; constant data: writable=false, enumerable=true, configurable=false; prototype.constructor: writable=true, enumerable=false, configurable=true | §3.7.5 const {W:F,E:T,C:F}; §3.7.6 attr getter/setter name+length; §3.7.7 op {W:T,E:T,C:T}+name+length; §3.7.3 constructor {W:T,E:F,C:T} | 90% |
+| L4 | toString 完整性 | `getter.toString()` -> `function get X() { [native code] }`? operation `function X() { [native code] }`? | §3.7.6/3.7.7 CreateBuiltinFunction name; ECMA-262 §22.1.3 Function.prototype.toString | 95% |
+| L5 | 递归 toString | `Function.prototype.toString.toString()` 递归检测 | ECMA-262 §22.1.3 | 100% |
+| L6 | TypeError 行为 | constructor called as function throws? non-constructable called/constructed throws? attribute getter on wrong receiver throws? operation on wrong receiver throws? | §3.7.1 constructor behavior; §3.7.6 attr receiver check; §3.7.7 op receiver check | 70% |
+| L7 | 原型链正确性 | interface object .__proto__ = parent interface object? prototype .__proto__ = parent prototype? instance .__proto__ = interface prototype? | §3.7.1 constructorProto = parent interface object; §3.7.3 proto = parent prototype | 85% |
+| L8 | 跨上下文 | Worker vs Window navigator 一致? | (非 spec 层 — 实现一致性) | 20% |
+| L9 | 接口对象属性 | .name = interface id? .length = constructor shortest overload? .prototype = proto object {W:F,E:F,C:F}? constants on interface object {W:F,E:T,C:F}? | §3.7.1 CreateBuiltinFunction(steps, length, id); "prototype" {W:F,E:F,C:F}; §3.7.5 const on interface object | 80% |
+| L10 | 命名构造函数 | LegacyFactoryFunction: .name = factory id? .length = shortest overload? .prototype = interface prototype object? exists on global? | §3.7.2 legacy factory function; §3.4.1 [LegacyFactoryFunction] | 0% |
+| L11 | 静态操作 | static operation exists on interface object? .name=id? .length=shortest overload? {W:T,E:T,C:T}? | §3.7.7 static operations on interface object; op descriptor {W:T,E:T,C:T} | 0% |
+| L12 | Stringifier | "toString" property on prototype? .name="toString"? .length=0? {W:B,E:T,C:B}? returns correct string? | §3.7.8 stringifier; CreateBuiltinFunction(steps, 0, "toString") | 0% |
+| L13 | Iterable/Setlike/Maplike | value iterator: Symbol.iterator=Array.prototype.values, entries/keys/values/forEach from Array.prototype? pair iterator: custom entries/keys/values/forEach, .name correct? setlike: size/add/delete/has/entries/keys/values/forEach/clear? maplike: size/get/set/has/delete/entries/keys/values/forEach/clear? | §3.7.9 iterable; §3.7.11 maplike; §3.7.12 setlike | 0% |
 
 #### 2.2.2 行为探真 D1-D6
 
@@ -142,19 +142,19 @@ H04 注册于 `HARNESS-CHARTER.md` §7 Harness 注册表：
 
 #### 2.2.3 检测层与 Web IDL spec 映射
 
-来源：`docs/conventions/authoritative-data-sources.md` Tier 1。
+来源：`docs/conventions/authoritative-data-sources.md` Tier 1。多源验证：Web IDL spec (whatwg) + Chromium Blink-V8 bindings + WPT idlharness.js。
 
-| 层 | Web IDL spec 条款 | idlharness 测试对应 | IV8 codegen 实现 |
-|---|---|---|---|
-| L0 | §3.2.1 interface object existence | "existence and properties of interface object" | install_all global registration |
-| L3 | §3.2.2 interface object .name/.length; §3.2.5 attribute descriptor; §3.5.4 constant writable | "attribute descriptor", "getter must have name", "setter length", "constant writable" | codegen set_class_name + .length() + set_with_attr |
-| L6 | §3.6 constructor behavior; §3.2.7 legacy constructor | "interface object existence", "constructor" | codegen illegal_constructor / construct_only |
-| L7 | §3.2.4 prototype chain; ECMA-262 §10.4 ordinary object [[Prototype]] | "prototype of X is not Y" | tmpl.inherit() + manual __proto__ fix |
-| L9 | §3.2.2 interface object .name, .length, .prototype | "interface object length", "interface object name" | codegen set_class_name + constructor_arg_count |
-| L10 | §3.3 named constructor | "named constructor name", "named constructor prototype" | codegen NamedConstructor alias (incomplete) |
-| L11 | §3.4 static operations | "static operation" | codegen (not implemented) |
-| L12 | §3.5.3 stringifier | "stringifier" | codegen (not implemented) |
-| L13 | §3.5.5 iterable/setlike/maplike | "iterable", "setlike" | codegen (not implemented) |
+| 层 | Web IDL spec 条款 | 关键规范要求 | idlharness 测试对应 | IV8 codegen 实现 |
+|---|---|---|---|---|
+| L0 | §3.7 interface on global; §3.7.3 prototype exists | interface object 作为 global 属性存在; prototype object 存在 | "existence and properties of interface object" | install_all global registration |
+| L3 | §3.7.5 const {W:F,E:T,C:F}; §3.7.6 attr getter/setter; §3.7.7 op {W:T,E:T,C:T}; §3.7.3 constructor {W:T,E:F,C:T} | const: writable=false, enumerable=true, configurable=false; attr getter: name="get X", length=0; attr setter: name="set X", length=1; op: writable=true, enumerable=true, configurable=true, name=id, length=shortest overload; constructor: writable=true, enumerable=false, configurable=true | "attribute descriptor", "getter must have name", "setter length must be 1", "constant writable", "property should be writable" | codegen set_class_name + .length() + set_with_attr + chain_dom_prototypes writable |
+| L6 | §3.7.1 constructor behavior; §3.7.6 attr receiver check; §3.7.7 op receiver check | constructor called as function throws TypeError; non-constructable throws; wrong receiver throws TypeError | "Illegal invocation", "assert_throws" | codegen prototype_chain_check + illegal_constructor + construct_only |
+| L7 | §3.7.1 constructorProto = parent interface object; §3.7.3 proto = parent prototype | interface object .__proto__ = parent interface object; prototype .__proto__ = parent prototype | "prototype of X is not Y" | tmpl.inherit() + manual __proto__ fix (CTOR_INHERITANCE + codegen install_all) |
+| L9 | §3.7.1 CreateBuiltinFunction(steps, length, id); "prototype" {W:F,E:F,C:F}; §3.7.5 const on interface object | .name = interface id; .length = constructor shortest overload; .prototype = proto {writable:false, enumerable:false, configurable:false}; constants on interface object {writable:false, enumerable:true, configurable:false} | "interface object length", "interface object name", "constant on interface object" | codegen set_class_name + constructor_arg_count + read_only_prototype + const define_own_property |
+| L10 | §3.7.2 legacy factory function; §3.4.1 [LegacyFactoryFunction] | .name = factory id (e.g. "Image"); .length = shortest overload; .prototype = interface prototype object; Audio.prototype === HTMLAudioElement.prototype | "named constructor name", "named constructor prototype property" | codegen NamedConstructor alias (incomplete — needs .name + .prototype fix) |
+| L11 | §3.7.7 static operations on interface object; op descriptor {W:T,E:T,C:T} | static operation on interface object (not prototype); .name=id; .length=shortest overload; writable=true, enumerable=true, configurable=true | "static operation" | codegen (not implemented — IR has static flag but codegen ignores) |
+| L12 | §3.7.8 stringifier; CreateBuiltinFunction(steps, 0, "toString") | "toString" property on prototype; .name="toString"; .length=0; {writable:B, enumerable:true, configurable:B}; returns correct string | "stringifier" | codegen (not implemented — IR stringifier detection needed) |
+| L13 | §3.7.9 iterable; §3.7.11 maplike; §3.7.12 setlike | value iterator: Symbol.iterator=Array.prototype.values, entries/keys/values/forEach from Array.prototype; pair iterator: custom entries/keys/values/forEach, name="entries"/"keys"/"values", length=0; setlike: size/add/delete/has/entries/keys/values/forEach/clear/Symbol.iterator; maplike: size/get/set/has/delete/entries/keys/values/forEach/clear/Symbol.iterator | "iterable", "setlike", "entries equality" | codegen (not implemented — IR iterable/setlike detection needed) |
 
 ### 2.3 轴 3 — 数据源（Source Axis）
 
@@ -176,8 +176,8 @@ H04 注册于 `HARNESS-CHARTER.md` §7 Harness 注册表：
 ### 2.4 矩阵规模
 
 ```
-P0: 4 接口 x ~500 属性 x 15 层 x 8 源 = ~240,000 单元格（稀疏填充）
-P1: 5 接口 x ~200 属性 x 3 层  x 2 源 = ~6,000 单元格
+P0: 4 接口 x ~500 属性 x 20 层(L0-L13+D1-D6) x 8 源 = ~320,000 单元格（稀疏填充）
+P1: 5 接口 x ~200 属性 x 5 层(L0/L1/L3/L9/L13) x 2 源 = ~10,000 单元格
 P2: 5 接口 x 1 接口级  x 2 层  x 1 源 = ~10 单元格
 P3: ~66 接口 x 1 接口级 x 1 层  x 1 源 = ~66 单元格
 ```
@@ -194,18 +194,18 @@ P3: ~66 接口 x 1 接口级 x 1 层  x 1 源 = ~66 单元格
 
 ```
 粒度: 每个属性/方法独立单元格
-层数: L0-L8 全部 + D1-D6 全部
+层数: L0-L13 全部 + D1-D6 全部
 源数: >=3 源交叉确认（S1+S2+S4 为主，S3/S5/S8 补充）
 适用: Navigator, Window, Document, Screen
 ```
 
 P0 是检测器查询最频繁的接口，必须做最深验证。每个属性在每个层都有独立单元格。
 
-### 3.2 P1 — 属性级 x L0/L1/L3 x 双源
+### 3.2 P1 — 属性级 x L0/L1/L3/L9/L13 x 双源
 
 ```
 粒度: 每个属性/方法独立单元格
-层数: L0 (存在性) + L1 (值正确性) + L3 (描述符正确性)
+层数: L0 (存在性) + L1 (值正确性) + L3 (描述符) + L9 (接口对象) + L13 (iterable)
 源数: >=2 源确认（S1+S4 或 S1+S2）
 适用: WebGLRenderingContext, WebGL2RenderingContext,
       CanvasRenderingContext2D, AudioContext, Permissions
@@ -917,10 +917,139 @@ Cat 9 (webdriver/plugins/chrome stubs)、Cat 8 (XHR/cookie 行为)。
 
 | 术语 | 定义 |
 |---|---|
-| 属性探真 | 属性的静态正确性 (L0/L1/L3/L4-L7) |
+| 属性探真 | 属性的静态正确性 (L0/L1/L3/L4-L7/L9-L13) |
 | 行为探真 | 方法的动态正确性 (L2/L6/L8/D1-D6) |
 | 金标准 | 来自权威来源的可追溯测试数据 (宪法 P10) |
 | 单元格 | 矩阵中一个 [interface, layer, source] 三元组对应的验证结果 |
 | 稀疏矩阵 | 大部分单元格为 N/A，仅在有效组合处填充 |
 | 蜕变关系 | Metamorphic Testing 中不需 gold standard 的输入-输出不变式 |
 | miss counter | V8 NamedPropertyHandlerConfiguration 拦截未定义属性访问的计数器 |
+
+## 附录 C: Web IDL spec 条款速查
+
+> 多源验证: Web IDL Living Standard (whatwg) + Chromium Blink-V8 bindings + WPT idlharness.js
+> 参见 `docs/conventions/authoritative-data-sources.md`
+
+### C.1 Interface object (§3.7.1)
+
+```
+CreateBuiltinFunction(steps, length, id, « [[Unforgeables]] », realm, constructorProto)
+  length = shortest argument list in constructor overload set (0 if no constructor)
+  id = interface identifier (becomes .name)
+  constructorProto = interface object of parent P (becomes .__proto__)
+
+"prototype" property: {Writable: false, Enumerable: false, Configurable: false, Value: proto}
+Constants on interface object: {Writable: false, Enumerable: true, Configurable: false}
+Static operations on interface object: {Writable: true, Enumerable: true, Configurable: true}
+```
+
+### C.2 Legacy factory function / Named constructor (§3.7.2, §3.4.1)
+
+```
+CreateBuiltinFunction(steps, length, id, « », realm)
+  length = shortest argument list in legacy factory overload set
+  id = [LegacyFactoryFunction] identifier (e.g., "Image", "Audio", "Option")
+
+"prototype" property: {Writable: false, Enumerable: false, Configurable: false, Value: interface prototype}
+Audio.prototype === HTMLAudioElement.prototype (spec: §3.7.2)
+```
+
+### C.3 Interface prototype object (§3.7.3)
+
+```
+proto = parent interface prototype (or Object.prototype)
+
+"constructor" property: {Writable: true, Enumerable: false, Configurable: true, Value: interface object}
+Constants: {Writable: false, Enumerable: true, Configurable: false, Value: value}
+Regular attributes: accessor property (get/set)
+Regular operations: {Writable: true, Enumerable: true, Configurable: true, Value: function}
+```
+
+### C.4 Constants (§3.7.5)
+
+```
+PropertyDescriptor: {Writable: false, Enumerable: true, Configurable: false, Value: value}
+Defined on BOTH interface object AND interface prototype object
+```
+
+### C.5 Attributes (§3.7.6)
+
+```
+Getter: CreateBuiltinFunction(getterSteps, 0, "get " + id, « », realm)
+  .name = "get " + attribute identifier
+  .length = 0
+
+Setter (non-readonly): CreateBuiltinFunction(setterSteps, 1, "set " + id, « », realm)
+  .name = "set " + attribute identifier
+  .length = 1
+
+Installed as accessor property on prototype (or instance for [Global])
+```
+
+### C.6 Operations (§3.7.7)
+
+```
+CreateBuiltinFunction(steps, length, id, « », realm)
+  length = shortest argument list in overload set
+  id = operation identifier (becomes .name)
+
+PropertyDescriptor: {Writable: modifiable, Enumerable: true, Configurable: modifiable}
+  modifiable = false if unforgeable, true otherwise
+
+Static operations on interface object, regular on prototype
+```
+
+### C.7 Stringifier (§3.7.8)
+
+```
+Property name: "toString"
+PropertyDescriptor: {Writable: B, Enumerable: true, Configurable: B}
+  B = false if unforgeable, true otherwise
+
+Value: CreateBuiltinFunction(toStringSteps, 0, "toString", « », realm)
+  .name = "toString"
+  .length = 0
+```
+
+### C.8 Iterable declarations (§3.7.9)
+
+```
+Value iterator:
+  Symbol.iterator = %Array.prototype.values%
+  entries = %Array.prototype.entries%
+  keys = %Array.prototype.keys%
+  values = %Array.prototype.values%
+  forEach = %Array.prototype.forEach%
+
+Pair iterator:
+  Symbol.iterator = entries function
+  entries.name = "entries", entries.length = 0
+  keys.name = "keys", keys.length = 0
+  values.name = "values", values.length = 0
+  forEach.name = "forEach", forEach.length = 1
+```
+
+### C.9 Setlike declarations (§3.7.12)
+
+```
+size: accessor getter, .name = "get size", .length = 0
+add: data property, .name = "add", .length = 1
+delete: data property, .name = "delete", .length = 1
+has: data property, .name = "has", .length = 1
+clear: data property, .name = "clear", .length = 0
+entries/keys/values/forEach: same as pair iterator
+Symbol.iterator = entries function
+```
+
+### C.10 Maplike declarations (§3.7.11)
+
+```
+size: accessor getter, .name = "get size", .length = 0
+get: data property, .name = "get", .length = 1
+set: data property, .name = "set", .length = 2
+has: data property, .name = "has", .length = 1
+delete: data property, .name = "delete", .length = 1
+clear: data property, .name = "clear", .length = 0
+entries/keys/values/forEach: same as pair iterator
+Symbol.iterator = entries function
+```
