@@ -115,12 +115,17 @@ H04 注册于 `HARNESS-CHARTER.md` §7 Harness 注册表：
 | L0 | 存在性 | 属性/方法在 prototype 上吗？（`in` operator, `hasOwnProperty`） | 95% |
 | L1 | 值正确性 | 返回值是正确类型和值吗？（类型 + 值匹配真实 Chrome） | 60% |
 | L2 | 值一致性 | 值与其他信号一致吗？（UA<->platform<->Client Hints 等跨字段） | 40% |
-| L3 | 描述符正确性 | getter/setter/enumerable/configurable 正确吗？ | 90% |
-| L4 | toString 完整性 | `getter.toString()` -> `function X() { [native code] }`？ | 95% |
+| L3 | 描述符正确性 | writable/enumerable/configurable 正确? getter/setter .name=".get/.set attr"? getter/setter .length? const .writable=false? | 90% |
+| L4 | toString 完整性 | `getter.toString()` -> `function get X() { [native code] }`？ | 95% |
 | L5 | 递归 toString | `Function.prototype.toString.toString()` 递归检测 | 100% |
 | L6 | TypeError 行为 | `new navigator.bluetooth()` 抛 TypeError？ | 70% |
 | L7 | Proxy 检测 | prototype cycle / `__proto__` 行为 / Reflect.setPrototypeOf | 85% |
 | L8 | 跨上下文 | Worker vs Window navigator 一致？ | 20% |
+| L9 | 接口对象属性 | interface object .name/.length/.prototype 正确? .prototype writable=false? | 80% |
+| L10 | 命名构造函数 | Image/Audio/Option .name/.prototype 正确? | 0% |
+| L11 | 静态操作 | static operation 存在? .name/.length 正确? | 0% |
+| L12 | Stringifier | toString 行为正确? [LegacyUnforgeable]? | 0% |
+| L13 | Iterable/Setlike | entries/keys/values/forEach/Symbol.iterator 存在? | 0% |
 
 #### 2.2.2 行为探真 D1-D6
 
@@ -134,6 +139,22 @@ H04 注册于 `HARNESS-CHARTER.md` §7 Harness 注册表：
 | D4 | 状态转换 | WebSocket/readyState 状态机正确转换 | 无 |
 | D5 | 异常行为 | TypeError/NotSupportedError/DOMException 类型正确 | CreepJS 部分 |
 | D6 | 异步排序 | microtask vs macrotask 排序正确 | 无 |
+
+#### 2.2.3 检测层与 Web IDL spec 映射
+
+来源：`docs/conventions/authoritative-data-sources.md` Tier 1。
+
+| 层 | Web IDL spec 条款 | idlharness 测试对应 | IV8 codegen 实现 |
+|---|---|---|---|
+| L0 | §3.2.1 interface object existence | "existence and properties of interface object" | install_all global registration |
+| L3 | §3.2.2 interface object .name/.length; §3.2.5 attribute descriptor; §3.5.4 constant writable | "attribute descriptor", "getter must have name", "setter length", "constant writable" | codegen set_class_name + .length() + set_with_attr |
+| L6 | §3.6 constructor behavior; §3.2.7 legacy constructor | "interface object existence", "constructor" | codegen illegal_constructor / construct_only |
+| L7 | §3.2.4 prototype chain; ECMA-262 §10.4 ordinary object [[Prototype]] | "prototype of X is not Y" | tmpl.inherit() + manual __proto__ fix |
+| L9 | §3.2.2 interface object .name, .length, .prototype | "interface object length", "interface object name" | codegen set_class_name + constructor_arg_count |
+| L10 | §3.3 named constructor | "named constructor name", "named constructor prototype" | codegen NamedConstructor alias (incomplete) |
+| L11 | §3.4 static operations | "static operation" | codegen (not implemented) |
+| L12 | §3.5.3 stringifier | "stringifier" | codegen (not implemented) |
+| L13 | §3.5.5 iterable/setlike/maplike | "iterable", "setlike" | codegen (not implemented) |
 
 ### 2.3 轴 3 — 数据源（Source Axis）
 

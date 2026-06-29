@@ -27,6 +27,7 @@ breaking existing cross-references), but they are all indexed here.
 | 8 | Tests Directory Conventions | `docs/conventions/tests-directory-conventions.md` | tests/ directory tree, subdirectory thresholds, helper placement, fixture organization, archive policy |
 | 9 | TODO Index | `docs/todo/README.md` | Cross-module TODO tracking: Bundler / Environment / Native / Infrastructure / Tools / Deobfuscation |
 | 10 | Logging Conventions | `docs/conventions/logging-conventions.md` | Module hierarchy, log level semantics, structured fields, span usage, runtime control |
+| 11 | Authoritative Data Sources | `docs/conventions/authoritative-data-sources.md` | Tiered reference sources: normative specs, reference implementations, test suites, fingerprinting research, network-layer, practical references |
 
 ## Convention Hierarchy
 
