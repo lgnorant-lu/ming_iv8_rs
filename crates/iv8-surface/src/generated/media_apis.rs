@@ -2078,7 +2078,7 @@ pub fn create_media_stream_track_handle_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "MediaStreamTrackHandle").unwrap());
 
@@ -2235,7 +2235,7 @@ pub fn create_media_stream_track_processor_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "MediaStreamTrackProcessor").unwrap());
 
@@ -5228,7 +5228,7 @@ pub fn create_media_recorder_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "MediaRecorder").unwrap());
     if let Some(p) = _parent {
@@ -8909,7 +8909,7 @@ pub fn create_media_element_audio_source_node_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "MediaElementAudioSourceNode").unwrap());
     if let Some(p) = _parent {
@@ -8984,7 +8984,7 @@ pub fn create_media_stream_audio_destination_node_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "MediaStreamAudioDestinationNode").unwrap());
     if let Some(p) = _parent {
@@ -9059,7 +9059,7 @@ pub fn create_media_stream_audio_source_node_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "MediaStreamAudioSourceNode").unwrap());
     if let Some(p) = _parent {
@@ -9088,7 +9088,7 @@ pub fn create_media_stream_track_audio_source_node_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "MediaStreamTrackAudioSourceNode").unwrap());
     if let Some(p) = _parent {

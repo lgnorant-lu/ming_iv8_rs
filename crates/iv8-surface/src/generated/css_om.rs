@@ -2273,7 +2273,7 @@ pub fn create_css_variable_reference_value_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSVariableReferenceValue").unwrap());
 
@@ -3925,7 +3925,7 @@ pub fn create_css_parser_at_rule_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSParserAtRule").unwrap());
     if let Some(p) = _parent {
@@ -4113,7 +4113,7 @@ pub fn create_css_parser_declaration_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSParserDeclaration").unwrap());
     if let Some(p) = _parent {
@@ -4294,7 +4294,7 @@ pub fn create_css_parser_qualified_rule_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSParserQualifiedRule").unwrap());
     if let Some(p) = _parent {
@@ -4475,7 +4475,7 @@ pub fn create_css_parser_block_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSParserBlock").unwrap());
     if let Some(p) = _parent {
@@ -4656,7 +4656,7 @@ pub fn create_css_parser_function_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSParserFunction").unwrap());
     if let Some(p) = _parent {
@@ -22113,7 +22113,7 @@ pub fn create_css_keyword_value_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSKeywordValue").unwrap());
     if let Some(p) = _parent {
@@ -22988,7 +22988,7 @@ pub fn create_css_transform_value_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSTransformValue").unwrap());
     if let Some(p) = _parent {
@@ -23183,7 +23183,7 @@ pub fn create_css_unparsed_value_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSUnparsedValue").unwrap());
     if let Some(p) = _parent {
@@ -23316,7 +23316,7 @@ pub fn create_css_matrix_component_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSMatrixComponent").unwrap());
     if let Some(p) = _parent {
@@ -23437,7 +23437,7 @@ pub fn create_css_perspective_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSPerspective").unwrap());
     if let Some(p) = _parent {
@@ -23828,7 +23828,7 @@ pub fn create_css_rotate_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSRotate").unwrap());
     if let Some(p) = _parent {
@@ -24156,7 +24156,7 @@ pub fn create_css_scale_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSScale").unwrap());
     if let Some(p) = _parent {
@@ -24385,7 +24385,7 @@ pub fn create_css_skew_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSSkew").unwrap());
     if let Some(p) = _parent {
@@ -24515,7 +24515,7 @@ pub fn create_css_skew_x_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSSkewX").unwrap());
     if let Some(p) = _parent {
@@ -24636,7 +24636,7 @@ pub fn create_css_skew_y_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSSkewY").unwrap());
     if let Some(p) = _parent {
@@ -24937,7 +24937,7 @@ pub fn create_css_translate_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSTranslate").unwrap());
     if let Some(p) = _parent {
@@ -27733,7 +27733,7 @@ pub fn create_css_color_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSColor").unwrap());
     if let Some(p) = _parent {
@@ -28142,7 +28142,7 @@ pub fn create_csshsl_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSHSL").unwrap());
     if let Some(p) = _parent {
@@ -28560,7 +28560,7 @@ pub fn create_csshwb_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSHWB").unwrap());
     if let Some(p) = _parent {
@@ -28978,7 +28978,7 @@ pub fn create_csslch_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSLCH").unwrap());
     if let Some(p) = _parent {
@@ -29396,7 +29396,7 @@ pub fn create_css_lab_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSLab").unwrap());
     if let Some(p) = _parent {
@@ -29814,7 +29814,7 @@ pub fn create_cssoklch_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSOKLCH").unwrap());
     if let Some(p) = _parent {
@@ -30232,7 +30232,7 @@ pub fn create_cssok_lab_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSOKLab").unwrap());
     if let Some(p) = _parent {
@@ -30650,7 +30650,7 @@ pub fn create_cssrgb_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSRGB").unwrap());
     if let Some(p) = _parent {
@@ -30919,7 +30919,7 @@ pub fn create_css_unit_value_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSUnitValue").unwrap());
     if let Some(p) = _parent {
@@ -31629,7 +31629,7 @@ pub fn create_css_math_clamp_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSMathClamp").unwrap());
     if let Some(p) = _parent {
@@ -31718,7 +31718,7 @@ pub fn create_css_math_invert_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSMathInvert").unwrap());
     if let Some(p) = _parent {
@@ -31943,7 +31943,7 @@ pub fn create_css_math_negate_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CSSMathNegate").unwrap());
     if let Some(p) = _parent {

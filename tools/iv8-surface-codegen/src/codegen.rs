@@ -85,6 +85,17 @@ fn is_constructable(def: &Definition) -> bool {
     def.members.iter().any(|m| m.kind == "constructor")
 }
 
+/// Get the required argument count for the interface constructor.
+/// Returns 0 if no constructor or all args are optional/variadic.
+fn constructor_arg_count(def: &Definition) -> usize {
+    for m in &def.members {
+        if m.kind == "constructor" {
+            return m.required_arg_count;
+        }
+    }
+    0
+}
+
 fn parse_const_value(raw: &str) -> Option<f64> {
     let trimmed = raw.trim();
     if trimmed.is_empty() {
@@ -389,10 +400,18 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     } else {
         "illegal_constructor"
     };
-    out.push_str(&format!(
-        "    let tmpl = v8::FunctionTemplate::builder_raw({}).build(scope);\n",
-        ctor_cb
-    ));
+    let ctor_length = constructor_arg_count(def);
+    if ctor_length > 0 {
+        out.push_str(&format!(
+            "    let tmpl = v8::FunctionTemplate::builder_raw({}).length({}).build(scope);\n",
+            ctor_cb, ctor_length
+        ));
+    } else {
+        out.push_str(&format!(
+            "    let tmpl = v8::FunctionTemplate::builder_raw({}).build(scope);\n",
+            ctor_cb
+        ));
+    }
     out.push_str("    tmpl.read_only_prototype();\n");
     out.push_str(&format!(
         "    tmpl.set_class_name(v8::String::new(scope, \"{}\").unwrap());\n",

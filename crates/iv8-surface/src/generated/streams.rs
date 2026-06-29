@@ -103,7 +103,7 @@ pub fn create_byte_length_queuing_strategy_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "ByteLengthQueuingStrategy").unwrap());
 
@@ -228,7 +228,7 @@ pub fn create_count_queuing_strategy_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "CountQueuingStrategy").unwrap());
 
@@ -1119,7 +1119,7 @@ pub fn create_readable_stream_byob_reader_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "ReadableStreamBYOBReader").unwrap());
 
@@ -1759,7 +1759,7 @@ pub fn create_readable_stream_default_reader_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "ReadableStreamDefaultReader").unwrap());
 
@@ -2840,7 +2840,7 @@ pub fn create_writable_stream_default_writer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "WritableStreamDefaultWriter").unwrap());
 

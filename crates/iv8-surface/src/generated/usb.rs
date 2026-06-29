@@ -287,7 +287,7 @@ pub fn create_usb_alternate_interface_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBAlternateInterface").unwrap());
 
@@ -486,7 +486,7 @@ pub fn create_usb_configuration_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBConfiguration").unwrap());
 
@@ -2442,7 +2442,7 @@ pub fn create_usb_endpoint_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(3).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBEndpoint").unwrap());
 
@@ -2581,7 +2581,7 @@ pub fn create_usb_in_transfer_result_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBInTransferResult").unwrap());
 
@@ -2798,7 +2798,7 @@ pub fn create_usb_interface_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(2).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBInterface").unwrap());
 
@@ -2937,7 +2937,7 @@ pub fn create_usb_isochronous_in_transfer_packet_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBIsochronousInTransferPacket").unwrap());
 
@@ -3062,7 +3062,7 @@ pub fn create_usb_isochronous_in_transfer_result_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBIsochronousInTransferResult").unwrap());
 
@@ -3187,7 +3187,7 @@ pub fn create_usb_isochronous_out_transfer_packet_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBIsochronousOutTransferPacket").unwrap());
 
@@ -3266,7 +3266,7 @@ pub fn create_usb_isochronous_out_transfer_result_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBIsochronousOutTransferResult").unwrap());
 
@@ -3384,7 +3384,7 @@ pub fn create_usb_out_transfer_result_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "USBOutTransferResult").unwrap());
 

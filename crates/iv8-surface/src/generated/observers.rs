@@ -471,7 +471,7 @@ pub fn create_intersection_observer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "IntersectionObserver").unwrap());
 
@@ -928,7 +928,7 @@ pub fn create_intersection_observer_entry_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "IntersectionObserverEntry").unwrap());
 
@@ -1187,7 +1187,7 @@ pub fn create_performance_observer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "PerformanceObserver").unwrap());
 
@@ -1464,7 +1464,7 @@ pub fn create_pressure_observer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "PressureObserver").unwrap());
 
@@ -1656,7 +1656,7 @@ pub fn create_reporting_observer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "ReportingObserver").unwrap());
 
@@ -1834,7 +1834,7 @@ pub fn create_resize_observer_template<'s>(
     scope: &v8::PinScope<'s, '_>,
     _parent: Option<v8::Local<'s, v8::FunctionTemplate>>,
 ) -> v8::Local<'s, v8::FunctionTemplate> {
-    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).build(scope);
+    let tmpl = v8::FunctionTemplate::builder_raw(construct_only).length(1).build(scope);
     tmpl.read_only_prototype();
     tmpl.set_class_name(v8::String::new(scope, "ResizeObserver").unwrap());
 
