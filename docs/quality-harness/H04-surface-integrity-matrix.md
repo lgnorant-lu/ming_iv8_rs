@@ -875,26 +875,34 @@ Cat 9 (webdriver/plugins/chrome stubs)、Cat 8 (XHR/cookie 行为)。
 
 ## 12. 当前基线
 
-> Phase 1 尚未实施，以下为预估基线，待 `scripts/evaluate_surface_integrity.py`
-> 首次运行后更新为实测值。
+> Phase 1 实施中。以下为 `scripts/evaluate_surface_integrity.py` 首次运行实测值。
+> 数据源: `data/idlharness-report.json` (7876/10222 PASS, 77.05%)
 
-| 类别 | 指标 | 预估值 | 阈值 | 状态 |
-|---|---|---|---|---|
-| A | golden_errors | — (待采集) | 0 | PENDING |
-| A | golden_freshness_days | — | <= 42 | PENDING |
-| B | p0_coverage_pct | ~95% (估) | >= 95 | PENDING |
-| B | p1_coverage_pct | ~90% (估) | >= 90 | PENDING |
-| B | p2_coverage_pct | ~100% (估) | = 100 | PENDING |
-| B | p3_coverage_pct | ~80% (估) | >= 80 | PENDING |
-| C | chrome_self_test_pass_pct | — (待 CDP 环境) | = 100 | PENDING |
-| C | creepjs_lies_on_chrome | — | = 0 | PENDING |
-| D | dual_source_pass_rate | — | >= 80 | PENDING |
-| D | conflict_count | — | = 0 | PENDING |
-| E | determinism_pct | — | = 100 | PENDING |
-| E | cdp_reproducibility_pct | — | >= 99 | PENDING |
-| E | metamorphic_invariant_pass | — | = 100 | PENDING |
+| Layer | Pass | Fail | Total | Rate | 状态 |
+|---|---|---|---|---|---|
+| L0 | 1604 | 539 | 2143 | 74.8% | PARTIAL |
+| L1 | 4208 | 157 | 4365 | 96.4% | GOOD |
+| L3 | 0 | 417 | 417 | 0.0% | BLOCKED |
+| L6 | 16 | 238 | 254 | 6.3% | PARTIAL |
+| L7 | 125 | 525 | 650 | 19.2% | PARTIAL |
+| L9 | 1253 | 32 | 1285 | 97.5% | GOOD |
+| L10 | 30 | 24 | 54 | 55.6% | PARTIAL |
+| L11 | 0 | 95 | 95 | 0.0% | NOT IMPL |
+| L12 | 0 | 13 | 13 | 0.0% | NOT IMPL |
+| L13 | 0 | 7 | 7 | 0.0% | NOT IMPL |
+| other | 640 | 299 | 939 | 68.2% | PARTIAL |
 
-**OVERALL: PENDING** (Phase 1 实施后首次测量)
+> L3 PASS=0 因为 idlharness 的 PASS 测试不生成 message，classify_pass
+> 基于测试名匹配，L3 的检查项（writable/configurable）在 PASS 时
+> 测试名为 "attribute X" 被分到 L1。需后续细化 classify_pass。
+>
+> L3 FAIL=417 主要是 dom-covered 接口的 configurable=false
+> (chain_dom_prototypes 复制时 set_configurable 未生效)
+>
+> L6 FAIL=238 主要是 dom native callback 的 receiver check
+> (HTMLElement.prototype.click.call(null) 等)
+>
+> L7 FAIL=525 主要是 codegen-only 接口的 __proto__ 链不完整
 
 ---
 
