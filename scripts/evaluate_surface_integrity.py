@@ -41,6 +41,7 @@ from collections import defaultdict
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = REPO_ROOT / "data"
 DEFAULT_REPORT = DATA_DIR / "idlharness-report.json"
+DEFAULT_WPT_REPORT = DATA_DIR / "wpt-report.json"
 DEFAULT_OUTPUT = DATA_DIR / "surface-integrity-report.json"
 
 
@@ -214,6 +215,7 @@ def classify_pass(test_name: str) -> str:
 def evaluate(report: dict) -> dict:
     """Evaluate idlharness report into L-layer matrix.
 
+    Supports both old format (interfaces[]) and WPT format (suites[]).
     Returns a dict with:
       layers: {layer: {pass, fail, total}}
       interfaces: {interface: {layer: {pass, fail}}}
@@ -223,20 +225,40 @@ def evaluate(report: dict) -> dict:
     interfaces = defaultdict(lambda: defaultdict(
         lambda: {"pass": 0, "fail": 0}))
 
-    for iface in report.get("interfaces", []):
-        iface_name = iface["name"]
-        for t in iface["tests"]:
-            if t["status"] == "Pass":
-                layer = classify_pass(t["name"])
-                layers[layer]["pass"] += 1
-                layers[layer]["total"] += 1
-                interfaces[iface_name][layer]["pass"] += 1
-            else:
-                msg = t.get("message", "") or ""
-                layer = classify_fail(t["name"], msg)
-                layers[layer]["fail"] += 1
-                layers[layer]["total"] += 1
-                interfaces[iface_name][layer]["fail"] += 1
+    # Support WPT official report format (suites[])
+    if "suites" in report:
+        for suite in report["suites"]:
+            suite_name = suite.get("suite", "unknown")
+            variant = suite.get("variant", "")
+            iface_name = f"{suite_name} [{variant}]"
+            for t in suite.get("tests", []):
+                if t["status"] == "Pass":
+                    layer = classify_pass(t["name"])
+                    layers[layer]["pass"] += 1
+                    layers[layer]["total"] += 1
+                    interfaces[iface_name][layer]["pass"] += 1
+                else:
+                    msg = t.get("message", "") or ""
+                    layer = classify_fail(t["name"], msg)
+                    layers[layer]["fail"] += 1
+                    layers[layer]["total"] += 1
+                    interfaces[iface_name][layer]["fail"] += 1
+    else:
+        # Old format (interfaces[])
+        for iface in report.get("interfaces", []):
+            iface_name = iface["name"]
+            for t in iface["tests"]:
+                if t["status"] == "Pass":
+                    layer = classify_pass(t["name"])
+                    layers[layer]["pass"] += 1
+                    layers[layer]["total"] += 1
+                    interfaces[iface_name][layer]["pass"] += 1
+                else:
+                    msg = t.get("message", "") or ""
+                    layer = classify_fail(t["name"], msg)
+                    layers[layer]["fail"] += 1
+                    layers[layer]["total"] += 1
+                    interfaces[iface_name][layer]["fail"] += 1
 
     total_pass = sum(l["pass"] for l in layers.values())
     total_fail = sum(l["fail"] for l in layers.values())
@@ -364,8 +386,8 @@ def main() -> None:
         description="H04: Surface Integrity Matrix evaluator")
     parser.add_argument(
         "--report", "-r",
-        default=str(DEFAULT_REPORT),
-        help=f"idlharness report JSON (default: {DEFAULT_REPORT})",
+        default=str(DEFAULT_WPT_REPORT),
+        help=f"Test report JSON (default: {DEFAULT_WPT_REPORT} — WPT official)",
     )
     parser.add_argument(
         "--output", "-o",
@@ -377,11 +399,22 @@ def main() -> None:
     report_path = Path(args.report)
     if not report_path.exists():
         print(f"ERROR: Report not found: {report_path}")
-        print("Run scripts/run_idlharness.py first.")
+        print("Run scripts/run_wpt.py first (WPT official runner).")
+        print("Or run scripts/run_idlharness.py for legacy runner.")
         sys.exit(2)
 
     report = json.loads(report_path.read_text(encoding="utf-8"))
     result = evaluate(report)
+
+    # Add Chrome baseline if available
+    if "chrome_baseline" in report:
+        chrome_total = sum(b.get("total", 0) for b in report["chrome_baseline"].values())
+        chrome_pass = sum(b.get("pass", 0) for b in report["chrome_baseline"].values())
+        result["chrome_baseline"] = {
+            "total": chrome_total,
+            "pass": chrome_pass,
+            "pass_rate": round(chrome_pass / chrome_total * 100, 2) if chrome_total > 0 else 0,
+        }
 
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -391,6 +424,13 @@ def main() -> None:
     )
 
     print_report(result)
+
+    # Print Chrome baseline if available
+    if "chrome_baseline" in result:
+        cb = result["chrome_baseline"]
+        print(f"Chrome 151 baseline: {cb['pass']}/{cb['total']} ({cb['pass_rate']}%)")
+        print()
+
     print(f"Report written to {output_path}")
 
     sys.exit(0 if result["summary"]["total_fail"] == 0 else 1)
