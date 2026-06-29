@@ -116,13 +116,15 @@ pub fn create_byte_length_queuing_strategy_template<'s>(
     // attribute: highWaterMark
     {
         let name = v8::String::new(scope, "highWaterMark").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(byte_length_queuing_strategy_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(byte_length_queuing_strategy_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get highWaterMark").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(byte_length_queuing_strategy_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(byte_length_queuing_strategy_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -239,13 +241,15 @@ pub fn create_count_queuing_strategy_template<'s>(
     // attribute: highWaterMark
     {
         let name = v8::String::new(scope, "highWaterMark").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(count_queuing_strategy_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(count_queuing_strategy_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get highWaterMark").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(count_queuing_strategy_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(count_queuing_strategy_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -500,13 +504,15 @@ pub fn create_readable_byte_stream_controller_template<'s>(
     // attribute: byobRequest
     {
         let name = v8::String::new(scope, "byobRequest").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(readable_byte_stream_controller_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(readable_byte_stream_controller_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get byobRequest").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: desiredSize
     {
         let name = v8::String::new(scope, "desiredSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(readable_byte_stream_controller_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(readable_byte_stream_controller_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get desiredSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: close()
@@ -881,7 +887,8 @@ pub fn create_readable_stream_template<'s>(
     // attribute: locked
     {
         let name = v8::String::new(scope, "locked").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(readable_stream_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(readable_stream_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get locked").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: cancel()
@@ -1139,7 +1146,8 @@ pub fn create_readable_stream_byob_reader_template<'s>(
     // attribute: closed
     {
         let name = v8::String::new(scope, "closed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(readable_stream_byob_reader_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(readable_stream_byob_reader_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get closed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: cancel()
@@ -1309,7 +1317,8 @@ pub fn create_readable_stream_byob_request_template<'s>(
     // attribute: view
     {
         let name = v8::String::new(scope, "view").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(readable_stream_byob_request_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(readable_stream_byob_request_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get view").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: respond()
@@ -1532,7 +1541,8 @@ pub fn create_readable_stream_default_controller_template<'s>(
     // attribute: desiredSize
     {
         let name = v8::String::new(scope, "desiredSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(readable_stream_default_controller_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(readable_stream_default_controller_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get desiredSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: close()
@@ -1776,7 +1786,8 @@ pub fn create_readable_stream_default_reader_template<'s>(
     // attribute: closed
     {
         let name = v8::String::new(scope, "closed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(readable_stream_default_reader_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(readable_stream_default_reader_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get closed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: cancel()
@@ -1900,13 +1911,15 @@ pub fn create_transform_stream_template<'s>(
     // attribute: readable
     {
         let name = v8::String::new(scope, "readable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(transform_stream_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(transform_stream_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: writable
     {
         let name = v8::String::new(scope, "writable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(transform_stream_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(transform_stream_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get writable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2115,7 +2128,8 @@ pub fn create_transform_stream_default_controller_template<'s>(
     // attribute: desiredSize
     {
         let name = v8::String::new(scope, "desiredSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(transform_stream_default_controller_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(transform_stream_default_controller_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get desiredSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: enqueue()
@@ -2345,7 +2359,8 @@ pub fn create_writable_stream_template<'s>(
     // attribute: locked
     {
         let name = v8::String::new(scope, "locked").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(writable_stream_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(writable_stream_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get locked").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: abort()
@@ -2483,7 +2498,8 @@ pub fn create_writable_stream_default_controller_template<'s>(
     // attribute: signal
     {
         let name = v8::String::new(scope, "signal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(writable_stream_default_controller_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(writable_stream_default_controller_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get signal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: error()
@@ -2837,19 +2853,22 @@ pub fn create_writable_stream_default_writer_template<'s>(
     // attribute: closed
     {
         let name = v8::String::new(scope, "closed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(writable_stream_default_writer_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(writable_stream_default_writer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get closed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: desiredSize
     {
         let name = v8::String::new(scope, "desiredSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(writable_stream_default_writer_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(writable_stream_default_writer_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get desiredSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ready
     {
         let name = v8::String::new(scope, "ready").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(writable_stream_default_writer_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(writable_stream_default_writer_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ready").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: abort()

@@ -438,55 +438,64 @@ pub fn create_bluetooth_characteristic_properties_template<'s>(
     // attribute: broadcast
     {
         let name = v8::String::new(scope, "broadcast").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get broadcast").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: read
     {
         let name = v8::String::new(scope, "read").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get read").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: writeWithoutResponse
     {
         let name = v8::String::new(scope, "writeWithoutResponse").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get writeWithoutResponse").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: write
     {
         let name = v8::String::new(scope, "write").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get write").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: notify
     {
         let name = v8::String::new(scope, "notify").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get notify").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: indicate
     {
         let name = v8::String::new(scope, "indicate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get indicate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: authenticatedSignedWrites
     {
         let name = v8::String::new(scope, "authenticatedSignedWrites").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get authenticatedSignedWrites").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: reliableWrite
     {
         let name = v8::String::new(scope, "reliableWrite").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get reliableWrite").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: writableAuxiliaries
     {
         let name = v8::String::new(scope, "writableAuxiliaries").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_characteristic_properties_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get writableAuxiliaries").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -603,13 +612,15 @@ pub fn create_bluetooth_data_filter_template<'s>(
     // attribute: dataPrefix
     {
         let name = v8::String::new(scope, "dataPrefix").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_data_filter_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_data_filter_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dataPrefix").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: mask
     {
         let name = v8::String::new(scope, "mask").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_data_filter_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_data_filter_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mask").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -864,25 +875,29 @@ pub fn create_bluetooth_le_scan_template<'s>(
     // attribute: filters
     {
         let name = v8::String::new(scope, "filters").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get filters").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: keepRepeatedDevices
     {
         let name = v8::String::new(scope, "keepRepeatedDevices").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get keepRepeatedDevices").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: acceptAllAdvertisements
     {
         let name = v8::String::new(scope, "acceptAllAdvertisements").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get acceptAllAdvertisements").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: active
     {
         let name = v8::String::new(scope, "active").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get active").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: stop()
@@ -1144,31 +1159,36 @@ pub fn create_bluetooth_le_scan_filter_template<'s>(
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: namePrefix
     {
         let name = v8::String::new(scope, "namePrefix").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get namePrefix").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: services
     {
         let name = v8::String::new(scope, "services").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get services").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: manufacturerData
     {
         let name = v8::String::new(scope, "manufacturerData").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get manufacturerData").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: serviceData
     {
         let name = v8::String::new(scope, "serviceData").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_filter_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get serviceData").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1461,19 +1481,22 @@ pub fn create_bluetooth_remote_gatt_descriptor_template<'s>(
     // attribute: characteristic
     {
         let name = v8::String::new(scope, "characteristic").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_descriptor_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_descriptor_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get characteristic").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: uuid
     {
         let name = v8::String::new(scope, "uuid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_descriptor_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_descriptor_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get uuid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_descriptor_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_descriptor_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: readValue()
@@ -1788,13 +1811,15 @@ pub fn create_bluetooth_remote_gatt_server_template<'s>(
     // attribute: device
     {
         let name = v8::String::new(scope, "device").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_server_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_server_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get device").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: connected
     {
         let name = v8::String::new(scope, "connected").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_server_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_server_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get connected").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: connect()
@@ -2993,14 +3018,17 @@ fn install_bluetooth_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: onavailabilitychanged
     {
         let name = v8::String::new(scope, "onavailabilitychanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onavailabilitychanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onavailabilitychanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: referringDevice
     {
         let name = v8::String::new(scope, "referringDevice").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referringDevice").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getDevices()
@@ -3027,29 +3055,37 @@ fn install_bluetooth_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: onadvertisementreceived
     {
         let name = v8::String::new(scope, "onadvertisementreceived").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onadvertisementreceived").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onadvertisementreceived").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ongattserverdisconnected
     {
         let name = v8::String::new(scope, "ongattserverdisconnected").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ongattserverdisconnected").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ongattserverdisconnected").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncharacteristicvaluechanged
     {
         let name = v8::String::new(scope, "oncharacteristicvaluechanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncharacteristicvaluechanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncharacteristicvaluechanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onserviceadded
     {
         let name = v8::String::new(scope, "onserviceadded").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onserviceadded").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onserviceadded").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -3058,15 +3094,19 @@ fn install_bluetooth_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: onservicechanged
     {
         let name = v8::String::new(scope, "onservicechanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onservicechanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onservicechanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onserviceremoved
     {
         let name = v8::String::new(scope, "onserviceremoved").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onserviceremoved").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onserviceremoved").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -3916,19 +3956,22 @@ fn install_bluetooth_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: gatt
     {
         let name = v8::String::new(scope, "gatt").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get gatt").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: forget()
@@ -3948,35 +3991,44 @@ fn install_bluetooth_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: watchingAdvertisements
     {
         let name = v8::String::new(scope, "watchingAdvertisements").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get watchingAdvertisements").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onadvertisementreceived
     {
         let name = v8::String::new(scope, "onadvertisementreceived").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onadvertisementreceived").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onadvertisementreceived").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ongattserverdisconnected
     {
         let name = v8::String::new(scope, "ongattserverdisconnected").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ongattserverdisconnected").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ongattserverdisconnected").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncharacteristicvaluechanged
     {
         let name = v8::String::new(scope, "oncharacteristicvaluechanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncharacteristicvaluechanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncharacteristicvaluechanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onserviceadded
     {
         let name = v8::String::new(scope, "onserviceadded").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onserviceadded").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onserviceadded").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -3985,15 +4037,19 @@ fn install_bluetooth_device_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: onservicechanged
     {
         let name = v8::String::new(scope, "onservicechanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onservicechanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onservicechanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onserviceremoved
     {
         let name = v8::String::new(scope, "onserviceremoved").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_device_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onserviceremoved").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_device_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onserviceremoved").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -4669,25 +4725,29 @@ fn install_bluetooth_remote_gatt_characteristic_members_1<'s>(scope: &v8::PinSco
     // attribute: service
     {
         let name = v8::String::new(scope, "service").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get service").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: uuid
     {
         let name = v8::String::new(scope, "uuid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get uuid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: properties
     {
         let name = v8::String::new(scope, "properties").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get properties").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getDescriptor()
@@ -4752,8 +4812,10 @@ fn install_bluetooth_remote_gatt_characteristic_members_2<'s>(scope: &v8::PinSco
     // attribute: oncharacteristicvaluechanged
     {
         let name = v8::String::new(scope, "oncharacteristicvaluechanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncharacteristicvaluechanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_characteristic_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncharacteristicvaluechanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -5469,19 +5531,22 @@ fn install_bluetooth_remote_gatt_service_members_1<'s>(scope: &v8::PinScope<'s, 
     // attribute: device
     {
         let name = v8::String::new(scope, "device").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get device").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: uuid
     {
         let name = v8::String::new(scope, "uuid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get uuid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: isPrimary
     {
         let name = v8::String::new(scope, "isPrimary").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isPrimary").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getCharacteristic()
@@ -5515,22 +5580,28 @@ fn install_bluetooth_remote_gatt_service_members_1<'s>(scope: &v8::PinScope<'s, 
     // attribute: oncharacteristicvaluechanged
     {
         let name = v8::String::new(scope, "oncharacteristicvaluechanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncharacteristicvaluechanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncharacteristicvaluechanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onserviceadded
     {
         let name = v8::String::new(scope, "onserviceadded").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onserviceadded").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onserviceadded").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onservicechanged
     {
         let name = v8::String::new(scope, "onservicechanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onservicechanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onservicechanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -5539,8 +5610,10 @@ fn install_bluetooth_remote_gatt_service_members_2<'s>(scope: &v8::PinScope<'s, 
     // attribute: onserviceremoved
     {
         let name = v8::String::new(scope, "onserviceremoved").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onserviceremoved").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_remote_gatt_service_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onserviceremoved").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -5657,8 +5730,10 @@ pub fn create_bluetooth_le_scan_permission_result_template<'s>(
     // attribute: scans
     {
         let name = v8::String::new(scope, "scans").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_permission_result_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_permission_result_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_permission_result_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scans").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_le_scan_permission_result_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set scans").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -5776,8 +5851,10 @@ pub fn create_bluetooth_permission_result_template<'s>(
     // attribute: devices
     {
         let name = v8::String::new(scope, "devices").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(bluetooth_permission_result_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(bluetooth_permission_result_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(bluetooth_permission_result_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get devices").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(bluetooth_permission_result_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set devices").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 

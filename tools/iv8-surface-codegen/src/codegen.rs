@@ -471,14 +471,22 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
                 attr_name
             ));
             block.push_str(&format!(
-                "        let getter = v8::FunctionTemplate::builder_raw({}_get_{}).build(scope);\n",
+                "        let getter = v8::FunctionTemplate::builder_raw({}_get_{}).length(0).build(scope);\n",
                 fn_name, idx
+            ));
+            block.push_str(&format!(
+                "        getter.set_class_name(v8::String::new(scope, \"get {}\").unwrap());\n",
+                attr_name
             ));
             if m.readonly {
                 block.push_str("        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);\n");
             } else {
                 block.push_str(&format!(
-                    "        let setter = v8::FunctionTemplate::builder_raw({}_set_{}).build(scope);\n", fn_name, idx));
+                    "        let setter = v8::FunctionTemplate::builder_raw({}_set_{}).length(1).build(scope);\n", fn_name, idx));
+                block.push_str(&format!(
+                    "        setter.set_class_name(v8::String::new(scope, \"set {}\").unwrap());\n",
+                    attr_name
+                ));
                 block.push_str("        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);\n");
             }
             block.push_str("    }\n");

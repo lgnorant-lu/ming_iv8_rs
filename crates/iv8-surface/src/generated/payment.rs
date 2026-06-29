@@ -160,8 +160,10 @@ pub fn create_payment_manager_template<'s>(
     // attribute: userHint
     {
         let name = v8::String::new(scope, "userHint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_manager_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(payment_manager_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_manager_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get userHint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(payment_manager_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set userHint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: enableDelegations()
@@ -908,46 +910,56 @@ fn install_payment_request_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: shippingAddress
     {
         let name = v8::String::new(scope, "shippingAddress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shippingAddress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: shippingOption
     {
         let name = v8::String::new(scope, "shippingOption").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shippingOption").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: shippingType
     {
         let name = v8::String::new(scope, "shippingType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shippingType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onshippingaddresschange
     {
         let name = v8::String::new(scope, "onshippingaddresschange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(payment_request_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onshippingaddresschange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(payment_request_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onshippingaddresschange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onshippingoptionchange
     {
         let name = v8::String::new(scope, "onshippingoptionchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(payment_request_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onshippingoptionchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(payment_request_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onshippingoptionchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpaymentmethodchange
     {
         let name = v8::String::new(scope, "onpaymentmethodchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(payment_request_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_request_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpaymentmethodchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(payment_request_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpaymentmethodchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -1601,49 +1613,57 @@ fn install_payment_response_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: requestId
     {
         let name = v8::String::new(scope, "requestId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get requestId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: methodName
     {
         let name = v8::String::new(scope, "methodName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get methodName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: details
     {
         let name = v8::String::new(scope, "details").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get details").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: shippingAddress
     {
         let name = v8::String::new(scope, "shippingAddress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shippingAddress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: shippingOption
     {
         let name = v8::String::new(scope, "shippingOption").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shippingOption").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: payerName
     {
         let name = v8::String::new(scope, "payerName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get payerName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: payerEmail
     {
         let name = v8::String::new(scope, "payerEmail").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get payerEmail").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: payerPhone
     {
         let name = v8::String::new(scope, "payerPhone").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get payerPhone").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: complete()
@@ -1666,8 +1686,10 @@ fn install_payment_response_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: onpayerdetailchange
     {
         let name = v8::String::new(scope, "onpayerdetailchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(payment_response_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(payment_response_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpayerdetailchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(payment_response_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpayerdetailchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }

@@ -299,15 +299,19 @@ pub fn create_hid_template<'s>(
     // attribute: onconnect
     {
         let name = v8::String::new(scope, "onconnect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(hid_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(hid_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(hid_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onconnect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(hid_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onconnect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondisconnect
     {
         let name = v8::String::new(scope, "ondisconnect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(hid_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(hid_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(hid_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondisconnect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(hid_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondisconnect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getDevices()
@@ -952,38 +956,45 @@ fn install_hid_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: oninputreport
     {
         let name = v8::String::new(scope, "oninputreport").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(hid_device_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oninputreport").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(hid_device_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oninputreport").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: opened
     {
         let name = v8::String::new(scope, "opened").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get opened").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: vendorId
     {
         let name = v8::String::new(scope, "vendorId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vendorId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: productId
     {
         let name = v8::String::new(scope, "productId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get productId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: productName
     {
         let name = v8::String::new(scope, "productName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get productName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: collections
     {
         let name = v8::String::new(scope, "collections").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(hid_device_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get collections").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: open()

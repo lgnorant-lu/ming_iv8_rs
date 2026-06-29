@@ -208,7 +208,8 @@ pub fn create_html_all_collection_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_all_collection_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_all_collection_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: unknown()
@@ -392,7 +393,8 @@ pub fn create_html_collection_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_collection_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_collection_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: item()
@@ -827,8 +829,10 @@ pub fn create_html_options_collection_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_options_collection_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_options_collection_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_options_collection_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_options_collection_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: unknown()
@@ -855,8 +859,10 @@ pub fn create_html_options_collection_template<'s>(
     // attribute: selectedIndex
     {
         let name = v8::String::new(scope, "selectedIndex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_options_collection_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_options_collection_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_options_collection_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectedIndex").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_options_collection_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selectedIndex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -10683,43 +10689,55 @@ fn install_html_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: title
     {
         let name = v8::String::new(scope, "title").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get title").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set title").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: lang
     {
         let name = v8::String::new(scope, "lang").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get lang").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set lang").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: translate
     {
         let name = v8::String::new(scope, "translate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get translate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set translate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: dir
     {
         let name = v8::String::new(scope, "dir").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dir").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set dir").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hidden
     {
         let name = v8::String::new(scope, "hidden").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hidden").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hidden").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: inert
     {
         let name = v8::String::new(scope, "inert").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get inert").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set inert").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: click()
@@ -10732,21 +10750,26 @@ fn install_html_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: accessKey
     {
         let name = v8::String::new(scope, "accessKey").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get accessKey").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set accessKey").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: accessKeyLabel
     {
         let name = v8::String::new(scope, "accessKeyLabel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get accessKeyLabel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: draggable
     {
         let name = v8::String::new(scope, "draggable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get draggable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set draggable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -10755,43 +10778,55 @@ fn install_html_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: spellcheck
     {
         let name = v8::String::new(scope, "spellcheck").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get spellcheck").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set spellcheck").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: writingSuggestions
     {
         let name = v8::String::new(scope, "writingSuggestions").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get writingSuggestions").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set writingSuggestions").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: autocapitalize
     {
         let name = v8::String::new(scope, "autocapitalize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autocapitalize").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autocapitalize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: autocorrect
     {
         let name = v8::String::new(scope, "autocorrect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autocorrect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autocorrect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: innerText
     {
         let name = v8::String::new(scope, "innerText").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get innerText").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set innerText").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: outerText
     {
         let name = v8::String::new(scope, "outerText").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get outerText").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set outerText").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: attachInternals()
@@ -10828,65 +10863,79 @@ fn install_html_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: popover
     {
         let name = v8::String::new(scope, "popover").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get popover").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set popover").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: headingOffset
     {
         let name = v8::String::new(scope, "headingOffset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get headingOffset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set headingOffset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: headingReset
     {
         let name = v8::String::new(scope, "headingReset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get headingReset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set headingReset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: scrollParent
     {
         let name = v8::String::new(scope, "scrollParent").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scrollParent").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: offsetParent
     {
         let name = v8::String::new(scope, "offsetParent").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get offsetParent").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: offsetTop
     {
         let name = v8::String::new(scope, "offsetTop").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get offsetTop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: offsetLeft
     {
         let name = v8::String::new(scope, "offsetLeft").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_27).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_27).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get offsetLeft").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: offsetWidth
     {
         let name = v8::String::new(scope, "offsetWidth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_28).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_28).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get offsetWidth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: offsetHeight
     {
         let name = v8::String::new(scope, "offsetHeight").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_29).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_29).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get offsetHeight").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: editContext
     {
         let name = v8::String::new(scope, "editContext").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_30).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_30).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_30).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get editContext").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_30).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set editContext").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -10895,70 +10944,89 @@ fn install_html_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: style
     {
         let name = v8::String::new(scope, "style").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_31).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_31).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get style").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onabort
     {
         let name = v8::String::new(scope, "onabort").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_32).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_32).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_32).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onabort").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_32).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onabort").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onauxclick
     {
         let name = v8::String::new(scope, "onauxclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_33).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_33).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_33).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onauxclick").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_33).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onauxclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeinput
     {
         let name = v8::String::new(scope, "onbeforeinput").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_34).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_34).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_34).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforeinput").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_34).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforeinput").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforematch
     {
         let name = v8::String::new(scope, "onbeforematch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_35).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_35).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_35).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforematch").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_35).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforematch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforetoggle
     {
         let name = v8::String::new(scope, "onbeforetoggle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_36).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_36).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_36).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforetoggle").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_36).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforetoggle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onblur
     {
         let name = v8::String::new(scope, "onblur").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_37).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_37).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_37).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onblur").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_37).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onblur").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncancel
     {
         let name = v8::String::new(scope, "oncancel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_38).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_38).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_38).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncancel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_38).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncancel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncanplay
     {
         let name = v8::String::new(scope, "oncanplay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_39).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_39).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_39).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncanplay").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_39).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncanplay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncanplaythrough
     {
         let name = v8::String::new(scope, "oncanplaythrough").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_40).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_40).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_40).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncanplaythrough").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_40).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncanplaythrough").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -10967,71 +11035,91 @@ fn install_html_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_41).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_41).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_41).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_41).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclick
     {
         let name = v8::String::new(scope, "onclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_42).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_42).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_42).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onclick").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_42).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclose
     {
         let name = v8::String::new(scope, "onclose").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_43).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_43).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_43).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onclose").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_43).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onclose").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncommand
     {
         let name = v8::String::new(scope, "oncommand").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_44).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_44).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_44).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncommand").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_44).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncommand").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextlost
     {
         let name = v8::String::new(scope, "oncontextlost").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_45).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_45).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_45).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncontextlost").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_45).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncontextlost").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextmenu
     {
         let name = v8::String::new(scope, "oncontextmenu").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_46).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_46).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_46).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncontextmenu").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_46).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncontextmenu").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextrestored
     {
         let name = v8::String::new(scope, "oncontextrestored").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_47).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_47).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_47).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncontextrestored").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_47).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncontextrestored").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncopy
     {
         let name = v8::String::new(scope, "oncopy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_48).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_48).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_48).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncopy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_48).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncopy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncuechange
     {
         let name = v8::String::new(scope, "oncuechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_49).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_49).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_49).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncuechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_49).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncuechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncut
     {
         let name = v8::String::new(scope, "oncut").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_50).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_50).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_50).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncut").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_50).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncut").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -11040,71 +11128,91 @@ fn install_html_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: ondblclick
     {
         let name = v8::String::new(scope, "ondblclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_51).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_51).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_51).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondblclick").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_51).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondblclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondrag
     {
         let name = v8::String::new(scope, "ondrag").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_52).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_52).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_52).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondrag").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_52).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondrag").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragend
     {
         let name = v8::String::new(scope, "ondragend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_53).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_53).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_53).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_53).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragenter
     {
         let name = v8::String::new(scope, "ondragenter").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_54).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_54).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_54).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragenter").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_54).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragenter").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragleave
     {
         let name = v8::String::new(scope, "ondragleave").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_55).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_55).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_55).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragleave").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_55).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragleave").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragover
     {
         let name = v8::String::new(scope, "ondragover").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_56).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_56).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_56).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragover").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_56).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragover").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragstart
     {
         let name = v8::String::new(scope, "ondragstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_57).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_57).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_57).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragstart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_57).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondrop
     {
         let name = v8::String::new(scope, "ondrop").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_58).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_58).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_58).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondrop").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_58).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondrop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondurationchange
     {
         let name = v8::String::new(scope, "ondurationchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_59).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_59).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_59).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondurationchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_59).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondurationchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onemptied
     {
         let name = v8::String::new(scope, "onemptied").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_60).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_60).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_60).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onemptied").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_60).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onemptied").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -11113,71 +11221,91 @@ fn install_html_element_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: onended
     {
         let name = v8::String::new(scope, "onended").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_61).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_61).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_61).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onended").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_61).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onended").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_62).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_62).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_62).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_62).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onfocus
     {
         let name = v8::String::new(scope, "onfocus").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_63).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_63).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_63).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onfocus").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_63).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onfocus").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onformdata
     {
         let name = v8::String::new(scope, "onformdata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_64).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_64).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_64).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onformdata").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_64).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onformdata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oninput
     {
         let name = v8::String::new(scope, "oninput").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_65).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_65).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_65).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oninput").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_65).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oninput").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oninvalid
     {
         let name = v8::String::new(scope, "oninvalid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_66).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_66).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_66).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oninvalid").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_66).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oninvalid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onkeydown
     {
         let name = v8::String::new(scope, "onkeydown").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_67).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_67).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_67).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onkeydown").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_67).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onkeydown").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onkeypress
     {
         let name = v8::String::new(scope, "onkeypress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_68).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_68).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_68).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onkeypress").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_68).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onkeypress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onkeyup
     {
         let name = v8::String::new(scope, "onkeyup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_69).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_69).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_69).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onkeyup").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_69).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onkeyup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onload
     {
         let name = v8::String::new(scope, "onload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_70).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_70).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_70).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_70).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -11186,71 +11314,91 @@ fn install_html_element_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: onloadeddata
     {
         let name = v8::String::new(scope, "onloadeddata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_71).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_71).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_71).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onloadeddata").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_71).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onloadeddata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onloadedmetadata
     {
         let name = v8::String::new(scope, "onloadedmetadata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_72).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_72).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_72).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onloadedmetadata").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_72).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onloadedmetadata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onloadstart
     {
         let name = v8::String::new(scope, "onloadstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_73).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_73).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_73).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onloadstart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_73).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onloadstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmousedown
     {
         let name = v8::String::new(scope, "onmousedown").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_74).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_74).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_74).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmousedown").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_74).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmousedown").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseenter
     {
         let name = v8::String::new(scope, "onmouseenter").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_75).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_75).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_75).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseenter").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_75).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseenter").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseleave
     {
         let name = v8::String::new(scope, "onmouseleave").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_76).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_76).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_76).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseleave").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_76).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseleave").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmousemove
     {
         let name = v8::String::new(scope, "onmousemove").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_77).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_77).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_77).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmousemove").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_77).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmousemove").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseout
     {
         let name = v8::String::new(scope, "onmouseout").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_78).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_78).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_78).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseout").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_78).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseout").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseover
     {
         let name = v8::String::new(scope, "onmouseover").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_79).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_79).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_79).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseover").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_79).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseover").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseup
     {
         let name = v8::String::new(scope, "onmouseup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_80).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_80).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_80).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseup").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_80).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -11259,71 +11407,91 @@ fn install_html_element_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: onpaste
     {
         let name = v8::String::new(scope, "onpaste").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_81).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_81).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_81).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpaste").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_81).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpaste").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpause
     {
         let name = v8::String::new(scope, "onpause").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_82).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_82).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_82).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpause").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_82).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpause").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onplay
     {
         let name = v8::String::new(scope, "onplay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_83).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_83).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_83).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onplay").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_83).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onplay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onplaying
     {
         let name = v8::String::new(scope, "onplaying").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_84).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_84).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_84).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onplaying").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_84).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onplaying").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onprogress
     {
         let name = v8::String::new(scope, "onprogress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_85).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_85).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_85).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onprogress").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_85).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onprogress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onratechange
     {
         let name = v8::String::new(scope, "onratechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_86).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_86).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_86).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onratechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_86).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onratechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onreset
     {
         let name = v8::String::new(scope, "onreset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_87).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_87).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_87).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onreset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_87).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onreset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onresize
     {
         let name = v8::String::new(scope, "onresize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_88).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_88).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_88).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onresize").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_88).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onresize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onscroll
     {
         let name = v8::String::new(scope, "onscroll").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_89).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_89).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_89).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onscroll").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_89).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onscroll").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onscrollend
     {
         let name = v8::String::new(scope, "onscrollend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_90).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_90).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_90).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onscrollend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_90).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onscrollend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -11332,71 +11500,91 @@ fn install_html_element_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     // attribute: onsecuritypolicyviolation
     {
         let name = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_91).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_91).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_91).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsecuritypolicyviolation").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_91).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsecuritypolicyviolation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onseeked
     {
         let name = v8::String::new(scope, "onseeked").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_92).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_92).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_92).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onseeked").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_92).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onseeked").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onseeking
     {
         let name = v8::String::new(scope, "onseeking").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_93).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_93).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_93).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onseeking").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_93).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onseeking").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onselect
     {
         let name = v8::String::new(scope, "onselect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_94).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_94).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_94).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onselect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_94).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onselect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onslotchange
     {
         let name = v8::String::new(scope, "onslotchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_95).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_95).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_95).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onslotchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_95).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onslotchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onstalled
     {
         let name = v8::String::new(scope, "onstalled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_96).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_96).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_96).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstalled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_96).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstalled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsubmit
     {
         let name = v8::String::new(scope, "onsubmit").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_97).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_97).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_97).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsubmit").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_97).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsubmit").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsuspend
     {
         let name = v8::String::new(scope, "onsuspend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_98).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_98).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_98).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsuspend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_98).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsuspend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ontimeupdate
     {
         let name = v8::String::new(scope, "ontimeupdate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_99).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_99).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_99).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ontimeupdate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_99).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ontimeupdate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ontoggle
     {
         let name = v8::String::new(scope, "ontoggle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_100).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_100).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_100).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ontoggle").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_100).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ontoggle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -11405,70 +11593,89 @@ fn install_html_element_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     // attribute: onvolumechange
     {
         let name = v8::String::new(scope, "onvolumechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_101).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_101).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_101).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onvolumechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_101).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onvolumechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwaiting
     {
         let name = v8::String::new(scope, "onwaiting").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_102).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_102).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_102).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwaiting").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_102).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwaiting").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationend
     {
         let name = v8::String::new(scope, "onwebkitanimationend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_103).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_103).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_103).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwebkitanimationend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_103).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwebkitanimationend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationiteration
     {
         let name = v8::String::new(scope, "onwebkitanimationiteration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_104).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_104).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_104).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwebkitanimationiteration").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_104).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwebkitanimationiteration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationstart
     {
         let name = v8::String::new(scope, "onwebkitanimationstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_105).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_105).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_105).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwebkitanimationstart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_105).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwebkitanimationstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkittransitionend
     {
         let name = v8::String::new(scope, "onwebkittransitionend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_106).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_106).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_106).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwebkittransitionend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_106).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwebkittransitionend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwheel
     {
         let name = v8::String::new(scope, "onwheel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_107).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_107).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_107).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwheel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_107).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwheel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: contentEditable
     {
         let name = v8::String::new(scope, "contentEditable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_108).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_108).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_108).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentEditable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_108).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set contentEditable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: enterKeyHint
     {
         let name = v8::String::new(scope, "enterKeyHint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_109).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_109).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_109).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get enterKeyHint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_109).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set enterKeyHint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: isContentEditable
     {
         let name = v8::String::new(scope, "isContentEditable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_110).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_110).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isContentEditable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -11477,35 +11684,44 @@ fn install_html_element_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     // attribute: inputMode
     {
         let name = v8::String::new(scope, "inputMode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_111).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_111).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_111).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get inputMode").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_111).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set inputMode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: dataset
     {
         let name = v8::String::new(scope, "dataset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_112).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_112).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dataset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: nonce
     {
         let name = v8::String::new(scope, "nonce").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_113).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_113).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_113).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get nonce").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_113).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set nonce").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: autofocus
     {
         let name = v8::String::new(scope, "autofocus").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_114).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_114).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_114).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autofocus").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_114).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autofocus").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: tabIndex
     {
         let name = v8::String::new(scope, "tabIndex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_element_get_115).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_element_set_115).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_element_get_115).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get tabIndex").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_element_set_115).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set tabIndex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: focus()
@@ -13806,70 +14022,89 @@ fn install_html_anchor_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: download
     {
         let name = v8::String::new(scope, "download").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get download").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set download").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ping
     {
         let name = v8::String::new(scope, "ping").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ping").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ping").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rel
     {
         let name = v8::String::new(scope, "rel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: relList
     {
         let name = v8::String::new(scope, "relList").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get relList").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: text
     {
         let name = v8::String::new(scope, "text").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get text").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set text").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: coords
     {
         let name = v8::String::new(scope, "coords").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get coords").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set coords").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: charset
     {
         let name = v8::String::new(scope, "charset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get charset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set charset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rev
     {
         let name = v8::String::new(scope, "rev").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rev").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rev").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -13878,70 +14113,89 @@ fn install_html_anchor_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: shape
     {
         let name = v8::String::new(scope, "shape").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shape").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set shape").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: attributionSourceId
     {
         let name = v8::String::new(scope, "attributionSourceId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get attributionSourceId").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set attributionSourceId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: origin
     {
         let name = v8::String::new(scope, "origin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get origin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: protocol
     {
         let name = v8::String::new(scope, "protocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get protocol").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set protocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: username
     {
         let name = v8::String::new(scope, "username").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get username").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set username").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: password
     {
         let name = v8::String::new(scope, "password").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get password").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set password").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: host
     {
         let name = v8::String::new(scope, "host").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get host").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set host").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hostname
     {
         let name = v8::String::new(scope, "hostname").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hostname").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hostname").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: pathname
     {
         let name = v8::String::new(scope, "pathname").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pathname").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set pathname").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -13950,43 +14204,55 @@ fn install_html_anchor_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: search
     {
         let name = v8::String::new(scope, "search").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get search").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set search").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hash
     {
         let name = v8::String::new(scope, "hash").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hash").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hash").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hreflang
     {
         let name = v8::String::new(scope, "hreflang").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hreflang").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hreflang").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_26).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_anchor_element_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get target").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_anchor_element_set_26).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set target").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -16003,69 +16269,87 @@ fn install_html_area_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: alt
     {
         let name = v8::String::new(scope, "alt").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get alt").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set alt").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: coords
     {
         let name = v8::String::new(scope, "coords").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get coords").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set coords").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: shape
     {
         let name = v8::String::new(scope, "shape").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shape").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set shape").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: download
     {
         let name = v8::String::new(scope, "download").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get download").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set download").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ping
     {
         let name = v8::String::new(scope, "ping").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ping").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ping").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rel
     {
         let name = v8::String::new(scope, "rel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: relList
     {
         let name = v8::String::new(scope, "relList").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get relList").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: noHref
     {
         let name = v8::String::new(scope, "noHref").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get noHref").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set noHref").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: origin
     {
         let name = v8::String::new(scope, "origin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get origin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -16074,71 +16358,91 @@ fn install_html_area_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: protocol
     {
         let name = v8::String::new(scope, "protocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get protocol").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set protocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: username
     {
         let name = v8::String::new(scope, "username").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get username").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set username").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: password
     {
         let name = v8::String::new(scope, "password").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get password").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set password").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: host
     {
         let name = v8::String::new(scope, "host").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get host").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set host").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hostname
     {
         let name = v8::String::new(scope, "hostname").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hostname").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hostname").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: pathname
     {
         let name = v8::String::new(scope, "pathname").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pathname").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set pathname").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: search
     {
         let name = v8::String::new(scope, "search").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get search").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set search").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hash
     {
         let name = v8::String::new(scope, "hash").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hash").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hash").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hreflang
     {
         let name = v8::String::new(scope, "hreflang").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hreflang").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hreflang").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -16147,22 +16451,28 @@ fn install_html_area_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_area_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get target").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_area_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set target").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -16279,8 +16589,10 @@ pub fn create_htmlbr_element_template<'s>(
     // attribute: clear
     {
         let name = v8::String::new(scope, "clear").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlbr_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlbr_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlbr_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get clear").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlbr_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set clear").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -16488,15 +16800,19 @@ pub fn create_html_base_element_template<'s>(
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_base_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_base_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_base_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_base_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_base_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_base_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_base_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get target").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_base_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set target").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -18782,71 +19098,91 @@ fn install_html_body_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: onorientationchange
     {
         let name = v8::String::new(scope, "onorientationchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onorientationchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onorientationchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: text
     {
         let name = v8::String::new(scope, "text").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get text").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set text").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: link
     {
         let name = v8::String::new(scope, "link").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get link").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set link").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: vLink
     {
         let name = v8::String::new(scope, "vLink").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vLink").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set vLink").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: aLink
     {
         let name = v8::String::new(scope, "aLink").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get aLink").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set aLink").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: bgColor
     {
         let name = v8::String::new(scope, "bgColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bgColor").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set bgColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: background
     {
         let name = v8::String::new(scope, "background").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get background").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set background").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onafterprint
     {
         let name = v8::String::new(scope, "onafterprint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onafterprint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onafterprint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeprint
     {
         let name = v8::String::new(scope, "onbeforeprint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforeprint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforeprint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeunload
     {
         let name = v8::String::new(scope, "onbeforeunload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforeunload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforeunload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -18855,71 +19191,91 @@ fn install_html_body_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: onhashchange
     {
         let name = v8::String::new(scope, "onhashchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onhashchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onhashchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onlanguagechange
     {
         let name = v8::String::new(scope, "onlanguagechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onlanguagechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onlanguagechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessage
     {
         let name = v8::String::new(scope, "onmessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessageerror
     {
         let name = v8::String::new(scope, "onmessageerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessageerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessageerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onoffline
     {
         let name = v8::String::new(scope, "onoffline").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onoffline").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onoffline").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ononline
     {
         let name = v8::String::new(scope, "ononline").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ononline").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ononline").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpagehide
     {
         let name = v8::String::new(scope, "onpagehide").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpagehide").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpagehide").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpagereveal
     {
         let name = v8::String::new(scope, "onpagereveal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpagereveal").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpagereveal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpageshow
     {
         let name = v8::String::new(scope, "onpageshow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpageshow").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpageshow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpageswap
     {
         let name = v8::String::new(scope, "onpageswap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpageswap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpageswap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -18928,36 +19284,46 @@ fn install_html_body_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: onpopstate
     {
         let name = v8::String::new(scope, "onpopstate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpopstate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpopstate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onrejectionhandled
     {
         let name = v8::String::new(scope, "onrejectionhandled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onrejectionhandled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onrejectionhandled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onstorage
     {
         let name = v8::String::new(scope, "onstorage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstorage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstorage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onunhandledrejection
     {
         let name = v8::String::new(scope, "onunhandledrejection").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onunhandledrejection").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onunhandledrejection").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onunload
     {
         let name = v8::String::new(scope, "onunload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_body_element_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onunload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_body_element_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onunload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -20530,70 +20896,89 @@ fn install_html_button_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: command
     {
         let name = v8::String::new(scope, "command").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get command").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set command").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: commandForElement
     {
         let name = v8::String::new(scope, "commandForElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get commandForElement").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set commandForElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: formAction
     {
         let name = v8::String::new(scope, "formAction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formAction").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formAction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formEnctype
     {
         let name = v8::String::new(scope, "formEnctype").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formEnctype").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formEnctype").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formMethod
     {
         let name = v8::String::new(scope, "formMethod").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formMethod").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formMethod").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formNoValidate
     {
         let name = v8::String::new(scope, "formNoValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formNoValidate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formNoValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formTarget
     {
         let name = v8::String::new(scope, "formTarget").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formTarget").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formTarget").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -20602,33 +20987,40 @@ fn install_html_button_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: willValidate
     {
         let name = v8::String::new(scope, "willValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get willValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validationMessage
     {
         let name = v8::String::new(scope, "validationMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validationMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: checkValidity()
@@ -20655,14 +21047,17 @@ fn install_html_button_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: labels
     {
         let name = v8::String::new(scope, "labels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get labels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: popoverTargetElement
     {
         let name = v8::String::new(scope, "popoverTargetElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get popoverTargetElement").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set popoverTargetElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -20671,8 +21066,10 @@ fn install_html_button_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: popoverTargetAction
     {
         let name = v8::String::new(scope, "popoverTargetAction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_button_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get popoverTargetAction").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_button_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set popoverTargetAction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -21109,15 +21506,19 @@ pub fn create_html_canvas_element_template<'s>(
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_canvas_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_canvas_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_canvas_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_canvas_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_canvas_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_canvas_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_canvas_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_canvas_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getContext()
@@ -21270,8 +21671,10 @@ pub fn create_htmld_list_element_template<'s>(
     // attribute: compact
     {
         let name = v8::String::new(scope, "compact").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmld_list_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmld_list_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmld_list_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get compact").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmld_list_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set compact").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -21389,8 +21792,10 @@ pub fn create_html_data_element_template<'s>(
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_data_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_data_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_data_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_data_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -21464,7 +21869,8 @@ pub fn create_html_data_list_element_template<'s>(
     // attribute: options
     {
         let name = v8::String::new(scope, "options").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_data_list_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_data_list_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get options").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -21672,15 +22078,19 @@ pub fn create_html_details_element_template<'s>(
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_details_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_details_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_details_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_details_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: open
     {
         let name = v8::String::new(scope, "open").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_details_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_details_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_details_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get open").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_details_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set open").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -22162,22 +22572,28 @@ pub fn create_html_dialog_element_template<'s>(
     // attribute: open
     {
         let name = v8::String::new(scope, "open").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_dialog_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_dialog_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_dialog_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get open").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_dialog_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set open").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: returnValue
     {
         let name = v8::String::new(scope, "returnValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_dialog_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_dialog_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_dialog_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get returnValue").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_dialog_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set returnValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: closedBy
     {
         let name = v8::String::new(scope, "closedBy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_dialog_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_dialog_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_dialog_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get closedBy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_dialog_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set closedBy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: show()
@@ -22323,8 +22739,10 @@ pub fn create_html_directory_element_template<'s>(
     // attribute: compact
     {
         let name = v8::String::new(scope, "compact").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_directory_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_directory_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_directory_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get compact").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_directory_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set compact").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -22442,8 +22860,10 @@ pub fn create_html_div_element_template<'s>(
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_div_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_div_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_div_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_div_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -23057,29 +23477,37 @@ pub fn create_html_embed_element_template<'s>(
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getSVGDocument()
@@ -23092,15 +23520,19 @@ pub fn create_html_embed_element_template<'s>(
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_embed_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_embed_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -23534,35 +23966,44 @@ pub fn create_html_fenced_frame_element_template<'s>(
     // attribute: config
     {
         let name = v8::String::new(scope, "config").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get config").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set config").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sandbox
     {
         let name = v8::String::new(scope, "sandbox").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sandbox").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: allow
     {
         let name = v8::String::new(scope, "allow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get allow").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_fenced_frame_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set allow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -24191,51 +24632,61 @@ fn install_html_field_set_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, pr
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_field_set_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_field_set_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_field_set_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_field_set_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: elements
     {
         let name = v8::String::new(scope, "elements").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get elements").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: willValidate
     {
         let name = v8::String::new(scope, "willValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get willValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validationMessage
     {
         let name = v8::String::new(scope, "validationMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_field_set_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validationMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: checkValidity()
@@ -24556,22 +25007,28 @@ pub fn create_html_font_element_template<'s>(
     // attribute: color
     {
         let name = v8::String::new(scope, "color").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_font_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_font_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_font_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get color").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_font_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set color").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: face
     {
         let name = v8::String::new(scope, "face").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_font_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_font_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_font_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get face").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_font_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set face").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_font_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_font_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_font_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_font_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -25966,71 +26423,91 @@ fn install_html_form_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: acceptCharset
     {
         let name = v8::String::new(scope, "acceptCharset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get acceptCharset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set acceptCharset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: action
     {
         let name = v8::String::new(scope, "action").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get action").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set action").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: autocomplete
     {
         let name = v8::String::new(scope, "autocomplete").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autocomplete").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autocomplete").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: enctype
     {
         let name = v8::String::new(scope, "enctype").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get enctype").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set enctype").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: encoding
     {
         let name = v8::String::new(scope, "encoding").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get encoding").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set encoding").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: method
     {
         let name = v8::String::new(scope, "method").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get method").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set method").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: noValidate
     {
         let name = v8::String::new(scope, "noValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get noValidate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set noValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get target").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set target").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rel
     {
         let name = v8::String::new(scope, "rel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_form_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -26039,19 +26516,22 @@ fn install_html_form_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: relList
     {
         let name = v8::String::new(scope, "relList").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get relList").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: elements
     {
         let name = v8::String::new(scope, "elements").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get elements").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_form_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: unknown()
@@ -26939,69 +27419,87 @@ pub fn create_html_frame_element_template<'s>(
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: scrolling
     {
         let name = v8::String::new(scope, "scrolling").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scrolling").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set scrolling").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: frameBorder
     {
         let name = v8::String::new(scope, "frameBorder").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get frameBorder").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set frameBorder").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: longDesc
     {
         let name = v8::String::new(scope, "longDesc").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get longDesc").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set longDesc").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: noResize
     {
         let name = v8::String::new(scope, "noResize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get noResize").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set noResize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: contentDocument
     {
         let name = v8::String::new(scope, "contentDocument").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentDocument").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: contentWindow
     {
         let name = v8::String::new(scope, "contentWindow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentWindow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: marginHeight
     {
         let name = v8::String::new(scope, "marginHeight").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get marginHeight").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set marginHeight").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: marginWidth
     {
         let name = v8::String::new(scope, "marginWidth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get marginWidth").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set marginWidth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -28836,71 +29334,91 @@ fn install_html_frame_set_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, pr
     // attribute: cols
     {
         let name = v8::String::new(scope, "cols").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cols").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set cols").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rows
     {
         let name = v8::String::new(scope, "rows").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rows").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rows").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onafterprint
     {
         let name = v8::String::new(scope, "onafterprint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onafterprint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onafterprint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeprint
     {
         let name = v8::String::new(scope, "onbeforeprint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforeprint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforeprint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeunload
     {
         let name = v8::String::new(scope, "onbeforeunload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforeunload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforeunload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onhashchange
     {
         let name = v8::String::new(scope, "onhashchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onhashchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onhashchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onlanguagechange
     {
         let name = v8::String::new(scope, "onlanguagechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onlanguagechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onlanguagechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessage
     {
         let name = v8::String::new(scope, "onmessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessageerror
     {
         let name = v8::String::new(scope, "onmessageerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessageerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessageerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onoffline
     {
         let name = v8::String::new(scope, "onoffline").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onoffline").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onoffline").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -28909,71 +29427,91 @@ fn install_html_frame_set_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, pr
     // attribute: ononline
     {
         let name = v8::String::new(scope, "ononline").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ononline").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ononline").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpagehide
     {
         let name = v8::String::new(scope, "onpagehide").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpagehide").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpagehide").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpagereveal
     {
         let name = v8::String::new(scope, "onpagereveal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpagereveal").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpagereveal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpageshow
     {
         let name = v8::String::new(scope, "onpageshow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpageshow").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpageshow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpageswap
     {
         let name = v8::String::new(scope, "onpageswap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpageswap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpageswap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpopstate
     {
         let name = v8::String::new(scope, "onpopstate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpopstate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpopstate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onrejectionhandled
     {
         let name = v8::String::new(scope, "onrejectionhandled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onrejectionhandled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onrejectionhandled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onstorage
     {
         let name = v8::String::new(scope, "onstorage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstorage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstorage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onunhandledrejection
     {
         let name = v8::String::new(scope, "onunhandledrejection").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onunhandledrejection").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onunhandledrejection").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onunload
     {
         let name = v8::String::new(scope, "onunload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_frame_set_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onunload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_frame_set_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onunload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -29823,65 +30361,79 @@ fn install_html_geolocation_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, 
     // attribute: position
     {
         let name = v8::String::new(scope, "position").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get position").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: error
     {
         let name = v8::String::new(scope, "error").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get error").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: autolocate
     {
         let name = v8::String::new(scope, "autolocate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autolocate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autolocate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: watch
     {
         let name = v8::String::new(scope, "watch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get watch").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set watch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onlocation
     {
         let name = v8::String::new(scope, "onlocation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onlocation").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onlocation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: isValid
     {
         let name = v8::String::new(scope, "isValid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isValid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: invalidReason
     {
         let name = v8::String::new(scope, "invalidReason").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get invalidReason").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onvalidationstatuschange
     {
         let name = v8::String::new(scope, "onvalidationstatuschange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onvalidationstatuschange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onvalidationstatuschange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: initialPermissionStatus
     {
         let name = v8::String::new(scope, "initialPermissionStatus").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get initialPermissionStatus").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: permissionStatus
     {
         let name = v8::String::new(scope, "permissionStatus").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get permissionStatus").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -29890,15 +30442,19 @@ fn install_html_geolocation_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, 
     // attribute: onpromptaction
     {
         let name = v8::String::new(scope, "onpromptaction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpromptaction").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpromptaction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpromptdismiss
     {
         let name = v8::String::new(scope, "onpromptdismiss").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_geolocation_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpromptdismiss").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_geolocation_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpromptdismiss").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -30375,36 +30931,46 @@ pub fn create_htmlhr_element_template<'s>(
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: color
     {
         let name = v8::String::new(scope, "color").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get color").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set color").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: noShade
     {
         let name = v8::String::new(scope, "noShade").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get noShade").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set noShade").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlhr_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlhr_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -30544,8 +31110,10 @@ pub fn create_html_heading_element_template<'s>(
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_heading_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_heading_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_heading_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_heading_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -30663,8 +31231,10 @@ pub fn create_html_html_element_template<'s>(
     // attribute: version
     {
         let name = v8::String::new(scope, "version").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_html_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_html_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_html_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get version").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_html_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set version").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -32550,70 +33120,89 @@ fn install_htmli_frame_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: srcdoc
     {
         let name = v8::String::new(scope, "srcdoc").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get srcdoc").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set srcdoc").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sandbox
     {
         let name = v8::String::new(scope, "sandbox").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sandbox").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: allow
     {
         let name = v8::String::new(scope, "allow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get allow").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set allow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: allowFullscreen
     {
         let name = v8::String::new(scope, "allowFullscreen").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get allowFullscreen").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set allowFullscreen").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: loading
     {
         let name = v8::String::new(scope, "loading").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get loading").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set loading").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -32622,13 +33211,15 @@ fn install_htmli_frame_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: contentDocument
     {
         let name = v8::String::new(scope, "contentDocument").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentDocument").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: contentWindow
     {
         let name = v8::String::new(scope, "contentWindow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentWindow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getSVGDocument()
@@ -32641,50 +33232,64 @@ fn install_htmli_frame_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: credentialless
     {
         let name = v8::String::new(scope, "credentialless").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get credentialless").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set credentialless").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: csp
     {
         let name = v8::String::new(scope, "csp").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get csp").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set csp").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: scrolling
     {
         let name = v8::String::new(scope, "scrolling").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scrolling").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set scrolling").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: frameBorder
     {
         let name = v8::String::new(scope, "frameBorder").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get frameBorder").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set frameBorder").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: longDesc
     {
         let name = v8::String::new(scope, "longDesc").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get longDesc").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set longDesc").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: marginHeight
     {
         let name = v8::String::new(scope, "marginHeight").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get marginHeight").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set marginHeight").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -32693,21 +33298,26 @@ fn install_htmli_frame_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: marginWidth
     {
         let name = v8::String::new(scope, "marginWidth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get marginWidth").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set marginWidth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: permissionsPolicy
     {
         let name = v8::String::new(scope, "permissionsPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get permissionsPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: privateToken
     {
         let name = v8::String::new(scope, "privateToken").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmli_frame_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get privateToken").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmli_frame_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set privateToken").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -34954,71 +35564,91 @@ fn install_html_image_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: alt
     {
         let name = v8::String::new(scope, "alt").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get alt").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set alt").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: srcset
     {
         let name = v8::String::new(scope, "srcset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get srcset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set srcset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sizes
     {
         let name = v8::String::new(scope, "sizes").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sizes").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set sizes").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: crossOrigin
     {
         let name = v8::String::new(scope, "crossOrigin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get crossOrigin").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set crossOrigin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: useMap
     {
         let name = v8::String::new(scope, "useMap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get useMap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set useMap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: isMap
     {
         let name = v8::String::new(scope, "isMap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isMap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set isMap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: controls
     {
         let name = v8::String::new(scope, "controls").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get controls").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set controls").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -35027,53 +35657,65 @@ fn install_html_image_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: naturalWidth
     {
         let name = v8::String::new(scope, "naturalWidth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get naturalWidth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: naturalHeight
     {
         let name = v8::String::new(scope, "naturalHeight").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get naturalHeight").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: complete
     {
         let name = v8::String::new(scope, "complete").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get complete").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: currentSrc
     {
         let name = v8::String::new(scope, "currentSrc").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentSrc").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: decoding
     {
         let name = v8::String::new(scope, "decoding").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get decoding").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set decoding").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: loading
     {
         let name = v8::String::new(scope, "loading").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get loading").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set loading").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: fetchPriority
     {
         let name = v8::String::new(scope, "fetchPriority").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get fetchPriority").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set fetchPriority").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: decode()
@@ -35086,7 +35728,8 @@ fn install_html_image_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -35095,56 +35738,71 @@ fn install_html_image_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: lowsrc
     {
         let name = v8::String::new(scope, "lowsrc").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get lowsrc").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set lowsrc").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hspace
     {
         let name = v8::String::new(scope, "hspace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hspace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hspace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: vspace
     {
         let name = v8::String::new(scope, "vspace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_26).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vspace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_26).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set vspace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: longDesc
     {
         let name = v8::String::new(scope, "longDesc").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_27).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_27).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_27).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get longDesc").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_27).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set longDesc").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: border
     {
         let name = v8::String::new(scope, "border").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_28).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_28).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_image_element_get_28).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get border").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_image_element_set_28).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set border").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -40015,70 +40673,89 @@ fn install_html_input_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: accept
     {
         let name = v8::String::new(scope, "accept").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get accept").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set accept").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: alpha
     {
         let name = v8::String::new(scope, "alpha").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get alpha").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set alpha").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: alt
     {
         let name = v8::String::new(scope, "alt").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get alt").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set alt").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: autocomplete
     {
         let name = v8::String::new(scope, "autocomplete").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autocomplete").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autocomplete").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: defaultChecked
     {
         let name = v8::String::new(scope, "defaultChecked").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultChecked").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defaultChecked").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: checked
     {
         let name = v8::String::new(scope, "checked").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get checked").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set checked").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: colorSpace
     {
         let name = v8::String::new(scope, "colorSpace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get colorSpace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set colorSpace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: dirName
     {
         let name = v8::String::new(scope, "dirName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dirName").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set dirName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -40087,70 +40764,89 @@ fn install_html_input_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: files
     {
         let name = v8::String::new(scope, "files").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get files").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set files").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formAction
     {
         let name = v8::String::new(scope, "formAction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formAction").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formAction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formEnctype
     {
         let name = v8::String::new(scope, "formEnctype").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formEnctype").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formEnctype").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formMethod
     {
         let name = v8::String::new(scope, "formMethod").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formMethod").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formMethod").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formNoValidate
     {
         let name = v8::String::new(scope, "formNoValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formNoValidate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formNoValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: formTarget
     {
         let name = v8::String::new(scope, "formTarget").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get formTarget").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set formTarget").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: indeterminate
     {
         let name = v8::String::new(scope, "indeterminate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get indeterminate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set indeterminate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: list
     {
         let name = v8::String::new(scope, "list").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get list").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: max
     {
         let name = v8::String::new(scope, "max").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get max").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set max").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -40159,71 +40855,91 @@ fn install_html_input_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: maxLength
     {
         let name = v8::String::new(scope, "maxLength").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxLength").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set maxLength").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: min
     {
         let name = v8::String::new(scope, "min").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get min").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set min").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: minLength
     {
         let name = v8::String::new(scope, "minLength").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get minLength").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set minLength").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: multiple
     {
         let name = v8::String::new(scope, "multiple").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get multiple").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set multiple").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: pattern
     {
         let name = v8::String::new(scope, "pattern").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_26).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pattern").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_26).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set pattern").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: placeholder
     {
         let name = v8::String::new(scope, "placeholder").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_27).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_27).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_27).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get placeholder").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_27).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set placeholder").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: readOnly
     {
         let name = v8::String::new(scope, "readOnly").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_28).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_28).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_28).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readOnly").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_28).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set readOnly").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: required
     {
         let name = v8::String::new(scope, "required").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_29).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_29).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_29).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get required").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_29).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set required").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_30).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_30).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_30).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_30).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -40232,57 +40948,73 @@ fn install_html_input_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_31).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_31).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_31).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_31).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: step
     {
         let name = v8::String::new(scope, "step").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_32).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_32).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_32).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get step").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_32).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set step").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_33).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_33).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_33).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_33).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: defaultValue
     {
         let name = v8::String::new(scope, "defaultValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_34).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_34).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_34).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultValue").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_34).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defaultValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_35).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_35).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_35).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_35).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: valueAsDate
     {
         let name = v8::String::new(scope, "valueAsDate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_36).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_36).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_36).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get valueAsDate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_36).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set valueAsDate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: valueAsNumber
     {
         let name = v8::String::new(scope, "valueAsNumber").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_37).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_37).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_37).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get valueAsNumber").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_37).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set valueAsNumber").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_38).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_38).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_38).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_38).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: stepUp()
@@ -40305,19 +41037,22 @@ fn install_html_input_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: willValidate
     {
         let name = v8::String::new(scope, "willValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_41).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_41).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get willValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_42).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_42).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validationMessage
     {
         let name = v8::String::new(scope, "validationMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_43).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_43).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validationMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: checkValidity()
@@ -40344,7 +41079,8 @@ fn install_html_input_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: labels
     {
         let name = v8::String::new(scope, "labels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_47).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_47).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get labels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: select()
@@ -40357,15 +41093,19 @@ fn install_html_input_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: selectionStart
     {
         let name = v8::String::new(scope, "selectionStart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_49).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_49).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_49).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectionStart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_49).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selectionStart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: selectionEnd
     {
         let name = v8::String::new(scope, "selectionEnd").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_50).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_50).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_50).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectionEnd").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_50).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selectionEnd").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -40374,8 +41114,10 @@ fn install_html_input_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: selectionDirection
     {
         let name = v8::String::new(scope, "selectionDirection").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_51).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_51).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_51).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectionDirection").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_51).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selectionDirection").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: setRangeText()
@@ -40409,35 +41151,44 @@ fn install_html_input_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: webkitdirectory
     {
         let name = v8::String::new(scope, "webkitdirectory").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_56).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_56).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_56).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get webkitdirectory").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_56).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set webkitdirectory").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: webkitEntries
     {
         let name = v8::String::new(scope, "webkitEntries").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_57).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_57).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get webkitEntries").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: capture
     {
         let name = v8::String::new(scope, "capture").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_58).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_58).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_58).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get capture").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_58).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set capture").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_59).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_59).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_59).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_59).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: useMap
     {
         let name = v8::String::new(scope, "useMap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_60).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_60).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_60).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get useMap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_60).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set useMap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -40446,15 +41197,19 @@ fn install_html_input_element_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: popoverTargetElement
     {
         let name = v8::String::new(scope, "popoverTargetElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_61).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_61).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_61).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get popoverTargetElement").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_61).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set popoverTargetElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: popoverTargetAction
     {
         let name = v8::String::new(scope, "popoverTargetAction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_62).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_62).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_input_element_get_62).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get popoverTargetAction").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_input_element_set_62).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set popoverTargetAction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -40661,15 +41416,19 @@ pub fn create_htmlli_element_template<'s>(
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlli_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlli_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlli_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlli_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlli_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlli_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlli_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlli_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -40879,20 +41638,24 @@ pub fn create_html_label_element_template<'s>(
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_label_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_label_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: htmlFor
     {
         let name = v8::String::new(scope, "htmlFor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_label_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_label_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_label_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get htmlFor").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_label_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set htmlFor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: control
     {
         let name = v8::String::new(scope, "control").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_label_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_label_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get control").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -41056,14 +41819,17 @@ pub fn create_html_legend_element_template<'s>(
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_legend_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_legend_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_legend_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_legend_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_legend_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_legend_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -42722,69 +43488,87 @@ fn install_html_link_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: crossOrigin
     {
         let name = v8::String::new(scope, "crossOrigin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get crossOrigin").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set crossOrigin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rel
     {
         let name = v8::String::new(scope, "rel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: as
     {
         let name = v8::String::new(scope, "as").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get as").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set as").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: relList
     {
         let name = v8::String::new(scope, "relList").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get relList").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: media
     {
         let name = v8::String::new(scope, "media").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get media").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set media").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: integrity
     {
         let name = v8::String::new(scope, "integrity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get integrity").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set integrity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hreflang
     {
         let name = v8::String::new(scope, "hreflang").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hreflang").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hreflang").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sizes
     {
         let name = v8::String::new(scope, "sizes").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sizes").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -42793,69 +43577,87 @@ fn install_html_link_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: imageSrcset
     {
         let name = v8::String::new(scope, "imageSrcset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get imageSrcset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set imageSrcset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: imageSizes
     {
         let name = v8::String::new(scope, "imageSizes").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get imageSizes").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set imageSizes").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: blocking
     {
         let name = v8::String::new(scope, "blocking").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get blocking").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: fetchPriority
     {
         let name = v8::String::new(scope, "fetchPriority").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get fetchPriority").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set fetchPriority").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: charset
     {
         let name = v8::String::new(scope, "charset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get charset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set charset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rev
     {
         let name = v8::String::new(scope, "rev").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rev").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rev").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get target").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_link_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set target").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sheet
     {
         let name = v8::String::new(scope, "sheet").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_link_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sheet").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -43018,14 +43820,17 @@ pub fn create_html_map_element_template<'s>(
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_map_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_map_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_map_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_map_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: areas
     {
         let name = v8::String::new(scope, "areas").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_map_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_map_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get areas").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -44142,71 +44947,91 @@ fn install_html_marquee_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, prot
     // attribute: behavior
     {
         let name = v8::String::new(scope, "behavior").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get behavior").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set behavior").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: bgColor
     {
         let name = v8::String::new(scope, "bgColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bgColor").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set bgColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: direction
     {
         let name = v8::String::new(scope, "direction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get direction").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set direction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hspace
     {
         let name = v8::String::new(scope, "hspace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hspace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hspace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: loop
     {
         let name = v8::String::new(scope, "loop").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get loop").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set loop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: scrollAmount
     {
         let name = v8::String::new(scope, "scrollAmount").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scrollAmount").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set scrollAmount").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: scrollDelay
     {
         let name = v8::String::new(scope, "scrollDelay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scrollDelay").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set scrollDelay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: trueSpeed
     {
         let name = v8::String::new(scope, "trueSpeed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get trueSpeed").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set trueSpeed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: vspace
     {
         let name = v8::String::new(scope, "vspace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vspace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set vspace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -44215,8 +45040,10 @@ fn install_html_marquee_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, prot
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_marquee_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_marquee_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: start()
@@ -47141,34 +47968,42 @@ fn install_html_media_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: error
     {
         let name = v8::String::new(scope, "error").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get error").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: srcObject
     {
         let name = v8::String::new(scope, "srcObject").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get srcObject").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set srcObject").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: currentSrc
     {
         let name = v8::String::new(scope, "currentSrc").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentSrc").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: crossOrigin
     {
         let name = v8::String::new(scope, "crossOrigin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get crossOrigin").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set crossOrigin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // const: NETWORK_EMPTY
@@ -47198,7 +48033,8 @@ fn install_html_media_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: networkState
     {
         let name = v8::String::new(scope, "networkState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get networkState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -47207,14 +48043,17 @@ fn install_html_media_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: preload
     {
         let name = v8::String::new(scope, "preload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set preload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: buffered
     {
         let name = v8::String::new(scope, "buffered").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get buffered").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: load()
@@ -47264,7 +48103,8 @@ fn install_html_media_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: readyState
     {
         let name = v8::String::new(scope, "readyState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readyState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -47273,14 +48113,17 @@ fn install_html_media_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: seeking
     {
         let name = v8::String::new(scope, "seeking").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get seeking").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: currentTime
     {
         let name = v8::String::new(scope, "currentTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set currentTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: fastSeek()
@@ -47293,7 +48136,8 @@ fn install_html_media_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: duration
     {
         let name = v8::String::new(scope, "duration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get duration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getStartDate()
@@ -47306,34 +48150,42 @@ fn install_html_media_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: paused
     {
         let name = v8::String::new(scope, "paused").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get paused").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: defaultPlaybackRate
     {
         let name = v8::String::new(scope, "defaultPlaybackRate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultPlaybackRate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defaultPlaybackRate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: playbackRate
     {
         let name = v8::String::new(scope, "playbackRate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get playbackRate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set playbackRate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: preservesPitch
     {
         let name = v8::String::new(scope, "preservesPitch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preservesPitch").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set preservesPitch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: played
     {
         let name = v8::String::new(scope, "played").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get played").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -47342,27 +48194,33 @@ fn install_html_media_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: seekable
     {
         let name = v8::String::new(scope, "seekable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get seekable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ended
     {
         let name = v8::String::new(scope, "ended").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ended").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: autoplay
     {
         let name = v8::String::new(scope, "autoplay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autoplay").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autoplay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: loop
     {
         let name = v8::String::new(scope, "loop").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get loop").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set loop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: play()
@@ -47382,29 +48240,37 @@ fn install_html_media_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: controls
     {
         let name = v8::String::new(scope, "controls").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_28).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_28).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_28).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get controls").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_28).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set controls").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: volume
     {
         let name = v8::String::new(scope, "volume").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_29).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_29).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_29).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get volume").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_29).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set volume").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: muted
     {
         let name = v8::String::new(scope, "muted").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_30).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_30).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_30).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get muted").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_30).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set muted").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: defaultMuted
     {
         let name = v8::String::new(scope, "defaultMuted").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_31).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_31).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_31).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultMuted").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_31).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defaultMuted").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -47413,26 +48279,31 @@ fn install_html_media_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: loading
     {
         let name = v8::String::new(scope, "loading").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_32).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_32).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_32).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get loading").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_32).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set loading").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: audioTracks
     {
         let name = v8::String::new(scope, "audioTracks").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_33).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_33).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get audioTracks").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: videoTracks
     {
         let name = v8::String::new(scope, "videoTracks").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_34).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_34).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get videoTracks").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: textTracks
     {
         let name = v8::String::new(scope, "textTracks").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_35).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_35).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get textTracks").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: addTextTrack()
@@ -47445,7 +48316,8 @@ fn install_html_media_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: sinkId
     {
         let name = v8::String::new(scope, "sinkId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_37).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_37).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sinkId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: setSinkId()
@@ -47458,21 +48330,26 @@ fn install_html_media_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: mediaKeys
     {
         let name = v8::String::new(scope, "mediaKeys").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_39).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_39).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mediaKeys").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onencrypted
     {
         let name = v8::String::new(scope, "onencrypted").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_40).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_40).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_40).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onencrypted").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_40).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onencrypted").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwaitingforkey
     {
         let name = v8::String::new(scope, "onwaitingforkey").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_41).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_41).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_41).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwaitingforkey").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_41).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwaitingforkey").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -47495,14 +48372,17 @@ fn install_html_media_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: remote
     {
         let name = v8::String::new(scope, "remote").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_44).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_44).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get remote").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: disableRemotePlayback
     {
         let name = v8::String::new(scope, "disableRemotePlayback").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_45).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_45).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_media_element_get_45).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disableRemotePlayback").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_media_element_set_45).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disableRemotePlayback").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -47619,8 +48499,10 @@ pub fn create_html_menu_element_template<'s>(
     // attribute: compact
     {
         let name = v8::String::new(scope, "compact").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_menu_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_menu_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_menu_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get compact").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_menu_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set compact").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -48098,36 +48980,46 @@ pub fn create_html_meta_element_template<'s>(
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: httpEquiv
     {
         let name = v8::String::new(scope, "httpEquiv").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get httpEquiv").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set httpEquiv").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: content
     {
         let name = v8::String::new(scope, "content").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get content").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set content").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: media
     {
         let name = v8::String::new(scope, "media").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get media").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set media").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: scheme
     {
         let name = v8::String::new(scope, "scheme").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meta_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scheme").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meta_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set scheme").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -48741,49 +49633,62 @@ pub fn create_html_meter_element_template<'s>(
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: min
     {
         let name = v8::String::new(scope, "min").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get min").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set min").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: max
     {
         let name = v8::String::new(scope, "max").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get max").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set max").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: low
     {
         let name = v8::String::new(scope, "low").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get low").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set low").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: high
     {
         let name = v8::String::new(scope, "high").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get high").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set high").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: optimum
     {
         let name = v8::String::new(scope, "optimum").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get optimum").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_meter_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set optimum").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: labels
     {
         let name = v8::String::new(scope, "labels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_meter_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get labels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -48991,15 +49896,19 @@ pub fn create_html_mod_element_template<'s>(
     // attribute: cite
     {
         let name = v8::String::new(scope, "cite").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_mod_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_mod_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_mod_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cite").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_mod_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set cite").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: dateTime
     {
         let name = v8::String::new(scope, "dateTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_mod_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_mod_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_mod_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dateTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_mod_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set dateTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -49481,46 +50390,56 @@ pub fn create_html_model_element_template<'s>(
     // attribute: ready
     {
         let name = v8::String::new(scope, "ready").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ready").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: boundingBoxCenter
     {
         let name = v8::String::new(scope, "boundingBoxCenter").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get boundingBoxCenter").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: boundingBoxExtents
     {
         let name = v8::String::new(scope, "boundingBoxExtents").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get boundingBoxExtents").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: entityTransform
     {
         let name = v8::String::new(scope, "entityTransform").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_model_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get entityTransform").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_model_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set entityTransform").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: environmentMap
     {
         let name = v8::String::new(scope, "environmentMap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_model_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get environmentMap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_model_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set environmentMap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: environmentMapReady
     {
         let name = v8::String::new(scope, "environmentMapReady").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get environmentMapReady").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: stageMode
     {
         let name = v8::String::new(scope, "stageMode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_model_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_model_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get stageMode").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_model_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set stageMode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -49908,29 +50827,37 @@ pub fn create_htmlo_list_element_template<'s>(
     // attribute: reversed
     {
         let name = v8::String::new(scope, "reversed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlo_list_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlo_list_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlo_list_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get reversed").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlo_list_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set reversed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: start
     {
         let name = v8::String::new(scope, "start").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlo_list_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlo_list_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlo_list_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get start").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlo_list_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set start").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlo_list_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlo_list_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlo_list_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlo_list_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: compact
     {
         let name = v8::String::new(scope, "compact").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlo_list_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlo_list_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlo_list_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get compact").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlo_list_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set compact").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -51866,54 +52793,67 @@ fn install_html_object_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: data
     {
         let name = v8::String::new(scope, "data").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get data").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set data").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: contentDocument
     {
         let name = v8::String::new(scope, "contentDocument").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentDocument").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: contentWindow
     {
         let name = v8::String::new(scope, "contentWindow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentWindow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getSVGDocument()
@@ -51926,7 +52866,8 @@ fn install_html_object_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: willValidate
     {
         let name = v8::String::new(scope, "willValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get willValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -51935,13 +52876,15 @@ fn install_html_object_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validationMessage
     {
         let name = v8::String::new(scope, "validationMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validationMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: checkValidity()
@@ -51968,36 +52911,46 @@ fn install_html_object_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: archive
     {
         let name = v8::String::new(scope, "archive").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get archive").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set archive").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: code
     {
         let name = v8::String::new(scope, "code").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get code").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set code").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: declare
     {
         let name = v8::String::new(scope, "declare").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get declare").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set declare").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hspace
     {
         let name = v8::String::new(scope, "hspace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hspace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hspace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -52006,43 +52959,55 @@ fn install_html_object_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: standby
     {
         let name = v8::String::new(scope, "standby").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get standby").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set standby").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: vspace
     {
         let name = v8::String::new(scope, "vspace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vspace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set vspace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: codeBase
     {
         let name = v8::String::new(scope, "codeBase").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get codeBase").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set codeBase").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: codeType
     {
         let name = v8::String::new(scope, "codeType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get codeType").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set codeType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: useMap
     {
         let name = v8::String::new(scope, "useMap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get useMap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set useMap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: border
     {
         let name = v8::String::new(scope, "border").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_26).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_object_element_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get border").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_object_element_set_26).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set border").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -52249,15 +53214,19 @@ pub fn create_html_opt_group_element_template<'s>(
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_opt_group_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_opt_group_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_opt_group_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_opt_group_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_opt_group_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_opt_group_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_opt_group_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_opt_group_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -52917,55 +53886,69 @@ pub fn create_html_option_element_template<'s>(
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: defaultSelected
     {
         let name = v8::String::new(scope, "defaultSelected").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultSelected").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defaultSelected").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: selected
     {
         let name = v8::String::new(scope, "selected").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selected").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selected").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: text
     {
         let name = v8::String::new(scope, "text").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get text").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_option_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set text").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: index
     {
         let name = v8::String::new(scope, "index").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_option_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get index").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -53730,58 +54713,70 @@ fn install_html_output_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: htmlFor
     {
         let name = v8::String::new(scope, "htmlFor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get htmlFor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_output_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_output_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: defaultValue
     {
         let name = v8::String::new(scope, "defaultValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_output_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultValue").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_output_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defaultValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_output_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_output_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: willValidate
     {
         let name = v8::String::new(scope, "willValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get willValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validationMessage
     {
         let name = v8::String::new(scope, "validationMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validationMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: checkValidity()
@@ -53811,7 +54806,8 @@ fn install_html_output_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: labels
     {
         let name = v8::String::new(scope, "labels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_output_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get labels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -53928,8 +54924,10 @@ pub fn create_html_paragraph_element_template<'s>(
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_paragraph_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_paragraph_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_paragraph_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_paragraph_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -54317,29 +55315,37 @@ pub fn create_html_param_element_template<'s>(
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_param_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_param_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_param_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_param_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_param_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_param_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_param_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_param_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_param_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_param_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_param_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_param_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: valueType
     {
         let name = v8::String::new(scope, "valueType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_param_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_param_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_param_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get valueType").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_param_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set valueType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -54841,15 +55847,19 @@ pub fn create_html_portal_element_template<'s>(
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_portal_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_portal_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_portal_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_portal_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_portal_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_portal_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_portal_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_portal_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: activate()
@@ -54869,15 +55879,19 @@ pub fn create_html_portal_element_template<'s>(
     // attribute: onmessage
     {
         let name = v8::String::new(scope, "onmessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_portal_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_portal_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_portal_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_portal_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessageerror
     {
         let name = v8::String::new(scope, "onmessageerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_portal_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_portal_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_portal_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessageerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_portal_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessageerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -54995,8 +56009,10 @@ pub fn create_html_pre_element_template<'s>(
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_pre_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_pre_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_pre_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_pre_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -55296,27 +56312,33 @@ pub fn create_html_progress_element_template<'s>(
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_progress_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_progress_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_progress_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_progress_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: max
     {
         let name = v8::String::new(scope, "max").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_progress_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_progress_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_progress_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get max").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_progress_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set max").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: position
     {
         let name = v8::String::new(scope, "position").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_progress_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_progress_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get position").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: labels
     {
         let name = v8::String::new(scope, "labels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_progress_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_progress_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get labels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -55434,8 +56456,10 @@ pub fn create_html_quote_element_template<'s>(
     // attribute: cite
     {
         let name = v8::String::new(scope, "cite").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_quote_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_quote_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_quote_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cite").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_quote_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set cite").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -56732,70 +57756,89 @@ fn install_html_script_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: noModule
     {
         let name = v8::String::new(scope, "noModule").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get noModule").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set noModule").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: async
     {
         let name = v8::String::new(scope, "async").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get async").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set async").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: defer
     {
         let name = v8::String::new(scope, "defer").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defer").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defer").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: blocking
     {
         let name = v8::String::new(scope, "blocking").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get blocking").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: crossOrigin
     {
         let name = v8::String::new(scope, "crossOrigin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get crossOrigin").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set crossOrigin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: integrity
     {
         let name = v8::String::new(scope, "integrity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get integrity").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set integrity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: fetchPriority
     {
         let name = v8::String::new(scope, "fetchPriority").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get fetchPriority").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set fetchPriority").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -56804,8 +57847,10 @@ fn install_html_script_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: text
     {
         let name = v8::String::new(scope, "text").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get text").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set text").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: supports()
@@ -56818,22 +57863,28 @@ fn install_html_script_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: charset
     {
         let name = v8::String::new(scope, "charset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get charset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set charset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: event
     {
         let name = v8::String::new(scope, "event").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get event").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set event").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: htmlFor
     {
         let name = v8::String::new(scope, "htmlFor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_script_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get htmlFor").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_script_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set htmlFor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -58506,68 +59557,85 @@ fn install_html_select_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: autocomplete
     {
         let name = v8::String::new(scope, "autocomplete").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autocomplete").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autocomplete").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: multiple
     {
         let name = v8::String::new(scope, "multiple").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get multiple").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set multiple").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: required
     {
         let name = v8::String::new(scope, "required").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get required").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set required").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: options
     {
         let name = v8::String::new(scope, "options").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get options").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -58618,27 +59686,33 @@ fn install_html_select_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: selectedOptions
     {
         let name = v8::String::new(scope, "selectedOptions").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectedOptions").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: selectedIndex
     {
         let name = v8::String::new(scope, "selectedIndex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectedIndex").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selectedIndex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_select_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: willValidate
     {
         let name = v8::String::new(scope, "willValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get willValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -58647,13 +59721,15 @@ fn install_html_select_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validationMessage
     {
         let name = v8::String::new(scope, "validationMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validationMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: checkValidity()
@@ -58687,7 +59763,8 @@ fn install_html_select_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: labels
     {
         let name = v8::String::new(scope, "labels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_27).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_select_element_get_27).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get labels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -58964,8 +60041,10 @@ pub fn create_html_slot_element_template<'s>(
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_slot_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_slot_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_slot_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_slot_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: assignedNodes()
@@ -59644,50 +60723,64 @@ pub fn create_html_source_element_template<'s>(
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: srcset
     {
         let name = v8::String::new(scope, "srcset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get srcset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set srcset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sizes
     {
         let name = v8::String::new(scope, "sizes").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sizes").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set sizes").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: media
     {
         let name = v8::String::new(scope, "media").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get media").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set media").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_source_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_source_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -60099,34 +61192,42 @@ pub fn create_html_style_element_template<'s>(
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_style_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_style_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: media
     {
         let name = v8::String::new(scope, "media").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_style_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get media").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_style_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set media").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: blocking
     {
         let name = v8::String::new(scope, "blocking").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get blocking").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_style_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_style_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sheet
     {
         let name = v8::String::new(scope, "sheet").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_style_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sheet").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -60244,8 +61345,10 @@ pub fn create_html_table_caption_element_template<'s>(
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_caption_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_caption_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_caption_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_caption_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -61586,70 +62689,89 @@ fn install_html_table_cell_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, p
     // attribute: colSpan
     {
         let name = v8::String::new(scope, "colSpan").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get colSpan").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set colSpan").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rowSpan
     {
         let name = v8::String::new(scope, "rowSpan").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rowSpan").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rowSpan").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: headers
     {
         let name = v8::String::new(scope, "headers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get headers").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set headers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: cellIndex
     {
         let name = v8::String::new(scope, "cellIndex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cellIndex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: scope
     {
         let name = v8::String::new(scope, "scope").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scope").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set scope").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: abbr
     {
         let name = v8::String::new(scope, "abbr").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get abbr").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set abbr").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: axis
     {
         let name = v8::String::new(scope, "axis").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get axis").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set axis").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -61658,36 +62780,46 @@ fn install_html_table_cell_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, p
     // attribute: ch
     {
         let name = v8::String::new(scope, "ch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ch").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: chOff
     {
         let name = v8::String::new(scope, "chOff").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get chOff").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set chOff").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: noWrap
     {
         let name = v8::String::new(scope, "noWrap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get noWrap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set noWrap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: vAlign
     {
         let name = v8::String::new(scope, "vAlign").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vAlign").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set vAlign").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: bgColor
     {
         let name = v8::String::new(scope, "bgColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_cell_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bgColor").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_cell_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set bgColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -62254,43 +63386,55 @@ pub fn create_html_table_col_element_template<'s>(
     // attribute: span
     {
         let name = v8::String::new(scope, "span").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get span").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set span").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ch
     {
         let name = v8::String::new(scope, "ch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ch").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: chOff
     {
         let name = v8::String::new(scope, "chOff").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get chOff").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set chOff").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: vAlign
     {
         let name = v8::String::new(scope, "vAlign").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vAlign").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set vAlign").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_col_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_col_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -63912,8 +65056,10 @@ fn install_html_table_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: caption
     {
         let name = v8::String::new(scope, "caption").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get caption").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set caption").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: createCaption()
@@ -63933,8 +65079,10 @@ fn install_html_table_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: tHead
     {
         let name = v8::String::new(scope, "tHead").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get tHead").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set tHead").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: createTHead()
@@ -63954,8 +65102,10 @@ fn install_html_table_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: tFoot
     {
         let name = v8::String::new(scope, "tFoot").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get tFoot").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set tFoot").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: createTFoot()
@@ -63975,7 +65125,8 @@ fn install_html_table_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: tBodies
     {
         let name = v8::String::new(scope, "tBodies").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get tBodies").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -63991,7 +65142,8 @@ fn install_html_table_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: rows
     {
         let name = v8::String::new(scope, "rows").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rows").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: insertRow()
@@ -64011,43 +65163,55 @@ fn install_html_table_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: border
     {
         let name = v8::String::new(scope, "border").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get border").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set border").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: frame
     {
         let name = v8::String::new(scope, "frame").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get frame").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set frame").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rules
     {
         let name = v8::String::new(scope, "rules").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rules").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rules").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: summary
     {
         let name = v8::String::new(scope, "summary").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get summary").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set summary").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -64056,22 +65220,28 @@ fn install_html_table_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: bgColor
     {
         let name = v8::String::new(scope, "bgColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bgColor").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set bgColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: cellPadding
     {
         let name = v8::String::new(scope, "cellPadding").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cellPadding").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set cellPadding").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: cellSpacing
     {
         let name = v8::String::new(scope, "cellSpacing").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cellSpacing").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set cellSpacing").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -64778,19 +65948,22 @@ pub fn create_html_table_row_element_template<'s>(
     // attribute: rowIndex
     {
         let name = v8::String::new(scope, "rowIndex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rowIndex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sectionRowIndex
     {
         let name = v8::String::new(scope, "sectionRowIndex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sectionRowIndex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: cells
     {
         let name = v8::String::new(scope, "cells").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cells").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: insertCell()
@@ -64810,36 +65983,46 @@ pub fn create_html_table_row_element_template<'s>(
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ch
     {
         let name = v8::String::new(scope, "ch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ch").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: chOff
     {
         let name = v8::String::new(scope, "chOff").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get chOff").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set chOff").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: vAlign
     {
         let name = v8::String::new(scope, "vAlign").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vAlign").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set vAlign").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: bgColor
     {
         let name = v8::String::new(scope, "bgColor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_row_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bgColor").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_row_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set bgColor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -65365,7 +66548,8 @@ pub fn create_html_table_section_element_template<'s>(
     // attribute: rows
     {
         let name = v8::String::new(scope, "rows").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rows").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: insertRow()
@@ -65385,29 +66569,37 @@ pub fn create_html_table_section_element_template<'s>(
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_section_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_section_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ch
     {
         let name = v8::String::new(scope, "ch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_section_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ch").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_section_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: chOff
     {
         let name = v8::String::new(scope, "chOff").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_section_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get chOff").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_section_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set chOff").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: vAlign
     {
         let name = v8::String::new(scope, "vAlign").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_table_section_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_table_section_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vAlign").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_table_section_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set vAlign").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -66021,49 +67213,62 @@ pub fn create_html_template_element_template<'s>(
     // attribute: content
     {
         let name = v8::String::new(scope, "content").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get content").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: shadowRootMode
     {
         let name = v8::String::new(scope, "shadowRootMode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shadowRootMode").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set shadowRootMode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: shadowRootDelegatesFocus
     {
         let name = v8::String::new(scope, "shadowRootDelegatesFocus").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shadowRootDelegatesFocus").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set shadowRootDelegatesFocus").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: shadowRootSlotAssignment
     {
         let name = v8::String::new(scope, "shadowRootSlotAssignment").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shadowRootSlotAssignment").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set shadowRootSlotAssignment").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: shadowRootClonable
     {
         let name = v8::String::new(scope, "shadowRootClonable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shadowRootClonable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set shadowRootClonable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: shadowRootSerializable
     {
         let name = v8::String::new(scope, "shadowRootSerializable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shadowRootSerializable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set shadowRootSerializable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: shadowRootCustomElementRegistry
     {
         let name = v8::String::new(scope, "shadowRootCustomElementRegistry").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_template_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get shadowRootCustomElementRegistry").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_template_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set shadowRootCustomElementRegistry").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -68274,70 +69479,89 @@ fn install_html_text_area_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, pr
     // attribute: autocomplete
     {
         let name = v8::String::new(scope, "autocomplete").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autocomplete").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autocomplete").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: cols
     {
         let name = v8::String::new(scope, "cols").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cols").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set cols").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: dirName
     {
         let name = v8::String::new(scope, "dirName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dirName").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set dirName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: form
     {
         let name = v8::String::new(scope, "form").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get form").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxLength
     {
         let name = v8::String::new(scope, "maxLength").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxLength").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set maxLength").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: minLength
     {
         let name = v8::String::new(scope, "minLength").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get minLength").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set minLength").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: placeholder
     {
         let name = v8::String::new(scope, "placeholder").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get placeholder").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set placeholder").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: readOnly
     {
         let name = v8::String::new(scope, "readOnly").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readOnly").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set readOnly").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -68346,66 +69570,81 @@ fn install_html_text_area_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, pr
     // attribute: required
     {
         let name = v8::String::new(scope, "required").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get required").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set required").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rows
     {
         let name = v8::String::new(scope, "rows").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rows").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rows").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: wrap
     {
         let name = v8::String::new(scope, "wrap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get wrap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set wrap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: defaultValue
     {
         let name = v8::String::new(scope, "defaultValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultValue").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defaultValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: textLength
     {
         let name = v8::String::new(scope, "textLength").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get textLength").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: willValidate
     {
         let name = v8::String::new(scope, "willValidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get willValidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validity
     {
         let name = v8::String::new(scope, "validity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: validationMessage
     {
         let name = v8::String::new(scope, "validationMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get validationMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -68435,7 +69674,8 @@ fn install_html_text_area_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, pr
     // attribute: labels
     {
         let name = v8::String::new(scope, "labels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get labels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: select()
@@ -68448,22 +69688,28 @@ fn install_html_text_area_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, pr
     // attribute: selectionStart
     {
         let name = v8::String::new(scope, "selectionStart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_26).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectionStart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_26).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selectionStart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: selectionEnd
     {
         let name = v8::String::new(scope, "selectionEnd").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_27).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_27).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_27).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectionEnd").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_27).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selectionEnd").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: selectionDirection
     {
         let name = v8::String::new(scope, "selectionDirection").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_28).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_28).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_text_area_element_get_28).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get selectionDirection").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_text_area_element_set_28).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set selectionDirection").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: setRangeText()
@@ -68604,8 +69850,10 @@ pub fn create_html_time_element_template<'s>(
     // attribute: dateTime
     {
         let name = v8::String::new(scope, "dateTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_time_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_time_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_time_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dateTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_time_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set dateTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -68723,8 +69971,10 @@ pub fn create_html_title_element_template<'s>(
     // attribute: text
     {
         let name = v8::String::new(scope, "text").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_title_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_title_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_title_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get text").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_title_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set text").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -69307,36 +70557,46 @@ fn install_html_track_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: kind
     {
         let name = v8::String::new(scope, "kind").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kind").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set kind").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: src
     {
         let name = v8::String::new(scope, "src").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get src").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set src").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: srclang
     {
         let name = v8::String::new(scope, "srclang").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get srclang").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set srclang").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: default
     {
         let name = v8::String::new(scope, "default").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get default").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_track_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set default").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // const: NONE
@@ -69366,7 +70626,8 @@ fn install_html_track_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: readyState
     {
         let name = v8::String::new(scope, "readyState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readyState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -69375,7 +70636,8 @@ fn install_html_track_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: track
     {
         let name = v8::String::new(scope, "track").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_track_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get track").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -69582,15 +70844,19 @@ pub fn create_htmlu_list_element_template<'s>(
     // attribute: compact
     {
         let name = v8::String::new(scope, "compact").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlu_list_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlu_list_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlu_list_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get compact").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlu_list_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set compact").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(htmlu_list_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(htmlu_list_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(htmlu_list_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(htmlu_list_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -70575,41 +71841,51 @@ fn install_html_video_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: videoWidth
     {
         let name = v8::String::new(scope, "videoWidth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get videoWidth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: videoHeight
     {
         let name = v8::String::new(scope, "videoHeight").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get videoHeight").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: poster
     {
         let name = v8::String::new(scope, "poster").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get poster").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set poster").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: playsInline
     {
         let name = v8::String::new(scope, "playsInline").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get playsInline").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set playsInline").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getVideoPlaybackQuality()
@@ -70629,15 +71905,19 @@ fn install_html_video_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: onenterpictureinpicture
     {
         let name = v8::String::new(scope, "onenterpictureinpicture").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onenterpictureinpicture").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onenterpictureinpicture").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onleavepictureinpicture
     {
         let name = v8::String::new(scope, "onleavepictureinpicture").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onleavepictureinpicture").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onleavepictureinpicture").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -70646,8 +71926,10 @@ fn install_html_video_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: disablePictureInPicture
     {
         let name = v8::String::new(scope, "disablePictureInPicture").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(html_video_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disablePictureInPicture").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(html_video_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disablePictureInPicture").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: requestVideoFrameCallback()

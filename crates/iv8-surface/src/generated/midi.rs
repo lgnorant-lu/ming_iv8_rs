@@ -293,26 +293,31 @@ pub fn create_midi_access_template<'s>(
     // attribute: inputs
     {
         let name = v8::String::new(scope, "inputs").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_access_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_access_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get inputs").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: outputs
     {
         let name = v8::String::new(scope, "outputs").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_access_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_access_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get outputs").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onstatechange
     {
         let name = v8::String::new(scope, "onstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_access_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(midi_access_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_access_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(midi_access_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sysexEnabled
     {
         let name = v8::String::new(scope, "sysexEnabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_access_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_access_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sysexEnabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -844,50 +849,59 @@ pub fn create_midi_port_template<'s>(
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: manufacturer
     {
         let name = v8::String::new(scope, "manufacturer").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get manufacturer").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: version
     {
         let name = v8::String::new(scope, "version").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get version").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: connection
     {
         let name = v8::String::new(scope, "connection").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get connection").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onstatechange
     {
         let name = v8::String::new(scope, "onstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(midi_port_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_port_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(midi_port_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: open()
@@ -1019,8 +1033,10 @@ pub fn create_midi_input_template<'s>(
     // attribute: onmidimessage
     {
         let name = v8::String::new(scope, "onmidimessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(midi_input_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(midi_input_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(midi_input_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmidimessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(midi_input_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmidimessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 

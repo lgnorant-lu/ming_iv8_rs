@@ -476,28 +476,35 @@ fn install_svg_angle_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: unitType
     {
         let name = v8::String::new(scope, "unitType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_angle_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_angle_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get unitType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_angle_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_angle_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_angle_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_angle_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: valueInSpecifiedUnits
     {
         let name = v8::String::new(scope, "valueInSpecifiedUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_angle_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_angle_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_angle_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get valueInSpecifiedUnits").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_angle_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set valueInSpecifiedUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: valueAsString
     {
         let name = v8::String::new(scope, "valueAsString").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_angle_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_angle_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_angle_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get valueAsString").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_angle_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set valueAsString").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: newValueSpecifiedUnits()
@@ -630,13 +637,15 @@ pub fn create_svg_animated_angle_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_angle_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_angle_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_angle_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_angle_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -797,14 +806,17 @@ pub fn create_svg_animated_boolean_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_boolean_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_animated_boolean_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_boolean_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_animated_boolean_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_boolean_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_boolean_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -965,14 +977,17 @@ pub fn create_svg_animated_enumeration_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_enumeration_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_animated_enumeration_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_enumeration_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_animated_enumeration_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_enumeration_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_enumeration_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1133,14 +1148,17 @@ pub fn create_svg_animated_integer_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_integer_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_animated_integer_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_integer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_animated_integer_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_integer_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_integer_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1257,13 +1275,15 @@ pub fn create_svg_animated_length_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_length_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_length_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_length_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_length_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1380,13 +1400,15 @@ pub fn create_svg_animated_length_list_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_length_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_length_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_length_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_length_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1547,14 +1569,17 @@ pub fn create_svg_animated_number_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_number_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_animated_number_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_number_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_animated_number_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_number_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_number_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1671,13 +1696,15 @@ pub fn create_svg_animated_number_list_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_number_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_number_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_number_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_number_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1794,13 +1821,15 @@ pub fn create_svg_animated_preserve_aspect_ratio_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_preserve_aspect_ratio_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_preserve_aspect_ratio_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_preserve_aspect_ratio_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_preserve_aspect_ratio_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1917,13 +1946,15 @@ pub fn create_svg_animated_rect_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_rect_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_rect_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_rect_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_rect_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2084,14 +2115,17 @@ pub fn create_svg_animated_string_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_string_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_animated_string_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_string_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_animated_string_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_string_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_string_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2208,13 +2242,15 @@ pub fn create_svg_animated_transform_list_template<'s>(
     // attribute: baseVal
     {
         let name = v8::String::new(scope, "baseVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_transform_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_transform_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animVal
     {
         let name = v8::String::new(scope, "animVal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animated_transform_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animated_transform_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animVal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2736,28 +2772,35 @@ fn install_svg_length_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: unitType
     {
         let name = v8::String::new(scope, "unitType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_length_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_length_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get unitType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_length_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_length_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_length_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_length_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: valueInSpecifiedUnits
     {
         let name = v8::String::new(scope, "valueInSpecifiedUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_length_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_length_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_length_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get valueInSpecifiedUnits").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_length_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set valueInSpecifiedUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: valueAsString
     {
         let name = v8::String::new(scope, "valueAsString").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_length_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_length_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_length_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get valueAsString").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_length_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set valueAsString").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: newValueSpecifiedUnits()
@@ -3255,13 +3298,15 @@ pub fn create_svg_length_list_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_length_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_length_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfItems
     {
         let name = v8::String::new(scope, "numberOfItems").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_length_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_length_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfItems").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: clear()
@@ -3432,8 +3477,10 @@ pub fn create_svg_number_template<'s>(
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_number_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_number_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_number_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_number_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -3918,13 +3965,15 @@ pub fn create_svg_number_list_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_number_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_number_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfItems
     {
         let name = v8::String::new(scope, "numberOfItems").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_number_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_number_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfItems").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: clear()
@@ -4185,15 +4234,19 @@ pub fn create_svg_path_segment_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_path_segment_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_path_segment_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_path_segment_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_path_segment_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: values
     {
         let name = v8::String::new(scope, "values").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_path_segment_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_path_segment_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_path_segment_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get values").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_path_segment_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set values").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -4678,13 +4731,15 @@ pub fn create_svg_point_list_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_point_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_point_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfItems
     {
         let name = v8::String::new(scope, "numberOfItems").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_point_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_point_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfItems").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: clear()
@@ -5055,15 +5110,19 @@ fn install_svg_preserve_aspect_ratio_members_2<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: align
     {
         let name = v8::String::new(scope, "align").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get align").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set align").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: meetOrSlice
     {
         let name = v8::String::new(scope, "meetOrSlice").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get meetOrSlice").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_preserve_aspect_ratio_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set meetOrSlice").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -5547,13 +5606,15 @@ pub fn create_svg_string_list_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_string_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_string_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfItems
     {
         let name = v8::String::new(scope, "numberOfItems").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_string_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_string_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfItems").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: clear()
@@ -6106,19 +6167,22 @@ fn install_svg_transform_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_transform_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_transform_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: matrix
     {
         let name = v8::String::new(scope, "matrix").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_transform_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_transform_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get matrix").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: angle
     {
         let name = v8::String::new(scope, "angle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_transform_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_transform_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get angle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -6746,13 +6810,15 @@ fn install_svg_transform_list_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_transform_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_transform_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfItems
     {
         let name = v8::String::new(scope, "numberOfItems").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_transform_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_transform_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfItems").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: clear()
@@ -14340,67 +14406,83 @@ fn install_svg_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: className
     {
         let name = v8::String::new(scope, "className").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get className").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ownerSVGElement
     {
         let name = v8::String::new(scope, "ownerSVGElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ownerSVGElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: viewportElement
     {
         let name = v8::String::new(scope, "viewportElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get viewportElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: style
     {
         let name = v8::String::new(scope, "style").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get style").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onabort
     {
         let name = v8::String::new(scope, "onabort").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onabort").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onabort").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onauxclick
     {
         let name = v8::String::new(scope, "onauxclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onauxclick").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onauxclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeinput
     {
         let name = v8::String::new(scope, "onbeforeinput").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforeinput").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforeinput").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforematch
     {
         let name = v8::String::new(scope, "onbeforematch").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforematch").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforematch").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforetoggle
     {
         let name = v8::String::new(scope, "onbeforetoggle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforetoggle").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforetoggle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onblur
     {
         let name = v8::String::new(scope, "onblur").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onblur").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onblur").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -14409,71 +14491,91 @@ fn install_svg_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: oncancel
     {
         let name = v8::String::new(scope, "oncancel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncancel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncancel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncanplay
     {
         let name = v8::String::new(scope, "oncanplay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncanplay").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncanplay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncanplaythrough
     {
         let name = v8::String::new(scope, "oncanplaythrough").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncanplaythrough").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncanplaythrough").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclick
     {
         let name = v8::String::new(scope, "onclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onclick").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclose
     {
         let name = v8::String::new(scope, "onclose").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onclose").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onclose").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncommand
     {
         let name = v8::String::new(scope, "oncommand").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncommand").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncommand").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextlost
     {
         let name = v8::String::new(scope, "oncontextlost").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncontextlost").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncontextlost").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextmenu
     {
         let name = v8::String::new(scope, "oncontextmenu").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_19).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncontextmenu").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_19).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncontextmenu").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncontextrestored
     {
         let name = v8::String::new(scope, "oncontextrestored").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncontextrestored").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncontextrestored").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -14482,71 +14584,91 @@ fn install_svg_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: oncopy
     {
         let name = v8::String::new(scope, "oncopy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncopy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncopy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncuechange
     {
         let name = v8::String::new(scope, "oncuechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncuechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncuechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncut
     {
         let name = v8::String::new(scope, "oncut").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncut").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncut").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondblclick
     {
         let name = v8::String::new(scope, "ondblclick").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondblclick").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondblclick").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondrag
     {
         let name = v8::String::new(scope, "ondrag").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondrag").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondrag").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragend
     {
         let name = v8::String::new(scope, "ondragend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_26).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_26).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragenter
     {
         let name = v8::String::new(scope, "ondragenter").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_27).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_27).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_27).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragenter").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_27).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragenter").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragleave
     {
         let name = v8::String::new(scope, "ondragleave").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_28).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_28).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_28).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragleave").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_28).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragleave").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragover
     {
         let name = v8::String::new(scope, "ondragover").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_29).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_29).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_29).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragover").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_29).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragover").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondragstart
     {
         let name = v8::String::new(scope, "ondragstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_30).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_30).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_30).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondragstart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_30).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondragstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -14555,71 +14677,91 @@ fn install_svg_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: ondrop
     {
         let name = v8::String::new(scope, "ondrop").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_31).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_31).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_31).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondrop").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_31).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondrop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondurationchange
     {
         let name = v8::String::new(scope, "ondurationchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_32).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_32).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_32).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondurationchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_32).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondurationchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onemptied
     {
         let name = v8::String::new(scope, "onemptied").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_33).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_33).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_33).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onemptied").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_33).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onemptied").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onended
     {
         let name = v8::String::new(scope, "onended").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_34).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_34).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_34).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onended").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_34).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onended").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_35).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_35).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_35).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_35).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onfocus
     {
         let name = v8::String::new(scope, "onfocus").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_36).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_36).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_36).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onfocus").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_36).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onfocus").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onformdata
     {
         let name = v8::String::new(scope, "onformdata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_37).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_37).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_37).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onformdata").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_37).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onformdata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oninput
     {
         let name = v8::String::new(scope, "oninput").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_38).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_38).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_38).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oninput").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_38).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oninput").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oninvalid
     {
         let name = v8::String::new(scope, "oninvalid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_39).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_39).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_39).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oninvalid").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_39).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oninvalid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onkeydown
     {
         let name = v8::String::new(scope, "onkeydown").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_40).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_40).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_40).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onkeydown").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_40).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onkeydown").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -14628,71 +14770,91 @@ fn install_svg_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: onkeypress
     {
         let name = v8::String::new(scope, "onkeypress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_41).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_41).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_41).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onkeypress").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_41).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onkeypress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onkeyup
     {
         let name = v8::String::new(scope, "onkeyup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_42).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_42).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_42).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onkeyup").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_42).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onkeyup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onload
     {
         let name = v8::String::new(scope, "onload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_43).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_43).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_43).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_43).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onloadeddata
     {
         let name = v8::String::new(scope, "onloadeddata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_44).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_44).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_44).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onloadeddata").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_44).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onloadeddata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onloadedmetadata
     {
         let name = v8::String::new(scope, "onloadedmetadata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_45).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_45).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_45).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onloadedmetadata").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_45).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onloadedmetadata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onloadstart
     {
         let name = v8::String::new(scope, "onloadstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_46).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_46).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_46).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onloadstart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_46).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onloadstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmousedown
     {
         let name = v8::String::new(scope, "onmousedown").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_47).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_47).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_47).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmousedown").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_47).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmousedown").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseenter
     {
         let name = v8::String::new(scope, "onmouseenter").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_48).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_48).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_48).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseenter").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_48).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseenter").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseleave
     {
         let name = v8::String::new(scope, "onmouseleave").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_49).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_49).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_49).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseleave").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_49).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseleave").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmousemove
     {
         let name = v8::String::new(scope, "onmousemove").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_50).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_50).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_50).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmousemove").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_50).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmousemove").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -14701,71 +14863,91 @@ fn install_svg_element_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: onmouseout
     {
         let name = v8::String::new(scope, "onmouseout").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_51).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_51).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_51).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseout").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_51).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseout").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseover
     {
         let name = v8::String::new(scope, "onmouseover").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_52).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_52).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_52).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseover").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_52).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseover").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmouseup
     {
         let name = v8::String::new(scope, "onmouseup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_53).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_53).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_53).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmouseup").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_53).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmouseup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpaste
     {
         let name = v8::String::new(scope, "onpaste").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_54).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_54).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_54).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpaste").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_54).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpaste").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpause
     {
         let name = v8::String::new(scope, "onpause").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_55).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_55).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_55).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpause").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_55).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpause").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onplay
     {
         let name = v8::String::new(scope, "onplay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_56).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_56).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_56).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onplay").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_56).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onplay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onplaying
     {
         let name = v8::String::new(scope, "onplaying").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_57).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_57).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_57).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onplaying").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_57).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onplaying").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onprogress
     {
         let name = v8::String::new(scope, "onprogress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_58).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_58).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_58).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onprogress").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_58).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onprogress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onratechange
     {
         let name = v8::String::new(scope, "onratechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_59).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_59).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_59).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onratechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_59).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onratechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onreset
     {
         let name = v8::String::new(scope, "onreset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_60).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_60).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_60).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onreset").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_60).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onreset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -14774,71 +14956,91 @@ fn install_svg_element_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: onresize
     {
         let name = v8::String::new(scope, "onresize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_61).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_61).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_61).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onresize").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_61).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onresize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onscroll
     {
         let name = v8::String::new(scope, "onscroll").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_62).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_62).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_62).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onscroll").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_62).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onscroll").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onscrollend
     {
         let name = v8::String::new(scope, "onscrollend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_63).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_63).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_63).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onscrollend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_63).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onscrollend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsecuritypolicyviolation
     {
         let name = v8::String::new(scope, "onsecuritypolicyviolation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_64).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_64).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_64).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsecuritypolicyviolation").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_64).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsecuritypolicyviolation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onseeked
     {
         let name = v8::String::new(scope, "onseeked").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_65).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_65).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_65).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onseeked").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_65).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onseeked").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onseeking
     {
         let name = v8::String::new(scope, "onseeking").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_66).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_66).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_66).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onseeking").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_66).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onseeking").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onselect
     {
         let name = v8::String::new(scope, "onselect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_67).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_67).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_67).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onselect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_67).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onselect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onslotchange
     {
         let name = v8::String::new(scope, "onslotchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_68).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_68).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_68).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onslotchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_68).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onslotchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onstalled
     {
         let name = v8::String::new(scope, "onstalled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_69).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_69).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_69).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstalled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_69).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstalled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsubmit
     {
         let name = v8::String::new(scope, "onsubmit").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_70).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_70).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_70).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsubmit").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_70).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsubmit").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -14847,71 +15049,91 @@ fn install_svg_element_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: onsuspend
     {
         let name = v8::String::new(scope, "onsuspend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_71).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_71).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_71).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsuspend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_71).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsuspend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ontimeupdate
     {
         let name = v8::String::new(scope, "ontimeupdate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_72).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_72).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_72).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ontimeupdate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_72).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ontimeupdate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ontoggle
     {
         let name = v8::String::new(scope, "ontoggle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_73).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_73).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_73).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ontoggle").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_73).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ontoggle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onvolumechange
     {
         let name = v8::String::new(scope, "onvolumechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_74).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_74).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_74).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onvolumechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_74).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onvolumechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwaiting
     {
         let name = v8::String::new(scope, "onwaiting").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_75).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_75).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_75).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwaiting").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_75).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwaiting").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationend
     {
         let name = v8::String::new(scope, "onwebkitanimationend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_76).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_76).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_76).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwebkitanimationend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_76).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwebkitanimationend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationiteration
     {
         let name = v8::String::new(scope, "onwebkitanimationiteration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_77).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_77).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_77).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwebkitanimationiteration").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_77).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwebkitanimationiteration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkitanimationstart
     {
         let name = v8::String::new(scope, "onwebkitanimationstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_78).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_78).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_78).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwebkitanimationstart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_78).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwebkitanimationstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwebkittransitionend
     {
         let name = v8::String::new(scope, "onwebkittransitionend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_79).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_79).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_79).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwebkittransitionend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_79).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwebkittransitionend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onwheel
     {
         let name = v8::String::new(scope, "onwheel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_80).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_80).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_80).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onwheel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_80).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onwheel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -14920,28 +15142,35 @@ fn install_svg_element_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: dataset
     {
         let name = v8::String::new(scope, "dataset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_81).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_81).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dataset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: nonce
     {
         let name = v8::String::new(scope, "nonce").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_82).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_82).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_82).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get nonce").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_82).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set nonce").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: autofocus
     {
         let name = v8::String::new(scope, "autofocus").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_83).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_83).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_83).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autofocus").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_83).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set autofocus").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: tabIndex
     {
         let name = v8::String::new(scope, "tabIndex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_84).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_84).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_element_get_84).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get tabIndex").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_element_set_84).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set tabIndex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: focus()
@@ -15741,28 +15970,35 @@ fn install_svg_animation_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, pro
     // attribute: targetElement
     {
         let name = v8::String::new(scope, "targetElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get targetElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onbegin
     {
         let name = v8::String::new(scope, "onbegin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_animation_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbegin").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_animation_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbegin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onend
     {
         let name = v8::String::new(scope, "onend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_animation_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_animation_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onrepeat
     {
         let name = v8::String::new(scope, "onrepeat").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_animation_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onrepeat").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_animation_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onrepeat").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getStartTime()
@@ -15820,13 +16056,15 @@ fn install_svg_animation_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, pro
     // attribute: requiredExtensions
     {
         let name = v8::String::new(scope, "requiredExtensions").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get requiredExtensions").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: systemLanguage
     {
         let name = v8::String::new(scope, "systemLanguage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_animation_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get systemLanguage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -15945,13 +16183,15 @@ pub fn create_svg_clip_path_element_template<'s>(
     // attribute: clipPathUnits
     {
         let name = v8::String::new(scope, "clipPathUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_clip_path_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_clip_path_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get clipPathUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: transform
     {
         let name = v8::String::new(scope, "transform").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_clip_path_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_clip_path_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transform").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -16352,25 +16592,29 @@ fn install_svg_component_transfer_function_element_members_1<'s>(scope: &v8::Pin
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: tableValues
     {
         let name = v8::String::new(scope, "tableValues").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get tableValues").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: slope
     {
         let name = v8::String::new(scope, "slope").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get slope").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: intercept
     {
         let name = v8::String::new(scope, "intercept").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get intercept").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -16379,19 +16623,22 @@ fn install_svg_component_transfer_function_element_members_2<'s>(scope: &v8::Pin
     // attribute: amplitude
     {
         let name = v8::String::new(scope, "amplitude").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get amplitude").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: exponent
     {
         let name = v8::String::new(scope, "exponent").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get exponent").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: offset
     {
         let name = v8::String::new(scope, "offset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_component_transfer_function_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get offset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -16940,19 +17187,22 @@ fn install_svgfe_blend_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: in2
     {
         let name = v8::String::new(scope, "in2").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in2").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: mode
     {
         let name = v8::String::new(scope, "mode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -16961,31 +17211,36 @@ fn install_svgfe_blend_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_blend_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -17424,31 +17679,36 @@ fn install_svgfe_color_matrix_element_members_1<'s>(scope: &v8::PinScope<'s, '_>
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: values
     {
         let name = v8::String::new(scope, "values").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get values").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -17457,19 +17717,22 @@ fn install_svgfe_color_matrix_element_members_2<'s>(scope: &v8::PinScope<'s, '_>
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_color_matrix_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -17772,37 +18035,43 @@ pub fn create_svgfe_component_transfer_element_template<'s>(
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_component_transfer_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -18440,19 +18709,22 @@ fn install_svgfe_composite_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, p
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: in2
     {
         let name = v8::String::new(scope, "in2").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in2").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: operator
     {
         let name = v8::String::new(scope, "operator").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get operator").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -18461,55 +18733,64 @@ fn install_svgfe_composite_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, p
     // attribute: k1
     {
         let name = v8::String::new(scope, "k1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get k1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: k2
     {
         let name = v8::String::new(scope, "k2").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get k2").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: k3
     {
         let name = v8::String::new(scope, "k3").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get k3").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: k4
     {
         let name = v8::String::new(scope, "k4").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get k4").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_composite_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -19356,37 +19637,43 @@ fn install_svgfe_convolve_matrix_element_members_1<'s>(scope: &v8::PinScope<'s, 
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: orderX
     {
         let name = v8::String::new(scope, "orderX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get orderX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: orderY
     {
         let name = v8::String::new(scope, "orderY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get orderY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kernelMatrix
     {
         let name = v8::String::new(scope, "kernelMatrix").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kernelMatrix").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: divisor
     {
         let name = v8::String::new(scope, "divisor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get divisor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: bias
     {
         let name = v8::String::new(scope, "bias").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bias").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -19395,61 +19682,71 @@ fn install_svgfe_convolve_matrix_element_members_2<'s>(scope: &v8::PinScope<'s, 
     // attribute: targetX
     {
         let name = v8::String::new(scope, "targetX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get targetX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: targetY
     {
         let name = v8::String::new(scope, "targetY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get targetY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: edgeMode
     {
         let name = v8::String::new(scope, "edgeMode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get edgeMode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kernelUnitLengthX
     {
         let name = v8::String::new(scope, "kernelUnitLengthX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kernelUnitLengthX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kernelUnitLengthY
     {
         let name = v8::String::new(scope, "kernelUnitLengthY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kernelUnitLengthY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: preserveAlpha
     {
         let name = v8::String::new(scope, "preserveAlpha").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preserveAlpha").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -19458,7 +19755,8 @@ fn install_svgfe_convolve_matrix_element_members_3<'s>(scope: &v8::PinScope<'s, 
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_convolve_matrix_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -19945,61 +20243,71 @@ pub fn create_svgfe_diffuse_lighting_element_template<'s>(
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: surfaceScale
     {
         let name = v8::String::new(scope, "surfaceScale").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get surfaceScale").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: diffuseConstant
     {
         let name = v8::String::new(scope, "diffuseConstant").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get diffuseConstant").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kernelUnitLengthX
     {
         let name = v8::String::new(scope, "kernelUnitLengthX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kernelUnitLengthX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kernelUnitLengthY
     {
         let name = v8::String::new(scope, "kernelUnitLengthY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kernelUnitLengthY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_diffuse_lighting_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -20531,31 +20839,36 @@ fn install_svgfe_displacement_map_element_members_1<'s>(scope: &v8::PinScope<'s,
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: in2
     {
         let name = v8::String::new(scope, "in2").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in2").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: scale
     {
         let name = v8::String::new(scope, "scale").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scale").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: xChannelSelector
     {
         let name = v8::String::new(scope, "xChannelSelector").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get xChannelSelector").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: yChannelSelector
     {
         let name = v8::String::new(scope, "yChannelSelector").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get yChannelSelector").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -20564,31 +20877,36 @@ fn install_svgfe_displacement_map_element_members_2<'s>(scope: &v8::PinScope<'s,
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_displacement_map_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -20707,13 +21025,15 @@ pub fn create_svgfe_distant_light_element_template<'s>(
     // attribute: azimuth
     {
         let name = v8::String::new(scope, "azimuth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_distant_light_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_distant_light_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get azimuth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: elevation
     {
         let name = v8::String::new(scope, "elevation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_distant_light_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_distant_light_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get elevation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -21254,31 +21574,36 @@ fn install_svgfe_drop_shadow_element_members_1<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: dx
     {
         let name = v8::String::new(scope, "dx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: dy
     {
         let name = v8::String::new(scope, "dy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: stdDeviationX
     {
         let name = v8::String::new(scope, "stdDeviationX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get stdDeviationX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: stdDeviationY
     {
         let name = v8::String::new(scope, "stdDeviationY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get stdDeviationY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: setStdDeviation()
@@ -21291,25 +21616,29 @@ fn install_svgfe_drop_shadow_element_members_1<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -21318,7 +21647,8 @@ fn install_svgfe_drop_shadow_element_members_2<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_drop_shadow_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -21575,31 +21905,36 @@ pub fn create_svgfe_flood_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_flood_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -22124,25 +22459,29 @@ fn install_svgfe_gaussian_blur_element_members_1<'s>(scope: &v8::PinScope<'s, '_
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: stdDeviationX
     {
         let name = v8::String::new(scope, "stdDeviationX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get stdDeviationX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: stdDeviationY
     {
         let name = v8::String::new(scope, "stdDeviationY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get stdDeviationY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: edgeMode
     {
         let name = v8::String::new(scope, "edgeMode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get edgeMode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: setStdDeviation()
@@ -22155,7 +22494,8 @@ fn install_svgfe_gaussian_blur_element_members_1<'s>(scope: &v8::PinScope<'s, '_
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -22164,25 +22504,29 @@ fn install_svgfe_gaussian_blur_element_members_2<'s>(scope: &v8::PinScope<'s, '_
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_gaussian_blur_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -22577,49 +22921,57 @@ pub fn create_svgfe_image_element_template<'s>(
     // attribute: preserveAspectRatio
     {
         let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preserveAspectRatio").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: crossOrigin
     {
         let name = v8::String::new(scope, "crossOrigin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get crossOrigin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_image_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -22877,31 +23229,36 @@ pub fn create_svgfe_merge_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -22975,7 +23332,8 @@ pub fn create_svgfe_merge_node_element_template<'s>(
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_node_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_merge_node_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -23447,43 +23805,50 @@ fn install_svgfe_morphology_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, 
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: operator
     {
         let name = v8::String::new(scope, "operator").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get operator").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: radiusX
     {
         let name = v8::String::new(scope, "radiusX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get radiusX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: radiusY
     {
         let name = v8::String::new(scope, "radiusY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get radiusY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -23492,13 +23857,15 @@ fn install_svgfe_morphology_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, 
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_morphology_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -23893,49 +24260,57 @@ pub fn create_svgfe_offset_element_template<'s>(
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: dx
     {
         let name = v8::String::new(scope, "dx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: dy
     {
         let name = v8::String::new(scope, "dy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_offset_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -24101,19 +24476,22 @@ pub fn create_svgfe_point_light_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_point_light_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_point_light_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_point_light_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_point_light_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: z
     {
         let name = v8::String::new(scope, "z").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_point_light_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_point_light_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get z").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -24654,61 +25032,71 @@ fn install_svgfe_specular_lighting_element_members_1<'s>(scope: &v8::PinScope<'s
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: surfaceScale
     {
         let name = v8::String::new(scope, "surfaceScale").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get surfaceScale").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: specularConstant
     {
         let name = v8::String::new(scope, "specularConstant").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get specularConstant").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: specularExponent
     {
         let name = v8::String::new(scope, "specularExponent").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get specularExponent").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kernelUnitLengthX
     {
         let name = v8::String::new(scope, "kernelUnitLengthX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kernelUnitLengthX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kernelUnitLengthY
     {
         let name = v8::String::new(scope, "kernelUnitLengthY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kernelUnitLengthY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -24717,7 +25105,8 @@ fn install_svgfe_specular_lighting_element_members_2<'s>(scope: &v8::PinScope<'s
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_specular_lighting_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -25112,49 +25501,57 @@ pub fn create_svgfe_spot_light_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: z
     {
         let name = v8::String::new(scope, "z").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get z").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: pointsAtX
     {
         let name = v8::String::new(scope, "pointsAtX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pointsAtX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: pointsAtY
     {
         let name = v8::String::new(scope, "pointsAtY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pointsAtY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: pointsAtZ
     {
         let name = v8::String::new(scope, "pointsAtZ").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pointsAtZ").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: specularExponent
     {
         let name = v8::String::new(scope, "specularExponent").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get specularExponent").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: limitingConeAngle
     {
         let name = v8::String::new(scope, "limitingConeAngle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_spot_light_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get limitingConeAngle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -25458,37 +25855,43 @@ pub fn create_svgfe_tile_element_template<'s>(
     // attribute: in1
     {
         let name = v8::String::new(scope, "in1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get in1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_tile_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -26073,25 +26476,29 @@ fn install_svgfe_turbulence_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, 
     // attribute: baseFrequencyX
     {
         let name = v8::String::new(scope, "baseFrequencyX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseFrequencyX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: baseFrequencyY
     {
         let name = v8::String::new(scope, "baseFrequencyY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseFrequencyY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numOctaves
     {
         let name = v8::String::new(scope, "numOctaves").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numOctaves").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: seed
     {
         let name = v8::String::new(scope, "seed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get seed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -26100,43 +26507,50 @@ fn install_svgfe_turbulence_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, 
     // attribute: stitchTiles
     {
         let name = v8::String::new(scope, "stitchTiles").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get stitchTiles").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgfe_turbulence_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -26485,43 +26899,50 @@ pub fn create_svg_filter_element_template<'s>(
     // attribute: filterUnits
     {
         let name = v8::String::new(scope, "filterUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get filterUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: primitiveUnits
     {
         let name = v8::String::new(scope, "primitiveUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get primitiveUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_filter_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -26757,25 +27178,29 @@ pub fn create_svg_gradient_element_template<'s>(
     // attribute: gradientUnits
     {
         let name = v8::String::new(scope, "gradientUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get gradientUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: gradientTransform
     {
         let name = v8::String::new(scope, "gradientTransform").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get gradientTransform").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: spreadMethod
     {
         let name = v8::String::new(scope, "spreadMethod").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get spreadMethod").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_gradient_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     if let Some(ctor) = tmpl.get_function(scope) {
@@ -27085,7 +27510,8 @@ pub fn create_svg_graphics_element_template<'s>(
     // attribute: transform
     {
         let name = v8::String::new(scope, "transform").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_graphics_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_graphics_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transform").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getBBox()
@@ -27112,13 +27538,15 @@ pub fn create_svg_graphics_element_template<'s>(
     // attribute: requiredExtensions
     {
         let name = v8::String::new(scope, "requiredExtensions").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_graphics_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_graphics_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get requiredExtensions").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: systemLanguage
     {
         let name = v8::String::new(scope, "systemLanguage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_graphics_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_graphics_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get systemLanguage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -27192,7 +27620,8 @@ pub fn create_svgm_path_element_template<'s>(
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgm_path_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgm_path_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -27874,19 +28303,22 @@ fn install_svg_marker_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: refX
     {
         let name = v8::String::new(scope, "refX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get refX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: refY
     {
         let name = v8::String::new(scope, "refY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get refY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: markerUnits
     {
         let name = v8::String::new(scope, "markerUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get markerUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -27895,32 +28327,38 @@ fn install_svg_marker_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: markerWidth
     {
         let name = v8::String::new(scope, "markerWidth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get markerWidth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: markerHeight
     {
         let name = v8::String::new(scope, "markerHeight").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get markerHeight").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: orientType
     {
         let name = v8::String::new(scope, "orientType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get orientType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: orientAngle
     {
         let name = v8::String::new(scope, "orientAngle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get orientAngle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: orient
     {
         let name = v8::String::new(scope, "orient").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_marker_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get orient").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_marker_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set orient").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: setOrientToAuto()
@@ -27940,13 +28378,15 @@ fn install_svg_marker_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: viewBox
     {
         let name = v8::String::new(scope, "viewBox").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get viewBox").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: preserveAspectRatio
     {
         let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_marker_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preserveAspectRatio").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -28249,37 +28689,43 @@ pub fn create_svg_mask_element_template<'s>(
     // attribute: maskUnits
     {
         let name = v8::String::new(scope, "maskUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maskUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maskContentUnits
     {
         let name = v8::String::new(scope, "maskContentUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maskContentUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_mask_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -28789,61 +29235,71 @@ pub fn create_svg_pattern_element_template<'s>(
     // attribute: patternUnits
     {
         let name = v8::String::new(scope, "patternUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get patternUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: patternContentUnits
     {
         let name = v8::String::new(scope, "patternContentUnits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get patternContentUnits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: patternTransform
     {
         let name = v8::String::new(scope, "patternTransform").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get patternTransform").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: viewBox
     {
         let name = v8::String::new(scope, "viewBox").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get viewBox").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: preserveAspectRatio
     {
         let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preserveAspectRatio").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_pattern_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -29097,21 +29553,26 @@ pub fn create_svg_script_element_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_script_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_script_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_script_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_script_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: crossOrigin
     {
         let name = v8::String::new(scope, "crossOrigin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_script_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_script_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_script_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get crossOrigin").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_script_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set crossOrigin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_script_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_script_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -29185,7 +29646,8 @@ pub fn create_svg_stop_element_template<'s>(
     // attribute: offset
     {
         let name = v8::String::new(scope, "offset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_stop_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_stop_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get offset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -29619,35 +30081,44 @@ pub fn create_svg_style_element_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: media
     {
         let name = v8::String::new(scope, "media").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get media").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set media").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: title
     {
         let name = v8::String::new(scope, "title").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get title").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set title").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: disabled
     {
         let name = v8::String::new(scope, "disabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get disabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_style_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set disabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sheet
     {
         let name = v8::String::new(scope, "sheet").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_style_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sheet").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -29789,13 +30260,15 @@ pub fn create_svg_view_element_template<'s>(
     // attribute: viewBox
     {
         let name = v8::String::new(scope, "viewBox").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_view_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_view_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get viewBox").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: preserveAspectRatio
     {
         let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_view_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_view_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preserveAspectRatio").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -30183,25 +30656,29 @@ pub fn create_svg_linear_gradient_element_template<'s>(
     // attribute: x1
     {
         let name = v8::String::new(scope, "x1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_linear_gradient_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_linear_gradient_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y1
     {
         let name = v8::String::new(scope, "y1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_linear_gradient_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_linear_gradient_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x2
     {
         let name = v8::String::new(scope, "x2").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_linear_gradient_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_linear_gradient_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x2").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y2
     {
         let name = v8::String::new(scope, "y2").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_linear_gradient_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_linear_gradient_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y2").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -30505,37 +30982,43 @@ pub fn create_svg_radial_gradient_element_template<'s>(
     // attribute: cx
     {
         let name = v8::String::new(scope, "cx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: cy
     {
         let name = v8::String::new(scope, "cy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: r
     {
         let name = v8::String::new(scope, "r").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get r").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: fx
     {
         let name = v8::String::new(scope, "fx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get fx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: fy
     {
         let name = v8::String::new(scope, "fy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get fy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: fr
     {
         let name = v8::String::new(scope, "fr").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_radial_gradient_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get fr").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -32104,68 +32587,85 @@ fn install_svga_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get target").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: download
     {
         let name = v8::String::new(scope, "download").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get download").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set download").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ping
     {
         let name = v8::String::new(scope, "ping").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ping").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ping").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: rel
     {
         let name = v8::String::new(scope, "rel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set rel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: relList
     {
         let name = v8::String::new(scope, "relList").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get relList").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: hreflang
     {
         let name = v8::String::new(scope, "hreflang").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hreflang").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hreflang").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: origin
     {
         let name = v8::String::new(scope, "origin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get origin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: protocol
     {
         let name = v8::String::new(scope, "protocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get protocol").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set protocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -32174,63 +32674,80 @@ fn install_svga_element_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: username
     {
         let name = v8::String::new(scope, "username").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get username").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set username").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: password
     {
         let name = v8::String::new(scope, "password").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get password").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set password").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: host
     {
         let name = v8::String::new(scope, "host").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get host").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set host").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hostname
     {
         let name = v8::String::new(scope, "hostname").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hostname").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hostname").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: pathname
     {
         let name = v8::String::new(scope, "pathname").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_16).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pathname").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_16).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set pathname").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: search
     {
         let name = v8::String::new(scope, "search").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get search").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set search").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hash
     {
         let name = v8::String::new(scope, "hash").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hash").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svga_element_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hash").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svga_element_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -32463,25 +32980,29 @@ pub fn create_svg_foreign_object_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_foreign_object_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_foreign_object_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_foreign_object_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_foreign_object_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_foreign_object_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_foreign_object_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_foreign_object_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_foreign_object_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -32761,7 +33282,8 @@ pub fn create_svg_geometry_element_template<'s>(
     // attribute: pathLength
     {
         let name = v8::String::new(scope, "pathLength").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_geometry_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_geometry_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pathLength").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: isPointInFill()
@@ -33183,44 +33705,52 @@ pub fn create_svg_image_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: preserveAspectRatio
     {
         let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preserveAspectRatio").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: crossOrigin
     {
         let name = v8::String::new(scope, "crossOrigin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svg_image_element_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get crossOrigin").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svg_image_element_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set crossOrigin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_image_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -36348,38 +36878,45 @@ fn install_svgsvg_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: currentScale
     {
         let name = v8::String::new(scope, "currentScale").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentScale").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set currentScale").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: currentTranslate
     {
         let name = v8::String::new(scope, "currentTranslate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentTranslate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getIntersectionList()
@@ -36552,7 +37089,8 @@ fn install_svgsvg_element_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     // attribute: viewBox
     {
         let name = v8::String::new(scope, "viewBox").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_30).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_30).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get viewBox").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -36561,70 +37099,89 @@ fn install_svgsvg_element_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     // attribute: preserveAspectRatio
     {
         let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_31).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_31).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preserveAspectRatio").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onafterprint
     {
         let name = v8::String::new(scope, "onafterprint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_32).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_32).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_32).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onafterprint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_32).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onafterprint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeprint
     {
         let name = v8::String::new(scope, "onbeforeprint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_33).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_33).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_33).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforeprint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_33).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforeprint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbeforeunload
     {
         let name = v8::String::new(scope, "onbeforeunload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_34).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_34).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_34).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbeforeunload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_34).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbeforeunload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onhashchange
     {
         let name = v8::String::new(scope, "onhashchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_35).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_35).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_35).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onhashchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_35).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onhashchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onlanguagechange
     {
         let name = v8::String::new(scope, "onlanguagechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_36).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_36).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_36).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onlanguagechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_36).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onlanguagechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessage
     {
         let name = v8::String::new(scope, "onmessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_37).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_37).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_37).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_37).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessageerror
     {
         let name = v8::String::new(scope, "onmessageerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_38).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_38).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_38).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessageerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_38).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessageerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onoffline
     {
         let name = v8::String::new(scope, "onoffline").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_39).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_39).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_39).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onoffline").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_39).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onoffline").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ononline
     {
         let name = v8::String::new(scope, "ononline").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_40).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_40).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_40).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ononline").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_40).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ononline").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -36633,64 +37190,82 @@ fn install_svgsvg_element_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     // attribute: onpagehide
     {
         let name = v8::String::new(scope, "onpagehide").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_41).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_41).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_41).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpagehide").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_41).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpagehide").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpagereveal
     {
         let name = v8::String::new(scope, "onpagereveal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_42).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_42).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_42).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpagereveal").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_42).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpagereveal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpageshow
     {
         let name = v8::String::new(scope, "onpageshow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_43).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_43).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_43).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpageshow").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_43).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpageshow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpageswap
     {
         let name = v8::String::new(scope, "onpageswap").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_44).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_44).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_44).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpageswap").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_44).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpageswap").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpopstate
     {
         let name = v8::String::new(scope, "onpopstate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_45).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_45).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_45).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpopstate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_45).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpopstate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onrejectionhandled
     {
         let name = v8::String::new(scope, "onrejectionhandled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_46).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_46).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_46).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onrejectionhandled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_46).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onrejectionhandled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onstorage
     {
         let name = v8::String::new(scope, "onstorage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_47).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_47).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_47).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstorage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_47).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstorage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onunhandledrejection
     {
         let name = v8::String::new(scope, "onunhandledrejection").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_48).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_48).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_48).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onunhandledrejection").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_48).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onunhandledrejection").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onunload
     {
         let name = v8::String::new(scope, "onunload").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_49).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_49).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svgsvg_element_get_49).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onunload").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(svgsvg_element_set_49).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onunload").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -36831,13 +37406,15 @@ pub fn create_svg_symbol_element_template<'s>(
     // attribute: viewBox
     {
         let name = v8::String::new(scope, "viewBox").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_symbol_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_symbol_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get viewBox").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: preserveAspectRatio
     {
         let name = v8::String::new(scope, "preserveAspectRatio").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_symbol_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_symbol_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get preserveAspectRatio").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -37401,13 +37978,15 @@ fn install_svg_text_content_element_members_1<'s>(scope: &v8::PinScope<'s, '_>, 
     // attribute: textLength
     {
         let name = v8::String::new(scope, "textLength").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_content_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_content_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get textLength").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: lengthAdjust
     {
         let name = v8::String::new(scope, "lengthAdjust").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_content_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_content_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get lengthAdjust").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getNumberOfChars()
@@ -37822,43 +38401,50 @@ pub fn create_svg_use_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: instanceRoot
     {
         let name = v8::String::new(scope, "instanceRoot").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get instanceRoot").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animatedInstanceRoot
     {
         let name = v8::String::new(scope, "animatedInstanceRoot").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animatedInstanceRoot").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_use_element_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -38024,19 +38610,22 @@ pub fn create_svg_circle_element_template<'s>(
     // attribute: cx
     {
         let name = v8::String::new(scope, "cx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_circle_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_circle_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: cy
     {
         let name = v8::String::new(scope, "cy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_circle_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_circle_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: r
     {
         let name = v8::String::new(scope, "r").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_circle_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_circle_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get r").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -38248,25 +38837,29 @@ pub fn create_svg_ellipse_element_template<'s>(
     // attribute: cx
     {
         let name = v8::String::new(scope, "cx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_ellipse_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_ellipse_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: cy
     {
         let name = v8::String::new(scope, "cy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_ellipse_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_ellipse_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: rx
     {
         let name = v8::String::new(scope, "rx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_ellipse_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_ellipse_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ry
     {
         let name = v8::String::new(scope, "ry").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_ellipse_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_ellipse_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ry").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -38478,25 +39071,29 @@ pub fn create_svg_line_element_template<'s>(
     // attribute: x1
     {
         let name = v8::String::new(scope, "x1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_line_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_line_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y1
     {
         let name = v8::String::new(scope, "y1").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_line_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_line_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y1").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: x2
     {
         let name = v8::String::new(scope, "x2").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_line_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_line_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x2").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y2
     {
         let name = v8::String::new(scope, "y2").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_line_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_line_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y2").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -38800,7 +39397,8 @@ pub fn create_svg_path_element_template<'s>(
     // attribute: pathLength
     {
         let name = v8::String::new(scope, "pathLength").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_path_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_path_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pathLength").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getTotalLength()
@@ -38955,13 +39553,15 @@ pub fn create_svg_polygon_element_template<'s>(
     // attribute: points
     {
         let name = v8::String::new(scope, "points").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_polygon_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_polygon_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get points").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animatedPoints
     {
         let name = v8::String::new(scope, "animatedPoints").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_polygon_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_polygon_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animatedPoints").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -39081,13 +39681,15 @@ pub fn create_svg_polyline_element_template<'s>(
     // attribute: points
     {
         let name = v8::String::new(scope, "points").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_polyline_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_polyline_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get points").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: animatedPoints
     {
         let name = v8::String::new(scope, "animatedPoints").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_polyline_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_polyline_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get animatedPoints").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -39391,37 +39993,43 @@ pub fn create_svg_rect_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: rx
     {
         let name = v8::String::new(scope, "rx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ry
     {
         let name = v8::String::new(scope, "ry").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_rect_element_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ry").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -39669,25 +40277,29 @@ pub fn create_svg_text_path_element_template<'s>(
     // attribute: startOffset
     {
         let name = v8::String::new(scope, "startOffset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get startOffset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: method
     {
         let name = v8::String::new(scope, "method").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get method").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: spacing
     {
         let name = v8::String::new(scope, "spacing").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get spacing").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_path_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     if let Some(ctor) = tmpl.get_function(scope) {
@@ -39953,31 +40565,36 @@ pub fn create_svg_text_positioning_element_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: dx
     {
         let name = v8::String::new(scope, "dx").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dx").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: dy
     {
         let name = v8::String::new(scope, "dy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: rotate
     {
         let name = v8::String::new(scope, "rotate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(svg_text_positioning_element_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rotate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

@@ -379,25 +379,29 @@ pub fn create_media_device_info_template<'s>(
     // attribute: deviceId
     {
         let name = v8::String::new(scope, "deviceId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_device_info_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_device_info_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get deviceId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kind
     {
         let name = v8::String::new(scope, "kind").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_device_info_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_device_info_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kind").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_device_info_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_device_info_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: groupId
     {
         let name = v8::String::new(scope, "groupId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_device_info_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_device_info_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get groupId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: toJSON()
@@ -545,13 +549,15 @@ pub fn create_media_error_template<'s>(
     // attribute: code
     {
         let name = v8::String::new(scope, "code").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_error_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_error_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get code").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: message
     {
         let name = v8::String::new(scope, "message").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_error_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_error_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get message").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     if let Some(ctor) = tmpl.get_function(scope) {
@@ -720,7 +726,8 @@ pub fn create_media_key_status_map_template<'s>(
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_key_status_map_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_key_status_map_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: has()
@@ -897,7 +904,8 @@ pub fn create_media_key_system_access_template<'s>(
     // attribute: keySystem
     {
         let name = v8::String::new(scope, "keySystem").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_key_system_access_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_key_system_access_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get keySystem").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getConfiguration()
@@ -1520,35 +1528,44 @@ pub fn create_media_metadata_template<'s>(
     // attribute: title
     {
         let name = v8::String::new(scope, "title").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_metadata_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get title").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_metadata_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set title").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: artist
     {
         let name = v8::String::new(scope, "artist").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_metadata_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get artist").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_metadata_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set artist").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: album
     {
         let name = v8::String::new(scope, "album").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_metadata_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get album").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_metadata_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set album").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: artwork
     {
         let name = v8::String::new(scope, "artwork").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_metadata_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get artwork").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_metadata_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set artwork").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: chapterInfo
     {
         let name = v8::String::new(scope, "chapterInfo").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_metadata_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get chapterInfo").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1983,15 +2000,19 @@ pub fn create_media_session_template<'s>(
     // attribute: metadata
     {
         let name = v8::String::new(scope, "metadata").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_session_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_session_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_session_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get metadata").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_session_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set metadata").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: playbackState
     {
         let name = v8::String::new(scope, "playbackState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_session_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_session_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_session_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get playbackState").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_session_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set playbackState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: setActionHandler()
@@ -2227,19 +2248,22 @@ pub fn create_media_stream_track_processor_template<'s>(
     // attribute: readable
     {
         let name = v8::String::new(scope, "readable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_processor_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_processor_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: discardedFrames
     {
         let name = v8::String::new(scope, "discardedFrames").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_processor_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_processor_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get discardedFrames").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: totalFrames
     {
         let name = v8::String::new(scope, "totalFrames").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_processor_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_processor_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get totalFrames").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2993,8 +3017,10 @@ pub fn create_media_devices_template<'s>(
     // attribute: ondevicechange
     {
         let name = v8::String::new(scope, "ondevicechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_devices_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_devices_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_devices_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondevicechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_devices_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondevicechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: enumerateDevices()
@@ -3028,8 +3054,10 @@ pub fn create_media_devices_template<'s>(
     // attribute: oncaptureaction
     {
         let name = v8::String::new(scope, "oncaptureaction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_devices_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_devices_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_devices_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncaptureaction").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_devices_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncaptureaction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getSupportedConstraints()
@@ -3686,39 +3714,47 @@ fn install_media_key_session_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: sessionId
     {
         let name = v8::String::new(scope, "sessionId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sessionId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: expiration
     {
         let name = v8::String::new(scope, "expiration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get expiration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: closed
     {
         let name = v8::String::new(scope, "closed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get closed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: keyStatuses
     {
         let name = v8::String::new(scope, "keyStatuses").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get keyStatuses").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onkeystatuseschange
     {
         let name = v8::String::new(scope, "onkeystatuseschange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_key_session_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onkeystatuseschange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_key_session_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onkeystatuseschange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessage
     {
         let name = v8::String::new(scope, "onmessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_key_session_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_key_session_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_key_session_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: generateRequest()
@@ -4057,13 +4093,15 @@ pub fn create_media_query_list_template<'s>(
     // attribute: media
     {
         let name = v8::String::new(scope, "media").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_query_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_query_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get media").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: matches
     {
         let name = v8::String::new(scope, "matches").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_query_list_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_query_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get matches").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: addListener()
@@ -4083,8 +4121,10 @@ pub fn create_media_query_list_template<'s>(
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_query_list_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_query_list_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_query_list_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_query_list_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -5211,67 +5251,83 @@ fn install_media_recorder_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     // attribute: stream
     {
         let name = v8::String::new(scope, "stream").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get stream").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: mimeType
     {
         let name = v8::String::new(scope, "mimeType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mimeType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onstart
     {
         let name = v8::String::new(scope, "onstart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onstop
     {
         let name = v8::String::new(scope, "onstop").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstop").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondataavailable
     {
         let name = v8::String::new(scope, "ondataavailable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondataavailable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondataavailable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onpause
     {
         let name = v8::String::new(scope, "onpause").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onpause").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onpause").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onresume
     {
         let name = v8::String::new(scope, "onresume").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onresume").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onresume").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_recorder_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: videoBitsPerSecond
     {
         let name = v8::String::new(scope, "videoBitsPerSecond").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get videoBitsPerSecond").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -5280,13 +5336,15 @@ fn install_media_recorder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     // attribute: audioBitsPerSecond
     {
         let name = v8::String::new(scope, "audioBitsPerSecond").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get audioBitsPerSecond").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: audioBitrateMode
     {
         let name = v8::String::new(scope, "audioBitrateMode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_recorder_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get audioBitrateMode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: start()
@@ -6228,59 +6286,72 @@ fn install_media_source_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: handle
     {
         let name = v8::String::new(scope, "handle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get handle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sourceBuffers
     {
         let name = v8::String::new(scope, "sourceBuffers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sourceBuffers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: activeSourceBuffers
     {
         let name = v8::String::new(scope, "activeSourceBuffers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get activeSourceBuffers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: readyState
     {
         let name = v8::String::new(scope, "readyState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readyState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: duration
     {
         let name = v8::String::new(scope, "duration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_source_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get duration").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_source_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set duration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsourceopen
     {
         let name = v8::String::new(scope, "onsourceopen").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_source_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsourceopen").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_source_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsourceopen").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsourceended
     {
         let name = v8::String::new(scope, "onsourceended").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_source_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsourceended").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_source_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsourceended").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsourceclose
     {
         let name = v8::String::new(scope, "onsourceclose").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_source_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsourceclose").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_source_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsourceclose").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: canConstructInDedicatedWorker
     {
         let name = v8::String::new(scope, "canConstructInDedicatedWorker").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_source_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_source_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get canConstructInDedicatedWorker").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: addSourceBuffer()
@@ -6953,7 +7024,8 @@ fn install_media_stream_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getAudioTracks()
@@ -7008,14 +7080,17 @@ fn install_media_stream_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: active
     {
         let name = v8::String::new(scope, "active").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get active").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onaddtrack
     {
         let name = v8::String::new(scope, "onaddtrack").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onaddtrack").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onaddtrack").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -7024,8 +7099,10 @@ fn install_media_stream_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: onremovetrack
     {
         let name = v8::String::new(scope, "onremovetrack").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onremovetrack").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onremovetrack").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -8380,59 +8457,72 @@ fn install_media_stream_track_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: kind
     {
         let name = v8::String::new(scope, "kind").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kind").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: enabled
     {
         let name = v8::String::new(scope, "enabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get enabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set enabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: muted
     {
         let name = v8::String::new(scope, "muted").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get muted").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onmute
     {
         let name = v8::String::new(scope, "onmute").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmute").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmute").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onunmute
     {
         let name = v8::String::new(scope, "onunmute").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onunmute").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onunmute").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: readyState
     {
         let name = v8::String::new(scope, "readyState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readyState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onended
     {
         let name = v8::String::new(scope, "onended").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onended").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onended").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: clone()
@@ -8490,8 +8580,10 @@ fn install_media_stream_track_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: oncapturehandlechange
     {
         let name = v8::String::new(scope, "oncapturehandlechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncapturehandlechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncapturehandlechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getSupportedCaptureActions()
@@ -8511,8 +8603,10 @@ fn install_media_stream_track_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: contentHint
     {
         let name = v8::String::new(scope, "contentHint").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_20).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentHint").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_20).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set contentHint").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -8521,14 +8615,17 @@ fn install_media_stream_track_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: isolated
     {
         let name = v8::String::new(scope, "isolated").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isolated").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onisolationchange
     {
         let name = v8::String::new(scope, "onisolationchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_track_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onisolationchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(media_stream_track_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onisolationchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -8737,20 +8834,24 @@ pub fn create_permission_status_template<'s>(
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(permission_status_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(permission_status_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(permission_status_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(permission_status_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(permission_status_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(permission_status_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(permission_status_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(permission_status_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -8824,7 +8925,8 @@ pub fn create_media_element_audio_source_node_template<'s>(
     // attribute: mediaElement
     {
         let name = v8::String::new(scope, "mediaElement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_element_audio_source_node_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_element_audio_source_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mediaElement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -8898,7 +9000,8 @@ pub fn create_media_stream_audio_destination_node_template<'s>(
     // attribute: stream
     {
         let name = v8::String::new(scope, "stream").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_audio_destination_node_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_audio_destination_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get stream").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -8972,7 +9075,8 @@ pub fn create_media_stream_audio_source_node_template<'s>(
     // attribute: mediaStream
     {
         let name = v8::String::new(scope, "mediaStream").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(media_stream_audio_source_node_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(media_stream_audio_source_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mediaStream").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -9295,7 +9399,8 @@ pub fn create_canvas_capture_media_stream_track_template<'s>(
     // attribute: canvas
     {
         let name = v8::String::new(scope, "canvas").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(canvas_capture_media_stream_track_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(canvas_capture_media_stream_track_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get canvas").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: requestFrame()

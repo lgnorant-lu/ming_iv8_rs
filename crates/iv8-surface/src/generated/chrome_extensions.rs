@@ -1231,29 +1231,37 @@ pub fn create_chrome_csi_template<'s>(
     // attribute: startE
     {
         let name = v8::String::new(scope, "startE").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get startE").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set startE").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onReadable
     {
         let name = v8::String::new(scope, "onReadable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onReadable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onReadable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onWindowCreated
     {
         let name = v8::String::new(scope, "onWindowCreated").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onWindowCreated").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onWindowCreated").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onTabsOnUpdated
     {
         let name = v8::String::new(scope, "onTabsOnUpdated").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onTabsOnUpdated").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onTabsOnUpdated").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: onIdle()
@@ -1266,22 +1274,28 @@ pub fn create_chrome_csi_template<'s>(
     // attribute: windowId
     {
         let name = v8::String::new(scope, "windowId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get windowId").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set windowId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: tabId
     {
         let name = v8::String::new(scope, "tabId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get tabId").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set tabId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: openerTabId
     {
         let name = v8::String::new(scope, "openerTabId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_csi_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get openerTabId").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_csi_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set openerTabId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -3588,71 +3602,91 @@ fn install_chrome_load_times_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: requestTime
     {
         let name = v8::String::new(scope, "requestTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get requestTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set requestTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: startLoadTime
     {
         let name = v8::String::new(scope, "startLoadTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get startLoadTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set startLoadTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: commitLoadTime
     {
         let name = v8::String::new(scope, "commitLoadTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get commitLoadTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set commitLoadTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: finishDocumentLoadTime
     {
         let name = v8::String::new(scope, "finishDocumentLoadTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get finishDocumentLoadTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set finishDocumentLoadTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: finishLoadTime
     {
         let name = v8::String::new(scope, "finishLoadTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get finishLoadTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set finishLoadTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: firstPaintTime
     {
         let name = v8::String::new(scope, "firstPaintTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get firstPaintTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set firstPaintTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: firstPaintAfterLoadTime
     {
         let name = v8::String::new(scope, "firstPaintAfterLoadTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get firstPaintAfterLoadTime").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set firstPaintAfterLoadTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: navigationType
     {
         let name = v8::String::new(scope, "navigationType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get navigationType").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set navigationType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: wasFetchedViaSpdy
     {
         let name = v8::String::new(scope, "wasFetchedViaSpdy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get wasFetchedViaSpdy").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set wasFetchedViaSpdy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: wasNpnNegotiated
     {
         let name = v8::String::new(scope, "wasNpnNegotiated").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get wasNpnNegotiated").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set wasNpnNegotiated").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -3661,22 +3695,28 @@ fn install_chrome_load_times_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: npnNegotiatedProtocol
     {
         let name = v8::String::new(scope, "npnNegotiatedProtocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get npnNegotiatedProtocol").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set npnNegotiatedProtocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: wasAlternateProtocolAvailable
     {
         let name = v8::String::new(scope, "wasAlternateProtocolAvailable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get wasAlternateProtocolAvailable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set wasAlternateProtocolAvailable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: connectionInfo
     {
         let name = v8::String::new(scope, "connectionInfo").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_load_times_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get connectionInfo").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_load_times_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set connectionInfo").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -4423,22 +4463,28 @@ pub fn create_chrome_port_template<'s>(
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_port_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_port_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_port_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_port_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onMessage
     {
         let name = v8::String::new(scope, "onMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_port_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_port_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_port_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onMessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_port_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onDisconnect
     {
         let name = v8::String::new(scope, "onDisconnect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_port_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_port_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_port_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onDisconnect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_port_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onDisconnect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: postMessage()
@@ -6173,71 +6219,91 @@ fn install_chrome_runtime_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     // attribute: onMessage
     {
         let name = v8::String::new(scope, "onMessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onMessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onMessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onConnect
     {
         let name = v8::String::new(scope, "onConnect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onConnect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onConnect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onInstalled
     {
         let name = v8::String::new(scope, "onInstalled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onInstalled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onInstalled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onStartup
     {
         let name = v8::String::new(scope, "onStartup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onStartup").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onStartup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onSuspend
     {
         let name = v8::String::new(scope, "onSuspend").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onSuspend").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onSuspend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onSuspendCanceled
     {
         let name = v8::String::new(scope, "onSuspendCanceled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onSuspendCanceled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onSuspendCanceled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onUpdateAvailable
     {
         let name = v8::String::new(scope, "onUpdateAvailable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onUpdateAvailable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onUpdateAvailable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onRestartRequired
     {
         let name = v8::String::new(scope, "onRestartRequired").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onRestartRequired").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onRestartRequired").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onBrowserUpdateAvailable
     {
         let name = v8::String::new(scope, "onBrowserUpdateAvailable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onBrowserUpdateAvailable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onBrowserUpdateAvailable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_runtime_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_runtime_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -6946,29 +7012,37 @@ pub fn create_chrome_storage_template<'s>(
     // attribute: sync
     {
         let name = v8::String::new(scope, "sync").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sync").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set sync").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: local
     {
         let name = v8::String::new(scope, "local").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get local").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set local").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: managed
     {
         let name = v8::String::new(scope, "managed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get managed").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set managed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: session
     {
         let name = v8::String::new(scope, "session").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get session").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set session").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -7348,8 +7422,10 @@ pub fn create_chrome_storage_area_template<'s>(
     // attribute: onChanged
     {
         let name = v8::String::new(scope, "onChanged").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_area_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_area_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(chrome_storage_area_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onChanged").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(chrome_storage_area_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onChanged").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 

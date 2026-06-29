@@ -484,37 +484,43 @@ pub fn create_intersection_observer_template<'s>(
     // attribute: root
     {
         let name = v8::String::new(scope, "root").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get root").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: rootMargin
     {
         let name = v8::String::new(scope, "rootMargin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rootMargin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: scrollMargin
     {
         let name = v8::String::new(scope, "scrollMargin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get scrollMargin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: thresholds
     {
         let name = v8::String::new(scope, "thresholds").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get thresholds").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: delay
     {
         let name = v8::String::new(scope, "delay").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get delay").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: trackVisibility
     {
         let name = v8::String::new(scope, "trackVisibility").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get trackVisibility").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: observe()
@@ -935,49 +941,57 @@ pub fn create_intersection_observer_entry_template<'s>(
     // attribute: time
     {
         let name = v8::String::new(scope, "time").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get time").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: rootBounds
     {
         let name = v8::String::new(scope, "rootBounds").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rootBounds").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: boundingClientRect
     {
         let name = v8::String::new(scope, "boundingClientRect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get boundingClientRect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: intersectionRect
     {
         let name = v8::String::new(scope, "intersectionRect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get intersectionRect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: isIntersecting
     {
         let name = v8::String::new(scope, "isIntersecting").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isIntersecting").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: isVisible
     {
         let name = v8::String::new(scope, "isVisible").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isVisible").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: intersectionRatio
     {
         let name = v8::String::new(scope, "intersectionRatio").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get intersectionRatio").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(intersection_observer_entry_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get target").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1207,7 +1221,8 @@ pub fn create_performance_observer_template<'s>(
     // attribute: supportedEntryTypes
     {
         let name = v8::String::new(scope, "supportedEntryTypes").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(performance_observer_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(performance_observer_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get supportedEntryTypes").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1490,7 +1505,8 @@ pub fn create_pressure_observer_template<'s>(
     // attribute: knownSources
     {
         let name = v8::String::new(scope, "knownSources").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(pressure_observer_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(pressure_observer_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get knownSources").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2101,31 +2117,36 @@ pub fn create_resize_observer_entry_template<'s>(
     // attribute: target
     {
         let name = v8::String::new(scope, "target").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get target").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: contentRect
     {
         let name = v8::String::new(scope, "contentRect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentRect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: borderBoxSize
     {
         let name = v8::String::new(scope, "borderBoxSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get borderBoxSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: contentBoxSize
     {
         let name = v8::String::new(scope, "contentBoxSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get contentBoxSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: devicePixelContentBoxSize
     {
         let name = v8::String::new(scope, "devicePixelContentBoxSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(resize_observer_entry_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get devicePixelContentBoxSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2242,13 +2263,15 @@ pub fn create_resize_observer_size_template<'s>(
     // attribute: inlineSize
     {
         let name = v8::String::new(scope, "inlineSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(resize_observer_size_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(resize_observer_size_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get inlineSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: blockSize
     {
         let name = v8::String::new(scope, "blockSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(resize_observer_size_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(resize_observer_size_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get blockSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

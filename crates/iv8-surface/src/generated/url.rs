@@ -1267,56 +1267,71 @@ fn install_url_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, 
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get href").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set href").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: origin
     {
         let name = v8::String::new(scope, "origin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get origin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: protocol
     {
         let name = v8::String::new(scope, "protocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get protocol").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set protocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: username
     {
         let name = v8::String::new(scope, "username").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get username").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set username").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: password
     {
         let name = v8::String::new(scope, "password").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get password").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set password").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: host
     {
         let name = v8::String::new(scope, "host").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get host").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set host").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: hostname
     {
         let name = v8::String::new(scope, "hostname").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hostname").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hostname").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -1325,28 +1340,35 @@ fn install_url_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, 
     // attribute: pathname
     {
         let name = v8::String::new(scope, "pathname").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pathname").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set pathname").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: search
     {
         let name = v8::String::new(scope, "search").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get search").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set search").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: searchParams
     {
         let name = v8::String::new(scope, "searchParams").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get searchParams").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: hash
     {
         let name = v8::String::new(scope, "hash").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(url_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hash").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(url_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set hash").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: toJSON()
@@ -1805,7 +1827,8 @@ pub fn create_url_search_params_template<'s>(
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(url_search_params_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(url_search_params_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: append()

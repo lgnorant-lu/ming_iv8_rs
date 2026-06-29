@@ -346,25 +346,29 @@ pub fn create_audio_buffer_template<'s>(
     // attribute: sampleRate
     {
         let name = v8::String::new(scope, "sampleRate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sampleRate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: duration
     {
         let name = v8::String::new(scope, "duration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get duration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfChannels
     {
         let name = v8::String::new(scope, "numberOfChannels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfChannels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getChannelData()
@@ -870,37 +874,43 @@ pub fn create_audio_data_template<'s>(
     // attribute: format
     {
         let name = v8::String::new(scope, "format").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get format").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sampleRate
     {
         let name = v8::String::new(scope, "sampleRate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sampleRate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfFrames
     {
         let name = v8::String::new(scope, "numberOfFrames").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfFrames").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfChannels
     {
         let name = v8::String::new(scope, "numberOfChannels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfChannels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: duration
     {
         let name = v8::String::new(scope, "duration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get duration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: timestamp
     {
         let name = v8::String::new(scope, "timestamp").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_data_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get timestamp").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: allocationSize()
@@ -1466,55 +1476,64 @@ fn install_audio_listener_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     // attribute: positionX
     {
         let name = v8::String::new(scope, "positionX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get positionX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: positionY
     {
         let name = v8::String::new(scope, "positionY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get positionY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: positionZ
     {
         let name = v8::String::new(scope, "positionZ").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get positionZ").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: forwardX
     {
         let name = v8::String::new(scope, "forwardX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get forwardX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: forwardY
     {
         let name = v8::String::new(scope, "forwardY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get forwardY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: forwardZ
     {
         let name = v8::String::new(scope, "forwardZ").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get forwardZ").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: upX
     {
         let name = v8::String::new(scope, "upX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get upX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: upY
     {
         let name = v8::String::new(scope, "upY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get upY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: upZ
     {
         let name = v8::String::new(scope, "upZ").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_listener_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get upZ").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: setPosition()
@@ -2202,33 +2221,40 @@ fn install_audio_param_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_param_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_param_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: automationRate
     {
         let name = v8::String::new(scope, "automationRate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_param_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get automationRate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_param_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set automationRate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: defaultValue
     {
         let name = v8::String::new(scope, "defaultValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: minValue
     {
         let name = v8::String::new(scope, "minValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get minValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxValue
     {
         let name = v8::String::new(scope, "maxValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_param_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: setValueAtTime()
@@ -2691,37 +2717,43 @@ pub fn create_audio_playback_stats_template<'s>(
     // attribute: underrunDuration
     {
         let name = v8::String::new(scope, "underrunDuration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get underrunDuration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: underrunEvents
     {
         let name = v8::String::new(scope, "underrunEvents").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get underrunEvents").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: totalDuration
     {
         let name = v8::String::new(scope, "totalDuration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get totalDuration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: averageLatency
     {
         let name = v8::String::new(scope, "averageLatency").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get averageLatency").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: minimumLatency
     {
         let name = v8::String::new(scope, "minimumLatency").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get minimumLatency").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maximumLatency
     {
         let name = v8::String::new(scope, "maximumLatency").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_playback_stats_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maximumLatency").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: resetLatency()
@@ -2806,7 +2838,8 @@ pub fn create_audio_sink_info_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_sink_info_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_sink_info_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3151,38 +3184,45 @@ pub fn create_audio_track_template<'s>(
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: kind
     {
         let name = v8::String::new(scope, "kind").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get kind").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: language
     {
         let name = v8::String::new(scope, "language").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get language").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: enabled
     {
         let name = v8::String::new(scope, "enabled").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_track_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get enabled").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_track_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set enabled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sourceBuffer
     {
         let name = v8::String::new(scope, "sourceBuffer").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sourceBuffer").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3253,7 +3293,8 @@ pub fn create_audio_worklet_processor_template<'s>(
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_processor_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_processor_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3739,20 +3780,24 @@ pub fn create_audio_decoder_template<'s>(
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_decoder_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_decoder_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: decodeQueueSize
     {
         let name = v8::String::new(scope, "decodeQueueSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_decoder_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_decoder_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get decodeQueueSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ondequeue
     {
         let name = v8::String::new(scope, "ondequeue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_decoder_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_decoder_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_decoder_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondequeue").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_decoder_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondequeue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: configure()
@@ -4280,20 +4325,24 @@ pub fn create_audio_encoder_template<'s>(
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_encoder_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_encoder_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: encodeQueueSize
     {
         let name = v8::String::new(scope, "encodeQueueSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_encoder_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_encoder_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get encodeQueueSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ondequeue
     {
         let name = v8::String::new(scope, "ondequeue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_encoder_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_encoder_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_encoder_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondequeue").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_encoder_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondequeue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: configure()
@@ -5255,7 +5304,8 @@ fn install_audio_node_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: context
     {
         let name = v8::String::new(scope, "context").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get context").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -5264,34 +5314,42 @@ fn install_audio_node_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: numberOfInputs
     {
         let name = v8::String::new(scope, "numberOfInputs").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfInputs").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: numberOfOutputs
     {
         let name = v8::String::new(scope, "numberOfOutputs").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get numberOfOutputs").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: channelCount
     {
         let name = v8::String::new(scope, "channelCount").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_node_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get channelCount").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_node_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set channelCount").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: channelCountMode
     {
         let name = v8::String::new(scope, "channelCountMode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_node_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get channelCountMode").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_node_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set channelCountMode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: channelInterpretation
     {
         let name = v8::String::new(scope, "channelInterpretation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_node_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_node_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get channelInterpretation").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_node_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set channelInterpretation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -5544,21 +5602,26 @@ pub fn create_audio_session_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_session_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_session_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_session_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_session_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_session_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_session_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onstatechange
     {
         let name = v8::String::new(scope, "onstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_session_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_session_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_session_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_session_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -5994,7 +6057,8 @@ pub fn create_audio_track_list_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: unknown()
@@ -6014,22 +6078,28 @@ pub fn create_audio_track_list_template<'s>(
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_list_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_track_list_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_list_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_track_list_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onaddtrack
     {
         let name = v8::String::new(scope, "onaddtrack").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_list_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_track_list_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_list_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onaddtrack").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_track_list_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onaddtrack").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onremovetrack
     {
         let name = v8::String::new(scope, "onremovetrack").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_track_list_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_track_list_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_track_list_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onremovetrack").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_track_list_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onremovetrack").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -7351,50 +7421,59 @@ fn install_base_audio_context_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto:
     // attribute: destination
     {
         let name = v8::String::new(scope, "destination").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get destination").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sampleRate
     {
         let name = v8::String::new(scope, "sampleRate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sampleRate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: currentTime
     {
         let name = v8::String::new(scope, "currentTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: listener
     {
         let name = v8::String::new(scope, "listener").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get listener").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: renderQuantumSize
     {
         let name = v8::String::new(scope, "renderQuantumSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get renderQuantumSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: audioWorklet
     {
         let name = v8::String::new(scope, "audioWorklet").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get audioWorklet").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onstatechange
     {
         let name = v8::String::new(scope, "onstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(base_audio_context_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(base_audio_context_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(base_audio_context_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: createAnalyser()
@@ -7606,7 +7685,8 @@ pub fn create_audio_worklet_template<'s>(
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -7917,31 +7997,36 @@ pub fn create_audio_worklet_global_scope_template<'s>(
     // attribute: currentFrame
     {
         let name = v8::String::new(scope, "currentFrame").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentFrame").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: currentTime
     {
         let name = v8::String::new(scope, "currentTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sampleRate
     {
         let name = v8::String::new(scope, "sampleRate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sampleRate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: renderQuantumSize
     {
         let name = v8::String::new(scope, "renderQuantumSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get renderQuantumSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_global_scope_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -8015,7 +8100,8 @@ pub fn create_audio_destination_node_template<'s>(
     // attribute: maxChannelCount
     {
         let name = v8::String::new(scope, "maxChannelCount").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_destination_node_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_destination_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxChannelCount").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -8225,8 +8311,10 @@ pub fn create_audio_scheduled_source_node_template<'s>(
     // attribute: onended
     {
         let name = v8::String::new(scope, "onended").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_scheduled_source_node_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_scheduled_source_node_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_scheduled_source_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onended").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_scheduled_source_node_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onended").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: start()
@@ -8450,20 +8538,24 @@ pub fn create_audio_worklet_node_template<'s>(
     // attribute: parameters
     {
         let name = v8::String::new(scope, "parameters").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_node_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get parameters").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_node_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_node_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onprocessorerror
     {
         let name = v8::String::new(scope, "onprocessorerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_node_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_worklet_node_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_worklet_node_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onprocessorerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_worklet_node_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onprocessorerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -8811,32 +8903,38 @@ pub fn create_biquad_filter_node_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(biquad_filter_node_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(biquad_filter_node_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: frequency
     {
         let name = v8::String::new(scope, "frequency").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get frequency").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: detune
     {
         let name = v8::String::new(scope, "detune").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get detune").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: Q
     {
         let name = v8::String::new(scope, "Q").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get Q").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: gain
     {
         let name = v8::String::new(scope, "gain").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(biquad_filter_node_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get gain").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getFrequencyResponse()
@@ -8917,7 +9015,8 @@ pub fn create_delay_node_template<'s>(
     // attribute: delayTime
     {
         let name = v8::String::new(scope, "delayTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(delay_node_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(delay_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get delayTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -8991,7 +9090,8 @@ pub fn create_gain_node_template<'s>(
     // attribute: gain
     {
         let name = v8::String::new(scope, "gain").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gain_node_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gain_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get gain").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -9804,39 +9904,47 @@ fn install_audio_context_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     // attribute: baseLatency
     {
         let name = v8::String::new(scope, "baseLatency").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get baseLatency").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: outputLatency
     {
         let name = v8::String::new(scope, "outputLatency").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get outputLatency").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sinkId
     {
         let name = v8::String::new(scope, "sinkId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sinkId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onsinkchange
     {
         let name = v8::String::new(scope, "onsinkchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_context_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsinkchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_context_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsinkchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_context_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_context_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: playbackStats
     {
         let name = v8::String::new(scope, "playbackStats").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_context_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get playbackStats").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getOutputTimestamp()
@@ -10224,14 +10332,17 @@ pub fn create_offline_audio_context_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(offline_audio_context_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(offline_audio_context_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: oncomplete
     {
         let name = v8::String::new(scope, "oncomplete").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(offline_audio_context_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(offline_audio_context_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(offline_audio_context_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncomplete").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(offline_audio_context_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncomplete").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -10757,41 +10868,51 @@ pub fn create_audio_buffer_source_node_template<'s>(
     // attribute: buffer
     {
         let name = v8::String::new(scope, "buffer").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get buffer").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set buffer").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: playbackRate
     {
         let name = v8::String::new(scope, "playbackRate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get playbackRate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: detune
     {
         let name = v8::String::new(scope, "detune").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get detune").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: loop
     {
         let name = v8::String::new(scope, "loop").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get loop").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set loop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: loopStart
     {
         let name = v8::String::new(scope, "loopStart").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get loopStart").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set loopStart").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: loopEnd
     {
         let name = v8::String::new(scope, "loopEnd").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get loopEnd").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(audio_buffer_source_node_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set loopEnd").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: start()
@@ -11054,20 +11175,24 @@ pub fn create_oscillator_node_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(oscillator_node_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(oscillator_node_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(oscillator_node_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(oscillator_node_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: frequency
     {
         let name = v8::String::new(scope, "frequency").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(oscillator_node_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(oscillator_node_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get frequency").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: detune
     {
         let name = v8::String::new(scope, "detune").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(oscillator_node_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(oscillator_node_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get detune").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: setPeriodicWave()

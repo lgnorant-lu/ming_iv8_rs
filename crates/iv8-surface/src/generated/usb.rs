@@ -300,37 +300,43 @@ pub fn create_usb_alternate_interface_template<'s>(
     // attribute: alternateSetting
     {
         let name = v8::String::new(scope, "alternateSetting").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get alternateSetting").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: interfaceClass
     {
         let name = v8::String::new(scope, "interfaceClass").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get interfaceClass").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: interfaceSubclass
     {
         let name = v8::String::new(scope, "interfaceSubclass").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get interfaceSubclass").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: interfaceProtocol
     {
         let name = v8::String::new(scope, "interfaceProtocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get interfaceProtocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: interfaceName
     {
         let name = v8::String::new(scope, "interfaceName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get interfaceName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: endpoints
     {
         let name = v8::String::new(scope, "endpoints").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_alternate_interface_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get endpoints").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -493,19 +499,22 @@ pub fn create_usb_configuration_template<'s>(
     // attribute: configurationValue
     {
         let name = v8::String::new(scope, "configurationValue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_configuration_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_configuration_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get configurationValue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: configurationName
     {
         let name = v8::String::new(scope, "configurationName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_configuration_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_configuration_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get configurationName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: interfaces
     {
         let name = v8::String::new(scope, "interfaces").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_configuration_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_configuration_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get interfaces").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2011,61 +2020,71 @@ fn install_usb_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: usbVersionMajor
     {
         let name = v8::String::new(scope, "usbVersionMajor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get usbVersionMajor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: usbVersionMinor
     {
         let name = v8::String::new(scope, "usbVersionMinor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get usbVersionMinor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: usbVersionSubminor
     {
         let name = v8::String::new(scope, "usbVersionSubminor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get usbVersionSubminor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: deviceClass
     {
         let name = v8::String::new(scope, "deviceClass").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get deviceClass").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: deviceSubclass
     {
         let name = v8::String::new(scope, "deviceSubclass").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get deviceSubclass").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: deviceProtocol
     {
         let name = v8::String::new(scope, "deviceProtocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get deviceProtocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: vendorId
     {
         let name = v8::String::new(scope, "vendorId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vendorId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: productId
     {
         let name = v8::String::new(scope, "productId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get productId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: deviceVersionMajor
     {
         let name = v8::String::new(scope, "deviceVersionMajor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get deviceVersionMajor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: deviceVersionMinor
     {
         let name = v8::String::new(scope, "deviceVersionMinor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get deviceVersionMinor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -2074,43 +2093,50 @@ fn install_usb_device_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: deviceVersionSubminor
     {
         let name = v8::String::new(scope, "deviceVersionSubminor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get deviceVersionSubminor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: manufacturerName
     {
         let name = v8::String::new(scope, "manufacturerName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get manufacturerName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: productName
     {
         let name = v8::String::new(scope, "productName").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get productName").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: serialNumber
     {
         let name = v8::String::new(scope, "serialNumber").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get serialNumber").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: configuration
     {
         let name = v8::String::new(scope, "configuration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get configuration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: configurations
     {
         let name = v8::String::new(scope, "configurations").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get configurations").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: opened
     {
         let name = v8::String::new(scope, "opened").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_device_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get opened").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: open()
@@ -2429,25 +2455,29 @@ pub fn create_usb_endpoint_template<'s>(
     // attribute: endpointNumber
     {
         let name = v8::String::new(scope, "endpointNumber").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_endpoint_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_endpoint_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get endpointNumber").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: direction
     {
         let name = v8::String::new(scope, "direction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_endpoint_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_endpoint_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get direction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_endpoint_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_endpoint_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: packetSize
     {
         let name = v8::String::new(scope, "packetSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_endpoint_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_endpoint_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get packetSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2564,13 +2594,15 @@ pub fn create_usb_in_transfer_result_template<'s>(
     // attribute: data
     {
         let name = v8::String::new(scope, "data").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_in_transfer_result_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_in_transfer_result_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get data").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: status
     {
         let name = v8::String::new(scope, "status").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_in_transfer_result_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_in_transfer_result_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get status").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2779,25 +2811,29 @@ pub fn create_usb_interface_template<'s>(
     // attribute: interfaceNumber
     {
         let name = v8::String::new(scope, "interfaceNumber").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_interface_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_interface_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get interfaceNumber").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: alternate
     {
         let name = v8::String::new(scope, "alternate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_interface_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_interface_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get alternate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: alternates
     {
         let name = v8::String::new(scope, "alternates").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_interface_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_interface_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get alternates").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: claimed
     {
         let name = v8::String::new(scope, "claimed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_interface_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_interface_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get claimed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -2914,13 +2950,15 @@ pub fn create_usb_isochronous_in_transfer_packet_template<'s>(
     // attribute: data
     {
         let name = v8::String::new(scope, "data").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_in_transfer_packet_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_in_transfer_packet_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get data").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: status
     {
         let name = v8::String::new(scope, "status").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_in_transfer_packet_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_in_transfer_packet_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get status").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3037,13 +3075,15 @@ pub fn create_usb_isochronous_in_transfer_result_template<'s>(
     // attribute: data
     {
         let name = v8::String::new(scope, "data").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_in_transfer_result_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_in_transfer_result_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get data").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: packets
     {
         let name = v8::String::new(scope, "packets").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_in_transfer_result_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_in_transfer_result_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get packets").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3160,13 +3200,15 @@ pub fn create_usb_isochronous_out_transfer_packet_template<'s>(
     // attribute: bytesWritten
     {
         let name = v8::String::new(scope, "bytesWritten").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_out_transfer_packet_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_out_transfer_packet_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bytesWritten").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: status
     {
         let name = v8::String::new(scope, "status").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_out_transfer_packet_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_out_transfer_packet_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get status").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3237,7 +3279,8 @@ pub fn create_usb_isochronous_out_transfer_result_template<'s>(
     // attribute: packets
     {
         let name = v8::String::new(scope, "packets").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_out_transfer_result_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_isochronous_out_transfer_result_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get packets").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3354,13 +3397,15 @@ pub fn create_usb_out_transfer_result_template<'s>(
     // attribute: bytesWritten
     {
         let name = v8::String::new(scope, "bytesWritten").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_out_transfer_result_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_out_transfer_result_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bytesWritten").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: status
     {
         let name = v8::String::new(scope, "status").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_out_transfer_result_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_out_transfer_result_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get status").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3660,15 +3705,19 @@ pub fn create_usb_template<'s>(
     // attribute: onconnect
     {
         let name = v8::String::new(scope, "onconnect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(usb_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onconnect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(usb_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onconnect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: ondisconnect
     {
         let name = v8::String::new(scope, "ondisconnect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(usb_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondisconnect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(usb_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondisconnect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getDevices()
@@ -3800,8 +3849,10 @@ pub fn create_usb_permission_result_template<'s>(
     // attribute: devices
     {
         let name = v8::String::new(scope, "devices").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(usb_permission_result_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(usb_permission_result_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(usb_permission_result_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get devices").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(usb_permission_result_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set devices").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 

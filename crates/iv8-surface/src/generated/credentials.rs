@@ -70,7 +70,8 @@ pub fn create_authenticator_response_template<'s>(
     // attribute: clientDataJSON
     {
         let name = v8::String::new(scope, "clientDataJSON").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(authenticator_response_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(authenticator_response_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get clientDataJSON").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -233,13 +234,15 @@ pub fn create_credential_template<'s>(
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(credential_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(credential_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(credential_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(credential_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: isConditionalMediationAvailable()
@@ -643,19 +646,22 @@ pub fn create_authenticator_assertion_response_template<'s>(
     // attribute: authenticatorData
     {
         let name = v8::String::new(scope, "authenticatorData").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(authenticator_assertion_response_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(authenticator_assertion_response_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get authenticatorData").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: signature
     {
         let name = v8::String::new(scope, "signature").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(authenticator_assertion_response_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(authenticator_assertion_response_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get signature").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: userHandle
     {
         let name = v8::String::new(scope, "userHandle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(authenticator_assertion_response_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(authenticator_assertion_response_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get userHandle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -913,7 +919,8 @@ pub fn create_authenticator_attestation_response_template<'s>(
     // attribute: attestationObject
     {
         let name = v8::String::new(scope, "attestationObject").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(authenticator_attestation_response_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(authenticator_attestation_response_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get attestationObject").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getTransports()
@@ -1574,19 +1581,22 @@ fn install_public_key_credential_members_1<'s>(scope: &v8::PinScope<'s, '_>, pro
     // attribute: rawId
     {
         let name = v8::String::new(scope, "rawId").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(public_key_credential_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(public_key_credential_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rawId").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: response
     {
         let name = v8::String::new(scope, "response").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(public_key_credential_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(public_key_credential_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get response").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: authenticatorAttachment
     {
         let name = v8::String::new(scope, "authenticatorAttachment").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(public_key_credential_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(public_key_credential_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get authenticatorAttachment").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getClientExtensionResults()

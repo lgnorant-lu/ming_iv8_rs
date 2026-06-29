@@ -162,7 +162,8 @@ pub fn create_crypto_template<'s>(
     // attribute: subtle
     {
         let name = v8::String::new(scope, "subtle").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(crypto_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(crypto_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get subtle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getRandomValues()
@@ -385,25 +386,29 @@ pub fn create_crypto_key_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(crypto_key_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(crypto_key_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: extractable
     {
         let name = v8::String::new(scope, "extractable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(crypto_key_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(crypto_key_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get extractable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: algorithm
     {
         let name = v8::String::new(scope, "algorithm").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(crypto_key_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(crypto_key_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get algorithm").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: usages
     {
         let name = v8::String::new(scope, "usages").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(crypto_key_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(crypto_key_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get usages").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

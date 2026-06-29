@@ -215,19 +215,22 @@ pub fn create_text_decoder_template<'s>(
     // attribute: encoding
     {
         let name = v8::String::new(scope, "encoding").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get encoding").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: fatal
     {
         let name = v8::String::new(scope, "fatal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get fatal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ignoreBOM
     {
         let name = v8::String::new(scope, "ignoreBOM").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ignoreBOM").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -482,31 +485,36 @@ pub fn create_text_decoder_stream_template<'s>(
     // attribute: encoding
     {
         let name = v8::String::new(scope, "encoding").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get encoding").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: fatal
     {
         let name = v8::String::new(scope, "fatal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get fatal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ignoreBOM
     {
         let name = v8::String::new(scope, "ignoreBOM").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ignoreBOM").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: readable
     {
         let name = v8::String::new(scope, "readable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: writable
     {
         let name = v8::String::new(scope, "writable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_decoder_stream_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get writable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -683,7 +691,8 @@ pub fn create_text_encoder_template<'s>(
     // attribute: encoding
     {
         let name = v8::String::new(scope, "encoding").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_encoder_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_encoder_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get encoding").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -846,19 +855,22 @@ pub fn create_text_encoder_stream_template<'s>(
     // attribute: encoding
     {
         let name = v8::String::new(scope, "encoding").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get encoding").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: readable
     {
         let name = v8::String::new(scope, "readable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: writable
     {
         let name = v8::String::new(scope, "writable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(text_encoder_stream_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get writable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

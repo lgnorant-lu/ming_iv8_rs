@@ -527,19 +527,22 @@ pub fn create_sensor_template<'s>(
     // attribute: activated
     {
         let name = v8::String::new(scope, "activated").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(sensor_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(sensor_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get activated").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: hasReading
     {
         let name = v8::String::new(scope, "hasReading").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(sensor_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(sensor_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hasReading").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: timestamp
     {
         let name = v8::String::new(scope, "timestamp").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(sensor_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(sensor_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get timestamp").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: start()
@@ -559,22 +562,28 @@ pub fn create_sensor_template<'s>(
     // attribute: onreading
     {
         let name = v8::String::new(scope, "onreading").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(sensor_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(sensor_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(sensor_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onreading").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(sensor_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onreading").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onactivate
     {
         let name = v8::String::new(scope, "onactivate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(sensor_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(sensor_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(sensor_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onactivate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(sensor_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onactivate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(sensor_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(sensor_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(sensor_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(sensor_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -740,19 +749,22 @@ pub fn create_accelerometer_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(accelerometer_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(accelerometer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(accelerometer_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(accelerometer_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: z
     {
         let name = v8::String::new(scope, "z").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(accelerometer_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(accelerometer_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get z").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -826,7 +838,8 @@ pub fn create_ambient_light_sensor_template<'s>(
     // attribute: illuminance
     {
         let name = v8::String::new(scope, "illuminance").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(ambient_light_sensor_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(ambient_light_sensor_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get illuminance").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -992,19 +1005,22 @@ pub fn create_gyroscope_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gyroscope_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gyroscope_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gyroscope_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gyroscope_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: z
     {
         let name = v8::String::new(scope, "z").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gyroscope_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gyroscope_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get z").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1170,19 +1186,22 @@ pub fn create_magnetometer_template<'s>(
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(magnetometer_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(magnetometer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get x").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: y
     {
         let name = v8::String::new(scope, "y").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(magnetometer_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(magnetometer_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get y").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: z
     {
         let name = v8::String::new(scope, "z").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(magnetometer_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(magnetometer_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get z").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1302,7 +1321,8 @@ pub fn create_orientation_sensor_template<'s>(
     // attribute: quaternion
     {
         let name = v8::String::new(scope, "quaternion").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(orientation_sensor_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(orientation_sensor_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get quaternion").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: populateMatrix()
@@ -1475,19 +1495,22 @@ pub fn create_proximity_sensor_template<'s>(
     // attribute: distance
     {
         let name = v8::String::new(scope, "distance").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(proximity_sensor_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(proximity_sensor_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get distance").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: max
     {
         let name = v8::String::new(scope, "max").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(proximity_sensor_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(proximity_sensor_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get max").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: near
     {
         let name = v8::String::new(scope, "near").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(proximity_sensor_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(proximity_sensor_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get near").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

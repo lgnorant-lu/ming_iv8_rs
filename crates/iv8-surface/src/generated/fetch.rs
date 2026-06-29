@@ -2054,61 +2054,71 @@ fn install_request_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<
     // attribute: method
     {
         let name = v8::String::new(scope, "method").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get method").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: url
     {
         let name = v8::String::new(scope, "url").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get url").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: headers
     {
         let name = v8::String::new(scope, "headers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get headers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: destination
     {
         let name = v8::String::new(scope, "destination").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get destination").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: referrer
     {
         let name = v8::String::new(scope, "referrer").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrer").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: referrerPolicy
     {
         let name = v8::String::new(scope, "referrerPolicy").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get referrerPolicy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: mode
     {
         let name = v8::String::new(scope, "mode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: credentials
     {
         let name = v8::String::new(scope, "credentials").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get credentials").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: cache
     {
         let name = v8::String::new(scope, "cache").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get cache").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: redirect
     {
         let name = v8::String::new(scope, "redirect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get redirect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -2117,37 +2127,43 @@ fn install_request_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<
     // attribute: integrity
     {
         let name = v8::String::new(scope, "integrity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get integrity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: keepalive
     {
         let name = v8::String::new(scope, "keepalive").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get keepalive").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: isReloadNavigation
     {
         let name = v8::String::new(scope, "isReloadNavigation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isReloadNavigation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: isHistoryNavigation
     {
         let name = v8::String::new(scope, "isHistoryNavigation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isHistoryNavigation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: signal
     {
         let name = v8::String::new(scope, "signal").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get signal").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: duplex
     {
         let name = v8::String::new(scope, "duplex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get duplex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: clone()
@@ -2160,19 +2176,22 @@ fn install_request_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<
     // attribute: targetAddressSpace
     {
         let name = v8::String::new(scope, "targetAddressSpace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get targetAddressSpace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: body
     {
         let name = v8::String::new(scope, "body").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get body").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: bodyUsed
     {
         let name = v8::String::new(scope, "bodyUsed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(request_get_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(request_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bodyUsed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -3150,43 +3169,50 @@ fn install_response_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: url
     {
         let name = v8::String::new(scope, "url").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get url").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: redirected
     {
         let name = v8::String::new(scope, "redirected").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get redirected").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: status
     {
         let name = v8::String::new(scope, "status").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get status").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ok
     {
         let name = v8::String::new(scope, "ok").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ok").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: statusText
     {
         let name = v8::String::new(scope, "statusText").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get statusText").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: headers
     {
         let name = v8::String::new(scope, "headers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get headers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -3202,13 +3228,15 @@ fn install_response_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
     // attribute: body
     {
         let name = v8::String::new(scope, "body").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get body").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: bodyUsed
     {
         let name = v8::String::new(scope, "bodyUsed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(response_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(response_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bodyUsed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: arrayBuffer()

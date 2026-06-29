@@ -13252,19 +13252,22 @@ fn install_web_gl2rendering_context_members_30<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: canvas
     {
         let name = v8::String::new(scope, "canvas").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get canvas").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: drawingBufferWidth
     {
         let name = v8::String::new(scope, "drawingBufferWidth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get drawingBufferWidth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: drawingBufferHeight
     {
         let name = v8::String::new(scope, "drawingBufferHeight").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get drawingBufferHeight").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -13273,21 +13276,26 @@ fn install_web_gl2rendering_context_members_31<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: drawingBufferFormat
     {
         let name = v8::String::new(scope, "drawingBufferFormat").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get drawingBufferFormat").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: drawingBufferColorSpace
     {
         let name = v8::String::new(scope, "drawingBufferColorSpace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get drawingBufferColorSpace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set drawingBufferColorSpace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: unpackColorSpace
     {
         let name = v8::String::new(scope, "unpackColorSpace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get unpackColorSpace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(web_gl2rendering_context_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set unpackColorSpace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getContextAttributes()
@@ -16740,19 +16748,22 @@ pub fn create_web_gl_active_info_template<'s>(
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_active_info_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_active_info_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_active_info_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_active_info_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_active_info_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_active_info_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -16867,8 +16878,10 @@ pub fn create_web_gl_object_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_object_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(web_gl_object_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_object_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(web_gl_object_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -25776,19 +25789,22 @@ fn install_web_gl_rendering_context_members_30<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: canvas
     {
         let name = v8::String::new(scope, "canvas").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get canvas").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: drawingBufferWidth
     {
         let name = v8::String::new(scope, "drawingBufferWidth").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get drawingBufferWidth").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: drawingBufferHeight
     {
         let name = v8::String::new(scope, "drawingBufferHeight").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get drawingBufferHeight").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -25797,21 +25813,26 @@ fn install_web_gl_rendering_context_members_31<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: drawingBufferFormat
     {
         let name = v8::String::new(scope, "drawingBufferFormat").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get drawingBufferFormat").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: drawingBufferColorSpace
     {
         let name = v8::String::new(scope, "drawingBufferColorSpace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get drawingBufferColorSpace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set drawingBufferColorSpace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: unpackColorSpace
     {
         let name = v8::String::new(scope, "unpackColorSpace").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get unpackColorSpace").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(web_gl_rendering_context_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set unpackColorSpace").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getContextAttributes()
@@ -26971,19 +26992,22 @@ pub fn create_web_gl_shader_precision_format_template<'s>(
     // attribute: rangeMin
     {
         let name = v8::String::new(scope, "rangeMin").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_shader_precision_format_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_shader_precision_format_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rangeMin").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: rangeMax
     {
         let name = v8::String::new(scope, "rangeMax").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_shader_precision_format_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_shader_precision_format_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rangeMax").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: precision
     {
         let name = v8::String::new(scope, "precision").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(web_gl_shader_precision_format_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(web_gl_shader_precision_format_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get precision").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

@@ -583,61 +583,71 @@ fn install_gamepad_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: index
     {
         let name = v8::String::new(scope, "index").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get index").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: connected
     {
         let name = v8::String::new(scope, "connected").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get connected").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: timestamp
     {
         let name = v8::String::new(scope, "timestamp").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get timestamp").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: mapping
     {
         let name = v8::String::new(scope, "mapping").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mapping").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: axes
     {
         let name = v8::String::new(scope, "axes").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get axes").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: buttons
     {
         let name = v8::String::new(scope, "buttons").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get buttons").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: touches
     {
         let name = v8::String::new(scope, "touches").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get touches").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: vibrationActuator
     {
         let name = v8::String::new(scope, "vibrationActuator").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vibrationActuator").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: hand
     {
         let name = v8::String::new(scope, "hand").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hand").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -646,13 +656,15 @@ fn install_gamepad_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<
     // attribute: hapticActuators
     {
         let name = v8::String::new(scope, "hapticActuators").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hapticActuators").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: pose
     {
         let name = v8::String::new(scope, "pose").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pose").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -814,19 +826,22 @@ pub fn create_gamepad_button_template<'s>(
     // attribute: pressed
     {
         let name = v8::String::new(scope, "pressed").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_button_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_button_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pressed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: touched
     {
         let name = v8::String::new(scope, "touched").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_button_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_button_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get touched").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_button_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_button_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1035,7 +1050,8 @@ pub fn create_gamepad_haptic_actuator_template<'s>(
     // attribute: effects
     {
         let name = v8::String::new(scope, "effects").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_haptic_actuator_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_haptic_actuator_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get effects").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: playEffect()
@@ -1449,49 +1465,57 @@ pub fn create_gamepad_pose_template<'s>(
     // attribute: hasOrientation
     {
         let name = v8::String::new(scope, "hasOrientation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hasOrientation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: hasPosition
     {
         let name = v8::String::new(scope, "hasPosition").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get hasPosition").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: position
     {
         let name = v8::String::new(scope, "position").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get position").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: linearVelocity
     {
         let name = v8::String::new(scope, "linearVelocity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get linearVelocity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: linearAcceleration
     {
         let name = v8::String::new(scope, "linearAcceleration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get linearAcceleration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: orientation
     {
         let name = v8::String::new(scope, "orientation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get orientation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: angularVelocity
     {
         let name = v8::String::new(scope, "angularVelocity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get angularVelocity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: angularAcceleration
     {
         let name = v8::String::new(scope, "angularAcceleration").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gamepad_pose_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get angularAcceleration").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

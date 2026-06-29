@@ -116,7 +116,8 @@ pub fn create_rtc_certificate_template<'s>(
     // attribute: expires
     {
         let name = v8::String::new(scope, "expires").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_certificate_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_certificate_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get expires").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getFingerprints()
@@ -284,8 +285,10 @@ pub fn create_rtc_encoded_audio_frame_template<'s>(
     // attribute: data
     {
         let name = v8::String::new(scope, "data").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_encoded_audio_frame_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_encoded_audio_frame_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_encoded_audio_frame_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get data").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_encoded_audio_frame_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set data").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getMetadata()
@@ -499,14 +502,17 @@ pub fn create_rtc_encoded_video_frame_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_encoded_video_frame_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_encoded_video_frame_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: data
     {
         let name = v8::String::new(scope, "data").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_encoded_video_frame_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_encoded_video_frame_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_encoded_video_frame_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get data").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_encoded_video_frame_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set data").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getMetadata()
@@ -1327,61 +1333,71 @@ fn install_rtc_ice_candidate_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: candidate
     {
         let name = v8::String::new(scope, "candidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get candidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sdpMid
     {
         let name = v8::String::new(scope, "sdpMid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sdpMid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sdpMLineIndex
     {
         let name = v8::String::new(scope, "sdpMLineIndex").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sdpMLineIndex").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: foundation
     {
         let name = v8::String::new(scope, "foundation").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get foundation").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: component
     {
         let name = v8::String::new(scope, "component").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get component").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: priority
     {
         let name = v8::String::new(scope, "priority").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get priority").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: address
     {
         let name = v8::String::new(scope, "address").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get address").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: protocol
     {
         let name = v8::String::new(scope, "protocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get protocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: port
     {
         let name = v8::String::new(scope, "port").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -1390,37 +1406,43 @@ fn install_rtc_ice_candidate_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: tcpType
     {
         let name = v8::String::new(scope, "tcpType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get tcpType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: relatedAddress
     {
         let name = v8::String::new(scope, "relatedAddress").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get relatedAddress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: relatedPort
     {
         let name = v8::String::new(scope, "relatedPort").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get relatedPort").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: usernameFragment
     {
         let name = v8::String::new(scope, "usernameFragment").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get usernameFragment").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: relayProtocol
     {
         let name = v8::String::new(scope, "relayProtocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get relayProtocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: url
     {
         let name = v8::String::new(scope, "url").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get url").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: toJSON()
@@ -1543,13 +1565,15 @@ pub fn create_rtc_ice_candidate_pair_template<'s>(
     // attribute: local
     {
         let name = v8::String::new(scope, "local").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_pair_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_pair_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get local").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: remote
     {
         let name = v8::String::new(scope, "remote").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_pair_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_candidate_pair_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get remote").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -1754,15 +1778,19 @@ pub fn create_rtc_identity_assertion_template<'s>(
     // attribute: idp
     {
         let name = v8::String::new(scope, "idp").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_identity_assertion_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_identity_assertion_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_identity_assertion_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get idp").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_identity_assertion_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set idp").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_identity_assertion_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_identity_assertion_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_identity_assertion_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_identity_assertion_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -2361,13 +2389,15 @@ pub fn create_rtc_rtp_receiver_template<'s>(
     // attribute: track
     {
         let name = v8::String::new(scope, "track").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get track").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: transport
     {
         let name = v8::String::new(scope, "transport").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transport").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getCapabilities()
@@ -2408,15 +2438,19 @@ pub fn create_rtc_rtp_receiver_template<'s>(
     // attribute: jitterBufferTarget
     {
         let name = v8::String::new(scope, "jitterBufferTarget").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get jitterBufferTarget").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set jitterBufferTarget").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: transform
     {
         let name = v8::String::new(scope, "transform").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transform").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set transform").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -3036,13 +3070,15 @@ pub fn create_rtc_rtp_sender_template<'s>(
     // attribute: track
     {
         let name = v8::String::new(scope, "track").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get track").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: transport
     {
         let name = v8::String::new(scope, "transport").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transport").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getCapabilities()
@@ -3090,14 +3126,17 @@ pub fn create_rtc_rtp_sender_template<'s>(
     // attribute: transform
     {
         let name = v8::String::new(scope, "transform").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transform").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set transform").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: dtmf
     {
         let name = v8::String::new(scope, "dtmf").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dtmf").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3488,32 +3527,38 @@ pub fn create_rtc_rtp_transceiver_template<'s>(
     // attribute: mid
     {
         let name = v8::String::new(scope, "mid").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sender
     {
         let name = v8::String::new(scope, "sender").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sender").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: receiver
     {
         let name = v8::String::new(scope, "receiver").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get receiver").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: direction
     {
         let name = v8::String::new(scope, "direction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get direction").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set direction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: currentDirection
     {
         let name = v8::String::new(scope, "currentDirection").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_transceiver_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentDirection").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: stop()
@@ -3690,13 +3735,15 @@ pub fn create_rtc_session_description_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_session_description_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_session_description_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sdp
     {
         let name = v8::String::new(scope, "sdp").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_session_description_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_session_description_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sdp").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: toJSON()
@@ -4026,37 +4073,43 @@ pub fn create_rtc_error_template<'s>(
     // attribute: errorDetail
     {
         let name = v8::String::new(scope, "errorDetail").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get errorDetail").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sdpLineNumber
     {
         let name = v8::String::new(scope, "sdpLineNumber").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sdpLineNumber").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sctpCauseCode
     {
         let name = v8::String::new(scope, "sctpCauseCode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sctpCauseCode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: receivedAlert
     {
         let name = v8::String::new(scope, "receivedAlert").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get receivedAlert").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sentAlert
     {
         let name = v8::String::new(scope, "sentAlert").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sentAlert").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: httpRequestStatusCode
     {
         let name = v8::String::new(scope, "httpRequestStatusCode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_error_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get httpRequestStatusCode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -4319,20 +4372,24 @@ pub fn create_rtcdtmf_sender_template<'s>(
     // attribute: ontonechange
     {
         let name = v8::String::new(scope, "ontonechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtcdtmf_sender_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtcdtmf_sender_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtcdtmf_sender_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ontonechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtcdtmf_sender_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ontonechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: canInsertDTMF
     {
         let name = v8::String::new(scope, "canInsertDTMF").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtcdtmf_sender_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtcdtmf_sender_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get canInsertDTMF").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: toneBuffer
     {
         let name = v8::String::new(scope, "toneBuffer").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtcdtmf_sender_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtcdtmf_sender_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get toneBuffer").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -5778,62 +5835,73 @@ fn install_rtc_data_channel_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: ordered
     {
         let name = v8::String::new(scope, "ordered").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ordered").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxPacketLifeTime
     {
         let name = v8::String::new(scope, "maxPacketLifeTime").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxPacketLifeTime").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxRetransmits
     {
         let name = v8::String::new(scope, "maxRetransmits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxRetransmits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: protocol
     {
         let name = v8::String::new(scope, "protocol").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get protocol").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: negotiated
     {
         let name = v8::String::new(scope, "negotiated").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get negotiated").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: readyState
     {
         let name = v8::String::new(scope, "readyState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readyState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: bufferedAmount
     {
         let name = v8::String::new(scope, "bufferedAmount").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bufferedAmount").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: bufferedAmountLowThreshold
     {
         let name = v8::String::new(scope, "bufferedAmountLowThreshold").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get bufferedAmountLowThreshold").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set bufferedAmountLowThreshold").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -5842,36 +5910,46 @@ fn install_rtc_data_channel_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: onopen
     {
         let name = v8::String::new(scope, "onopen").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onopen").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onopen").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onbufferedamountlow
     {
         let name = v8::String::new(scope, "onbufferedamountlow").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onbufferedamountlow").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onbufferedamountlow").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_13).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_13).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclosing
     {
         let name = v8::String::new(scope, "onclosing").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_14).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onclosing").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_14).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onclosing").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclose
     {
         let name = v8::String::new(scope, "onclose").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_15).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onclose").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_15).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onclose").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: close()
@@ -5884,15 +5962,19 @@ fn install_rtc_data_channel_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: onmessage
     {
         let name = v8::String::new(scope, "onmessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: binaryType
     {
         let name = v8::String::new(scope, "binaryType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get binaryType").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_data_channel_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set binaryType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: send()
@@ -5929,7 +6011,8 @@ fn install_rtc_data_channel_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: priority
     {
         let name = v8::String::new(scope, "priority").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_data_channel_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get priority").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -6274,13 +6357,15 @@ pub fn create_rtc_dtls_transport_template<'s>(
     // attribute: iceTransport
     {
         let name = v8::String::new(scope, "iceTransport").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get iceTransport").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getRemoteCertificates()
@@ -6293,15 +6378,19 @@ pub fn create_rtc_dtls_transport_template<'s>(
     // attribute: onstatechange
     {
         let name = v8::String::new(scope, "onstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_dtls_transport_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -7384,25 +7473,29 @@ fn install_rtc_ice_transport_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: role
     {
         let name = v8::String::new(scope, "role").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get role").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: component
     {
         let name = v8::String::new(scope, "component").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get component").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: gatheringState
     {
         let name = v8::String::new(scope, "gatheringState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get gatheringState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: getLocalCandidates()
@@ -7443,8 +7536,10 @@ fn install_rtc_ice_transport_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: onstatechange
     {
         let name = v8::String::new(scope, "onstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -7453,15 +7548,19 @@ fn install_rtc_ice_transport_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: ongatheringstatechange
     {
         let name = v8::String::new(scope, "ongatheringstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ongatheringstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ongatheringstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onselectedcandidatepairchange
     {
         let name = v8::String::new(scope, "onselectedcandidatepairchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onselectedcandidatepairchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onselectedcandidatepairchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: gather()
@@ -7495,15 +7594,19 @@ fn install_rtc_ice_transport_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: 
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_17).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_17).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onicecandidate
     {
         let name = v8::String::new(scope, "onicecandidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_18).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onicecandidate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_ice_transport_set_18).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onicecandidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -10211,19 +10314,22 @@ fn install_rtc_peer_connection_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: localDescription
     {
         let name = v8::String::new(scope, "localDescription").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get localDescription").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: currentLocalDescription
     {
         let name = v8::String::new(scope, "currentLocalDescription").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentLocalDescription").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: pendingLocalDescription
     {
         let name = v8::String::new(scope, "pendingLocalDescription").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pendingLocalDescription").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: setRemoteDescription()
@@ -10236,19 +10342,22 @@ fn install_rtc_peer_connection_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: remoteDescription
     {
         let name = v8::String::new(scope, "remoteDescription").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get remoteDescription").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: currentRemoteDescription
     {
         let name = v8::String::new(scope, "currentRemoteDescription").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get currentRemoteDescription").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: pendingRemoteDescription
     {
         let name = v8::String::new(scope, "pendingRemoteDescription").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get pendingRemoteDescription").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -10264,31 +10373,36 @@ fn install_rtc_peer_connection_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: signalingState
     {
         let name = v8::String::new(scope, "signalingState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get signalingState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: iceGatheringState
     {
         let name = v8::String::new(scope, "iceGatheringState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get iceGatheringState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: iceConnectionState
     {
         let name = v8::String::new(scope, "iceConnectionState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get iceConnectionState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: connectionState
     {
         let name = v8::String::new(scope, "connectionState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get connectionState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: canTrickleIceCandidates
     {
         let name = v8::String::new(scope, "canTrickleIceCandidates").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get canTrickleIceCandidates").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: restartIce()
@@ -10325,50 +10439,64 @@ fn install_rtc_peer_connection_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: onnegotiationneeded
     {
         let name = v8::String::new(scope, "onnegotiationneeded").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_21).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onnegotiationneeded").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_21).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onnegotiationneeded").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onicecandidate
     {
         let name = v8::String::new(scope, "onicecandidate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_22).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onicecandidate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_22).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onicecandidate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onicecandidateerror
     {
         let name = v8::String::new(scope, "onicecandidateerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_23).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onicecandidateerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_23).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onicecandidateerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onsignalingstatechange
     {
         let name = v8::String::new(scope, "onsignalingstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsignalingstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsignalingstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oniceconnectionstatechange
     {
         let name = v8::String::new(scope, "oniceconnectionstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oniceconnectionstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oniceconnectionstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onicegatheringstatechange
     {
         let name = v8::String::new(scope, "onicegatheringstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_26).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onicegatheringstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_26).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onicegatheringstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onconnectionstatechange
     {
         let name = v8::String::new(scope, "onconnectionstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_27).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_27).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_27).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onconnectionstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_27).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onconnectionstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: createOffer()
@@ -10426,19 +10554,22 @@ fn install_rtc_peer_connection_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: peerIdentity
     {
         let name = v8::String::new(scope, "peerIdentity").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_35).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_35).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get peerIdentity").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: idpLoginUrl
     {
         let name = v8::String::new(scope, "idpLoginUrl").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_36).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_36).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get idpLoginUrl").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: idpErrorInfo
     {
         let name = v8::String::new(scope, "idpErrorInfo").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_37).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_37).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get idpErrorInfo").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: generateCertificate()
@@ -10496,14 +10627,17 @@ fn install_rtc_peer_connection_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: ontrack
     {
         let name = v8::String::new(scope, "ontrack").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_45).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_45).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_45).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ontrack").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_45).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ontrack").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: sctp
     {
         let name = v8::String::new(scope, "sctp").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_46).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_46).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sctp").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: createDataChannel()
@@ -10516,8 +10650,10 @@ fn install_rtc_peer_connection_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: ondatachannel
     {
         let name = v8::String::new(scope, "ondatachannel").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_48).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_48).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_get_48).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get ondatachannel").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_peer_connection_set_48).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set ondatachannel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getStats()
@@ -10747,8 +10883,10 @@ pub fn create_rtc_rtp_s_frame_decrypter_template<'s>(
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_decrypter_get_3).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_decrypter_set_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_decrypter_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_s_frame_decrypter_set_3).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -11096,7 +11234,8 @@ pub fn create_rtc_rtp_script_transformer_template<'s>(
     // attribute: readable
     {
         let name = v8::String::new(scope, "readable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: generateKeyFrame()
@@ -11116,20 +11255,24 @@ pub fn create_rtc_rtp_script_transformer_template<'s>(
     // attribute: writable
     {
         let name = v8::String::new(scope, "writable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get writable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onkeyframerequest
     {
         let name = v8::String::new(scope, "onkeyframerequest").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onkeyframerequest").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onkeyframerequest").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: options
     {
         let name = v8::String::new(scope, "options").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_script_transformer_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get options").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -11431,32 +11574,38 @@ pub fn create_rtc_sctp_transport_template<'s>(
     // attribute: transport
     {
         let name = v8::String::new(scope, "transport").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transport").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxMessageSize
     {
         let name = v8::String::new(scope, "maxMessageSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxMessageSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxChannels
     {
         let name = v8::String::new(scope, "maxChannels").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxChannels").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onstatechange
     {
         let name = v8::String::new(scope, "onstatechange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onstatechange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(rtc_sctp_transport_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onstatechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -11530,7 +11679,8 @@ pub fn create_rtc_identity_provider_global_scope_template<'s>(
     // attribute: rtcIdentityProvider
     {
         let name = v8::String::new(scope, "rtcIdentityProvider").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(rtc_identity_provider_global_scope_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(rtc_identity_provider_global_scope_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get rtcIdentityProvider").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 

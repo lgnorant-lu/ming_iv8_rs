@@ -162,7 +162,8 @@ pub fn create_dom_string_list_template<'s>(
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(dom_string_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(dom_string_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: item()
@@ -661,31 +662,36 @@ pub fn create_idb_cursor_template<'s>(
     // attribute: source
     {
         let name = v8::String::new(scope, "source").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get source").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: direction
     {
         let name = v8::String::new(scope, "direction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get direction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: key
     {
         let name = v8::String::new(scope, "key").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get key").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: primaryKey
     {
         let name = v8::String::new(scope, "primaryKey").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get primaryKey").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: request
     {
         let name = v8::String::new(scope, "request").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get request").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: advance()
@@ -1625,32 +1631,38 @@ fn install_idb_index_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_index_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_index_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: objectStore
     {
         let name = v8::String::new(scope, "objectStore").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get objectStore").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: keyPath
     {
         let name = v8::String::new(scope, "keyPath").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get keyPath").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: multiEntry
     {
         let name = v8::String::new(scope, "multiEntry").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get multiEntry").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: unique
     {
         let name = v8::String::new(scope, "unique").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_index_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get unique").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: get()
@@ -2147,25 +2159,29 @@ pub fn create_idb_key_range_template<'s>(
     // attribute: lower
     {
         let name = v8::String::new(scope, "lower").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_key_range_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_key_range_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get lower").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: upper
     {
         let name = v8::String::new(scope, "upper").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_key_range_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_key_range_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get upper").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: lowerOpen
     {
         let name = v8::String::new(scope, "lowerOpen").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_key_range_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_key_range_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get lowerOpen").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: upperOpen
     {
         let name = v8::String::new(scope, "upperOpen").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_key_range_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_key_range_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get upperOpen").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: only()
@@ -3196,32 +3212,38 @@ fn install_idb_object_store_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_object_store_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_object_store_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: keyPath
     {
         let name = v8::String::new(scope, "keyPath").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get keyPath").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: indexNames
     {
         let name = v8::String::new(scope, "indexNames").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get indexNames").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: transaction
     {
         let name = v8::String::new(scope, "transaction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transaction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: autoIncrement
     {
         let name = v8::String::new(scope, "autoIncrement").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_object_store_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get autoIncrement").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: put()
@@ -3491,19 +3513,22 @@ pub fn create_idb_record_template<'s>(
     // attribute: key
     {
         let name = v8::String::new(scope, "key").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_record_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_record_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get key").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: primaryKey
     {
         let name = v8::String::new(scope, "primaryKey").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_record_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_record_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get primaryKey").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_record_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_record_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -4220,19 +4245,22 @@ fn install_idb_database_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: name
     {
         let name = v8::String::new(scope, "name").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get name").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: version
     {
         let name = v8::String::new(scope, "version").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get version").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: objectStoreNames
     {
         let name = v8::String::new(scope, "objectStoreNames").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get objectStoreNames").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: transaction()
@@ -4266,22 +4294,28 @@ fn install_idb_database_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: onabort
     {
         let name = v8::String::new(scope, "onabort").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_database_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onabort").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_database_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onabort").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclose
     {
         let name = v8::String::new(scope, "onclose").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_database_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onclose").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_database_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onclose").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_database_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_database_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -4290,8 +4324,10 @@ fn install_idb_database_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     // attribute: onversionchange
     {
         let name = v8::String::new(scope, "onversionchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_database_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_database_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onversionchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_database_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onversionchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -4728,45 +4764,54 @@ pub fn create_idb_request_template<'s>(
     // attribute: result
     {
         let name = v8::String::new(scope, "result").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get result").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: error
     {
         let name = v8::String::new(scope, "error").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get error").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: source
     {
         let name = v8::String::new(scope, "source").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get source").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: transaction
     {
         let name = v8::String::new(scope, "transaction").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get transaction").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: readyState
     {
         let name = v8::String::new(scope, "readyState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get readyState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onsuccess
     {
         let name = v8::String::new(scope, "onsuccess").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_request_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onsuccess").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_request_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onsuccess").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_request_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_request_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_request_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -5439,31 +5484,36 @@ fn install_idb_transaction_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8
     // attribute: objectStoreNames
     {
         let name = v8::String::new(scope, "objectStoreNames").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get objectStoreNames").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: mode
     {
         let name = v8::String::new(scope, "mode").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mode").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: durability
     {
         let name = v8::String::new(scope, "durability").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get durability").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: db
     {
         let name = v8::String::new(scope, "db").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get db").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: error
     {
         let name = v8::String::new(scope, "error").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get error").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: objectStore()
@@ -5490,15 +5540,19 @@ fn install_idb_transaction_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8
     // attribute: onabort
     {
         let name = v8::String::new(scope, "onabort").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_transaction_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onabort").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_transaction_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onabort").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: oncomplete
     {
         let name = v8::String::new(scope, "oncomplete").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_transaction_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get oncomplete").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_transaction_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set oncomplete").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -5507,8 +5561,10 @@ fn install_idb_transaction_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8
     // attribute: onerror
     {
         let name = v8::String::new(scope, "onerror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_transaction_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_transaction_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onerror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_transaction_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -5581,7 +5637,8 @@ pub fn create_idb_cursor_with_value_template<'s>(
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_with_value_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_cursor_with_value_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -5789,15 +5846,19 @@ pub fn create_idb_open_db_request_template<'s>(
     // attribute: onblocked
     {
         let name = v8::String::new(scope, "onblocked").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_open_db_request_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_open_db_request_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_open_db_request_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onblocked").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_open_db_request_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onblocked").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onupgradeneeded
     {
         let name = v8::String::new(scope, "onupgradeneeded").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(idb_open_db_request_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(idb_open_db_request_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(idb_open_db_request_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onupgradeneeded").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(idb_open_db_request_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onupgradeneeded").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 

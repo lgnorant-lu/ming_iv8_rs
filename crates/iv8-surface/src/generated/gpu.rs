@@ -176,7 +176,8 @@ pub fn create_gpu_template<'s>(
     // attribute: wgslLanguageFeatures
     {
         let name = v8::String::new(scope, "wgslLanguageFeatures").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get wgslLanguageFeatures").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -385,19 +386,22 @@ pub fn create_gpu_adapter_template<'s>(
     // attribute: features
     {
         let name = v8::String::new(scope, "features").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get features").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: limits
     {
         let name = v8::String::new(scope, "limits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get limits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: info
     {
         let name = v8::String::new(scope, "info").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get info").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: requestDevice()
@@ -751,43 +755,50 @@ pub fn create_gpu_adapter_info_template<'s>(
     // attribute: vendor
     {
         let name = v8::String::new(scope, "vendor").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get vendor").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: architecture
     {
         let name = v8::String::new(scope, "architecture").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get architecture").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: device
     {
         let name = v8::String::new(scope, "device").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get device").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: description
     {
         let name = v8::String::new(scope, "description").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get description").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: subgroupMinSize
     {
         let name = v8::String::new(scope, "subgroupMinSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get subgroupMinSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: subgroupMaxSize
     {
         let name = v8::String::new(scope, "subgroupMaxSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get subgroupMaxSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: isFallbackAdapter
     {
         let name = v8::String::new(scope, "isFallbackAdapter").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_adapter_info_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get isFallbackAdapter").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -902,8 +913,10 @@ pub fn create_gpu_bind_group_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_bind_group_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_bind_group_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_bind_group_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_bind_group_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -1018,8 +1031,10 @@ pub fn create_gpu_bind_group_layout_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_bind_group_layout_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_bind_group_layout_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_bind_group_layout_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_bind_group_layout_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -1456,19 +1471,22 @@ pub fn create_gpu_buffer_template<'s>(
     // attribute: size
     {
         let name = v8::String::new(scope, "size").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_buffer_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_buffer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get size").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: usage
     {
         let name = v8::String::new(scope, "usage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_buffer_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_buffer_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get usage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: mapState
     {
         let name = v8::String::new(scope, "mapState").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_buffer_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_buffer_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mapState").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: mapAsync()
@@ -1502,8 +1520,10 @@ pub fn create_gpu_buffer_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_buffer_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_buffer_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_buffer_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_buffer_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -1758,7 +1778,8 @@ pub fn create_gpu_canvas_context_template<'s>(
     // attribute: canvas
     {
         let name = v8::String::new(scope, "canvas").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_canvas_context_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_canvas_context_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get canvas").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: configure()
@@ -1901,8 +1922,10 @@ pub fn create_gpu_command_buffer_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_command_buffer_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_command_buffer_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_command_buffer_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_command_buffer_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -2695,8 +2718,10 @@ fn install_gpu_command_encoder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_command_encoder_get_11).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_command_encoder_set_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_command_encoder_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_command_encoder_set_11).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: pushDebugGroup()
@@ -2787,7 +2812,8 @@ pub fn create_gpu_compilation_info_template<'s>(
     // attribute: messages
     {
         let name = v8::String::new(scope, "messages").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_info_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_info_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get messages").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3088,37 +3114,43 @@ pub fn create_gpu_compilation_message_template<'s>(
     // attribute: message
     {
         let name = v8::String::new(scope, "message").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get message").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: lineNum
     {
         let name = v8::String::new(scope, "lineNum").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get lineNum").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: linePos
     {
         let name = v8::String::new(scope, "linePos").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get linePos").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: offset
     {
         let name = v8::String::new(scope, "offset").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get offset").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: length
     {
         let name = v8::String::new(scope, "length").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compilation_message_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get length").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -3675,8 +3707,10 @@ pub fn create_gpu_compute_pass_encoder_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compute_pass_encoder_get_5).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_compute_pass_encoder_set_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compute_pass_encoder_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_compute_pass_encoder_set_5).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: pushDebugGroup()
@@ -3872,8 +3906,10 @@ pub fn create_gpu_compute_pipeline_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_compute_pipeline_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_compute_pipeline_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_compute_pipeline_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_compute_pipeline_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getBindGroupLayout()
@@ -3997,13 +4033,15 @@ pub fn create_gpu_device_lost_info_template<'s>(
     // attribute: reason
     {
         let name = v8::String::new(scope, "reason").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_lost_info_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_lost_info_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get reason").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: message
     {
         let name = v8::String::new(scope, "message").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_lost_info_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_lost_info_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get message").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -4074,7 +4112,8 @@ pub fn create_gpu_error_template<'s>(
     // attribute: message
     {
         let name = v8::String::new(scope, "message").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_error_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_error_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get message").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -4189,8 +4228,10 @@ pub fn create_gpu_external_texture_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_external_texture_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_external_texture_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_external_texture_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_external_texture_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -4305,8 +4346,10 @@ pub fn create_gpu_pipeline_layout_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_pipeline_layout_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_pipeline_layout_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_pipeline_layout_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_pipeline_layout_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -4566,20 +4609,24 @@ pub fn create_gpu_query_set_template<'s>(
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_query_set_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_query_set_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: count
     {
         let name = v8::String::new(scope, "count").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_query_set_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_query_set_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get count").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_query_set_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_query_set_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_query_set_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_query_set_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -4959,8 +5006,10 @@ pub fn create_gpu_queue_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_queue_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_queue_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_queue_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_queue_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -5075,8 +5124,10 @@ pub fn create_gpu_render_bundle_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_render_bundle_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_render_bundle_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_render_bundle_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_render_bundle_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -5803,8 +5854,10 @@ fn install_gpu_render_bundle_encoder_members_1<'s>(scope: &v8::PinScope<'s, '_>,
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_render_bundle_encoder_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_render_bundle_encoder_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_render_bundle_encoder_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_render_bundle_encoder_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: pushDebugGroup()
@@ -6989,8 +7042,10 @@ fn install_gpu_render_pass_encoder_members_1<'s>(scope: &v8::PinScope<'s, '_>, p
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_render_pass_encoder_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_render_pass_encoder_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_render_pass_encoder_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_render_pass_encoder_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: pushDebugGroup()
@@ -7240,8 +7295,10 @@ pub fn create_gpu_render_pipeline_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_render_pipeline_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_render_pipeline_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_render_pipeline_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_render_pipeline_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // method: getBindGroupLayout()
@@ -7363,8 +7420,10 @@ pub fn create_gpu_sampler_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_sampler_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_sampler_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_sampler_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_sampler_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -7532,8 +7591,10 @@ pub fn create_gpu_shader_module_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_shader_module_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_shader_module_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_shader_module_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_shader_module_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -9242,61 +9303,71 @@ fn install_gpu_supported_limits_members_1<'s>(scope: &v8::PinScope<'s, '_>, prot
     // attribute: maxTextureDimension1D
     {
         let name = v8::String::new(scope, "maxTextureDimension1D").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxTextureDimension1D").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxTextureDimension2D
     {
         let name = v8::String::new(scope, "maxTextureDimension2D").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxTextureDimension2D").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxTextureDimension3D
     {
         let name = v8::String::new(scope, "maxTextureDimension3D").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxTextureDimension3D").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxTextureArrayLayers
     {
         let name = v8::String::new(scope, "maxTextureArrayLayers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxTextureArrayLayers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxBindGroups
     {
         let name = v8::String::new(scope, "maxBindGroups").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxBindGroups").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxBindGroupsPlusVertexBuffers
     {
         let name = v8::String::new(scope, "maxBindGroupsPlusVertexBuffers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxBindGroupsPlusVertexBuffers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxImmediateSize
     {
         let name = v8::String::new(scope, "maxImmediateSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxImmediateSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxBindingsPerBindGroup
     {
         let name = v8::String::new(scope, "maxBindingsPerBindGroup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxBindingsPerBindGroup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxDynamicUniformBuffersPerPipelineLayout
     {
         let name = v8::String::new(scope, "maxDynamicUniformBuffersPerPipelineLayout").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxDynamicUniformBuffersPerPipelineLayout").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxDynamicStorageBuffersPerPipelineLayout
     {
         let name = v8::String::new(scope, "maxDynamicStorageBuffersPerPipelineLayout").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxDynamicStorageBuffersPerPipelineLayout").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -9305,61 +9376,71 @@ fn install_gpu_supported_limits_members_2<'s>(scope: &v8::PinScope<'s, '_>, prot
     // attribute: maxSampledTexturesPerShaderStage
     {
         let name = v8::String::new(scope, "maxSampledTexturesPerShaderStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxSampledTexturesPerShaderStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxSamplersPerShaderStage
     {
         let name = v8::String::new(scope, "maxSamplersPerShaderStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxSamplersPerShaderStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxStorageBuffersPerShaderStage
     {
         let name = v8::String::new(scope, "maxStorageBuffersPerShaderStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_13).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_13).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxStorageBuffersPerShaderStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxStorageBuffersInVertexStage
     {
         let name = v8::String::new(scope, "maxStorageBuffersInVertexStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_14).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_14).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxStorageBuffersInVertexStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxStorageBuffersInFragmentStage
     {
         let name = v8::String::new(scope, "maxStorageBuffersInFragmentStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_15).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_15).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxStorageBuffersInFragmentStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxStorageTexturesPerShaderStage
     {
         let name = v8::String::new(scope, "maxStorageTexturesPerShaderStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_16).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_16).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxStorageTexturesPerShaderStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxStorageTexturesInVertexStage
     {
         let name = v8::String::new(scope, "maxStorageTexturesInVertexStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_17).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_17).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxStorageTexturesInVertexStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxStorageTexturesInFragmentStage
     {
         let name = v8::String::new(scope, "maxStorageTexturesInFragmentStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_18).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_18).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxStorageTexturesInFragmentStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxUniformBuffersPerShaderStage
     {
         let name = v8::String::new(scope, "maxUniformBuffersPerShaderStage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_19).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_19).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxUniformBuffersPerShaderStage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxUniformBufferBindingSize
     {
         let name = v8::String::new(scope, "maxUniformBufferBindingSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_20).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_20).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxUniformBufferBindingSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -9368,61 +9449,71 @@ fn install_gpu_supported_limits_members_3<'s>(scope: &v8::PinScope<'s, '_>, prot
     // attribute: maxStorageBufferBindingSize
     {
         let name = v8::String::new(scope, "maxStorageBufferBindingSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxStorageBufferBindingSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: minUniformBufferOffsetAlignment
     {
         let name = v8::String::new(scope, "minUniformBufferOffsetAlignment").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_22).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_22).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get minUniformBufferOffsetAlignment").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: minStorageBufferOffsetAlignment
     {
         let name = v8::String::new(scope, "minStorageBufferOffsetAlignment").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_23).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_23).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get minStorageBufferOffsetAlignment").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxVertexBuffers
     {
         let name = v8::String::new(scope, "maxVertexBuffers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxVertexBuffers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxBufferSize
     {
         let name = v8::String::new(scope, "maxBufferSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxBufferSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxVertexAttributes
     {
         let name = v8::String::new(scope, "maxVertexAttributes").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_26).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_26).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxVertexAttributes").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxVertexBufferArrayStride
     {
         let name = v8::String::new(scope, "maxVertexBufferArrayStride").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_27).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_27).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxVertexBufferArrayStride").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxInterStageShaderVariables
     {
         let name = v8::String::new(scope, "maxInterStageShaderVariables").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_28).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_28).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxInterStageShaderVariables").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxColorAttachments
     {
         let name = v8::String::new(scope, "maxColorAttachments").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_29).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_29).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxColorAttachments").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxColorAttachmentBytesPerSample
     {
         let name = v8::String::new(scope, "maxColorAttachmentBytesPerSample").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_30).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_30).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxColorAttachmentBytesPerSample").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -9431,37 +9522,43 @@ fn install_gpu_supported_limits_members_4<'s>(scope: &v8::PinScope<'s, '_>, prot
     // attribute: maxComputeWorkgroupStorageSize
     {
         let name = v8::String::new(scope, "maxComputeWorkgroupStorageSize").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_31).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_31).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxComputeWorkgroupStorageSize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxComputeInvocationsPerWorkgroup
     {
         let name = v8::String::new(scope, "maxComputeInvocationsPerWorkgroup").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_32).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_32).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxComputeInvocationsPerWorkgroup").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxComputeWorkgroupSizeX
     {
         let name = v8::String::new(scope, "maxComputeWorkgroupSizeX").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_33).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_33).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxComputeWorkgroupSizeX").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxComputeWorkgroupSizeY
     {
         let name = v8::String::new(scope, "maxComputeWorkgroupSizeY").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_34).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_34).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxComputeWorkgroupSizeY").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxComputeWorkgroupSizeZ
     {
         let name = v8::String::new(scope, "maxComputeWorkgroupSizeZ").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_35).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_35).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxComputeWorkgroupSizeZ").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: maxComputeWorkgroupsPerDimension
     {
         let name = v8::String::new(scope, "maxComputeWorkgroupsPerDimension").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_36).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_supported_limits_get_36).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get maxComputeWorkgroupsPerDimension").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -10102,49 +10199,57 @@ fn install_gpu_texture_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: width
     {
         let name = v8::String::new(scope, "width").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get width").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: height
     {
         let name = v8::String::new(scope, "height").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: depthOrArrayLayers
     {
         let name = v8::String::new(scope, "depthOrArrayLayers").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_5).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_5).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get depthOrArrayLayers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: mipLevelCount
     {
         let name = v8::String::new(scope, "mipLevelCount").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get mipLevelCount").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: sampleCount
     {
         let name = v8::String::new(scope, "sampleCount").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get sampleCount").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: dimension
     {
         let name = v8::String::new(scope, "dimension").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get dimension").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: format
     {
         let name = v8::String::new(scope, "format").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get format").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: usage
     {
         let name = v8::String::new(scope, "usage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get usage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 }
@@ -10153,14 +10258,17 @@ fn install_gpu_texture_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Lo
     // attribute: textureBindingViewDimension
     {
         let name = v8::String::new(scope, "textureBindingViewDimension").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_11).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_11).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get textureBindingViewDimension").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_12).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_texture_set_12).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_get_12).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_texture_set_12).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -10274,8 +10382,10 @@ pub fn create_gpu_texture_view_template<'s>(
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_view_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_texture_view_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_texture_view_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_texture_view_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -10349,7 +10459,8 @@ pub fn create_gpu_pipeline_error_template<'s>(
     // attribute: reason
     {
         let name = v8::String::new(scope, "reason").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_pipeline_error_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_pipeline_error_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get reason").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -11623,25 +11734,29 @@ fn install_gpu_device_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: features
     {
         let name = v8::String::new(scope, "features").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get features").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: limits
     {
         let name = v8::String::new(scope, "limits").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get limits").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: adapterInfo
     {
         let name = v8::String::new(scope, "adapterInfo").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get adapterInfo").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: queue
     {
         let name = v8::String::new(scope, "queue").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get queue").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: destroy()
@@ -11765,7 +11880,8 @@ fn install_gpu_device_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: lost
     {
         let name = v8::String::new(scope, "lost").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_21).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_21).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get lost").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: pushErrorScope()
@@ -11785,15 +11901,19 @@ fn install_gpu_device_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
     // attribute: onuncapturederror
     {
         let name = v8::String::new(scope, "onuncapturederror").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_24).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_device_set_24).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_24).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onuncapturederror").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_device_set_24).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onuncapturederror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: label
     {
         let name = v8::String::new(scope, "label").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_25).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(gpu_device_set_25).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(gpu_device_get_25).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get label").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(gpu_device_set_25).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set label").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }

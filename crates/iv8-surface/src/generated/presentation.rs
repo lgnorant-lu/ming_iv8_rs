@@ -160,14 +160,17 @@ pub fn create_presentation_template<'s>(
     // attribute: defaultRequest
     {
         let name = v8::String::new(scope, "defaultRequest").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_get_1).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_set_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get defaultRequest").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set defaultRequest").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: receiver
     {
         let name = v8::String::new(scope, "receiver").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get receiver").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -238,7 +241,8 @@ pub fn create_presentation_receiver_template<'s>(
     // attribute: connectionList
     {
         let name = v8::String::new(scope, "connectionList").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_receiver_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_receiver_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get connectionList").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
 
@@ -402,14 +406,17 @@ pub fn create_presentation_availability_template<'s>(
     // attribute: value
     {
         let name = v8::String::new(scope, "value").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_availability_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_availability_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get value").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onchange
     {
         let name = v8::String::new(scope, "onchange").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_availability_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_availability_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_availability_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onchange").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_availability_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -1308,19 +1315,22 @@ fn install_presentation_connection_members_1<'s>(scope: &v8::PinScope<'s, '_>, p
     // attribute: id
     {
         let name = v8::String::new(scope, "id").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get id").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: url
     {
         let name = v8::String::new(scope, "url").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get url").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: state
     {
         let name = v8::String::new(scope, "state").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_3).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_3).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get state").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // method: close()
@@ -1340,36 +1350,46 @@ fn install_presentation_connection_members_1<'s>(scope: &v8::PinScope<'s, '_>, p
     // attribute: onconnect
     {
         let name = v8::String::new(scope, "onconnect").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_6).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_6).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_6).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onconnect").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onconnect").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onclose
     {
         let name = v8::String::new(scope, "onclose").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_7).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_7).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_7).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onclose").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_7).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onclose").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onterminate
     {
         let name = v8::String::new(scope, "onterminate").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_8).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_8).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_8).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onterminate").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_8).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onterminate").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: binaryType
     {
         let name = v8::String::new(scope, "binaryType").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_9).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_9).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_9).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get binaryType").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_9).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set binaryType").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: onmessage
     {
         let name = v8::String::new(scope, "onmessage").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_10).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_10).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_get_10).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onmessage").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_set_10).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onmessage").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 }
@@ -1563,14 +1583,17 @@ pub fn create_presentation_connection_list_template<'s>(
     // attribute: connections
     {
         let name = v8::String::new(scope, "connections").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_list_get_1).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_list_get_1).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get connections").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
     // attribute: onconnectionavailable
     {
         let name = v8::String::new(scope, "onconnectionavailable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_list_get_2).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_list_set_2).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_connection_list_get_2).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onconnectionavailable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_connection_list_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onconnectionavailable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
@@ -1847,8 +1870,10 @@ pub fn create_presentation_request_template<'s>(
     // attribute: onconnectionavailable
     {
         let name = v8::String::new(scope, "onconnectionavailable").unwrap();
-        let getter = v8::FunctionTemplate::builder_raw(presentation_request_get_4).build(scope);
-        let setter = v8::FunctionTemplate::builder_raw(presentation_request_set_4).build(scope);
+        let getter = v8::FunctionTemplate::builder_raw(presentation_request_get_4).length(0).build(scope);
+        getter.set_class_name(v8::String::new(scope, "get onconnectionavailable").unwrap());
+        let setter = v8::FunctionTemplate::builder_raw(presentation_request_set_4).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set onconnectionavailable").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
