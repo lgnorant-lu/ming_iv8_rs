@@ -1222,6 +1222,34 @@ pub fn chain_dom_prototypes(
             crate::telemetry::init_same_ctor_warning(name);
         }
 
+        // Fix constructor __proto__ for ALL interfaces in codegen_ctors.
+        // codegen install_all set __proto__ to codegen parent, but
+        // install_dom_constructors may have replaced parent on global.
+        // Re-set __proto__ to current global parent.
+        {
+            let current_proto = dom_ctor.get_prototype(scope);
+            if let Some(current_proto) = current_proto {
+                if current_proto.is_function() {
+                    let proto_func = unsafe {
+                        v8::Local::<v8::Function>::cast_unchecked(current_proto)
+                    };
+                    let proto_name = proto_func.get_name(scope);
+                    let proto_name_str = proto_name.to_rust_string_lossy(scope);
+                    if !proto_name_str.is_empty() {
+                        let global_key = crate::v8_utils::v8_string(scope, &proto_name_str);
+                        if let Some(global_parent) = global.get(scope, global_key.into()) {
+                            if global_parent.is_function()
+                                && !global_parent.strict_equals(current_proto.into())
+                            {
+                                let dom_ctor_obj: v8::Local<v8::Object> = dom_ctor.into();
+                                let _ = dom_ctor_obj.set_prototype(scope, global_parent);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         let Some(dom_proto_val) = dom_ctor.get(scope, proto_key.into()) else { continue };
         if !dom_proto_val.is_object() || dom_proto_val.is_null_or_undefined() { continue; }
         let dom_proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(dom_proto_val) };
@@ -1336,6 +1364,59 @@ pub fn chain_dom_prototypes(
         );
     }
     crate::telemetry::init_proto_merge_complete();
+
+    // Fix __proto__ for codegen-only interfaces NOT in the 39 dom set.
+    // These interfaces (e.g., HTMLTitleElement, HTMLBaseElement) had their
+    // __proto__ set by codegen install_all to the codegen parent, but
+    // install_dom_constructors replaced the parent on global with a dom
+    // version. Use JS to scan and fix stale __proto__ refs.
+    let fix_script = r#"
+        (function() {
+            var names = Object.getOwnPropertyNames(globalThis);
+            for (var i = 0; i < names.length; i++) {
+                var name = names[i];
+                if (!name.startsWith('HTML') && !name.startsWith('SVG')
+                    && name !== 'Window' && name !== 'Navigator'
+                    && name !== 'Document' && name !== 'EventTarget') {
+                    continue;
+                }
+                var ctor = globalThis[name];
+                if (typeof ctor !== 'function') continue;
+
+                // Fix constructor.__proto__
+                var proto = Object.getPrototypeOf(ctor);
+                if (typeof proto === 'function' && proto.name) {
+                    var globalParent = globalThis[proto.name];
+                    if (typeof globalParent === 'function'
+                        && proto !== globalParent
+                        && ctor !== globalParent) {
+                        try { Object.setPrototypeOf(ctor, globalParent); } catch(e) {}
+                    }
+                }
+
+                // Fix constructor.prototype.__proto__
+                if (ctor.prototype) {
+                    var protoProto = Object.getPrototypeOf(ctor.prototype);
+                    if (protoProto && protoProto.constructor
+                        && protoProto.constructor.name
+                        && protoProto.constructor.name !== name) {
+                        var globalParentCtor = globalThis[protoProto.constructor.name];
+                        if (globalParentCtor && globalParentCtor.prototype
+                            && protoProto !== globalParentCtor.prototype
+                            && ctor.prototype !== globalParentCtor.prototype) {
+                            try {
+                                Object.setPrototypeOf(ctor.prototype, globalParentCtor.prototype);
+                            } catch(e) {}
+                        }
+                    }
+                }
+            }
+        })();
+    "#;
+    let fix_src = crate::v8_utils::v8_string(scope, fix_script);
+    if let Some(script) = v8::Script::compile(scope, fix_src, None) {
+        let _ = script.run(scope);
+    }
 }
 
 /// Select the correct FunctionTemplate for a given tag name.
