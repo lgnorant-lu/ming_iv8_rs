@@ -135,6 +135,19 @@ unsafe extern "C" fn illegal_dom_constructor(info: *const v8::FunctionCallbackIn
 /// is handled by JS shims layered on top.
 unsafe extern "C" fn empty_dom_constructor(_info: *const v8::FunctionCallbackInfo) {}
 
+/// Construct-only callback — allows `new X()` but throws TypeError on `X()`
+/// without `new`. Used for interfaces like EventTarget that are constructable
+/// but not callable.
+unsafe extern "C" fn construct_only_dom_constructor(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    if !info_ref.is_construct_call() {
+        v8::callback_scope!(unsafe scope, info_ref);
+        let msg = crate::v8_utils::v8_string(scope, "Failed to construct: please use 'new'");
+        let exc = v8::Exception::type_error(scope, msg);
+        scope.throw_exception(exc);
+    }
+}
+
 /// Helper: install a native method on a prototype template.
 fn install_proto_method(
     scope: &v8::PinScope<'_, '_>,
@@ -142,7 +155,22 @@ fn install_proto_method(
     name: &str,
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
 ) {
-    let fn_tmpl = v8::FunctionTemplate::builder_raw(callback).build(scope);
+    install_proto_method_with_length(scope, proto, name, callback, 0);
+}
+
+/// Helper: install a native method with a specific .length on a prototype template.
+fn install_proto_method_with_length(
+    scope: &v8::PinScope<'_, '_>,
+    proto: v8::Local<v8::ObjectTemplate>,
+    name: &str,
+    callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
+    length: i32,
+) {
+    let mut builder = v8::FunctionTemplate::builder_raw(callback);
+    if length > 0 {
+        builder = builder.length(length);
+    }
+    let fn_tmpl = builder.build(scope);
     let name_str = crate::v8_utils::v8_string(scope, name);
     fn_tmpl.set_class_name(name_str);
     proto.set(name_str.into(), fn_tmpl.into());
@@ -182,17 +210,18 @@ fn set_to_string_tag(
 /// Must be called once per Isolate, with the isolate entered.
 pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
     // ── 1. EventTarget ──────────────────────────────────────────────────────
-    let event_target = make_template(scope, "EventTarget", empty_dom_constructor);
+    let event_target = make_template(scope, "EventTarget", construct_only_dom_constructor);
     {
         let proto = event_target.prototype_template(scope);
-        install_proto_method(scope, proto, "addEventListener", add_event_listener_cb);
-        install_proto_method(
+        install_proto_method_with_length(scope, proto, "addEventListener", add_event_listener_cb, 2);
+        install_proto_method_with_length(
             scope,
             proto,
             "removeEventListener",
             remove_event_listener_cb,
+            2,
         );
-        install_proto_method(scope, proto, "dispatchEvent", dispatch_event_cb);
+        install_proto_method_with_length(scope, proto, "dispatchEvent", dispatch_event_cb, 1);
     }
 
     // ── 2. Node (inherits EventTarget) ──────────────────────────────────────
@@ -219,13 +248,13 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         install_proto_accessor(scope, proto, "previousSibling", prev_sibling_getter, None);
         install_proto_accessor(scope, proto, "childNodes", child_nodes_getter, None);
         // Mutation methods
-        install_proto_method(scope, proto, "appendChild", append_child_cb);
-        install_proto_method(scope, proto, "removeChild", remove_child_cb);
-        install_proto_method(scope, proto, "insertBefore", insert_before_cb);
-        install_proto_method(scope, proto, "cloneNode", clone_node_cb);
-        install_proto_method(scope, proto, "contains", contains_cb);
-        install_proto_method(scope, proto, "hasChildNodes", has_child_nodes_cb);
-        install_proto_method(scope, proto, "normalize", normalize_cb);
+        install_proto_method_with_length(scope, proto, "appendChild", append_child_cb, 1);
+        install_proto_method_with_length(scope, proto, "removeChild", remove_child_cb, 1);
+        install_proto_method_with_length(scope, proto, "insertBefore", insert_before_cb, 2);
+        install_proto_method_with_length(scope, proto, "cloneNode", clone_node_cb, 0);
+        install_proto_method_with_length(scope, proto, "contains", contains_cb, 1);
+        install_proto_method_with_length(scope, proto, "hasChildNodes", has_child_nodes_cb, 0);
+        install_proto_method_with_length(scope, proto, "normalize", normalize_cb, 0);
 
         let node_consts = [
             ("ELEMENT_NODE", 1i32), ("ATTRIBUTE_NODE", 2), ("TEXT_NODE", 3),
@@ -345,48 +374,28 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             None,
         );
         // Attribute methods
-        install_proto_method(scope, proto, "getAttribute", get_attribute_cb);
-        install_proto_method(scope, proto, "setAttribute", set_attribute_cb);
-        install_proto_method(scope, proto, "removeAttribute", remove_attribute_cb);
-        install_proto_method(scope, proto, "hasAttribute", has_attribute_cb);
-        install_proto_method(scope, proto, "getAttributeNames", get_attribute_names_cb);
+        install_proto_method_with_length(scope, proto, "getAttribute", get_attribute_cb, 1);
+        install_proto_method_with_length(scope, proto, "setAttribute", set_attribute_cb, 2);
+        install_proto_method_with_length(scope, proto, "removeAttribute", remove_attribute_cb, 1);
+        install_proto_method_with_length(scope, proto, "hasAttribute", has_attribute_cb, 1);
+        install_proto_method_with_length(scope, proto, "getAttributeNames", get_attribute_names_cb, 0);
         // DOM mutation methods
-        install_proto_method(scope, proto, "replaceChild", replace_child_cb);
-        install_proto_method(scope, proto, "insertBefore", insert_before_cb);
-        install_proto_method(scope, proto, "insertAdjacentHTML", insert_adjacent_html_cb);
-        install_proto_method(
-            scope,
-            proto,
-            "insertAdjacentElement",
-            insert_adjacent_element_cb,
-        );
-        install_proto_method(scope, proto, "insertAdjacentText", insert_adjacent_text_cb);
-        install_proto_method(scope, proto, "cloneNode", clone_node_cb);
-        install_proto_method(scope, proto, "contains", contains_cb);
+        install_proto_method_with_length(scope, proto, "replaceChild", replace_child_cb, 2);
+        install_proto_method_with_length(scope, proto, "insertBefore", insert_before_cb, 2);
+        install_proto_method_with_length(scope, proto, "insertAdjacentHTML", insert_adjacent_html_cb, 2);
+        install_proto_method_with_length(scope, proto, "insertAdjacentElement", insert_adjacent_element_cb, 2);
+        install_proto_method_with_length(scope, proto, "insertAdjacentText", insert_adjacent_text_cb, 2);
+        install_proto_method_with_length(scope, proto, "cloneNode", clone_node_cb, 0);
+        install_proto_method_with_length(scope, proto, "contains", contains_cb, 1);
         // Query methods
-        install_proto_method(scope, proto, "querySelector", query_selector_cb);
-        install_proto_method(scope, proto, "querySelectorAll", query_selector_all_cb);
-        install_proto_method(
-            scope,
-            proto,
-            "getElementsByTagName",
-            get_elements_by_tag_name_cb,
-        );
-        install_proto_method(
-            scope,
-            proto,
-            "getElementsByClassName",
-            get_elements_by_class_name_cb,
-        );
-        install_proto_method(scope, proto, "matches", matches_cb);
-        install_proto_method(scope, proto, "closest", closest_cb);
+        install_proto_method_with_length(scope, proto, "querySelector", query_selector_cb, 1);
+        install_proto_method_with_length(scope, proto, "querySelectorAll", query_selector_all_cb, 1);
+        install_proto_method_with_length(scope, proto, "getElementsByTagName", get_elements_by_tag_name_cb, 1);
+        install_proto_method_with_length(scope, proto, "getElementsByClassName", get_elements_by_class_name_cb, 1);
+        install_proto_method_with_length(scope, proto, "matches", matches_cb, 1);
+        install_proto_method_with_length(scope, proto, "closest", closest_cb, 1);
         // Geometry
-        install_proto_method(
-            scope,
-            proto,
-            "getBoundingClientRect",
-            get_bounding_client_rect_cb,
-        );
+        install_proto_method_with_length(scope, proto, "getBoundingClientRect", get_bounding_client_rect_cb, 0);
         install_proto_accessor(scope, proto, "offsetWidth", offset_width_getter, None);
         install_proto_accessor(scope, proto, "offsetHeight", offset_height_getter, None);
         install_proto_accessor(scope, proto, "offsetTop", offset_top_getter, None);
@@ -1451,8 +1460,13 @@ where
         let this = args.this();
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        if let Some(node_id) = extract_node_id_from_internal(scope, this) {
-            f(scope, &mut rv, state, node_id);
+        match extract_node_id_from_internal(scope, this) {
+            Some(node_id) => f(scope, &mut rv, state, node_id),
+            None => {
+                let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+                let exc = v8::Exception::type_error(scope, msg);
+                scope.throw_exception(exc);
+            }
         }
     }));
 }
@@ -1479,6 +1493,54 @@ where
         let state = RuntimeState::get(isolate);
         let node_id = extract_node_id_from_internal(scope, this);
         f(scope, &args, &mut rv, state, node_id);
+    }));
+}
+
+/// Helper: run a DOM callback body that REQUIRES a valid node_id on `this`.
+/// If `this` is not a DOM node (no internal field), throws TypeError.
+/// Exception: if `this` is the global object, allows the callback to run
+/// with NodeId(0) (the document root), since Window inherits EventTarget.
+/// Used for methods like addEventListener, removeEventListener, dispatchEvent,
+/// appendChild, etc. that require a valid receiver.
+#[inline(always)]
+fn run_callback_strict<F>(info: *const v8::FunctionCallbackInfo, f: F)
+where
+    F: FnOnce(
+            &v8::PinScope<'_, '_>,
+            &v8::FunctionCallbackArguments<'_>,
+            &mut v8::ReturnValue<'_>,
+            &RuntimeState,
+            NodeId,
+        ) + std::panic::UnwindSafe,
+{
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        let this = args.this();
+        let isolate: &v8::Isolate = &*scope;
+        let state = RuntimeState::get(isolate);
+        match extract_node_id_from_internal(scope, this) {
+            Some(node_id) => f(scope, &args, &mut rv, state, node_id),
+            None => {
+                // Check if `this` is the global object (Window inherits EventTarget).
+                // The global object may not have a node_id internal field, but
+                // EventTarget methods should still work on it.
+                let ctx = scope.get_current_context();
+                let global = ctx.global(scope);
+                if this.strict_equals(global.into()) {
+                    // Use NodeId(0) as a sentinel for the global object.
+                    // EventTarget methods on window will use this as the key
+                    // for storing event listeners.
+                    f(scope, &args, &mut rv, state, super::binding::usize_to_node_id(1).unwrap());
+                } else {
+                    let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+                    let exc = v8::Exception::type_error(scope, msg);
+                    scope.throw_exception(exc);
+                }
+            }
+        }
     }));
 }
 
@@ -3277,75 +3339,71 @@ unsafe extern "C" fn offset_parent_getter(info: *const v8::FunctionCallbackInfo)
 // ── EventTarget methods ───────────────────────────────────────────────────────
 
 unsafe extern "C" fn add_event_listener_cb(info: *const v8::FunctionCallbackInfo) {
-    run_callback(info, |scope, args, _rv, state, node_id| {
-        if let Some(nid) = node_id {
-            if args.length() >= 2 {
-                let event_type = args.get(0).to_rust_string_lossy(scope);
-                let listener_arg = args.get(1);
-                if listener_arg.is_function() {
-                    let func: v8::Local<v8::Function> =
-                        unsafe { v8::Local::cast_unchecked(listener_arg) };
-                    let global_fn = v8::Global::new(scope, func);
-                    let mut capture = false;
-                    let mut once = false;
-                    if args.length() >= 3 {
-                        let opts = args.get(2);
-                        if opts.is_boolean() {
-                            capture = opts.is_true();
-                        } else if opts.is_object() {
-                            let opts_obj: v8::Local<v8::Object> =
-                                unsafe { v8::Local::cast_unchecked(opts) };
-                            if let Some(k) = v8::String::new(scope, "capture") {
-                                if let Some(v) = opts_obj.get(scope, k.into()) {
-                                    capture = v.is_true();
-                                }
+    run_callback_strict(info, |scope, args, _rv, state, nid| {
+        if args.length() >= 2 {
+            let event_type = args.get(0).to_rust_string_lossy(scope);
+            let listener_arg = args.get(1);
+            if listener_arg.is_function() {
+                let func: v8::Local<v8::Function> =
+                    unsafe { v8::Local::cast_unchecked(listener_arg) };
+                let global_fn = v8::Global::new(scope, func);
+                let mut capture = false;
+                let mut once = false;
+                if args.length() >= 3 {
+                    let opts = args.get(2);
+                    if opts.is_boolean() {
+                        capture = opts.is_true();
+                    } else if opts.is_object() {
+                        let opts_obj: v8::Local<v8::Object> =
+                            unsafe { v8::Local::cast_unchecked(opts) };
+                        if let Some(k) = v8::String::new(scope, "capture") {
+                            if let Some(v) = opts_obj.get(scope, k.into()) {
+                                capture = v.is_true();
                             }
-                            if let Some(k) = v8::String::new(scope, "once") {
-                                if let Some(v) = opts_obj.get(scope, k.into()) {
-                                    once = v.is_true();
-                                }
+                        }
+                        if let Some(k) = v8::String::new(scope, "once") {
+                            if let Some(v) = opts_obj.get(scope, k.into()) {
+                                once = v.is_true();
                             }
                         }
                     }
-                    state.event_listeners.borrow_mut().add(
-                        nid,
-                        &event_type,
-                        global_fn,
-                        capture,
-                        once,
-                    );
                 }
-            }
-        }
-    });
-}
-
-unsafe extern "C" fn remove_event_listener_cb(info: *const v8::FunctionCallbackInfo) {
-    run_callback(info, |scope, args, _rv, state, node_id| {
-        if let Some(nid) = node_id {
-            if args.length() >= 2 && args.get(1).is_function() {
-                let event_type = args.get(0).to_rust_string_lossy(scope);
-                let func: v8::Local<v8::Function> =
-                    unsafe { v8::Local::cast_unchecked(args.get(1)) };
-                let capture = if args.length() >= 3 {
-                    args.get(2).is_true()
-                } else {
-                    false
-                };
-                state.event_listeners.borrow_mut().remove_by_callback(
-                    scope,
+                state.event_listeners.borrow_mut().add(
                     nid,
                     &event_type,
-                    func,
+                    global_fn,
                     capture,
+                    once,
                 );
             }
         }
     });
 }
 
+unsafe extern "C" fn remove_event_listener_cb(info: *const v8::FunctionCallbackInfo) {
+    run_callback_strict(info, |scope, args, _rv, state, nid| {
+        if args.length() >= 2 && args.get(1).is_function() {
+            let event_type = args.get(0).to_rust_string_lossy(scope);
+            let func: v8::Local<v8::Function> =
+                unsafe { v8::Local::cast_unchecked(args.get(1)) };
+            let capture = if args.length() >= 3 {
+                args.get(2).is_true()
+            } else {
+                false
+            };
+            state.event_listeners.borrow_mut().remove_by_callback(
+                scope,
+                nid,
+                &event_type,
+                func,
+                capture,
+            );
+        }
+    });
+}
+
 unsafe extern "C" fn dispatch_event_cb(info: *const v8::FunctionCallbackInfo) {
-    run_callback(info, |scope, args, rv, state, node_id| {
+    run_callback_strict(info, |scope, args, rv, state, nid| {
         if args.length() < 1 {
             rv.set(v8::Boolean::new(scope, true).into());
             return;
@@ -3372,26 +3430,22 @@ unsafe extern "C" fn dispatch_event_cb(info: *const v8::FunctionCallbackInfo) {
             return;
         };
 
-        if let Some(nid) = node_id {
-            let result = {
-                let doc = state.document.borrow();
-                if let Some(ref doc) = *doc {
-                    crate::events::target::dispatch_event(
-                        scope,
-                        &state.event_listeners,
-                        doc,
-                        nid,
-                        &event_type,
-                        bubbles,
-                    )
-                } else {
-                    true
-                }
-            };
-            rv.set(v8::Boolean::new(scope, result).into());
-        } else {
-            rv.set(v8::Boolean::new(scope, true).into());
-        }
+        let result = {
+            let doc = state.document.borrow();
+            if let Some(ref doc) = *doc {
+                crate::events::target::dispatch_event(
+                    scope,
+                    &state.event_listeners,
+                    doc,
+                    nid,
+                    &event_type,
+                    bubbles,
+                )
+            } else {
+                true
+            }
+        };
+        rv.set(v8::Boolean::new(scope, result).into());
     });
 }
 
