@@ -74,8 +74,25 @@ def classify_fail(test_name: str, message: str) -> str:
     # L7 - Prototype chain correctness
     if "prototype of" in msg and "is not" in msg:
         return "L7"
+    if "instanceof" in msg and "expected true got false" in msg:
+        return "L7"
 
-    # L3 - Descriptor correctness
+    # L0 - Existence (interface/prototype/property missing or extra)
+    if "existence" in name.lower():
+        return "L0"
+    if "expected property" in msg and "missing" in msg:
+        return "L0"
+    if "global object must have a property" in msg:
+        return "L0"
+    if "prototype object must have a property" in msg:
+        return "L0"
+    if "prototype object should not have a property" in msg:
+        return "L0"
+    if "should not have a" in msg and "prototype" in msg:
+        return "L0"
+
+    # L3 - Descriptor correctness (writable/enumerable/configurable/name/length
+    #       + setter existence + extra getter)
     if any(k in msg for k in [
         "should be writable", "should not be writable",
         "getter must have the name", "setter must have the name",
@@ -86,6 +103,9 @@ def classify_fail(test_name: str, message: str) -> str:
         "property must be enumerable",
         "assert_true: property must be",
         "assert_false: property should not be",
+        "property should be enumerable",
+        "property should not have a getter",
+        "setter must be function",
     ]):
         return "L3"
 
@@ -122,7 +142,14 @@ def classify_fail(test_name: str, message: str) -> str:
             return "L0"
         return "L0"
 
-    # L1 - Value correctness
+    # L4 - toString completeness (class string, [native code])
+    if any(k in msg for k in [
+        "assert_class_string", "class string of",
+        "[native code]", "toString",
+    ]):
+        return "L4"
+
+    # L1 - Value correctness (type mismatch, value mismatch)
     if any(k in msg for k in [
         'expected "function" but got',
         'expected "string" but got',
@@ -133,17 +160,13 @@ def classify_fail(test_name: str, message: str) -> str:
     ]):
         return "L1"
 
-    # L4 - toString completeness
-    if "toString" in msg or "[native code]" in msg:
-        return "L4"
-
     # Remaining value mismatches
     if "expected" in msg and "but got" in msg:
         if "wrong value for" in msg:
             return "L10"  # named constructor value
         return "L1"
 
-    # Runtime errors
+    # Runtime errors (stub returns wrong type)
     if "Cannot convert" in msg or "Cannot read" in msg:
         return "L1"
 
@@ -234,6 +257,21 @@ def evaluate(report: dict) -> dict:
     return {
         "schema_version": "surface-integrity-report.v0.1",
         "source": "idlharness-report.json",
+        "idlharness_layers": ["L0", "L1", "L3", "L4", "L6", "L7",
+                              "L9", "L10", "L11", "L12", "L13"],
+        "separate_script_layers": ["L2", "L5", "L8",
+                                   "D1", "D2", "D3", "D4", "D5", "D6"],
+        "separate_script_sources": {
+            "L2": "scripts/evaluate_env_consistency.py",
+            "L5": "(not yet implemented)",
+            "L8": "(not yet implemented)",
+            "D1": "scripts/_d1_d5_behavior.py",
+            "D2": "scripts/_d1_d5_behavior.py",
+            "D3": "scripts/_d1_d5_behavior.py",
+            "D4": "scripts/_d1_d5_behavior.py",
+            "D5": "scripts/run_creepjs_lies.py",
+            "D6": "scripts/_d1_d5_behavior.py",
+        },
         "layers": dict(layer_coverage),
         "interfaces": {
             name: {layer: dict(counts)
@@ -250,23 +288,58 @@ def evaluate(report: dict) -> dict:
 
 
 def print_report(result: dict) -> None:
-    """Print human-readable matrix report."""
-    print("=" * 60)
+    """Print human-readable matrix report with all 20 layers."""
+    print("=" * 70)
     print("H04: Surface Integrity Matrix Report")
-    print("=" * 60)
+    print("=" * 70)
     print()
-    print(f"Total: {result['summary']['total_pass']} PASS, "
-          f"{result['summary']['total_fail']} FAIL, "
-          f"{result['summary']['pass_rate']}%")
+    total_pass = result["summary"]["total_pass"]
+    total_fail = result["summary"]["total_fail"]
+    total = result["summary"]["total"]
+    rate = result["summary"]["pass_rate"]
+    print(f"idlharness Total: {total_pass} PASS, {total_fail} FAIL / {total} ({rate}%)")
     print()
-    print("--- Layer Breakdown ---")
-    print(f"{'Layer':<6} {'Pass':>6} {'Fail':>6} {'Total':>6} {'Rate':>8}")
-    print("-" * 36)
-    for layer in sorted(result["layers"].keys()):
-        l = result["layers"][layer]
-        print(f"{layer:<6} {l['pass']:>6} {l['fail']:>6} "
-              f"{l['total']:>6} {l['pass_rate']:>7.1f}%")
+
+    # All 20 layers in order
+    all_layers = [
+        ("L0", "Existence"),
+        ("L1", "Value correctness"),
+        ("L2", "Value consistency (cross-field)"),
+        ("L3", "Descriptor correctness"),
+        ("L4", "toString completeness"),
+        ("L5", "Recursive toString"),
+        ("L6", "TypeError behavior"),
+        ("L7", "Prototype chain correctness"),
+        ("L8", "Cross-context (Worker vs Window)"),
+        ("L9", "Interface object properties"),
+        ("L10", "Named constructor"),
+        ("L11", "Static operations"),
+        ("L12", "Stringifier"),
+        ("L13", "Iterable/Setlike/Maplike"),
+        ("D1", "Method return value semantics"),
+        ("D2", "Promise semantics"),
+        ("D3", "Event trigger timing"),
+        ("D4", "State transition"),
+        ("D5", "Exception behavior"),
+        ("D6", "Async ordering"),
+    ]
+    # Layers not covered by idlharness (need separate scripts)
+    separate_script_layers = {"L2", "L5", "L8", "D1", "D2", "D3", "D4", "D5", "D6"}
+
+    print("--- Layer Breakdown (idlharness) ---")
+    print(f"{'Layer':<6} {'Name':<40} {'Pass':>6} {'Fail':>6} {'Rate':>8}")
+    print("-" * 70)
+    for layer_id, layer_name in all_layers:
+        if layer_id in separate_script_layers:
+            print(f"{layer_id:<6} {layer_name:<40} {'N/A':>6} {'N/A':>6} {'(separate script)':>8}")
+        else:
+            l = result["layers"].get(layer_id, {"pass": 0, "fail": 0, "total": 0, "pass_rate": 0})
+            print(f"{layer_id:<6} {layer_name:<40} {l['pass']:>6} {l['fail']:>6} {l['pass_rate']:>7.1f}%")
+    if "other" in result["layers"]:
+        o = result["layers"]["other"]
+        print(f"{'other':<6} {'Uncategorized':<40} {o['pass']:>6} {o['fail']:>6} {o['pass_rate']:>7.1f}%")
     print()
+
     print("--- Interface Breakdown (top FAIL) ---")
     iface_fails = []
     for name, layers in result["interfaces"].items():
