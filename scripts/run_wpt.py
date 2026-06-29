@@ -76,15 +76,25 @@ WPT_SUITES = [
 
 
 def load_wpt_resources() -> dict[str, str]:
-    """Load WPT resource files (testharness.js, idlharness.js, webidl2.js)."""
+    """Load WPT resource files (testharness.js, idlharness.js, webidl2.js).
+
+    testharnessreport.js is IV8's custom version (sets output:false).
+    """
     resources = {}
-    for name in ["testharness.js", "testharnessreport.js", "idlharness.js", "webidl2.js"]:
+    for name in ["testharness.js", "idlharness.js", "webidl2.js"]:
         path = RESOURCES_DIR / name
         if path.exists():
             resources[name] = path.read_text(encoding="utf-8")
         else:
             print(f"FATAL: {path} not found. Run tools/wpt/wpt_update.py first.")
             sys.exit(1)
+    # Use IV8's custom testharnessreport.js
+    report_path = WPT_DIR / "fixtures" / "resources" / "testharnessreport.js"
+    if report_path.exists():
+        resources["testharnessreport.js"] = report_path.read_text(encoding="utf-8")
+    else:
+        print(f"FATAL: {report_path} not found.")
+        sys.exit(1)
     return resources
 
 
@@ -163,71 +173,16 @@ add_result_callback(function(test) {{
 
 // testharness.js expects window.onload to fire before running tests.
 // IV8 has no real event loop, so we resolve the 'load' event immediately.
-// The waitForLoad promise in test files resolves on 'load' event.
 if (typeof addEventListener === 'function') {{
     var __origAddEventListener = addEventListener;
     globalThis.addEventListener = function(type, listener) {{
         if (type === 'load') {{
-            // Defer to next microtask so test code can register first
             Promise.resolve().then(function() {{ listener({{ type: 'load' }}); }});
         }} else {{
             __origAddEventListener(type, listener);
         }}
     }};
 }}
-
-// Override document.createElement to always return simple DOM objects.
-// This avoids Illegal invocation from IV8 DOM receiver checks when
-// testharness.js make_dom creates output elements.
-// Test code in idlharness uses add_objects with eval strings like
-// 'document.createElement("div")' which run BEFORE our override,
-// but testharness output rendering runs AFTER, so the override only
-// affects output rendering, not test execution.
-var __simpleDom = function(tag) {{
-    var children = [];
-    return {{
-        tagName: (tag || 'div').toUpperCase(),
-        nodeName: (tag || 'div').toUpperCase(),
-        nodeType: 1,
-        setAttribute: function(k, v) {{ this['_' + k] = v; }},
-        getAttribute: function(k) {{ return this['_' + k] || null; }},
-        hasAttribute: function(k) {{ return ('_' + k) in this; }},
-        removeAttribute: function(k) {{ delete this['_' + k]; }},
-        appendChild: function(c) {{ children.push(c); return c; }},
-        removeChild: function(c) {{ var i = children.indexOf(c); if (i>=0) children.splice(i,1); return c; }},
-        replaceChild: function(n,o) {{ var i=children.indexOf(o); if(i>=0) children[i]=n; return o; }},
-        insertBefore: function(n,r) {{ if(r){{var i=children.indexOf(r); if(i>=0) children.splice(i,0,n);}} else children.push(n); return n; }},
-        firstChild: null,
-        lastChild: null,
-        parentNode: null,
-        nextSibling: null,
-        previousSibling: null,
-        style: {{}},
-        textContent: '',
-        innerHTML: '',
-        outerHTML: '',
-        classList: {{ add: function() {{}}, remove: function() {{}}, contains: function() {{ return false; }}, toggle: function() {{}} }},
-        children: children,
-        childNodes: children,
-        ownerDocument: document,
-        cloneNode: function() {{ return __simpleDom(tag); }},
-        addEventListener: function() {{}},
-        removeEventListener: function() {{}},
-    }};
-}};
-var __simpleText = function(text) {{
-    return {{
-        data: text || '',
-        nodeType: 3,
-        nodeName: '#text',
-        textContent: text || '',
-        parentNode: null,
-        appendChild: function(c) {{ return c; }},
-    }};
-}};
-document.createElement = function(tag) {{ return __simpleDom(tag); }};
-document.createElementNS = function(ns, tag) {{ return __simpleDom(tag); }};
-document.createTextNode = function(text) {{ return __simpleText(text); }};
 // === End IV8 WPT Shim ===
 """
 
@@ -262,9 +217,6 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
     else:
         test_code = test_file.read_text(encoding="utf-8")
 
-    # Build shim
-    shim_code = build_shim_code(idl_contents, variant_query)
-
     # Create IV8 context
     ctx = iv8.JSContext()
 
@@ -273,36 +225,89 @@ def run_suite(suite: dict, variant: dict, resources: dict) -> dict:
         for spec, content in idl_contents.items():
             ctx.add_resource(f"/interfaces/{spec}.idl", content)
 
-        # Load WPT harness
+        # Inject pre-harness shim BEFORE testharness.js loads.
+        # testharness.js IIFE registers load event listener at load time
+        # via window.addEventListener('load', callback). We must intercept
+        # this before testharness.js executes.
+        pre_shim = f"""
+globalThis.GLOBAL = globalThis;
+globalThis.GLOBAL.isWindow = function() {{ return true; }};
+globalThis.GLOBAL.isWorker = function() {{ return false; }};
+globalThis.GLOBAL.isShadowRealm = function() {{ return false; }};
+globalThis.location = {{ search: {json.dumps(variant_query)} }};
+globalThis.fetch_spec = function(spec) {{
+    return fetch("/interfaces/" + spec + ".idl").then(function(r) {{
+        if (!r.ok) throw new Error("Error fetching " + spec);
+        return r.text();
+    }}).then(function(idl) {{ return {{ spec: spec, idl: idl }}; }});
+}};
+var __results = [];
+var __loadCallbacks = [];
+// Intercept addEventListener BEFORE testharness.js loads
+var __origAEL = globalThis.addEventListener;
+globalThis.addEventListener = function(type, listener, useCapture) {{
+    if (type === 'load') {{
+        __loadCallbacks.push(listener);
+    }} else {{
+        __origAEL.call(this, type, listener, useCapture);
+    }}
+}};
+// window.addEventListener should be the same
+if (typeof window !== 'undefined' && window !== globalThis) {{
+    window.addEventListener = globalThis.addEventListener;
+}}
+"""
+        ctx.eval(pre_shim, name="iv8-pre-shim.js")
+
+        # Load WPT harness (IIFE registers load listener via our shim)
         ctx.eval(resources["testharness.js"], name="testharness.js")
         ctx.eval(resources["testharnessreport.js"], name="testharnessreport.js")
         ctx.eval(resources["webidl2.js"], name="webidl2.js")
         ctx.eval(resources["idlharness.js"], name="idlharness.js")
 
-        # Inject shim (after harness loaded, so Output is defined)
-        ctx.eval(shim_code, name="iv8-wpt-shim.js")
+        # Post-harness shim: add result callback
+        post_shim = """
+add_result_callback(function(test) {
+    __results.push({
+        name: test.name,
+        status: test.format_status(),
+        message: test.message || null
+    });
+});
+"""
+        ctx.eval(post_shim, name="iv8-post-shim.js")
 
-        # Patch testharness Output to skip DOM rendering.
-        # testharness.js creates a Tests singleton with output_handler.
-        # show_results() calls make_dom() which crashes on IV8's DOM.
-        # We replace the method on the singleton instance directly.
-        ctx.eval(
-            "if (typeof tests !== 'undefined' && tests && tests.output_handler) {"
-            "  tests.output_handler.show_results = function() {};"
-            "  tests.output_handler.show_status = function() {};"
-            "}"
-            "if (typeof Output !== 'undefined') {"
-            "  Output.prototype.show_results = function() {};"
-            "  Output.prototype.show_status = function() {};"
-            "}",
-            name="iv8-output-patch.js",
-        )
-
-        # Run test code
-        full_test_code = test_code + "\n;"  # ensure trailing semicolon
+        # Run test code — idl_test() is async (promise_test).
+        # After test code registers tests, we need to:
+        # 1. Fire load callbacks (triggers testharness to start tests)
+        # 2. Drain event loop until all tests complete
+        full_test_code = test_code + "\n;"
 
         try:
+            # First eval the test code (registers idl_test as promise_test)
             ctx.eval_promise(full_test_code, max_ticks=10000)
+
+            # Fire load callbacks — triggers testharness test execution
+            ctx.eval("""
+                for (var i = 0; i < __loadCallbacks.length; i++) {
+                    try { __loadCallbacks[i]({ type: 'load' }); } catch(e) {}
+                }
+            """)
+
+            # Drain event loop until results stabilize
+            prev_count = -1
+            for _ in range(200):
+                try:
+                    current = ctx.eval("__results.length")
+                except Exception:
+                    break
+                if current == prev_count and current > 0:
+                    break
+                prev_count = current
+                try:
+                    ctx.eval("__iv8__.eventLoop.tick()")
+                except Exception:
+                    break
             run_status = "completed"
         except Exception as e:
             run_status = f"error: {e}"
