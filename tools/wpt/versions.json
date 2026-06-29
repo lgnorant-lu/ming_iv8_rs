@@ -1,0 +1,32 @@
+{
+  "wpt_commit": "unknown",
+  "wpt_resources": {
+    "resources/resources/testharness.js": "downloaded",
+    "resources/resources/testharnessreport.js": "downloaded",
+    "resources/resources/idlharness.js": "downloaded",
+    "resources/resources/WebIDLParser.js": "failed"
+  },
+  "wpt_tests": {
+    "html/dom/idlharness.https.html": "downloaded",
+    "dom/idlharness.window.js": "downloaded",
+    "css/cssom-view/idlharness.html": "downloaded"
+  },
+  "idl_files": {
+    "html": "copied",
+    "wai-aria": "copied",
+    "SVG": "copied",
+    "cssom": "copied",
+    "touch-events": "copied",
+    "pointerevents": "copied",
+    "uievents": "copied",
+    "dom": "copied",
+    "xhr": "copied",
+    "FileAPI": "copied",
+    "mediacapture-streams": "copied",
+    "performance-timeline": "copied",
+    "trusted-types": "copied",
+    "fullscreen": "copied",
+    "cssom-view": "copied",
+    "css-pseudo": "copied"
+  }
+}
