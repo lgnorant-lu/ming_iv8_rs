@@ -879,34 +879,49 @@ Cat 9 (webdriver/plugins/chrome stubs)、Cat 8 (XHR/cookie 行为)。
 
 ## 12. 当前基线
 
-> Phase 1 实施中。以下为 `scripts/evaluate_surface_integrity.py` 首次运行实测值。
+> Phase 1 实施中。以下为 `scripts/evaluate_surface_integrity.py` + 全量审计实测值。
 > 数据源: `data/idlharness-report.json` (7876/10222 PASS, 77.05%)
+> 全量审计: 10222/10222 idlharness 测试 100% 映射到 11 层 (L0/L1/L3/L4/L6/L7/L9-L13)
+> 多源验证: 6 独立来源 (Web IDL spec + CreepJS + FP-Inconsistent + FP-Scanner + crawlex.net + fp-scanner GitHub)
+
+### 12.1 idlharness 覆盖层 (11/23 层, 10222 测试)
 
 | Layer | Pass | Fail | Total | Rate | 状态 |
 |---|---|---|---|---|---|
-| L0 | 1604 | 539 | 2143 | 74.8% | PARTIAL |
-| L1 | 4208 | 157 | 4365 | 96.4% | GOOD |
-| L3 | 0 | 417 | 417 | 0.0% | BLOCKED |
-| L6 | 16 | 238 | 254 | 6.3% | PARTIAL |
-| L7 | 125 | 525 | 650 | 19.2% | PARTIAL |
-| L9 | 1253 | 32 | 1285 | 97.5% | GOOD |
+| L0 | 1604 | 780 | 2384 | 67.3% | PARTIAL |
+| L1 | 4208 | 126 | 4334 | 97.1% | GOOD |
+| L3 | 0 | 440 | 440 | 0.0% | BLOCKED |
+| L4 | 0 | 1 | 1 | 0.0% | 1 FAIL |
+| L6 | 16 | 235 | 251 | 6.4% | PARTIAL |
+| L7 | 125 | 541 | 666 | 18.8% | PARTIAL |
+| L9 | 1253 | 7 | 1260 | 99.4% | GOOD |
 | L10 | 30 | 24 | 54 | 55.6% | PARTIAL |
 | L11 | 0 | 95 | 95 | 0.0% | NOT IMPL |
 | L12 | 0 | 13 | 13 | 0.0% | NOT IMPL |
 | L13 | 0 | 7 | 7 | 0.0% | NOT IMPL |
-| other | 640 | 299 | 939 | 68.2% | PARTIAL |
+| other | 640 | 77 | 717 | 89.3% | 待细化 |
 
-> L3 PASS=0 因为 idlharness 的 PASS 测试不生成 message，classify_pass
-> 基于测试名匹配，L3 的检查项（writable/configurable）在 PASS 时
-> 测试名为 "attribute X" 被分到 L1。需后续细化 classify_pass。
->
-> L3 FAIL=417 主要是 dom-covered 接口的 configurable=false
-> (chain_dom_prototypes 复制时 set_configurable 未生效)
->
-> L6 FAIL=238 主要是 dom native callback 的 receiver check
-> (HTMLElement.prototype.click.call(null) 等)
->
-> L7 FAIL=525 主要是 codegen-only 接口的 __proto__ 链不完整
+### 12.2 独立脚本覆盖层 (9/23 层, 已有脚本待接入)
+
+| Layer | 名称 | 现有脚本 | 接入状态 |
+|---|---|---|---|
+| L2 | 值一致性 | `scripts/evaluate_env_consistency.py` | 待接入 evaluator |
+| L5 | 递归 toString | `scripts/probe-iv8-wrapnative.py` (部分) | 需专用脚本 |
+| L8 | 跨上下文 | `scripts/_metamorphic.py` (MR-CTX-001~007) | 待接入 evaluator |
+| D1 | 方法返回值语义 | `scripts/_d1_d5_behavior.py` | 待接入 evaluator |
+| D2 | Promise 语义 | `scripts/_d1_d5_behavior.py` | 待接入 evaluator |
+| D3 | 事件触发时序 | `scripts/_d1_d5_behavior.py` | 待接入 evaluator |
+| D4 | 状态转换 | `scripts/_d1_d5_behavior.py` | 待接入 evaluator |
+| D5 | 异常行为 | `scripts/run_creepjs_lies.py` | 待接入 evaluator |
+| D6 | 异步排序 | `scripts/_d1_d5_behavior.py` | 待接入 evaluator |
+
+### 12.3 缺失脚本层 (3/23 层, 需新建)
+
+| Layer | 名称 | 检测内容 | 参考来源 | 优先级 |
+|---|---|---|---|---|
+| L14 | Stack trace shape | Error.stack 格式 (V8 "at" vs SM "@"), 描述符 (data vs accessor), stackTraceLimit | crawlex.net, CreepJS hasValidStack, TC39 Error Stacks proposal | P1 |
+| L15 | Enumeration order | Object.keys(navigator) 顺序, DOM 属性顺序, host object key order | crawlex.net, FP-Scanner, ECMA-262 §6.1.7.1 | P2 |
+| L16 | Timing resolution | performance.now() 精度, Date.now() 末位裁剪, rAF 时序 | CreepJS resistance, crawlex.net, W3C fingerprinting-guidance §3.2 | P2 |
 
 ---
 
