@@ -29,6 +29,7 @@ pub mod inspector;
 pub mod kernel;
 pub mod network;
 pub mod shims;
+pub mod snapshot;
 pub mod state;
 pub mod telemetry;
 pub mod user_overrides;
