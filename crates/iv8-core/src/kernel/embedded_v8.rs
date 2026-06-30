@@ -707,7 +707,7 @@ impl EmbeddedV8Kernel {
 
             let proto = tmpl.prototype_template(scope);
 
-            let post_msg_tmpl = v8::FunctionTemplate::builder_raw(worker_post_message_cb).build(scope);
+            let post_msg_tmpl = v8::FunctionTemplate::builder_raw(worker_post_message_cb).length(1).build(scope);
             let post_msg_name = crate::v8_utils::v8_string(scope, "postMessage");
             post_msg_tmpl.set_class_name(post_msg_name);
             proto.set(post_msg_name.into(), post_msg_tmpl.into());

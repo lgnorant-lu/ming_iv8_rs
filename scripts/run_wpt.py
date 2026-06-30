@@ -382,22 +382,40 @@ add_completion_callback(function(tests, harness_status) {
 
 
 def fetch_chrome_baseline() -> dict:
-    """Fetch Chrome's WPT results from wpt.fyi API for comparison."""
+    """Fetch Chrome's WPT results from wpt.fyi API for comparison.
+
+    Uses Chrome master run (not pr_base) to ensure complete test coverage.
+    The default /api/search returns a mix of pr_base + master runs where
+    Chrome pr_base often has total:0 (not run), causing fallback to Edge.
+    """
     baselines = {}
+
+    # Step 1: Get Chrome master run id
+    runs_url = "https://wpt.fyi/api/runs?browser=chrome&label=master&max-count=1"
+    try:
+        req = urllib.request.Request(runs_url, headers={"User-Agent": "IV8-WPT/1.0"})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            runs_data = json.loads(resp.read())
+        if not runs_data:
+            return baselines
+        chrome_run_id = runs_data[0]["id"]
+    except Exception:
+        return baselines
+
+    # Step 2: Search idlharness tests with Chrome master run_id
     test_paths = [
         "html/dom/idlharness",
         "dom/idlharness",
         "cssom-view/idlharness",
     ]
     for query in test_paths:
-        url = f"https://wpt.fyi/api/search?q={query}"
+        url = f"https://wpt.fyi/api/search?q={query}&run_ids={chrome_run_id}"
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "IV8-WPT/1.0"})
             with urllib.request.urlopen(req, timeout=15) as resp:
                 data = json.loads(resp.read())
             for result in data.get("results", []):
                 test = result["test"]
-                # Chrome is usually the first run
                 for status in result.get("legacy_status", []):
                     if status.get("total", 0) > 0:
                         baselines[test] = {

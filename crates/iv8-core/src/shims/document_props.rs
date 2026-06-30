@@ -373,7 +373,7 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             // Already patched — skip to avoid wrapper chain buildup.
         } else {
             var _mediaCanPlay = HTMLMediaElement.prototype.canPlayType;
-            var _canPlayOverride = function(type) {
+            var _canPlayOverride = function canPlayType(type) {
                 if (/avc1|mp4a|aac|h\.264|h264/i.test(type)) return 'probably';
                 return _mediaCanPlay.call(this, type);
             };

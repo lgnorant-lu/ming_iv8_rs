@@ -13,7 +13,7 @@ pub const MESSAGE_CHANNEL_JS: &str = r#"
         this._started = false;
     }
 
-    MessagePort.prototype.postMessage = function(data) {
+    MessagePort.prototype.postMessage = function postMessage(data) {
         var other = this._otherPort;
         if (other && other.onmessage) {
             var event = {data: data, origin: '', lastEventId: '', source: null, ports: []};
@@ -23,23 +23,23 @@ pub const MESSAGE_CHANNEL_JS: &str = r#"
         }
     };
 
-    MessagePort.prototype.start = function() {
+    MessagePort.prototype.start = function start() {
         this._started = true;
     };
 
-    MessagePort.prototype.close = function() {
+    MessagePort.prototype.close = function close() {
         this.onmessage = null;
         this._otherPort = null;
     };
 
-    MessagePort.prototype.addEventListener = function(type, listener) {
+    MessagePort.prototype.addEventListener = function addEventListener(type, listener) {
         if (type === 'message') {
             this.onmessage = listener;
             this.start();
         }
     };
 
-    MessagePort.prototype.removeEventListener = function() {};
+    MessagePort.prototype.removeEventListener = function removeEventListener() {};
 
     function MessageChannel() {
         this.port1 = new MessagePort();

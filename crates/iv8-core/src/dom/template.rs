@@ -184,14 +184,19 @@ fn install_proto_accessor(
     getter: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
     setter: Option<unsafe extern "C" fn(*const v8::FunctionCallbackInfo)>,
 ) {
-    let getter_tmpl = v8::FunctionTemplate::builder_raw(getter).build(scope);
-    let setter_tmpl = setter.map(|s| v8::FunctionTemplate::builder_raw(s).build(scope));
+    let getter_tmpl = v8::FunctionTemplate::builder_raw(getter).length(0).build(scope);
+    getter_tmpl.set_class_name(crate::v8_utils::v8_string(scope, &format!("get {}", name)));
+    let setter_tmpl = setter.map(|s| {
+        let tmpl = v8::FunctionTemplate::builder_raw(s).length(1).build(scope);
+        tmpl.set_class_name(crate::v8_utils::v8_string(scope, &format!("set {}", name)));
+        tmpl
+    });
     let name_str = crate::v8_utils::v8_string(scope, name);
     proto.set_accessor_property(
         name_str.into(),
         Some(getter_tmpl),
         setter_tmpl,
-        v8::PropertyAttribute::DONT_DELETE,
+        v8::PropertyAttribute::NONE,
     );
 }
 
@@ -265,7 +270,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         for (cname, cval) in node_consts {
             let key = v8::String::new(scope, cname).unwrap();
             let val = v8::Integer::new(scope, cval);
-            proto.set(key.into(), val.into());
+            proto.set_with_attr(key.into(), val.into(), v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
         }
         let node_hex_consts = [
             ("DOCUMENT_POSITION_DISCONNECTED", 0x01u32),
@@ -278,11 +283,12 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         for (cname, cval) in node_hex_consts {
             let key = v8::String::new(scope, cname).unwrap();
             let val = v8::Integer::new_from_unsigned(scope, cval);
-            proto.set(key.into(), val.into());
+            proto.set_with_attr(key.into(), val.into(), v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
         }
     }
 
     if let Some(node_fn) = node.get_function(scope) {
+        let node_fn_obj: v8::Local<v8::Object> = node_fn.into();
         for (cname, cval) in [
             ("ELEMENT_NODE", 1i32), ("ATTRIBUTE_NODE", 2), ("TEXT_NODE", 3),
             ("CDATA_SECTION_NODE", 4), ("PROCESSING_INSTRUCTION_NODE", 7),
@@ -291,7 +297,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         ] {
             let key = v8::String::new(scope, cname).unwrap();
             let val = v8::Integer::new(scope, cval);
-            let _ = node_fn.set(scope, key.into(), val.into());
+            let _ = node_fn_obj.define_own_property(scope, key.into(), val.into(), v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
         }
         for (cname, cval) in [
             ("DOCUMENT_POSITION_DISCONNECTED", 0x01u32),
@@ -303,7 +309,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         ] {
             let key = v8::String::new(scope, cname).unwrap();
             let val = v8::Integer::new_from_unsigned(scope, cval);
-            let _ = node_fn.set(scope, key.into(), val.into());
+            let _ = node_fn_obj.define_own_property(scope, key.into(), val.into(), v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);
         }
     }
 
@@ -814,7 +820,7 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         .set_internal_field_count(2);
     {
         let proto = node_list.prototype_template(scope);
-        install_proto_method(scope, proto, "item", node_list_item_cb);
+        install_proto_method_with_length(scope, proto, "item", node_list_item_cb, 1);
         install_proto_accessor(scope, proto, "length", node_list_length_getter, None);
         set_to_string_tag(scope, proto, "NodeList");
     }
@@ -826,12 +832,12 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
         .set_internal_field_count(1);
     {
         let proto = dom_token_list.prototype_template(scope);
-        install_proto_method(scope, proto, "item", domtokenlist_item_cb);
-        install_proto_method(scope, proto, "contains", domtokenlist_contains_cb);
+        install_proto_method_with_length(scope, proto, "item", domtokenlist_item_cb, 1);
+        install_proto_method_with_length(scope, proto, "contains", domtokenlist_contains_cb, 1);
         install_proto_method(scope, proto, "add", domtokenlist_add_cb);
         install_proto_method(scope, proto, "remove", domtokenlist_remove_cb);
-        install_proto_method(scope, proto, "toggle", domtokenlist_toggle_cb);
-        install_proto_method(scope, proto, "replace", domtokenlist_replace_cb);
+        install_proto_method_with_length(scope, proto, "toggle", domtokenlist_toggle_cb, 1);
+        install_proto_method_with_length(scope, proto, "replace", domtokenlist_replace_cb, 2);
         install_proto_method(scope, proto, "toString", domtokenlist_tostring_cb);
         install_proto_method(scope, proto, "forEach", domtokenlist_foreach_cb);
         install_proto_method(scope, proto, "entries", domtokenlist_entries_cb);
@@ -1291,33 +1297,37 @@ pub fn chain_dom_prototypes(
                     let getter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "get").into());
                     let setter = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "set").into());
                     let value = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "value").into());
+                    let writable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "writable").into());
+                    let configurable_val = desc_obj.get(scope, crate::v8_utils::v8_string(scope, "configurable").into());
+                    let src_writable = writable_val.map(|v| v.is_boolean() && v.is_true()).unwrap_or(true);
+                    let src_configurable = configurable_val.map(|v| v.is_boolean() && v.is_true()).unwrap_or(true);
                     let pd = if let (Some(g), Some(s)) = (getter, setter) {
                         if g.is_undefined() && s.is_undefined() {
-                            let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), true);
-                            p.set_configurable(true);
+                            let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), src_writable);
+                            p.set_configurable(src_configurable);
                             p.set_enumerable(true);
                             p
                         } else {
                             let mut p = v8::PropertyDescriptor::new_from_get_set(g, s);
-                            p.set_configurable(true);
+                            p.set_configurable(src_configurable);
                             p.set_enumerable(true);
                             p
                         }
                     } else if let Some(g) = getter {
                         if g.is_undefined() {
-                            let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), true);
-                            p.set_configurable(true);
+                            let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), src_writable);
+                            p.set_configurable(src_configurable);
                             p.set_enumerable(true);
                             p
                         } else {
                             let mut p = v8::PropertyDescriptor::new_from_get_set(g, v8::undefined(scope).into());
-                            p.set_configurable(true);
+                            p.set_configurable(src_configurable);
                             p.set_enumerable(true);
                             p
                         }
                     } else {
-                        let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), true);
-                        p.set_configurable(true);
+                        let mut p = v8::PropertyDescriptor::new_from_value_writable(value.unwrap_or(v8::undefined(scope).into()), src_writable);
+                        p.set_configurable(src_configurable);
                         p.set_enumerable(true);
                         p
                     };
@@ -1349,6 +1359,7 @@ pub fn chain_dom_prototypes(
                         false,
                     );
                     pd.set_configurable(false);
+                    pd.set_enumerable(true);
                     let _ = dom_ctor.define_property(scope, prop_name, &pd);
                     ctor_copied += 1;
                 }
@@ -1668,6 +1679,7 @@ where
 }
 
 /// Helper: run a DOM callback body (with args, node_id may be None).
+/// Throws TypeError if receiver is not a valid DOM node.
 #[inline(always)]
 fn run_callback<F>(info: *const v8::FunctionCallbackInfo, f: F)
 where
@@ -1687,8 +1699,14 @@ where
         let this = args.this();
         let isolate: &v8::Isolate = &*scope;
         let state = RuntimeState::get(isolate);
-        let node_id = extract_node_id_from_internal(scope, this);
-        f(scope, &args, &mut rv, state, node_id);
+        match extract_node_id_from_internal(scope, this) {
+            Some(node_id) => f(scope, &args, &mut rv, state, Some(node_id)),
+            None => {
+                let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+                let exc = v8::Exception::type_error(scope, msg);
+                scope.throw_exception(exc);
+            }
+        }
     }));
 }
 
@@ -2107,6 +2125,10 @@ where
                     .unwrap_or_default()
             };
             f(scope, &mut rv, &classes);
+        } else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
         }
     }));
 }
@@ -2147,6 +2169,10 @@ where
                     }
                 }
             }
+        } else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
         }
     }));
 }
@@ -3760,6 +3786,10 @@ where
                     }
                 }
             }
+        } else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
         }
     }));
 }
@@ -3798,6 +3828,10 @@ where
                     }
                 }
             }
+        } else {
+            let msg = crate::v8_utils::v8_string(scope, "Illegal invocation");
+            let exc = v8::Exception::type_error(scope, msg);
+            scope.throw_exception(exc);
         }
     }));
 }

@@ -275,9 +275,16 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
             f.remove_prototype();
             proto.set(n.into(), f.into());
         };
+        ($name:literal, $cb:ident, $len:expr) => {
+            let f = v8::FunctionTemplate::builder_raw($cb).length($len).build(scope);
+            let n = crate::v8_utils::v8_string(scope, $name);
+            f.set_class_name(n);
+            f.remove_prototype();
+            proto.set(n.into(), f.into());
+        };
     }
-    nav_method_stub!("registerProtocolHandler", stub_noop);
-    nav_method_stub!("unregisterProtocolHandler", stub_noop);
+    nav_method_stub!("registerProtocolHandler", stub_noop, 2);
+    nav_method_stub!("unregisterProtocolHandler", stub_noop, 2);
     nav_method_stub!("runAdAuction", stub_promise_resolve_null);
     nav_method_stub!("joinAdInterestGroup", stub_noop);
     nav_method_stub!("leaveAdInterestGroup", stub_noop);

@@ -51,24 +51,24 @@ pub const STORAGE_JS: &str = r#"
 
     // Install methods on StorageCtor.prototype
     var p = StorageCtor.prototype;
-    p.getItem = function(key) {
+    p.getItem = function getItem(key) {
         return this._data.hasOwnProperty(key) ? this._data[key] : null;
     };
-    p.setItem = function(key, value) {
+    p.setItem = function setItem(key, value) {
         if (!this._data.hasOwnProperty(key)) this.length++;
         this._data[key] = String(value);
     };
-    p.removeItem = function(key) {
+    p.removeItem = function removeItem(key) {
         if (this._data.hasOwnProperty(key)) {
             delete this._data[key];
             this.length--;
         }
     };
-    p.clear = function() {
+    p.clear = function clear() {
         this._data = {};
         this.length = 0;
     };
-    p.key = function(index) {
+    p.key = function key(index) {
         var keys = Object.keys(this._data);
         return index < keys.length ? keys[index] : null;
     };
