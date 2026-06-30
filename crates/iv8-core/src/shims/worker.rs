@@ -242,11 +242,14 @@ fn worker_thread_main(
     // Install RuntimeState for Worker isolate.
     // NOTE: codegen IDL template installation (install_browser_surface) causes
     // V8 GC "IsOnCentralStack" crash on Worker thread. Root cause: V8 shared
-    // heap (ReadOnlySpace) is accessed by GC across isolates, and the default
-    // Platform's GC is not safe for concurrent isolate creation on non-main
-    // threads. new_unprotected_default_platform alone does not fix this.
+    // ReadOnlySpace (V8_SHARED_RO_HEAP, compile-time macro) is shared across
+    // isolates. GC accessing shared RO heap must run on the "central stack"
+    // thread (main thread). --single-threaded flag alone doesn't fix this
+    // because V8_SHARED_RO_HEAP is a compile-time setting.
+    // Solution: V8 snapshot (pre-install FunctionTemplates in snapshot, then
+    // Worker isolate creates from snapshot without runtime GC pressure).
     // This is the "通道架构重构" blocker (D-116 §9.8).
-    // Until resolved, Worker isolate uses minimal empty context (no codegen).
+    // Until snapshot is implemented, Worker isolate uses minimal context.
     let state = crate::state::RuntimeState::new(
         false,
         crate::state::TimeMode::System,
