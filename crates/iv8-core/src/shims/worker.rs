@@ -239,6 +239,24 @@ fn worker_thread_main(
         v8::Global::new(scope, context)
     };
 
+    // Install RuntimeState for Worker isolate.
+    // NOTE: codegen IDL template installation (install_browser_surface) causes
+    // V8 GC "IsOnCentralStack" crash on Worker thread. Root cause: V8 shared
+    // heap (ReadOnlySpace) is accessed by GC across isolates, and the default
+    // Platform's GC is not safe for concurrent isolate creation on non-main
+    // threads. new_unprotected_default_platform alone does not fix this.
+    // This is the "通道架构重构" blocker (D-116 §9.8).
+    // Until resolved, Worker isolate uses minimal empty context (no codegen).
+    let state = crate::state::RuntimeState::new(
+        false,
+        crate::state::TimeMode::System,
+        "worker".to_string(),
+        std::sync::Arc::new(crate::config::EnvironmentMap::defaults()),
+        None,
+        None,
+    );
+    crate::state::RuntimeState::install(&mut isolate, state);
+
     {
         v8::scope!(scope, &mut isolate);
         let context = v8::Local::new(scope, &context);
@@ -246,6 +264,10 @@ fn worker_thread_main(
         let global = context.global(scope);
         install_worker_globals(scope, global, &profile_json);
         install_worker_callbacks(scope, global);
+
+        // Run worker bootstrap JS (WorkerGlobalScope, navigator, etc.)
+        let bootstrap_str = crate::v8_utils::v8_string(scope, WORKER_BOOTSTRAP_JS);
+        let _ = v8::Script::compile(scope, bootstrap_str, None).and_then(|s| s.run(scope));
     }
 
     {
