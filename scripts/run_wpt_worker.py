@@ -163,8 +163,24 @@ globalThis.fetch_spec = function(spec) {{
     # 4. WebIDLParser.js
     parts.append(resources["webidl2.js"])
 
-    # 5. idlharness.js
-    parts.append(resources["idlharness.js"])
+    # 5. idlharness.js (patched: replace instanceof check with typeof check)
+    # V8 Worker isolate cannot use setPrototypeOf or Symbol.hasInstance
+    # without triggering GC crash or OOM. Patch exposed_in() to use
+    # typeof check instead of instanceof.
+    idlharness = resources["idlharness.js"]
+    idlharness = idlharness.replace(
+        "self instanceof DedicatedWorkerGlobalScope",
+        "typeof DedicatedWorkerGlobalScope !== 'undefined'",
+    )
+    idlharness = idlharness.replace(
+        "self instanceof SharedWorkerGlobalScope",
+        "typeof SharedWorkerGlobalScope !== 'undefined'",
+    )
+    idlharness = idlharness.replace(
+        "self instanceof ServiceWorkerGlobalScope",
+        "typeof ServiceWorkerGlobalScope !== 'undefined'",
+    )
+    parts.append(idlharness)
 
     # 6. Test code with error capture
     parts.append(f"""

@@ -222,7 +222,7 @@ fn worker_thread_main(
     ensure_v8_initialized();
 
     let mut isolate = v8::Isolate::new(
-        v8::CreateParams::default().heap_limits(0, 256 * 1024 * 1024),
+        v8::CreateParams::default().heap_limits(0, 2048 * 1024 * 1024),
     );
     isolate.set_microtasks_policy(v8::MicrotasksPolicy::Explicit);
 

@@ -42,8 +42,9 @@ def generate_js_stub(ir_path: str) -> str:
             )
         else:
             exposed_str = str(exposed_raw)
-        # Check if Worker-visible (exclude Exposed=* to reduce object count)
-        if "Worker" in exposed_str and exposed_str != "*":
+        # Check if Worker-visible (includes Exposed=* since those are
+        # available in all contexts including Worker)
+        if "Worker" in exposed_str or exposed_str == "*":
             inheritance = d.get("inheritance", "") or ""
             members = d.get("members", [])
             interfaces.append((name, inheritance, members))
@@ -60,16 +61,30 @@ def generate_js_stub(ir_path: str) -> str:
             gen_interface(inh, *by_name[inh])
         generated.add(name)
 
-        # Constructor
-        lines.append(f"  var {name} = function {name}() {{}};")
-        # Prototype chain
+        # Constructor — compute length from IDL constructor members
+        ctor_len = 0
+        for m in members:
+            if m.get("kind") == "constructor":
+                ctor_len = len(m.get("arguments", []))
+                break
+        # Constructor function with proper length and new-operator check
+        lines.append(f"  var {name} = function {name}() {{")
+        lines.append(f"    if (!(this instanceof {name})) throw new TypeError(\"Failed to construct '{name}': Please use the 'new' operator\");")
+        lines.append(f"  }};")
+        if ctor_len > 0:
+            lines.append(f"  Object.defineProperty({name}, 'length', {{value: {ctor_len}, writable: false, enumerable: false, configurable: true}});")
+        # Prototype chain — non-writable, non-configurable, non-enumerable
         if inh and inh in by_name:
-            lines.append(f"  {name}.prototype = Object.create({inh}.prototype);")
+            lines.append(f"  var _proto_{name} = Object.create({inh}.prototype);")
+            lines.append(f"  Object.defineProperty({name}, 'prototype', {{value: _proto_{name}, writable: false, enumerable: false, configurable: false}});")
+            lines.append(f"  Object.defineProperty(_proto_{name}, 'constructor', {{value: {name}, writable: true, configurable: true, enumerable: false}});")
+        else:
+            lines.append(f"  Object.defineProperty({name}, 'prototype', {{writable: false, enumerable: false, configurable: false}});")
             lines.append(f"  Object.defineProperty({name}.prototype, 'constructor', {{value: {name}, writable: true, configurable: true, enumerable: false}});")
         # toStringTag
         lines.append(f"  Object.defineProperty({name}.prototype, Symbol.toStringTag, {{value: '{name}', configurable: true}});")
-        # Register on global
-        lines.append(f"  self.{name} = {name};")
+        # Register on global — non-enumerable
+        lines.append(f"  Object.defineProperty(self, '{name}', {{value: {name}, writable: true, configurable: true, enumerable: false}});")
 
     for name, inh, members in interfaces:
         gen_interface(name, inh, members)
@@ -114,28 +129,37 @@ def generate_js_stub(ir_path: str) -> str:
                 lines.append(f"  Object.defineProperty({name}.prototype, '{mname}', {{value: {cval_js}, writable: false, enumerable: true, configurable: false}});")
 
             elif kind == "attribute":
-                # Accessor property: get + optional set
-                # Use Object.defineProperty with named functions
-                # Function name set via Object.defineProperty for "get X" / "set X"
                 getter_name = f"get {mname}"
                 setter_name = f"set {mname}"
-                # Create function then set .name via defineProperty
-                lines.append(f"  var _g_{name}_{mname} = function() {{ return undefined; }};")
+                lines.append(f"  var _g_{name}_{mname} = function() {{")
+                lines.append(f"    if (!(this instanceof {name}) && (this === null || this === undefined || Object.getPrototypeOf(this) !== {name}.prototype))")
+                lines.append(f"      throw new TypeError('Illegal invocation');")
+                lines.append(f"    return undefined;")
+                lines.append(f"  }};")
                 lines.append(f"  Object.defineProperty(_g_{name}_{mname}, 'name', {{value: '{getter_name}'}});")
                 if readonly:
                     lines.append(f"  Object.defineProperty({target}, '{mname}', {{get: _g_{name}_{mname}, set: undefined, enumerable: true, configurable: true}});")
                 else:
-                    lines.append(f"  var _s_{name}_{mname} = function(v) {{}};")
+                    lines.append(f"  var _s_{name}_{mname} = function(v) {{")
+                    lines.append(f"    if (!(this instanceof {name}) && (this === null || this === undefined || Object.getPrototypeOf(this) !== {name}.prototype))")
+                    lines.append(f"      throw new TypeError('Illegal invocation');")
+                    lines.append(f"  }};")
                     lines.append(f"  Object.defineProperty(_s_{name}_{mname}, 'name', {{value: '{setter_name}'}});")
                     lines.append(f"  Object.defineProperty({target}, '{mname}', {{get: _g_{name}_{mname}, set: _s_{name}_{mname}, enumerable: true, configurable: true}});")
 
             elif kind == "operation":
-                # Data property: writable function
-                arg_count = len(m.get("arguments", []))
+                all_args = m.get("arguments", [])
+                arg_count = len(all_args)
+                # Function length = number of required (non-optional) args
+                required_count = sum(1 for a in all_args if not a.get("optional", False) and not a.get("variadic", False))
                 args = ", ".join(["a" + str(i) for i in range(arg_count)])
-                # Use computed name to avoid reserved word issues
-                lines.append(f"  var _op_{name}_{mname} = function({args}) {{}};")
+                lines.append(f"  var _op_{name}_{mname} = function({args}) {{")
+                lines.append(f"    if (!(this instanceof {name}) && (this === null || this === undefined || Object.getPrototypeOf(this) !== {name}.prototype))")
+                lines.append(f"      throw new TypeError('Illegal invocation');")
+                lines.append(f"  }};")
                 lines.append(f"  Object.defineProperty(_op_{name}_{mname}, 'name', {{value: '{mname}'}});")
+                if required_count != arg_count:
+                    lines.append(f"  Object.defineProperty(_op_{name}_{mname}, 'length', {{value: {required_count}, writable: false, enumerable: false, configurable: true}});")
                 lines.append(f"  Object.defineProperty({target}, '{mname}', {{value: _op_{name}_{mname}, writable: true, enumerable: true, configurable: true}});")
 
     lines.append("})();")
