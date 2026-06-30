@@ -244,12 +244,17 @@ fn worker_thread_main(
     // V8 GC "IsOnCentralStack" crash on Worker thread. Root cause: V8 shared
     // ReadOnlySpace (V8_SHARED_RO_HEAP, compile-time macro) is shared across
     // isolates. GC accessing shared RO heap must run on the "central stack"
-    // thread (main thread). --single-threaded flag alone doesn't fix this
-    // because V8_SHARED_RO_HEAP is a compile-time setting.
-    // Solution: V8 snapshot (pre-install FunctionTemplates in snapshot, then
-    // Worker isolate creates from snapshot without runtime GC pressure).
+    // thread (main thread).
+    // Tested approaches that do NOT work:
+    //   - --single-threaded flag: still crashes, 2 regression in WPT
+    //   - --no-shared-readonly-heap: flag not recognized in V8 147
+    //   - 4GB heap limit: GC still triggered during FunctionTemplate creation
+    //   - new_unprotected_default_platform: does not fix shared RO heap GC
+    // Only viable solution: V8 snapshot (SnapshotCreator)
+    //   - Pre-install FunctionTemplates in snapshot blob on main thread
+    //   - Worker isolate creates from snapshot, no runtime FunctionTemplate GC
+    //   - Deno validates this approach (JsRuntimeForSnapshot)
     // This is the "通道架构重构" blocker (D-116 §9.8).
-    // Until snapshot is implemented, Worker isolate uses minimal context.
     let state = crate::state::RuntimeState::new(
         false,
         crate::state::TimeMode::System,
