@@ -177,9 +177,11 @@ H04 注册于 `HARNESS-CHARTER.md` §7 Harness 注册表：
 > S6 (FP-Inconsistent) 无 license，仅提取规则逻辑自行实现，不引用原始代码。
 >
 > S8 (idlharness) Phase 1 已实现 WPT 官方测试文件直接复用
-> (run_wpt.py, 3 suites, 3952 tests, 3043 PASS 77.0%)。
-> Chrome 151 基线: 9023/9202 (98.1%), wpt.fyi API (2026-06-29)。
-> 旧 runner (run_idlharness.py, 10222 tests) 待废弃。
+> (run_wpt.py, 3 suites × 6 variants, 3758 tests, 3213 PASS 85.50%)。
+> Chrome 151 基线: 9481/9640 (98.35%), wpt.fyi API (2026-06-30, run id 5155506334466048)。
+> 旧 runner (run_idlharness.py, 10222 tests) 已废弃。
+> R4 修复: const 描述符 + accessor .name/.length + configurable
+>   + dom callback receiver check + shim .name + dom method .length
 > 参见 `docs/roadmap/v0.8/analysis/wpt-integration-design.md` §12。
 
 ### 2.4 矩阵规模
@@ -890,12 +892,15 @@ Cat 9 (webdriver/plugins/chrome stubs)、Cat 8 (XHR/cookie 行为)。
 > 全量审计: 10222/10222 idlharness 测试 100% 映射到 11 层 (L0/L1/L3/L4/L6/L7/L9-L13)
 > 多源验证: 6 独立来源 (Web IDL spec + CreepJS + FP-Inconsistent + FP-Scanner + crawlex.net + fp-scanner GitHub)
 
-### 12.1 idlharness 覆盖层 (11/23 层, 10222 测试 — 自定义 runner)
+### 12.1 idlharness 覆盖层 (11/23 层, 3758 测试 — WPT 官方 runner)
 
-> 注意: 当前 10222 测试来自自定义 runner (5 P0 接口, 1 对象/接口)。
-> WPT 官方 Chrome 151 基线: 9202 测试, 9023 PASS (98.1%)。
-> 计划切换为 WPT 官方测试文件直接复用, 参见
-> `docs/roadmap/v0.8/analysis/wpt-integration-design.md`。
+> WPT 官方 runner (run_wpt.py): 3758 测试, 3213 PASS (85.50%)。
+> WPT 官方 Chrome 151 基线: 9640 测试, 9481 PASS (98.35%)。
+> wpt.fyi API (2026-06-30, Chrome 151.0.7921.0, run id 5155506334466048)。
+> 旧 runner (run_idlharness.py, 10222 测试) 已废弃。
+> R4 修复: const 描述符 + accessor .name/.length + configurable
+>   + dom callback receiver check + shim .name + dom method .length (+125 PASS)
+> 参见 `docs/roadmap/v0.8/analysis/wpt-integration-design.md`。
 
 | Layer | Pass | Fail | Total | Rate | 状态 |
 |---|---|---|---|---|---|

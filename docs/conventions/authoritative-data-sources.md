@@ -74,7 +74,7 @@ These are executable validation tools that check spec conformance.
 | bcd-collector | https://github.com/foolip/bcd-collector | Browser API existence + feature detection across Chrome/Firefox/Safari | H04 S1 data source; P3 interface list generation; L0 existence baseline |
 | @webref/idl | https://www.npmjs.com/package/@webref/idl | W3C/WHATWG IDL fragment extraction (authoritative, from spec sources) | codegen IR input; interface/attribute/operation enumeration |
 | wptrunner | https://web-platform-tests.org/tools/wptrunner/docs/design.html | WPT official test runner framework, custom product plugin system | Architecture reference for IV8 WPT integration |
-| wpt.fyi API | https://wpt.fyi/api/search | Chrome/Firefox/Safari WPT results archive | Chrome baseline comparison (9023/9202 Chrome 151) |
+| wpt.fyi API | https://wpt.fyi/api/search | Chrome/Firefox/Safari WPT results archive | Chrome baseline comparison (9481/9640 Chrome 151.0.7921.0, 2026-06-30) |
 | Node.js WPTRunner | https://github.com/nodejs/node/blob/main/test/wpt/README.md | Non-browser WPT reuse pattern (V8 isolate + eval) | IV8 WPT integration design reference (selected model) |
 | Deno wpt.ts | https://github.com/denoland/deno/blob/main/tests/wpt/wpt.ts | Non-browser WPT reuse pattern (spawn binary + wpt serve) | Alternative considered; rejected (needs Python server) |
 | Ladybird WPT.sh | https://github.com/LadybirdBrowser/ladybird/blob/master/Meta/WPT.sh | Non-mainstream engine WPT integration (WebDriver + import) | Alternative considered; rejected (needs browser binary) |
