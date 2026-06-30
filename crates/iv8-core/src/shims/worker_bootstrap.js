@@ -1,6 +1,13 @@
 (function(profile) {
     'use strict';
 
+    // idlharness checks self instanceof DedicatedWorkerGlobalScope.
+    // Setting __proto__ triggers V8 OOM from shape transitions.
+    // Symbol.hasInstance override also causes issues.
+    // Current approach: accept the "Unexpected global object" FAIL
+    // and focus on interface property tests that don't require
+    // the global object check to pass.
+
     var _profile = profile;
 
     Object.defineProperty(self, 'self', {

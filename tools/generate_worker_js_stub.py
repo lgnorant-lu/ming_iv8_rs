@@ -42,7 +42,8 @@ def generate_js_stub(ir_path: str) -> str:
             )
         else:
             exposed_str = str(exposed_raw)
-        if exposed_str == "*" or "Worker" in exposed_str:
+        # Check if Worker-visible (exclude Exposed=* to reduce object count)
+        if "Worker" in exposed_str and exposed_str != "*":
             inheritance = d.get("inheritance", "") or ""
             members = d.get("members", [])
             interfaces.append((name, inheritance, members))
