@@ -59,6 +59,7 @@
 | `shims`      | crates/iv8-core/src/shims/（含 navigator/document/storage 等）|
 | `surface`    | crates/iv8-surface + tools/iv8-surface-codegen |
 | `compat`     | tests/compat/ 差异测试                   |
+| `harness`    | scripts/ 中的 quality harness 脚本 (evaluate_*.py, run_wpt.py, run_idlharness.py, tools/wpt/) |
 
 如果一次提交跨多个 scope，选择**主要影响的 scope**，在 body 中说明其他变更。
 
