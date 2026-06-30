@@ -240,7 +240,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
             this._targets.push({ target: target, options: options });
         };
         MutationObserver.prototype.disconnect = function() { this._targets = []; };
-        MutationObserver.prototype.takeRecords = function() { return []; };
+        MutationObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
 
     // IntersectionObserver stub
@@ -255,7 +255,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         IntersectionObserver.prototype.observe = function(target) {};
         IntersectionObserver.prototype.unobserve = function(target) {};
         IntersectionObserver.prototype.disconnect = function() {};
-        IntersectionObserver.prototype.takeRecords = function() { return []; };
+        IntersectionObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
 
     // ResizeObserver stub
@@ -266,7 +266,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         ResizeObserver.prototype.observe = function(target, options) {};
         ResizeObserver.prototype.unobserve = function(target) {};
         ResizeObserver.prototype.disconnect = function() {};
-        ResizeObserver.prototype.takeRecords = function() { return []; };
+        ResizeObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
 
     // ReportingObserver stub
@@ -276,7 +276,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         };
         ReportingObserver.prototype.observe = function() {};
         ReportingObserver.prototype.disconnect = function() {};
-        ReportingObserver.prototype.takeRecords = function() { return []; };
+        ReportingObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
 
     // Blob stub
@@ -364,7 +364,7 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         };
         PerformanceObserver.prototype.observe = function(options) {};
         PerformanceObserver.prototype.disconnect = function() {};
-        PerformanceObserver.prototype.takeRecords = function() { return []; };
+        PerformanceObserver.prototype.takeRecords = function takeRecords() { return []; };
         PerformanceObserver.supportedEntryTypes = [
             'element', 'event', 'first-input', 'largest-contentful-paint',
             'layout-shift', 'longtask', 'mark', 'measure', 'navigation',
@@ -389,19 +389,19 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
     // (codegen defines these Observers, so the typeof === 'undefined' guards
     // above do not fire; codegen takeRecords returns undefined)
     if (typeof IntersectionObserver !== 'undefined' && IntersectionObserver.prototype) {
-        IntersectionObserver.prototype.takeRecords = function() { return []; };
+        IntersectionObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
     if (typeof ResizeObserver !== 'undefined' && ResizeObserver.prototype) {
-        ResizeObserver.prototype.takeRecords = function() { return []; };
+        ResizeObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
     if (typeof ReportingObserver !== 'undefined' && ReportingObserver.prototype) {
-        ReportingObserver.prototype.takeRecords = function() { return []; };
+        ReportingObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
     if (typeof MutationObserver !== 'undefined' && MutationObserver.prototype) {
-        MutationObserver.prototype.takeRecords = function() { return []; };
+        MutationObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
     if (typeof PerformanceObserver !== 'undefined' && PerformanceObserver.prototype) {
-        PerformanceObserver.prototype.takeRecords = function() { return []; };
+        PerformanceObserver.prototype.takeRecords = function takeRecords() { return []; };
     }
 
     // performance.getEntries / getEntriesByName / getEntriesByType stubs

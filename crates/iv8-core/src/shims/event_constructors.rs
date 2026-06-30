@@ -25,22 +25,22 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this._stopImmediatePropagation = false;
     }
 
-    Event.prototype.preventDefault = function() {
+    Event.prototype.preventDefault = function preventDefault() {
         if (this.cancelable) {
             this.defaultPrevented = true;
         }
     };
 
-    Event.prototype.stopPropagation = function() {
+    Event.prototype.stopPropagation = function stopPropagation() {
         this._stopPropagation = true;
     };
 
-    Event.prototype.stopImmediatePropagation = function() {
+    Event.prototype.stopImmediatePropagation = function stopImmediatePropagation() {
         this._stopPropagation = true;
         this._stopImmediatePropagation = true;
     };
 
-    Event.prototype.composedPath = function() {
+    Event.prototype.composedPath = function composedPath() {
         return [];
     };
 

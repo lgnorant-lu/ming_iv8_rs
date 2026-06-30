@@ -110,7 +110,7 @@ pub const GEOMETRY_SHIM_JS: &str = r#"
     // matchMedia — returns MediaQueryList-like object
     // Reads from globalThis.__iv8MediaPrefs (injected from profile env map).
     // Falls back to Chrome desktop defaults if not set.
-    globalThis.matchMedia = function(query) {
+    globalThis.matchMedia = function matchMedia(query) {
         query = String(query || '');
         var q = query.toLowerCase().replace(/\s+/g, '');
 
