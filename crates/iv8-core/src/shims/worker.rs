@@ -280,7 +280,10 @@ fn worker_thread_main(
         // JS stub creates constructors, prototype chains, and property
         // descriptors using Object.defineProperty — no FunctionTemplate.
         let stub_str = crate::v8_utils::v8_string(scope, WORKER_JS_STUB);
-        let _ = v8::Script::compile(scope, stub_str, None).and_then(|s| s.run(scope));
+        let stub_result = v8::Script::compile(scope, stub_str, None).and_then(|s| s.run(scope));
+        if stub_result.is_none() {
+            crate::telemetry::worker_script_error("JS stub eval failed");
+        }
 
         // Run worker bootstrap JS (WorkerGlobalScope, navigator, etc.)
         let bootstrap_str = crate::v8_utils::v8_string(scope, WORKER_BOOTSTRAP_JS);

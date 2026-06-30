@@ -281,10 +281,41 @@ fn resolve_worker_script(isolate: &v8::Isolate, url: &str) -> String {
     }
     if url.starts_with("blob:") || url.starts_with("data:") {
         if let Some(src) = url.split(',').nth(1) {
-            return src.to_string();
+            return percent_decode(src);
         }
     }
     String::new()
+}
+
+fn percent_decode(input: &str) -> String {
+    let mut result = Vec::with_capacity(input.len());
+    let bytes = input.as_bytes();
+    let mut i = 0;
+    while i < bytes.len() {
+        if bytes[i] == b'%' && i + 2 < bytes.len() {
+            if let (Some(h), Some(l)) = (hex_digit(bytes[i + 1]), hex_digit(bytes[i + 2])) {
+                result.push(h * 16 + l);
+                i += 3;
+                continue;
+            }
+        }
+        if bytes[i] == b'+' {
+            result.push(b' ');
+        } else {
+            result.push(bytes[i]);
+        }
+        i += 1;
+    }
+    String::from_utf8_lossy(&result).to_string()
+}
+
+fn hex_digit(b: u8) -> Option<u8> {
+    match b {
+        b'0'..=b'9' => Some(b - b'0'),
+        b'a'..=b'f' => Some(b - b'a' + 10),
+        b'A'..=b'F' => Some(b - b'A' + 10),
+        _ => None,
+    }
 }
 
 impl EmbeddedV8Kernel {
