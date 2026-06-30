@@ -1417,6 +1417,33 @@ pub fn chain_dom_prototypes(
     if let Some(script) = v8::Script::compile(scope, fix_src, None) {
         let _ = script.run(scope);
     }
+
+    // Copy Window.prototype own properties to global object.
+    // Per Web IDL §3.7.3, [Global] interface properties must be on the
+    // global object itself, not just on the prototype. idlharness checks
+    // global.hasOwnProperty(prop) for Window interface members.
+    let global_prop_script = r#"
+        (function() {
+            if (typeof Window === 'undefined' || !Window.prototype) return;
+            var proto = Window.prototype;
+            var names = Object.getOwnPropertyNames(proto);
+            for (var i = 0; i < names.length; i++) {
+                var name = names[i];
+                if (name === 'constructor') continue;
+                if (globalThis.hasOwnProperty(name)) continue;
+                try {
+                    var desc = Object.getOwnPropertyDescriptor(proto, name);
+                    if (desc) {
+                        Object.defineProperty(globalThis, name, desc);
+                    }
+                } catch(e) {}
+            }
+        })();
+    "#;
+    let gp_src = crate::v8_utils::v8_string(scope, global_prop_script);
+    if let Some(script) = v8::Script::compile(scope, gp_src, None) {
+        let _ = script.run(scope);
+    }
 }
 
 /// Select the correct FunctionTemplate for a given tag name.
