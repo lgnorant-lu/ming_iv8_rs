@@ -12,6 +12,7 @@ use crate::shims::structured_clone::{deserialize_value, serialize_value};
 use crate::v8_init::ensure_v8_initialized;
 
 const WORKER_BOOTSTRAP_JS: &str = include_str!("worker_bootstrap.js");
+const WORKER_JS_STUB: &str = include_str!("worker_js_stub.js");
 
 pub enum WorkerMessage {
     PostMessage(Vec<u8>),
@@ -272,6 +273,14 @@ fn worker_thread_main(
         let global = context.global(scope);
         install_worker_globals(scope, global, &profile_json);
         install_worker_callbacks(scope, global);
+
+        // Install Worker interface stubs via pure JS eval.
+        // This avoids V8 FunctionTemplate creation that triggers
+        // IsOnCentralStack GC crash on Worker thread (client isolate).
+        // JS stub creates constructors, prototype chains, and property
+        // descriptors using Object.defineProperty — no FunctionTemplate.
+        let stub_str = crate::v8_utils::v8_string(scope, WORKER_JS_STUB);
+        let _ = v8::Script::compile(scope, stub_str, None).and_then(|s| s.run(scope));
 
         // Run worker bootstrap JS (WorkerGlobalScope, navigator, etc.)
         let bootstrap_str = crate::v8_utils::v8_string(scope, WORKER_BOOTSTRAP_JS);
