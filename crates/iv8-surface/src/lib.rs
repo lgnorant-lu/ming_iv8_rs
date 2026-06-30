@@ -15,6 +15,7 @@ pub mod behavior;
 pub mod descriptor;
 pub mod generated;
 pub mod hand_implemented;
+pub mod promise_check;
 pub mod registry;
 pub mod type_conv;
 

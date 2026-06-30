@@ -1,0 +1,53 @@
+use v8::Isolate;
+
+pub fn check_receiver_promise(
+    scope: &v8::PinScope<'_, '_>,
+    info: *const v8::FunctionCallbackInfo,
+    iface_name: &str,
+) -> bool {
+    let info_ref = unsafe { &*info };
+    let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+    let this = args.this();
+    let ctx = scope.get_current_context();
+    let global = ctx.global(scope);
+    let iface_str = v8::String::new(scope, iface_name).unwrap();
+    if let Some(ctor_val) = global.get(scope, iface_str.into()) {
+        if ctor_val.is_function() {
+            let ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(ctor_val) };
+            let proto_key = v8::String::new(scope, "prototype").unwrap();
+            if let Some(proto_val) = ctor.get(scope, proto_key.into()) {
+                if proto_val.is_object() && !proto_val.is_null_or_undefined() {
+                    let proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(proto_val) };
+                    if this.strict_equals(proto.into()) {
+                        reject_promise(scope, info_ref);
+                        return false;
+                    }
+                    let mut current: v8::Local<v8::Value> = this.into();
+                    let mut found = false;
+                    for _ in 0..20usize {
+                        let Some(cur_obj) = current.to_object(scope) else { break; };
+                        let Some(parent) = cur_obj.get_prototype(scope) else { break; };
+                        if parent.is_null_or_undefined() || !parent.is_object() { break; }
+                        if parent.strict_equals(proto.into()) { found = true; break; }
+                        current = parent;
+                    }
+                    if !found {
+                        reject_promise(scope, info_ref);
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    true
+}
+
+fn reject_promise(scope: &v8::PinScope<'_, '_>, info_ref: &v8::FunctionCallbackInfo) {
+    let msg = v8::String::new(scope, "Illegal invocation").unwrap();
+    let exc = v8::Exception::type_error(scope, msg);
+    if let Some(resolver) = v8::PromiseResolver::new(scope) {
+        let _ = resolver.reject(scope, exc.into());
+        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+        rv.set(resolver.get_promise(scope).into());
+    }
+}

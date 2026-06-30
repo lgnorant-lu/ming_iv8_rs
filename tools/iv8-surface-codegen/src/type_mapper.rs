@@ -87,8 +87,8 @@ pub fn map_idl_type(idl_type: &str) -> TypeMap {
 
         // Promise<T>
         name if is_promise(name) => TypeMap {
-            rust_type: "v8::Local<'s, v8::Promise>".into(),
-            default_value: "v8::Promise::new(scope).into()".into(),
+            rust_type: "v8::Local<'s, v8::Value>".into(),
+            default_value: "v8::undefined(scope).into()".into(),
             needs_scope: true,
         },
 
@@ -152,8 +152,12 @@ fn is_buffer_source(name: &str) -> bool {
     )
 }
 
+pub fn is_promise_public(name: &str) -> bool {
+    is_promise(name)
+}
+
 fn is_promise(name: &str) -> bool {
-    name.starts_with("Promise<")
+    name.starts_with("Promise<") || name == "Promise"
 }
 
 fn is_sequence(name: &str) -> bool {

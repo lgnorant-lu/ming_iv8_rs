@@ -286,6 +286,59 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
     );
 
     let receiver_check = &prototype_chain_check;
+
+    // Promise variant: for operations returning Promise<T>, receiver check
+    // failure must return Promise.reject(TypeError) instead of throwing.
+    // idlharness throwOrReject expects Promise-returning ops to reject, not throw.
+    let prototype_chain_check_promise = format!(
+        "        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);\n\
+         \x20       let __this = __args.this();\n\
+         \x20       let __ctx = scope.get_current_context();\n\
+         \x20       let __global = __ctx.global(scope);\n\
+         \x20       let __iface_name = v8::String::new(scope, \"{iface}\").unwrap();\n\
+         \x20       if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {{\n\
+         \x20           if __ctor_val.is_function() {{\n\
+         \x20               let __ctor = unsafe {{ v8::Local::<v8::Function>::cast_unchecked(__ctor_val) }};\n\
+         \x20               let __proto_key = v8::String::new(scope, \"prototype\").unwrap();\n\
+         \x20               if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {{\n\
+         \x20                   if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {{\n\
+         \x20                       let __proto = unsafe {{ v8::Local::<v8::Object>::cast_unchecked(__proto_val) }};\n\
+         \x20                       if __this.strict_equals(__proto.into()) {{\n\
+         \x20                           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20                           let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20                           if let Some(__resolver) = v8::PromiseResolver::new(scope) {{\n\
+         \x20                               let _ = __resolver.reject(scope, __exc.into());\n\
+         \x20                               let mut __rv = v8::ReturnValue::from_function_callback_info(info_ref);\n\
+         \x20                               __rv.set(__resolver.get_promise(scope).into());\n\
+         \x20                           }}\n\
+         \x20                           return;\n\
+         \x20                       }}\n\
+         \x20                       let mut __current: v8::Local<v8::Value> = __this.into();\n\
+         \x20                       let mut __found = false;\n\
+         \x20                       for _ in 0..20usize {{\n\
+         \x20                           let Some(__cur_obj) = __current.to_object(scope) else {{ break; }};\n\
+         \x20                           let Some(__parent) = __cur_obj.get_prototype(scope) else {{ break; }};\n\
+         \x20                           if __parent.is_null_or_undefined() || !__parent.is_object() {{ break; }}\n\
+         \x20                           if __parent.strict_equals(__proto.into()) {{ __found = true; break; }}\n\
+         \x20                           __current = __parent;\n\
+         \x20                       }}\n\
+         \x20                       if !__found {{\n\
+         \x20                           let __msg = v8::String::new(scope, \"Illegal invocation\").unwrap();\n\
+         \x20                           let __exc = v8::Exception::type_error(scope, __msg);\n\
+         \x20                           if let Some(__resolver) = v8::PromiseResolver::new(scope) {{\n\
+         \x20                               let _ = __resolver.reject(scope, __exc.into());\n\
+         \x20                               let mut __rv = v8::ReturnValue::from_function_callback_info(info_ref);\n\
+         \x20                               __rv.set(__resolver.get_promise(scope).into());\n\
+         \x20                           }}\n\
+         \x20                           return;\n\
+         \x20                       }}\n\
+         \x20                   }}\n\
+         \x20               }}\n\
+         \x20           }}\n\
+         \x20       }}\n",
+        iface = iface_name,
+    );
+
     let op_receiver_check = &prototype_chain_check;
 
     for m in &def.members {
@@ -337,9 +390,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             idx += 1;
             let ret_name = m.return_type.as_deref().unwrap_or("undefined");
             let tm = type_mapper::map_idl_type(ret_name);
-            // Operations use global-object check: when .call(null) is used,
-            // V8 converts null to globalThis in non-strict mode. We check if
-            // this is the global object and throw TypeError.
+            let is_promise_ret = type_mapper::is_promise_public(ret_name);
             out.push_str(&format!(
                 "unsafe extern \"C\" fn {}_op_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                 fn_name, idx
@@ -349,7 +400,14 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             );
             out.push_str("        let info_ref = unsafe { &*_info };\n");
             out.push_str("        v8::callback_scope!(unsafe scope, info_ref);\n");
-            out.push_str(op_receiver_check);
+            if is_promise_ret {
+                out.push_str(&format!(
+                    "        if !crate::promise_check::check_receiver_promise(scope, _info, \"{iface}\") {{ return; }}\n",
+                    iface = iface_name,
+                ));
+            } else {
+                out.push_str(op_receiver_check);
+            }
             out.push_str(
                 "        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
             );

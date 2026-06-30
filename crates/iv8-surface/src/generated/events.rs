@@ -569,7 +569,7 @@ unsafe extern "C" fn event_op_5(_info: *const v8::FunctionCallbackInfo) {
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -2093,7 +2093,7 @@ unsafe extern "C" fn autofill_event_get_1(_info: *const v8::FunctionCallbackInfo
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -2183,43 +2183,7 @@ unsafe extern "C" fn before_install_prompt_event_op_1(_info: *const v8::Function
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "BeforeInstallPromptEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BeforeInstallPromptEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -2591,7 +2555,7 @@ unsafe extern "C" fn bluetooth_advertising_event_get_2(_info: *const v8::Functio
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -3450,7 +3414,7 @@ unsafe extern "C" fn clipboard_change_event_get_1(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4037,7 +4001,7 @@ unsafe extern "C" fn cookie_change_event_get_1(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4083,7 +4047,7 @@ unsafe extern "C" fn cookie_change_event_get_2(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4293,7 +4257,7 @@ unsafe extern "C" fn device_change_event_get_1(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4339,7 +4303,7 @@ unsafe extern "C" fn device_change_event_get_2(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4567,43 +4531,7 @@ unsafe extern "C" fn device_motion_event_op_5(_info: *const v8::FunctionCallback
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DeviceMotionEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "DeviceMotionEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -4854,43 +4782,7 @@ unsafe extern "C" fn device_orientation_event_op_5(_info: *const v8::FunctionCal
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "DeviceOrientationEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "DeviceOrientationEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -5432,7 +5324,7 @@ unsafe extern "C" fn font_face_set_load_event_get_1(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -7112,7 +7004,7 @@ unsafe extern "C" fn message_event_get_5(_info: *const v8::FunctionCallbackInfo)
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -10247,7 +10139,7 @@ unsafe extern "C" fn rtc_track_event_get_3(_info: *const v8::FunctionCallbackInf
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -12548,7 +12440,7 @@ unsafe extern "C" fn text_format_update_event_op_1(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -15000,7 +14892,7 @@ unsafe extern "C" fn extendable_cookie_change_event_get_1(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -15046,7 +14938,7 @@ unsafe extern "C" fn extendable_cookie_change_event_get_2(_info: *const v8::Func
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -15312,7 +15204,7 @@ unsafe extern "C" fn extendable_message_event_get_5(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -15770,43 +15662,7 @@ unsafe extern "C" fn install_event_op_1(_info: *const v8::FunctionCallbackInfo) 
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "InstallEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "InstallEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -16149,7 +16005,7 @@ unsafe extern "C" fn payment_request_event_get_4(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -16241,7 +16097,7 @@ unsafe extern "C" fn payment_request_event_get_6(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -16333,7 +16189,7 @@ unsafe extern "C" fn payment_request_event_get_8(_info: *const v8::FunctionCallb
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -16341,43 +16197,7 @@ unsafe extern "C" fn payment_request_event_op_9(_info: *const v8::FunctionCallba
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "PaymentRequestEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -16387,43 +16207,7 @@ unsafe extern "C" fn payment_request_event_op_10(_info: *const v8::FunctionCallb
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "PaymentRequestEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -16433,43 +16217,7 @@ unsafe extern "C" fn payment_request_event_op_11(_info: *const v8::FunctionCallb
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "PaymentRequestEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -16479,43 +16227,7 @@ unsafe extern "C" fn payment_request_event_op_12(_info: *const v8::FunctionCallb
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "PaymentRequestEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "PaymentRequestEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -17780,7 +17492,7 @@ unsafe extern "C" fn input_event_op_5(_info: *const v8::FunctionCallbackInfo) {
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -20551,43 +20263,7 @@ unsafe extern "C" fn background_fetch_update_ui_event_op_1(_info: *const v8::Fun
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "BackgroundFetchUpdateUIEvent").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "BackgroundFetchUpdateUIEvent") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -21337,7 +21013,7 @@ unsafe extern "C" fn pointer_event_op_14(_info: *const v8::FunctionCallbackInfo)
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -21383,7 +21059,7 @@ unsafe extern "C" fn pointer_event_op_15(_info: *const v8::FunctionCallbackInfo)
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 

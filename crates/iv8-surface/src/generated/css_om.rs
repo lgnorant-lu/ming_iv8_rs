@@ -513,7 +513,7 @@ unsafe extern "C" fn css_pseudo_element_op_6(_info: *const v8::FunctionCallbackI
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -1864,7 +1864,7 @@ unsafe extern "C" fn css_style_value_op_3(_info: *const v8::FunctionCallbackInfo
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -3824,7 +3824,7 @@ unsafe extern "C" fn css_parser_at_rule_get_2(_info: *const v8::FunctionCallback
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -3870,7 +3870,7 @@ unsafe extern "C" fn css_parser_at_rule_get_3(_info: *const v8::FunctionCallback
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4058,7 +4058,7 @@ unsafe extern "C" fn css_parser_declaration_get_2(_info: *const v8::FunctionCall
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4193,7 +4193,7 @@ unsafe extern "C" fn css_parser_qualified_rule_get_1(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4239,7 +4239,7 @@ unsafe extern "C" fn css_parser_qualified_rule_get_2(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4420,7 +4420,7 @@ unsafe extern "C" fn css_parser_block_get_2(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4601,7 +4601,7 @@ unsafe extern "C" fn css_parser_function_get_2(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -4782,7 +4782,7 @@ unsafe extern "C" fn css_apply_statement_rule_op_2(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -8325,7 +8325,7 @@ unsafe extern "C" fn css_layer_statement_rule_get_1(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -9139,7 +9139,7 @@ unsafe extern "C" fn css_view_transition_rule_get_2(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -25859,43 +25859,7 @@ unsafe extern "C" fn css_style_sheet_op_5(_info: *const v8::FunctionCallbackInfo
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
         v8::callback_scope!(unsafe scope, info_ref);
-        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
-        let __this = __args.this();
-        let __ctx = scope.get_current_context();
-        let __global = __ctx.global(scope);
-        let __iface_name = v8::String::new(scope, "CSSStyleSheet").unwrap();
-        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
-            if __ctor_val.is_function() {
-                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
-                let __proto_key = v8::String::new(scope, "prototype").unwrap();
-                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
-                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
-                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
-                        if __this.strict_equals(__proto.into()) {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                        let mut __current: v8::Local<v8::Value> = __this.into();
-                        let mut __found = false;
-                        for _ in 0..20usize {
-                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
-                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
-                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
-                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
-                            __current = __parent;
-                        }
-                        if !__found {
-                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
-                            let __exc = v8::Exception::type_error(scope, __msg);
-                            scope.throw_exception(__exc);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+        if !crate::promise_check::check_receiver_promise(scope, _info, "CSSStyleSheet") { return; }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         rv.set(v8::undefined(scope).into());
     }));
@@ -26258,7 +26222,7 @@ unsafe extern "C" fn css_apply_block_rule_op_2(_info: *const v8::FunctionCallbac
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -26483,7 +26447,7 @@ unsafe extern "C" fn css_function_rule_op_2(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -26739,7 +26703,7 @@ unsafe extern "C" fn css_mixin_rule_op_2(_info: *const v8::FunctionCallbackInfo)
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -27590,7 +27554,7 @@ unsafe extern "C" fn css_color_get_2(_info: *const v8::FunctionCallbackInfo) {
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Object::new(scope).into());
     }));
 }
 
@@ -31236,7 +31200,7 @@ unsafe extern "C" fn css_container_rule_get_3(_info: *const v8::FunctionCallback
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 

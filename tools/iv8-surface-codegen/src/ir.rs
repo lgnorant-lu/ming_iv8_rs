@@ -41,6 +41,14 @@ fn extract_type_name(val: &serde_json::Value) -> Option<String> {
             if let Some(serde_json::Value::String(name)) = map.get("name") {
                 return Some(name.clone());
             }
+            // name may be an array of objects with idlType
+            if let Some(serde_json::Value::Array(arr)) = map.get("name") {
+                if let Some(first) = arr.first() {
+                    if let Some(inner_name) = extract_type_name(first) {
+                        return Some(inner_name);
+                    }
+                }
+            }
             // Try "idlType" for primitive references
             if let Some(inner) = map.get("idlType") {
                 return extract_type_name(inner);
@@ -57,10 +65,13 @@ fn extract_type_name(val: &serde_json::Value) -> Option<String> {
                     return extract_type_name(first);
                 }
             }
-            // Generic type
+            // Generic type (e.g. Promise<T>, sequence<T>, FrozenArray<T>)
+            // Return "Generic<Inner>" format so type_mapper can detect Promise
             if let Some(generic) = map.get("generic").and_then(|g| g.as_str()) {
                 if let Some(inner) = map.get("inner") {
-                    return extract_type_name(inner);
+                    if let Some(inner_name) = extract_type_name(inner) {
+                        return Some(format!("{}<{}>", generic, inner_name));
+                    }
                 }
                 return Some(generic.to_string());
             }

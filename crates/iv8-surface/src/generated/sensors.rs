@@ -1250,7 +1250,7 @@ unsafe extern "C" fn orientation_sensor_get_1(_info: *const v8::FunctionCallback
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 

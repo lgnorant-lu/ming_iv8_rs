@@ -504,7 +504,7 @@ unsafe extern "C" fn web_gl2rendering_context_op_9(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -3034,7 +3034,7 @@ unsafe extern "C" fn web_gl2rendering_context_op_64(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -9474,7 +9474,7 @@ unsafe extern "C" fn web_gl2rendering_context_op_204(_info: *const v8::FunctionC
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -17386,7 +17386,7 @@ unsafe extern "C" fn web_gl_rendering_context_op_9(_info: *const v8::FunctionCal
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -19916,7 +19916,7 @@ unsafe extern "C" fn web_gl_rendering_context_op_64(_info: *const v8::FunctionCa
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 

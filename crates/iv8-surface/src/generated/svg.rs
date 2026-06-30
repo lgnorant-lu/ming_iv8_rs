@@ -4168,7 +4168,7 @@ unsafe extern "C" fn svg_path_segment_get_2(_info: *const v8::FunctionCallbackIn
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
@@ -39326,7 +39326,7 @@ unsafe extern "C" fn svg_path_element_op_5(_info: *const v8::FunctionCallbackInf
             }
         }
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
-        rv.set(v8::undefined(scope).into());
+        rv.set(v8::Array::new(scope, 0).into());
     }));
 }
 
