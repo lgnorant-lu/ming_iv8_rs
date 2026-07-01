@@ -66,17 +66,18 @@ pub const CANVAS2D_SHIM_JS: &str = r#"
     if (typeof HTMLCanvasElement !== 'undefined') {
         HTMLCanvasElement.prototype.getContext = function(type, attrs) {
             var id = getOrCreateCanvasId(this);
-            // Update size in case it changed
             __canvas_set_size__(id, this.width || 300, this.height || 150);
             var ctx = window.__getCanvasContext__(id, type);
             if (ctx) ctx.canvas = this;
             return ctx;
         };
+        Object.defineProperty(HTMLCanvasElement.prototype.getContext, 'length', {value: 1});
 
         HTMLCanvasElement.prototype.toDataURL = function(type, quality) {
             var id = getOrCreateCanvasId(this);
             return __canvas_to_data_url__(id, type || 'image/png', quality || 0.92);
         };
+        Object.defineProperty(HTMLCanvasElement.prototype.toDataURL, 'length', {value: 0});
     }
 
     // Also install a global helper that patches any canvas element on demand

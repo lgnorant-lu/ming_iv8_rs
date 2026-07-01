@@ -466,6 +466,8 @@ impl EmbeddedV8Kernel {
         // Install deterministic overrides (random_seed / crypto_seed / time_freeze)
         kernel.install_deterministic_overrides_from(random_seed, crypto_seed, time_freeze);
 
+        kernel.freeze_all_prototypes();
+
         // DOM templates are installed inside install_browser_surface_init
         // via install_dom_constructors() — no separate call needed.
 
@@ -495,6 +497,28 @@ impl EmbeddedV8Kernel {
         }
 
         Ok(kernel)
+    }
+
+    fn freeze_all_prototypes(&mut self) {
+        self.with_global_scope(|scope, global| {
+            let js = crate::v8_utils::v8_string(scope, r#"
+                (function() {
+                    var names = Object.getOwnPropertyNames(globalThis);
+                    for (var i = 0; i < names.length; i++) {
+                        try {
+                            var ctor = globalThis[names[i]];
+                            if (ctor && typeof ctor === 'function' && ctor.prototype) {
+                                Object.defineProperty(ctor, 'prototype', {
+                                    writable: false, enumerable: false, configurable: false
+                                });
+                                Object.preventExtensions(ctor.prototype);
+                            }
+                        } catch(e) {}
+                    }
+                })();
+            "#);
+            let _ = v8::Script::compile(scope, js, None).and_then(|s| s.run(scope));
+        });
     }
 
     /// Assert we're on the creator thread (debug only).

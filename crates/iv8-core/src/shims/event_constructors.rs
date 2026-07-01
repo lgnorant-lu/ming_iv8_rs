@@ -51,7 +51,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
 
     // Make prototype non-writable, non-configurable, non-enumerable
     Object.defineProperty(Event, 'prototype', {writable: false, enumerable: false, configurable: false});
-    // Make constants non-writable, non-configurable, enumerable
+    Object.defineProperty(Event, 'length', {value: 1, writable: false, enumerable: false, configurable: true});
     ['NONE', 'CAPTURING_PHASE', 'AT_TARGET', 'BUBBLING_PHASE'].forEach(function(k) {
         Object.defineProperty(Event, k, {writable: false, enumerable: true, configurable: false});
     });
@@ -65,8 +65,9 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this.detail = options.detail !== undefined ? options.detail : null;
     }
     CustomEvent.prototype = Object.create(Event.prototype);
-    CustomEvent.prototype.constructor = CustomEvent;
+    Object.defineProperty(CustomEvent.prototype, 'constructor', {value: CustomEvent, writable: true, enumerable: false, configurable: true});
     Object.defineProperty(CustomEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
+    Object.defineProperty(CustomEvent, 'length', {value: 1, writable: false, enumerable: false, configurable: true});
 
     globalThis.CustomEvent = CustomEvent;
 
@@ -91,7 +92,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this.relatedTarget = options.relatedTarget || null;
     }
     MouseEvent.prototype = Object.create(Event.prototype);
-    MouseEvent.prototype.constructor = MouseEvent;
+    Object.defineProperty(MouseEvent.prototype, 'constructor', {value: MouseEvent, writable: true, enumerable: false, configurable: true});
     Object.defineProperty(MouseEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.MouseEvent = MouseEvent;
@@ -113,7 +114,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this.location = options.location || 0;
     }
     KeyboardEvent.prototype = Object.create(Event.prototype);
-    KeyboardEvent.prototype.constructor = KeyboardEvent;
+    Object.defineProperty(KeyboardEvent.prototype, 'constructor', {value: KeyboardEvent, writable: true, enumerable: false, configurable: true});
     Object.defineProperty(KeyboardEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.KeyboardEvent = KeyboardEvent;
@@ -130,7 +131,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         this.isPrimary = options.isPrimary !== undefined ? !!options.isPrimary : true;
     }
     PointerEvent.prototype = Object.create(MouseEvent.prototype);
-    PointerEvent.prototype.constructor = PointerEvent;
+    Object.defineProperty(PointerEvent.prototype, 'constructor', {value: PointerEvent, writable: true, enumerable: false, configurable: true});
     Object.defineProperty(PointerEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.PointerEvent = PointerEvent;

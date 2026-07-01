@@ -166,11 +166,9 @@ fn install_proto_method_with_length(
     callback: unsafe extern "C" fn(*const v8::FunctionCallbackInfo),
     length: i32,
 ) {
-    let mut builder = v8::FunctionTemplate::builder_raw(callback);
-    if length > 0 {
-        builder = builder.length(length);
-    }
-    let fn_tmpl = builder.build(scope);
+    let fn_tmpl = v8::FunctionTemplate::builder_raw(callback)
+        .length(length)
+        .build(scope);
     let name_str = crate::v8_utils::v8_string(scope, name);
     fn_tmpl.set_class_name(name_str);
     proto.set(name_str.into(), fn_tmpl.into());
@@ -596,9 +594,9 @@ pub fn build_dom_templates(scope: &v8::PinScope<'_, '_>) -> DomTemplates {
             canvas_height_getter,
             Some(canvas_height_setter),
         );
-        install_proto_method(scope, proto, "getContext", get_context_cb);
-        install_proto_method(scope, proto, "toDataURL", to_data_url_cb);
-        install_proto_method(scope, proto, "toBlob", to_blob_cb);
+        install_proto_method_with_length(scope, proto, "getContext", get_context_cb, 1);
+        install_proto_method_with_length(scope, proto, "toDataURL", to_data_url_cb, 0);
+        install_proto_method_with_length(scope, proto, "toBlob", to_blob_cb, 1);
         install_proto_method(scope, proto, "captureStream", capture_stream_cb);
         install_proto_method(scope, proto, "webkitCaptureStream", capture_stream_cb);
     }
@@ -3212,6 +3210,9 @@ unsafe extern "C" fn node_list_length_getter(info: *const v8::FunctionCallbackIn
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*info };
         v8::callback_scope!(unsafe scope, info_ref);
+        if !crate::shims::native_env::check_receiver(&scope, info_ref, "NodeList") {
+            return;
+        }
         let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
         let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
         let this = args.this();
