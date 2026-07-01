@@ -596,6 +596,32 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
+    try {
+        if (typeof HTMLElement !== 'undefined' && HTMLElement.prototype) {
+            var _heProps = {
+                innerText: '', offsetTop: 0, offsetLeft: 0,
+                offsetWidth: 0, offsetHeight: 0,
+                clientTop: 0, clientLeft: 0,
+                clientWidth: 0, clientHeight: 0,
+                scrollTop: 0, scrollLeft: 0,
+                scrollWidth: 0, scrollHeight: 0
+            };
+            Object.keys(_heProps).forEach(function(prop) {
+                var dv = _heProps[prop];
+                Object.defineProperty(HTMLElement.prototype, prop, {
+                    get: function() {
+                        if (this === HTMLElement.prototype) return dv;
+                        var s = this['_' + prop];
+                        return s !== undefined ? s : dv;
+                    },
+                    set: function(v) { this['_' + prop] = v; },
+                    enumerable: true,
+                    configurable: true
+                });
+            });
+        }
+    } catch(e) {}
+
     // CaretPosition: wrap caretPositionFromPoint so returned objects get
     // the correct toStringTag. Only set toStringTag, not prototype chain
     // (same rationale as matchMedia above).

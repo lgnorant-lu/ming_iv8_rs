@@ -88,6 +88,10 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     Event.CAPTURING_PHASE = 1;
     Event.AT_TARGET = 2;
     Event.BUBBLING_PHASE = 3;
+    Object.defineProperty(Event.prototype, 'NONE', {value: 0, writable: false, enumerable: true, configurable: false});
+    Object.defineProperty(Event.prototype, 'CAPTURING_PHASE', {value: 1, writable: false, enumerable: true, configurable: false});
+    Object.defineProperty(Event.prototype, 'AT_TARGET', {value: 2, writable: false, enumerable: true, configurable: false});
+    Object.defineProperty(Event.prototype, 'BUBBLING_PHASE', {value: 3, writable: false, enumerable: true, configurable: false});
 
     Object.defineProperty(Event, 'prototype', {writable: false, enumerable: false, configurable: false});
     Object.defineProperty(Event, 'length', {value: 1, writable: false, enumerable: false, configurable: true});
