@@ -608,13 +608,22 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
             };
             Object.keys(_heProps).forEach(function(prop) {
                 var dv = _heProps[prop];
-                Object.defineProperty(HTMLElement.prototype, prop, {
+                var proto = HTMLElement.prototype;
+                Object.defineProperty(proto, prop, {
                     get: function() {
-                        if (this === HTMLElement.prototype) return dv;
+                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                        if (this === proto) return dv;
+                        var cur = Object.getPrototypeOf(this);
+                        var found = false;
+                        while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
+                        if (!found) throw new TypeError('Illegal invocation');
                         var s = this['_' + prop];
                         return s !== undefined ? s : dv;
                     },
-                    set: function(v) { this['_' + prop] = v; },
+                    set: function(v) {
+                        if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                        this['_' + prop] = v;
+                    },
                     enumerable: true,
                     configurable: true
                 });

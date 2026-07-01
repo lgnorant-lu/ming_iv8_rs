@@ -8,10 +8,20 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         var slot = '_' + name;
         Object.defineProperty(proto, name, {
             get: function() {
+                if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                if (this !== proto) {
+                    var cur = Object.getPrototypeOf(this);
+                    var found = false;
+                    while (cur) { if (cur === proto) { found = true; break; } cur = Object.getPrototypeOf(cur); }
+                    if (!found) throw new TypeError('Illegal invocation');
+                }
                 var v = this[slot];
                 return v !== undefined ? v : defaultVal;
             },
-            set: function(v) { this[slot] = v; },
+            set: function(v) {
+                if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                this[slot] = v;
+            },
             enumerable: true,
             configurable: true
         });
@@ -20,6 +30,12 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
         var slot = '_' + name;
         Object.defineProperty(proto, name, {
             get: function() {
+                if (this === null || this === undefined) throw new TypeError('Illegal invocation');
+                if (Object.getPrototypeOf(this) !== proto && this !== proto) {
+                    var cur = Object.getPrototypeOf(this);
+                    while (cur) { if (cur === proto) break; cur = Object.getPrototypeOf(cur); }
+                    if (!cur) throw new TypeError('Illegal invocation');
+                }
                 var v = this[slot];
                 return v !== undefined ? v : defaultVal;
             },
