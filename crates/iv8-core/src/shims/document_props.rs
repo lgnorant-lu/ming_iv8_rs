@@ -665,7 +665,19 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     try {
         if (typeof window !== 'undefined' && window.visualViewport && typeof VisualViewport !== 'undefined') {
             try {
-                Object.setPrototypeOf(window.visualViewport, VisualViewport.prototype);
+                var vv = window.visualViewport;
+                var VVProxy = Object.create(VisualViewport.prototype);
+                var vnames = Object.getOwnPropertyNames(vv);
+                for (var vi = 0; vi < vnames.length; vi++) {
+                    var vn = vnames[vi];
+                    try {
+                        var vd = Object.getOwnPropertyDescriptor(vv, vn);
+                        if (vd && vd.configurable) {
+                            Object.defineProperty(VVProxy, vn, vd);
+                        }
+                    } catch(e) {}
+                }
+                Object.defineProperty(window, 'visualViewport', {value: VVProxy, writable: true, configurable: true, enumerable: true});
             } catch(e) {}
         }
     } catch(e) {}
