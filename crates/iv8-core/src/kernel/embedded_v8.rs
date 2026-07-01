@@ -506,6 +506,15 @@ impl EmbeddedV8Kernel {
 
             let js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
+                    var workerOnly = ['WorkerGlobalScope','DedicatedWorkerGlobalScope',
+                        'SharedWorkerGlobalScope','ServiceWorkerGlobalScope',
+                        'WorkerNavigator','WorkerLocation','WorkletGlobalScope',
+                        'AnimationWorkletGlobalScope','AudioWorkletGlobalScope',
+                        'LayoutWorkletGlobalScope','PaintWorkletGlobalScope',
+                        'RTCIdentityProviderGlobalScope'];
+                    for (var i = 0; i < workerOnly.length; i++) {
+                        try { delete globalThis[workerOnly[i]]; } catch(e) {}
+                    }
                     var names = Object.getOwnPropertyNames(globalThis);
                     for (var i = 0; i < names.length; i++) {
                         try {
