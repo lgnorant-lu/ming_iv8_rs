@@ -384,7 +384,6 @@ pub fn create_form_data_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "FormData").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "FormData").unwrap();
@@ -736,7 +735,6 @@ pub fn create_headers_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Headers").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Headers").unwrap();
@@ -1824,7 +1822,6 @@ pub fn create_request_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Request").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Request").unwrap();
@@ -2740,7 +2737,6 @@ pub fn create_response_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Response").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Response").unwrap();

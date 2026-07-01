@@ -16,7 +16,6 @@ pub fn create_midi_input_map_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MIDIInputMap").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MIDIInputMap").unwrap();
@@ -36,7 +35,6 @@ pub fn create_midi_output_map_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MIDIOutputMap").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MIDIOutputMap").unwrap();
@@ -287,7 +285,6 @@ pub fn create_midi_access_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MIDIAccess").unwrap();
@@ -772,7 +769,6 @@ pub fn create_midi_port_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MIDIPort").unwrap();
@@ -957,7 +953,6 @@ pub fn create_midi_input_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MIDIInput").unwrap();
@@ -1081,7 +1076,6 @@ pub fn create_midi_output_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MIDIOutput").unwrap();

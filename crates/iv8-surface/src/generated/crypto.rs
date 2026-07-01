@@ -154,7 +154,6 @@ pub fn create_crypto_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Crypto").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Crypto").unwrap();
@@ -379,7 +378,6 @@ pub fn create_crypto_key_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CryptoKey").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CryptoKey").unwrap();
@@ -689,7 +687,6 @@ pub fn create_subtle_crypto_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SubtleCrypto").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SubtleCrypto").unwrap();

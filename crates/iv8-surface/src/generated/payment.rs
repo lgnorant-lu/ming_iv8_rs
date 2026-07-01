@@ -116,7 +116,6 @@ pub fn create_payment_manager_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "PaymentManager").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PaymentManager").unwrap();
@@ -659,7 +658,6 @@ pub fn create_payment_request_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PaymentRequest").unwrap();
@@ -1305,7 +1303,6 @@ pub fn create_payment_response_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PaymentResponse").unwrap();

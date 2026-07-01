@@ -568,7 +568,6 @@ pub fn create_gamepad_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Gamepad").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Gamepad").unwrap();
@@ -819,7 +818,6 @@ pub fn create_gamepad_button_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GamepadButton").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GamepadButton").unwrap();
@@ -936,7 +934,6 @@ pub fn create_gamepad_haptic_actuator_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GamepadHapticActuator").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GamepadHapticActuator").unwrap();
@@ -1352,7 +1349,6 @@ pub fn create_gamepad_pose_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GamepadPose").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GamepadPose").unwrap();

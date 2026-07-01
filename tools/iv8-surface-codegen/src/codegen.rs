@@ -419,7 +419,7 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
     out
 }
 
-fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -> String {
+fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) -> String {
     let name = def.name.as_deref().unwrap_or("Unknown");
     let mut out = String::new();
 
@@ -486,7 +486,9 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     // Prototype setup
     let _has_members = !def.members.is_empty();
     out.push_str("\n    let proto = tmpl.prototype_template(scope);\n");
-    out.push_str("    proto.set_immutable_proto();\n");
+    
+    // For [Global] interfaces, attributes go on the instance (tmpl) not prototype
+    let target_var = "proto";
 
     // Symbol.toStringTag
     out.push_str("    {\n");
@@ -516,7 +518,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
                     cname
                 ));
                 block.push_str(&format!("        let val = {};\n", v8_val));
-                block.push_str("        proto.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);\n");
+                block.push_str(&format!("        {}.set_with_attr(name.into(), val, v8::PropertyAttribute::READ_ONLY | v8::PropertyAttribute::DONT_DELETE);\n", target_var));
                 block.push_str("    }\n");
                 member_blocks.push(block);
 
@@ -557,7 +559,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
                 attr_name
             ));
             if m.readonly && !m.has_put_forwards && !m.has_replaceable {
-                block.push_str("        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);\n");
+                block.push_str(&format!("        {}.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);\n", target_var));
             } else {
                 block.push_str(&format!(
                     "        let setter = v8::FunctionTemplate::builder_raw({}_set_{}).length(1).build(scope);\n", fn_name, idx));
@@ -565,7 +567,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
                     "        setter.set_class_name(v8::String::new(scope, \"set {}\").unwrap());\n",
                     attr_name
                 ));
-                block.push_str("        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);\n");
+                block.push_str(&format!("        {}.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);\n", target_var));
             }
             block.push_str("    }\n");
             member_blocks.push(block);
@@ -590,7 +592,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
                     "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).build(scope);\n", fn_name, idx));
             }
             block.push_str("        func_tmpl.set_class_name(name);\n");
-            block.push_str("        proto.set(name.into(), func_tmpl.into());\n");
+            block.push_str(&format!("        {}.set(name.into(), func_tmpl.into());\n", target_var));
             block.push_str("    }\n");
             member_blocks.push(block);
         }
@@ -602,12 +604,17 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
         }
     } else {
         let mut helper_fns = String::new();
+        let (helper_param_type, helper_param_name) = if ea.is_global {
+            ("FunctionTemplate", "tmpl")
+        } else {
+            ("ObjectTemplate", "proto")
+        };
         for (batch_i, chunk) in member_blocks.chunks(MEMBER_BATCH_SIZE).enumerate() {
             let helper_name = format!("install_{}_members_{}", fn_name, batch_i + 1);
-            out.push_str(&format!("    {}(scope, proto);\n", helper_name));
+            out.push_str(&format!("    {}(scope, {});\n", helper_name, helper_param_name));
             helper_fns.push_str(&format!(
-                "fn {}<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {{\n",
-                helper_name
+                "fn {}<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::{}>) {{\n",
+                helper_name, helper_param_type
             ));
             for block in chunk {
                 helper_fns.push_str(block);
@@ -851,6 +858,31 @@ pub fn generate_install_all(
     out.push_str("    } // end last registration batch\n");
 
     out.push_str("}\n");
+
+    // Phase 3 JS: For [Global] interfaces, move attributes from prototype to globalThis.
+    // This is eval'd AFTER all installations (in freeze_all_prototypes) to avoid GC crash.
+    let mut global_move_js = String::from("(function(){");
+    for name in sorted {
+        let def = match by_name.get(name.as_str()) {
+            Some(d) => d,
+            None => continue,
+        };
+        let ea = process_interface_ea(def);
+        if !ea.is_global { continue; }
+        let attrs: Vec<&str> = def.members.iter()
+            .filter(|m| m.kind == "attribute" || m.kind == "operation")
+            .filter_map(|m| m.name.as_deref())
+            .collect();
+        if attrs.is_empty() { continue; }
+        let attrs_js: Vec<String> = attrs.iter().map(|a| format!("'{}'", a)).collect();
+        global_move_js.push_str(&format!(
+            "try{{var p={}.prototype;var names=[{}];for(var i=0;i<names.length;i++){{try{{var d=Object.getOwnPropertyDescriptor(p,names[i]);if(d){{Object.defineProperty(globalThis,names[i],d);delete p[names[i]];}}}}catch(e){{}}}}}}catch(e){{}}",
+            name, attrs_js.join(","),
+        ));
+    }
+    global_move_js.push_str("})();");
+
+    out.push_str(&format!("\npub const GLOBAL_MOVE_JS: &str = {:?};\n", global_move_js));
     out
 }
 

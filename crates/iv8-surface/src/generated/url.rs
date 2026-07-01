@@ -1238,7 +1238,6 @@ pub fn create_url_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "URL").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "URL").unwrap();
@@ -1820,7 +1819,6 @@ pub fn create_url_search_params_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "URLSearchParams").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "URLSearchParams").unwrap();

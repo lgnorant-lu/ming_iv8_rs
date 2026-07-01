@@ -338,7 +338,6 @@ pub fn create_audio_buffer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioBuffer").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioBuffer").unwrap();
@@ -867,7 +866,6 @@ pub fn create_audio_data_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioData").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioData").unwrap();
@@ -1463,7 +1461,6 @@ pub fn create_audio_listener_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioListener").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioListener").unwrap();
@@ -2209,7 +2206,6 @@ pub fn create_audio_param_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioParam").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioParam").unwrap();
@@ -2326,7 +2322,6 @@ pub fn create_audio_param_map_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioParamMap").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioParamMap").unwrap();
@@ -2714,7 +2709,6 @@ pub fn create_audio_playback_stats_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioPlaybackStats").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioPlaybackStats").unwrap();
@@ -2836,7 +2830,6 @@ pub fn create_audio_sink_info_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioSinkInfo").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioSinkInfo").unwrap();
@@ -3183,7 +3176,6 @@ pub fn create_audio_track_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioTrack").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioTrack").unwrap();
@@ -3293,7 +3285,6 @@ pub fn create_audio_worklet_processor_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AudioWorkletProcessor").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioWorkletProcessor").unwrap();
@@ -3709,7 +3700,6 @@ pub fn create_audio_decoder_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioDecoder").unwrap();
@@ -4183,7 +4173,6 @@ pub fn create_audio_encoder_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioEncoder").unwrap();
@@ -5093,7 +5082,6 @@ pub fn create_audio_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioNode").unwrap();
@@ -5462,7 +5450,6 @@ pub fn create_audio_session_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioSession").unwrap();
@@ -5918,7 +5905,6 @@ pub fn create_audio_track_list_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioTrackList").unwrap();
@@ -7239,7 +7225,6 @@ pub fn create_base_audio_context_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BaseAudioContext").unwrap();
@@ -7512,7 +7497,6 @@ pub fn create_audio_worklet_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioWorklet").unwrap();
@@ -7818,7 +7802,6 @@ pub fn create_audio_worklet_global_scope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioWorkletGlobalScope").unwrap();
@@ -7929,7 +7912,6 @@ pub fn create_audio_destination_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioDestinationNode").unwrap();
@@ -8141,7 +8123,6 @@ pub fn create_audio_scheduled_source_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioScheduledSourceNode").unwrap();
@@ -8369,7 +8350,6 @@ pub fn create_audio_worklet_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioWorkletNode").unwrap();
@@ -8735,7 +8715,6 @@ pub fn create_biquad_filter_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BiquadFilterNode").unwrap();
@@ -8848,7 +8827,6 @@ pub fn create_delay_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DelayNode").unwrap();
@@ -8924,7 +8902,6 @@ pub fn create_gain_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GainNode").unwrap();
@@ -9588,7 +9565,6 @@ pub fn create_audio_context_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioContext").unwrap();
@@ -9895,7 +9871,6 @@ pub fn create_offline_audio_context_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "OfflineAudioContext").unwrap();
@@ -10453,7 +10428,6 @@ pub fn create_audio_buffer_source_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioBufferSourceNode").unwrap();
@@ -10761,7 +10735,6 @@ pub fn create_oscillator_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "OscillatorNode").unwrap();

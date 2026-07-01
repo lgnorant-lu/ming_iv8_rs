@@ -152,7 +152,6 @@ pub fn create_presentation_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Presentation").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Presentation").unwrap();
@@ -234,7 +233,6 @@ pub fn create_presentation_receiver_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "PresentationReceiver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PresentationReceiver").unwrap();
@@ -400,7 +398,6 @@ pub fn create_presentation_availability_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PresentationAvailability").unwrap();
@@ -1303,7 +1300,6 @@ pub fn create_presentation_connection_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PresentationConnection").unwrap();
@@ -1579,7 +1575,6 @@ pub fn create_presentation_connection_list_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PresentationConnectionList").unwrap();
@@ -1738,7 +1733,6 @@ pub fn create_presentation_request_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PresentationRequest").unwrap();

@@ -108,7 +108,6 @@ pub fn create_message_channel_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MessageChannel").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MessageChannel").unwrap();
@@ -556,7 +555,6 @@ pub fn create_worker_location_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WorkerLocation").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WorkerLocation").unwrap();
@@ -1950,7 +1948,6 @@ pub fn create_worker_navigator_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WorkerNavigator").unwrap();
@@ -2650,7 +2647,6 @@ pub fn create_message_port_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MessagePort").unwrap();
@@ -3092,7 +3088,6 @@ pub fn create_service_worker_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ServiceWorker").unwrap();
@@ -3599,7 +3594,6 @@ pub fn create_service_worker_container_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ServiceWorkerContainer").unwrap();
@@ -4419,7 +4413,6 @@ pub fn create_service_worker_registration_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ServiceWorkerRegistration").unwrap();
@@ -4987,7 +4980,6 @@ pub fn create_worker_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Worker").unwrap();
@@ -6434,7 +6426,6 @@ pub fn create_worker_global_scope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WorkerGlobalScope").unwrap();
@@ -8556,20 +8547,19 @@ pub fn create_service_worker_global_scope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ServiceWorkerGlobalScope").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    install_service_worker_global_scope_members_1(scope, proto);
-    install_service_worker_global_scope_members_2(scope, proto);
-    install_service_worker_global_scope_members_3(scope, proto);
+    install_service_worker_global_scope_members_1(scope, tmpl);
+    install_service_worker_global_scope_members_2(scope, tmpl);
+    install_service_worker_global_scope_members_3(scope, tmpl);
 
     tmpl
 }
 
-fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
+fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::FunctionTemplate>) {
     // attribute: clients
     {
         let name = v8::String::new(scope, "clients").unwrap();
@@ -8654,7 +8644,7 @@ fn install_service_worker_global_scope_members_1<'s>(scope: &v8::PinScope<'s, '_
     }
 }
 
-fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
+fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::FunctionTemplate>) {
     // attribute: onbackgroundfetchfail
     {
         let name = v8::String::new(scope, "onbackgroundfetchfail").unwrap();
@@ -8745,7 +8735,7 @@ fn install_service_worker_global_scope_members_2<'s>(scope: &v8::PinScope<'s, '_
     }
 }
 
-fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
+fn install_service_worker_global_scope_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::FunctionTemplate>) {
     // attribute: onpush
     {
         let name = v8::String::new(scope, "onpush").unwrap();

@@ -108,7 +108,6 @@ pub fn create_byte_length_queuing_strategy_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ByteLengthQueuingStrategy").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ByteLengthQueuingStrategy").unwrap();
@@ -234,7 +233,6 @@ pub fn create_count_queuing_strategy_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CountQueuingStrategy").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CountQueuingStrategy").unwrap();
@@ -498,7 +496,6 @@ pub fn create_readable_byte_stream_controller_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ReadableByteStreamController").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ReadableByteStreamController").unwrap();
@@ -803,7 +800,6 @@ pub fn create_readable_stream_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ReadableStream").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ReadableStream").unwrap();
@@ -984,7 +980,6 @@ pub fn create_readable_stream_byob_reader_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ReadableStreamBYOBReader").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ReadableStreamBYOBReader").unwrap();
@@ -1170,7 +1165,6 @@ pub fn create_readable_stream_byob_request_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ReadableStreamBYOBRequest").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ReadableStreamBYOBRequest").unwrap();
@@ -1395,7 +1389,6 @@ pub fn create_readable_stream_default_controller_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ReadableStreamDefaultController").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ReadableStreamDefaultController").unwrap();
@@ -1555,7 +1548,6 @@ pub fn create_readable_stream_default_reader_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ReadableStreamDefaultReader").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ReadableStreamDefaultReader").unwrap();
@@ -1695,7 +1687,6 @@ pub fn create_transform_stream_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "TransformStream").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TransformStream").unwrap();
@@ -1913,7 +1904,6 @@ pub fn create_transform_stream_default_controller_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "TransformStreamDefaultController").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TransformStreamDefaultController").unwrap();
@@ -2073,7 +2063,6 @@ pub fn create_writable_stream_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WritableStream").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WritableStream").unwrap();
@@ -2213,7 +2202,6 @@ pub fn create_writable_stream_default_controller_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WritableStreamDefaultController").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WritableStreamDefaultController").unwrap();
@@ -2461,7 +2449,6 @@ pub fn create_writable_stream_default_writer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WritableStreamDefaultWriter").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WritableStreamDefaultWriter").unwrap();

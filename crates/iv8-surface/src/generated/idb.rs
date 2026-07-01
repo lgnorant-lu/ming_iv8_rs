@@ -154,7 +154,6 @@ pub fn create_dom_string_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "DOMStringList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMStringList").unwrap();
@@ -655,7 +654,6 @@ pub fn create_idb_cursor_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "IDBCursor").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBCursor").unwrap();
@@ -893,7 +891,6 @@ pub fn create_idb_factory_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "IDBFactory").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBFactory").unwrap();
@@ -1583,7 +1580,6 @@ pub fn create_idb_index_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "IDBIndex").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBIndex").unwrap();
@@ -2119,7 +2115,6 @@ pub fn create_idb_key_range_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "IDBKeyRange").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBKeyRange").unwrap();
@@ -3166,7 +3161,6 @@ pub fn create_idb_object_store_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "IDBObjectStore").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBObjectStore").unwrap();
@@ -3475,7 +3469,6 @@ pub fn create_idb_record_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "IDBRecord").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBRecord").unwrap();
@@ -4201,7 +4194,6 @@ pub fn create_idb_database_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBDatabase").unwrap();
@@ -4728,7 +4720,6 @@ pub fn create_idb_request_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBRequest").unwrap();
@@ -5442,7 +5433,6 @@ pub fn create_idb_transaction_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBTransaction").unwrap();
@@ -5603,7 +5593,6 @@ pub fn create_idb_cursor_with_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBCursorWithValue").unwrap();
@@ -5813,7 +5802,6 @@ pub fn create_idb_open_db_request_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBOpenDBRequest").unwrap();

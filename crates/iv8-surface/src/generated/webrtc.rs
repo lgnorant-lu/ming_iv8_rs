@@ -108,7 +108,6 @@ pub fn create_rtc_certificate_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCCertificate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCCertificate").unwrap();
@@ -278,7 +277,6 @@ pub fn create_rtc_encoded_audio_frame_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCEncodedAudioFrame").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCEncodedAudioFrame").unwrap();
@@ -496,7 +494,6 @@ pub fn create_rtc_encoded_video_frame_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCEncodedVideoFrame").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCEncodedVideoFrame").unwrap();
@@ -1321,7 +1318,6 @@ pub fn create_rtc_ice_candidate_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCIceCandidate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCIceCandidate").unwrap();
@@ -1561,7 +1557,6 @@ pub fn create_rtc_ice_candidate_pair_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCIceCandidatePair").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCIceCandidatePair").unwrap();
@@ -1775,7 +1770,6 @@ pub fn create_rtc_identity_assertion_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCIdentityAssertion").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCIdentityAssertion").unwrap();
@@ -1859,7 +1853,6 @@ pub fn create_rtc_identity_provider_registrar_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCIdentityProviderRegistrar").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCIdentityProviderRegistrar").unwrap();
@@ -2352,7 +2345,6 @@ pub fn create_rtc_rtp_receiver_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCRtpReceiver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpReceiver").unwrap();
@@ -2449,7 +2441,6 @@ pub fn create_rtc_rtp_s_frame_encrypter_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCRtpSFrameEncrypter").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpSFrameEncrypter").unwrap();
@@ -2476,7 +2467,6 @@ pub fn create_rtc_rtp_script_transform_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCRtpScriptTransform").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpScriptTransform").unwrap();
@@ -2892,7 +2882,6 @@ pub fn create_rtc_rtp_sender_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCRtpSender").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpSender").unwrap();
@@ -3350,7 +3339,6 @@ pub fn create_rtc_rtp_transceiver_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCRtpTransceiver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpTransceiver").unwrap();
@@ -3559,7 +3547,6 @@ pub fn create_rtc_session_description_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCSessionDescription").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCSessionDescription").unwrap();
@@ -3600,7 +3587,6 @@ pub fn create_rtc_stats_report_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "RTCStatsReport").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCStatsReport").unwrap();
@@ -3899,7 +3885,6 @@ pub fn create_rtc_error_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCError").unwrap();
@@ -4192,7 +4177,6 @@ pub fn create_rtcdtmf_sender_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCDTMFSender").unwrap();
@@ -5655,7 +5639,6 @@ pub fn create_rtc_data_channel_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCDataChannel").unwrap();
@@ -6186,7 +6169,6 @@ pub fn create_rtc_dtls_transport_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCDtlsTransport").unwrap();
@@ -7296,7 +7278,6 @@ pub fn create_rtc_ice_transport_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCIceTransport").unwrap();
@@ -9646,7 +9627,6 @@ pub fn create_rtc_peer_connection_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCPeerConnection").unwrap();
@@ -10161,7 +10141,6 @@ pub fn create_rtc_rtp_s_frame_decrypter_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpSFrameDecrypter").unwrap();
@@ -10455,7 +10434,6 @@ pub fn create_rtc_rtp_script_transformer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCRtpScriptTransformer").unwrap();
@@ -10796,7 +10774,6 @@ pub fn create_rtc_sctp_transport_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCSctpTransport").unwrap();
@@ -10902,7 +10879,6 @@ pub fn create_rtc_identity_provider_global_scope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCIdentityProviderGlobalScope").unwrap();

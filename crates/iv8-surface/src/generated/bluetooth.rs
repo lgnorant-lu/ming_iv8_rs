@@ -430,7 +430,6 @@ pub fn create_bluetooth_characteristic_properties_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothCharacteristicProperties").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothCharacteristicProperties").unwrap();
@@ -605,7 +604,6 @@ pub fn create_bluetooth_data_filter_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothDataFilter").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothDataFilter").unwrap();
@@ -869,7 +867,6 @@ pub fn create_bluetooth_le_scan_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothLEScan").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothLEScan").unwrap();
@@ -1154,7 +1151,6 @@ pub fn create_bluetooth_le_scan_filter_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothLEScanFilter").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothLEScanFilter").unwrap();
@@ -1209,7 +1205,6 @@ pub fn create_bluetooth_manufacturer_data_filter_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothManufacturerDataFilter").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothManufacturerDataFilter").unwrap();
@@ -1229,7 +1224,6 @@ pub fn create_bluetooth_manufacturer_data_map_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothManufacturerDataMap").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothManufacturerDataMap").unwrap();
@@ -1407,7 +1401,6 @@ pub fn create_bluetooth_remote_gatt_descriptor_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothRemoteGATTDescriptor").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothRemoteGATTDescriptor").unwrap();
@@ -1630,7 +1623,6 @@ pub fn create_bluetooth_remote_gatt_server_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothRemoteGATTServer").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothRemoteGATTServer").unwrap();
@@ -1692,7 +1684,6 @@ pub fn create_bluetooth_service_data_filter_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothServiceDataFilter").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothServiceDataFilter").unwrap();
@@ -1712,7 +1703,6 @@ pub fn create_bluetooth_service_data_map_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothServiceDataMap").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothServiceDataMap").unwrap();
@@ -1916,7 +1906,6 @@ pub fn create_bluetooth_uuid_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "BluetoothUUID").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothUUID").unwrap();
@@ -2683,7 +2672,6 @@ pub fn create_bluetooth_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Bluetooth").unwrap();
@@ -3557,7 +3545,6 @@ pub fn create_bluetooth_device_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothDevice").unwrap();
@@ -4039,7 +4026,6 @@ pub fn create_bluetooth_remote_gatt_characteristic_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothRemoteGATTCharacteristic").unwrap();
@@ -4702,7 +4688,6 @@ pub fn create_bluetooth_remote_gatt_service_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothRemoteGATTService").unwrap();
@@ -4909,7 +4894,6 @@ pub fn create_bluetooth_le_scan_permission_result_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothLEScanPermissionResult").unwrap();
@@ -5031,7 +5015,6 @@ pub fn create_bluetooth_permission_result_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothPermissionResult").unwrap();

@@ -16,7 +16,6 @@ pub fn create_chrome_accessibility_features_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeAccessibilityFeatures").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeAccessibilityFeatures").unwrap();
@@ -36,7 +35,6 @@ pub fn create_chrome_action_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeAction").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeAction").unwrap();
@@ -56,7 +54,6 @@ pub fn create_chrome_alarms_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeAlarms").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeAlarms").unwrap();
@@ -306,7 +303,6 @@ pub fn create_chrome_app_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeApp").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeApp").unwrap();
@@ -361,7 +357,6 @@ pub fn create_chrome_app_runtime_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeAppRuntime").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeAppRuntime").unwrap();
@@ -381,7 +376,6 @@ pub fn create_chrome_app_window_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeAppWindow").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeAppWindow").unwrap();
@@ -401,7 +395,6 @@ pub fn create_chrome_audio_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeAudio").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeAudio").unwrap();
@@ -421,7 +414,6 @@ pub fn create_chrome_autofill_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeAutofillPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeAutofillPrivate").unwrap();
@@ -441,7 +433,6 @@ pub fn create_chrome_bluetooth_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeBluetooth").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeBluetooth").unwrap();
@@ -461,7 +452,6 @@ pub fn create_chrome_bluetooth_low_energy_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeBluetoothLowEnergy").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeBluetoothLowEnergy").unwrap();
@@ -481,7 +471,6 @@ pub fn create_chrome_bluetooth_socket_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeBluetoothSocket").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeBluetoothSocket").unwrap();
@@ -501,7 +490,6 @@ pub fn create_chrome_bookmarks_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeBookmarks").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeBookmarks").unwrap();
@@ -521,7 +509,6 @@ pub fn create_chrome_braille_display_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeBrailleDisplayPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeBrailleDisplayPrivate").unwrap();
@@ -541,7 +528,6 @@ pub fn create_chrome_browsing_data_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeBrowsingData").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeBrowsingData").unwrap();
@@ -1237,7 +1223,6 @@ pub fn create_chrome_csi_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeCSI").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeCSI").unwrap();
@@ -1327,7 +1312,6 @@ pub fn create_chrome_cast_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeCast").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeCast").unwrap();
@@ -1347,7 +1331,6 @@ pub fn create_chrome_cast_streaming_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeCastStreaming").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeCastStreaming").unwrap();
@@ -1367,7 +1350,6 @@ pub fn create_chrome_certificate_provider_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeCertificateProvider").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeCertificateProvider").unwrap();
@@ -1387,7 +1369,6 @@ pub fn create_chrome_clipboard_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeClipboard").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeClipboard").unwrap();
@@ -1407,7 +1388,6 @@ pub fn create_chrome_command_line_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeCommandLinePrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeCommandLinePrivate").unwrap();
@@ -1427,7 +1407,6 @@ pub fn create_chrome_commands_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeCommands").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeCommands").unwrap();
@@ -1447,7 +1426,6 @@ pub fn create_chrome_content_settings_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeContentSettings").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeContentSettings").unwrap();
@@ -1467,7 +1445,6 @@ pub fn create_chrome_context_menus_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeContextMenus").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeContextMenus").unwrap();
@@ -1487,7 +1464,6 @@ pub fn create_chrome_cookies_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeCookies").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeCookies").unwrap();
@@ -1507,7 +1483,6 @@ pub fn create_chrome_dom_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDOM").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDOM").unwrap();
@@ -1527,7 +1502,6 @@ pub fn create_chrome_debugger_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDebugger").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDebugger").unwrap();
@@ -1547,7 +1521,6 @@ pub fn create_chrome_declarative_content_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDeclarativeContent").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDeclarativeContent").unwrap();
@@ -1567,7 +1540,6 @@ pub fn create_chrome_declarative_net_request_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDeclarativeNetRequest").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDeclarativeNetRequest").unwrap();
@@ -1587,7 +1559,6 @@ pub fn create_chrome_desk_capture_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDeskCapture").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDeskCapture").unwrap();
@@ -1607,7 +1578,6 @@ pub fn create_chrome_desktop_capture_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDesktopCapture").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDesktopCapture").unwrap();
@@ -1627,7 +1597,6 @@ pub fn create_chrome_devtools_namespace_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDevtoolsNamespace").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDevtoolsNamespace").unwrap();
@@ -1647,7 +1616,6 @@ pub fn create_chrome_diagnostics_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDiagnostics").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDiagnostics").unwrap();
@@ -1667,7 +1635,6 @@ pub fn create_chrome_display_source_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDisplaySource").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDisplaySource").unwrap();
@@ -1687,7 +1654,6 @@ pub fn create_chrome_dns_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDns").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDns").unwrap();
@@ -1707,7 +1673,6 @@ pub fn create_chrome_document_scan_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDocumentScan").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDocumentScan").unwrap();
@@ -1727,7 +1692,6 @@ pub fn create_chrome_downloads_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeDownloads").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeDownloads").unwrap();
@@ -1747,7 +1711,6 @@ pub fn create_chrome_echo_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeEchoPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeEchoPrivate").unwrap();
@@ -1767,7 +1730,6 @@ pub fn create_chrome_enterprise_hardware_platform_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeEnterpriseHardwarePlatform").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeEnterpriseHardwarePlatform").unwrap();
@@ -1787,7 +1749,6 @@ pub fn create_chrome_enterprise_ns_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeEnterpriseNS").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeEnterpriseNS").unwrap();
@@ -1807,7 +1768,6 @@ pub fn create_chrome_enterprise_platform_keys_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeEnterprisePlatformKeys").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeEnterprisePlatformKeys").unwrap();
@@ -1827,7 +1787,6 @@ pub fn create_chrome_events_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeEvents").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeEvents").unwrap();
@@ -1847,7 +1806,6 @@ pub fn create_chrome_experience_sampling_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeExperienceSamplingPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeExperienceSamplingPrivate").unwrap();
@@ -1867,7 +1825,6 @@ pub fn create_chrome_extension_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeExtension").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeExtension").unwrap();
@@ -1887,7 +1844,6 @@ pub fn create_chrome_feedback_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeFeedbackPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeFeedbackPrivate").unwrap();
@@ -1907,7 +1863,6 @@ pub fn create_chrome_file_browser_handler_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeFileBrowserHandler").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeFileBrowserHandler").unwrap();
@@ -1927,7 +1882,6 @@ pub fn create_chrome_file_system_provider_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeFileSystemProvider").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeFileSystemProvider").unwrap();
@@ -1947,7 +1901,6 @@ pub fn create_chrome_first_run_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeFirstRunPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeFirstRunPrivate").unwrap();
@@ -1967,7 +1920,6 @@ pub fn create_chrome_font_settings_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeFontSettings").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeFontSettings").unwrap();
@@ -1987,7 +1939,6 @@ pub fn create_chrome_gcm_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeGcm").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeGcm").unwrap();
@@ -2007,7 +1958,6 @@ pub fn create_chrome_hid_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeHid").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeHid").unwrap();
@@ -2027,7 +1977,6 @@ pub fn create_chrome_history_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeHistory").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeHistory").unwrap();
@@ -2047,7 +1996,6 @@ pub fn create_chrome_hotword_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeHotwordPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeHotwordPrivate").unwrap();
@@ -2179,7 +2127,6 @@ pub fn create_chrome_i18n_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeI18n").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeI18n").unwrap();
@@ -2227,7 +2174,6 @@ pub fn create_chrome_identity_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdentity").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeIdentity").unwrap();
@@ -2247,7 +2193,6 @@ pub fn create_chrome_identity_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdentityPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeIdentityPrivate").unwrap();
@@ -2267,7 +2212,6 @@ pub fn create_chrome_identity_private_api_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdentityPrivateAPI").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeIdentityPrivateAPI").unwrap();
@@ -2287,7 +2231,6 @@ pub fn create_chrome_idle_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdle").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeIdle").unwrap();
@@ -2307,7 +2250,6 @@ pub fn create_chrome_idle_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeIdlePrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeIdlePrivate").unwrap();
@@ -2327,7 +2269,6 @@ pub fn create_chrome_input_ime_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeInputIme").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeInputIme").unwrap();
@@ -2347,7 +2288,6 @@ pub fn create_chrome_input_method_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeInputMethodPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeInputMethodPrivate").unwrap();
@@ -2367,7 +2307,6 @@ pub fn create_chrome_instance_id_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeInstanceID").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeInstanceID").unwrap();
@@ -2387,7 +2326,6 @@ pub fn create_chrome_language_settings_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeLanguageSettingsPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeLanguageSettingsPrivate").unwrap();
@@ -3577,7 +3515,6 @@ pub fn create_chrome_load_times_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeLoadTimes").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeLoadTimes").unwrap();
@@ -3723,7 +3660,6 @@ pub fn create_chrome_location_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeLocation").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeLocation").unwrap();
@@ -3743,7 +3679,6 @@ pub fn create_chrome_log_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeLogPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeLogPrivate").unwrap();
@@ -3763,7 +3698,6 @@ pub fn create_chrome_login_state_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeLoginState").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeLoginState").unwrap();
@@ -3783,7 +3717,6 @@ pub fn create_chrome_management_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeManagement").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeManagement").unwrap();
@@ -3803,7 +3736,6 @@ pub fn create_chrome_mdns_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeMdns").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeMdns").unwrap();
@@ -3823,7 +3755,6 @@ pub fn create_chrome_media_galleries_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeMediaGalleries").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeMediaGalleries").unwrap();
@@ -3843,7 +3774,6 @@ pub fn create_chrome_media_perception_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeMediaPerceptionPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeMediaPerceptionPrivate").unwrap();
@@ -3863,7 +3793,6 @@ pub fn create_chrome_midi_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeMidi").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeMidi").unwrap();
@@ -3883,7 +3812,6 @@ pub fn create_chrome_music_manager_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeMusicManagerPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeMusicManagerPrivate").unwrap();
@@ -3903,7 +3831,6 @@ pub fn create_chrome_networking_config_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeNetworkingConfig").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeNetworkingConfig").unwrap();
@@ -3923,7 +3850,6 @@ pub fn create_chrome_networking_onc_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeNetworkingOnc").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeNetworkingOnc").unwrap();
@@ -3943,7 +3869,6 @@ pub fn create_chrome_networking_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeNetworkingPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeNetworkingPrivate").unwrap();
@@ -3963,7 +3888,6 @@ pub fn create_chrome_notifications_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeNotifications").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeNotifications").unwrap();
@@ -3983,7 +3907,6 @@ pub fn create_chrome_offscreen_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeOffscreen").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeOffscreen").unwrap();
@@ -4003,7 +3926,6 @@ pub fn create_chrome_omnibox_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeOmnibox").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeOmnibox").unwrap();
@@ -4023,7 +3945,6 @@ pub fn create_chrome_page_capture_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePageCapture").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePageCapture").unwrap();
@@ -4043,7 +3964,6 @@ pub fn create_chrome_passwords_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePasswordsPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePasswordsPrivate").unwrap();
@@ -4063,7 +3983,6 @@ pub fn create_chrome_permissions_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePermissions").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePermissions").unwrap();
@@ -4083,7 +4002,6 @@ pub fn create_chrome_platform_keys_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePlatformKeys").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePlatformKeys").unwrap();
@@ -4465,7 +4383,6 @@ pub fn create_chrome_port_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePort").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePort").unwrap();
@@ -4526,7 +4443,6 @@ pub fn create_chrome_power_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePower").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePower").unwrap();
@@ -4546,7 +4462,6 @@ pub fn create_chrome_printer_provider_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePrinterProvider").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePrinterProvider").unwrap();
@@ -4566,7 +4481,6 @@ pub fn create_chrome_printing_api_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePrintingAPI").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePrintingAPI").unwrap();
@@ -4586,7 +4500,6 @@ pub fn create_chrome_printing_metrics_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePrintingMetrics").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePrintingMetrics").unwrap();
@@ -4606,7 +4519,6 @@ pub fn create_chrome_privacy_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromePrivacy").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromePrivacy").unwrap();
@@ -4626,7 +4538,6 @@ pub fn create_chrome_processes_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeProcesses").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeProcesses").unwrap();
@@ -4646,7 +4557,6 @@ pub fn create_chrome_proxy_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeProxy").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeProxy").unwrap();
@@ -4666,7 +4576,6 @@ pub fn create_chrome_quick_unlock_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeQuickUnlockPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeQuickUnlockPrivate").unwrap();
@@ -4686,7 +4595,6 @@ pub fn create_chrome_reading_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeReadingList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeReadingList").unwrap();
@@ -4706,7 +4614,6 @@ pub fn create_chrome_resource_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeResourcePrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeResourcePrivate").unwrap();
@@ -6044,7 +5951,6 @@ pub fn create_chrome_runtime_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeRuntime").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeRuntime").unwrap();
@@ -6258,7 +6164,6 @@ pub fn create_chrome_runtime_on_installed_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeRuntimeOnInstalled").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeRuntimeOnInstalled").unwrap();
@@ -6278,7 +6183,6 @@ pub fn create_chrome_runtime_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeRuntimePrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeRuntimePrivate").unwrap();
@@ -6298,7 +6202,6 @@ pub fn create_chrome_safe_browsing_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSafeBrowsingPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSafeBrowsingPrivate").unwrap();
@@ -6318,7 +6221,6 @@ pub fn create_chrome_scripting_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeScripting").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeScripting").unwrap();
@@ -6338,7 +6240,6 @@ pub fn create_chrome_search_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSearch").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSearch").unwrap();
@@ -6358,7 +6259,6 @@ pub fn create_chrome_serial_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSerial").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSerial").unwrap();
@@ -6378,7 +6278,6 @@ pub fn create_chrome_sessions_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSessions").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSessions").unwrap();
@@ -6398,7 +6297,6 @@ pub fn create_chrome_settings_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSettingsPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSettingsPrivate").unwrap();
@@ -6418,7 +6316,6 @@ pub fn create_chrome_side_panel_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSidePanel").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSidePanel").unwrap();
@@ -6438,7 +6335,6 @@ pub fn create_chrome_signed_in_devices_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSignedInDevices").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSignedInDevices").unwrap();
@@ -6458,7 +6354,6 @@ pub fn create_chrome_socket_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSocket").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSocket").unwrap();
@@ -6478,7 +6373,6 @@ pub fn create_chrome_speech_recognition_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSpeechRecognitionPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSpeechRecognitionPrivate").unwrap();
@@ -6858,7 +6752,6 @@ pub fn create_chrome_storage_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeStorage").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeStorage").unwrap();
@@ -7054,7 +6947,6 @@ pub fn create_chrome_storage_area_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeStorageArea").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeStorageArea").unwrap();
@@ -7118,7 +7010,6 @@ pub fn create_chrome_storage_managed_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeStorageManaged").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeStorageManaged").unwrap();
@@ -7138,7 +7029,6 @@ pub fn create_chrome_sync_file_system_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSyncFileSystem").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSyncFileSystem").unwrap();
@@ -7158,7 +7048,6 @@ pub fn create_chrome_system_cpu_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemCpu").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSystemCpu").unwrap();
@@ -7178,7 +7067,6 @@ pub fn create_chrome_system_display_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemDisplay").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSystemDisplay").unwrap();
@@ -7198,7 +7086,6 @@ pub fn create_chrome_system_memory_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemMemory").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSystemMemory").unwrap();
@@ -7218,7 +7105,6 @@ pub fn create_chrome_system_ns_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemNS").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSystemNS").unwrap();
@@ -7238,7 +7124,6 @@ pub fn create_chrome_system_network_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemNetwork").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSystemNetwork").unwrap();
@@ -7258,7 +7143,6 @@ pub fn create_chrome_system_storage_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeSystemStorage").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeSystemStorage").unwrap();
@@ -7278,7 +7162,6 @@ pub fn create_chrome_tab_capture_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeTabCapture").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeTabCapture").unwrap();
@@ -7298,7 +7181,6 @@ pub fn create_chrome_tab_groups_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeTabGroups").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeTabGroups").unwrap();
@@ -7318,7 +7200,6 @@ pub fn create_chrome_tabs_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeTabs").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeTabs").unwrap();
@@ -7338,7 +7219,6 @@ pub fn create_chrome_top_sites_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeTopSites").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeTopSites").unwrap();
@@ -7358,7 +7238,6 @@ pub fn create_chrome_tts_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeTts").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeTts").unwrap();
@@ -7378,7 +7257,6 @@ pub fn create_chrome_tts_engine_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeTtsEngine").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeTtsEngine").unwrap();
@@ -7398,7 +7276,6 @@ pub fn create_chrome_types_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeTypes").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeTypes").unwrap();
@@ -7418,7 +7295,6 @@ pub fn create_chrome_usb_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeUsb").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeUsb").unwrap();
@@ -7438,7 +7314,6 @@ pub fn create_chrome_user_scripts_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeUserScripts").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeUserScripts").unwrap();
@@ -7458,7 +7333,6 @@ pub fn create_chrome_virtual_keyboard_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeVirtualKeyboardPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeVirtualKeyboardPrivate").unwrap();
@@ -7478,7 +7352,6 @@ pub fn create_chrome_vpn_provider_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeVpnProvider").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeVpnProvider").unwrap();
@@ -7498,7 +7371,6 @@ pub fn create_chrome_wallpaper_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWallpaper").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWallpaper").unwrap();
@@ -7518,7 +7390,6 @@ pub fn create_chrome_web_authentication_proxy_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebAuthenticationProxy").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebAuthenticationProxy").unwrap();
@@ -7538,7 +7409,6 @@ pub fn create_chrome_web_navigation_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebNavigation").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebNavigation").unwrap();
@@ -7558,7 +7428,6 @@ pub fn create_chrome_web_request_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebRequest").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebRequest").unwrap();
@@ -7578,7 +7447,6 @@ pub fn create_chrome_web_view_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebView").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebView").unwrap();
@@ -7598,7 +7466,6 @@ pub fn create_chrome_webrtc_audio_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebrtcAudioPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebrtcAudioPrivate").unwrap();
@@ -7618,7 +7485,6 @@ pub fn create_chrome_webrtc_desktop_capture_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebrtcDesktopCapturePrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebrtcDesktopCapturePrivate").unwrap();
@@ -7638,7 +7504,6 @@ pub fn create_chrome_webrtc_logging_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebrtcLoggingPrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebrtcLoggingPrivate").unwrap();
@@ -7704,7 +7569,6 @@ pub fn create_chrome_webstore_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebstore").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebstore").unwrap();
@@ -7731,7 +7595,6 @@ pub fn create_chrome_webstore_private_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWebstorePrivate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWebstorePrivate").unwrap();
@@ -7751,7 +7614,6 @@ pub fn create_chrome_windows_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeWindows").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeWindows").unwrap();
@@ -7955,7 +7817,6 @@ pub fn create_external_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "External").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "External").unwrap();
@@ -8003,7 +7864,6 @@ pub fn create_webkit_cancel_animation_frame_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitCancelAnimationFrame").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitCancelAnimationFrame").unwrap();
@@ -8023,7 +7883,6 @@ pub fn create_webkit_convert_point_from_node_to_page_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitConvertPointFromNodeToPage").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitConvertPointFromNodeToPage").unwrap();
@@ -8043,7 +7902,6 @@ pub fn create_webkit_convert_point_from_page_to_node_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitConvertPointFromPageToNode").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitConvertPointFromPageToNode").unwrap();
@@ -8063,7 +7921,6 @@ pub fn create_webkit_get_gamepads_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitGetGamepads").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitGetGamepads").unwrap();
@@ -8083,7 +7940,6 @@ pub fn create_webkit_get_user_media_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitGetUserMedia").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitGetUserMedia").unwrap();
@@ -8103,7 +7959,6 @@ pub fn create_webkit_idb_key_range_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitIDBKeyRange").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitIDBKeyRange").unwrap();
@@ -8123,7 +7978,6 @@ pub fn create_webkit_indexed_db_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitIndexedDB").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitIndexedDB").unwrap();
@@ -8143,7 +7997,6 @@ pub fn create_webkit_match_media_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitMatchMedia").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitMatchMedia").unwrap();
@@ -8163,7 +8016,6 @@ pub fn create_webkit_media_stream_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitMediaStream").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitMediaStream").unwrap();
@@ -8183,7 +8035,6 @@ pub fn create_webkit_notifications_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitNotifications").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitNotifications").unwrap();
@@ -8203,7 +8054,6 @@ pub fn create_webkit_performance_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitPerformance").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitPerformance").unwrap();
@@ -8223,7 +8073,6 @@ pub fn create_webkit_rtc_peer_connection_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitRTCPeerConnection").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitRTCPeerConnection").unwrap();
@@ -8243,7 +8092,6 @@ pub fn create_webkit_request_animation_frame_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitRequestAnimationFrame").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitRequestAnimationFrame").unwrap();
@@ -8263,7 +8111,6 @@ pub fn create_webkit_request_file_system_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitRequestFileSystem").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitRequestFileSystem").unwrap();
@@ -8283,7 +8130,6 @@ pub fn create_webkit_resolve_local_file_system_url_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitResolveLocalFileSystemURL").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitResolveLocalFileSystemURL").unwrap();
@@ -8303,7 +8149,6 @@ pub fn create_webkit_speech_grammar_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitSpeechGrammarList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitSpeechGrammarList").unwrap();
@@ -8323,7 +8168,6 @@ pub fn create_webkit_speech_recognition_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitSpeechRecognition").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitSpeechRecognition").unwrap();
@@ -8343,7 +8187,6 @@ pub fn create_webkit_speech_recognition_error_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitSpeechRecognitionError").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitSpeechRecognitionError").unwrap();
@@ -8363,7 +8206,6 @@ pub fn create_webkit_storage_info_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitStorageInfo").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitStorageInfo").unwrap();
@@ -8475,7 +8317,6 @@ pub fn create_webkit_url_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitURL").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitURL").unwrap();
@@ -8512,7 +8353,6 @@ pub fn create_webkit_audio_context_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitAudioContext").unwrap();

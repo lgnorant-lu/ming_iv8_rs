@@ -64,7 +64,7 @@ pub fn process_interface_ea(def: &Definition) -> EaResult {
             "CrossOrigin" | "CrossOriginIsolated" | "CrossOriginReadable" => {
                 result.cross_origin_accessible = true;
             }
-            "Global" => {
+            a if a == "Global" || a.starts_with("Global=") => {
                 result.is_global = true;
             }
             a if a.starts_with("NamedConstructor") || a.starts_with("LegacyFactoryFunction") => {

@@ -501,15 +501,15 @@ impl EmbeddedV8Kernel {
 
     fn freeze_all_prototypes(&mut self) {
         self.with_global_scope(|scope, global| {
+            let move_js = crate::v8_utils::v8_string(scope, iv8_surface::generated::install_all::GLOBAL_MOVE_JS);
+            let _ = v8::Script::compile(scope, move_js, None).and_then(|s| s.run(scope));
+
             let js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
-                    var shimNames = ['Event','CustomEvent','MouseEvent','KeyboardEvent','PointerEvent',
-                        'MessageChannel','MessagePort','BroadcastChannel','Worker',
-                        'Location','Navigator','Screen','DOMRect','DOMException',
-                        'AudioContext','OfflineAudioContext','AudioBuffer','AudioNode','AudioParam'];
-                    for (var i = 0; i < shimNames.length; i++) {
+                    var names = Object.getOwnPropertyNames(globalThis);
+                    for (var i = 0; i < names.length; i++) {
                         try {
-                            var ctor = globalThis[shimNames[i]];
+                            var ctor = globalThis[names[i]];
                             if (ctor && typeof ctor === 'function' && ctor.prototype) {
                                 Object.defineProperty(ctor, 'prototype', {
                                     writable: false, enumerable: false, configurable: false

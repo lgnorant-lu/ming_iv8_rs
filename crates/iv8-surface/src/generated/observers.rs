@@ -476,7 +476,6 @@ pub fn create_intersection_observer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "IntersectionObserver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IntersectionObserver").unwrap();
@@ -934,7 +933,6 @@ pub fn create_intersection_observer_entry_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "IntersectionObserverEntry").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IntersectionObserverEntry").unwrap();
@@ -1194,7 +1192,6 @@ pub fn create_performance_observer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "PerformanceObserver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PerformanceObserver").unwrap();
@@ -1436,7 +1433,6 @@ pub fn create_pressure_observer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "PressureObserver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PressureObserver").unwrap();
@@ -1629,7 +1625,6 @@ pub fn create_reporting_observer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ReportingObserver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ReportingObserver").unwrap();
@@ -1808,7 +1803,6 @@ pub fn create_resize_observer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ResizeObserver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ResizeObserver").unwrap();
@@ -2079,7 +2073,6 @@ pub fn create_resize_observer_entry_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ResizeObserverEntry").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ResizeObserverEntry").unwrap();
@@ -2226,7 +2219,6 @@ pub fn create_resize_observer_size_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ResizeObserverSize").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ResizeObserverSize").unwrap();

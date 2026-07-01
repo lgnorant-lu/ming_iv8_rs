@@ -292,7 +292,6 @@ pub fn create_usb_alternate_interface_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBAlternateInterface").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBAlternateInterface").unwrap();
@@ -492,7 +491,6 @@ pub fn create_usb_configuration_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBConfiguration").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBConfiguration").unwrap();
@@ -1465,7 +1463,6 @@ pub fn create_usb_device_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBDevice").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBDevice").unwrap();
@@ -1910,7 +1907,6 @@ pub fn create_usb_endpoint_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBEndpoint").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBEndpoint").unwrap();
@@ -2050,7 +2046,6 @@ pub fn create_usb_in_transfer_result_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBInTransferResult").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBInTransferResult").unwrap();
@@ -2268,7 +2263,6 @@ pub fn create_usb_interface_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBInterface").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBInterface").unwrap();
@@ -2408,7 +2402,6 @@ pub fn create_usb_isochronous_in_transfer_packet_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBIsochronousInTransferPacket").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBIsochronousInTransferPacket").unwrap();
@@ -2534,7 +2527,6 @@ pub fn create_usb_isochronous_in_transfer_result_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBIsochronousInTransferResult").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBIsochronousInTransferResult").unwrap();
@@ -2660,7 +2652,6 @@ pub fn create_usb_isochronous_out_transfer_packet_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBIsochronousOutTransferPacket").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBIsochronousOutTransferPacket").unwrap();
@@ -2740,7 +2731,6 @@ pub fn create_usb_isochronous_out_transfer_result_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBIsochronousOutTransferResult").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBIsochronousOutTransferResult").unwrap();
@@ -2859,7 +2849,6 @@ pub fn create_usb_out_transfer_result_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "USBOutTransferResult").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBOutTransferResult").unwrap();
@@ -3096,7 +3085,6 @@ pub fn create_usb_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USB").unwrap();
@@ -3241,7 +3229,6 @@ pub fn create_usb_permission_result_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBPermissionResult").unwrap();

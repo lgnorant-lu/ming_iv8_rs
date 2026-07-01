@@ -62,7 +62,6 @@ pub fn create_css_font_feature_values_map_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSFontFeatureValuesMap").unwrap();
@@ -181,7 +180,6 @@ pub fn create_css_numeric_array_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSNumericArray").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSNumericArray").unwrap();
@@ -215,7 +213,6 @@ pub fn create_css_parser_rule_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSParserRule").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSParserRule").unwrap();
@@ -235,7 +232,6 @@ pub fn create_css_parser_value_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSParserValue").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSParserValue").unwrap();
@@ -669,7 +665,6 @@ pub fn create_css_pseudo_element_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSPseudoElement").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSPseudoElement").unwrap();
@@ -980,7 +975,6 @@ pub fn create_css_rule_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSRule").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSRule").unwrap();
@@ -1224,7 +1218,6 @@ pub fn create_css_rule_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSRuleList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSRuleList").unwrap();
@@ -1670,7 +1663,6 @@ pub fn create_css_style_declaration_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSStyleDeclaration").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSStyleDeclaration").unwrap();
@@ -1886,7 +1878,6 @@ pub fn create_css_style_value_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSStyleValue").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSStyleValue").unwrap();
@@ -2109,7 +2100,6 @@ pub fn create_css_transform_component_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSTransformComponent").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSTransformComponent").unwrap();
@@ -2288,7 +2278,6 @@ pub fn create_css_variable_reference_value_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CSSVariableReferenceValue").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSVariableReferenceValue").unwrap();
@@ -2598,7 +2587,6 @@ pub fn create_media_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaList").unwrap();
@@ -3113,7 +3101,6 @@ pub fn create_screen_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Screen").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Screen").unwrap();
@@ -3608,7 +3595,6 @@ pub fn create_style_sheet_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "StyleSheet").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "StyleSheet").unwrap();
@@ -3773,7 +3759,6 @@ pub fn create_style_sheet_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "StyleSheetList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "StyleSheetList").unwrap();
@@ -3994,7 +3979,6 @@ pub fn create_css_parser_at_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSParserAtRule").unwrap();
@@ -4183,7 +4167,6 @@ pub fn create_css_parser_declaration_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSParserDeclaration").unwrap();
@@ -4365,7 +4348,6 @@ pub fn create_css_parser_qualified_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSParserQualifiedRule").unwrap();
@@ -4547,7 +4529,6 @@ pub fn create_css_parser_block_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSParserBlock").unwrap();
@@ -4729,7 +4710,6 @@ pub fn create_css_parser_function_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSParserFunction").unwrap();
@@ -4865,7 +4845,6 @@ pub fn create_css_apply_statement_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSApplyStatementRule").unwrap();
@@ -5086,7 +5065,6 @@ pub fn create_css_color_profile_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSColorProfileRule").unwrap();
@@ -5137,7 +5115,6 @@ pub fn create_css_contents_statement_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSContentsStatementRule").unwrap();
@@ -6150,7 +6127,6 @@ pub fn create_css_counter_style_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSCounterStyleRule").unwrap();
@@ -6373,7 +6349,6 @@ pub fn create_css_custom_media_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSCustomMediaRule").unwrap();
@@ -6500,7 +6475,6 @@ pub fn create_css_font_face_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSFontFaceRule").unwrap();
@@ -6944,7 +6918,6 @@ pub fn create_css_font_feature_values_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSFontFeatureValuesRule").unwrap();
@@ -7209,7 +7182,6 @@ pub fn create_css_font_palette_values_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSFontPaletteValuesRule").unwrap();
@@ -7350,7 +7322,6 @@ pub fn create_css_function_declarations_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSFunctionDeclarations").unwrap();
@@ -7520,7 +7491,6 @@ pub fn create_css_grouping_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSGroupingRule").unwrap();
@@ -7838,7 +7808,6 @@ pub fn create_css_import_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSImportRule").unwrap();
@@ -8078,7 +8047,6 @@ pub fn create_css_keyframe_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSKeyframeRule").unwrap();
@@ -8485,7 +8453,6 @@ pub fn create_css_keyframes_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSKeyframesRule").unwrap();
@@ -8605,7 +8572,6 @@ pub fn create_css_layer_statement_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSLayerStatementRule").unwrap();
@@ -8771,7 +8737,6 @@ pub fn create_css_margin_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMarginRule").unwrap();
@@ -8902,7 +8867,6 @@ pub fn create_css_namespace_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSNamespaceRule").unwrap();
@@ -9029,7 +8993,6 @@ pub fn create_css_nested_declarations_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSNestedDeclarations").unwrap();
@@ -9197,7 +9160,6 @@ pub fn create_css_position_try_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSPositionTryRule").unwrap();
@@ -9420,7 +9382,6 @@ pub fn create_css_property_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSPropertyRule").unwrap();
@@ -9563,7 +9524,6 @@ pub fn create_css_view_transition_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSViewTransitionRule").unwrap();
@@ -13290,7 +13250,6 @@ pub fn create_css_font_face_descriptors_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSFontFaceDescriptors").unwrap();
@@ -13793,7 +13752,6 @@ pub fn create_css_function_descriptors_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSFunctionDescriptors").unwrap();
@@ -15085,7 +15043,6 @@ pub fn create_css_page_descriptors_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSPageDescriptors").unwrap();
@@ -21543,7 +21500,6 @@ pub fn create_css_position_try_descriptors_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSPositionTryDescriptors").unwrap();
@@ -22315,7 +22271,6 @@ pub fn create_css_style_properties_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSStyleProperties").unwrap();
@@ -22393,7 +22348,6 @@ pub fn create_css_color_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSColorValue").unwrap();
@@ -22423,7 +22377,6 @@ pub fn create_css_image_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSImageValue").unwrap();
@@ -22536,7 +22489,6 @@ pub fn create_css_keyword_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSKeywordValue").unwrap();
@@ -23074,7 +23026,6 @@ pub fn create_css_numeric_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSNumericValue").unwrap();
@@ -23413,7 +23364,6 @@ pub fn create_css_transform_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSTransformValue").unwrap();
@@ -23609,7 +23559,6 @@ pub fn create_css_unparsed_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSUnparsedValue").unwrap();
@@ -23743,7 +23692,6 @@ pub fn create_css_matrix_component_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMatrixComponent").unwrap();
@@ -23865,7 +23813,6 @@ pub fn create_css_perspective_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSPerspective").unwrap();
@@ -24257,7 +24204,6 @@ pub fn create_css_rotate_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSRotate").unwrap();
@@ -24586,7 +24532,6 @@ pub fn create_css_scale_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSScale").unwrap();
@@ -24816,7 +24761,6 @@ pub fn create_css_skew_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSSkew").unwrap();
@@ -24947,7 +24891,6 @@ pub fn create_css_skew_x_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSSkewX").unwrap();
@@ -25069,7 +25012,6 @@ pub fn create_css_skew_y_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSSkewY").unwrap();
@@ -25371,7 +25313,6 @@ pub fn create_css_translate_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSTranslate").unwrap();
@@ -26013,7 +25954,6 @@ pub fn create_visual_viewport_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "VisualViewport").unwrap();
@@ -26490,7 +26430,6 @@ pub fn create_css_style_sheet_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSStyleSheet").unwrap();
@@ -26668,7 +26607,6 @@ pub fn create_css_apply_block_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSApplyBlockRule").unwrap();
@@ -26751,7 +26689,6 @@ pub fn create_css_condition_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSConditionRule").unwrap();
@@ -26781,7 +26718,6 @@ pub fn create_css_contents_block_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSContentsBlockRule").unwrap();
@@ -26942,7 +26878,6 @@ pub fn create_css_function_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSFunctionRule").unwrap();
@@ -27032,7 +26967,6 @@ pub fn create_css_layer_block_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSLayerBlockRule").unwrap();
@@ -27200,7 +27134,6 @@ pub fn create_css_mixin_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMixinRule").unwrap();
@@ -27424,7 +27357,6 @@ pub fn create_css_page_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSPageRule").unwrap();
@@ -27557,7 +27489,6 @@ pub fn create_css_scope_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSScopeRule").unwrap();
@@ -27594,7 +27525,6 @@ pub fn create_css_starting_style_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSStartingStyleRule").unwrap();
@@ -27843,7 +27773,6 @@ pub fn create_css_style_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSStyleRule").unwrap();
@@ -27937,7 +27866,6 @@ pub fn create_css_supports_condition_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSSupportsConditionRule").unwrap();
@@ -28237,7 +28165,6 @@ pub fn create_css_color_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSColor").unwrap();
@@ -28647,7 +28574,6 @@ pub fn create_csshsl_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSHSL").unwrap();
@@ -29066,7 +28992,6 @@ pub fn create_csshwb_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSHWB").unwrap();
@@ -29485,7 +29410,6 @@ pub fn create_csslch_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSLCH").unwrap();
@@ -29904,7 +29828,6 @@ pub fn create_css_lab_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSLab").unwrap();
@@ -30323,7 +30246,6 @@ pub fn create_cssoklch_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSOKLCH").unwrap();
@@ -30742,7 +30664,6 @@ pub fn create_cssok_lab_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSOKLab").unwrap();
@@ -31161,7 +31082,6 @@ pub fn create_cssrgb_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSRGB").unwrap();
@@ -31266,7 +31186,6 @@ pub fn create_css_math_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMathValue").unwrap();
@@ -31432,7 +31351,6 @@ pub fn create_css_unit_value_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSUnitValue").unwrap();
@@ -31517,7 +31435,6 @@ pub fn create_css_animation_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSAnimation").unwrap();
@@ -31593,7 +31510,6 @@ pub fn create_css_transition_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSTransition").unwrap();
@@ -31761,7 +31677,6 @@ pub fn create_css_container_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSContainerRule").unwrap();
@@ -31941,7 +31856,6 @@ pub fn create_css_media_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMediaRule").unwrap();
@@ -32026,7 +31940,6 @@ pub fn create_css_supports_rule_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSSupportsRule").unwrap();
@@ -32194,7 +32107,6 @@ pub fn create_css_math_clamp_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMathClamp").unwrap();
@@ -32284,7 +32196,6 @@ pub fn create_css_math_invert_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMathInvert").unwrap();
@@ -32360,7 +32271,6 @@ pub fn create_css_math_max_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMathMax").unwrap();
@@ -32436,7 +32346,6 @@ pub fn create_css_math_min_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMathMin").unwrap();
@@ -32512,7 +32421,6 @@ pub fn create_css_math_negate_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMathNegate").unwrap();
@@ -32588,7 +32496,6 @@ pub fn create_css_math_product_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMathProduct").unwrap();
@@ -32664,7 +32571,6 @@ pub fn create_css_math_sum_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
-    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CSSMathSum").unwrap();
