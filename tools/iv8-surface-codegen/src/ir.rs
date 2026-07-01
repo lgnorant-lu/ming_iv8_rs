@@ -26,6 +26,8 @@ pub struct MemberData {
     pub name: Option<String>,
     pub idl_type: Option<String>,
     pub readonly: bool,
+    pub has_put_forwards: bool,
+    pub has_replaceable: bool,
     pub return_type: Option<String>,
     pub arguments: Vec<String>,
     pub const_value: Option<String>,
@@ -203,11 +205,21 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
                             .and_then(|v| v.as_str())
                             .map(|s| s.to_string());
 
+                        let ext_attrs = mobj.and_then(|o| o.get("ext_attrs")).and_then(|v| v.as_array());
+                        let has_put_forwards = ext_attrs
+                            .map(|arr| arr.iter().any(|ea| ea.get("name").and_then(|v| v.as_str()) == Some("PutForwards")))
+                            .unwrap_or(false);
+                        let has_replaceable = ext_attrs
+                            .map(|arr| arr.iter().any(|ea| ea.get("name").and_then(|v| v.as_str()) == Some("Replaceable")))
+                            .unwrap_or(false);
+
                         MemberData {
                             kind,
                             name: mname,
                             idl_type,
                             readonly,
+                            has_put_forwards,
+                            has_replaceable,
                             return_type,
                             arguments: args,
                             const_value,
@@ -418,6 +430,8 @@ mod tests {
             name: Some(name.into()),
             idl_type: None,
             readonly: false,
+            has_put_forwards: false,
+            has_replaceable: false,
             return_type: None,
             arguments: vec![],
             const_value: None,

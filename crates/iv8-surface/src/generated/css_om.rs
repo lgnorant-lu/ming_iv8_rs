@@ -3451,6 +3451,50 @@ unsafe extern "C" fn style_sheet_get_6(_info: *const v8::FunctionCallbackInfo) {
     }));
 }
 
+unsafe extern "C" fn style_sheet_set_6(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "StyleSheet").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 unsafe extern "C" fn style_sheet_get_7(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
@@ -3596,7 +3640,9 @@ pub fn create_style_sheet_template<'s>(
         let name = v8::String::new(scope, "media").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(style_sheet_get_6).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get media").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(style_sheet_set_6).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set media").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: disabled
     {
@@ -6372,6 +6418,50 @@ unsafe extern "C" fn css_font_face_rule_get_1(_info: *const v8::FunctionCallback
     }));
 }
 
+unsafe extern "C" fn css_font_face_rule_set_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSFontFaceRule").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 /// Create FunctionTemplate for CSSFontFaceRule.
 pub fn create_css_font_face_rule_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -6395,7 +6485,9 @@ pub fn create_css_font_face_rule_template<'s>(
         let name = v8::String::new(scope, "style").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_font_face_rule_get_1).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get style").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_font_face_rule_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set style").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -7173,6 +7265,50 @@ unsafe extern "C" fn css_function_declarations_get_1(_info: *const v8::FunctionC
     }));
 }
 
+unsafe extern "C" fn css_function_declarations_set_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSFunctionDeclarations").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 /// Create FunctionTemplate for CSSFunctionDeclarations.
 pub fn create_css_function_declarations_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -7196,7 +7332,9 @@ pub fn create_css_function_declarations_template<'s>(
         let name = v8::String::new(scope, "style").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_function_declarations_get_1).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get style").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_function_declarations_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set style").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -7475,6 +7613,50 @@ unsafe extern "C" fn css_import_rule_get_2(_info: *const v8::FunctionCallbackInf
     }));
 }
 
+unsafe extern "C" fn css_import_rule_set_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSImportRule").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 unsafe extern "C" fn css_import_rule_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
@@ -7643,7 +7825,9 @@ pub fn create_css_import_rule_template<'s>(
         let name = v8::String::new(scope, "media").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_import_rule_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get media").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_import_rule_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set media").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: styleSheet
     {
@@ -7806,6 +7990,50 @@ unsafe extern "C" fn css_keyframe_rule_get_2(_info: *const v8::FunctionCallbackI
     }));
 }
 
+unsafe extern "C" fn css_keyframe_rule_set_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSKeyframeRule").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 /// Create FunctionTemplate for CSSKeyframeRule.
 pub fn create_css_keyframe_rule_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -7838,7 +8066,9 @@ pub fn create_css_keyframe_rule_template<'s>(
         let name = v8::String::new(scope, "style").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_keyframe_rule_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get style").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_keyframe_rule_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set style").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -8450,6 +8680,50 @@ unsafe extern "C" fn css_margin_rule_get_2(_info: *const v8::FunctionCallbackInf
     }));
 }
 
+unsafe extern "C" fn css_margin_rule_set_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSMarginRule").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 /// Create FunctionTemplate for CSSMarginRule.
 pub fn create_css_margin_rule_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -8480,7 +8754,9 @@ pub fn create_css_margin_rule_template<'s>(
         let name = v8::String::new(scope, "style").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_margin_rule_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get style").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_margin_rule_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set style").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -8660,6 +8936,50 @@ unsafe extern "C" fn css_nested_declarations_get_1(_info: *const v8::FunctionCal
     }));
 }
 
+unsafe extern "C" fn css_nested_declarations_set_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSNestedDeclarations").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 /// Create FunctionTemplate for CSSNestedDeclarations.
 pub fn create_css_nested_declarations_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -8683,7 +9003,9 @@ pub fn create_css_nested_declarations_template<'s>(
         let name = v8::String::new(scope, "style").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_nested_declarations_get_1).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get style").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_nested_declarations_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set style").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -8781,6 +9103,50 @@ unsafe extern "C" fn css_position_try_rule_get_2(_info: *const v8::FunctionCallb
     }));
 }
 
+unsafe extern "C" fn css_position_try_rule_set_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSPositionTryRule").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 /// Create FunctionTemplate for CSSPositionTryRule.
 pub fn create_css_position_try_rule_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -8811,7 +9177,9 @@ pub fn create_css_position_try_rule_template<'s>(
         let name = v8::String::new(scope, "style").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_position_try_rule_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get style").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_position_try_rule_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set style").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -26932,6 +27300,50 @@ unsafe extern "C" fn css_page_rule_get_2(_info: *const v8::FunctionCallbackInfo)
     }));
 }
 
+unsafe extern "C" fn css_page_rule_set_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSPageRule").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 /// Create FunctionTemplate for CSSPageRule.
 pub fn create_css_page_rule_template<'s>(
     scope: &v8::PinScope<'s, '_>,
@@ -26964,7 +27376,9 @@ pub fn create_css_page_rule_template<'s>(
         let name = v8::String::new(scope, "style").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_page_rule_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get style").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_page_rule_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set style").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
 
     tmpl
@@ -27256,6 +27670,50 @@ unsafe extern "C" fn css_style_rule_get_2(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
+unsafe extern "C" fn css_style_rule_set_2(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSStyleRule").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 unsafe extern "C" fn css_style_rule_get_3(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
@@ -27334,7 +27792,9 @@ pub fn create_css_style_rule_template<'s>(
         let name = v8::String::new(scope, "style").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_style_rule_get_2).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get style").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_style_rule_set_2).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set style").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: styleMap
     {
@@ -31293,6 +31753,50 @@ unsafe extern "C" fn css_media_rule_get_1(_info: *const v8::FunctionCallbackInfo
     }));
 }
 
+unsafe extern "C" fn css_media_rule_set_1(_info: *const v8::FunctionCallbackInfo) {
+    let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let info_ref = unsafe { &*_info };
+        v8::callback_scope!(unsafe scope, info_ref);
+        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+        let __this = __args.this();
+        let __ctx = scope.get_current_context();
+        let __global = __ctx.global(scope);
+        let __iface_name = v8::String::new(scope, "CSSMediaRule").unwrap();
+        if let Some(__ctor_val) = __global.get(scope, __iface_name.into()) {
+            if __ctor_val.is_function() {
+                let __ctor = unsafe { v8::Local::<v8::Function>::cast_unchecked(__ctor_val) };
+                let __proto_key = v8::String::new(scope, "prototype").unwrap();
+                if let Some(__proto_val) = __ctor.get(scope, __proto_key.into()) {
+                    if __proto_val.is_object() && !__proto_val.is_null_or_undefined() {
+                        let __proto = unsafe { v8::Local::<v8::Object>::cast_unchecked(__proto_val) };
+                        if __this.strict_equals(__proto.into()) {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                        let mut __current: v8::Local<v8::Value> = __this.into();
+                        let mut __found = false;
+                        for _ in 0..20usize {
+                            let Some(__cur_obj) = __current.to_object(scope) else { break; };
+                            let Some(__parent) = __cur_obj.get_prototype(scope) else { break; };
+                            if __parent.is_null_or_undefined() || !__parent.is_object() { break; }
+                            if __parent.strict_equals(__proto.into()) { __found = true; break; }
+                            __current = __parent;
+                        }
+                        if !__found {
+                            let __msg = v8::String::new(scope, "Illegal invocation").unwrap();
+                            let __exc = v8::Exception::type_error(scope, __msg);
+                            scope.throw_exception(__exc);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }));
+}
+
 unsafe extern "C" fn css_media_rule_get_2(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let info_ref = unsafe { &*_info };
@@ -31362,7 +31866,9 @@ pub fn create_css_media_rule_template<'s>(
         let name = v8::String::new(scope, "media").unwrap();
         let getter = v8::FunctionTemplate::builder_raw(css_media_rule_get_1).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get media").unwrap());
-        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+        let setter = v8::FunctionTemplate::builder_raw(css_media_rule_set_1).length(1).build(scope);
+        setter.set_class_name(v8::String::new(scope, "set media").unwrap());
+        proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
     // attribute: matches
     {

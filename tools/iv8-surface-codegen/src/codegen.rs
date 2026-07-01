@@ -369,8 +369,8 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             out.push_str("    }));\n");
             out.push_str("}\n\n");
 
-            // Setter — receiver check for null-this
-            if !m.readonly {
+            // Setter — generated for non-readonly OR readonly-with-PutForwards/Replaceable
+            if !m.readonly || m.has_put_forwards || m.has_replaceable {
                 out.push_str(&format!(
                     "unsafe extern \"C\" fn {}_set_{}(_info: *const v8::FunctionCallbackInfo) {{\n",
                     fn_name, idx
@@ -555,7 +555,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
                 "        getter.set_class_name(v8::String::new(scope, \"get {}\").unwrap());\n",
                 attr_name
             ));
-            if m.readonly {
+            if m.readonly && !m.has_put_forwards && !m.has_replaceable {
                 block.push_str("        proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);\n");
             } else {
                 block.push_str(&format!(
@@ -912,6 +912,8 @@ mod tests {
                 name: Some("bar".into()),
                 idl_type: Some("DOMString".into()),
                 readonly: false,
+                has_put_forwards: false,
+                has_replaceable: false,
                 return_type: None,
                 arguments: vec![],
                 const_value: None,
@@ -942,6 +944,8 @@ mod tests {
                 name: Some("doThing".into()),
                 idl_type: None,
                 readonly: false,
+                has_put_forwards: false,
+                has_replaceable: false,
                 return_type: Some("undefined".into()),
                 arguments: vec![],
                 const_value: None,
@@ -998,6 +1002,8 @@ mod tests {
             name: None,
             idl_type: None,
             readonly: false,
+            has_put_forwards: false,
+            has_replaceable: false,
             return_type: None,
             arguments: vec![],
             const_value: None,
@@ -1037,6 +1043,8 @@ mod tests {
             name: Some("FILTER_ACCEPT".into()),
             idl_type: Some("unsigned short".into()),
             readonly: false,
+            has_put_forwards: false,
+            has_replaceable: false,
             return_type: None,
             arguments: vec![],
             const_value: Some("1".into()),
