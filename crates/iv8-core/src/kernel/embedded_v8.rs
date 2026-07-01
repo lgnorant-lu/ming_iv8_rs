@@ -503,10 +503,13 @@ impl EmbeddedV8Kernel {
         self.with_global_scope(|scope, global| {
             let js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
-                    var names = Object.getOwnPropertyNames(globalThis);
-                    for (var i = 0; i < names.length; i++) {
+                    var shimNames = ['Event','CustomEvent','MouseEvent','KeyboardEvent','PointerEvent',
+                        'MessageChannel','MessagePort','BroadcastChannel','Worker',
+                        'Location','Navigator','Screen','DOMRect','DOMException',
+                        'AudioContext','OfflineAudioContext','AudioBuffer','AudioNode','AudioParam'];
+                    for (var i = 0; i < shimNames.length; i++) {
                         try {
-                            var ctor = globalThis[names[i]];
+                            var ctor = globalThis[shimNames[i]];
                             if (ctor && typeof ctor === 'function' && ctor.prototype) {
                                 Object.defineProperty(ctor, 'prototype', {
                                     writable: false, enumerable: false, configurable: false
