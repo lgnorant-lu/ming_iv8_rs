@@ -539,8 +539,29 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         });
     }
 
-    // Custom Elements (customElements) stub
-    if (typeof customElements !== 'undefined' && !customElements.define) {
+    if (typeof customElements === 'undefined') {
+        globalThis.customElements = {
+            _registry: {},
+            define: function define(name, constructor, options) {
+                this._registry[name] = { constructor: constructor, options: options };
+            },
+            get: function get(name) {
+                var entry = this._registry[name];
+                return entry ? entry.constructor : undefined;
+            },
+            getName: function getName(constructor) {
+                var keys = Object.keys(this._registry);
+                for (var i = 0; i < keys.length; i++) {
+                    if (this._registry[keys[i]].constructor === constructor) return keys[i];
+                }
+                return null;
+            },
+            upgrade: function upgrade(root) {},
+            whenDefined: function whenDefined(name) {
+                return Promise.resolve(this._registry[name] ? this._registry[name].constructor : undefined);
+            }
+        };
+    } else if (!customElements.define) {
         customElements._registry = {};
         customElements.define = function(name, constructor, options) {
             customElements._registry[name] = { constructor: constructor, options: options };
@@ -559,6 +580,44 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
         customElements.upgrade = function(root) {};
         customElements.whenDefined = function(name) {
             return Promise.resolve(customElements._registry[name] ? constructor : undefined);
+        };
+    }
+
+    var _barProp = { visible: true };
+    if (typeof locationbar === 'undefined') globalThis.locationbar = _barProp;
+    if (typeof menubar === 'undefined') globalThis.menubar = _barProp;
+    if (typeof personalbar === 'undefined') globalThis.personalbar = _barProp;
+    if (typeof scrollbars === 'undefined') globalThis.scrollbars = _barProp;
+    if (typeof statusbar === 'undefined') globalThis.statusbar = _barProp;
+    if (typeof toolbar === 'undefined') globalThis.toolbar = _barProp;
+    if (typeof opener === 'undefined') globalThis.opener = null;
+    if (typeof frameElement === 'undefined') globalThis.frameElement = null;
+    if (typeof trustedTypes === 'undefined') {
+        globalThis.trustedTypes = {
+            createPolicy: function(name, rules) {
+                return {
+                    createHTML: function(s) { return s; },
+                    createScript: function(s) { return s; },
+                    createScriptURL: function(s) { return s; }
+                };
+            },
+            emptyHTML: '',
+            emptyScript: ''
+        };
+    }
+    if (typeof navigation === 'undefined') {
+        globalThis.navigation = {
+            entries: function() { return []; },
+            currentEntry: null,
+            updateCurrentEntry: function(options) {},
+            traverseTo: function(key, options) { return Promise.resolve(); },
+            back: function(options) { return Promise.resolve(); },
+            forward: function(options) { return Promise.resolve(); },
+            navigate: function(url, options) { return Promise.resolve(); },
+            reload: function(options) { return Promise.resolve(); },
+            canGoBack: false,
+            canGoForward: false,
+            transition: null
         };
     }
 
