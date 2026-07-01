@@ -1814,6 +1814,30 @@ impl EmbeddedV8Kernel {
                         crate::shims::native_env::install_native_env,
                     );
 
+                    // Freeze shim constructor prototypes (non-writable, non-configurable)
+                    // idlharness checks that X.prototype is not writable and
+                    // Object.setPrototypeOf(X.prototype, {}) throws TypeError.
+                    // Codegen interfaces already use read_only_prototype(), but
+                    // JS shim constructors (Event, MessageChannel, etc.) do not.
+                    let freeze_js = crate::v8_utils::v8_string(scope, r#"
+                        (function() {
+                            var names = ['Event','CustomEvent','MouseEvent','KeyboardEvent','PointerEvent',
+                                'MessageChannel','MessagePort','BroadcastChannel','Worker',
+                                'Location','Navigator','Screen','DOMRect','DOMException',
+                                'AudioContext','OfflineAudioContext','AudioBuffer','AudioNode','AudioParam'];
+                            for (var i = 0; i < names.length; i++) {
+                                var name = names[i];
+                                try {
+                                    var ctor = globalThis[name];
+                                    if (ctor && typeof ctor === 'function') {
+                                        Object.defineProperty(ctor, 'prototype', {writable: false, enumerable: false, configurable: false});
+                                    }
+                                } catch(e) {}
+                            }
+                        })();
+                    "#);
+                    let _ = v8::Script::compile(scope, freeze_js, None).and_then(|s| s.run(scope));
+
                     *state.dom_templates.borrow_mut() = Some(dom_templates);
                     let count = registry.interface_count();
                     *state.surface_registry.borrow_mut() = Some(registry);

@@ -49,6 +49,13 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     Event.AT_TARGET = 2;
     Event.BUBBLING_PHASE = 3;
 
+    // Make prototype non-writable, non-configurable, non-enumerable
+    Object.defineProperty(Event, 'prototype', {writable: false, enumerable: false, configurable: false});
+    // Make constants non-writable, non-configurable, enumerable
+    ['NONE', 'CAPTURING_PHASE', 'AT_TARGET', 'BUBBLING_PHASE'].forEach(function(k) {
+        Object.defineProperty(Event, k, {writable: false, enumerable: true, configurable: false});
+    });
+
     globalThis.Event = Event;
 
     // ─── CustomEvent ────────────────────────────────────────────────────────
@@ -59,6 +66,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     }
     CustomEvent.prototype = Object.create(Event.prototype);
     CustomEvent.prototype.constructor = CustomEvent;
+    Object.defineProperty(CustomEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.CustomEvent = CustomEvent;
 
@@ -84,6 +92,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     }
     MouseEvent.prototype = Object.create(Event.prototype);
     MouseEvent.prototype.constructor = MouseEvent;
+    Object.defineProperty(MouseEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.MouseEvent = MouseEvent;
 
@@ -105,6 +114,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     }
     KeyboardEvent.prototype = Object.create(Event.prototype);
     KeyboardEvent.prototype.constructor = KeyboardEvent;
+    Object.defineProperty(KeyboardEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.KeyboardEvent = KeyboardEvent;
 
@@ -121,6 +131,7 @@ pub const EVENT_CONSTRUCTORS_JS: &str = r#"
     }
     PointerEvent.prototype = Object.create(MouseEvent.prototype);
     PointerEvent.prototype.constructor = PointerEvent;
+    Object.defineProperty(PointerEvent, 'prototype', {writable: false, enumerable: false, configurable: false});
 
     globalThis.PointerEvent = PointerEvent;
 })();
