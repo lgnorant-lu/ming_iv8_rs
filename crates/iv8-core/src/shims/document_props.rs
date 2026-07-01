@@ -522,6 +522,117 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
         }
     } catch(e) {}
 
+    // Symbol.unscopables on DOM prototypes — WPT idlharness checks that
+    // these prototypes have @@unscopables. Without it, accessing
+    // prototype[Symbol.unscopables] returns undefined, and
+    // Object.getOwnPropertyDescriptor(undefined, name) throws
+    // "Cannot convert undefined or null to object".
+    function _installUnscopables(proto, names) {
+        if (!proto) return;
+        var obj = Object.create(null);
+        for (var i = 0; i < names.length; i++) obj[names[i]] = true;
+        try {
+            Object.defineProperty(proto, Symbol.unscopables, {
+                value: obj, writable: false, configurable: true, enumerable: false,
+            });
+        } catch(e) {}
+    }
+    try {
+        if (typeof Document !== 'undefined' && Document.prototype) {
+            _installUnscopables(Document.prototype, ['prepend', 'append', 'replaceChildren', 'fullscreen']);
+        }
+    } catch(e) {}
+    try {
+        if (typeof DocumentFragment !== 'undefined' && DocumentFragment.prototype) {
+            _installUnscopables(DocumentFragment.prototype, ['prepend', 'append', 'replaceChildren']);
+        }
+    } catch(e) {}
+    try {
+        if (typeof Element !== 'undefined' && Element.prototype) {
+            _installUnscopables(Element.prototype, ['prepend', 'append', 'replaceChildren', 'before', 'after', 'replaceWith', 'remove', 'slot']);
+        }
+    } catch(e) {}
+    try {
+        if (typeof DocumentType !== 'undefined' && DocumentType.prototype) {
+            _installUnscopables(DocumentType.prototype, ['before', 'after', 'replaceWith', 'remove']);
+        }
+    } catch(e) {}
+    try {
+        if (typeof CharacterData !== 'undefined' && CharacterData.prototype) {
+            _installUnscopables(CharacterData.prototype, ['before', 'after', 'replaceWith', 'remove']);
+        }
+    } catch(e) {}
+
+    // WindowProperties intermediate prototype — cannot be inserted from JS
+    // because Window.prototype has set_immutable_proto() (codegen).
+    // Requires codegen change to add WindowProperties template between
+    // Window and EventTarget. See TODO.
+
+    // MediaQueryList: wrap matchMedia so returned objects get the correct
+    // toStringTag. The geometry.rs shim returns a plain object without
+    // Symbol.toStringTag, causing "[object Object]" instead of "[object MediaQueryList]".
+    // Note: We only set toStringTag, not the prototype chain, because the
+    // geometry.rs shim puts properties directly on the object (matches, media,
+    // etc.) and setting __proto__ to MediaQueryList.prototype would cause
+    // assert_inherits to fail ("property found on object, expected in prototype chain").
+    try {
+        if (typeof matchMedia !== 'undefined' && !matchMedia.__iv8MqlPatched) {
+            var _origMatchMedia = matchMedia;
+            var _mqlWrapper = function matchMedia(query) {
+                var mql = _origMatchMedia.call(this, query);
+                if (mql && typeof mql === 'object') {
+                    try {
+                        Object.defineProperty(mql, Symbol.toStringTag, {
+                            value: 'MediaQueryList', configurable: true, writable: true, enumerable: false,
+                        });
+                    } catch(e) {}
+                }
+                return mql;
+            };
+            Object.defineProperty(_mqlWrapper, '__iv8MqlPatched', {
+                value: true, writable: true, configurable: true, enumerable: false,
+            });
+            globalThis.matchMedia = _mqlWrapper;
+        }
+    } catch(e) {}
+
+    // CaretPosition: wrap caretPositionFromPoint so returned objects get
+    // the correct toStringTag. Only set toStringTag, not prototype chain
+    // (same rationale as matchMedia above).
+    try {
+        if (typeof document !== 'undefined' && document.caretPositionFromPoint
+            && !document.caretPositionFromPoint.__iv8CaretPatched) {
+            var _origCaret = document.caretPositionFromPoint;
+            var _caretWrapper = function caretPositionFromPoint(x, y) {
+                var cp = _origCaret.call(this, x, y);
+                if (cp && typeof cp === 'object') {
+                    try {
+                        Object.defineProperty(cp, Symbol.toStringTag, {
+                            value: 'CaretPosition', configurable: true, writable: true, enumerable: false,
+                        });
+                    } catch(e) {}
+                }
+                return cp;
+            };
+            Object.defineProperty(_caretWrapper, '__iv8CaretPatched', {
+                value: true, writable: true, configurable: true, enumerable: false,
+            });
+            document.caretPositionFromPoint = _caretWrapper;
+        }
+    } catch(e) {}
+
+    // VisualViewport: the codegen getter returns a plain object. Set
+    // toStringTag only (not prototype chain) for the same rationale as above.
+    try {
+        if (typeof window !== 'undefined' && window.visualViewport) {
+            try {
+                Object.defineProperty(window.visualViewport, Symbol.toStringTag, {
+                    value: 'VisualViewport', configurable: true, writable: true, enumerable: false,
+                });
+            } catch(e) {}
+        }
+    } catch(e) {}
+
     // DOMException constructor shim — real Chrome has DOMException for
     // Promise rejections (EME, MIDI, mediaDevices). V8 only has TypeError.
     if (typeof DOMException === 'undefined') {
