@@ -292,6 +292,7 @@ pub fn create_chrome_event_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "ChromeEvent").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ChromeEvent").unwrap();
@@ -1269,6 +1270,7 @@ pub fn create_event_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Event").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Event").unwrap();
@@ -1461,6 +1463,7 @@ pub fn create_event_counts_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "EventCounts").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "EventCounts").unwrap();
@@ -1480,6 +1483,7 @@ pub fn create_event_listener_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "EventListener").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "EventListener").unwrap();
@@ -1499,6 +1503,7 @@ pub fn create_webkit_speech_recognition_event_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "webkitSpeechRecognitionEvent").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "webkitSpeechRecognitionEvent").unwrap();
@@ -1705,6 +1710,7 @@ pub fn create_animation_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AnimationEvent").unwrap();
@@ -1847,6 +1853,7 @@ pub fn create_animation_playback_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AnimationPlaybackEvent").unwrap();
@@ -2021,6 +2028,7 @@ pub fn create_audio_processing_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AudioProcessingEvent").unwrap();
@@ -2156,6 +2164,7 @@ pub fn create_autofill_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AutofillEvent").unwrap();
@@ -2202,6 +2211,7 @@ pub fn create_before_install_prompt_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BeforeInstallPromptEvent").unwrap();
@@ -2321,6 +2331,7 @@ pub fn create_before_unload_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BeforeUnloadEvent").unwrap();
@@ -2444,6 +2455,7 @@ pub fn create_blob_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BlobEvent").unwrap();
@@ -2848,6 +2860,7 @@ pub fn create_bluetooth_advertising_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BluetoothAdvertisingEvent").unwrap();
@@ -3018,6 +3031,7 @@ pub fn create_buffered_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BufferedChangeEvent").unwrap();
@@ -3100,6 +3114,7 @@ pub fn create_capture_action_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CaptureActionEvent").unwrap();
@@ -3221,6 +3236,7 @@ pub fn create_captured_mouse_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CapturedMouseEvent").unwrap();
@@ -3349,6 +3365,7 @@ pub fn create_character_bounds_update_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CharacterBoundsUpdateEvent").unwrap();
@@ -3477,6 +3494,7 @@ pub fn create_clipboard_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ClipboardChangeEvent").unwrap();
@@ -3559,6 +3577,7 @@ pub fn create_clipboard_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ClipboardEvent").unwrap();
@@ -3726,6 +3745,7 @@ pub fn create_close_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CloseEvent").unwrap();
@@ -3861,6 +3881,7 @@ pub fn create_command_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CommandEvent").unwrap();
@@ -3943,6 +3964,7 @@ pub fn create_content_visibility_auto_state_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ContentVisibilityAutoStateChangeEvent").unwrap();
@@ -4064,6 +4086,7 @@ pub fn create_cookie_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CookieChangeEvent").unwrap();
@@ -4192,6 +4215,7 @@ pub fn create_custom_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CustomEvent").unwrap();
@@ -4320,6 +4344,7 @@ pub fn create_device_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DeviceChangeEvent").unwrap();
@@ -4550,6 +4575,7 @@ pub fn create_device_motion_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DeviceMotionEvent").unwrap();
@@ -4801,6 +4827,7 @@ pub fn create_device_orientation_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DeviceOrientationEvent").unwrap();
@@ -4904,6 +4931,7 @@ pub fn create_document_picture_in_picture_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DocumentPictureInPictureEvent").unwrap();
@@ -5163,6 +5191,7 @@ pub fn create_error_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ErrorEvent").unwrap();
@@ -5266,6 +5295,7 @@ pub fn create_extendable_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ExtendableEvent").unwrap();
@@ -5341,6 +5371,7 @@ pub fn create_font_face_set_load_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "FontFaceSetLoadEvent").unwrap();
@@ -5416,6 +5447,7 @@ pub fn create_form_data_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "FormDataEvent").unwrap();
@@ -5491,6 +5523,7 @@ pub fn create_gpu_uncaptured_error_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUUncapturedErrorEvent").unwrap();
@@ -5566,6 +5599,7 @@ pub fn create_gamepad_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GamepadEvent").unwrap();
@@ -5641,6 +5675,7 @@ pub fn create_hid_connection_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HIDConnectionEvent").unwrap();
@@ -5808,6 +5843,7 @@ pub fn create_hid_input_report_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HIDInputReportEvent").unwrap();
@@ -5943,6 +5979,7 @@ pub fn create_hash_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HashChangeEvent").unwrap();
@@ -6071,6 +6108,7 @@ pub fn create_idb_version_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "IDBVersionChangeEvent").unwrap();
@@ -6153,6 +6191,7 @@ pub fn create_key_frame_request_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "KeyFrameRequestEvent").unwrap();
@@ -6228,6 +6267,7 @@ pub fn create_midi_connection_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MIDIConnectionEvent").unwrap();
@@ -6303,6 +6343,7 @@ pub fn create_midi_message_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MIDIMessageEvent").unwrap();
@@ -6424,6 +6465,7 @@ pub fn create_media_encrypted_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaEncryptedEvent").unwrap();
@@ -6552,6 +6594,7 @@ pub fn create_media_key_message_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaKeyMessageEvent").unwrap();
@@ -6680,6 +6723,7 @@ pub fn create_media_query_list_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaQueryListEvent").unwrap();
@@ -6762,6 +6806,7 @@ pub fn create_media_stream_track_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaStreamTrackEvent").unwrap();
@@ -7067,6 +7112,7 @@ pub fn create_message_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MessageEvent").unwrap();
@@ -7223,6 +7269,7 @@ pub fn create_ndef_reading_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "NDEFReadingEvent").unwrap();
@@ -7857,6 +7904,7 @@ pub fn create_navigate_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "NavigateEvent").unwrap();
@@ -8071,6 +8119,7 @@ pub fn create_navigation_current_entry_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "NavigationCurrentEntryChangeEvent").unwrap();
@@ -8153,6 +8202,7 @@ pub fn create_offline_audio_completion_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "OfflineAudioCompletionEvent").unwrap();
@@ -8228,6 +8278,7 @@ pub fn create_page_reveal_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PageRevealEvent").unwrap();
@@ -8349,6 +8400,7 @@ pub fn create_page_swap_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PageSwapEvent").unwrap();
@@ -8431,6 +8483,7 @@ pub fn create_page_transition_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PageTransitionEvent").unwrap();
@@ -8506,6 +8559,7 @@ pub fn create_payment_request_update_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PaymentRequestUpdateEvent").unwrap();
@@ -8581,6 +8635,7 @@ pub fn create_picture_in_picture_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PictureInPictureEvent").unwrap();
@@ -8702,6 +8757,7 @@ pub fn create_pop_state_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PopStateEvent").unwrap();
@@ -8830,6 +8886,7 @@ pub fn create_portal_activate_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PortalActivateEvent").unwrap();
@@ -8912,6 +8969,7 @@ pub fn create_presentation_connection_available_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PresentationConnectionAvailableEvent").unwrap();
@@ -9033,6 +9091,7 @@ pub fn create_presentation_connection_close_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PresentationConnectionCloseEvent").unwrap();
@@ -9207,6 +9266,7 @@ pub fn create_progress_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ProgressEvent").unwrap();
@@ -9342,6 +9402,7 @@ pub fn create_promise_rejection_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PromiseRejectionEvent").unwrap();
@@ -9424,6 +9485,7 @@ pub fn create_rtcdtmf_tone_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCDTMFToneChangeEvent").unwrap();
@@ -9499,6 +9561,7 @@ pub fn create_rtc_data_channel_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCDataChannelEvent").unwrap();
@@ -9574,6 +9637,7 @@ pub fn create_rtc_error_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCErrorEvent").unwrap();
@@ -9833,6 +9897,7 @@ pub fn create_rtc_peer_connection_ice_error_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCPeerConnectionIceErrorEvent").unwrap();
@@ -9982,6 +10047,7 @@ pub fn create_rtc_peer_connection_ice_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCPeerConnectionIceEvent").unwrap();
@@ -10202,6 +10268,7 @@ pub fn create_rtc_track_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCTrackEvent").unwrap();
@@ -10298,6 +10365,7 @@ pub fn create_rtc_transform_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RTCTransformEvent").unwrap();
@@ -10465,6 +10533,7 @@ pub fn create_s_frame_transform_error_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SFrameTransformErrorEvent").unwrap();
@@ -11060,6 +11129,7 @@ pub fn create_security_policy_violation_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SecurityPolicyViolationEvent").unwrap();
@@ -11221,6 +11291,7 @@ pub fn create_sensor_error_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SensorErrorEvent").unwrap();
@@ -11342,6 +11413,7 @@ pub fn create_snap_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SnapEvent").unwrap();
@@ -11470,6 +11542,7 @@ pub fn create_speech_recognition_error_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SpeechRecognitionErrorEvent").unwrap();
@@ -11598,6 +11671,7 @@ pub fn create_speech_recognition_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SpeechRecognitionEvent").unwrap();
@@ -11864,6 +11938,7 @@ pub fn create_speech_synthesis_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SpeechSynthesisEvent").unwrap();
@@ -12197,6 +12272,7 @@ pub fn create_storage_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "StorageEvent").unwrap();
@@ -12307,6 +12383,7 @@ pub fn create_submit_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SubmitEvent").unwrap();
@@ -12382,6 +12459,7 @@ pub fn create_task_priority_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TaskPriorityChangeEvent").unwrap();
@@ -12457,6 +12535,7 @@ pub fn create_text_format_update_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextFormatUpdateEvent").unwrap();
@@ -12716,6 +12795,7 @@ pub fn create_text_update_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextUpdateEvent").unwrap();
@@ -12911,6 +12991,7 @@ pub fn create_time_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TimeEvent").unwrap();
@@ -13092,6 +13173,7 @@ pub fn create_toggle_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ToggleEvent").unwrap();
@@ -13181,6 +13263,7 @@ pub fn create_track_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TrackEvent").unwrap();
@@ -13394,6 +13477,7 @@ pub fn create_transition_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TransitionEvent").unwrap();
@@ -13674,6 +13758,7 @@ pub fn create_ui_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "UIEvent").unwrap();
@@ -13777,6 +13862,7 @@ pub fn create_usb_connection_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "USBConnectionEvent").unwrap();
@@ -13852,6 +13938,7 @@ pub fn create_value_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ValueEvent").unwrap();
@@ -13927,6 +14014,7 @@ pub fn create_web_gl_context_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLContextEvent").unwrap();
@@ -14048,6 +14136,7 @@ pub fn create_window_controls_overlay_geometry_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WindowControlsOverlayGeometryChangeEvent").unwrap();
@@ -14538,6 +14627,7 @@ pub fn create_event_source_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "EventSource").unwrap();
@@ -14684,6 +14774,7 @@ pub fn create_background_fetch_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BackgroundFetchEvent").unwrap();
@@ -14759,6 +14850,7 @@ pub fn create_can_make_payment_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CanMakePaymentEvent").unwrap();
@@ -14834,6 +14926,7 @@ pub fn create_content_index_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ContentIndexEvent").unwrap();
@@ -14955,6 +15048,7 @@ pub fn create_extendable_cookie_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ExtendableCookieChangeEvent").unwrap();
@@ -15221,6 +15315,7 @@ pub fn create_extendable_message_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ExtendableMessageEvent").unwrap();
@@ -15600,6 +15695,7 @@ pub fn create_fetch_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "FetchEvent").unwrap();
@@ -15681,6 +15777,7 @@ pub fn create_install_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "InstallEvent").unwrap();
@@ -15802,6 +15899,7 @@ pub fn create_notification_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "NotificationEvent").unwrap();
@@ -16292,6 +16390,7 @@ pub fn create_payment_request_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PaymentRequestEvent").unwrap();
@@ -16460,6 +16559,7 @@ pub fn create_periodic_sync_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PeriodicSyncEvent").unwrap();
@@ -16581,6 +16681,7 @@ pub fn create_push_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PushEvent").unwrap();
@@ -16709,6 +16810,7 @@ pub fn create_push_subscription_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PushSubscriptionChangeEvent").unwrap();
@@ -16837,6 +16939,7 @@ pub fn create_sync_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SyncEvent").unwrap();
@@ -16965,6 +17068,7 @@ pub fn create_payment_method_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PaymentMethodChangeEvent").unwrap();
@@ -17047,6 +17151,7 @@ pub fn create_speech_synthesis_error_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SpeechSynthesisErrorEvent").unwrap();
@@ -17168,6 +17273,7 @@ pub fn create_composition_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CompositionEvent").unwrap();
@@ -17250,6 +17356,7 @@ pub fn create_focus_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "FocusEvent").unwrap();
@@ -17509,6 +17616,7 @@ pub fn create_input_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "InputEvent").unwrap();
@@ -18164,6 +18272,7 @@ pub fn create_keyboard_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "KeyboardEvent").unwrap();
@@ -19374,6 +19483,7 @@ pub fn create_mouse_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MouseEvent").unwrap();
@@ -19662,6 +19772,7 @@ pub fn create_navigation_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "NavigationEvent").unwrap();
@@ -19790,6 +19901,7 @@ pub fn create_text_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextEvent").unwrap();
@@ -20194,6 +20306,7 @@ pub fn create_touch_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TouchEvent").unwrap();
@@ -20282,6 +20395,7 @@ pub fn create_background_fetch_update_ui_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BackgroundFetchUpdateUIEvent").unwrap();
@@ -20357,6 +20471,7 @@ pub fn create_drag_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DragEvent").unwrap();
@@ -21076,6 +21191,7 @@ pub fn create_pointer_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PointerEvent").unwrap();
@@ -21442,6 +21558,7 @@ pub fn create_wheel_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WheelEvent").unwrap();

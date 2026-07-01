@@ -62,6 +62,7 @@ pub fn create_authenticator_response_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AuthenticatorResponse").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AuthenticatorResponse").unwrap();
@@ -190,6 +191,7 @@ pub fn create_credential_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Credential").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Credential").unwrap();
@@ -270,6 +272,7 @@ pub fn create_credentials_container_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "CredentialsContainer").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CredentialsContainer").unwrap();
@@ -458,6 +461,7 @@ pub fn create_authenticator_assertion_response_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AuthenticatorAssertionResponse").unwrap();
@@ -731,6 +735,7 @@ pub fn create_authenticator_attestation_response_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AuthenticatorAttestationResponse").unwrap();
@@ -1170,6 +1175,7 @@ pub fn create_public_key_credential_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PublicKeyCredential").unwrap();

@@ -118,6 +118,7 @@ pub fn create_gpu_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPU").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPU").unwrap();
@@ -306,6 +307,7 @@ pub fn create_gpu_adapter_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUAdapter").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUAdapter").unwrap();
@@ -675,6 +677,7 @@ pub fn create_gpu_adapter_info_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUAdapterInfo").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUAdapterInfo").unwrap();
@@ -833,6 +836,7 @@ pub fn create_gpu_bind_group_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUBindGroup").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUBindGroup").unwrap();
@@ -951,6 +955,7 @@ pub fn create_gpu_bind_group_layout_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUBindGroupLayout").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUBindGroupLayout").unwrap();
@@ -1355,6 +1360,7 @@ pub fn create_gpu_buffer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUBuffer").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUBuffer").unwrap();
@@ -1662,6 +1668,7 @@ pub fn create_gpu_canvas_context_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUCanvasContext").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUCanvasContext").unwrap();
@@ -1806,6 +1813,7 @@ pub fn create_gpu_command_buffer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUCommandBuffer").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUCommandBuffer").unwrap();
@@ -2522,6 +2530,7 @@ pub fn create_gpu_command_encoder_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUCommandEncoder").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUCommandEncoder").unwrap();
@@ -2696,6 +2705,7 @@ pub fn create_gpu_compilation_info_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUCompilationInfo").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUCompilationInfo").unwrap();
@@ -2998,6 +3008,7 @@ pub fn create_gpu_compilation_message_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUCompilationMessage").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUCompilationMessage").unwrap();
@@ -3563,6 +3574,7 @@ pub fn create_gpu_compute_pass_encoder_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUComputePassEncoder").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUComputePassEncoder").unwrap();
@@ -3790,6 +3802,7 @@ pub fn create_gpu_compute_pipeline_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUComputePipeline").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUComputePipeline").unwrap();
@@ -3917,6 +3930,7 @@ pub fn create_gpu_device_lost_info_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUDeviceLostInfo").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUDeviceLostInfo").unwrap();
@@ -3996,6 +4010,7 @@ pub fn create_gpu_error_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUError").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUError").unwrap();
@@ -4112,6 +4127,7 @@ pub fn create_gpu_external_texture_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUExternalTexture").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUExternalTexture").unwrap();
@@ -4230,6 +4246,7 @@ pub fn create_gpu_pipeline_layout_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUPipelineLayout").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUPipelineLayout").unwrap();
@@ -4486,6 +4503,7 @@ pub fn create_gpu_query_set_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUQuerySet").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUQuerySet").unwrap();
@@ -4819,6 +4837,7 @@ pub fn create_gpu_queue_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUQueue").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUQueue").unwrap();
@@ -4972,6 +4991,7 @@ pub fn create_gpu_render_bundle_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPURenderBundle").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPURenderBundle").unwrap();
@@ -5688,6 +5708,7 @@ pub fn create_gpu_render_bundle_encoder_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPURenderBundleEncoder").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPURenderBundleEncoder").unwrap();
@@ -6826,6 +6847,7 @@ pub fn create_gpu_render_pass_encoder_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPURenderPassEncoder").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPURenderPassEncoder").unwrap();
@@ -7143,6 +7165,7 @@ pub fn create_gpu_render_pipeline_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPURenderPipeline").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPURenderPipeline").unwrap();
@@ -7268,6 +7291,7 @@ pub fn create_gpu_sampler_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUSampler").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUSampler").unwrap();
@@ -7396,6 +7420,7 @@ pub fn create_gpu_shader_module_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUShaderModule").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUShaderModule").unwrap();
@@ -7431,6 +7456,7 @@ pub fn create_gpu_supported_features_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUSupportedFeatures").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUSupportedFeatures").unwrap();
@@ -9106,6 +9132,7 @@ pub fn create_gpu_supported_limits_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUSupportedLimits").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUSupportedLimits").unwrap();
@@ -9990,6 +10017,7 @@ pub fn create_gpu_texture_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUTexture").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUTexture").unwrap();
@@ -10194,6 +10222,7 @@ pub fn create_gpu_texture_view_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "GPUTextureView").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUTextureView").unwrap();
@@ -10271,6 +10300,7 @@ pub fn create_gpu_pipeline_error_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUPipelineError").unwrap();
@@ -11430,6 +11460,7 @@ pub fn create_gpu_device_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUDevice").unwrap();
@@ -11644,6 +11675,7 @@ pub fn create_gpu_internal_error_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUInternalError").unwrap();
@@ -11666,6 +11698,7 @@ pub fn create_gpu_out_of_memory_error_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUOutOfMemoryError").unwrap();
@@ -11688,6 +11721,7 @@ pub fn create_gpu_validation_error_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GPUValidationError").unwrap();

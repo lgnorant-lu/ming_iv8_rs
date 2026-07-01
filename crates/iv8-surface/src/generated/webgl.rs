@@ -10730,6 +10730,7 @@ pub fn create_web_gl2rendering_context_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WebGL2RenderingContext").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGL2RenderingContext").unwrap();
@@ -16740,6 +16741,7 @@ pub fn create_web_gl_active_info_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WebGLActiveInfo").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLActiveInfo").unwrap();
@@ -16870,6 +16872,7 @@ pub fn create_web_gl_object_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WebGLObject").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLObject").unwrap();
@@ -23564,6 +23567,7 @@ pub fn create_web_gl_rendering_context_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WebGLRenderingContext").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLRenderingContext").unwrap();
@@ -26984,6 +26988,7 @@ pub fn create_web_gl_shader_precision_format_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WebGLShaderPrecisionFormat").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLShaderPrecisionFormat").unwrap();
@@ -27024,6 +27029,7 @@ pub fn create_web_gl_uniform_location_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "WebGLUniformLocation").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLUniformLocation").unwrap();
@@ -27046,6 +27052,7 @@ pub fn create_web_gl_buffer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLBuffer").unwrap();
@@ -27068,6 +27075,7 @@ pub fn create_web_gl_framebuffer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLFramebuffer").unwrap();
@@ -27090,6 +27098,7 @@ pub fn create_web_gl_program_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLProgram").unwrap();
@@ -27112,6 +27121,7 @@ pub fn create_web_gl_query_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLQuery").unwrap();
@@ -27134,6 +27144,7 @@ pub fn create_web_gl_renderbuffer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLRenderbuffer").unwrap();
@@ -27156,6 +27167,7 @@ pub fn create_web_gl_sampler_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLSampler").unwrap();
@@ -27178,6 +27190,7 @@ pub fn create_web_gl_shader_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLShader").unwrap();
@@ -27200,6 +27213,7 @@ pub fn create_web_gl_sync_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLSync").unwrap();
@@ -27222,6 +27236,7 @@ pub fn create_web_gl_texture_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLTexture").unwrap();
@@ -27244,6 +27259,7 @@ pub fn create_web_gl_timer_query_ext_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLTimerQueryEXT").unwrap();
@@ -27266,6 +27282,7 @@ pub fn create_web_gl_transform_feedback_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLTransformFeedback").unwrap();
@@ -27288,6 +27305,7 @@ pub fn create_web_gl_vertex_array_object_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLVertexArrayObject").unwrap();
@@ -27310,6 +27328,7 @@ pub fn create_web_gl_vertex_array_object_oes_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "WebGLVertexArrayObjectOES").unwrap();

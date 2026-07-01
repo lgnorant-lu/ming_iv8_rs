@@ -104,7 +104,7 @@ wheels = [
 [[package]]
 name = "iv8-rs"
 version = "0.8.11"
-source = { editable = "." }
+source = { virtual = "." }
 
 [package.dev-dependencies]
 dev = [

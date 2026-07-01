@@ -36,6 +36,7 @@ pub fn create_media_capabilities_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaCapabilities").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaCapabilities").unwrap();
@@ -299,6 +300,7 @@ pub fn create_media_device_info_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaDeviceInfo").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaDeviceInfo").unwrap();
@@ -445,6 +447,7 @@ pub fn create_media_error_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaError").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaError").unwrap();
@@ -646,6 +649,7 @@ pub fn create_media_key_status_map_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaKeyStatusMap").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaKeyStatusMap").unwrap();
@@ -788,6 +792,7 @@ pub fn create_media_key_system_access_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaKeySystemAccess").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaKeySystemAccess").unwrap();
@@ -894,6 +899,7 @@ pub fn create_media_keys_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaKeys").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaKeys").unwrap();
@@ -1340,6 +1346,7 @@ pub fn create_media_metadata_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaMetadata").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaMetadata").unwrap();
@@ -1704,6 +1711,7 @@ pub fn create_media_session_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaSession").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaSession").unwrap();
@@ -1776,6 +1784,7 @@ pub fn create_media_source_handle_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaSourceHandle").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaSourceHandle").unwrap();
@@ -1795,6 +1804,7 @@ pub fn create_media_stream_track_handle_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaStreamTrackHandle").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaStreamTrackHandle").unwrap();
@@ -1952,6 +1962,7 @@ pub fn create_media_stream_track_processor_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MediaStreamTrackProcessor").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaStreamTrackProcessor").unwrap();
@@ -2022,6 +2033,7 @@ pub fn create_permissions_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "Permissions").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Permissions").unwrap();
@@ -2433,6 +2445,7 @@ pub fn create_media_devices_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaDevices").unwrap();
@@ -2943,6 +2956,7 @@ pub fn create_media_key_session_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaKeySession").unwrap();
@@ -3329,6 +3343,7 @@ pub fn create_media_query_list_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaQueryList").unwrap();
@@ -4480,6 +4495,7 @@ pub fn create_media_recorder_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaRecorder").unwrap();
@@ -5515,6 +5531,7 @@ pub fn create_media_source_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaSource").unwrap();
@@ -6253,6 +6270,7 @@ pub fn create_media_stream_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaStream").unwrap();
@@ -7613,6 +7631,7 @@ pub fn create_media_stream_track_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaStreamTrack").unwrap();
@@ -7998,6 +8017,7 @@ pub fn create_permission_status_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "PermissionStatus").unwrap();
@@ -8089,6 +8109,7 @@ pub fn create_media_element_audio_source_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaElementAudioSourceNode").unwrap();
@@ -8164,6 +8185,7 @@ pub fn create_media_stream_audio_destination_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaStreamAudioDestinationNode").unwrap();
@@ -8239,6 +8261,7 @@ pub fn create_media_stream_audio_source_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaStreamAudioSourceNode").unwrap();
@@ -8268,6 +8291,7 @@ pub fn create_media_stream_track_audio_source_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MediaStreamTrackAudioSourceNode").unwrap();
@@ -8356,6 +8380,7 @@ pub fn create_browser_capture_media_stream_track_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "BrowserCaptureMediaStreamTrack").unwrap();
@@ -8491,6 +8516,7 @@ pub fn create_canvas_capture_media_stream_track_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CanvasCaptureMediaStreamTrack").unwrap();

@@ -519,6 +519,7 @@ pub fn create_sensor_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Sensor").unwrap();
@@ -741,6 +742,7 @@ pub fn create_accelerometer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Accelerometer").unwrap();
@@ -830,6 +832,7 @@ pub fn create_ambient_light_sensor_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AmbientLightSensor").unwrap();
@@ -997,6 +1000,7 @@ pub fn create_gyroscope_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Gyroscope").unwrap();
@@ -1178,6 +1182,7 @@ pub fn create_magnetometer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Magnetometer").unwrap();
@@ -1313,6 +1318,7 @@ pub fn create_orientation_sensor_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "OrientationSensor").unwrap();
@@ -1487,6 +1493,7 @@ pub fn create_proximity_sensor_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ProximitySensor").unwrap();
@@ -1530,6 +1537,7 @@ pub fn create_gravity_sensor_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "GravitySensor").unwrap();
@@ -1552,6 +1560,7 @@ pub fn create_linear_acceleration_sensor_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "LinearAccelerationSensor").unwrap();
@@ -1574,6 +1583,7 @@ pub fn create_absolute_orientation_sensor_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AbsoluteOrientationSensor").unwrap();
@@ -1596,6 +1606,7 @@ pub fn create_relative_orientation_sensor_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "RelativeOrientationSensor").unwrap();

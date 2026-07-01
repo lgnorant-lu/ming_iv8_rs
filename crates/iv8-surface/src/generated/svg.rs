@@ -424,6 +424,7 @@ pub fn create_svg_angle_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAngle").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAngle").unwrap();
@@ -629,6 +630,7 @@ pub fn create_svg_animated_angle_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedAngle").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedAngle").unwrap();
@@ -798,6 +800,7 @@ pub fn create_svg_animated_boolean_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedBoolean").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedBoolean").unwrap();
@@ -969,6 +972,7 @@ pub fn create_svg_animated_enumeration_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedEnumeration").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedEnumeration").unwrap();
@@ -1140,6 +1144,7 @@ pub fn create_svg_animated_integer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedInteger").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedInteger").unwrap();
@@ -1267,6 +1272,7 @@ pub fn create_svg_animated_length_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedLength").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedLength").unwrap();
@@ -1392,6 +1398,7 @@ pub fn create_svg_animated_length_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedLengthList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedLengthList").unwrap();
@@ -1561,6 +1568,7 @@ pub fn create_svg_animated_number_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedNumber").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedNumber").unwrap();
@@ -1688,6 +1696,7 @@ pub fn create_svg_animated_number_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedNumberList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedNumberList").unwrap();
@@ -1813,6 +1822,7 @@ pub fn create_svg_animated_preserve_aspect_ratio_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedPreserveAspectRatio").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedPreserveAspectRatio").unwrap();
@@ -1938,6 +1948,7 @@ pub fn create_svg_animated_rect_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedRect").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedRect").unwrap();
@@ -2107,6 +2118,7 @@ pub fn create_svg_animated_string_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedString").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedString").unwrap();
@@ -2234,6 +2246,7 @@ pub fn create_svg_animated_transform_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGAnimatedTransformList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimatedTransformList").unwrap();
@@ -2675,6 +2688,7 @@ pub fn create_svg_length_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGLength").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGLength").unwrap();
@@ -3290,6 +3304,7 @@ pub fn create_svg_length_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGLengthList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGLengthList").unwrap();
@@ -3469,6 +3484,7 @@ pub fn create_svg_number_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGNumber").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGNumber").unwrap();
@@ -3957,6 +3973,7 @@ pub fn create_svg_number_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGNumberList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGNumberList").unwrap();
@@ -4226,6 +4243,7 @@ pub fn create_svg_path_segment_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGPathSegment").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGPathSegment").unwrap();
@@ -4723,6 +4741,7 @@ pub fn create_svg_point_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGPointList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGPointList").unwrap();
@@ -4992,6 +5011,7 @@ pub fn create_svg_preserve_aspect_ratio_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGPreserveAspectRatio").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGPreserveAspectRatio").unwrap();
@@ -5598,6 +5618,7 @@ pub fn create_svg_string_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGStringList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGStringList").unwrap();
@@ -6101,6 +6122,7 @@ pub fn create_svg_transform_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGTransform").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGTransform").unwrap();
@@ -6795,6 +6817,7 @@ pub fn create_svg_transform_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGTransformList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGTransformList").unwrap();
@@ -6907,6 +6930,7 @@ pub fn create_svg_unit_types_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "SVGUnitTypes").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGUnitTypes").unwrap();
@@ -14428,6 +14452,7 @@ pub fn create_svg_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGElement").unwrap();
@@ -15249,6 +15274,7 @@ pub fn create_svg_use_element_shadow_root_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGUseElementShadowRoot").unwrap();
@@ -16001,6 +16027,7 @@ pub fn create_svg_animation_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimationElement").unwrap();
@@ -16221,6 +16248,7 @@ pub fn create_svg_clip_path_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGClipPathElement").unwrap();
@@ -16579,6 +16607,7 @@ pub fn create_svg_component_transfer_function_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGComponentTransferFunctionElement").unwrap();
@@ -16703,6 +16732,7 @@ pub fn create_svg_desc_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGDescElement").unwrap();
@@ -17093,6 +17123,7 @@ pub fn create_svgfe_blend_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEBlendElement").unwrap();
@@ -17673,6 +17704,7 @@ pub fn create_svgfe_color_matrix_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEColorMatrixElement").unwrap();
@@ -18073,6 +18105,7 @@ pub fn create_svgfe_component_transfer_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEComponentTransferElement").unwrap();
@@ -18689,6 +18722,7 @@ pub fn create_svgfe_composite_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFECompositeElement").unwrap();
@@ -19637,6 +19671,7 @@ pub fn create_svgfe_convolve_matrix_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEConvolveMatrixElement").unwrap();
@@ -20281,6 +20316,7 @@ pub fn create_svgfe_diffuse_lighting_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEDiffuseLightingElement").unwrap();
@@ -20833,6 +20869,7 @@ pub fn create_svgfe_displacement_map_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEDisplacementMapElement").unwrap();
@@ -21063,6 +21100,7 @@ pub fn create_svgfe_distant_light_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEDistantLightElement").unwrap();
@@ -21605,6 +21643,7 @@ pub fn create_svgfe_drop_shadow_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEDropShadowElement").unwrap();
@@ -21943,6 +21982,7 @@ pub fn create_svgfe_flood_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEFloodElement").unwrap();
@@ -22460,6 +22500,7 @@ pub fn create_svgfe_gaussian_blur_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEGaussianBlurElement").unwrap();
@@ -22959,6 +23000,7 @@ pub fn create_svgfe_image_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEImageElement").unwrap();
@@ -23267,6 +23309,7 @@ pub fn create_svgfe_merge_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEMergeElement").unwrap();
@@ -23370,6 +23413,7 @@ pub fn create_svgfe_merge_node_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEMergeNodeElement").unwrap();
@@ -23813,6 +23857,7 @@ pub fn create_svgfe_morphology_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEMorphologyElement").unwrap();
@@ -24298,6 +24343,7 @@ pub fn create_svgfe_offset_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEOffsetElement").unwrap();
@@ -24514,6 +24560,7 @@ pub fn create_svgfe_point_light_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEPointLightElement").unwrap();
@@ -25063,6 +25110,7 @@ pub fn create_svgfe_specular_lighting_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFESpecularLightingElement").unwrap();
@@ -25539,6 +25587,7 @@ pub fn create_svgfe_spot_light_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFESpotLightElement").unwrap();
@@ -25893,6 +25942,7 @@ pub fn create_svgfe_tile_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFETileElement").unwrap();
@@ -26463,6 +26513,7 @@ pub fn create_svgfe_turbulence_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFETurbulenceElement").unwrap();
@@ -26937,6 +26988,7 @@ pub fn create_svg_filter_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFilterElement").unwrap();
@@ -27192,6 +27244,7 @@ pub fn create_svg_gradient_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGGradientElement").unwrap();
@@ -27548,6 +27601,7 @@ pub fn create_svg_graphics_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGGraphicsElement").unwrap();
@@ -27658,6 +27712,7 @@ pub fn create_svgm_path_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGMPathElement").unwrap();
@@ -28283,6 +28338,7 @@ pub fn create_svg_marker_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGMarkerElement").unwrap();
@@ -28727,6 +28783,7 @@ pub fn create_svg_mask_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGMaskElement").unwrap();
@@ -28791,6 +28848,7 @@ pub fn create_svg_metadata_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGMetadataElement").unwrap();
@@ -29273,6 +29331,7 @@ pub fn create_svg_pattern_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGPatternElement").unwrap();
@@ -29591,6 +29650,7 @@ pub fn create_svg_script_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGScriptElement").unwrap();
@@ -29684,6 +29744,7 @@ pub fn create_svg_stop_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGStopElement").unwrap();
@@ -30119,6 +30180,7 @@ pub fn create_svg_style_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGStyleElement").unwrap();
@@ -30184,6 +30246,7 @@ pub fn create_svg_title_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGTitleElement").unwrap();
@@ -30298,6 +30361,7 @@ pub fn create_svg_view_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGViewElement").unwrap();
@@ -30334,6 +30398,7 @@ pub fn create_svg_animate_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimateElement").unwrap();
@@ -30356,6 +30421,7 @@ pub fn create_svg_animate_motion_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimateMotionElement").unwrap();
@@ -30378,6 +30444,7 @@ pub fn create_svg_animate_transform_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAnimateTransformElement").unwrap();
@@ -30400,6 +30467,7 @@ pub fn create_svg_set_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGSetElement").unwrap();
@@ -30422,6 +30490,7 @@ pub fn create_svgfe_func_a_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEFuncAElement").unwrap();
@@ -30444,6 +30513,7 @@ pub fn create_svgfe_func_b_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEFuncBElement").unwrap();
@@ -30466,6 +30536,7 @@ pub fn create_svgfe_func_g_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEFuncGElement").unwrap();
@@ -30488,6 +30559,7 @@ pub fn create_svgfe_func_r_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGFEFuncRElement").unwrap();
@@ -30694,6 +30766,7 @@ pub fn create_svg_linear_gradient_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGLinearGradientElement").unwrap();
@@ -31020,6 +31093,7 @@ pub fn create_svg_radial_gradient_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGRadialGradientElement").unwrap();
@@ -32662,6 +32736,7 @@ pub fn create_svga_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGAElement").unwrap();
@@ -32858,6 +32933,7 @@ pub fn create_svg_defs_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGDefsElement").unwrap();
@@ -33064,6 +33140,7 @@ pub fn create_svg_foreign_object_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGForeignObjectElement").unwrap();
@@ -33114,6 +33191,7 @@ pub fn create_svgg_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGGElement").unwrap();
@@ -33366,6 +33444,7 @@ pub fn create_svg_geometry_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGGeometryElement").unwrap();
@@ -33789,6 +33868,7 @@ pub fn create_svg_image_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGImageElement").unwrap();
@@ -36952,6 +37032,7 @@ pub fn create_svgsvg_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGSVGElement").unwrap();
@@ -37376,6 +37457,7 @@ pub fn create_svg_switch_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGSwitchElement").unwrap();
@@ -37490,6 +37572,7 @@ pub fn create_svg_symbol_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGSymbolElement").unwrap();
@@ -38032,6 +38115,7 @@ pub fn create_svg_text_content_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGTextContentElement").unwrap();
@@ -38485,6 +38569,7 @@ pub fn create_svg_use_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGUseElement").unwrap();
@@ -38694,6 +38779,7 @@ pub fn create_svg_circle_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGCircleElement").unwrap();
@@ -38921,6 +39007,7 @@ pub fn create_svg_ellipse_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGEllipseElement").unwrap();
@@ -39155,6 +39242,7 @@ pub fn create_svg_line_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGLineElement").unwrap();
@@ -39481,6 +39569,7 @@ pub fn create_svg_path_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGPathElement").unwrap();
@@ -39637,6 +39726,7 @@ pub fn create_svg_polygon_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGPolygonElement").unwrap();
@@ -39765,6 +39855,7 @@ pub fn create_svg_polyline_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGPolylineElement").unwrap();
@@ -40077,6 +40168,7 @@ pub fn create_svg_rect_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGRectElement").unwrap();
@@ -40325,6 +40417,7 @@ pub fn create_svg_text_path_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGTextPathElement").unwrap();
@@ -40649,6 +40742,7 @@ pub fn create_svg_text_positioning_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGTextPositioningElement").unwrap();
@@ -40706,6 +40800,7 @@ pub fn create_svgt_span_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGTSpanElement").unwrap();
@@ -40728,6 +40823,7 @@ pub fn create_svg_text_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "SVGTextElement").unwrap();

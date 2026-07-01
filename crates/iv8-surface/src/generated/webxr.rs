@@ -118,6 +118,7 @@ pub fn create_xr_anchor_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRAnchor").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRAnchor").unwrap();
@@ -158,6 +159,7 @@ pub fn create_xr_anchor_set_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRAnchorSet").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRAnchorSet").unwrap();
@@ -269,6 +271,7 @@ pub fn create_xr_body_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRBody").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRBody").unwrap();
@@ -394,6 +397,7 @@ pub fn create_xr_camera_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRCamera").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRCamera").unwrap();
@@ -703,6 +707,7 @@ pub fn create_xr_depth_information_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRDepthInformation").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRDepthInformation").unwrap();
@@ -1464,6 +1469,7 @@ pub fn create_xr_frame_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRFrame").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRFrame").unwrap();
@@ -1696,6 +1702,7 @@ pub fn create_xr_hand_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRHand").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRHand").unwrap();
@@ -1785,6 +1792,7 @@ pub fn create_xr_hit_test_result_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRHitTestResult").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRHitTestResult").unwrap();
@@ -1864,6 +1872,7 @@ pub fn create_xr_hit_test_source_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRHitTestSource").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRHitTestSource").unwrap();
@@ -2258,6 +2267,7 @@ pub fn create_xr_input_source_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRInputSource").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRInputSource").unwrap();
@@ -2425,6 +2435,7 @@ pub fn create_xr_input_source_array_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRInputSourceArray").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRInputSourceArray").unwrap();
@@ -2596,6 +2607,7 @@ pub fn create_xr_light_estimate_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRLightEstimate").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRLightEstimate").unwrap();
@@ -2774,6 +2786,7 @@ pub fn create_xr_media_binding_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRMediaBinding").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRMediaBinding").unwrap();
@@ -3044,6 +3057,7 @@ pub fn create_xr_mesh_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRMesh").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRMesh").unwrap();
@@ -3098,6 +3112,7 @@ pub fn create_xr_mesh_set_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRMeshSet").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRMeshSet").unwrap();
@@ -3347,6 +3362,7 @@ pub fn create_xr_plane_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRPlane").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRPlane").unwrap();
@@ -3401,6 +3417,7 @@ pub fn create_xr_plane_set_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRPlaneSet").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRPlaneSet").unwrap();
@@ -3604,6 +3621,7 @@ pub fn create_xr_pose_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRPose").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRPose").unwrap();
@@ -3789,6 +3807,7 @@ pub fn create_xr_ray_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRRay").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRRay").unwrap();
@@ -4105,6 +4124,7 @@ pub fn create_xr_render_state_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRRenderState").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRRenderState").unwrap();
@@ -4350,6 +4370,7 @@ pub fn create_xr_rigid_transform_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRRigidTransform").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRRigidTransform").unwrap();
@@ -4443,6 +4464,7 @@ pub fn create_xr_sub_image_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRSubImage").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRSubImage").unwrap();
@@ -4561,6 +4583,7 @@ pub fn create_xr_transient_input_hit_test_result_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRTransientInputHitTestResult").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRTransientInputHitTestResult").unwrap();
@@ -4640,6 +4663,7 @@ pub fn create_xr_transient_input_hit_test_source_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRTransientInputHitTestSource").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRTransientInputHitTestSource").unwrap();
@@ -5034,6 +5058,7 @@ pub fn create_xr_view_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRView").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRView").unwrap();
@@ -5293,6 +5318,7 @@ pub fn create_xr_viewport_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRViewport").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRViewport").unwrap();
@@ -5938,6 +5964,7 @@ pub fn create_xr_web_gl_binding_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "XRWebGLBinding").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRWebGLBinding").unwrap();
@@ -6152,6 +6179,7 @@ pub fn create_xr_input_source_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRInputSourceEvent").unwrap();
@@ -6326,6 +6354,7 @@ pub fn create_xr_input_sources_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRInputSourcesChangeEvent").unwrap();
@@ -6415,6 +6444,7 @@ pub fn create_xr_layer_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRLayerEvent").unwrap();
@@ -6536,6 +6566,7 @@ pub fn create_xr_reference_space_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRReferenceSpaceEvent").unwrap();
@@ -6618,6 +6649,7 @@ pub fn create_xr_session_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRSessionEvent").unwrap();
@@ -6877,6 +6909,7 @@ pub fn create_xr_visibility_mask_change_event_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRVisibilityMaskChangeEvent").unwrap();
@@ -6934,6 +6967,7 @@ pub fn create_xr_layer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRLayer").unwrap();
@@ -7092,6 +7126,7 @@ pub fn create_xr_light_probe_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRLightProbe").unwrap();
@@ -9178,6 +9213,7 @@ pub fn create_xr_session_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRSession").unwrap();
@@ -9535,6 +9571,7 @@ pub fn create_xr_space_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRSpace").unwrap();
@@ -9667,6 +9704,7 @@ pub fn create_xr_system_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRSystem").unwrap();
@@ -9804,6 +9842,7 @@ pub fn create_xrcpu_depth_information_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRCPUDepthInformation").unwrap();
@@ -9978,6 +10017,7 @@ pub fn create_xr_web_gl_depth_information_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRWebGLDepthInformation").unwrap();
@@ -10067,6 +10107,7 @@ pub fn create_xr_joint_pose_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRJointPose").unwrap();
@@ -10142,6 +10183,7 @@ pub fn create_xr_viewer_pose_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRViewerPose").unwrap();
@@ -10539,6 +10581,7 @@ pub fn create_xr_web_gl_sub_image_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRWebGLSubImage").unwrap();
@@ -10707,6 +10750,7 @@ pub fn create_xr_permission_status_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRPermissionStatus").unwrap();
@@ -11282,6 +11326,7 @@ pub fn create_xr_composition_layer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRCompositionLayer").unwrap();
@@ -11780,6 +11825,7 @@ pub fn create_xr_web_gl_layer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRWebGLLayer").unwrap();
@@ -11906,6 +11952,7 @@ pub fn create_xr_body_space_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRBodySpace").unwrap();
@@ -11981,6 +12028,7 @@ pub fn create_xr_joint_space_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRJointSpace").unwrap();
@@ -12146,6 +12194,7 @@ pub fn create_xr_reference_space_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRReferenceSpace").unwrap();
@@ -12454,6 +12503,7 @@ pub fn create_xr_cube_layer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRCubeLayer").unwrap();
@@ -13043,6 +13093,7 @@ pub fn create_xr_cylinder_layer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRCylinderLayer").unwrap();
@@ -13749,6 +13800,7 @@ pub fn create_xr_equirect_layer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XREquirectLayer").unwrap();
@@ -14198,6 +14250,7 @@ pub fn create_xr_projection_layer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRProjectionLayer").unwrap();
@@ -14716,6 +14769,7 @@ pub fn create_xr_quad_layer_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRQuadLayer").unwrap();
@@ -14829,6 +14883,7 @@ pub fn create_xr_bounded_reference_space_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "XRBoundedReferenceSpace").unwrap();

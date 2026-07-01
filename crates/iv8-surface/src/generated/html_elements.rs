@@ -200,6 +200,7 @@ pub fn create_html_all_collection_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "HTMLAllCollection").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLAllCollection").unwrap();
@@ -385,6 +386,7 @@ pub fn create_html_collection_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "HTMLCollection").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLCollection").unwrap();
@@ -474,6 +476,7 @@ pub fn create_html_form_controls_collection_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLFormControlsCollection").unwrap();
@@ -821,6 +824,7 @@ pub fn create_html_options_collection_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLOptionsCollection").unwrap();
@@ -10708,6 +10712,7 @@ pub fn create_html_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLElement").unwrap();
@@ -14096,6 +14101,7 @@ pub fn create_html_anchor_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLAnchorElement").unwrap();
@@ -16389,6 +16395,7 @@ pub fn create_html_area_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLAreaElement").unwrap();
@@ -16719,6 +16726,7 @@ pub fn create_htmlbr_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLBRElement").unwrap();
@@ -16930,6 +16938,7 @@ pub fn create_html_base_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLBaseElement").unwrap();
@@ -19220,6 +19229,7 @@ pub fn create_html_body_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLBodyElement").unwrap();
@@ -21018,6 +21028,7 @@ pub fn create_html_button_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLButtonElement").unwrap();
@@ -21636,6 +21647,7 @@ pub fn create_html_canvas_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLCanvasElement").unwrap();
@@ -21801,6 +21813,7 @@ pub fn create_htmld_list_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLDListElement").unwrap();
@@ -21922,6 +21935,7 @@ pub fn create_html_data_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLDataElement").unwrap();
@@ -21999,6 +22013,7 @@ pub fn create_html_data_list_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLDataListElement").unwrap();
@@ -22208,6 +22223,7 @@ pub fn create_html_details_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLDetailsElement").unwrap();
@@ -22702,6 +22718,7 @@ pub fn create_html_dialog_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLDialogElement").unwrap();
@@ -22869,6 +22886,7 @@ pub fn create_html_directory_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLDirectoryElement").unwrap();
@@ -22990,6 +23008,7 @@ pub fn create_html_div_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLDivElement").unwrap();
@@ -23607,6 +23626,7 @@ pub fn create_html_embed_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLEmbedElement").unwrap();
@@ -24140,6 +24160,7 @@ pub fn create_html_fenced_frame_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLFencedFrameElement").unwrap();
@@ -24801,6 +24822,7 @@ pub fn create_html_field_set_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLFieldSetElement").unwrap();
@@ -25183,6 +25205,7 @@ pub fn create_html_font_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLFontElement").unwrap();
@@ -26636,6 +26659,7 @@ pub fn create_html_form_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLFormElement").unwrap();
@@ -27641,6 +27665,7 @@ pub fn create_html_frame_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLFrameElement").unwrap();
@@ -29549,6 +29574,7 @@ pub fn create_html_frame_set_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLFrameSetElement").unwrap();
@@ -30576,6 +30602,7 @@ pub fn create_html_geolocation_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLGeolocationElement").unwrap();
@@ -31153,6 +31180,7 @@ pub fn create_htmlhr_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLHRElement").unwrap();
@@ -31220,6 +31248,7 @@ pub fn create_html_head_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLHeadElement").unwrap();
@@ -31332,6 +31361,7 @@ pub fn create_html_heading_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLHeadingElement").unwrap();
@@ -31453,6 +31483,7 @@ pub fn create_html_html_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLHtmlElement").unwrap();
@@ -33378,6 +33409,7 @@ pub fn create_htmli_frame_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLIFrameElement").unwrap();
@@ -35788,6 +35820,7 @@ pub fn create_html_image_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLImageElement").unwrap();
@@ -40893,6 +40926,7 @@ pub fn create_html_input_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLInputElement").unwrap();
@@ -41648,6 +41682,7 @@ pub fn create_htmlli_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLLIElement").unwrap();
@@ -41870,6 +41905,7 @@ pub fn create_html_label_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLLabelElement").unwrap();
@@ -42051,6 +42087,7 @@ pub fn create_html_legend_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLLegendElement").unwrap();
@@ -43845,6 +43882,7 @@ pub fn create_html_link_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLLinkElement").unwrap();
@@ -44190,6 +44228,7 @@ pub fn create_html_map_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLMapElement").unwrap();
@@ -45310,6 +45349,7 @@ pub fn create_html_marquee_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLMarqueeElement").unwrap();
@@ -48208,6 +48248,7 @@ pub fn create_html_media_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLMediaElement").unwrap();
@@ -48761,6 +48802,7 @@ pub fn create_html_menu_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLMenuElement").unwrap();
@@ -49242,6 +49284,7 @@ pub fn create_html_meta_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLMetaElement").unwrap();
@@ -49895,6 +49938,7 @@ pub fn create_html_meter_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLMeterElement").unwrap();
@@ -50158,6 +50202,7 @@ pub fn create_html_mod_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLModElement").unwrap();
@@ -50652,6 +50697,7 @@ pub fn create_html_model_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLModelElement").unwrap();
@@ -51089,6 +51135,7 @@ pub fn create_htmlo_list_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLOListElement").unwrap();
@@ -53047,6 +53094,7 @@ pub fn create_html_object_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLObjectElement").unwrap();
@@ -53476,6 +53524,7 @@ pub fn create_html_opt_group_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLOptGroupElement").unwrap();
@@ -54148,6 +54197,7 @@ pub fn create_html_option_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLOptionElement").unwrap();
@@ -55012,6 +55062,7 @@ pub fn create_html_output_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLOutputElement").unwrap();
@@ -55232,6 +55283,7 @@ pub fn create_html_paragraph_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLParagraphElement").unwrap();
@@ -55623,6 +55675,7 @@ pub fn create_html_param_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLParamElement").unwrap();
@@ -55681,6 +55734,7 @@ pub fn create_html_picture_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLPictureElement").unwrap();
@@ -56119,6 +56173,7 @@ pub fn create_html_portal_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLPortalElement").unwrap();
@@ -56281,6 +56336,7 @@ pub fn create_html_pre_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLPreElement").unwrap();
@@ -56584,6 +56640,7 @@ pub fn create_html_progress_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLProgressElement").unwrap();
@@ -56728,6 +56785,7 @@ pub fn create_html_quote_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLQuoteElement").unwrap();
@@ -58065,6 +58123,7 @@ pub fn create_html_script_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLScriptElement").unwrap();
@@ -59867,6 +59926,7 @@ pub fn create_html_select_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLSelectElement").unwrap();
@@ -60109,6 +60169,7 @@ pub fn create_html_selected_content_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLSelectedContentElement").unwrap();
@@ -60359,6 +60420,7 @@ pub fn create_html_slot_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLSlotElement").unwrap();
@@ -61041,6 +61103,7 @@ pub fn create_html_source_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLSourceElement").unwrap();
@@ -61126,6 +61189,7 @@ pub fn create_html_span_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLSpanElement").unwrap();
@@ -61554,6 +61618,7 @@ pub fn create_html_style_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLStyleElement").unwrap();
@@ -61709,6 +61774,7 @@ pub fn create_html_table_caption_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTableCaptionElement").unwrap();
@@ -63046,6 +63112,7 @@ pub fn create_html_table_cell_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTableCellElement").unwrap();
@@ -63750,6 +63817,7 @@ pub fn create_html_table_col_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTableColElement").unwrap();
@@ -65412,6 +65480,7 @@ pub fn create_html_table_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTableElement").unwrap();
@@ -66312,6 +66381,7 @@ pub fn create_html_table_row_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTableRowElement").unwrap();
@@ -66912,6 +66982,7 @@ pub fn create_html_table_section_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTableSectionElement").unwrap();
@@ -67577,6 +67648,7 @@ pub fn create_html_template_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTemplateElement").unwrap();
@@ -69834,6 +69906,7 @@ pub fn create_html_text_area_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTextAreaElement").unwrap();
@@ -70214,6 +70287,7 @@ pub fn create_html_time_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTimeElement").unwrap();
@@ -70335,6 +70409,7 @@ pub fn create_html_title_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTitleElement").unwrap();
@@ -70908,6 +70983,7 @@ pub fn create_html_track_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLTrackElement").unwrap();
@@ -71208,6 +71284,7 @@ pub fn create_htmlu_list_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLUListElement").unwrap();
@@ -71248,6 +71325,7 @@ pub fn create_html_unknown_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLUnknownElement").unwrap();
@@ -71270,6 +71348,7 @@ pub fn create_html_audio_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLAudioElement").unwrap();
@@ -72162,6 +72241,7 @@ pub fn create_html_video_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "HTMLVideoElement").unwrap();

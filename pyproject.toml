@@ -20,6 +20,9 @@ dev = [
     "ruff>=0.15.16",
 ]
 
+[tool.uv]
+package = false
+
 [tool.maturin]
 manifest-path = "crates/iv8-py/Cargo.toml"
 python-source = "python"

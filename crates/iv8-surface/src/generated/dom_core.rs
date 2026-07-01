@@ -108,6 +108,7 @@ pub fn create_abort_controller_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AbortController").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AbortController").unwrap();
@@ -371,6 +372,7 @@ pub fn create_abstract_range_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "AbstractRange").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AbstractRange").unwrap();
@@ -609,6 +611,7 @@ pub fn create_dom_implementation_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "DOMImplementation").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMImplementation").unwrap();
@@ -2726,6 +2729,7 @@ pub fn create_dom_matrix_read_only_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "DOMMatrixReadOnly").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMMatrixReadOnly").unwrap();
@@ -3403,6 +3407,7 @@ pub fn create_dom_point_read_only_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "DOMPointReadOnly").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMPointReadOnly").unwrap();
@@ -3839,6 +3844,7 @@ pub fn create_dom_quad_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "DOMQuad").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMQuad").unwrap();
@@ -4374,6 +4380,7 @@ pub fn create_dom_rect_read_only_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "DOMRectReadOnly").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMRectReadOnly").unwrap();
@@ -4921,6 +4928,7 @@ pub fn create_dom_token_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "DOMTokenList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMTokenList").unwrap();
@@ -5189,6 +5197,7 @@ pub fn create_event_target_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "EventTarget").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "EventTarget").unwrap();
@@ -5374,6 +5383,7 @@ pub fn create_mutation_observer_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MutationObserver").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MutationObserver").unwrap();
@@ -5828,6 +5838,7 @@ pub fn create_mutation_record_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "MutationRecord").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "MutationRecord").unwrap();
@@ -6278,6 +6289,7 @@ pub fn create_named_node_map_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "NamedNodeMap").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "NamedNodeMap").unwrap();
@@ -6721,6 +6733,7 @@ pub fn create_node_iterator_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "NodeIterator").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "NodeIterator").unwrap();
@@ -6888,6 +6901,7 @@ pub fn create_node_list_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "NodeList").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "NodeList").unwrap();
@@ -7471,6 +7485,7 @@ pub fn create_tree_walker_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "TreeWalker").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TreeWalker").unwrap();
@@ -8731,6 +8746,7 @@ pub fn create_range_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Range").unwrap();
@@ -8971,6 +8987,7 @@ pub fn create_static_range_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "StaticRange").unwrap();
@@ -11663,6 +11680,7 @@ pub fn create_dom_matrix_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMMatrix").unwrap();
@@ -12411,6 +12429,7 @@ pub fn create_dom_point_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMPoint").unwrap();
@@ -12882,6 +12901,7 @@ pub fn create_dom_rect_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DOMRect").unwrap();
@@ -13313,6 +13333,7 @@ pub fn create_abort_signal_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "AbortSignal").unwrap();
@@ -14716,6 +14737,7 @@ pub fn create_node_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Node").unwrap();
@@ -15446,6 +15468,7 @@ pub fn create_attr_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Attr").unwrap();
@@ -16161,6 +16184,7 @@ pub fn create_character_data_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "CharacterData").unwrap();
@@ -29001,6 +29025,7 @@ pub fn create_document_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Document").unwrap();
@@ -31142,6 +31167,7 @@ pub fn create_document_fragment_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DocumentFragment").unwrap();
@@ -31572,6 +31598,7 @@ pub fn create_document_type_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "DocumentType").unwrap();
@@ -41445,6 +41472,7 @@ pub fn create_element_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Element").unwrap();
@@ -42763,6 +42791,7 @@ pub fn create_comment_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Comment").unwrap();
@@ -43107,6 +43136,7 @@ pub fn create_text_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "Text").unwrap();
@@ -43818,6 +43848,7 @@ pub fn create_shadow_root_template<'s>(
     }
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "ShadowRoot").unwrap();

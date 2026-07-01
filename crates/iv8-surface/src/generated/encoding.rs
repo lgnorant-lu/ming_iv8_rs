@@ -200,6 +200,7 @@ pub fn create_text_decoder_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "TextDecoder").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextDecoder").unwrap();
@@ -477,6 +478,7 @@ pub fn create_text_decoder_stream_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "TextDecoderStream").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextDecoderStream").unwrap();
@@ -669,6 +671,7 @@ pub fn create_text_encoder_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "TextEncoder").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextEncoder").unwrap();
@@ -847,6 +850,7 @@ pub fn create_text_encoder_stream_template<'s>(
     tmpl.set_class_name(v8::String::new(scope, "TextEncoderStream").unwrap());
 
     let proto = tmpl.prototype_template(scope);
+    proto.set_immutable_proto();
     {
         let tag_sym = v8::Symbol::get_to_string_tag(scope);
         let tag_val = v8::String::new(scope, "TextEncoderStream").unwrap();

@@ -486,6 +486,7 @@ fn generate_template_function(def: &Definition, _ea: &EaResult, fn_name: &str) -
     // Prototype setup
     let _has_members = !def.members.is_empty();
     out.push_str("\n    let proto = tmpl.prototype_template(scope);\n");
+    out.push_str("    proto.set_immutable_proto();\n");
 
     // Symbol.toStringTag
     out.push_str("    {\n");
