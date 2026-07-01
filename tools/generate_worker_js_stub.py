@@ -54,6 +54,32 @@ def generate_js_stub(ir_path: str) -> str:
     by_name = {name: (inh, members) for name, inh, members in interfaces}
     generated = set()
 
+    # Type-to-default-value mapping for IDL attribute types
+    def idl_default_value(type_info):
+        if not isinstance(type_info, dict):
+            return "undefined"
+        tn = type_info.get("name", "")
+        if type_info.get("nullable"):
+            return "null"
+        string_types = {"DOMString", "USVString", "CSSOMString", "ByteString", "SVGBString"}
+        if tn in string_types or "String" in tn:
+            return '""'
+        if tn in ("boolean",):
+            return "false"
+        if tn in ("byte", "octet", "short", "unsigned short", "long",
+                   "unsigned long", "long long", "unsigned long long",
+                   "float", "double", "unrestricted float", "unrestricted double",
+                   "DOMHighResTimeStamp", "EpochTimeStamp"):
+            return "0"
+        # Interface types, object, any, etc.
+        return "null"
+
+    # Collect all interfaces for type lookup
+    all_interface_names = set()
+    for d in ir.get("definitions", []):
+        if d.get("kind") == "interface":
+            all_interface_names.add(d.get("name", ""))
+
     def gen_interface(name, inh, members):
         if name in generated:
             return
@@ -62,14 +88,27 @@ def generate_js_stub(ir_path: str) -> str:
         generated.add(name)
 
         # Constructor — compute length from IDL constructor members
+        # length = number of required (non-optional) arguments
         ctor_len = 0
         for m in members:
             if m.get("kind") == "constructor":
-                ctor_len = len(m.get("arguments", []))
+                ctor_args = m.get("arguments", [])
+                ctor_len = sum(1 for a in ctor_args if not a.get("optional", False) and not a.get("variadic", False))
                 break
         # Constructor function with proper length and new-operator check
         lines.append(f"  var {name} = function {name}() {{")
         lines.append(f"    if (!(this instanceof {name})) throw new TypeError(\"Failed to construct '{name}': Please use the 'new' operator\");")
+        # Initialize instance properties with type-correct default values
+        for m in members:
+            if m.get("kind") == "attribute":
+                mname = m.get("name", "")
+                if not mname:
+                    continue
+                ext_attrs_m = m.get("ext_attrs", [])
+                is_unforgeable_m = any(ea.get("name") == "LegacyUnforgeable" for ea in ext_attrs_m)
+                if is_unforgeable_m:
+                    dv = idl_default_value(m.get("type", {}))
+                    lines.append(f"    Object.defineProperty(this, '{mname}', {{value: {dv}, writable: false, enumerable: true, configurable: false}});")
         lines.append(f"  }};")
         if ctor_len > 0:
             lines.append(f"  Object.defineProperty({name}, 'length', {{value: {ctor_len}, writable: false, enumerable: false, configurable: true}});")
@@ -78,6 +117,8 @@ def generate_js_stub(ir_path: str) -> str:
             lines.append(f"  var _proto_{name} = Object.create({inh}.prototype);")
             lines.append(f"  Object.defineProperty({name}, 'prototype', {{value: _proto_{name}, writable: false, enumerable: false, configurable: false}});")
             lines.append(f"  Object.defineProperty(_proto_{name}, 'constructor', {{value: {name}, writable: true, configurable: true, enumerable: false}});")
+            # Constructor inheritance: Object.getPrototypeOf({name}) === {inh}
+            lines.append(f"  Object.setPrototypeOf({name}, {inh});")
         else:
             lines.append(f"  Object.defineProperty({name}, 'prototype', {{writable: false, enumerable: false, configurable: false}});")
             lines.append(f"  Object.defineProperty({name}.prototype, 'constructor', {{value: {name}, writable: true, configurable: true, enumerable: false}});")
@@ -129,12 +170,19 @@ def generate_js_stub(ir_path: str) -> str:
                 lines.append(f"  Object.defineProperty({name}.prototype, '{mname}', {{value: {cval_js}, writable: false, enumerable: true, configurable: false}});")
 
             elif kind == "attribute":
+                # Check for LegacyUnforgeable — these are own data properties
+                ext_attrs = m.get("ext_attrs", [])
+                is_unforgeable = any(ea.get("name") == "LegacyUnforgeable" for ea in ext_attrs)
+                if is_unforgeable:
+                    # Already set as own data property in constructor
+                    continue
                 getter_name = f"get {mname}"
                 setter_name = f"set {mname}"
+                dv = idl_default_value(m.get("type", {}))
                 lines.append(f"  var _g_{name}_{mname} = function() {{")
                 lines.append(f"    if (!(this instanceof {name}) && (this === null || this === undefined || Object.getPrototypeOf(this) !== {name}.prototype))")
                 lines.append(f"      throw new TypeError('Illegal invocation');")
-                lines.append(f"    return undefined;")
+                lines.append(f"    return {dv};")
                 lines.append(f"  }};")
                 lines.append(f"  Object.defineProperty(_g_{name}_{mname}, 'name', {{value: '{getter_name}'}});")
                 if readonly:
@@ -150,12 +198,13 @@ def generate_js_stub(ir_path: str) -> str:
             elif kind == "operation":
                 all_args = m.get("arguments", [])
                 arg_count = len(all_args)
-                # Function length = number of required (non-optional) args
                 required_count = sum(1 for a in all_args if not a.get("optional", False) and not a.get("variadic", False))
                 args = ", ".join(["a" + str(i) for i in range(arg_count)])
                 lines.append(f"  var _op_{name}_{mname} = function({args}) {{")
                 lines.append(f"    if (!(this instanceof {name}) && (this === null || this === undefined || Object.getPrototypeOf(this) !== {name}.prototype))")
                 lines.append(f"      throw new TypeError('Illegal invocation');")
+                if required_count > 0:
+                    lines.append(f"    if (arguments.length < {required_count}) throw new TypeError(\"{required_count} argument(s) required, but only \" + arguments.length + \" present.\");")
                 lines.append(f"  }};")
                 lines.append(f"  Object.defineProperty(_op_{name}_{mname}, 'name', {{value: '{mname}'}});")
                 if required_count != arg_count:
