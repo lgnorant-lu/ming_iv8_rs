@@ -42,6 +42,9 @@ pub const MESSAGE_CHANNEL_JS: &str = r#"
     MessagePort.prototype.removeEventListener = function removeEventListener() {};
 
     function MessageChannel() {
+        if (!(this instanceof MessageChannel)) {
+            throw new TypeError("Failed to construct 'MessageChannel': Please use the 'new' operator");
+        }
         this.port1 = new MessagePort();
         this.port2 = new MessagePort();
         this.port1._otherPort = this.port2;
