@@ -408,6 +408,21 @@ fn generate_callbacks(def: &Definition, fn_name: &str) -> String {
             } else {
                 out.push_str(op_receiver_check);
             }
+            if m.required_arg_count > 0 {
+                out.push_str("        let __args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);\n");
+                out.push_str(&format!(
+                    "        if __args.length() < {} {{\n",
+                    m.required_arg_count
+                ));
+                out.push_str(&format!(
+                    "            let msg = v8::String::new(scope, &format!(\"{{}} argument(s) required, but only {{}} present\", {}, __args.length())).unwrap();\n",
+                    m.required_arg_count
+                ));
+                out.push_str("            let exc = v8::Exception::type_error(scope, msg);\n");
+                out.push_str("            scope.throw_exception(exc);\n");
+                out.push_str("            return;\n");
+                out.push_str("        }\n");
+            }
             out.push_str(
                 "        let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);\n",
             );
