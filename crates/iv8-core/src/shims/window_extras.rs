@@ -7,6 +7,64 @@ pub const WINDOW_EXTRAS_JS: &str = r#"
 (function() {
     if (typeof window === 'undefined') return;
 
+    var _winOps = {
+        stop: function stop() {},
+        focus: function focus() {},
+        blur: function blur() {},
+        open: function open(url, target, features) { return null; },
+        alert: function alert(message) {},
+        confirm: function confirm(message) { return false; },
+        prompt: function prompt(message, defaultValue) { return null; },
+        print: function print() {},
+        captureEvents: function captureEvents() {},
+        releaseEvents: function releaseEvents() {},
+        getSelection: function getSelection() { return { rangeCount: 0, toString: function() { return ''; } }; },
+        requestIdleCallback: function requestIdleCallback(cb) { if (typeof cb === 'function') cb({ didTimeout: false, timeRemaining: function() { return 50; } }); return 0; },
+        cancelIdleCallback: function cancelIdleCallback(id) {},
+        requestAnimationFrame: function requestAnimationFrame(cb) { if (typeof cb === 'function') cb(Date.now()); return 0; },
+        cancelAnimationFrame: function cancelAnimationFrame(id) {},
+        reportError: function reportError(e) { if (typeof console !== 'undefined' && console.error) console.error(e); },
+        createImageBitmap: function createImageBitmap() { return Promise.reject(new TypeError('Not supported')); },
+        moveTo: function moveTo(x, y) {},
+        moveBy: function moveBy(dx, dy) {},
+        resizeTo: function resizeTo(w, h) {},
+        resizeBy: function resizeBy(dw, dh) {},
+        scroll: function scroll(x, y) {},
+        scrollTo: function scrollTo(x, y) {},
+        scrollBy: function scrollBy(dx, dy) {},
+        getComputedStyle: function getComputedStyle(el, pseudo) {
+            return { getPropertyValue: function(prop) { return ''; }, getPropertyPriority: function(prop) { return ''; }, length: 0, item: function(i) { return ''; } };
+        },
+        matchMedia: function matchMedia(query) {
+            return { matches: false, media: query, addListener: function() {}, removeListener: function() {}, addEventListener: function() {}, removeEventListener: function() {}, dispatchEvent: function() { return true; }, onchange: null };
+        }
+    };
+    Object.keys(_winOps).forEach(function(k) {
+        if (typeof globalThis[k] === 'undefined') {
+            globalThis[k] = _winOps[k];
+        }
+    });
+
+    if (typeof globalThis.clientInformation === 'undefined') {
+        globalThis.clientInformation = typeof navigator !== 'undefined' ? navigator : {};
+    }
+    if (typeof globalThis.devicePixelRatio === 'undefined') {
+        globalThis.devicePixelRatio = 1;
+    }
+    if (typeof globalThis.innerWidth === 'undefined') { globalThis.innerWidth = 1920; }
+    if (typeof globalThis.innerHeight === 'undefined') { globalThis.innerHeight = 1080; }
+    if (typeof globalThis.outerWidth === 'undefined') { globalThis.outerWidth = 1920; }
+    if (typeof globalThis.outerHeight === 'undefined') { globalThis.outerHeight = 1080; }
+    if (typeof globalThis.screenX === 'undefined') { globalThis.screenX = 0; }
+    if (typeof globalThis.screenY === 'undefined') { globalThis.screenY = 0; }
+    if (typeof globalThis.screenLeft === 'undefined') { globalThis.screenLeft = 0; }
+    if (typeof globalThis.screenTop === 'undefined') { globalThis.screenTop = 0; }
+    if (typeof globalThis.scrollX === 'undefined') { globalThis.scrollX = 0; }
+    if (typeof globalThis.scrollY === 'undefined') { globalThis.scrollY = 0; }
+    if (typeof globalThis.pageXOffset === 'undefined') { globalThis.pageXOffset = 0; }
+    if (typeof globalThis.pageYOffset === 'undefined') { globalThis.pageYOffset = 0; }
+    if (typeof globalThis.orientation === 'undefined') { globalThis.orientation = 0; }
+
     // window.addEventListener/removeEventListener/dispatchEvent
     if (!window.addEventListener) {
         window.addEventListener = function(type, listener, options) {};
