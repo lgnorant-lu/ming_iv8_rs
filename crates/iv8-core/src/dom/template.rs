@@ -1119,8 +1119,8 @@ pub fn install_dom_constructors(
         ("HTMLCanvasElement", "HTMLElement"),
         ("HTMLScriptElement", "HTMLElement"),
         ("HTMLImageElement", "HTMLElement"),
-        ("HTMLVideoElement", "HTMLElement"),
-        ("HTMLAudioElement", "HTMLElement"),
+        ("HTMLVideoElement", "HTMLMediaElement"),
+        ("HTMLAudioElement", "HTMLMediaElement"),
         ("HTMLSelectElement", "HTMLElement"),
         ("HTMLTextAreaElement", "HTMLElement"),
         ("HTMLHeadElement", "HTMLElement"),
@@ -1156,6 +1156,28 @@ pub fn install_dom_constructors(
         if !parent_val.is_function() { continue; }
         let child_obj: v8::Local<v8::Object> = (*child_func).into();
         let _ = child_obj.set_prototype(scope, parent_val);
+    }
+
+    let proto_fixes: &[(&str, &str)] = &[
+        ("HTMLVideoElement", "HTMLMediaElement"),
+        ("HTMLAudioElement", "HTMLMediaElement"),
+    ];
+    for (child, parent) in proto_fixes {
+        let child_key = crate::v8_utils::v8_string(scope, *child);
+        let parent_key = crate::v8_utils::v8_string(scope, *parent);
+        let Some(child_val) = global.get(scope, child_key.into()) else { continue };
+        let Some(parent_val) = global.get(scope, parent_key.into()) else { continue };
+        if !child_val.is_function() || !parent_val.is_function() { continue; }
+        let child_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(child_val) };
+        let parent_ctor: v8::Local<v8::Function> = unsafe { v8::Local::cast_unchecked(parent_val) };
+        let proto_key = crate::v8_utils::v8_string(scope, "prototype");
+        if let Some(child_proto) = child_ctor.get(scope, proto_key.into()) {
+            if let Some(parent_proto) = parent_ctor.get(scope, proto_key.into()) {
+                if let Some(child_proto_obj) = child_proto.to_object(scope) {
+                    let _ = child_proto_obj.set_prototype(scope, parent_proto);
+                }
+            }
+        }
     }
 }
 
