@@ -576,15 +576,21 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // etc.) and setting __proto__ to MediaQueryList.prototype would cause
     // assert_inherits to fail ("property found on object, expected in prototype chain").
     try {
-        if (typeof matchMedia !== 'undefined' && !matchMedia.__iv8MqlPatched) {
+        if (typeof matchMedia !== 'undefined' && !matchMedia.__iv8MqlPatched && typeof MediaQueryList !== 'undefined') {
             var _origMatchMedia = matchMedia;
             var _mqlWrapper = function matchMedia(query) {
                 var mql = _origMatchMedia.call(this, query);
-                if (mql && typeof mql === 'object') {
+                if (mql && typeof mql === 'object' && typeof MediaQueryList !== 'undefined') {
                     try {
-                        Object.defineProperty(mql, Symbol.toStringTag, {
-                            value: 'MediaQueryList', configurable: true, writable: true, enumerable: false,
-                        });
+                        var ownProps = {};
+                        var pnames = Object.getOwnPropertyNames(mql);
+                        for (var i = 0; i < pnames.length; i++) {
+                            ownProps[pnames[i]] = mql[pnames[i]];
+                        }
+                        Object.setPrototypeOf(mql, MediaQueryList.prototype);
+                        for (var k in ownProps) {
+                            try { delete mql[k]; } catch(e) {}
+                        }
                     } catch(e) {}
                 }
                 return mql;
@@ -636,15 +642,13 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // (same rationale as matchMedia above).
     try {
         if (typeof document !== 'undefined' && document.caretPositionFromPoint
-            && !document.caretPositionFromPoint.__iv8CaretPatched) {
+            && !document.caretPositionFromPoint.__iv8CaretPatched && typeof CaretPosition !== 'undefined') {
             var _origCaret = document.caretPositionFromPoint;
             var _caretWrapper = function caretPositionFromPoint(x, y) {
                 var cp = _origCaret.call(this, x, y);
-                if (cp && typeof cp === 'object') {
+                if (cp && typeof cp === 'object' && typeof CaretPosition !== 'undefined') {
                     try {
-                        Object.defineProperty(cp, Symbol.toStringTag, {
-                            value: 'CaretPosition', configurable: true, writable: true, enumerable: false,
-                        });
+                        Object.setPrototypeOf(cp, CaretPosition.prototype);
                     } catch(e) {}
                 }
                 return cp;
@@ -659,11 +663,9 @@ pub const DOCUMENT_PROPS_JS: &str = r#"
     // VisualViewport: the codegen getter returns a plain object. Set
     // toStringTag only (not prototype chain) for the same rationale as above.
     try {
-        if (typeof window !== 'undefined' && window.visualViewport) {
+        if (typeof window !== 'undefined' && window.visualViewport && typeof VisualViewport !== 'undefined') {
             try {
-                Object.defineProperty(window.visualViewport, Symbol.toStringTag, {
-                    value: 'VisualViewport', configurable: true, writable: true, enumerable: false,
-                });
+                Object.setPrototypeOf(window.visualViewport, VisualViewport.prototype);
             } catch(e) {}
         }
     } catch(e) {}
