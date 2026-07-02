@@ -109,6 +109,31 @@ unsafe extern "C" fn illegal_constructor(info: *const v8::FunctionCallbackInfo) 
     scope.throw_exception(exc);
 }
 
+/// Global getter for `navigator` — returns the stored navigator instance.
+/// Reads from globalThis.__iv8NavInst__ (set by JS shim before this getter).
+unsafe extern "C" fn navigator_global_getter(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+    let this = args.this();
+    let key = v8::String::new(scope, "__iv8NavInst__").unwrap();
+    let val = this.get(scope, key.into());
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(val.unwrap_or(v8::undefined(scope).into()));
+}
+
+/// Global getter for `screen` — returns the stored screen instance.
+unsafe extern "C" fn screen_global_getter(info: *const v8::FunctionCallbackInfo) {
+    let info_ref = unsafe { &*info };
+    v8::callback_scope!(unsafe scope, info_ref);
+    let args = v8::FunctionCallbackArguments::from_function_callback_info(info_ref);
+    let this = args.this();
+    let key = v8::String::new(scope, "__iv8ScreenInst__").unwrap();
+    let val = this.get(scope, key.into());
+    let mut rv = v8::ReturnValue::from_function_callback_info(info_ref);
+    rv.set(val.unwrap_or(v8::undefined(scope).into()));
+}
+
 /// Build a DOMException object with the given message and name.
 /// If DOMException constructor is not available (shim not yet installed),
 /// falls back to a plain Error with name property set.
@@ -443,12 +468,22 @@ fn install_native_navigator(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::
         conditionally_hide_properties(scope, nav_obj);
 
         let key = crate::v8_utils::v8_string(scope, "navigator");
-        let _ = global.define_own_property(
-            scope,
-            key.into(),
-            nav_obj.into(),
-            v8::PropertyAttribute::DONT_DELETE,
-        );
+        // Store navigator instance on globalThis.__iv8NavInst__, then install
+        // as accessor property so descriptor returns {get: function, set: undefined}
+        let store_key = crate::v8_utils::v8_string(scope, "__iv8NavInst__");
+        let _ = global.set(scope, store_key.into(), nav_obj.into());
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(navigator_global_getter).build(scope);
+        getter_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "get navigator"));
+        getter_tmpl.remove_prototype();
+        if let Some(getter_fn) = getter_tmpl.get_function(scope) {
+            let mut desc = v8::PropertyDescriptor::new_from_get_set(
+                getter_fn.into(),
+                v8::undefined(scope).into(),
+            );
+            desc.set_enumerable(true);
+            desc.set_configurable(true);
+            let _ = global.define_property(scope, key.into(), &desc);
+        }
 
         // Overwrite global Navigator constructor with illegal_constructor,
         // but preserve install_all's Navigator.prototype (which has EventTarget
@@ -1468,12 +1503,22 @@ fn install_native_screen(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Obj
         }
 
         let key = crate::v8_utils::v8_string(scope, "screen");
-        let _ = global.define_own_property(
-            scope,
-            key.into(),
-            screen_obj.into(),
-            v8::PropertyAttribute::DONT_DELETE,
-        );
+        // Store screen instance on globalThis.__iv8ScreenInst__, then install
+        // as accessor property
+        let store_key = crate::v8_utils::v8_string(scope, "__iv8ScreenInst__");
+        let _ = global.set(scope, store_key.into(), screen_obj.into());
+        let getter_tmpl = v8::FunctionTemplate::builder_raw(screen_global_getter).build(scope);
+        getter_tmpl.set_class_name(crate::v8_utils::v8_string(scope, "get screen"));
+        getter_tmpl.remove_prototype();
+        if let Some(getter_fn) = getter_tmpl.get_function(scope) {
+            let mut desc = v8::PropertyDescriptor::new_from_get_set(
+                getter_fn.into(),
+                v8::undefined(scope).into(),
+            );
+            desc.set_enumerable(true);
+            desc.set_configurable(true);
+            let _ = global.define_property(scope, key.into(), &desc);
+        }
     }
 
     // Overwrite global Screen constructor with illegal_constructor version.

@@ -507,6 +507,45 @@ impl EmbeddedV8Kernel {
             iv8_surface::generated::install_all::fix_accessor_properties(scope, global);
             iv8_surface::generated::install_all::fix_global_accessor_properties(scope, global);
 
+            // Post-fix: convert [Global] data properties to accessor properties.
+            // Shims install real values as data properties (history, customElements, etc.).
+            // idlharness expects accessor properties (descriptor.get === function).
+            // For each [Global] attribute that is a configurable data property:
+            //   read value → store in closure → install accessor getter returning value.
+            // Skip non-configurable (V8 built-in name/length) and already-accessor.
+            let global_attr_names: &[&str] = iv8_surface::generated::install_all::GLOBAL_ATTR_NAMES;
+            let attr_names_js = global_attr_names
+                .iter()
+                .map(|n| format!("'{}'", n))
+                .collect::<Vec<_>>()
+                .join(",");
+            let convert_js = format!(r#"
+                (function() {{
+                    var attrs = [{names}];
+                    for (var i = 0; i < attrs.length; i++) {{
+                        var name = attrs[i];
+                        try {{
+                            var desc = Object.getOwnPropertyDescriptor(globalThis, name);
+                            if (!desc) continue;
+                            if (desc.get || desc.set) continue;
+                            if (!desc.configurable) continue;
+                            var value = desc.value;
+                            var getter = (function(v) {{
+                                return function() {{ return v; }};
+                            }})(value);
+                            Object.defineProperty(globalThis, name, {{
+                                get: getter,
+                                set: undefined,
+                                enumerable: desc.enumerable !== false,
+                                configurable: true
+                            }});
+                        }} catch(e) {{}}
+                    }}
+                }})();
+            "#, names = attr_names_js);
+            let convert_js_str = crate::v8_utils::v8_string(scope, &convert_js);
+            let _ = v8::Script::compile(scope, convert_js_str, None).and_then(|s| s.run(scope));
+
             let fix_proto_js = crate::v8_utils::v8_string(scope, r#"
                 (function() {
                     var shimEvent = globalThis.Event;
@@ -541,6 +580,18 @@ impl EmbeddedV8Kernel {
                         ['Storage','Function'],
                         ['MediaQueryList','EventTarget'],
                         ['MediaQueryListEvent','Event'],
+                        ['CharacterData','Node'],
+                        ['Text','CharacterData'],
+                        ['CDATASection','Text'],
+                        ['Comment','CharacterData'],
+                        ['ProcessingInstruction','CharacterData'],
+                        ['Node','EventTarget'],
+                        ['Element','Node'],
+                        ['HTMLElement','Element'],
+                        ['Screen','Object'],
+                        ['VisualViewport','EventTarget'],
+                        ['WindowProperties','Window'],
+                        ['Location','Object'],
                     ];
                     for (var i = 0; i < fixes.length; i++) {
                         var child = fixes[i][0], parent = fixes[i][1];
@@ -554,6 +605,24 @@ impl EmbeddedV8Kernel {
                                 if (childProto && parentProto) {
                                     Object.setPrototypeOf(childProto, parentProto);
                                 }
+                            }
+                        } catch(e) {}
+                    }
+                    // Fix .constructor on prototypes that got mismatched by shim overrides
+                    var ctorFixes = [
+                        'Location', 'Navigator', 'BroadcastChannel', 'MessagePort',
+                        'Worker', 'SharedWorker', 'Storage', 'Screen',
+                        'EventTarget', 'Node', 'Document', 'Element', 'HTMLElement',
+                        'CharacterData', 'Text', 'Comment', 'Event', 'CustomEvent',
+                        'MouseEvent', 'VisualViewport', 'MediaQueryList',
+                    ];
+                    for (var i = 0; i < ctorFixes.length; i++) {
+                        try {
+                            var ctor = globalThis[ctorFixes[i]];
+                            if (ctor && ctor.prototype) {
+                                Object.defineProperty(ctor.prototype, 'constructor', {
+                                    value: ctor, writable: true, configurable: true, enumerable: false
+                                });
                             }
                         } catch(e) {}
                     }
@@ -573,12 +642,22 @@ impl EmbeddedV8Kernel {
                         try { delete globalThis[workerOnly[i]]; } catch(e) {}
                     }
                     try {
-                        var nf = {};
-                        nf.FILTER_ACCEPT = 1; nf.FILTER_REJECT = 2; nf.FILTER_SKIP = 3;
-                        nf.SHOW_ALL = 4294967295; nf.SHOW_ELEMENT = 1; nf.SHOW_ATTRIBUTE = 2;
-                        nf.SHOW_TEXT = 4; nf.SHOW_CDATA_SECTION = 8; nf.SHOW_PROCESSING_INSTRUCTION = 64;
-                        nf.SHOW_COMMENT = 128; nf.SHOW_DOCUMENT = 256; nf.SHOW_DOCUMENT_TYPE = 512;
-                        nf.SHOW_DOCUMENT_FRAGMENT = 1024; nf.SHOW_NOTATION = 2048;
+                        var nf = function NodeFilter(node) { return 3; };
+                        var consts = {
+                            FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3,
+                            SHOW_ALL: 4294967295, SHOW_ELEMENT: 1, SHOW_ATTRIBUTE: 2,
+                            SHOW_TEXT: 4, SHOW_CDATA_SECTION: 8,
+                            SHOW_ENTITY_REFERENCE: 16, SHOW_ENTITY: 32,
+                            SHOW_PROCESSING_INSTRUCTION: 64,
+                            SHOW_COMMENT: 128, SHOW_DOCUMENT: 256, SHOW_DOCUMENT_TYPE: 512,
+                            SHOW_DOCUMENT_FRAGMENT: 1024, SHOW_NOTATION: 2048
+                        };
+                        for (var k in consts) {
+                            Object.defineProperty(nf, k, {
+                                value: consts[k], writable: false,
+                                enumerable: true, configurable: false
+                            });
+                        }
                         nf.acceptNode = function(node) { return 3; };
                         Object.defineProperty(globalThis, 'NodeFilter', {value: nf, writable: true, configurable: true, enumerable: false});
                     } catch(e) {}

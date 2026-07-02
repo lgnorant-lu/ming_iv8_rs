@@ -980,8 +980,10 @@ pub fn generate_install_all(
             idx += 1;
             let has_setter = !m.readonly || m.has_put_forwards || m.has_replaceable;
 
-            // For global attributes, define on globalThis directly
-            // Only if not already a data property with a value (shim-set)
+            // For global attributes, define on globalThis directly.
+            // Skip if already an accessor property (has get/set).
+            // Data properties will be converted to accessor by JS post-fix
+            // in freeze_all_prototypes (preserving their values).
             out.push_str("    {\n");
             out.push_str(&format!("        let attr_key = v8::String::new(scope, \"{}\").unwrap();\n", attr_name));
             out.push_str("        let should_skip = {\n");
@@ -1010,6 +1012,28 @@ pub fn generate_install_all(
     }
     out.push_str(&format!("    // Fixed {} global accessor properties\n", global_fix_count));
     out.push_str("}\n");
+
+    // Generate GLOBAL_ATTR_NAMES — list of all [Global] attribute names.
+    // Used by freeze_all_prototypes JS post-fix to convert data properties
+    // to accessor properties (preserving values) for idlharness compliance.
+    out.push_str("\npub const GLOBAL_ATTR_NAMES: &[&str] = &[\n");
+    {
+        let mut seen = std::collections::BTreeSet::new();
+        for def in definitions {
+            if def.kind != "interface" { continue; }
+            let ea = process_interface_ea(def);
+            if !ea.is_global { continue; }
+            for m in &def.members {
+                if m.kind == "attribute" {
+                    let name = m.name.as_deref().unwrap_or("");
+                    if name.is_empty() || seen.contains(name) { continue; }
+                    seen.insert(name.to_string());
+                    out.push_str(&format!("    \"{}\",\n", name));
+                }
+            }
+        }
+    }
+    out.push_str("];\n");
 
     // GLOBAL_MOVE_JS is now empty — replaced by fix_global_accessor_properties
     out.push_str("\npub const GLOBAL_MOVE_JS: &str = \"(function(){});\";\n");
