@@ -2849,32 +2849,37 @@ pub fn create_response_template<'s>(
     }
     install_response_members_1(scope, proto);
     install_response_members_2(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: error()
+    {
+        let name = v8::String::new(scope, "error").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: redirect()
+    {
+        let name = v8::String::new(scope, "redirect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_2).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: json()
+    {
+        let name = v8::String::new(scope, "json").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_3).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
 
 fn install_response_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
-    // method: error()
-    {
-        let name = v8::String::new(scope, "error").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: redirect()
-    {
-        let name = v8::String::new(scope, "redirect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_2).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: json()
-    {
-        let name = v8::String::new(scope, "json").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(response_op_3).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: type
     {
         let name = v8::String::new(scope, "type").unwrap();
@@ -2924,9 +2929,6 @@ fn install_response_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         getter.set_class_name(v8::String::new(scope, "get headers").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_response_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: clone()
     {
         let name = v8::String::new(scope, "clone").unwrap();
@@ -2948,6 +2950,9 @@ fn install_response_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         getter.set_class_name(v8::String::new(scope, "get bodyUsed").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_response_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: arrayBuffer()
     {
         let name = v8::String::new(scope, "arrayBuffer").unwrap();

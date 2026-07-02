@@ -1953,33 +1953,39 @@ pub fn create_bluetooth_uuid_template<'s>(
         let tag_val = v8::String::new(scope, "BluetoothUUID").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: getService()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: getService()
     {
         let name = v8::String::new(scope, "getService").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(bluetooth_uuid_op_1).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: getCharacteristic()
+    // static method: getCharacteristic()
     {
         let name = v8::String::new(scope, "getCharacteristic").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(bluetooth_uuid_op_2).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: getDescriptor()
+    // static method: getDescriptor()
     {
         let name = v8::String::new(scope, "getDescriptor").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(bluetooth_uuid_op_3).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: canonicalUUID()
+    // static method: canonicalUUID()
     {
         let name = v8::String::new(scope, "canonicalUUID").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(bluetooth_uuid_op_4).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl

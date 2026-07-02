@@ -4685,12 +4685,15 @@ pub fn create_device_motion_event_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get interval").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: requestPermission()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: requestPermission()
     {
         let name = v8::String::new(scope, "requestPermission").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(device_motion_event_op_5).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -4936,12 +4939,15 @@ pub fn create_device_orientation_event_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get absolute").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: requestPermission()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: requestPermission()
     {
         let name = v8::String::new(scope, "requestPermission").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(device_orientation_event_op_5).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl

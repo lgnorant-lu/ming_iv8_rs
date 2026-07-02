@@ -2764,32 +2764,37 @@ pub fn create_dom_matrix_read_only_template<'s>(
     install_dom_matrix_read_only_members_3(scope, proto);
     install_dom_matrix_read_only_members_4(scope, proto);
     install_dom_matrix_read_only_members_5(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: fromMatrix()
+    {
+        let name = v8::String::new(scope, "fromMatrix").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_read_only_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: fromFloat32Array()
+    {
+        let name = v8::String::new(scope, "fromFloat32Array").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_read_only_op_2).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: fromFloat64Array()
+    {
+        let name = v8::String::new(scope, "fromFloat64Array").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_read_only_op_3).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
 
 fn install_dom_matrix_read_only_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
-    // method: fromMatrix()
-    {
-        let name = v8::String::new(scope, "fromMatrix").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_read_only_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: fromFloat32Array()
-    {
-        let name = v8::String::new(scope, "fromFloat32Array").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_read_only_op_2).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: fromFloat64Array()
-    {
-        let name = v8::String::new(scope, "fromFloat64Array").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_read_only_op_3).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: a
     {
         let name = v8::String::new(scope, "a").unwrap();
@@ -2839,9 +2844,6 @@ fn install_dom_matrix_read_only_members_1<'s>(scope: &v8::PinScope<'s, '_>, prot
         getter.set_class_name(v8::String::new(scope, "get m11").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_dom_matrix_read_only_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: m12
     {
         let name = v8::String::new(scope, "m12").unwrap();
@@ -2863,6 +2865,9 @@ fn install_dom_matrix_read_only_members_2<'s>(scope: &v8::PinScope<'s, '_>, prot
         getter.set_class_name(v8::String::new(scope, "get m14").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_dom_matrix_read_only_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: m21
     {
         let name = v8::String::new(scope, "m21").unwrap();
@@ -2912,9 +2917,6 @@ fn install_dom_matrix_read_only_members_2<'s>(scope: &v8::PinScope<'s, '_>, prot
         getter.set_class_name(v8::String::new(scope, "get m33").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_dom_matrix_read_only_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: m34
     {
         let name = v8::String::new(scope, "m34").unwrap();
@@ -2936,6 +2938,9 @@ fn install_dom_matrix_read_only_members_3<'s>(scope: &v8::PinScope<'s, '_>, prot
         getter.set_class_name(v8::String::new(scope, "get m42").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_dom_matrix_read_only_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: m43
     {
         let name = v8::String::new(scope, "m43").unwrap();
@@ -2985,9 +2990,6 @@ fn install_dom_matrix_read_only_members_3<'s>(scope: &v8::PinScope<'s, '_>, prot
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_dom_matrix_read_only_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: scale3d()
     {
         let name = v8::String::new(scope, "scale3d").unwrap();
@@ -3009,6 +3011,9 @@ fn install_dom_matrix_read_only_members_4<'s>(scope: &v8::PinScope<'s, '_>, prot
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_dom_matrix_read_only_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: rotateAxisAngle()
     {
         let name = v8::String::new(scope, "rotateAxisAngle").unwrap();
@@ -3058,9 +3063,6 @@ fn install_dom_matrix_read_only_members_4<'s>(scope: &v8::PinScope<'s, '_>, prot
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_dom_matrix_read_only_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: transformPoint()
     {
         let name = v8::String::new(scope, "transformPoint").unwrap();
@@ -3082,6 +3084,9 @@ fn install_dom_matrix_read_only_members_5<'s>(scope: &v8::PinScope<'s, '_>, prot
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_dom_matrix_read_only_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: unknown()
     {
         let name = v8::String::new(scope, "unknown").unwrap();
@@ -3436,13 +3441,6 @@ pub fn create_dom_point_read_only_template<'s>(
         let tag_val = v8::String::new(scope, "DOMPointReadOnly").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: fromPoint()
-    {
-        let name = v8::String::new(scope, "fromPoint").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_point_read_only_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
@@ -3484,6 +3482,16 @@ pub fn create_dom_point_read_only_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(dom_point_read_only_op_7).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: fromPoint()
+    {
+        let name = v8::String::new(scope, "fromPoint").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_point_read_only_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -3872,20 +3880,6 @@ pub fn create_dom_quad_template<'s>(
         let tag_val = v8::String::new(scope, "DOMQuad").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: fromRect()
-    {
-        let name = v8::String::new(scope, "fromRect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_quad_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: fromQuad()
-    {
-        let name = v8::String::new(scope, "fromQuad").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_quad_op_2).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: p1
     {
         let name = v8::String::new(scope, "p1").unwrap();
@@ -3927,6 +3921,24 @@ pub fn create_dom_quad_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(dom_quad_op_8).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: fromRect()
+    {
+        let name = v8::String::new(scope, "fromRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_quad_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: fromQuad()
+    {
+        let name = v8::String::new(scope, "fromQuad").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_quad_op_2).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -4407,13 +4419,6 @@ pub fn create_dom_rect_read_only_template<'s>(
         let tag_val = v8::String::new(scope, "DOMRectReadOnly").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: fromRect()
-    {
-        let name = v8::String::new(scope, "fromRect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_rect_read_only_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
@@ -4476,6 +4481,16 @@ pub fn create_dom_rect_read_only_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(dom_rect_read_only_op_10).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: fromRect()
+    {
+        let name = v8::String::new(scope, "fromRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_rect_read_only_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -11952,32 +11967,37 @@ pub fn create_dom_matrix_template<'s>(
     install_dom_matrix_members_2(scope, proto);
     install_dom_matrix_members_3(scope, proto);
     install_dom_matrix_members_4(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: fromMatrix()
+    {
+        let name = v8::String::new(scope, "fromMatrix").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: fromFloat32Array()
+    {
+        let name = v8::String::new(scope, "fromFloat32Array").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_op_2).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: fromFloat64Array()
+    {
+        let name = v8::String::new(scope, "fromFloat64Array").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_op_3).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
 
 fn install_dom_matrix_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
-    // method: fromMatrix()
-    {
-        let name = v8::String::new(scope, "fromMatrix").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: fromFloat32Array()
-    {
-        let name = v8::String::new(scope, "fromFloat32Array").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_op_2).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: fromFloat64Array()
-    {
-        let name = v8::String::new(scope, "fromFloat64Array").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_matrix_op_3).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: a
     {
         let name = v8::String::new(scope, "a").unwrap();
@@ -12041,9 +12061,6 @@ fn install_dom_matrix_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
         setter.set_class_name(v8::String::new(scope, "set m11").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_dom_matrix_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: m12
     {
         let name = v8::String::new(scope, "m12").unwrap();
@@ -12071,6 +12088,9 @@ fn install_dom_matrix_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
         setter.set_class_name(v8::String::new(scope, "set m14").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_dom_matrix_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: m21
     {
         let name = v8::String::new(scope, "m21").unwrap();
@@ -12134,9 +12154,6 @@ fn install_dom_matrix_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
         setter.set_class_name(v8::String::new(scope, "set m33").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_dom_matrix_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: m34
     {
         let name = v8::String::new(scope, "m34").unwrap();
@@ -12164,6 +12181,9 @@ fn install_dom_matrix_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
         setter.set_class_name(v8::String::new(scope, "set m42").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_dom_matrix_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: m43
     {
         let name = v8::String::new(scope, "m43").unwrap();
@@ -12217,9 +12237,6 @@ fn install_dom_matrix_members_3<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_dom_matrix_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: rotateSelf()
     {
         let name = v8::String::new(scope, "rotateSelf").unwrap();
@@ -12241,6 +12258,9 @@ fn install_dom_matrix_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loc
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_dom_matrix_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: skewXSelf()
     {
         let name = v8::String::new(scope, "skewXSelf").unwrap();
@@ -12696,13 +12716,6 @@ pub fn create_dom_point_template<'s>(
         let tag_val = v8::String::new(scope, "DOMPoint").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: fromPoint()
-    {
-        let name = v8::String::new(scope, "fromPoint").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_point_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
@@ -12738,6 +12751,16 @@ pub fn create_dom_point_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(dom_point_set_5).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set w").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: fromPoint()
+    {
+        let name = v8::String::new(scope, "fromPoint").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_point_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -13167,13 +13190,6 @@ pub fn create_dom_rect_template<'s>(
         let tag_val = v8::String::new(scope, "DOMRect").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: fromRect()
-    {
-        let name = v8::String::new(scope, "fromRect").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_rect_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: x
     {
         let name = v8::String::new(scope, "x").unwrap();
@@ -13209,6 +13225,16 @@ pub fn create_dom_rect_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(dom_rect_set_5).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set height").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: fromRect()
+    {
+        let name = v8::String::new(scope, "fromRect").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(dom_rect_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -13612,27 +13638,6 @@ pub fn create_abort_signal_template<'s>(
         let tag_val = v8::String::new(scope, "AbortSignal").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: abort()
-    {
-        let name = v8::String::new(scope, "abort").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(abort_signal_op_1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: timeout()
-    {
-        let name = v8::String::new(scope, "timeout").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(abort_signal_op_2).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: any()
-    {
-        let name = v8::String::new(scope, "any").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(abort_signal_op_3).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: aborted
     {
         let name = v8::String::new(scope, "aborted").unwrap();
@@ -13662,6 +13667,32 @@ pub fn create_abort_signal_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(abort_signal_set_7).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set onabort").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: abort()
+    {
+        let name = v8::String::new(scope, "abort").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(abort_signal_op_1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: timeout()
+    {
+        let name = v8::String::new(scope, "timeout").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(abort_signal_op_2).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: any()
+    {
+        let name = v8::String::new(scope, "any").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(abort_signal_op_3).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -29746,7 +29777,24 @@ pub fn create_document_template<'s>(
     install_document_members_17(scope, proto);
     install_document_members_18(scope, proto);
     install_document_members_19(scope, proto);
-    install_document_members_20(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: parseHTMLUnsafe()
+    {
+        let name = v8::String::new(scope, "parseHTMLUnsafe").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_36).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: parseHTML()
+    {
+        let name = v8::String::new(scope, "parseHTML").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_37).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
@@ -30010,20 +30058,6 @@ fn install_document_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         setter.set_class_name(v8::String::new(scope, "set onfullscreenerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-    // method: parseHTMLUnsafe()
-    {
-        let name = v8::String::new(scope, "parseHTMLUnsafe").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_36).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: parseHTML()
-    {
-        let name = v8::String::new(scope, "parseHTML").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(document_op_37).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: location
     {
         let name = v8::String::new(scope, "location").unwrap();
@@ -30049,9 +30083,6 @@ fn install_document_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         setter.set_class_name(v8::String::new(scope, "set dir").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: body
     {
         let name = v8::String::new(scope, "body").unwrap();
@@ -30068,6 +30099,9 @@ fn install_document_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         getter.set_class_name(v8::String::new(scope, "get head").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: images
     {
         let name = v8::String::new(scope, "images").unwrap();
@@ -30124,9 +30158,6 @@ fn install_document_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_document_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: open()
     {
         let name = v8::String::new(scope, "open").unwrap();
@@ -30141,6 +30172,9 @@ fn install_document_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_document_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: write()
     {
         let name = v8::String::new(scope, "write").unwrap();
@@ -30199,9 +30233,6 @@ fn install_document_members_6<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_document_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: queryCommandSupported()
     {
         let name = v8::String::new(scope, "queryCommandSupported").unwrap();
@@ -30216,6 +30247,9 @@ fn install_document_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_document_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onreadystatechange
     {
         let name = v8::String::new(scope, "onreadystatechange").unwrap();
@@ -30286,9 +30320,6 @@ fn install_document_members_7<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         getter.set_class_name(v8::String::new(scope, "get anchors").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: applets
     {
         let name = v8::String::new(scope, "applets").unwrap();
@@ -30303,6 +30334,9 @@ fn install_document_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_document_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: captureEvents()
     {
         let name = v8::String::new(scope, "captureEvents").unwrap();
@@ -30363,9 +30397,6 @@ fn install_document_members_8<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_document_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onpointerlockchange
     {
         let name = v8::String::new(scope, "onpointerlockchange").unwrap();
@@ -30384,6 +30415,9 @@ fn install_document_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         setter.set_class_name(v8::String::new(scope, "set onpointerlockerror").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: exitPointerLock()
     {
         let name = v8::String::new(scope, "exitPointerLock").unwrap();
@@ -30442,9 +30476,6 @@ fn install_document_members_9<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_document_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: rootElement
     {
         let name = v8::String::new(scope, "rootElement").unwrap();
@@ -30459,6 +30490,9 @@ fn install_document_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_document_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: hasRedemptionRecord()
     {
         let name = v8::String::new(scope, "hasRedemptionRecord").unwrap();
@@ -30515,9 +30549,6 @@ fn install_document_members_10<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_document_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getElementById()
     {
         let name = v8::String::new(scope, "getElementById").unwrap();
@@ -30532,6 +30563,9 @@ fn install_document_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         getter.set_class_name(v8::String::new(scope, "get customElementRegistry").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: children
     {
         let name = v8::String::new(scope, "children").unwrap();
@@ -30588,9 +30622,6 @@ fn install_document_members_11<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_document_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: querySelector()
     {
         let name = v8::String::new(scope, "querySelector").unwrap();
@@ -30605,6 +30636,9 @@ fn install_document_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_document_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: createExpression()
     {
         let name = v8::String::new(scope, "createExpression").unwrap();
@@ -30671,9 +30705,6 @@ fn install_document_members_12<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onbeforetoggle").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_13<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onblur
     {
         let name = v8::String::new(scope, "onblur").unwrap();
@@ -30692,6 +30723,9 @@ fn install_document_members_13<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set oncancel").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_13<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oncanplay
     {
         let name = v8::String::new(scope, "oncanplay").unwrap();
@@ -30764,9 +30798,6 @@ fn install_document_members_13<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set oncontextmenu").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_14<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oncontextrestored
     {
         let name = v8::String::new(scope, "oncontextrestored").unwrap();
@@ -30785,6 +30816,9 @@ fn install_document_members_14<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set oncopy").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_14<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: oncuechange
     {
         let name = v8::String::new(scope, "oncuechange").unwrap();
@@ -30857,9 +30891,6 @@ fn install_document_members_14<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set ondragover").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_15<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ondragstart
     {
         let name = v8::String::new(scope, "ondragstart").unwrap();
@@ -30878,6 +30909,9 @@ fn install_document_members_15<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set ondrop").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_15<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ondurationchange
     {
         let name = v8::String::new(scope, "ondurationchange").unwrap();
@@ -30950,9 +30984,6 @@ fn install_document_members_15<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set oninvalid").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_16<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onkeydown
     {
         let name = v8::String::new(scope, "onkeydown").unwrap();
@@ -30971,6 +31002,9 @@ fn install_document_members_16<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onkeypress").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_16<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onkeyup
     {
         let name = v8::String::new(scope, "onkeyup").unwrap();
@@ -31043,9 +31077,6 @@ fn install_document_members_16<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onmouseleave").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_17<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onmousemove
     {
         let name = v8::String::new(scope, "onmousemove").unwrap();
@@ -31064,6 +31095,9 @@ fn install_document_members_17<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onmouseout").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_17<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onmouseover
     {
         let name = v8::String::new(scope, "onmouseover").unwrap();
@@ -31136,9 +31170,6 @@ fn install_document_members_17<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onratechange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_18<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onreset
     {
         let name = v8::String::new(scope, "onreset").unwrap();
@@ -31157,6 +31188,9 @@ fn install_document_members_18<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onresize").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_18<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onscroll
     {
         let name = v8::String::new(scope, "onscroll").unwrap();
@@ -31229,9 +31263,6 @@ fn install_document_members_18<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onstalled").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_19<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onsubmit
     {
         let name = v8::String::new(scope, "onsubmit").unwrap();
@@ -31250,6 +31281,9 @@ fn install_document_members_19<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onsuspend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_document_members_19<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: ontimeupdate
     {
         let name = v8::String::new(scope, "ontimeupdate").unwrap();
@@ -31322,9 +31356,6 @@ fn install_document_members_19<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Loca
         setter.set_class_name(v8::String::new(scope, "set onwebkittransitionend").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_document_members_20<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: onwheel
     {
         let name = v8::String::new(scope, "onwheel").unwrap();

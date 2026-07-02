@@ -833,13 +833,6 @@ pub fn create_readable_stream_template<'s>(
         let tag_val = v8::String::new(scope, "ReadableStream").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: from()
-    {
-        let name = v8::String::new(scope, "from").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(readable_stream_op_1).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: locked
     {
         let name = v8::String::new(scope, "locked").unwrap();
@@ -881,6 +874,16 @@ pub fn create_readable_stream_template<'s>(
         let func_tmpl = v8::FunctionTemplate::builder_raw(readable_stream_op_7).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: from()
+    {
+        let name = v8::String::new(scope, "from").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(readable_stream_op_1).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl

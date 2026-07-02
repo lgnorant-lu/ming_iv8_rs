@@ -32,6 +32,7 @@ pub struct MemberData {
     pub arguments: Vec<String>,
     pub const_value: Option<String>,
     pub required_arg_count: usize,
+    pub special: Option<String>,
 }
 
 /// Extract the type name from an IDL type JSON value (recursive).
@@ -213,6 +214,8 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
                             .map(|arr| arr.iter().any(|ea| ea.get("name").and_then(|v| v.as_str()) == Some("Replaceable")))
                             .unwrap_or(false);
 
+                        let special = m.get("special").and_then(|v| v.as_str()).map(|s| s.to_string());
+
                         MemberData {
                             kind,
                             name: mname,
@@ -224,6 +227,7 @@ pub fn load_ir(path: &str) -> Result<(Vec<Definition>, JsonStats), String> {
                             arguments: args,
                             const_value,
                             required_arg_count,
+                            special,
                         }
                     })
                     .collect()
@@ -436,6 +440,7 @@ mod tests {
             arguments: vec![],
             const_value: None,
             required_arg_count: 0,
+            special: None,
         }
     }
 

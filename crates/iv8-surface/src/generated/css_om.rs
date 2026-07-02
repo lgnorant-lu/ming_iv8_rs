@@ -1988,19 +1988,23 @@ pub fn create_css_style_value_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-    // method: parse()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: parse()
     {
         let name = v8::String::new(scope, "parse").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_style_value_op_2).length(2).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: parseAll()
+    // static method: parseAll()
     {
         let name = v8::String::new(scope, "parseAll").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_style_value_op_3).length(2).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -22528,12 +22532,15 @@ pub fn create_css_color_value_template<'s>(
         let tag_val = v8::String::new(scope, "CSSColorValue").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    // method: parse()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: parse()
     {
         let name = v8::String::new(scope, "parse").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_color_value_op_1).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -23220,13 +23227,6 @@ pub fn create_css_numeric_value_template<'s>(
         let tag_val = v8::String::new(scope, "CSSNumericValue").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    install_css_numeric_value_members_1(scope, proto);
-    install_css_numeric_value_members_2(scope, proto);
-
-    tmpl
-}
-
-fn install_css_numeric_value_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: add()
     {
         let name = v8::String::new(scope, "add").unwrap();
@@ -23297,18 +23297,19 @@ fn install_css_numeric_value_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: 
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_css_numeric_value_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
-    // method: parse()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: parse()
     {
         let name = v8::String::new(scope, "parse").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(css_numeric_value_op_11).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-}
+    }
 
+    tmpl
+}
 
 pub(crate) unsafe extern "C" fn css_transform_value_get_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

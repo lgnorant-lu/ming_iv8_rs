@@ -3882,12 +3882,15 @@ pub fn create_audio_decoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-    // method: isConfigSupported()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: isConfigSupported()
     {
         let name = v8::String::new(scope, "isConfigSupported").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(audio_decoder_op_9).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -4376,12 +4379,15 @@ pub fn create_audio_encoder_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-    // method: isConfigSupported()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: isConfigSupported()
     {
         let name = v8::String::new(scope, "isConfigSupported").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(audio_encoder_op_9).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl

@@ -568,6 +568,7 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
     const MEMBER_BATCH_SIZE: usize = 10;
     let mut member_blocks: Vec<String> = Vec::new();
     let mut const_blocks: Vec<String> = Vec::new();
+    let mut static_blocks: Vec<String> = Vec::new();
     let mut idx = 0;
     for m in &def.members {
         if m.kind == "const" {
@@ -638,6 +639,7 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
 
         if m.kind == "operation" {
             let op_name = m.name.as_deref().unwrap_or("unknown");
+            let is_static = m.special.as_deref() == Some("static");
             // Calculate minOverloadLength: min required_arg_count across all
             // overloads with the same name. WebIDL spec: interface object
             // .length = minOverloadLength for overloaded operations.
@@ -665,9 +667,30 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
                     "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).build(scope);\n", fn_name, idx));
             }
             block.push_str("        func_tmpl.set_class_name(name);\n");
-            block.push_str(&format!("        {}.set(name.into(), func_tmpl.into());\n", target_var));
-            block.push_str("    }\n");
-            member_blocks.push(block);
+            if is_static {
+                // Static operations go on the constructor function
+                let mut sblock = String::new();
+                sblock.push_str(&format!("    // static method: {}()\n", op_name));
+                sblock.push_str("    {\n");
+                sblock.push_str(&format!("        let name = v8::String::new(scope, \"{}\").unwrap();\n", op_name));
+                if arg_count > 0 {
+                    sblock.push_str(&format!(
+                        "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).length({}).build(scope);\n",
+                        fn_name, idx, arg_count));
+                } else {
+                    sblock.push_str(&format!(
+                        "        let func_tmpl = v8::FunctionTemplate::builder_raw({}_op_{}).build(scope);\n", fn_name, idx));
+                }
+                sblock.push_str("        func_tmpl.set_class_name(name);\n");
+                sblock.push_str("        let func_fn = func_tmpl.get_function(scope).unwrap();\n");
+                sblock.push_str("        ctor.set(scope, name.into(), func_fn.into());\n");
+                sblock.push_str("    }\n");
+                static_blocks.push(sblock);
+            } else {
+                block.push_str(&format!("        {}.set(name.into(), func_tmpl.into());\n", target_var));
+                block.push_str("    }\n");
+                member_blocks.push(block);
+            }
         }
     }
 
@@ -694,9 +717,12 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
             }
             helper_fns.push_str("}\n\n");
         }
-        if !const_blocks.is_empty() {
+        if !const_blocks.is_empty() || !static_blocks.is_empty() {
             out.push_str("    if let Some(ctor) = tmpl.get_function(scope) {\n");
             for block in &const_blocks {
+                out.push_str(block);
+            }
+            for block in &static_blocks {
                 out.push_str(block);
             }
             out.push_str("    }\n");
@@ -707,9 +733,12 @@ fn generate_template_function(def: &Definition, ea: &EaResult, fn_name: &str) ->
         return out;
     }
 
-    if !const_blocks.is_empty() {
+    if !const_blocks.is_empty() || !static_blocks.is_empty() {
         out.push_str("    if let Some(ctor) = tmpl.get_function(scope) {\n");
         for block in &const_blocks {
+            out.push_str(block);
+        }
+        for block in &static_blocks {
             out.push_str(block);
         }
         out.push_str("    }\n");

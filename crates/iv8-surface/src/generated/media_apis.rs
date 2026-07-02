@@ -4620,6 +4620,16 @@ pub fn create_media_recorder_template<'s>(
     }
     install_media_recorder_members_1(scope, proto);
     install_media_recorder_members_2(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: isTypeSupported()
+    {
+        let name = v8::String::new(scope, "isTypeSupported").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(media_recorder_op_18).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
@@ -4756,13 +4766,6 @@ fn install_media_recorder_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8:
     {
         let name = v8::String::new(scope, "requestData").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(media_recorder_op_17).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: isTypeSupported()
-    {
-        let name = v8::String::new(scope, "isTypeSupported").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(media_recorder_op_18).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
@@ -5683,6 +5686,16 @@ pub fn create_media_source_template<'s>(
     }
     install_media_source_members_1(scope, proto);
     install_media_source_members_2(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: isTypeSupported()
+    {
+        let name = v8::String::new(scope, "isTypeSupported").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(media_source_op_15).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
@@ -5794,13 +5807,6 @@ fn install_media_source_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::L
     {
         let name = v8::String::new(scope, "clearLiveSeekableRange").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(media_source_op_14).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: isTypeSupported()
-    {
-        let name = v8::String::new(scope, "isTypeSupported").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(media_source_op_15).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

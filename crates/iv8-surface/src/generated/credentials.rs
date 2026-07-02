@@ -209,12 +209,15 @@ pub fn create_credential_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get type").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: isConditionalMediationAvailable()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: isConditionalMediationAvailable()
     {
         let name = v8::String::new(scope, "isConditionalMediationAvailable").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(credential_op_3).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -1217,13 +1220,6 @@ pub fn create_public_key_credential_template<'s>(
         let tag_val = v8::String::new(scope, "PublicKeyCredential").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    install_public_key_credential_members_1(scope, proto);
-    install_public_key_credential_members_2(scope, proto);
-
-    tmpl
-}
-
-fn install_public_key_credential_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: rawId
     {
         let name = v8::String::new(scope, "rawId").unwrap();
@@ -1252,13 +1248,6 @@ fn install_public_key_credential_members_1<'s>(scope: &v8::PinScope<'s, '_>, pro
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-    // method: isConditionalMediationAvailable()
-    {
-        let name = v8::String::new(scope, "isConditionalMediationAvailable").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_5).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // method: toJSON()
     {
         let name = v8::String::new(scope, "toJSON").unwrap();
@@ -1266,60 +1255,75 @@ fn install_public_key_credential_members_1<'s>(scope: &v8::PinScope<'s, '_>, pro
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-    // method: isUserVerifyingPlatformAuthenticatorAvailable()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: isConditionalMediationAvailable()
+    {
+        let name = v8::String::new(scope, "isConditionalMediationAvailable").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_5).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: isUserVerifyingPlatformAuthenticatorAvailable()
     {
         let name = v8::String::new(scope, "isUserVerifyingPlatformAuthenticatorAvailable").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_7).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: getClientCapabilities()
+    // static method: getClientCapabilities()
     {
         let name = v8::String::new(scope, "getClientCapabilities").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_8).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: parseCreationOptionsFromJSON()
+    // static method: parseCreationOptionsFromJSON()
     {
         let name = v8::String::new(scope, "parseCreationOptionsFromJSON").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_9).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: parseRequestOptionsFromJSON()
+    // static method: parseRequestOptionsFromJSON()
     {
         let name = v8::String::new(scope, "parseRequestOptionsFromJSON").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_10).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-}
-
-fn install_public_key_credential_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
-    // method: signalUnknownCredential()
+    // static method: signalUnknownCredential()
     {
         let name = v8::String::new(scope, "signalUnknownCredential").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_11).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: signalAllAcceptedCredentials()
+    // static method: signalAllAcceptedCredentials()
     {
         let name = v8::String::new(scope, "signalAllAcceptedCredentials").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_12).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: signalCurrentUserDetails()
+    // static method: signalCurrentUserDetails()
     {
         let name = v8::String::new(scope, "signalCurrentUserDetails").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(public_key_credential_op_13).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-}
+    }
 
+    tmpl
+}
 
 pub fn fix_accessors_credentials(scope: &v8::PinScope<'_, '_>, global: v8::Local<v8::Object>) {
     // fixed 0 accessors

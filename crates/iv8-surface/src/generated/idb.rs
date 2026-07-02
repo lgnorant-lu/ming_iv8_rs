@@ -2253,40 +2253,46 @@ pub fn create_idb_key_range_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get upperOpen").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: only()
-    {
-        let name = v8::String::new(scope, "only").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_5).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: lowerBound()
-    {
-        let name = v8::String::new(scope, "lowerBound").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_6).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: upperBound()
-    {
-        let name = v8::String::new(scope, "upperBound").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_7).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: bound()
-    {
-        let name = v8::String::new(scope, "bound").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_8).length(2).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // method: includes()
     {
         let name = v8::String::new(scope, "includes").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_9).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: only()
+    {
+        let name = v8::String::new(scope, "only").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_5).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: lowerBound()
+    {
+        let name = v8::String::new(scope, "lowerBound").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_6).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: upperBound()
+    {
+        let name = v8::String::new(scope, "upperBound").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_7).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: bound()
+    {
+        let name = v8::String::new(scope, "bound").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(idb_key_range_op_8).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl

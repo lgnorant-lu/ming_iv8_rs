@@ -1273,25 +1273,45 @@ pub fn create_url_template<'s>(
     }
     install_url_members_1(scope, proto);
     install_url_members_2(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: parse()
+    {
+        let name = v8::String::new(scope, "parse").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_1).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: canParse()
+    {
+        let name = v8::String::new(scope, "canParse").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_2).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: createObjectURL()
+    {
+        let name = v8::String::new(scope, "createObjectURL").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_16).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: revokeObjectURL()
+    {
+        let name = v8::String::new(scope, "revokeObjectURL").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_17).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
 
 fn install_url_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
-    // method: parse()
-    {
-        let name = v8::String::new(scope, "parse").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_1).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: canParse()
-    {
-        let name = v8::String::new(scope, "canParse").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_2).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // attribute: href
     {
         let name = v8::String::new(scope, "href").unwrap();
@@ -1362,9 +1382,6 @@ fn install_url_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, 
         setter.set_class_name(v8::String::new(scope, "set port").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_url_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: pathname
     {
         let name = v8::String::new(scope, "pathname").unwrap();
@@ -1383,6 +1400,9 @@ fn install_url_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, 
         setter.set_class_name(v8::String::new(scope, "set search").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
+}
+
+fn install_url_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // attribute: searchParams
     {
         let name = v8::String::new(scope, "searchParams").unwrap();
@@ -1403,20 +1423,6 @@ fn install_url_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, 
     {
         let name = v8::String::new(scope, "toJSON").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_15).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: createObjectURL()
-    {
-        let name = v8::String::new(scope, "createObjectURL").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_16).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: revokeObjectURL()
-    {
-        let name = v8::String::new(scope, "revokeObjectURL").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(url_op_17).length(1).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

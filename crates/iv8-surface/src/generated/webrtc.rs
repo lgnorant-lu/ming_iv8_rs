@@ -2378,13 +2378,6 @@ pub fn create_rtc_rtp_receiver_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get transport").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: getCapabilities()
-    {
-        let name = v8::String::new(scope, "getCapabilities").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_op_3).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // method: getParameters()
     {
         let name = v8::String::new(scope, "getParameters").unwrap();
@@ -2430,6 +2423,16 @@ pub fn create_rtc_rtp_receiver_template<'s>(
         let setter = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_set_9).length(1).build(scope);
         setter.set_class_name(v8::String::new(scope, "set transform").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: getCapabilities()
+    {
+        let name = v8::String::new(scope, "getCapabilities").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_rtp_receiver_op_3).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -2943,13 +2946,6 @@ pub fn create_rtc_rtp_sender_template<'s>(
         getter.set_class_name(v8::String::new(scope, "get transport").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: getCapabilities()
-    {
-        let name = v8::String::new(scope, "getCapabilities").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_op_3).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // method: setParameters()
     {
         let name = v8::String::new(scope, "setParameters").unwrap();
@@ -3000,6 +2996,16 @@ pub fn create_rtc_rtp_sender_template<'s>(
         let getter = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_get_10).length(0).build(scope);
         getter.set_class_name(v8::String::new(scope, "get dtmf").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
+    }
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: getCapabilities()
+    {
+        let name = v8::String::new(scope, "getCapabilities").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_rtp_sender_op_3).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl
@@ -9805,6 +9811,16 @@ pub fn create_rtc_peer_connection_template<'s>(
     install_rtc_peer_connection_members_3(scope, proto);
     install_rtc_peer_connection_members_4(scope, proto);
     install_rtc_peer_connection_members_5(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: generateCertificate()
+    {
+        let name = v8::String::new(scope, "generateCertificate").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_38).length(1).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
@@ -10092,13 +10108,6 @@ fn install_rtc_peer_connection_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto
         getter.set_class_name(v8::String::new(scope, "get idpErrorInfo").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), None, v8::PropertyAttribute::NONE);
     }
-    // method: generateCertificate()
-    {
-        let name = v8::String::new(scope, "generateCertificate").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(rtc_peer_connection_op_38).length(1).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
     // method: getSenders()
     {
         let name = v8::String::new(scope, "getSenders").unwrap();
@@ -10113,9 +10122,6 @@ fn install_rtc_peer_connection_members_4<'s>(scope: &v8::PinScope<'s, '_>, proto
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-}
-
-fn install_rtc_peer_connection_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: getTransceivers()
     {
         let name = v8::String::new(scope, "getTransceivers").unwrap();
@@ -10123,6 +10129,9 @@ fn install_rtc_peer_connection_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
+}
+
+fn install_rtc_peer_connection_members_5<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: addTrack()
     {
         let name = v8::String::new(scope, "addTrack").unwrap();

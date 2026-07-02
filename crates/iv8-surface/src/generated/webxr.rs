@@ -12095,12 +12095,15 @@ pub fn create_xr_web_gl_layer_template<'s>(
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }
-    // method: getNativeFramebufferScaleFactor()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: getNativeFramebufferScaleFactor()
     {
         let name = v8::String::new(scope, "getNativeFramebufferScaleFactor").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(xr_web_gl_layer_op_8).length(1).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
     }
 
     tmpl

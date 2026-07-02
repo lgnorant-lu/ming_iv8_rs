@@ -834,6 +834,24 @@ pub fn create_subtle_crypto_template<'s>(
     }
     install_subtle_crypto_members_1(scope, proto);
     install_subtle_crypto_members_2(scope, proto);
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: supports()
+    {
+        let name = v8::String::new(scope, "supports").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(subtle_crypto_op_18).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    // static method: supports()
+    {
+        let name = v8::String::new(scope, "supports").unwrap();
+        let func_tmpl = v8::FunctionTemplate::builder_raw(subtle_crypto_op_19).length(2).build(scope);
+        func_tmpl.set_class_name(name);
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
+    }
+    }
 
     tmpl
 }
@@ -958,20 +976,6 @@ fn install_subtle_crypto_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::
     {
         let name = v8::String::new(scope, "getPublicKey").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(subtle_crypto_op_17).length(2).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: supports()
-    {
-        let name = v8::String::new(scope, "supports").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(subtle_crypto_op_18).length(2).build(scope);
-        func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
-    }
-    // method: supports()
-    {
-        let name = v8::String::new(scope, "supports").unwrap();
-        let func_tmpl = v8::FunctionTemplate::builder_raw(subtle_crypto_op_19).length(2).build(scope);
         func_tmpl.set_class_name(name);
         proto.set(name.into(), func_tmpl.into());
     }

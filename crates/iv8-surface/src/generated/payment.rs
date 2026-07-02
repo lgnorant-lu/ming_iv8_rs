@@ -670,13 +670,6 @@ pub fn create_payment_request_template<'s>(
         let tag_val = v8::String::new(scope, "PaymentRequest").unwrap();
         proto.set(tag_sym.into(), tag_val.into());
     }
-    install_payment_request_members_1(scope, proto);
-    install_payment_request_members_2(scope, proto);
-
-    tmpl
-}
-
-fn install_payment_request_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
     // method: show()
     {
         let name = v8::String::new(scope, "show").unwrap();
@@ -753,25 +746,27 @@ fn install_payment_request_members_1<'s>(scope: &v8::PinScope<'s, '_>, proto: v8
         setter.set_class_name(v8::String::new(scope, "set onpaymentmethodchange").unwrap());
         proto.set_accessor_property(name.into(), Some(getter), Some(setter), v8::PropertyAttribute::NONE);
     }
-}
-
-fn install_payment_request_members_2<'s>(scope: &v8::PinScope<'s, '_>, proto: v8::Local<'s, v8::ObjectTemplate>) {
-    // method: securePaymentConfirmationAvailability()
+    if let Some(ctor) = tmpl.get_function(scope) {
+    // static method: securePaymentConfirmationAvailability()
     {
         let name = v8::String::new(scope, "securePaymentConfirmationAvailability").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(payment_request_op_11).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-    // method: getSecurePaymentConfirmationCapabilities()
+    // static method: getSecurePaymentConfirmationCapabilities()
     {
         let name = v8::String::new(scope, "getSecurePaymentConfirmationCapabilities").unwrap();
         let func_tmpl = v8::FunctionTemplate::builder_raw(payment_request_op_12).build(scope);
         func_tmpl.set_class_name(name);
-        proto.set(name.into(), func_tmpl.into());
+        let func_fn = func_tmpl.get_function(scope).unwrap();
+        ctor.set(scope, name.into(), func_fn.into());
     }
-}
+    }
 
+    tmpl
+}
 
 unsafe extern "C" fn payment_response_op_1(_info: *const v8::FunctionCallbackInfo) {
     let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
