@@ -522,6 +522,8 @@ impl EmbeddedV8Kernel {
             let convert_js = format!(r#"
                 (function() {{
                     var attrs = [{names}];
+                    var windowCtor = globalThis.Window;
+                    var windowProto = windowCtor && windowCtor.prototype;
                     for (var i = 0; i < attrs.length; i++) {{
                         var name = attrs[i];
                         try {{
@@ -530,9 +532,23 @@ impl EmbeddedV8Kernel {
                             if (desc.get || desc.set) continue;
                             if (!desc.configurable) continue;
                             var value = desc.value;
-                            var getter = (function(v) {{
-                                return function() {{ return v; }};
-                            }})(value);
+                            var getter = (function(v, wproto) {{
+                                return function() {{
+                                    // Receiver check: this must be the global object
+                                    // (which has Window.prototype in its chain)
+                                    if (wproto && this !== globalThis && this !== wproto) {{
+                                        var cur = Object.getPrototypeOf(this);
+                                        var found = false;
+                                        for (var k = 0; k < 30; k++) {{
+                                            if (cur === wproto) {{ found = true; break; }}
+                                            if (!cur) break;
+                                            cur = Object.getPrototypeOf(cur);
+                                        }}
+                                        if (!found) throw new TypeError('Illegal invocation');
+                                    }}
+                                    return v;
+                                }};
+                            }})(value, windowProto);
                             Object.defineProperty(globalThis, name, {{
                                 get: getter,
                                 set: undefined,
@@ -623,6 +639,111 @@ impl EmbeddedV8Kernel {
                                 Object.defineProperty(ctor.prototype, 'constructor', {
                                     value: ctor, writable: true, configurable: true, enumerable: false
                                 });
+                            }
+                        } catch(e) {}
+                    }
+                    // Fix constructor __proto__ — shim constructors (illegal_constructor)
+                    // have wrong __proto__. Must be Function.prototype per WebIDL.
+                    var functionProto = Function.prototype;
+                    var protoFixes = [
+                        'Location', 'Navigator', 'Storage', 'EventTarget', 'Screen',
+                        'BroadcastChannel', 'MessagePort', 'Worker', 'SharedWorker',
+                    ];
+                    for (var i = 0; i < protoFixes.length; i++) {
+                        try {
+                            var ctor = globalThis[protoFixes[i]];
+                            if (ctor && typeof ctor === 'function') {
+                                Object.setPrototypeOf(ctor, functionProto);
+                            }
+                        } catch(e) {}
+                    }
+                    // WindowProperties: Window.prototype.__proto__ must be WindowProperties.prototype
+                    try {
+                        var wp = globalThis.WindowProperties;
+                        var winCtor = globalThis.Window;
+                        if (wp && wp.prototype && winCtor && winCtor.prototype) {
+                            Object.setPrototypeOf(winCtor.prototype, wp.prototype);
+                        }
+                    } catch(e) {}
+                    // Named constructors: Image, Audio, Option
+                    // Per HTML spec, these are named constructors with their
+                    // own .name and .prototype pointing to the right interface.
+                    try {
+                        var namedCtors = [
+                            ['Image', 'HTMLImageElement'],
+                            ['Audio', 'HTMLAudioElement'],
+                            ['Option', 'HTMLOptionElement'],
+                        ];
+                        for (var i = 0; i < namedCtors.length; i++) {
+                            var alias = namedCtors[i][0];
+                            var real = namedCtors[i][1];
+                            var realCtor = globalThis[real];
+                            if (realCtor && realCtor.prototype) {
+                                var fn = function() {};
+                                fn.prototype = realCtor.prototype;
+                                Object.defineProperty(fn, 'name', { value: alias });
+                                Object.defineProperty(globalThis, alias, {
+                                    value: fn, writable: true, configurable: true, enumerable: false
+                                });
+                            }
+                        }
+                    } catch(e) {}
+                    // Wrap accessor getters on prototypes with receiver check.
+                    // idlharness requires: calling getter on prototype object
+                    // (or wrong-type receiver) must throw TypeError.
+                    // codegen getters already have this check, but shim-installed
+                    // getters (document_props.rs, event_constructors.rs) don't.
+                    // This wraps ALL accessor getters on key prototypes.
+                    var receiverCheckInterfaces = [
+                        'Document', 'Event', 'CustomEvent', 'MouseEvent',
+                        'HTMLElement', 'Element', 'Node', 'Window',
+                        'NavigationTransition', 'ShadowRoot',
+                    ];
+                    for (var i = 0; i < receiverCheckInterfaces.length; i++) {
+                        try {
+                            var ifaceName = receiverCheckInterfaces[i];
+                            var ctor = globalThis[ifaceName];
+                            if (!ctor || !ctor.prototype) continue;
+                            var proto = ctor.prototype;
+                            var names = Object.getOwnPropertyNames(proto);
+                            for (var j = 0; j < names.length; j++) {
+                                var pname = names[j];
+                                if (pname === 'constructor') continue;
+                                try {
+                                    var desc = Object.getOwnPropertyDescriptor(proto, pname);
+                                    if (!desc || !desc.get) continue;
+                                    if (desc.get.__iv8_wrapped) continue;
+                                    var origGet = desc.get;
+                                    var origSet = desc.set;
+                                    var thisIfaceName = ifaceName;
+                                    var wrappedGet = function() {
+                                        var thisCtor = globalThis[thisIfaceName];
+                                        if (thisCtor && thisCtor.prototype) {
+                                            if (this === thisCtor.prototype) {
+                                                throw new TypeError('Illegal invocation');
+                                            }
+                                            var isValid = false;
+                                            var cur = Object.getPrototypeOf(this);
+                                            for (var k = 0; k < 30; k++) {
+                                                if (cur === thisCtor.prototype) { isValid = true; break; }
+                                                if (!cur) break;
+                                                cur = Object.getPrototypeOf(cur);
+                                            }
+                                            if (!isValid) {
+                                                throw new TypeError('Illegal invocation');
+                                            }
+                                        }
+                                        return origGet.call(this);
+                                    };
+                                    wrappedGet.__iv8_wrapped = true;
+                                    try { Object.defineProperty(wrappedGet, 'name', { value: 'get ' + pname }); } catch(e) {}
+                                    Object.defineProperty(proto, pname, {
+                                        get: wrappedGet,
+                                        set: origSet,
+                                        enumerable: desc.enumerable,
+                                        configurable: true
+                                    });
+                                } catch(e) {}
                             }
                         } catch(e) {}
                     }
